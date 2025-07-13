@@ -13,7 +13,7 @@ cssClass: {undefined | String}
     <div class="flex flex-row">
       {{#if viewModel.showParentSkillImage}}
       <div class="flex flex-center">
-        <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.parentSkillImage}}" height="20" width="20" />
+        <img class="inline-img custom-icon-chat margin-r-sm" name="img" src="{{viewModel.parentSkillImage}}" height="20" width="20" />
       </div>
       {{/if}}
       {{#if viewModel.showParentSkillName}}
@@ -23,7 +23,7 @@ cssClass: {undefined | String}
   {{/if}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.expertise.img}}" title="{{viewModel.expertise.name}}" height="26" width="26" />
+      <img class="inline-img custom-icon-chat margin-r-sm" name="img" src="{{viewModel.expertise.img}}" title="{{viewModel.expertise.name}}" height="26" width="26" />
     </div>
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.expertise.name}}{{/header2}}
   </div>

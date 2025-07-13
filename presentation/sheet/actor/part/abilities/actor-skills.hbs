@@ -4,16 +4,5 @@ cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
   {{> inputSearch viewModel=viewModel.vmSearch }}
-  {{!-- Innate Skills --}}
-  <div class="{{#if viewModel.hideInnateSkills}}hidden{{/if}}">
-    {{> sortableList viewModel=viewModel.vmInnateSkillList }}
-  </div>
-  {{!-- Learning Skills --}}
-  <div class="{{#if viewModel.hideLearningSkills}}hidden{{/if}}">
-    {{> sortableList viewModel=viewModel.vmLearningSkillList }}
-  </div>
-  {{!-- Known Skills --}}
-  <div>
-    {{> sortableList viewModel=viewModel.vmKnownSkillList }}
-  </div>
+  {{> sortableList viewModel=viewModel.vmSkills }}
 </section>

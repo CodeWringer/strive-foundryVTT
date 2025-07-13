@@ -2,11 +2,11 @@
   "id": "strive",
   "title": "STRIVE",
   "description": "The STRIVE system for FoundryVTT",
-  "version": "1.7.11",
+  "version": "1.9.0",
   "compatibility": {
     "minimum": 11,
     "maximum": 12,
-    "verified": 12.331
+    "verified": 12.343
   },
   "authors": [
 		{

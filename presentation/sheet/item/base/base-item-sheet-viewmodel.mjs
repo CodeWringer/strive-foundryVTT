@@ -24,7 +24,6 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * * `getPrimaryHeaderButtons`
  * * `getSecondaryHeaderButtons`
  * * `getAdditionalContent`
- * * `getAdditionalHeaderContent`
  * 
  * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
  * header buttons. 
@@ -36,9 +35,6 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
- * @property {additionalHeaderContent | undefined} additionalHeaderContent Additional 
- * header content. Will not be collapsible and will be rendered directly beneath the 
- * header. 
  * @property {Array<TemplatedComponent>} dataFields 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
@@ -91,11 +87,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     
     this.secondaryHeaderButtons = this.getSecondaryHeaderButtons();
     this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
-    
-    this.additionalHeaderContent = this.getAdditionalHeaderContent();
-    if (ValidationUtil.isDefined(this.additionalHeaderContent)) {
-      this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
-    }
     
     this.additionalContent = this.getAdditionalContent();
     if (ValidationUtil.isDefined(this.additionalContent)) {
@@ -178,31 +169,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @protected
    */
   getSecondaryHeaderButtons() {
-    return [
-      // Send to chat button
-      new TemplatedComponent({
-        template: ButtonSendToChatViewModel.TEMPLATE,
-        viewModel: new ButtonSendToChatViewModel({
-          id: "vmBtnSendToChat",
-          parent: this,
-          isEditable: true,
-          target: this.document,
-          localizedToolTip: game.i18n.localize("system.general.sendToChat"),
-        }),
-      }),
-    ]; 
-  }
-  
-  /**
-   * Returns the definition of the additional header content, if there is one. 
-   * 
-   * @returns {TemplatedComponent | undefined}
-   * 
-   * @virtual
-   * @protected
-   */
-  getAdditionalHeaderContent() {
-    return undefined;
+    return []; 
   }
   
   /**

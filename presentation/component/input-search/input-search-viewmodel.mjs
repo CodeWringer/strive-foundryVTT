@@ -32,6 +32,8 @@ export default class InputSearchTextViewModel extends InputViewModel {
    * 
    * @param {String | undefined} args.value The current value. 
    * * default `""`
+   * @param {String | undefined} args.localizedPlaceholder 
+   * * default localized `"system.general.search"`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {String}`
@@ -41,6 +43,7 @@ export default class InputSearchTextViewModel extends InputViewModel {
     super(args);
 
     this._value = args.value ?? "";
+    this.localizedPlaceholder = args.localizedPlaceholder ?? game.i18n.localize("system.general.search");
   }
 
   /** @override */
@@ -53,6 +56,9 @@ export default class InputSearchTextViewModel extends InputViewModel {
         this._onChange(event);
         return false;
       }
+    });
+    this.element.blur((event) => {
+      this._onChange(event);
     });
   }
 }

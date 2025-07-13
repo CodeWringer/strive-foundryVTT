@@ -72,12 +72,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     // Prepare data for system default health state visibilities. 
     this._stateVisibilityItems = this._getHealthStateVisibilityViewModels();
 
-    // Prepare data for custom health states. 
-    this.customHealthStateViewModels = [];
-    this.customHealthStateViewModels = this._getCustomHealthStateViewModels();
-
-    const thiz = this;
-
     this.vmBtnSave = new ButtonViewModel({
       id: "vmBtnSave",
       parent: this,
@@ -85,8 +79,8 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       localizedLabel: game.i18n.localize("system.settings.saveChanges"),
       isEditable: this.isEditable,
       onClick: async () => {
-        thiz.formApplication._saveSettings(this.stateSettings);
-        thiz.formApplication.close();
+        this.formApplication._saveSettings(this.stateSettings);
+        this.formApplication.close();
       },
     });
     this.vmVisibilityList = new VisibilityToggleListViewModel({
@@ -100,25 +94,27 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     this.vmCustomList = new SimpleListViewModel({
       id: "vmCustomList",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      contentItemViewModels: this.customHealthStateViewModels,
+      value: this.stateSettings.custom,
       contentItemTemplate: this.customHealthStateListItemTemplate,
-      onAddClick: () => {
-        this.stateSettings.custom.push({
-          name: game.i18n.localize("system.settings.healthStates.newDefaultName"),
-          limit: 0,
+      contentItemViewModelFactory: (index, customHealthState) => {
+        return new CustomHealthStateListItemViewModel({
+          id: `vmAttribute${index}`,
+          isEditable: this.isEditable,
+          stateName: ((customHealthState ?? {}).name ?? customHealthState),
+          stateLimit: ((customHealthState ?? {}).limit ?? 0),
         });
-        this._renderFormApplication();
       },
-      onRemoveClick: (_, index) => {
-        this.stateSettings.custom.splice(index, 1);
-        this._renderFormApplication();
+      newItemDefaultValue: {
+        name: game.i18n.localize("system.settings.healthStates.newDefaultName"),
+        limit: 0,
       },
       isItemAddable: true,
       isItemRemovable: true,
       localizedAddLabel: game.i18n.localize("system.settings.healthStates.add.label"),
+      onChange: (oldValue, newValue) => {
+        this.stateSettings.custom = newValue;
+        this._renderFormApplication();
+      },
     });
   }
 
@@ -129,11 +125,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     }
     this._stateVisibilityItems = this._getHealthStateVisibilityViewModels();
     
-    for (const vm of this.customHealthStateViewModels) {
-      vm.dispose();
-    }
-    this.customHealthStateViewModels = this._getCustomHealthStateViewModels();
-
     super.update(args);
   }
 
@@ -143,7 +134,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
 
     updates.set(this.vmCustomList, {
       ...updates.get(this.vmCustomList),
-      contentItemViewModels: this.customHealthStateViewModels,
     });
 
     return updates;
@@ -161,32 +151,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       localizedName: game.i18n.localize(healthState.localizableName),
       value: this.stateSettings.hidden.find(stateName => stateName === healthState.name) === undefined,
     }));
-    return result;
-  }
-
-  /**
-   * @returns {Array<CustomHealthStateListItemViewModel>}
-   * 
-   * @private
-   */
-  _getCustomHealthStateViewModels() {
-    const result = [];
-
-    const customHealthStates = this.stateSettings.custom;
-    for (let index = 0; index < customHealthStates.length; index++) {
-      const customHealthState = customHealthStates[index];
-      const vm = new CustomHealthStateListItemViewModel({
-        id: `name${index}`,
-        isEditable: this.isEditable,
-        stateName: (customHealthState.name ?? customHealthState),
-        stateLimit: (customHealthState.limit ?? 0),
-        onChange: (state) => {
-          this.stateSettings.custom[index] = state;
-          this._renderFormApplication();
-        }
-      });
-      result.push(vm);
-    }
     return result;
   }
 

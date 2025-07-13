@@ -1,3 +1,5 @@
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
+
 /**
  * Represents a document collection source. 
  * 
@@ -48,3 +50,4 @@ export const DOCUMENT_COLLECTION_SOURCES = {
     name: "world",
   }),
 }
+ConstantsUtil.enrichConstant(DOCUMENT_COLLECTION_SOURCES);

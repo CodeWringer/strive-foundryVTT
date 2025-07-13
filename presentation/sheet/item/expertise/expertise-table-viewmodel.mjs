@@ -140,18 +140,21 @@ export default class ExpertiseTableViewModel extends ViewModel {
         },
       });
     }
+
     this.vmFooter = new ListFooterViewModel({
       id: "vmFooter",
       parent: this,
-      visGroupId: this.visGroupId,
-      isEditable: this.isEditable,
       isCollapsible: true,
-      isExpanded: this.isExpanded,
-      addItemParams: this.addItemParams,
-      onExpansionToggled: (event, data) => {
-        if (ValidationUtil.isDefined(this.addItemParams.onItemAdded)) {
-          this.addItemParams.onItemAdded(event, data);
-        }
+      addItemParams: [this.addItemParams],
+      localizedCollapseToolTip: StringUtil.format2(
+        game.i18n.localize("system.general.expansion.collapseOf"),
+        { s: StringUtil.format2(
+          game.i18n.localize("system.character.skill.expertise.expertisesOf"),
+          { skill: this.document.name, }
+        ) }
+      ),
+      onExpansionToggled: () => {
+        this.isExpanded = !this.isExpanded;
       },
     });
     this.vmLockedExpertisesSeparator = new ViewModel({
@@ -193,7 +196,8 @@ export default class ExpertiseTableViewModel extends ViewModel {
       }
     };
 
-    const level = parseInt(this.document.modifiedLevel);
+    const documentHasOwner = ValidationUtil.isDefined(this.document.owningDocument);
+    const level = documentHasOwner ? parseInt(this.document.modifiedLevel) : 999999;
     const unlockedExpertises = this.document.expertises.filter(it => parseInt(it.requiredLevel) <= level)
     const sortedUnlockedExpertises = unlockedExpertises.sort(expertiseSortFunc);
     this.unlockedExpertises = this._getExpertiseViewModels(sortedUnlockedExpertises, true);

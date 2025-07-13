@@ -34,7 +34,7 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm border-sm fill component-input-dropdown {{readOnlyCssClass}}" 
+    class="custom-system-read-only pad-sm border-solid-sm fill component-input-dropdown {{readOnlyCssClass}}" 
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
   >{{viewModel.localizedValue}}</div>

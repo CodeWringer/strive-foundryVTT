@@ -5,10 +5,10 @@ import { ValidationUtil } from "../../../../../business/util/validation-utility.
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
+import InputDropDownViewModel from "../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs";
 import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
@@ -182,14 +182,15 @@ export default class ActorAssetSlotViewModel extends ViewModel {
           ),
           inputDefinitions: [
             new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
               name: inputChoices,
               localizedLabel: game.i18n.localize("system.general.name.label"),
-              required: true,
-              defaultValue: assetChoices.length > 0 ? assetChoices[0] : undefined,
-              specificArgs: {
+              template: InputDropDownViewModel.TEMPLATE,
+              viewModelFactory: (id, parent) => new InputDropDownViewModel({
+                id: id,
+                parent: parent,
                 options: assetChoices,
-              }
+                value: assetChoices.length > 0 ? assetChoices[0] : undefined,
+              }),
             }),
           ],
         }).renderAndAwait(true);

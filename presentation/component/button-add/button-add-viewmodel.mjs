@@ -1,6 +1,7 @@
 import ButtonViewModel from '../button/button-viewmodel.mjs';
 import Expertise from '../../../business/document/item/skill/expertise.mjs';
 import { ValidationUtil } from '../../../business/util/validation-utility.mjs';
+import DocumentCreationStrategy from './document-creation-strategy.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 

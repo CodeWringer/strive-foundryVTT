@@ -71,10 +71,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
-
-    await game.strive.logger.logPerfAsync(this, "HealthStatesSettingsDialog.activateListeners (viewModel)", async () => {
-      await this.viewModel.activateListeners(html);
-    });
+    await this.viewModel.activateListeners(html);
   }
 
   /**

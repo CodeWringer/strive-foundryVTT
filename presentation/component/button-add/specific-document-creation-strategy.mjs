@@ -4,11 +4,13 @@ import DocumentFetcher from "../../../business/document/document-fetcher/documen
 import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
 import { StringUtil } from "../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
 import DocumentCreationStrategy from "./document-creation-strategy.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import DynamicLabelViewModel from "../label/dynamic-label.mjs";
+import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document-fetcher/document-collection-source.mjs";
 
 /**
  * Lets the user select a specific template document from a given list of options. 
@@ -26,6 +28,15 @@ import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 export default class SpecificDocumentCreationStrategy extends DocumentCreationStrategy {
   
   /**
+   * Returns the name of the choices input that allows selection of a document collection source. 
+   * 
+   * @type {String}
+   * @readonly
+   * @protected
+   */
+  get nameInputCollectionSources() { return "nameInputCollectionSources"; }
+  
+  /**
    * Returns the name of the choices input. 
    * 
    * @type {String}
@@ -34,6 +45,15 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    */
   get nameInputChoices() { return "nameInputChoices"; }
 
+  /**
+   * Returns the name of the label that changes based on the selected entry. 
+   * 
+   * @type {String}
+   * @readonly
+   * @protected
+   */
+  get nameLabel() { return "nameLabel"; }
+  
   /**
    * Returns the value of the custom choice. Can be used to identify this choice 
    * in the list of choices. 
@@ -53,12 +73,15 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 
    * the others untouched. For example, to set a starting level for a skill Item. 
+   * @param {Function | undefined} args.filter A function that can filter, allowing only 
+   * those documents for which it returns true to be valid choices. **Must** return a boolean
+   * value. Receives arguments:
+   * * `document: TransientDocument` - A document instance
    * 
-   * @param {Function | undefined} args.onSelectionChanged Asynchronous callback that is 
-   * invoked when selection changes. Arguments: 
-   * * `dialog: DynamicInputDialog`
-   * * `selected: Document`. 
-   * * `choices: Array<ChoiceOption>`. 
+   * @param {Function | undefined} args.selectionLabelMapper If not undefined, will be used 
+   * to change the content's of a label based on the currently selected entry. 
+   * Must return a string value. Must be async. Arguments: 
+   * * `selected: ChoiceOption | undefined`
    */
   constructor(args = {}) {
     super(args);
@@ -66,8 +89,37 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
 
     this._generalType = this._getIsTypeAnActor(args.documentType) ? GENERAL_DOCUMENT_TYPES.ACTOR : GENERAL_DOCUMENT_TYPES.ITEM;
     this.documentType = args.documentType;
+    this.filter = args.filter ?? (() => { return true });
+    this.selectionLabelMapper = args.selectionLabelMapper;
+    
+    this._collectionSource = DOCUMENT_COLLECTION_SOURCES.systemCompendia;
+  }
 
-    this.onSelectionChanged = args.onSelectionChanged ?? (async (dialog, selected, choices) => {});
+  /**
+   * Collects the document collection sources (system, world compendia, world) and returns them 
+   * as `ChoiceOption`s. 
+   * 
+   * @returns {Array<ChoiceOption>}
+   */
+  _getCollectionChoices() {
+    return [
+      new ChoiceOption({
+        value: DOCUMENT_COLLECTION_SOURCES.systemCompendia.name,
+        localizedValue: game.i18n.localize("system.general.collectionSources.systemCompendia"),
+      }),
+      new ChoiceOption({
+        value: DOCUMENT_COLLECTION_SOURCES.worldCompendia.name,
+        localizedValue: game.i18n.localize("system.general.collectionSources.worldCompendia"),
+      }),
+      new ChoiceOption({
+        value: DOCUMENT_COLLECTION_SOURCES.world.name,
+        localizedValue: game.i18n.localize("system.general.collectionSources.world"),
+      }),
+      new ChoiceOption({
+        value: DOCUMENT_COLLECTION_SOURCES.all.name,
+        localizedValue: game.i18n.localize("system.general.collectionSources.all"),
+      }),
+    ];
   }
 
   /**
@@ -78,33 +130,41 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * 
    * @async
    * @protected
+   * @virtual
    */
   async _getChoices() {
     const documentIndices = new DocumentFetcher().getIndices({
       documentType: this._generalType,
       contentType: this.documentType,
+      source: this._collectionSource,
     });
 
-    const documents = new Map;
     // Load the full documents, so their detailed data can be accessed. 
+    const documents = new Map;
     for (let i = 0; i < documentIndices.length; i++) {
       const id = documentIndices[i].id;
       const document = await new DocumentFetcher().find({
         id: id,
       });
-      documents.set(id, document);
+      const transientDocument = document.getTransientObject();
+      if (this.filter(transientDocument) === true) {
+        documents.set(id, transientDocument);
+      }
     }
     
     // Map the documents to choices. 
-    const options = documentIndices.map(documentIndex => {
+    const options = [];
+    for (let i = 0; i < documentIndices.length; i++) {
+      const documentIndex = documentIndices[i];
       const document = documents.get(documentIndex.id);
-      const documentNameForDisplay = ((document ?? {}).getTransientObject() ?? {}).nameForDisplay ?? documentIndex.name;
+      if (!ValidationUtil.isDefined(document)) continue;
+      const documentNameForDisplay = document.nameForDisplay ?? documentIndex.name;
       
-      return new ChoiceOption({
+      options.push(new ChoiceOption({
         value: documentIndex.id,
         localizedValue: `${documentNameForDisplay}   (${documentIndex.sourceName})`,
-      });
-    });
+      }));
+    }
     const sortedOptions = options.sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
 
     // Insert "custom" choice. 
@@ -120,32 +180,78 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
   /**
    * Prepares and returns the dynamic dialog input definitions. 
    * 
-   * @param {Array<ChoiceOption>} choices 
-   * 
    * @returns {Array<DynamicInputDefinition>}
    * 
-   * @async
    * @protected
+   * @virtual
    */
-  async _getDialogInputs(choices) {
-    const localizedType = game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`);
-    const customChoice = choices.find(it => it.value === this.customChoiceValue);
-    
-    return [
+  _getDialogInputs() {
+    const inputs = [
+      // Document collection choices input
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
-        name: this.nameInputChoices,
-        localizedLabel: localizedType,
-        required: true,
-        defaultValue: customChoice,
-        specificArgs: {
-          options: choices,
+        name: this.nameInputCollectionSources,
+        localizedLabel: game.i18n.localize("system.general.collection"),
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: async (id, parent) => {
+          const sortedOptions = this._getCollectionChoices();
+          return new InputDropDownViewModel({
+            id: id,
+            parent: parent,
+            options: sortedOptions,
+          });
         },
-        onChange: async (_, newValue, dialogViewModel) => {
-          await this.onSelectionChanged(dialogViewModel.ui, newValue, choices);
-        }
+        onChange: async (oldValue, newValue, dialogViewModel) => {
+          this._collectionSource = DOCUMENT_COLLECTION_SOURCES.asArray().find(it => it.name === newValue.value);
+          dialogViewModel.refreshInput(this.nameInputChoices);
+          dialogViewModel.refreshInput(this.nameLabel);
+        },
+      }),
+      // Document choices input
+      new DynamicInputDefinition({
+        name: this.nameInputChoices,
+        localizedLabel: game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`),
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: async (id, parent) => {
+          const sortedOptions = await this._getChoices();
+          const customChoice = sortedOptions.find(it => it.value === this.customChoiceValue);
+          return new InputDropDownViewModel({
+            id: id,
+            parent: parent,
+            options: sortedOptions,
+            value: customChoice,
+          });
+        },
+        onChange: async (oldValue, newValue, dialogViewModel) => {
+          const labelInst = dialogViewModel.inputInstances.find(it => it.name === this.nameLabel);
+
+          if (!ValidationUtil.isDefined(labelInst)) return;
+
+          const mappedLabel = await this.selectionLabelMapper(newValue);
+          labelInst.viewModel.localizedLabel = mappedLabel;
+        },
       }),
     ];
+
+    if (ValidationUtil.isDefined(this.selectionLabelMapper)) {
+      return inputs.concat([
+        // Dynamic label
+        new DynamicInputDefinition({
+          name: this.nameLabel,
+          template: DynamicLabelViewModel.TEMPLATE,
+          viewModelFactory: async (id, parent) => {
+            const mappedLabel = await this.selectionLabelMapper(undefined);
+
+            return new DynamicLabelViewModel({
+              id: id,
+              parent: parent,
+              localizedLabel: mappedLabel,
+            });
+          },
+        }),
+      ]);
+    }
+
+    return inputs;
   }
 
   /**
@@ -157,6 +263,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * 
    * @async
    * @protected
+   * @virtual
    */
   async _parseCreationData(dialog) {
     const selectedValue = dialog[this.nameInputChoices];
@@ -193,10 +300,10 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * 
    * @async
    * @override
+   * @virtual
    */
   async _getCreationData() {
-    const sortedOptions = await this._getChoices();
-    const inputDefinitions = await this._getDialogInputs(sortedOptions);
+    const inputDefinitions = this._getDialogInputs();
 
     const localizedType = game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`);
     const localizedDialogTitle = StringUtil.format(

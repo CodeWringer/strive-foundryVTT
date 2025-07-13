@@ -1,24 +1,17 @@
-import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
-import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputTextareaViewModel from "../../component/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
-import SimpleListViewModel from "../../component/simple-list/simple-list-viewmodel.mjs";
-import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs";
-import DynamicInputDefinition from "./dynamic-input-definition.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { KEYBOARD } from "../../keyboard/keyboard.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
 import ConfirmableModalDialog from "../confirmable-modal-dialog/confirmable-modal-dialog.mjs";
+import DynamicInputDefinition from "./dynamic-input-definition.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
  * this dynamic dialog. 
- * @property {Array<DynamicInputDialogControl>} controls The list of input control instances. 
+ * 
+ * @property {Array<DynamicInputDefinitionInstance>} inputInstances
+ * * read-only
  * 
  * @extends ViewModel
  */
@@ -32,6 +25,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
    * @param {Application} args.ui The dialog that owns this view model. 
    * @param {String | undefined} args.focused Name of the input field to pre-focus when 
    * the dialog is opened. 
+   * 
+   * @param {Function | undefined} args.onReady Invoked once all view model instances have 
+   * been created. Receives arguments:
+   * * `dialogViewModel: DynamicInputDialogViewModel`
    */
   constructor(args = {}) {
     super(args);
@@ -41,204 +38,82 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     this.inputDefinitions = args.inputDefinitions;
     this.ui = args.ui;
     this.focused = args.focused;
+    this.onReady = args.onReady;
 
-    this.controls = [];
-    for (const definition of this.inputDefinitions) {
-      // Create the underlying data field on the view model. 
-      // The value of this field _may_ be undefined! 
-      this[definition.name] = definition.defaultValue;
-
-      let viewModel;
-      let template;
-      if (definition.type === DYNAMIC_INPUT_TYPES.DROP_DOWN) {
-        viewModel = new InputDropDownViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-          options: definition.specificArgs.options,
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.IMAGE) {
-        viewModel = new InputImageViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.NUMBER_SPINNER) {
-        viewModel = new InputNumberSpinnerViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-          min: definition.specificArgs.min,
-          max: definition.specificArgs.max,
-          step: definition.specificArgs.step,
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.RADIO_BUTTONS) {
-        viewModel = new InputRadioButtonGroupViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-          options: definition.specificArgs.options,
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.RICH_TEXT) {
-        viewModel = new InputRichTextViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.TEXTAREA) {
-        viewModel = new InputTextareaViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-          spellcheck: definition.specificArgs.spellcheck,
-          placeholder: definition.specificArgs.placeholder,
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.TEXTFIELD) {
-        viewModel = new InputTextFieldViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-          placeholder: definition.specificArgs.placeholder,
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.LABEL) {
-        viewModel = new ViewModel({
-          id: definition.name,
-          parent: this,
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.SIMPLE_LIST) {
-        const values = this[definition.name];
-
-        const viewModels = [];
-        for (let index = 0; index < values.length; index++) {
-          const vm = definition.specificArgs.contentItemViewModelFactory(index, values);
-          viewModels.push(vm);
-        }
-
-        viewModel = new SimpleListViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          contentItemViewModels: viewModels,
-          contentItemTemplate: definition.specificArgs.contentItemTemplate,
-          onAddClick: async () => {
-            const oldValue = values.concat([]);
-            values.push(definition.specificArgs.newItemDefaultValue);
-            this.ui.render(true);
-            await definition.onChange(oldValue, values.concat([]), this);
-          },
-          onRemoveClick: async (_, index) => {
-            const oldValue = values.concat([]);
-            values.splice(index, 1);
-            this.ui.render(true);
-            await definition.onChange(oldValue, values.concat([]), this);
-          },
-          isItemAddable: definition.specificArgs.isItemAddable,
-          isItemRemovable: definition.specificArgs.isItemRemovable,
-          localizedAddLabel: definition.specificArgs.localizedAddLabel,
-        });
-        viewModel.value = values;
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.TOGGLE) {
-        viewModel = new InputToggleViewModel({
-          id: definition.name,
-          parent: this,
-          isEditable: definition.isEditable ?? this.isEditable,
-          value: definition.defaultValue,
-          onChange: async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          },
-        });
-      } else if (definition.type === DYNAMIC_INPUT_TYPES.CUSTOM) {
-        viewModel = definition.specificArgs.viewModelFactory(
-          definition.name, 
-          this,
-          definition.defaultValue,
-          definition.specificArgs.furtherArgs,
-        );
-        viewModel.isEditable = definition.isEditable ?? this.isEditable;
-        if (ValidationUtil.isDefined(viewModel.onChange)) {
-          viewModel.onChange = async (oldValue, newValue) => {
-            this[definition.name] = newValue;
-            await definition.onChange(oldValue, newValue, this);
-          };
-        }
-        template = definition.specificArgs.template;
-      } else {
-        throw new Error(`Invalid input type: "${definition.type}"`);
-      }
-
-      // Ensure the default value is properly set. 
-      // This has to happen _after_ control instantiation, because determining the default 
-      // value is the control's business. 
-      if (!ValidationUtil.isDefined(definition.defaultValue)) {
-        this[definition.name] = viewModel.value;
-      }
-
-      viewModel.showFancyFont = definition.showFancyFont ?? false
-
-      let validationFunc = definition.validationFunc;
-      if (validationFunc === undefined && definition.required === true) {
-        // Fallback function, for a required field only. 
-        validationFunc = (value) => {
-          return ValidationUtil.isBlankOrUndefined(value) === false;
-        };
-      }
-
-      this.controls.push(new DynamicInputDialogControl({
-        definition: definition,
-        viewModel: viewModel,
-        validationFunc: validationFunc,
-        template: template,
-      }));
-    }
+    this.inputInstances = [];
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
+    // Determine how many view models require instantiation. 
+    let expectedViewModelInstanceCount = 0;
+    for (const definition of this.inputDefinitions) {
+      if (ValidationUtil.isDefined(definition.viewModelFactory) && ValidationUtil.isNotBlankOrUndefined(definition.template)) {
+        expectedViewModelInstanceCount++;
+      }
+    }
+
+    let viewModelInstanceCount = 0;
+
+    // Render input elements. 
+    for await (const definition of this.inputDefinitions) {
+      let viewModel;
+      if (ValidationUtil.isDefined(definition.viewModelFactory) && ValidationUtil.isNotBlankOrUndefined(definition.template)) {
+        // Instantiate the view model. 
+        viewModel = await definition.viewModelFactory(
+          definition.name, 
+          this,
+        );
+
+        // Render the view model and attach it to the DOM. 
+        const renderedTemplate = await new FoundryWrapper().renderTemplate(definition.template, {
+          viewModel: viewModel,
+        });
+        this.element.find(`#${definition.name}-placeholder`).remove();
+        this.element.find(`#${definition.name}-slot`).append(renderedTemplate);
+
+        // Pass through the view model's onChange, if possible, so that value changes can be properly propagated. 
+        if (ValidationUtil.isDefined(viewModel.onChange)) {
+          viewModel.onChange = async (oldValue, newValue) => {
+            this[definition.name] = newValue;
+            if (ValidationUtil.isDefined(definition.onChange)) {
+              await definition.onChange(oldValue, newValue, this);
+            }
+          };
+        }
+
+        // Ensure the default value of the child view model is present on this view model for easy access. 
+        this[definition.name] = viewModel.value;
+
+        // Activate the view model's listeners. 
+        const childElement = this.element.find(`#${viewModel.id}`);
+        await viewModel.activateListeners(childElement);
+      }
+
+      this.inputInstances.push(new DynamicInputDefinitionInstance({
+        ...definition,
+        viewModel: viewModel,
+      }));
+      viewModelInstanceCount++;
+    }
+
+    // Pre-focus an element. 
     if (ValidationUtil.isDefined(this.focused)) {
-      const controlToFocus = this.controls.find(it => it.definition.name === this.focused)
-      $(`#${controlToFocus.viewModel.id}`).focus();
+      const controlToFocus = this.inputInstances.find(it => it.name === this.focused)
+      $(controlToFocus.viewModel.element).focus();
     }
 
     KEYBOARD.onKeyDown(KEY_CODES.ENTER, this._handleConfirm.bind(this));
     KEYBOARD.onKeyDown(KEY_CODES.ESCAPE, this._handleCancel.bind(this));
+
+    // Invoke onReady
+    if (ValidationUtil.isDefined(this.onReady)) {
+      if (viewModelInstanceCount >= expectedViewModelInstanceCount) {
+        this.onReady(this);
+      }
+    }
   }
 
   /**
@@ -257,15 +132,21 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     const validations = [];
     let allValid = true;
 
-    for (const control of this.controls) {
-      const value = control.viewModel.value;
+    for (const inputInstance of this.inputInstances) {
+      if (!ValidationUtil.isDefined(inputInstance.viewModel)) continue;
+      if (!ValidationUtil.isDefined(inputInstance.validationFunc) && inputInstance.required === true) {
+        throw new Error("Required control must have a validation function");
+      }
+
+      const value = inputInstance.viewModel.value;
       let controlValidated = true;
-      if (ValidationUtil.isDefined(control.validationFunc) === true && control.validationFunc(value) === false) {
+      if (ValidationUtil.isDefined(inputInstance.validationFunc) === true 
+        && inputInstance.validationFunc(value) === false) {
         controlValidated = false;
       }
 
       validations.push({
-        definition: control.definition,
+        definition: inputInstance,
         valid: controlValidated
       });
 
@@ -286,6 +167,52 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     KEYBOARD.offKeyDown(KEY_CODES.ESCAPE, this._handleCancel);
 
     super.dispose();
+  }
+
+  /**
+   * Re-generates the view model of and re-renders the input identified by the given `name`. 
+   * 
+   * @param {String} name Name of the input to refresh. 
+   * 
+   * @async
+   */
+  async refreshInput(name) {
+    const instance = this.inputInstances.find(it => it.name === name);
+
+    if (!ValidationUtil.isDefined(instance)) {
+      game.strive.logger.logWarn(`Failed to find instance by name '${name}'`);
+      return;
+    };
+
+    $(instance.viewModel.element).remove();
+    $(this.element).find(`#${instance.name}-slot`).append(`<div id="${instance.name}-placeholder" class="flex flex-center"><i class="fa-spinner fas font-size-lg spin"></i></div>`)
+
+    // Re-create the view model instance. 
+    instance.viewModel = await instance.viewModelFactory(instance.name, this);
+
+    // Render the view model and attach it to the DOM. 
+    const renderedTemplate = await new FoundryWrapper().renderTemplate(instance.template, {
+      viewModel: instance.viewModel,
+    });
+    $(this.element).find(`#${instance.name}-placeholder`).remove();
+    $(this.element).find(`#${instance.name}-slot`).append(renderedTemplate);
+
+    // Pass through the view model's onChange, if possible, so that value changes can be properly propagated. 
+    if (ValidationUtil.isDefined(instance.viewModel.onChange)) {
+      instance.viewModel.onChange = async (oldValue, newValue) => {
+        this[instance.name] = newValue;
+        if (ValidationUtil.isDefined(instance.onChange)) {
+          await instance.onChange(oldValue, newValue, this);
+        }
+      };
+    }
+
+    // Ensure the default value of the child view model is present on this view model for easy access. 
+    this[instance.name] = instance.viewModel.value;
+
+    // Activate the view model's listeners. 
+    const childElement = this.element.find(`#${instance.viewModel.id}`);
+    await instance.viewModel.activateListeners(childElement);
   }
   
   /**
@@ -308,32 +235,72 @@ export default class DynamicInputDialogViewModel extends ViewModel {
 }
 
 /**
- * Represents a dynamic input definition and its corresponding view model. 
+ * Represents an input control definition instance for a `DynamicInputDialog`. 
  * 
- * @property {DynamicInputDefinition} definition
- * @property {ViewModel} viewModel
+ * @property {String} name Internal name. The value of the input will be referencable 
+ * by this name. 
+ * @property {String | undefined} template String path to the template to render the control with. 
+ * @property {Function | undefined} viewModelFactory Must return a `ViewModel` instance. Is `async` and receives the following arguments:
+ * * `id: String`
+ * * `parent: ViewModel`
+ * @property {String | undefined} localizedLabel Localized companion label. 
+ * * default `""`
+ * @property {String | undefined} iconHtml E. g. `'<i class="fas fa-plus"></i>'`
+ * @property {Boolean | undefined} required If true, the represented input must have a valid 
+ * input, to allow dialog confirmation. 
+ * * Default `false`. 
+ * @property {Boolean | undefined} showFancyFont If true, will render labels using the 
+ * fancy font. 
+ * * Default `false`
+ * @property {Function | undefined} validationFunc A validation function. 
+ * * Receives the current value of the control as its input and must return a boolean 
+ * value. `true` signalizes a successful validation without errors, while `false` 
+ * indicates validation failed. 
+ * 
+ * @property {ViewModel | undefined} viewModel A generated view model instance. 
+ * @property {Boolean} isRenderable Returns `true`, if the control has a defined view model factory and a template. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Any}`
+ * * `newValue: {Any}`
+ * * `dialogViewModel: {DynamicInputDialogViewModel}`
  */
-class DynamicInputDialogControl {
+class DynamicInputDefinitionInstance extends DynamicInputDefinition {
   /**
    * @param {Object} args 
-   * @param {DynamicInputDefinition} args.definition
-   * @param {ViewModel} args.viewModel
-   * @param {Function | undefined} args.validationFunc A validation function. 
-   * * Receives the current value of the control as its input and must return a boolean 
+   * @param {String} args.name Internal name. The value of the input will be referencable 
+   * by this name. 
+   * @param {String | undefined} args.template String path to the template to render the control with. 
+   * @param {Function | undefined} args.viewModelFactory Must return a `ViewModel` instance. Is `async` 
+   * and receives the following arguments:
+   * * `id: String`
+   * * `parent: ViewModel`
+   * @param {String | undefined} args.localizedLabel Localized companion label. 
+   * * default `""`
+   * @param {String | undefined} args.iconHtml E. g. `'<i class="fas fa-plus"></i>'`
+   * @param {Boolean | undefined} args.required If true, the represented input must have a valid 
+   * input, to allow dialog confirmation. 
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.showFancyFont If true, will render labels using the 
+   * fancy font. 
+   * * Default `false`
+   * @param {Function | undefined} args.validationFunc A validation function. **Must** return a boolean 
    * value. `true` signalizes a successful validation without errors, while `false` 
-   * indicates validation failed. 
-   * @param {String | undefined} args.template In case of a CUSTOM control, 
-   * this field **must** be set. 
+   * indicates validation failed. Receives arguments: 
+   * * `currentValue: Any`
+   * 
+   * @param {ViewModel | undefined} args.viewModel A generated view model instance. 
+   * 
+   * @param {Function | undefined} onChange Callback that is invoked when the value changes. 
+   * Receives the following arguments: 
+   * * `oldValue: {Any}`
+   * * `newValue: {Any}`
+   * * `dialogViewModel: {DynamicInputDialogViewModel}`
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["definition", "viewModel"]);
+    super(args);
 
-    this.definition = args.definition;
     this.viewModel = args.viewModel;
-    this.validationFunc = args.validationFunc;
-    this.template = args.template;
-
-    if (this.definition.type === DYNAMIC_INPUT_TYPES.CUSTOM)
-      ValidationUtil.validateOrThrow(args, ["template"]);
   }
 }

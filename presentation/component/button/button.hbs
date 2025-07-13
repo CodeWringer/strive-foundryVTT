@@ -8,7 +8,7 @@ leftAlign: {Boolean | undefined}
 skipPadding: {Boolean | undefined}
 --}}
 <span class="button flex{{#if leftAlign}} flex-middle{{else}} flex-center{{/if}}{{#if heavy}}{{else}} light{{/if}}{{#if square}} square{{/if}}{{#if fill}} fill{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}">
-  <a class="custom-system-button flex-grow{{#if skipPadding}}{{else}} pad-sm{{/if}} flex flex-row{{#if leftAlign}} flex-middle{{else}} flex-center{{/if}}" 
+  <a class="custom-system-button flex-grow{{#if fill}} fill{{/if}}{{#if skipPadding}}{{else}} pad-sm{{/if}} flex flex-row{{#if leftAlign}} flex-middle{{else}} flex-center{{/if}}" 
     id="{{viewModel.id}}"
   >
     {{#if viewModel.iconHtml}}{{{viewModel.iconHtml}}}{{/if}}

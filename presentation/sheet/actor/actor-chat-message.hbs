@@ -10,24 +10,12 @@ cssClass: {undefined | String}
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
+      <img class="inline-img custom-icon-chat margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
     </div>
     <h2 class="flex-grow">
       {{viewModel.document.name}}
     </h2>
   </div>
-  {{#if viewModel.isNPC}}
-    {{#if viewModel.challengeRating}}
-      <div class="flex flex-row sheet-block margin-b-md">
-        <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "system.character.advancement.challengeRating.label"}}
-        </div>
-        <div class="flex-grow">
-          <span>{{viewModel.challengeRating.value}}</span>
-        </div>
-      </div>
-    {{/if}}
-  {{/if}}
   {{#if (eq viewModel.isPlain false)}}
     {{!-- Personals --}}
     {{!-- Species --}}

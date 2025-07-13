@@ -1,10 +1,5 @@
-$c-white: #fff;
 $c-black: #000;
-
 $c-dark: #191813;
-$c-faint: #c9c7b8;
-$c-beige: #b5b3a4;
-$c-tan: #444;
 
 $c-bg-lightest: rgba(0, 0, 0, 0.01);
 $c-bg-lighter: rgba(0, 0, 0, 0.025);
@@ -21,7 +16,6 @@ $c-border-beige-light: #b5b3a4;
 $c-border-input: #7a7971;
 $c-border-highlight-light: #f78d317d;
 $c-border-highlight: #d76e147d;
-$c-border-highlight-dark: #a557127d;
 
 $c-row-even: rgba(255, 255, 255, 0.2);
 $c-row-odd: rgba(0, 0, 0, 0.08);
@@ -36,18 +30,11 @@ $c-text-read-only: #525252;
 
 $c-button-highlight: #FF0000;
 
-$c-neutral-bg-light: #c2c2c2;
 $c-neutral-bg-medium: #b9b9b9;
-$c-neutral-bg-dark: #acacac;
 
 $c-themed-bg-disabled: #676662;
-$c-themed-bg-lightest: #f78d317d;
 $c-themed-bg-lighter: #ec81237d;
 $c-themed-bg-light: #e0771c7d;
-$c-themed-bg-medium: #d76e147d;
-$c-themed-bg-dark: #ca6a167d;
-$c-themed-bg-darker: #bb62147d;
-$c-themed-bg-darkest: #a557127d;
 
 // Themed operation state - success, warn, error and failure
 

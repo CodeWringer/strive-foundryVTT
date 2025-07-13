@@ -292,10 +292,6 @@ export default class Ruleset {
    * Returns the effective raw level of the given actor for the given 
    * attribute. 
    * 
-   * For NPCs, the effective level can be determined by a challenge 
-   * rating, if one is active. For PCs, the raw attribute level 
-   * is picked. 
-   * 
    * @param {Attribute} attribute The attribute whose effective level 
    * is to be returned. 
    * @param {Actor} actor The actor whose attribute it is. 
@@ -309,21 +305,13 @@ export default class Ruleset {
     }
 
     const transientActor = actor.getTransientObject();
-    
-    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
-      return transientActor.challengeRating.value;
-    } else {
-      const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-      return characterAttribute.level;
-    }
+    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+    return characterAttribute.level;
   }
   
   /**
    * Returns the effective modified level of the given actor for the 
    * given attribute. 
-   * 
-   * For NPCs, the effective level can be determined by a challenge 
-   * rating, if one is active. 
    * 
    * @param {Attribute} attribute The attribute whose effective level 
    * is to be returned. 
@@ -338,26 +326,17 @@ export default class Ruleset {
     }
 
     const transientActor = actor.getTransientObject();
-    
-    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
-      return transientActor.challengeRating.modified;
-    } else {
-      const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-      if (!ValidationUtil.isDefined(characterAttribute)) {
-        game.strive.logger.logError(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
-        return;
-      }
-      return characterAttribute.modifiedLevel;
+    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+    if (!ValidationUtil.isDefined(characterAttribute)) {
+      game.strive.logger.logError(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
+      return;
     }
+    return characterAttribute.modifiedLevel;
   }
 
   /**
    * Returns the effective modified level of the given actor for the 
    * given skill. 
-   * 
-   * For NPCs, the effective level can be determined by a challenge 
-   * rating, if one is active. For PCs, the raw skill level 
-   * is picked. 
    * 
    * @param {Item | TransientSkill} skill The skill whose effective level 
    * is to be returned. 
@@ -372,13 +351,8 @@ export default class Ruleset {
     }
 
     const transientActor = actor.getTransientObject();
-
-    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
-      return transientActor.challengeRating.modified;
-    } else {
-      const transientSkill = skill.getTransientObject();
-      return transientSkill.modifiedLevel;
-    }
+    const transientSkill = skill.getTransientObject();
+    return transientSkill.modifiedLevel;
   }
 
   /**

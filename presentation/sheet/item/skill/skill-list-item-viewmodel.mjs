@@ -3,7 +3,7 @@ import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mj
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
@@ -13,8 +13,6 @@ import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
 import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 import Ruleset from "../../../../business/ruleset/ruleset.mjs"
@@ -25,11 +23,17 @@ import { ValidationUtil } from "../../../../business/util/validation-utility.mjs
 import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
 import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
+import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document
  */
 export default class SkillListItemViewModel extends BaseListItemViewModel {
+  /** @override */
+  static get HEADER_TEMPLATE() { return game.strive.const.TEMPLATES.SKILL_LIST_ITEM_HEADER; }
+
   /**
    * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
@@ -169,39 +173,55 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    */
   get _inputAttributes() { return "inputAttributes"; }
 
+  /**
+   * @returns {Number}
+   * @readonly
+   */
+  get apCost() { return this.document.apCost; }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get isLearningSkill() { return this.document.level === 0; }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get isInnateSkill() { return ValidationUtil.isDefined(this.document.tags.find(it => it.id === SKILL_TAGS.INNATE.id)); }
+
   /** @override */
   get metaDataInputDefinitions() {
     const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
-
-    return super.metaDataInputDefinitions.concat([
+    const metaData = super.metaDataInputDefinitions;
+    metaData.splice(0, 0, 
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.SIMPLE_LIST,
         name: this._inputAttributes,
         localizedLabel: game.i18n.localize("system.character.attribute.plural"),
-        required: true,
-        defaultValue: baseAttributes,
-        validationFunc: (value) => {
-          return value.length > 0;
-        },
-        specificArgs: {
+        template: SimpleListViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new SimpleListViewModel({
+          id: id,
+          parent: parent,
+          value: baseAttributes,
           contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
-          contentItemViewModelFactory: (index, attributes) => {
+          contentItemViewModelFactory: (index, attribute) => {
             return new BaseAttributeListItemViewModel({
               id: `vmAttribute${index}`,
               isEditable: true,
-              attribute: attributes[index],
-              onChange: (newAttribute) => {
-                attributes[index] = newAttribute;
-              },
-            })
+              attribute: attribute,
+            });
           },
           newItemDefaultValue: ATTRIBUTES.agility,
           isItemAddable: this.isEditable,
           isItemRemovable: this.isEditable,
           localizedAddLabel: game.i18n.localize("system.general.add.add"),
-        },
+        }),
+        required: true,
+        validationFunc: (value) => { return value.length > 0; },
       }),
-    ]);
+    );
+    return metaData;
   }
 
   /**
@@ -224,21 +244,30 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    const level = this.document.dependsOnActiveCr === true ? (this.document.owningDocument.challengeRating.modified) : this.document.level;
+    const level = this.document.level;
+    // Header
+    this.vmModifiedLevelHeader = new ReadOnlyValueViewModel({
+      id: "vmModifiedLevelHeader",
+      parent: this,
+      value: this.modifiedLevel,
+      localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
+    });
+    // Promoted content
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsLevel",
       value: level,
-      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
+      min: 0,
+      localizedToolTip: game.i18n.localize("system.character.advancement.level"),
       onChange: (_, newValue) => {
         this.document.level = newValue;
       },
-      min: 0,
     });
     this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsLevelModifier",
       value: this.document.levelModifier,
+      localizedToolTip: game.i18n.localize("system.character.advancement.modifier.label"),
       onChange: (_, newValue) => {
         this.document.levelModifier = newValue;
       },
@@ -247,14 +276,9 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       id: "vmModifiedLevel",
       parent: this,
       value: this.modifiedLevel,
+      localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
     });
     if (this.showAdvancementProgression) {
-      this.vmAdvancementRequirements = new ReadOnlyValueViewModel({
-        id: "vmAdvancementRequirements",
-        parent: this,
-        value: `${this.advancementRequirements.successes} / ${this.advancementRequirements.failures}`,
-        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
-      });
       this.vmNsSuccesses = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsSuccesses",
@@ -265,6 +289,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         },
         min: 0,
       });
+      this.vmAdvancementRequirementSuccesses = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequirements",
+        parent: this,
+        value: this.advancementRequirements.successes,
+        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
+      });
       this.vmNsFailures = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsFailures",
@@ -274,6 +304,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           this.document.advancementProgress.failures = newValue;
         },
         min: 0,
+      });
+      this.vmAdvancementRequirementFailures = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequirementFailures",
+        parent: this,
+        value: this.advancementRequirements.failures,
+        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
       });
       this.vmAdvanced = new ButtonCheckBoxViewModel({
         parent: this,
@@ -322,10 +358,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmApCost",
           value: this.document.apCost,
+          min: 0,
           onChange: (_, newValue) => {
             this.document.apCost = newValue;
           },
-          min: 0,
         }),
         isHidden: this.hideApCost,
         localizedIconToolTip: game.i18n.localize("system.actionPoint.plural"),
@@ -432,7 +468,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   getContextMenuButtons() {
     return super.getContextMenuButtons().concat([
       // Add damage
-      {
+      new ContextMenuItem({
         name: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.damageDefinition.label")
@@ -447,7 +483,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           }));
           this.document.damage = damage;
         },
-      },
+      }),
     ])
       // Toggle ap cost
       .concat(
@@ -508,13 +544,21 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           activeValue: "",
           isEditable: this.isEditable,
         })
-      )
+      );
   }
 
   /** @override */
-  getAdditionalHeaderContent() {
+  getHeaderTemplate() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_EXTRA_HEADER,
+      template: SkillListItemViewModel.HEADER_TEMPLATE,
+      viewModel: this,
+    });
+  }
+
+  /** @override */
+  getPromotedContentTemplate() {
+    return new TemplatedComponent({
+      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,
     });
   }

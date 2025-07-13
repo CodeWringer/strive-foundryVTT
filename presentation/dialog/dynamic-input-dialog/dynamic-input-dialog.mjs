@@ -1,5 +1,4 @@
 import { ValidationUtil } from '../../../business/util/validation-utility.mjs';
-import FoundryWrapper from '../../../common/foundry-wrapper.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
 import DynamicInputDefinition from './dynamic-input-definition.mjs';
@@ -35,14 +34,15 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  *   ),
  *   inputDefinitions: [
  *     new DynamicInputDefinition({
- *       type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
  *       name: "inputChoices",
  *       localizedLabel: game.i18n.localize("system.general.name.label"),
- *       required: true,
- *       defaultValue: assetChoices[0], // This must be of type `ChoiceOption`! 
- *       specificArgs: {
- *         options: assetChoices, // This must be of type `Array<ChoiceOption>`! 
- *       }
+ *       template: InputDropDownViewModel.TEMPLATE,
+ *       viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+ *         id: id,
+ *         parent: parent,
+ *         options: assetChoices,
+ *         value: assetChoices[0],
+ *       }),
  *     }),
  *   ],
  * }).renderAndAwait(true); 
@@ -124,6 +124,10 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
    * @param {Array<DynamicInputDefinition>} options.inputDefinitions
    * @param {String | undefined} options.focused Name of the input field to pre-focus when 
    * the dialog is opened. 
+   * 
+   * @param {Function | undefined} options.onReady Invoked once all view model instances have 
+   * been created. Receives arguments:
+   * * `dialogViewModel: DynamicInputDialogViewModel`
    */
   constructor(options = {}) {
     super(options);
@@ -131,6 +135,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
 
     this.inputDefinitions = options.inputDefinitions;
     this.focused = options.focused;
+    this.onReady = options.onReady;
   }
   
   /** @override */
@@ -146,6 +151,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       isSendable: true,
       ui: this,
       focused: this.focused,
+      onReady: this.onReady,
     });
 
     return {

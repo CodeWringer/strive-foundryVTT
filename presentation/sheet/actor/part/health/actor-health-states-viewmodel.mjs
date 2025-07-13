@@ -104,7 +104,6 @@ export default class ActorHealthStatesViewModel extends ViewModel {
       }
     });
 
-    const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
     for (const state of states) {
       const isVisible = stateSettings.hidden.find(stateName => state.name === stateName) === undefined;
       if (isVisible === true) {
@@ -116,7 +115,7 @@ export default class ActorHealthStatesViewModel extends ViewModel {
           isSendable: this.isSendable,
           isOwner: this.isOwner,
           localizedLabel: game.i18n.localize(state.localizableName),
-          localizedToolTip: showReminders ? game.i18n.localize(state.localizableToolTip) : undefined,
+          localizedToolTip: this.showReminders ? game.i18n.localize(state.localizableToolTip) : undefined,
           stateName: state.name,
           stateIntensity: state.intensity,
           stateLimit: state.limit,

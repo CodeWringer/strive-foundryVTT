@@ -27,7 +27,7 @@ cssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only flex flex-center pad-sm border-sm fill{{#if cssClass}} {{cssClass}}{{/if}}" 
+    class="custom-system-read-only flex flex-center pad-sm border-solid-sm fill{{#if cssClass}} {{cssClass}}{{/if}}" 
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
   >{{viewModel.value}}</div>

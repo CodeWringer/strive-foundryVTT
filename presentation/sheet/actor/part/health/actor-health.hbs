@@ -10,8 +10,8 @@ cssClass: {undefined | String}
       {{!-- Row --}}
       <div class="flex flex-justify flex-row flex-wrap">
         {{!-- HP --}}
-        <div class="sheet-block">
-          <div class="flex flex-row">
+        <div class="sheet-block flex flex-row">
+          <div class="flex flex-column">
             {{!-- Max HP --}}
             <div class="flex flex-row flex-middle flex-right">
               {{#> labeledControl viewModel=viewModel.vmMaxHp localizedIconToolTip=(localize "system.character.health.hp.maximum") iconClass="ico-heart-limit-solid" cssClass="width-lg" }}
@@ -38,7 +38,8 @@ cssClass: {undefined | String}
               {{/labeledControl}}
             </div>
           </div>
-          <div class="flex flex-column flex-end">
+          <div class="flex flex-column">
+            <span class="flex-grow"></span>
             {{!-- Adjust button --}}
             {{> button viewModel=viewModel.vmAdjustHp heavy=true fill=false skipPadding=true }}
           </div>

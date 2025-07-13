@@ -1,0 +1,19 @@
+a.context.highlight {
+  &:hover {
+    text-shadow: unset;
+  }
+}
+
+li.context-item {
+  font-family: var(--font-primary);
+  text-align: left;
+
+  &:hover {
+    text-shadow: 0 0 8px $c-text-highlight;
+    background-color: #47453c;
+  }
+}
+
+nav#context-menu {
+  width: 12rem;
+}

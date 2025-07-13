@@ -27,6 +27,7 @@ export const TEMPLATES = {
   COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
   // Labels
   COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
+  COMPONENT_DYNAMIC_LABEL: `${basePathComponent}/label/dynamic-label.hbs`,
   COMPONENT_READ_ONLY_VALUE: `${basePathComponent}/read-only-value/read-only-value.hbs`,
   COMPONENT_HEADER_PRIMARY: `${basePathComponent}/label/header/primary-header-label.hbs`,
   COMPONENT_HEADER_SECONDARY: `${basePathComponent}/label/header/secondary-header-label.hbs`,
@@ -105,25 +106,26 @@ export const TEMPLATES = {
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/actor-biography.hbs`,
   ACTOR_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/actor-chat-message.hbs`,
   ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
-  CHALLENGE_RATING: `${basePathPresentation}/sheet/actor/part/abilities/challenge-rating.hbs`,
   // --- Item
   // Base
   BASE_LIST_ITEM: `${basePathPresentation}/sheet/item/base/base-list-item.hbs`,
+  BASE_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/base/base-list-item-header.hbs`,
   BASE_ITEM_SHEET: `${basePathPresentation}/sheet/item/base/base-item-sheet.hbs`,
   // Asset
   ASSET_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/asset/asset-item-chat-message.hbs`,
-  ASSET_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/asset/asset-list-item-extra-header.hbs`,
+  ASSET_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/asset/asset-list-item-promoted-content.hbs`,
   // Skill
   SKILL_ITEM_SHEET_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-item-sheet-extra-content.hbs`,
   SKILL_ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill/skill-chat-message.hbs`,
+  SKILL_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/skill/skill-list-item-header.hbs`,
   SKILL_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-content.hbs`,
-  SKILL_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-header.hbs`,
+  SKILL_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-promoted-content.hbs`,
   SKILL_PREREQUISITE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-prerequisite-list-item.hbs`,
   SKILL_BASE_ATTRIBUTE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/base-attribute/base-attribute-list-item.hbs`,
   // Expertise
   EXPERTISE_TABLE: `${basePathPresentation}/sheet/item/expertise/expertise-table.hbs`,
+  EXPERTISE_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-header.hbs`,
   EXPERTISE_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-extra-content.hbs`,
-  EXPERTISE_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-extra-header.hbs`,
   EXPERTISE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/expertise/expertise-chat-message.hbs`,
   // Fate
   FATE_CARD: `${basePathPresentation}/sheet/item/fate-card/fate-card.hbs`,
@@ -132,7 +134,7 @@ export const TEMPLATES = {
   INJURY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/injury/injury-chat-message.hbs`,
   // Illness
   ILLNESS_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/illness/illness-chat-message.hbs`,
-  ILLNESS_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/illness/illness-list-item-extra-header.hbs`,
+  ILLNESS_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/illness/illness-list-item-promoted-content.hbs`,
   // Mutation
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
   // Mutation

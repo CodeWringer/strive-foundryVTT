@@ -1,0 +1,66 @@
+{{!-- Parameters:
+viewModel: {BaseListItemViewModel}
+cssClass: {undefined | String}
+--}}
+{{!-- Header Row --}}
+<div class="flex flex-row flex-middle list-item-header">
+  {{!-- Modified Level --}}
+  <div class="flex flex-row auto-margin-h-sm">
+    {{> readOnlyValue viewModel=viewModel.vmModifiedLevelHeader cssClass="width-sm font-size-lg flex flex-center" }}
+    {{#if (or viewModel.isLearningSkill viewModel.isInnateSkill)}}
+    <span class="strive-pill flex flex-row flex-center margin-t-sm margin-b-sm border-solid-sm font-size-xs{{#if viewModel.isLearningSkill}}{{else}} highlight{{/if}}">{{#if viewModel.isLearningSkill}}{{localize "system.character.skill.learning.skillChip"}}{{else}}{{localize "system.character.skill.innate.skillChip"}}{{/if}}</span>
+    {{/if}}
+  </div>
+  <span class="pad-r-md"></span>
+  {{!-- Identity --}}
+  <div class="list-item-header-img">
+    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+  </div>
+  <div id="{{viewModel.id}}-name-area" class="flex-grow">
+    {{#if viewModel.enableExpansion}}
+      {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
+        <div class="flex flex-row flex-grow flex-middle">
+          {{!-- Title --}}
+          <span class="pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{../viewModel.title}}</span>
+          {{!-- Spacer --}}
+          <span style="width: 1rem;"></span>
+          {{!-- Action Point Cost --}}
+          <span class="flex flex-row">
+            {{#times ../viewModel.apCost}}
+            <i class="ico ico-action-point-solid dark"></i>
+            {{/times}}
+          </span>
+          {{!-- Spacer --}}
+          <span class="flex-grow"></span>
+          {{!-- Expansion State Indicator --}}
+          <div class="flex flex-center">
+            <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-chevron-d-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+            <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-chevron-r-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+          </div>
+        </div>
+      {{/button}}
+    {{else}}
+      <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.title}}</span>
+    {{/if}}
+  </div>
+  {{!-- Primary header buttons --}}
+  <div id="{{viewModel.id}}-primary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
+    {{#each viewModel.primaryHeaderButtons as |button|}}
+      {{#with button.template as |template|}}
+        <div class="{{#if button.isHidden}}hidden{{/if}}">
+          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+        </div>
+      {{/with}}
+    {{/each}}
+  </div>
+  {{!-- Secondary header buttons --}}
+  <div id="{{viewModel.id}}-secondary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
+    {{#each viewModel.secondaryHeaderButtons as |button|}}
+      {{#with button.template as |template|}}
+        <div class="{{#if button.isHidden}}hidden{{/if}}">
+          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+        </div>
+      {{/with}}
+    {{/each}}
+  </div>
+</div>

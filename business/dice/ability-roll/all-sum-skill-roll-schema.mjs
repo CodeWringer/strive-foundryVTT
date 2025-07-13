@@ -1,11 +1,14 @@
 import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs";
+import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
 import TransientSkill from "../../document/item/skill/transient-skill.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
 import GameSystemUserSettings from "../../setting/game-system-user-settings.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 import RollData from "../roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
 import RollQueryData from "../roll-query-data.mjs";
@@ -52,44 +55,57 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "diceCompositionLabel",
         localizedLabel: `<p>${game.i18n.localize("system.roll.numberOfDice")}: ${diceComponents.total}</p><p class="font-size-sm">${diceComposition}</p>`,
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
-        required: true,
-        defaultValue: "0",
-        specificArgs: {
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+          id: id,
+          parent: parent,
           placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
-        },
+          value: "0",
+        }),
+        required: true,
+        validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: nameInputBonusDice,
         localizedLabel: game.i18n.localize("system.roll.bonusDice"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          value: 0,
+        }),
         required: true,
-        defaultValue: 0,
+        validationFunc: (value) => { return parseInt(value) !== NaN; },
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: nameInputCompensationPoints,
         localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          value: 0,
+        }),
         required: true,
-        defaultValue: 0,
+        validationFunc: (value) => { return parseInt(value) !== NaN; },
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: nameInputRollDiceModifier,
         localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
-        required: true,
-        defaultValue: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
-        specificArgs: {
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          id: id,
+          parent: parent,
           options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
-        }
+          value: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
+        }),
       }),
     );
 
@@ -98,7 +114,6 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
     if (showReminders && isPC) {
       dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.LABEL,
           name: "forkReminderLabel",
           localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
           showFancyFont: false,
@@ -127,28 +142,21 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
    * @private
    */
   _getDiceComponents(skillDocument) {
-    if (skillDocument.dependsOnActiveCr === true) {
-      return [
-        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", skillDocument.owningDocument.challengeRating.modified),
-        new SumComponent(skillDocument.name, "system.character.advancement.modifier.label", skillDocument.levelModifier),
-      ];
-    } else {
-      const actor = (skillDocument.owningDocument ?? {}).document;
-      const components = [];
-      
-      // Accumulate the dice from base attributes. 
-      for (const attribute of skillDocument.baseAttributes) {
-        const characterAttribute = new CharacterAttribute(actor, attribute.name);
-        const attributeComponent = new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel);
-        components.push(attributeComponent);
-      }
-      // Lastly, add the skill's own dice. 
-      components.push(
-        new SumComponent(skillDocument.name, skillDocument.name, skillDocument.modifiedLevel)
-      );
-
-      return components;
+    const actor = (skillDocument.owningDocument ?? {}).document;
+    const components = [];
+    
+    // Accumulate the dice from base attributes. 
+    for (const attribute of skillDocument.baseAttributes) {
+      const characterAttribute = new CharacterAttribute(actor, attribute.name);
+      const attributeComponent = new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel);
+      components.push(attributeComponent);
     }
+    // Lastly, add the skill's own dice. 
+    components.push(
+      new SumComponent(skillDocument.name, skillDocument.name, skillDocument.modifiedLevel)
+    );
+
+    return components;
   }
 
 }

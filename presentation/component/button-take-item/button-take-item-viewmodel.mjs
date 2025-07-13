@@ -4,9 +4,10 @@ import DocumentFetcher from "../../../business/document/document-fetcher/documen
 import TransientAsset from "../../../business/document/item/transient-asset.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputToggleViewModel from "../input-toggle/input-toggle-viewmodel.mjs";
 
 /**
  * @property {String} chatMessage
@@ -159,13 +160,14 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
       inputDefinitions.push(
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: nameInputActor,
           localizedLabel: game.i18n.localize("system.general.actor.label"),
-          required: true,
-          specificArgs: {
+          template: InputDropDownViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputDropDownViewModel({
+            id: id,
+            parent: parent,
             options: choices,
-          }
+          }),
         }),
       );
     }
@@ -176,22 +178,28 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     if (ValidationUtil.isDefined(assetDocument.owningDocument)) { // Embedded -> removable from actor. 
       inputDefinitions.push(
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TOGGLE,
           name: nameInputDeleteFromSource,
           localizedLabel: game.i18n.localize("system.character.asset.delete.fromOwner"),
-          required: true,
-          defaultValue: false,
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: false,
+          }),
         }),
       );
       assetIsRemovable = true;
     } else if (!ValidationUtil.isDefined(assetDocument.pack)) { // Not embedded and not in a pack -> removable from world. 
       inputDefinitions.push(
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TOGGLE,
           name: nameInputDeleteFromSource,
           localizedLabel: game.i18n.localize("system.character.asset.delete.fromWorld"),
-          required: true,
-          defaultValue: false,
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: false,
+          }),
         }),
       );
       assetIsRemovable = true;

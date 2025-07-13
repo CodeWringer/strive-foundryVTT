@@ -3,20 +3,20 @@ import { ASSET_TAGS, SKILL_TAGS } from "../../../../business/tags/system-tags.mj
 import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
 import { TemplatedComponent } from "./templated-component.mjs";
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 
@@ -43,8 +43,6 @@ export const LIST_ITEM_DETAIL_MODES = {
  * * `getDataFields`
  * * `getPrimaryHeaderButtons`
  * * `getSecondaryHeaderButtons`
- * * `getAdditionalContent`
- * * `getAdditionalHeaderContent`
  * 
  * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
  * header buttons. 
@@ -56,9 +54,6 @@ export const LIST_ITEM_DETAIL_MODES = {
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
- * @property {additionalHeaderContent | undefined} additionalHeaderContent Additional 
- * header content. Will not be collapsible and will be rendered directly beneath the 
- * header. 
  * @property {Array<TemplatedComponent>} dataFields 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
@@ -68,6 +63,13 @@ export const LIST_ITEM_DETAIL_MODES = {
 export default class BaseListItemViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_LIST_ITEM; }
+  
+  /**
+   * @returns {String}
+   * @static
+   * @readonly
+   */
+  static get HEADER_TEMPLATE() { return game.strive.const.TEMPLATES.BASE_LIST_ITEM_HEADER; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -191,26 +193,19 @@ export default class BaseListItemViewModel extends ViewModel {
   get metaDataInputDefinitions() {
     return [
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.CUSTOM,
         name: this._inputTags,
         localizedLabel: game.i18n.localize("system.general.tag.plural"),
         iconHtml: '<i class="ico dark ico-tags-solid"></i>',
-        defaultValue: this.document.tags,
-        specificArgs: {
-          viewModelFactory: (id, parent, value, furtherArgs) => {
-            return new InputTagsViewModel({
-              id: id,
-              parent: parent,
-              value: value,
-              systemTags: furtherArgs.systemTags,
-            });
-          },
-          furtherArgs: {
+        template: InputTagsViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => {
+          return new InputTagsViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.tags,
             systemTags: SKILL_TAGS.asArray()
               .concat(ASSET_TAGS.asArray()),
-          },
-          template: InputTagsViewModel.TEMPLATE,
-        }
+          });
+        },
       }),
     ];
   }
@@ -253,9 +248,11 @@ export default class BaseListItemViewModel extends ViewModel {
     this.secondaryHeaderButtons = this.getSecondaryHeaderButtons();
     this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
     
-    this.additionalHeaderContent = this.getAdditionalHeaderContent();
-    if (ValidationUtil.isDefined(this.additionalHeaderContent)) {
-      this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
+    this.headerTemplate = this.getHeaderTemplate();
+    
+    this.promotedContent = this.getPromotedContentTemplate();
+    if (ValidationUtil.isDefined(this.promotedContent)) {
+      this._ensureViewModelsAsProperties([this.promotedContent]);
     }
     
     this.additionalContent = this.getAdditionalContent();
@@ -425,44 +422,62 @@ export default class BaseListItemViewModel extends ViewModel {
   getContextMenuButtons() {
     return [
       // Edit name
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.name.edit"),
         icon: '<i class="fas fa-edit"></i>',
         condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.queryEditName.bind(this),
-      },
+      }),
       // Import
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.import"),
         icon: '<i class="fas fa-download"></i>',
         condition: (this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM),
         callback: this.import.bind(this),
-      },
+      }),
       // Duplicate
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.duplicate"),
         icon: '<i class="fas fa-clone"></i>',
         condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.duplicate.bind(this),
-      },
+      }),
       // Edit meta data
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.edit.metadata"),
         icon: '<i class="fas fa-cog"></i>',
         callback: this.editMetaData.bind(this),
-      },
+      }),
     ];
   }
   
   /**
-   * Returns the definition of the additional header content, if there is one. 
+   * Returns the definition of the header. 
+   * 
+   * Can be overridden to implement a custom header. 
+   * 
+   * @returns {TemplatedComponent}
+   * 
+   * @virtual
+   * @protected
+   */
+  getHeaderTemplate() {
+    return new TemplatedComponent({
+      template: BaseListItemViewModel.HEADER_TEMPLATE,
+      viewModel: this,
+    });
+  }
+  
+  /**
+   * Returns the definition of additional content that is to be rendered just below the header, 
+   * and above the data fields, and which does not get hidden when the list item is collapsed. 
    * 
    * @returns {TemplatedComponent | undefined}
    * 
    * @virtual
    * @protected
    */
-  getAdditionalHeaderContent() {
+  getPromotedContentTemplate() {
     return undefined;
   }
   
@@ -491,14 +506,16 @@ export default class BaseListItemViewModel extends ViewModel {
       localizedTitle: `${StringUtil.format(game.i18n.localize("system.general.name.editOf"), this.title)}`,
       inputDefinitions: [
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
           name: inputName,
           localizedLabel: game.i18n.localize("system.general.name.label"),
+          template: InputTextFieldViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.name,
+          }),
           required: true,
-          defaultValue: this.document.name,
-          validationFunc: (str) => {
-            return str.trim().length > 0;
-          },
+          validationFunc: (str) => { return str.trim().length > 0; },
         }),
       ],
       focused: inputName,
@@ -609,6 +626,8 @@ export default class BaseListItemViewModel extends ViewModel {
 
     const deltaTags = dialog[this._inputTags];
     this.document.tags = deltaTags;
+
+    return dialog;
   }
 
   /** @override */

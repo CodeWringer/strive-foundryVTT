@@ -18,7 +18,7 @@ viewModel: DamageHierarchyListItemViewModel
   </div>
   {{!-- Content --}}
   <div id="{{viewModel.id}}-content" class="margin-l-lg">
-    <ol class="unstyled-list auto-margin-v-md auto-border-b">
+    <ol class="unstyled-list auto-margin-v-md auto-border-b-sm">
       {{#each viewModel.findingViewModels as |vm| }}
         {{#with ../viewModel.findingTemplate as |template| }}
           {{> (template) viewModel=vm }}

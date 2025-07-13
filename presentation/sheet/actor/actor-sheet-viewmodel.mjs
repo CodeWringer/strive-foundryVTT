@@ -10,16 +10,16 @@ import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs"
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs"
-import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs"
 import { ExtenderUtil } from "../../../common/extender-util.mjs"
-import Tooltip from "../../component/tooltip/tooltip.mjs"
+import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../../component/tooltip/tooltip.mjs"
 import ActorAbilitiesViewModel from "./part/abilities/actor-abilities-viewmodel.mjs"
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -129,110 +129,35 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       },
     });
     if (this.isNPC || this.isPC) {
+      this.vmActionPoints = new ViewModel({
+        id: "vmActionPoints",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
+        toolTipConstraint: new TooltipPlacementConstraint({
+          placement: TOOLTIP_PLACEMENTS.BOTTOM,
+          offset: 0,
+        }),
+      });
+      this.actionPoints = [];
+      const currentAp = this.document.actionPoints.current;
+      for (let i = 0; i < (this.document.actionPoints.maximum + 1); i++) {
+        this.actionPoints.push({
+          id: `${this.vmActionPoints.id}-ap-${i}`,
+          full: (i > 0) && (i <= currentAp),
+          value: i,
+        });
+      }
+
       this.vmBtnConfigure = new ButtonViewModel({
         id: "vmBtnConfigure",
         parent: this,
         iconHtml: '<i class="fas fa-cog"></i>',
         localizedToolTip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
-          const inputMaxActionPoints = "inputMaxActionPoints";
-          const inputRefillActionPoints = "inputRefillActionPoints";
-          const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
-          const inputInitiatives = "inputInitiatives";
-          const inputEnablePersonality = "inputEnablePersonality";
-          const inputEnableProgression = "inputEnableProgression";
-          const inputEnableGritPoints = "inputEnableGritPoints";
-
-          const inputDefinitions = [
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-              name: inputMaxActionPoints,
-              localizedLabel: game.i18n.localize("system.actionPoint.max"),
-              specificArgs: {
-                min: 0,
-              },
-              defaultValue: this.document.actionPoints.maximum,
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-              name: inputRefillActionPoints,
-              localizedLabel: game.i18n.localize("system.actionPoint.refill"),
-              specificArgs: {
-                min: 0,
-              },
-              defaultValue: this.document.actionPoints.refill.amount,
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.TOGGLE,
-              name: inputAllowRefillActionPoints,
-              localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-              defaultValue: this.document.actionPoints.refill.enable,
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-              name: inputInitiatives,
-              localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
-              specificArgs: {
-                min: 1,
-              },
-              defaultValue: this.document.initiative.perTurn,
-            }),
-          ];
-
-          if (this.isNPC) {
-            inputDefinitions.push(
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.TOGGLE,
-                name: inputEnablePersonality,
-                localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
-                defaultValue: this.document.personalityVisible,
-              })
-            );
-            inputDefinitions.push(
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.TOGGLE,
-                name: inputEnableProgression,
-                localizedLabel: game.i18n.localize("system.character.advancement.label"),
-                defaultValue: this.document.progressionVisible,
-              })
-            );
-            inputDefinitions.push(
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.TOGGLE,
-                name: inputEnableGritPoints,
-                localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
-                defaultValue: this.document.gritPoints.enable,
-              })
-            );
-          }
-          const dialog = await new DynamicInputDialog({
-            localizedTitle: game.i18n.localize("system.character.edit"),
-            inputDefinitions: inputDefinitions,
-          }).renderAndAwait(true);
-  
-          if (dialog.confirmed !== true) return;
-  
-          this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
-          this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
-          this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
-
-          this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
-
-          if (this.isNPC) {
-            this.document.personalityVisible = dialog[inputEnablePersonality] == true;
-            this.document.progressionVisible = dialog[inputEnableProgression] == true;
-            this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
-          }
+          await this.promptConfigure();
         },
       });
     }
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: this,
-      id: "vmBtnSendToChat",
-      isEditable: true,
-      target: this.document,
-      isEditable: this.isEditable || this.isGM,
-    });
 
     if (this.isPlain !== true) {
       this.personalsViewModel = new ActorPersonalsViewModel({ 
@@ -329,6 +254,19 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       thiz._renderLazyTab(tab);
     });
 
+    if (this.isPlain !== true) {
+      this.actionPoints.forEach(ap => {
+        const element = this.vmActionPoints.element.find(`#${ap.id}`);
+        element.click(async (event) => {
+          event.preventDefault(); // Prevents side-effects from event-bubbling. 
+
+          if (this.isEditable === true) {
+            this.document.actionPoints.current = ap.value;
+          }
+        });
+      });
+    }
+
     await this._renderActiveTab(html);
   }
 
@@ -392,7 +330,125 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       await this.gmNotesViewModel.render();
     }
   }
-  
+
+  /**
+   * Opens the dialog to configure the meta data of the character. 
+   * 
+   * @async
+   */
+  async promptConfigure() {
+    const inputMaxActionPoints = "inputMaxActionPoints";
+    const inputRefillActionPoints = "inputRefillActionPoints";
+    const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
+    const inputInitiatives = "inputInitiatives";
+    const inputEnablePersonality = "inputEnablePersonality";
+    const inputEnableProgression = "inputEnableProgression";
+    const inputEnableGritPoints = "inputEnableGritPoints";
+
+    const inputDefinitions = [
+      new DynamicInputDefinition({
+        name: inputMaxActionPoints,
+        localizedLabel: game.i18n.localize("system.actionPoint.max"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.maximum,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: inputRefillActionPoints,
+        localizedLabel: game.i18n.localize("system.actionPoint.refill"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.refill.amount,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: inputAllowRefillActionPoints,
+        localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: this.document.actionPoints.refill.enable,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: inputInitiatives,
+        localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 1,
+          value: this.document.initiative.perTurn,
+        }),
+      }),
+    ];
+
+    if (this.isNPC) {
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          name: inputEnablePersonality,
+          localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.personalityVisible,
+          }),
+        })
+      );
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          name: inputEnableProgression,
+          localizedLabel: game.i18n.localize("system.character.advancement.label"),
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.progressionVisible,
+          }),
+        })
+      );
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          name: inputEnableGritPoints,
+          localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.gritPoints.enable,
+          }),
+        })
+      );
+    }
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: game.i18n.localize("system.character.edit"),
+      inputDefinitions: inputDefinitions,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
+    this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
+    this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
+
+    this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
+
+    if (this.isNPC) {
+      this.document.personalityVisible = dialog[inputEnablePersonality] == true;
+      this.document.progressionVisible = dialog[inputEnableProgression] == true;
+      this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
+    }
+  }
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorSheetViewModel));

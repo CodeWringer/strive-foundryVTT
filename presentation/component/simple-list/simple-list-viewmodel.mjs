@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
@@ -7,8 +8,7 @@ import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
  * Represents a simple item list in the sense that the presentation of 
  * individual items is entirely up to the user. 
  * 
- * @property {Array<SimpleListItemViewModel>} itemViewModels
- * @property {Array<ViewModel>} contentItemViewModels
+ * @property {Array<Any>} value
  * @property {String} itemTemplate
  * * Read-only
  * @property {String} contentItemTemplate
@@ -17,11 +17,10 @@ import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
  * @property {Boolean} isItemRemovable
  * @property {ViewModel} vmBtnAddItem
  * 
- * @method onAddClick Invoked when the "add" button is clicked. 
- * * A user of this component is expected to instantiate and provide a new list item view model instance. 
- * @method onRemoveClick Invoked when the "remove" button is clicked. Arguments: 
- * * `{SimpleListItemViewModel} viewmodel` View model instance of the list item to remove. 
- * * `{Number} index` Index of the list item to remove. 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Any}`
+ * * `newValue: {Any}`
  * 
  * @extends ViewModel
  */
@@ -45,6 +44,23 @@ export default class SimpleListViewModel extends ViewModel {
   get itemTemplate() { return SimpleListItemViewModel.TEMPLATE; }
 
   /**
+   * Returns the current value. 
+   * 
+   * @type {Array<Any>}
+   */
+  get value() { return this._value; }
+  /**
+   * Sets the current value. 
+   * 
+   * @param {Array<Any>} newValue
+   */
+  set value(newValue) {
+    const oldValue = this._value;
+    this._value = newValue;
+    this.onChange(oldValue, newValue);
+  }
+
+  /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
@@ -52,33 +68,55 @@ export default class SimpleListViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner
    * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
    * 
-   * @param {Array<ViewModel>} args.contentItemViewModels 
    * @param {String} args.contentItemTemplate
-   * @param {Function | undefined} args.onAddClick Invoked when the "add" button is clicked. 
-   * * A user of this component is expected to instantiate and provide a new list item view model instance. 
-   * @param {Function | undefined} args.onRemoveClick Invoked when the "remove" button is clicked. Arguments: 
-   * * `{SimpleListItemViewModel} viewmodel` View model instance of the list item to remove. 
-   * * `{Number} index` Index of the list item to remove. 
+   * @param {Function} args.contentItemViewModelFactory
+   * @param {Any} args.newItemDefaultValue 
+   * @param {Array<Any> | undefined} args.value
    * @param {Boolean | undefined} args.isItemAddable 
    * * Default `false`.
    * @param {Boolean | undefined} args.isItemRemovable 
    * * Default `false`.
    * @param {String | undefined} args.localizedAddLabel
+   * 
+   * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
+   * Receives the following arguments: 
+   * * `oldValue: {Any}`
+   * * `newValue: {Any}`
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["contentItemViewModels", "contentItemTemplate"]);
+    ValidationUtil.validateOrThrow(args, ["contentItemTemplate", "contentItemViewModelFactory", "newItemDefaultValue"]);
 
-    this.contentItemViewModels = args.contentItemViewModels;
     this.contentItemTemplate = args.contentItemTemplate;
+    this.contentItemViewModelFactory = args.contentItemViewModelFactory;
+    this.newItemDefaultValue = args.newItemDefaultValue;
+    this._value = args.value ?? [];
     this.isItemAddable = args.isItemAddable ?? false;
     this.isItemRemovable = args.isItemRemovable ?? false;
     this.localizedAddLabel = args.localizedAddLabel ?? "";
-    this.onAddClick = args.onAddClick ?? (() => {});
-    this.onRemoveClick = args.onRemoveClick ?? (() => {});
+    this.onChange = args.onChange ?? (() => {});
 
-    this.itemViewModels = [];
-    this.itemViewModels = this._getItemViewModels();
+    this.onAddClick = async () => {
+      const index = this.value.length;
+      const vm = this._generateItemViewModel(index, this.newItemDefaultValue);
+      const renderedItem = await new FoundryWrapper().renderTemplate(SimpleListItemViewModel.TEMPLATE, {
+        viewModel: vm,
+      });
+      const listElement = this.element.find(`#${this.id}-ul`);
+      listElement.append(renderedItem);
+      vm.activateListeners(listElement.find(`#${vm.id}`));
+
+      this.value = this.value.concat(this.newItemDefaultValue);
+    };
+    this.onRemoveClick = (index, vm) => {
+      const newValue = this.value.concat([]);
+      newValue.splice(index, 1);
+
+      this.element.find(`#${vm.id}`).remove();
+      this.value = newValue;
+    };
+
+    this.itemViewModels = this._generateItemViewModels();
 
     if (this.isItemAddable === true) {
       this.vmBtnAddItem = new ButtonViewModel({
@@ -99,38 +137,58 @@ export default class SimpleListViewModel extends ViewModel {
       vm.dispose();
     }
     // Generate new list of child view models. 
-    this.itemViewModels = this._getItemViewModels();
+    this.itemViewModels = this._generateItemViewModels();
   }
 
   /**
-   * Returns simple list item view models, based on `this.contentItemViewModels`. 
-   * 
    * @returns {Array<SimpleListItemViewModel>}
    * 
    * @private
    */
-  _getItemViewModels() {
+  _generateItemViewModels() {
     const result = [];
 
-    for (let i = 0; i < this.contentItemViewModels.length; i++) {
-      const contentItemViewModel = this.contentItemViewModels[i];
-      const vm = new SimpleListItemViewModel({
-        id: `simpleListItem${i}`,
-        parent: this,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
-        itemViewModel: contentItemViewModel,
-        itemTemplate: this.contentItemTemplate,
-        isRemovable: this.isItemRemovable,
-        onRemoveClick: () => {
-          this.onRemoveClick(vm, i);
-        }
-      });
-      contentItemViewModel.parent = vm;
+    for (let i = 0; i < this.value.length; i++) {
+      const item = this.value[i];
+      const vm = this._generateItemViewModel(i, item);
       result.push(vm);
     }
 
     return result;
   }
+
+  /**
+   * @param {Number} index 
+   * @param {Any} item 
+   * 
+   * @returns {SimpleListItemViewModel}
+   * 
+   * @private
+   */
+  _generateItemViewModel(index, item) {
+    const contentItemViewModel = this.contentItemViewModelFactory(index, item);
+    if (ValidationUtil.isDefined(contentItemViewModel.onChange)) {
+      contentItemViewModel.onChange = (newValue) => {
+        const newValues = this.value.concat([]);
+        newValues[index] = newValue;
+        this.value = newValues;
+      };
+    }
+    const vm = new SimpleListItemViewModel({
+      id: `simpleListItem-${index}`,
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      itemViewModel: contentItemViewModel,
+      itemTemplate: this.contentItemTemplate,
+      isRemovable: this.isItemRemovable,
+      onRemoveClick: () => {
+        this.onRemoveClick(index, vm);
+      }
+    });
+    contentItemViewModel.parent = vm;
+    return vm;
+  }
+
 }
