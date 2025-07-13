@@ -168,6 +168,52 @@ export default class DynamicInputDialogViewModel extends ViewModel {
 
     super.dispose();
   }
+
+  /**
+   * Re-generates the view model of and re-renders the input identified by the given `name`. 
+   * 
+   * @param {String} name Name of the input to refresh. 
+   * 
+   * @async
+   */
+  async refreshInput(name) {
+    const instance = this.inputInstances.find(it => it.name === name);
+
+    if (!ValidationUtil.isDefined(instance)) {
+      game.strive.logger.logWarn(`Failed to find instance by name '${name}'`);
+      return;
+    };
+
+    $(instance.viewModel.element).remove();
+    $(this.element).find(`#${instance.name}-slot`).append(`<div id="${instance.name}-placeholder" class="flex flex-center"><i class="fa-spinner fas font-size-lg spin"></i></div>`)
+
+    // Re-create the view model instance. 
+    instance.viewModel = await instance.viewModelFactory(instance.name, this);
+
+    // Render the view model and attach it to the DOM. 
+    const renderedTemplate = await new FoundryWrapper().renderTemplate(instance.template, {
+      viewModel: instance.viewModel,
+    });
+    $(this.element).find(`#${instance.name}-placeholder`).remove();
+    $(this.element).find(`#${instance.name}-slot`).append(renderedTemplate);
+
+    // Pass through the view model's onChange, if possible, so that value changes can be properly propagated. 
+    if (ValidationUtil.isDefined(instance.viewModel.onChange)) {
+      instance.viewModel.onChange = async (oldValue, newValue) => {
+        this[instance.name] = newValue;
+        if (ValidationUtil.isDefined(instance.onChange)) {
+          await instance.onChange(oldValue, newValue, this);
+        }
+      };
+    }
+
+    // Ensure the default value of the child view model is present on this view model for easy access. 
+    this[instance.name] = instance.viewModel.value;
+
+    // Activate the view model's listeners. 
+    const childElement = this.element.find(`#${instance.viewModel.id}`);
+    await instance.viewModel.activateListeners(childElement);
+  }
   
   /**
    * @private
@@ -218,6 +264,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
  * Receives the following arguments: 
  * * `oldValue: {Any}`
  * * `newValue: {Any}`
+ * * `dialogViewModel: {DynamicInputDialogViewModel}`
  */
 class DynamicInputDefinitionInstance extends DynamicInputDefinition {
   /**
@@ -249,6 +296,7 @@ class DynamicInputDefinitionInstance extends DynamicInputDefinition {
    * Receives the following arguments: 
    * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * * `dialogViewModel: {DynamicInputDialogViewModel}`
    */
   constructor(args = {}) {
     super(args);

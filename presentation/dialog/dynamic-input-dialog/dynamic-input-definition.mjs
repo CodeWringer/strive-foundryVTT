@@ -30,6 +30,7 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
  * Receives the following arguments: 
  * * `oldValue: {Any}`
  * * `newValue: {Any}`
+ * * `dialogViewModel: {DynamicInputDialogViewModel}`
  */
 export default class DynamicInputDefinition {
   /**
@@ -70,6 +71,7 @@ export default class DynamicInputDefinition {
    * Receives the following arguments: 
    * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * * `dialogViewModel: {DynamicInputDialogViewModel}`
    */
   constructor(args = {}) {
     ValidationUtil.validateOrThrow(args, ["name"]);
