@@ -55,6 +55,14 @@
       "cancel": "Cancel",
       "confirm": "Confirm",
       "contextMenu": "Context-Menu",
+      "collection": "Collection",
+      "collectionSources": {
+        "all": "All",
+        "allCompendia": "All Compendia",
+        "systemCompendia": "System Compendia",
+        "worldCompendia": "World Compendia",
+        "world": "World"
+      },
       "custom": "Custom",
       "decrement": "Decrement",
       "delete": {

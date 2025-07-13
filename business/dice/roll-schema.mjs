@@ -1,7 +1,7 @@
 import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs";
+import InputDropDownViewModel from "../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import DynamicInputDefinition from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import RollData from "./roll-data.mjs";
 import RollQueryData from "./roll-query-data.mjs";
 
@@ -102,14 +102,15 @@ export class RollSchema {
       localizedTitle: game.i18n.localize("system.roll.query"),
       inputDefinitions: [
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: this._nameInputVisibility,
-          localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
-          required: true,
-          defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
-          specificArgs: {
+          template: InputDropDownViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputDropDownViewModel({
+            id: id,
+            parent: parent,
+            value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
             options: VISIBILITY_MODES.asChoices(),
-          }
+          }),
+          localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
         }),
       ],
     });

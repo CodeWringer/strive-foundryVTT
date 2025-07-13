@@ -3,12 +3,10 @@ viewModel: SimpleListViewModel
 cssClass: String | undefined
 --}}
 <section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
-  <ul class="unstyled-list auto-margin-v">
+  <ul id="{{viewModel.id}}-ul" class="unstyled-list auto-margin-v">
     {{#each viewModel.itemViewModels as |vm index|}}
     {{#with ../viewModel.itemTemplate as |template|}}
-      <li class="flex flex-row">
-        {{> (template) viewModel=vm}}
-      </li>
+      {{> (template) viewModel=vm}}
     {{/with}}
     {{/each}}
     {{#if viewModel.isItemAddable}}

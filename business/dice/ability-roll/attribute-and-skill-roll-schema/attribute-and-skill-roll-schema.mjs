@@ -1,8 +1,6 @@
 import { VISIBILITY_MODES } from "../../../../presentation/chat/visibility-modes.mjs";
 import ChoiceOption from "../../../../presentation/component/input-choice/choice-option.mjs";
-import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { ACTOR_TYPES } from "../../../document/actor/actor-types.mjs";
 import TransientSkill from "../../../document/item/skill/transient-skill.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
@@ -13,6 +11,11 @@ import { ROLL_DICE_MODIFIER_TYPES } from "../../roll-dice-modifier-types.mjs";
 import { RollSchema } from "../../roll-schema.mjs";
 import { SkillRollSchema } from "../skill-roll-schema.mjs";
 import AttributeAndSkillRollQueryData from "./attribute-and-skill-roll-query-data.mjs";
+import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import InputTextFieldViewModel from "../../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
+import { ValidationUtil } from "../../../util/validation-utility.mjs";
+import InputDropDownViewModel from "../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 
 /**
  * Defines a schema for rolling dice to test a skill. 
@@ -74,55 +77,69 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "diceCompositionLabel",
         localizedLabel: `<p class="font-size-sm">${diceComposition}</p>`,
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
-        required: true,
-        defaultValue: "0",
-        specificArgs: {
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+          id: id,
+          parent: parent,
+          value: "0",
           placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
-        },
+        }),
+        required: true,
+        validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: nameInputAttribute,
         localizedLabel: game.i18n.localize("system.character.attribute.singular"),
-        required: true,
-        isEditable: baseAttributeChoices.length > 1,
-        defaultValue: baseAttributeChoices.find(choice => choice.value === bestAttribute.name),
-        specificArgs: {
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          id: id,
+          parent: parent,
+          isEditable: baseAttributeChoices.length > 1,
           options: baseAttributeChoices,
-        }
+          value: baseAttributeChoices.find(choice => choice.value === bestAttribute.name),
+        }),
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: nameInputBonusDice,
         localizedLabel: game.i18n.localize("system.roll.bonusDice"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          value: 0,
+        }),
         required: true,
-        defaultValue: 0,
+        validationFunc: (value) => { return parseInt(value) !== NaN; },
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: nameInputCompensationPoints,
         localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          value: 0,
+        }),
         required: true,
-        defaultValue: 0,
+        validationFunc: (value) => { return parseInt(value) !== NaN; },
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: nameInputRollDiceModifier,
         localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
-        required: true,
-        defaultValue: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
-        specificArgs: {
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          id: id,
+          parent: parent,
           options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
-        }
+          value: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
+        }),
       }),
     );
 
@@ -131,7 +148,6 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     if (showReminders && isPC) {
       dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.LABEL,
           name: "forkReminderLabel",
           localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
           showFancyFont: false,

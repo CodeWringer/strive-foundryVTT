@@ -3,9 +3,9 @@ import { StringUtil } from "../../../../../business/util/string-utility.mjs";
 import { UuidUtil } from "../../../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAssetSlotGroupViewModel from "./actor-asset-slot-group-viewmodel.mjs";
 
@@ -69,11 +69,16 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
           ),
           inputDefinitions: [
             new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
               name: inputName,
               localizedLabel: game.i18n.localize("system.general.name.label"),
+              template: InputTextFieldViewModel.TEMPLATE,
+              viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+                id: id,
+                parent: parent,
+                value: "New Asset Slot Group",
+              }),
               required: true,
-              defaultValue: "New Asset Slot Group"
+              validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
             }),
           ],
         }).renderAndAwait(true);

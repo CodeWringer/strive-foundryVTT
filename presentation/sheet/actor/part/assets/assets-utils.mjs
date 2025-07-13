@@ -1,7 +1,9 @@
 import { StringUtil } from "../../../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 
 /**
  * Queries the user for input for a character asset slot and returns the 
@@ -29,31 +31,39 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
     ),
     inputDefinitions: [
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputName,
         localizedLabel: game.i18n.localize("system.general.name.label"),
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+          id: id,
+          parent: parent,
+          value: (assetSlot.name ?? "New Asset Slot"),
+        }),
         required: true,
-        defaultValue: (assetSlot.name ?? "New Asset Slot"),
+        validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputAcceptedTypes,
         localizedLabel: game.i18n.localize("system.character.asset.slot.acceptedTypes"),
-        required: false,
-        defaultValue: ((assetSlot.acceptedTypes ?? []).join(", ")),
-        specificArgs: {
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+          id: id,
+          parent: parent,
+          value: ((assetSlot.acceptedTypes ?? []).join(", ")),
           placeholder: "holdable, armor, ..."
-        },
+        }),
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputMaxBulk,
         localizedLabel: game.i18n.localize("system.character.asset.maxBulk"),
-        required: false,
-        defaultValue: (assetSlot.maxBulk ?? 1),
-        specificArgs: {
-          min: 1
-        },
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          value: (assetSlot.maxBulk ?? 1),
+          min: 1,
+        }),
+        required: true,
         validationFunc: (value) => {
           try {
             const int = parseInt(value);

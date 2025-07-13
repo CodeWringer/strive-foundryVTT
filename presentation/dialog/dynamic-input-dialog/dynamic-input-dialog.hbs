@@ -1,60 +1,33 @@
 {{!-- Parameters:
-viewModel: {Array<DynamicInputDialogViewModel>}
+viewModel: DynamicInputDialogViewModel
+buttons: Array<Object>
 --}}
 {{#> dialogContent}}
-  {{#each viewModel.controls as |control index|}}
-  <div class="flex flex-row auto-margin-h-md sheet-block">
-    {{!-- Label only --}}
-    {{#if (eq control.definition.type "LABEL")}}
-    <div id="{{control.viewModel.id}}">{{{control.definition.localizedLabel}}}</div>
-    {{else}}
+  {{#each viewModel.inputDefinitions as |definition index|}}
+  <div id="{{definition.name}}" class="flex flex-row auto-margin-h-md sheet-block">
     {{!-- Label --}}
+    {{#if (or definition.localizedLabel definition.iconHtml)}}
     <div class="flex flex-row flex-grow flex-middle">
-      {{#> label showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{{control.definition.localizedLabel}}}{{/label}}
-      {{#if control.definition.required}}
+      {{#if definition.localizedLabel}}
+      {{#> label showFancyFont=definition.showFancyFont cssClass="flex-grow"}}{{{definition.localizedLabel}}}{{/label}}
+      {{/if}}
+      {{#if definition.required}}
         <span class="font-size-md font-bold">*</span>
       {{/if}}
       {{!-- Icon --}}
-      {{#if control.definition.iconHtml}}
+      {{#if definition.iconHtml}}
       <span class="flex flex-center">
-        {{{control.definition.iconHtml}}}
+        {{{definition.iconHtml}}}
       </span>
       {{/if}}
     </div>
-    {{!-- Input control --}}
-    <div class="flex flex-middle flex-grow">
-      {{#if (eq control.definition.type "DROP_DOWN")}}
-        {{> inputDropDown viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "IMAGE")}}
-        {{> inputImage viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "NUMBER_SPINNER")}}
-        {{> inputNumberSpinner viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "RADIO_BUTTONS")}}
-        {{> inputRadioButtonGroup viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "RICH_TEXT")}}
-        {{> inputRichText viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "TEXTAREA")}}
-        {{> inputTextarea viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "TEXTFIELD")}}
-        {{> inputTextField viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "SIMPLE_LIST")}}
-        {{> simpleList viewModel=control.viewModel cssClass="flex-grow" }}
-      {{/if}}
-      {{#if (eq control.definition.type "TOGGLE")}}
-        {{> inputToggle viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "CUSTOM")}}
-        {{#with control.template as | template |}}
-          {{> (template) viewModel=control.viewModel }}
-        {{/with}}
-      {{/if}}
+    {{/if}}
+    {{!-- Input element --}}
+    {{#if definition.isRenderable}}
+    <div id="{{definition.name}}-slot" class="flex flex-middle flex-grow">
+			<div id="{{definition.name}}-placeholder" class="flex flex-center">
+        <i class="fa-spinner fas font-size-lg spin"></i>
+      </div>
     </div>
     {{/if}}
   </div>

@@ -27,6 +27,7 @@ export const TEMPLATES = {
   COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
   // Labels
   COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
+  COMPONENT_DYNAMIC_LABEL: `${basePathComponent}/label/dynamic-label.hbs`,
   COMPONENT_READ_ONLY_VALUE: `${basePathComponent}/read-only-value/read-only-value.hbs`,
   COMPONENT_HEADER_PRIMARY: `${basePathComponent}/label/header/primary-header-label.hbs`,
   COMPONENT_HEADER_SECONDARY: `${basePathComponent}/label/header/secondary-header-label.hbs`,

@@ -2,6 +2,7 @@ import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-docum
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
  * Represents a means of determining the creation data for a new 
@@ -42,7 +43,7 @@ export default class DocumentCreationStrategy {
     if (!ValidationUtil.isDefined(creationData)) return; // Bail out. 
     
     // Apply overrides. 
-    creationData = foundry.utils.mergeObject(creationData, this.creationDataOverrides);
+    creationData = new FoundryWrapper().mergeObject(creationData, this.creationDataOverrides);
 
     const creationDataIsActor = this._getIsTypeAnActor(creationData.type);
     

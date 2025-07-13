@@ -21,7 +21,6 @@ import DocumentListItemOrderDataSource from "../../../../component/sortable-list
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
@@ -207,14 +206,18 @@ export default class ActorHealthViewModel extends ViewModel {
           focused: inputNumber,
           inputDefinitions: [
             new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
               name: inputNumber,
               localizedLabel: game.i18n.localize("system.character.health.hp.adjustInputLabel"),
+              template: InputNumberSpinnerViewModel.TEMPLATE,
+              viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+                id: id,
+                parent: parent,
+                value: 0,
+              }),
               required: true,
-              defaultValue: 0,
+              validationFunc: (value) => { return parseInt(value) !== NaN; },
             }),
             new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.LABEL,
               name: "reminder",
               localizedLabel: game.i18n.localize("system.character.health.injury.reminder"),
             }),

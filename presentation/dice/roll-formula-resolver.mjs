@@ -1,9 +1,10 @@
 import AtReferencer from "../../business/referencing/at-referencer.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
+import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputTextFieldViewModel from "../component/input-textfield/input-textfield-viewmodel.mjs";
 import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 
 /**
  * Provides a means to fully resolve roll formulae. 
@@ -201,19 +202,19 @@ export default class RollFormulaResolver {
   _getDynamicDialogInputDefinitions(unresolvedReferences, inputNameVisibility) {
     const inputDefinitions = [
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "promptUnresolvedReferences",
         localizedLabel: game.i18n.localize("system.damageDefinition.unresolvedReferences"),
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputNameVisibility,
         localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
-        required: true,
-        defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
-        specificArgs: {
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          id: id,
+          parent: parent,
           options: VISIBILITY_MODES.asChoices(),
-        }
+          value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+        }),
       }),
     ];
 
@@ -223,11 +224,18 @@ export default class RollFormulaResolver {
     for (let i = unresolvedReferences.length - 1; i >= 0; i--) {
       const unresolvedReference = unresolvedReferences[i];
       inputDefinitions.splice(1, 0, new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: unresolvedReference,
         localizedLabel: unresolvedReference,
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+          id: id,
+          parent: parent,
+          value: "0",
+        }),
         required: true,
-        defaultValue: "",
+        validationFunc: (value) => {
+          return ValidationUtil.isNotBlankOrUndefined(value) && parseInt(value) !== NaN;
+        },
       }));
     }
 

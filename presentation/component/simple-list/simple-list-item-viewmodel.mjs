@@ -7,7 +7,6 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * 
  * @property {ViewModel} itemViewModel The wrapped content view model. 
  * @property {String} itemTemplate Template path of the content. 
- * @property {ViewModel} vmBtnRemove
  * @property {Boolean} isRemovable If `true`, the item is removable. 
  * 
  * @extends ViewModel
@@ -35,7 +34,7 @@ export default class SimpleListItemViewModel extends ViewModel {
     this.itemViewModel = args.itemViewModel;
     this.itemTemplate = args.itemTemplate;
     this.isRemovable = args.isRemovable ?? false;
-    this.onRemoveClick = args.onRemoveClick ?? this.onRemoveClick;
+    this.onRemoveClick = args.onRemoveClick ?? (() => {});
 
     this.vmBtnRemove = new ButtonViewModel({
       id: "vmBtnRemove",
@@ -46,11 +45,4 @@ export default class SimpleListItemViewModel extends ViewModel {
       onClick: this.onRemoveClick,
     });
   }
-  
-  /**
-   * Invoked when the "remove" button is clicked. 
-   * 
-   * This method will be overriden by a parent `SimpleListViewModel`. 
-   */
-  onRemoveClick() { /* Implementation up to the user. */ }
 }
