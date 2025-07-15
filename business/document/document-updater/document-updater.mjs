@@ -150,36 +150,46 @@ export default class DocumentUpdater {
     // Iterate once for every property name in the path. 
     for (let i = 0; i < propertyNames.length; i++) {
       const propertyName = propertyNames[i];
-      const currentDocumentProperty = previousDocumentProperty[propertyName];
 
-      if (ValidationUtil.isFunction(currentDocumentProperty) === true) {
-        throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
-      } else if (ValidationUtil.isArray(currentDocumentProperty) === true) {
-        arrayIsPartOfPath = true;
-        this._logger.logWarn(`Detected array as part by name '${propertyName}' of given property path '${propertyPath}' - consider converting the array to an object, instead, as arrays are slow to process`);
-        previousDtoProperty[propertyName] = currentDocumentProperty;
-      } else if (ValidationUtil.isObject(currentDocumentProperty) === true) {
-        if (arrayIsPartOfPath === true) {
-          // Because differential updates to array elements are not possible, 
-          // we must get the whole object from the document. 
+      if (ValidationUtil.isDefined(previousDocumentProperty[propertyName])) {
+        const currentDocumentProperty = previousDocumentProperty[propertyName];
+  
+        if (ValidationUtil.isFunction(currentDocumentProperty) === true) {
+          throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
+        } else if (ValidationUtil.isArray(currentDocumentProperty) === true) {
+          arrayIsPartOfPath = true;
+          this._logger.logWarn(`Detected array as part by name '${propertyName}' of given property path '${propertyPath}' - consider converting the array to an object, instead, as arrays are slow to process`);
           previousDtoProperty[propertyName] = currentDocumentProperty;
+        } else if (ValidationUtil.isObject(currentDocumentProperty) === true) {
+          if (arrayIsPartOfPath === true) {
+            // Because differential updates to array elements are not possible, 
+            // we must get the whole object from the document. 
+            previousDtoProperty[propertyName] = currentDocumentProperty;
+          } else {
+            // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
+            previousDtoProperty[propertyName] = {};
+          }
         } else {
-          // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
-          previousDtoProperty[propertyName] = {};
+          // Not an object, function or array, so surely it's a primitive?
+          // A primitive is good as the last part of the path, but illegal within a path. 
+          throw new Error(`Detected a primitive as part by name '${propertyName}' of a given property path '${propertyPath}' - property paths may not contain primitives, only end on them!`);
         }
-      } else if (currentDocumentProperty === undefined) {
+
+        // Keep references to the currently looked at properties until the end of the next iteration. 
+        previousDtoProperty = previousDtoProperty[propertyName];
+        previousDocumentProperty = previousDocumentProperty[propertyName];
+      } else {
+        // The original object to build the DTO from is missing a piece of the path!
+        // From this point on, the original object can no longer be used to determine elements of the path. 
+
         this._logger.logWarn("Substituting missing object in path");
         // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
         previousDtoProperty[propertyName] = {};
-      } else {
-        // Not an object, function or array, so surely it's a primitive?
-        // A primitive is good as the last part of the path, but illegal within a path. 
-        throw new Error(`Detected a primitive as part by name '${propertyName}' of a given property path '${propertyPath}' - property paths may not contain primitives, only end on them!`);
-      }
 
-      // Keep references to the currently looked at properties until the end of the next iteration. 
-      previousDtoProperty = previousDtoProperty[propertyName];
-      previousDocumentProperty = previousDocumentProperty[propertyName];
+        // The substituted object is now the effective last property. 
+        previousDtoProperty = previousDtoProperty[propertyName];
+        previousDocumentProperty = previousDtoProperty;
+      }
     }
 
     // Finally, assign the new value. 
