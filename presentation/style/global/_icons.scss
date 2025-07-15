@@ -23,6 +23,9 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
     &.disabled {
       filter: brightness($brightness-disabled-dark);
     }
+    &.active {
+      filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+    }
   }
   &.disabled {
     filter: brightness($brightness-disabled);
