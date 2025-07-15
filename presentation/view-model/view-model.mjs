@@ -284,6 +284,48 @@ export default class ViewModel {
   }
 
   /**
+   * @type {String | undefined}
+   */
+  get localizedToolTip() {
+    return this._localizedToolTip;
+  }
+  /**
+   * @param {String | undefined} value 
+   */
+  set localizedToolTip(value) {
+    this._localizedToolTip = value;
+
+    let toolTipVisible = false;
+
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      toolTipVisible = this._toolTip.visible;
+      this._toolTip.deactivateListeners();
+      this._toolTip.hide();
+      this._toolTip = null;
+    }
+
+    if (ValidationUtil.isDefined(value)) {
+      this._toolTip = new Tooltip({
+        id: `${this.id}-tooltip`,
+        content: this.localizedToolTip,
+        enableArrow: true,
+        style: this.toolTipStyle,
+        constraint: this.toolTipConstraint,
+        onShown: () => {
+          this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+        onHidden: () => {
+          this.element.removeClass(ViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+      });
+      this._toolTip.activateListeners(this._element);
+      if (toolTipVisible) {
+        this._toolTip.show();
+      }
+    }
+  }
+
+  /**
    * Returns true, if rule reminders are enabled. 
    * 
    * @type {Boolean}
@@ -349,7 +391,7 @@ export default class ViewModel {
     this.parent = args.parent;
     this.document = args.document;
     this._showFancyFont = args.showFancyFont;
-    this.localizedToolTip = args.localizedToolTip;
+    this._localizedToolTip = args.localizedToolTip;
     this.toolTipStyle = args.toolTipStyle;
     this.toolTipConstraint = args.toolTipConstraint ?? new TooltipPlacementConstraint({
       placement: TOOLTIP_PLACEMENTS.TOP,
