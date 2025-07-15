@@ -38,6 +38,9 @@ export const SELECTOR_READ = "custom-system-read-only";
  * Receives the following arguments: 
  * * `oldValue: {Any}`
  * * `newValue: {Any}`
+ * @method onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
  */
 export default class InputViewModel extends ViewModel {
 
@@ -85,6 +88,9 @@ export default class InputViewModel extends ViewModel {
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
    */
   constructor(args = {}) {
     super(args);
@@ -92,6 +98,7 @@ export default class InputViewModel extends ViewModel {
     this.iconHtml = args.iconHtml;
     this._value = args.value;
     this.onChange = args.onChange ?? (() => {});
+    this.onInput = args.onInput ?? (() => {});
   }
 
   /** @override */
@@ -101,6 +108,7 @@ export default class InputViewModel extends ViewModel {
     if (this.isEditable !== true) return;
 
     this.element.change(this._onChange.bind(this));
+    this.element.on("input", this._onInput.bind(this));
   }
   
   /** @override */
@@ -125,5 +133,16 @@ export default class InputViewModel extends ViewModel {
     }
 
     this.value = newValue;
+  }
+
+  /**
+   * Internal callback for onInput. 
+   * 
+   * @param {Event} event 
+   * 
+   * @protected
+   */
+  _onInput(event) {
+    this.onInput(event, this);
   }
 }
