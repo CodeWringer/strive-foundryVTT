@@ -1,11 +1,11 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
-import GritPointsViewModel from "../sheet/actor/part/health/grit-points/grit-points-viewmodel.mjs";
+import GritPointsCombatTrackerViewModel from "../sheet/actor/part/health/grit-points/grit-points-combat-tracker-viewmodel.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
 
 /**
  * @property {Array<CombatTrackerActionPointsViewModel>} actionPointsViewModels
- * @property {Array<GritPointsViewModel>} gritPointsViewModels
+ * @property {Array<GritPointsCombatTrackerViewModel>} gritPointsViewModels
  * 
  * @extends CombatTracker
  * @see https://foundryvtt.com/api/v10/classes/client.CombatTracker.html
@@ -42,7 +42,7 @@ export default class CustomCombatTracker extends CombatTracker {
       
       // Add action points view model. 
       turn.renderActionPoints = document.type !== ACTOR_TYPES.PLAIN;
-      turn.actionPointsTemplate = game.strive.const.TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
+      turn.actionPointsTemplate = CombatTrackerActionPointsViewModel.TEMPLATE;
       turn.actionPointsViewModel = new CombatTrackerActionPointsViewModel({
         id: `${turn.id}-aplist`,
         document: document,
@@ -52,11 +52,11 @@ export default class CustomCombatTracker extends CombatTracker {
       
       // Add grit points view model. 
       const transientActor = document.getTransientObject();
-      turn.gritPointsTemplate = game.strive.const.TEMPLATES.ACTOR_GRIT_POINTS;
+      turn.gritPointsTemplate = GritPointsCombatTrackerViewModel.TEMPLATE;
       turn.renderGritPoints = transientActor.type === ACTOR_TYPES.PC 
       || (transientActor.type === ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);
 
-      turn.gritPointsViewModel = new GritPointsViewModel({
+      turn.gritPointsViewModel = new GritPointsCombatTrackerViewModel({
         id: `${turn.id}-gplist`,
         isEditable: true,
         document: transientActor,

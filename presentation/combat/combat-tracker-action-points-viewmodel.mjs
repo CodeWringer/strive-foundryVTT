@@ -10,6 +10,9 @@ import ViewModel from "../view-model/view-model.mjs";
  * @property {Actor} document 
  */
 export default class CombatTrackerActionPointsViewModel extends ViewModel {
+  /** @override */
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMBAT_TRACKER_ACTION_POINTS; }
+
   /**
    * @param {Object} args 
    * @param {Actor} args.document 
