@@ -7,63 +7,37 @@ cssClass: {undefined | String}
   <div class="auto-margin-v-md">
     {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.healthStats"}}{{/header1}}
     <div class="flex flex-column auto-margin-v-md">
-      {{!-- Row --}}
       <div class="flex flex-justify flex-row flex-wrap auto-margin-h-md">
         {{!-- HP --}}
-        <div class="sheet-block flex flex-row">
-          <div class="flex flex-column">
+        <div class="sheet-block flex flex-column">
+          <div class="flex flex-row flex-middle auto-margin-h-sm">
+            {{!-- Current Value Icon --}}
+            <i id="{{viewModel.vmHpIcon.id}}" class="ico dark ico-heart-solid"></i>
+            {{!-- Current HP --}}
+            {{> inputNumberSpinner viewModel=viewModel.vmHp cssClass="width-md" }}
+            <span class="font-size-lg font-bold">/</span>
             {{!-- Max HP --}}
-            <div class="flex flex-row flex-middle flex-right">
-              {{#> labeledControl viewModel=viewModel.vmMaxHp localizedIconToolTip=(localize "system.character.health.hp.maximum") iconClass="ico-heart-limit-solid" cssClass="width-lg" }}
-                {{> inputNumberSpinner }}
-              {{/labeledControl}}
-              {{#> labeledControl viewModel=viewModel.vmMaxHpModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
-                {{> inputNumberSpinner }}
-              {{/labeledControl}}
-              <span class="pad-md font-bold">=</span>
-              <span class="width-md">
-                {{> readOnlyValue viewModel=viewModel.vmModifiedMaxHp }}
-              </span>
-            </div>
-            <div class="flex flex-row flex-middle flex-right">
-              {{!-- Reminder --}}
-              {{#if viewModel.showReminders}}
-              <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmHpInjuryReminder.id}}">
-                <i class="far fa-question-circle info-button"></i>
-              </span>
-              {{/if}}
-              {{!-- Current HP --}}
-              {{#> labeledControl viewModel=viewModel.vmHp localizedIconToolTip=(localize "system.character.health.hp.label") iconClass="ico-heart-solid" cssClass="width-xl" }}
-                {{> inputNumberSpinner }}
-              {{/labeledControl}}
-            </div>
-          </div>
-          <div class="flex flex-column">
-            <span class="flex-grow"></span>
+            {{> inputNumberSpinner viewModel=viewModel.vmMaxHp cssClass="width-md" }}
+            {{!-- Max Value Icon --}}
+            <i id="{{viewModel.vmMaxHpIcon.id}}" class="ico dark ico-heart-limit-solid"></i>
             {{!-- Adjust button --}}
-            {{> button viewModel=viewModel.vmAdjustHp heavy=true fill=false skipPadding=true }}
+            {{> button viewModel=viewModel.vmAdjustHp heavy=false fill=false skipPadding=true }}
           </div>
         </div>
         {{!-- Exhaustion --}}
-        <div class="sheet-block">
-          {{!-- Max Exhaustion --}}
-          <div class="flex flex-row flex-middle flex-right">
-            {{#> labeledControl viewModel=viewModel.vmMaxExhaustion localizedIconToolTip=(localize "system.character.health.exhaustion.maximum") iconClass="ico-lung-limit-solid" cssClass="width-lg" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
-            {{#> labeledControl viewModel=viewModel.vmMaxExhaustionModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
-            <span class="pad-md font-bold">=</span>
-            <span class="width-md">
-              {{> readOnlyValue viewModel=viewModel.vmModifiedMaxExhaustion }}
-            </span>
-          </div>
-          {{!-- Current Exhaustion --}}
-          <div class="flex flex-row flex-middle flex-right">
-            {{#> labeledControl viewModel=viewModel.vmExhaustion localizedIconToolTip=(localize "system.character.health.exhaustion.label") iconClass="ico-lung-solid" cssClass="width-xl" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
+        <div class="sheet-block flex flex-column">
+          <div class="flex flex-row flex-middle auto-margin-h-sm">
+            {{!-- Current Value Icon --}}
+            <i id="{{viewModel.vmExhaustionIcon.id}}" class="ico dark ico-lung-solid"></i>
+            {{!-- Current Exhaustion --}}
+            {{> inputNumberSpinner viewModel=viewModel.vmExhaustion cssClass="width-md" }}
+            <span class="font-size-lg font-bold">/</span>
+            {{!-- Max Exhaustion --}}
+            {{> inputNumberSpinner viewModel=viewModel.vmMaxExhaustion cssClass="width-md" }}
+            {{!-- Max Value Icon --}}
+            <i id="{{viewModel.vmMaxExhaustionIcon.id}}" class="ico dark ico-lung-limit-solid"></i>
+            {{!-- Adjust button --}}
+            {{> button viewModel=viewModel.vmAdjustExhaustion heavy=false fill=false skipPadding=true }}
           </div>
         </div>
       </div>

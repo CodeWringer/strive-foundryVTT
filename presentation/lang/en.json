@@ -458,14 +458,20 @@
         "obstacleTreatment": "Obstacle Treatment",
         "exhaustion": {
           "label": "Exhaustion",
-          "maximum": "Max. Exhaustion"
+          "maximum": "Max. Exhaustion",
+          "adjust": "Adjust Exhaustion",
+          "adjustInputLabel": "Exhaustion to add/subtract",
+          "maxWithModifier": "Maximum Exhaustion<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
+          "maxExplanation": "Maximum Exhaustion<br>%{baseExhaustionLimit} (base) + %{toughnessRawLevel} (raw toughness) %{operand} %{modifier} (modifier) = %{maxExhaustion}"
         },
         "hp": {
-          "label": "Hit-Points",
+          "label": "Hit-Points (HP)",
           "abbreviation": "HP",
           "maximum": "Max. HP",
           "adjust": "Adjust HP",
-          "adjustInputLabel": "HP to add/subtract"
+          "adjustInputLabel": "HP to add/subtract",
+          "maxWithModifier": "Maximum Hit-Points (Max. HP)<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
+          "maxExplanation": "Maximum Hit-Points (Max. HP)<br>%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>10 - (%{toughness} (toughness) / 2 (round down) = %{hpReductionPerInjury} (reduction per injury)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
         },
         "illness": {
           "plural": "Illnesses",
@@ -784,8 +790,6 @@
       "skillAdvancementRequirements": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}<br>Failures: %{failureFormula} = %{requiredFailures}",
       "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
       "sprintingSpeed": "(%{localizedAgility} (%{agility}) + %{localizedToughness} (%{toughness})) / 2 (rounded up) = %{sprintingSpeed}",
-      "maxHp": "%{baseHp} + (%{toughness} * %{hpPerLevel}) = %{unmodifiedHp} (Raw maximum HP)<br>10 - (%{toughness} / 2) = 10 - %{halfToughness} (rounded down) = %{hpReductionPerInjury} (Reduction per injury)<br>Raw maximum HP (%{unmodifiedHp}) - (injury count (%{injuryCount}) * reduction per injury (%{hpReductionPerInjury})) = %{unmodifiedHp} - %{hpReduction} = %{finalMaxHp}",
-      "maxExhaustion": "base (%{baseExhaustionLimit}) + raw toughness (%{toughnessRawLevel}) = %{maxExhaustion}",
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {
