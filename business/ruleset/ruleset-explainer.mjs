@@ -153,21 +153,6 @@ export default class RulesetExplainer {
   }
   
   /**
-   * @param {CharacterAssetSlotGroup} group 
-   * 
-   * @returns {String}
-   */
-  getExplanationForAssetSlotGroupBulk(group) {
-    
-    return StringUtil.format2(
-      game.i18n.localize("system.rules.assetSlotGroupBulk"),
-      {
-        // TODO
-      }
-    );
-  }
-  
-  /**
    * @param {TransientBaseCharacterActor} actor 
    * 
    * @returns {String}
