@@ -1,7 +1,10 @@
 import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
+import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 import GritPoint from "./grit-point.mjs";
 
@@ -63,6 +66,8 @@ export default class GritPointsViewModel extends ViewModel {
 
     this.document = args.document;
 
+    const thiz = this;
+
     const currentGritPoints = this.document.gritPoints.current;
     this.gritPoints = [];
     for (let i = 0; i < currentGritPoints; i++) {
@@ -76,8 +81,8 @@ export default class GritPointsViewModel extends ViewModel {
     this.vmGritPointsIcon = new ViewModel({
       id: "vmGritPointsIcon",
       parent: this,
-      localizedToolTip: this.showReminders ? 
-        `${game.i18n.localize("system.character.gritPoint.plural")}<br>${game.i18n.localize("system.character.gritPoint.tooltip")}` 
+      localizedToolTip: this.showReminders ?
+        `${game.i18n.localize("system.character.gritPoint.plural")}<br>${game.i18n.localize("system.character.gritPoint.tooltip")}`
         : game.i18n.localize("system.character.gritPoint.plural"),
     });
     this.vmGritPointsSpinner = new InputNumberSpinnerViewModel({
@@ -90,20 +95,39 @@ export default class GritPointsViewModel extends ViewModel {
         this.document.gritPoints.current = newValue;
       },
     });
+    this.vmAdjust = new ButtonViewModel({
+      id: "vmAdjust",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.gritPoint.adjust"),
+      iconHtml: '<i class="fas fa-edit" style="height: 22px;"></i>',
+      onClick: async () => {
+        const inputNumber = "inputNumber";
+        const dialog = await new DynamicInputDialog({
+          easyDismissal: true,
+          focused: inputNumber,
+          inputDefinitions: [
+            new DynamicInputDefinition({
+              name: inputNumber,
+              localizedLabel: game.i18n.localize("system.character.gritPoint.adjustInputLabel"),
+              template: InputNumberSpinnerViewModel.TEMPLATE,
+              viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+                id: id,
+                parent: parent,
+                value: 0,
+              }),
+              required: true,
+              validationFunc: (value) => { return parseInt(value) !== NaN; },
+            }),
+          ],
+        }).renderAndAwait(true);
+
+        if (dialog.confirmed !== true) return;
+
+        const number = parseInt(dialog[inputNumber]);
+        const newValue = thiz.document.gritPoints.current + number;
+        const clampedValue = Math.max(0, newValue);
+        thiz.document.gritPoints.current = clampedValue;
+      },
+    });
   }
-
-  /** @override */
-//   activateListeners(html) {
-//     super.activateListeners(html);
-
-//     if (this.isEditable !== true) return;
-
-//     // Set up set to value of clicked element. 
-//     for (let i = 0; i < this.gritPoints.length; i++) {
-//       const gritPoint = this.gritPoints[i];
-//       html.find(`#${gritPoint.id}`).click(async (event) => {
-//         this.document.gritPoints.current = gritPoint.value;
-//       });
-//     }
-//   }
 }

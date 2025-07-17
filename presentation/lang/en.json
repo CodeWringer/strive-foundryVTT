@@ -442,6 +442,8 @@
       },
       "gritPoint": {
         "abbreviation": "GP",
+        "adjust": "Adjust Grit Points",
+        "adjustInputLabel": "Grit Points to add/subtract",
         "singular": "Grit Point",
         "plural": "Grit Points",
         "toggleLabel": "Enable Grit Points",

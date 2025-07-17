@@ -6,8 +6,13 @@ cssClass: String | undefined
   <div class="flex flex-column flex-middle">
     {{!-- Icon --}}
     <i id="{{viewModel.vmGritPointsIcon.id}}" class="ico dark ico-grit-line" style="width: 48px; height: 48px;"></i>
-    {{!-- Current Value --}}
-    {{> inputNumberSpinner viewModel=viewModel.vmGritPointsSpinner cssClass="width-md" }}
+    <div class="flex flex-row flex-middle">
+      {{!-- Current Value --}}
+      {{> inputNumberSpinner viewModel=viewModel.vmGritPointsSpinner cssClass="width-md" }}
+      {{!-- Adjust button --}}
+      {{> button viewModel=viewModel.vmAdjust heavy=false fill=false skipPadding=true }}
+    </div>
+    {{!-- Visual Grit Point Indicators --}}
     <div class="flex flex-row flex-wrap flex-middle">
       {{#each viewModel.gritPoints as |gritPoint|}}
       <span id="{{gritPoint.id}}" class="icon-with-centered-label {{#if gritPoint.active}}grit-point-full{{else}}grit-point-void{{/if}}">
