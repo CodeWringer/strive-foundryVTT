@@ -462,7 +462,7 @@
           "adjust": "Adjust Exhaustion",
           "adjustInputLabel": "Exhaustion to add/subtract",
           "maxWithModifier": "Maximum Exhaustion<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
-          "maxExplanation": "Maximum Exhaustion<br>%{baseExhaustionLimit} (base) + %{toughnessRawLevel} (raw toughness) %{operand} %{modifier} (modifier) = %{maxExhaustion}"
+          "maxExplanation": "%{baseExhaustionLimit} (base) + %{toughnessRawLevel} (raw toughness) %{operand} %{modifier} (modifier) = %{maxExhaustion}"
         },
         "hp": {
           "label": "Hit-Points (HP)",
@@ -471,7 +471,7 @@
           "adjust": "Adjust HP",
           "adjustInputLabel": "HP to add/subtract",
           "maxWithModifier": "Maximum Hit-Points (Max. HP)<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
-          "maxExplanation": "Maximum Hit-Points (Max. HP)<br>%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>10 - (%{toughness} (toughness) / 2 (round down) = %{hpReductionPerInjury} (reduction per injury)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
+          "maxExplanation": "%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>10 - (%{toughness} (toughness) / 2 (round down) = %{hpReductionPerInjury} (reduction per injury)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
         },
         "illness": {
           "plural": "Illnesses",
@@ -510,7 +510,7 @@
             "roll": "Roll for a shrug-off test",
             "chatMessage": "Rolls to shrug off an injury"
           },
-          "reminder": "A loss of <code>10+</code> HP may result in an injury. A loss of <code>20+</code> HP may result in two injuries. A shrug-off test (the button below the 'Injuries' heading) will determine whether you actually suffer any injury. <br>On a successful shrug-off, increment the counter of shrug-offs (next to the button). The <b>Ob</b> of the next shrug-off test will be increased by that number."
+          "reminder": "A loss of <code>10+</code> HP may result in an injury.<br>A loss of <code>20+</code> HP may result in two injuries.<br>A shrug-off test will determine whether you actually suffer any injury."
         },
         "mutation": {
           "plural": "Mutations",

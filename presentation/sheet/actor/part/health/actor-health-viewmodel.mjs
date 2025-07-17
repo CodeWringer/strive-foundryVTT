@@ -77,6 +77,18 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get modifiedMaxHp() { return this.document.health.modifiedMaxHp; }
+  
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxHpModifier() { return this.document.health.maxHpModifier; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get maxHpModifierString() { return `(${this.maxHpModifier >= 0 ? "+" : "-"}${Math.abs(this.maxHpModifier)})`; }
 
   /**
    * @type {Number}
@@ -89,6 +101,18 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get maxExhaustion() { return this.document.health.maxExhaustion; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxExhaustionModifier() { return this.document.health.maxExhaustionModifier; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get maxExhaustionModifierString() { return `(${this.maxExhaustionModifier >= 0 ? "+" : "-"}${Math.abs(this.maxExhaustionModifier)})`; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -183,30 +207,27 @@ export default class ActorHealthViewModel extends ViewModel {
         this.document.health.HP = newValue;
       },
     });
+    const maxHpToolTip = StringUtil.format2(game.i18n.localize("system.character.health.hp.maxWithModifier"), {
+      maximum: this.document.health.maxHP,
+      operand: this.document.health.maxHpModifier >= 0 ? "+" : "-",
+      modifier: Math.abs(this.document.health.maxHpModifier),
+      finalValue: this.document.health.modifiedMaxHp,
+    });
+    const maxHpExplanation = new RulesetExplainer().getExplanationForMaxHp(this.document);
     this.vmMaxHp = new InputNumberSpinnerViewModel({
       id: "vmMaxHp",
       parent: this,
-      localizedToolTip: StringUtil.format2(game.i18n.localize("system.character.health.hp.maxWithModifier"), {
-        maximum: this.document.health.maxHP,
-        operand: this.document.health.maxHpModifier >= 0 ? "+" : "-",
-        modifier: Math.abs(this.document.health.maxHpModifier),
-        finalValue: this.document.health.modifiedMaxHp,
-      }),
+      localizedToolTip: this.showReminders ? `${maxHpToolTip}<br><br>${maxHpExplanation}` : maxHpToolTip,
       value: this.document.health.modifiedMaxHp,
       onChange: (_, newValue) => {
         this.document.health.maxHpModifier = newValue - this.document.health.maxHP;
       },
     });
-    this.vmMaxHpIcon = new ViewModel({
-      id: "vmMaxHpIcon",
-      parent: this,
-      localizedToolTip: new RulesetExplainer().getExplanationForMaxHp(this.document),
-    });
     this.vmAdjustHp = new ButtonViewModel({
       id: "vmAdjustHp",
       parent: this,
       localizedToolTip: game.i18n.localize("system.character.health.hp.adjust"),
-      iconHtml: '<i class="fas fa-edit" style="height: 22px;"></i>',
+      iconHtml: '<i class="fas fa-edit"></i>',
       onClick: async () => {
         const inputNumber = "inputNumber";
         const dialog = await new DynamicInputDialog({
@@ -256,24 +277,21 @@ export default class ActorHealthViewModel extends ViewModel {
         this.document.health.exhaustion = newValue;
       },
     });
+    const maxExhaustionToolTip = StringUtil.format2(game.i18n.localize("system.character.health.exhaustion.maxWithModifier"), {
+      maximum: this.document.health.maxExhaustion,
+      operand: this.document.health.maxExhaustionModifier > 0 ? "+" : "-",
+      modifier: Math.abs(this.document.health.maxExhaustionModifier),
+      finalValue: this.document.health.modifiedMaxExhaustion,
+    });
+    const maxExhaustionExplanation = new RulesetExplainer().getExplanationForMaxExhaustion(this.document);
     this.vmMaxExhaustion = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmMaxExhaustion",
       value: this.document.health.modifiedMaxExhaustion,
-      localizedToolTip: StringUtil.format2(game.i18n.localize("system.character.health.exhaustion.maxWithModifier"), {
-        maximum: this.document.health.maxExhaustion,
-        operand: this.document.health.maxExhaustionModifier > 0 ? "+" : "-",
-        modifier: Math.abs(this.document.health.maxExhaustionModifier),
-        finalValue: this.document.health.modifiedMaxExhaustion,
-      }),
+      localizedToolTip: this.showReminders ? `${maxExhaustionToolTip}<br><br>${maxExhaustionExplanation}` : maxExhaustionToolTip,
       onChange: (_, newValue) => {
         this.document.health.maxExhaustionModifier = newValue - this.document.health.maxExhaustion;
       },
-    });
-    this.vmMaxExhaustionIcon = new ViewModel({
-      id: "vmMaxExhaustionIcon",
-      parent: this,
-      localizedToolTip: new RulesetExplainer().getExplanationForMaxExhaustion(this.document),
     });
     this.vmAdjustExhaustion = new ButtonViewModel({
       id: "vmAdjustExhaustion",
