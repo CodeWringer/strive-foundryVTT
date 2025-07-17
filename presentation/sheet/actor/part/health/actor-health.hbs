@@ -7,66 +7,49 @@ cssClass: {undefined | String}
   <div class="auto-margin-v-md">
     {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.healthStats"}}{{/header1}}
     <div class="flex flex-column auto-margin-v-md">
-      {{!-- Row --}}
       <div class="flex flex-justify flex-row flex-wrap auto-margin-h-md">
         {{!-- HP --}}
-        <div class="sheet-block flex flex-row">
-          <div class="flex flex-column">
-            {{!-- Max HP --}}
-            <div class="flex flex-row flex-middle flex-right">
-              {{#> labeledControl viewModel=viewModel.vmMaxHp localizedIconToolTip=(localize "system.character.health.hp.maximum") iconClass="ico-heart-limit-solid" cssClass="width-lg" }}
-                {{> inputNumberSpinner }}
-              {{/labeledControl}}
-              {{#> labeledControl viewModel=viewModel.vmMaxHpModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
-                {{> inputNumberSpinner }}
-              {{/labeledControl}}
-              <span class="pad-md font-bold">=</span>
-              <span class="width-md">
-                {{> readOnlyValue viewModel=viewModel.vmModifiedMaxHp }}
-              </span>
-            </div>
-            <div class="flex flex-row flex-middle flex-right">
-              {{!-- Reminder --}}
-              {{#if viewModel.showReminders}}
-              <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmHpInjuryReminder.id}}">
-                <i class="far fa-question-circle info-button"></i>
-              </span>
-              {{/if}}
+        <div class="sheet-block flex flex-column">
+          <div class="flex flex-column flex-middle">
+            {{!-- Icon --}}
+            <i id="{{viewModel.vmHpIcon.id}}" class="ico dark ico-heart-solid" style="width: 48px; height: 48px;"></i>
+            <div class="flex flex-row flex-middle">
               {{!-- Current HP --}}
-              {{#> labeledControl viewModel=viewModel.vmHp localizedIconToolTip=(localize "system.character.health.hp.label") iconClass="ico-heart-solid" cssClass="width-xl" }}
-                {{> inputNumberSpinner }}
-              {{/labeledControl}}
+              {{> inputNumberSpinner viewModel=viewModel.vmHp cssClass="width-md" }}
+              {{!-- Adjust button --}}
+              {{> button viewModel=viewModel.vmAdjustHp heavy=false fill=false skipPadding=true }}
             </div>
-          </div>
-          <div class="flex flex-column">
-            <span class="flex-grow"></span>
-            {{!-- Adjust button --}}
-            {{> button viewModel=viewModel.vmAdjustHp heavy=true fill=false skipPadding=true }}
+            {{!-- Divider --}}
+            <div class="margin-t-md margin-b-md" style="height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0) 90%);"></div>
+            {{!-- Max HP --}}
+            <div class="flex flex-row flex-middle">
+              {{> inputNumberSpinner viewModel=viewModel.vmMaxHp cssClass="width-md" }}
+              <span style="width: 26px;">{{viewModel.maxHpModifierString}}</span>
+            </div>
+            {{!-- Max Value Icon --}}
+            {{!-- <i id="{{viewModel.vmMaxHpIcon.id}}" class="ico dark ico-heart-limit-solid"></i> --}}
           </div>
         </div>
         {{!-- Exhaustion --}}
-        <div class="sheet-block">
-          {{!-- Max Exhaustion --}}
-          <div class="flex flex-row flex-middle flex-right">
-            {{#> labeledControl viewModel=viewModel.vmMaxExhaustion localizedIconToolTip=(localize "system.character.health.exhaustion.maximum") iconClass="ico-lung-limit-solid" cssClass="width-lg" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
-            {{#> labeledControl viewModel=viewModel.vmMaxExhaustionModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
-            <span class="pad-md font-bold">=</span>
-            <span class="width-md">
-              {{> readOnlyValue viewModel=viewModel.vmModifiedMaxExhaustion }}
-            </span>
-          </div>
-          {{!-- Current Exhaustion --}}
-          <div class="flex flex-row flex-middle flex-right">
-            {{#> labeledControl viewModel=viewModel.vmExhaustion localizedIconToolTip=(localize "system.character.health.exhaustion.label") iconClass="ico-lung-solid" cssClass="width-xl" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
+        <div class="sheet-block flex flex-column">
+          <div class="flex flex-column flex-middle">
+            {{!-- Icon --}}
+            <i id="{{viewModel.vmExhaustionIcon.id}}" class="ico dark ico-lung-solid" style="width: 48px; height: 48px;"></i>
+            <div class="flex flex-row flex-middle">
+              {{!-- Current Exhaustion --}}
+              {{> inputNumberSpinner viewModel=viewModel.vmExhaustion cssClass="width-md" }}
+              {{!-- Adjust button --}}
+              {{> button viewModel=viewModel.vmAdjustExhaustion heavy=false fill=false skipPadding=true }}
+            </div>
+            {{!-- Divider --}}
+            <div class="margin-t-md margin-b-md" style="height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0) 90%);"></div>
+            {{!-- Max Exhaustion --}}
+            <div class="flex flex-row flex-middle">
+              {{> inputNumberSpinner viewModel=viewModel.vmMaxExhaustion cssClass="width-md" }}
+              <span style="width: 26px;">{{viewModel.maxExhaustionModifierString}}</span>
+            </div>
           </div>
         </div>
-      </div>
       {{!-- Death's Door --}}
       {{#if viewModel.isPC}}
       {{#with viewModel.deathsDoorTemplate as | template |}}

@@ -58,9 +58,15 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
  * * Read-only. 
+ * @property {Number} health.maxHpModifier 
+ * @property {Number} health.modifiedMaxHp 
+ * * Read-only. 
  * @property {Number} health.injuryShrugOffs 
  * @property {Number} health.exhaustion 
  * @property {Number} health.maxExhaustion 
+ * * Read-only. 
+ * @property {Number} health.maxExhaustionModifier 
+ * @property {Number} health.modifiedMaxExhaustion 
  * * Read-only. 
  * @property {Number} health.deathSaves
  * @property {Number} health.deathSaveLimit

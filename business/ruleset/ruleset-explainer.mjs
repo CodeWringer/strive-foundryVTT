@@ -134,30 +134,20 @@ export default class RulesetExplainer {
     const baseHp = this._ruleset.getCharacterBaseHp();
     const toughnessLevel = parseInt(this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, transientActor));
     const hpReductionPerInjury = this._ruleset.getMaximumHpReductionPerInjury(actor);
-
-    const modifiedToughnessString = StringUtil.format2(
-      game.i18n.localize("system.character.advancement.modifiedOf"),
-      {
-        name: game.i18n.localize(ATTRIBUTES.toughness.localizableName),
-      }
-    );
-
     const unmodifiedHp = this._ruleset.getUnmodifiedMaximumHp(actor);
-    const hpReduction = this._ruleset.getCharacterMaximumHpReduction(actor);
-
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
     return StringUtil.format2(
-      game.i18n.localize("system.rules.maxHp"),
+      game.i18n.localize("system.character.health.hp.maxExplanation"),
       {
         baseHp: baseHp,
-        toughness: `${modifiedToughnessString} (${toughnessLevel})`,
+        toughness: toughnessLevel,
         hpPerLevel: this._ruleset.hpPerLevel,
         unmodifiedHp: unmodifiedHp,
-        halfToughness: Math.floor(toughnessLevel / 2),
         hpReductionPerInjury: hpReductionPerInjury,
         injuryCount: injuryCount,
-        hpReduction: hpReduction,
-        finalMaxHp: transientActor.health.maxHP,
+        finalMaxHp: transientActor.health.modifiedMaxHp,
+        operand: transientActor.health.maxHpModifier >= 0 ? "+" : "-",
+        modifier: Math.abs(transientActor.health.maxHpModifier),
       }
     );
   }
@@ -172,7 +162,7 @@ export default class RulesetExplainer {
     return StringUtil.format2(
       game.i18n.localize("system.rules.assetSlotGroupBulk"),
       {
-
+        // TODO
       }
     );
   }
@@ -183,14 +173,17 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForMaxExhaustion(actor) {
-    const level = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
-    const maxExhaustion = this._ruleset.getCharacterMaximumExhaustion(actor);
+    const transientActor = actor.getTransientObject();
+
+    const rawLevel = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
     return StringUtil.format2(
-      game.i18n.localize("system.rules.maxExhaustion"),
+      game.i18n.localize("system.character.health.exhaustion.maxExplanation"),
       {
         baseExhaustionLimit: 1,
-        toughnessRawLevel: level,
-        maxExhaustion: maxExhaustion,
+        toughnessRawLevel: rawLevel,
+        maxExhaustion: transientActor.health.modifiedMaxExhaustion,
+        operand: transientActor.health.maxExhaustionModifier >= 0 ? "+" : "-",
+        modifier: Math.abs(transientActor.health.maxExhaustionModifier),
       }
     );
   }

@@ -64,6 +64,7 @@ export const TEMPLATES = {
   COMPONENT_VISIBILITY_TOGGLE_LIST_ITEM: `${basePathComponent}/visibility-toggle-list/visibility-toggle-list-item.hbs`,
   COMPONENT_HINT_CARD: `${basePathComponent}/hint-card/hint-card.hbs`,
   COMPONENT_LIST_FOOTER: `${basePathComponent}/sortable-list/list-footer.hbs`,
+  COMPOSITE_CURRENT_AND_MAXIMUM_NUMBERS: `${basePathComponent}/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers.hbs`,
   // GM
   COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice

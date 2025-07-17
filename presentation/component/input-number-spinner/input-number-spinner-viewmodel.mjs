@@ -8,6 +8,9 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
+ * 
  * @property {Number} value The current value. 
  * @property {Number | undefined} min Gets the minimum value. 
  * @property {Number | undefined} max Gets the maximum value. 
@@ -40,7 +43,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   /** @override */
   set value(newValue) {
     const oldValue = this._value;
-    this._value = parseInt(newValue);
+    const parsedValue = parseInt(newValue);
+    if (parsedValue === NaN)
+      this._value = this.hasMin ? this.min : 0;
+    else if (this.hasMin && parsedValue < this.min)
+      this._value = this.min;
+    else if (this.hasMax && parsedValue > this.max)
+      this._value = this.max;
+    else
+      this._value = parsedValue;
     this.onChange(oldValue, this._value);
   }
 
@@ -95,6 +106,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
   /**
    * @param {Object} args
+   * 
+   * @param {String | undefined} args.localizedToolTip A localized text to display as a tool tip. 
+   * 
    * @param {Number | undefined} args.value The current value. 
    * * default `0`
    * @param {Number | undefined} args.min Optional. The minimum value. 

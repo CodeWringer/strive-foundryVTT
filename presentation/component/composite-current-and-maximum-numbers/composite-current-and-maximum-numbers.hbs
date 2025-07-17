@@ -1,0 +1,21 @@
+{{!--
+viewModel: CompositeModifiableNumbersViewModel
+cssClass: String | undefined
+--}}
+{{log "DEBUG"}}
+{{log viewModel}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-middle auto-margin-h-sm{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Current Value Icon --}}
+  <i id="{{viewModel.vmIcon.id}}" class="{{viewModel.currentValueIconClass}}"></i>
+  {{!-- Current Value --}}
+  {{> inputNumberSpinner viewModel=viewModel.vmCurrent cssClass="width-md" }}
+  <span class="font-size-lg font-bold">/</span>
+  {{!-- Max Value --}}
+  {{> inputNumberSpinner viewModel=viewModel.vmMax cssClass="width-md" }}
+  {{!-- Max Value Icon --}}
+  <i id="{{viewModel.vmMaxIcon.id}}" class="{{viewModel.maximumValueIconClass}}"></i>
+  {{!-- Adjust button --}}
+  {{#if viewModel.renderAdjustButton}}
+  {{> button viewModel=viewModel.vmAdjust heavy=false fill=false skipPadding=true }}
+  {{/if}}
+</div>
