@@ -176,8 +176,9 @@ export default class ActorHealthViewModel extends ViewModel {
     this.vmHp = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmHp",
-      value: this.document.health.HP,
       localizedToolTip: game.i18n.localize("system.character.health.hp.label"),
+      value: this.document.health.HP,
+      min: 0,
       onChange: (_, newValue) => {
         this.document.health.HP = newValue;
       },
