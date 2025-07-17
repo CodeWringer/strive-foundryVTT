@@ -52,6 +52,7 @@
         "addTypeOf": "Add %s '%s'",
         "query": "Select %s to Add"
       },
+      "adjustInputLabel": "Amount to add/subtract",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "contextMenu": "Context-Menu",
