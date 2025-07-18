@@ -325,7 +325,7 @@
           },
           "fleeCombat": {
             "label": "Flee Combat",
-            "tooltip": "When combat is a decidedly bad idea, one can try to flee from it. A fleeing character can no longer perform any hostile actions. That means, they can no longer attack or hinder any other characters until the end of combat.<br><br>In turn for giving up their offensive capacity, they gain +50% of movement (for an average human on foot, that is +6'/2m) per AP spent. Rules for difficult terrain still apply."
+            "tooltip": "When combat is a decidedly bad idea, one can try to flee from it. A fleeing character can no longer perform any hostile actions. That means, they can no longer attack or hinder any other characters until the end of combat.<br><br>In turn for giving up their offensive capacity, they gain double their sprinting speed per AP spent. Rules for difficult terrain and the exhaustion cost for sprinting still apply."
           },
           "pushThrough": {
             "label": "Push Through",
