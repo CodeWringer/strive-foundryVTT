@@ -310,7 +310,7 @@ export default class TransientDocument {
     let previousProperty = this.document;
     for (let i = 0; i < propertyNames.length - 1; i++) {
       const propertyName = propertyNames[i];
-      let current = propertyName[propertyName];
+      let current = previousProperty[propertyName];
 
       if (ValidationUtil.isDefined(current)) {
         previousProperty = current;
