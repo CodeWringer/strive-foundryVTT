@@ -7,6 +7,7 @@ import AtReferencer from "../referencing/at-referencer.mjs";
 import { ChatUtil } from '../../presentation/chat/chat-utility.mjs';
 import { PropertyUtil } from '../util/property-utility.mjs';
 import FoundryWrapper from '../../common/foundry-wrapper.mjs';
+import { ValidationUtil } from '../util/validation-utility.mjs';
 
 /**
  * @summary
@@ -250,9 +251,10 @@ export default class TransientDocument {
    * @param {Document} document A Foundry {Document}. 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    *  * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"system.attributes[0].level" `
-   * * E.g.: `"system.attributes[4]" `
-   * * E.g.: `"system.attributes" `
+   * * E.g.: `"system.attributes[0].level" ` - supported
+   * * E.g.: `"system.attributes[4]" ` - supported
+   * * E.g.: `"system.attributes" ` - supported
+   * * E.g.: `"system.attributes['level']"` - NOT supported
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
    * 
@@ -268,7 +270,8 @@ export default class TransientDocument {
    * 
    * @param {String} propertyPath Path leading to the property to update, on the document. 
    * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"system.attributes[0].level"`
+   * * E.g.: `"system.attributes[0].level"` - supported
+   * * E.g.: `"system.attributes['level']"` - NOT supported
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
@@ -278,6 +281,46 @@ export default class TransientDocument {
    */
   async updateByPath(propertyPath, newValue, render = true) {
     await this._updater.updateByPath(this.document, propertyPath, newValue, render);
+  }
+
+  /**
+   * Returns the value of the document, identified by the given `propertyPath`, 
+   * or `undefined`, if there is no value. 
+   * 
+   * Handles missing pieces in the path by substituting empty objects. 
+   * 
+   * @param {String} propertyPath Path leading to the property to return, on the document. 
+   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"system.attributes[0].level"` - supported
+   * * E.g.: `"system.attributes['level']"` - NOT supported
+   * 
+   * @returns {Any | undefined}
+   */
+  getByPath(propertyPath) {
+    if (propertyPath === undefined || propertyPath.trim().length < 1) {
+      throw new Error(`Invalid property path '${propertyPath}'`);
+    }
+    
+    const propertyNames = game.strive.util.property.splitPropertyPath(propertyPath);
+    
+    if (propertyNames.length < 1) {
+      throw new Error(`Invalid property path '${propertyPath}'`);
+    }
+
+    let previousProperty = this.document;
+    for (let i = 0; i < propertyNames.length - 1; i++) {
+      const propertyName = propertyNames[i];
+      let current = propertyName[propertyName];
+
+      if (ValidationUtil.isDefined(current)) {
+        previousProperty = current;
+      } else {
+        previousProperty = {};
+      }
+    }
+
+    const finalPropertyName = propertyNames[propertyNames.length - 1];
+    return previousProperty[finalPropertyName];
   }
 
   /**
