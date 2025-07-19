@@ -27,7 +27,7 @@ import IllnessListItemViewModel from "../../../item/illness/illness-list-item-vi
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
 import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.mjs"
-import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
+import ActorHealthConditionsViewModel from "./conditions/actor-health-conditions-viewmodel.mjs"
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
 import InjuryShrugOffBarViewModel from "./injury-shrug-off-bar/injury-shrug-off-bar-viewmodel.mjs"
@@ -142,7 +142,7 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get healthStatesTemplate() { return ActorHealthStatesViewModel.TEMPLATE; }
+  get healthConditionsTemplate() { return ActorHealthConditionsViewModel.TEMPLATE; }
 
   /**
    * @type {String}
@@ -375,9 +375,9 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
     });
 
-    // Conditions (formerly health states)
-    this.vmHealthStates = new ActorHealthStatesViewModel({
-      id: "vmHealthStates",
+    // Conditions
+    this.vmHealthConditions = new ActorHealthConditionsViewModel({
+      id: "vmHealthConditions",
       parent: this,
       isOwner: this.isOwner,
       document: this.document,

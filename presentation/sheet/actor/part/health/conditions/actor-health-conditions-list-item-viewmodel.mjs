@@ -1,10 +1,10 @@
-import { CharacterHealthState } from "../../../../../business/ruleset/health/character-health-state.mjs";
-import { ArrayUtil } from "../../../../../business/util/array-utility.mjs";
-import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
-import ObservableField from "../../../../../common/observables/observable-field.mjs";
-import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputToggleViewModel from "../../../../component/input-toggle/input-toggle-viewmodel.mjs";
-import ViewModel from "../../../../view-model/view-model.mjs"
+import { CharacterHealthState } from "../../../../../../business/ruleset/health/character-health-state.mjs"
+import { ArrayUtil } from "../../../../../../business/util/array-utility.mjs"
+import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs"
+import ObservableField from "../../../../../../common/observables/observable-field.mjs"
+import InputNumberSpinnerViewModel from "../../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputToggleViewModel from "../../../../../component/input-toggle/input-toggle-viewmodel.mjs"
+import ViewModel from "../../../../../view-model/view-model.mjs"
 
 /**
  * Represents a single health state. 
@@ -21,9 +21,9 @@ import ViewModel from "../../../../view-model/view-model.mjs"
  * 
  * @extends ViewModel
  */
-export default class ActorHealthStatesListItemViewModel extends ViewModel {
+export default class ActorHealthConditionsListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH_STATES_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH_CONDITIONS_LIST_ITEM; }
 
   /**
    * Returns true, if the state can be incurred multiple times, which means the 
