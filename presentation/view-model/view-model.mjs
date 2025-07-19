@@ -351,6 +351,16 @@ export default class ViewModel {
    */
   get element() { return this._element; }
 
+  get visible() { return this._visible; }
+  set visible(value) {
+    this._visible = value;
+    if (value) {
+      this.element.removeClass("hidden");
+    } else {
+      this.element.addClass("hidden");
+    }
+  }
+
   /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
@@ -384,6 +394,8 @@ export default class ViewModel {
    * @param {TooltipPlacementConstraint | undefined} args.toolTipConstraint Sets a constraint that determines 
    * where the tool tip will be placed, around the element. 
    * * default `TOOLTIP_PLACEMENTS.TOP` with offset `0`. 
+   * @param {Boolean | undefined} args.visible
+   * * default `true`
    */
   constructor(args = {}) {
     this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
@@ -397,6 +409,7 @@ export default class ViewModel {
       placement: TOOLTIP_PLACEMENTS.TOP,
       offset: 0,
     });
+    this._visible = args.visible ?? true;
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
@@ -527,6 +540,10 @@ export default class ViewModel {
 
     if (this._element === undefined || this._element === null || this._element.length === 0) {
       game.strive.logger.logWarn(`Failed to get element with id '${this.id}'`);
+    }
+
+    if (this.visible !== true) {
+      this.element.addClass("hidden");
     }
 
     if (ValidationUtil.isDefined(this._toolTip)) {

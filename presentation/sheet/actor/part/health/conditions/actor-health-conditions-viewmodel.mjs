@@ -1,28 +1,59 @@
-import { CharacterHealthState } from "../../../../../business/ruleset/health/character-health-state.mjs";
-import { HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
-import GameSystemUserSettings from "../../../../../business/setting/game-system-user-settings.mjs";
-import LoadHealthStatesSettingUseCase from "../../../../../business/use-case/load-health-states-setting-use-case.mjs";
-import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
-import ViewModel from "../../../../view-model/view-model.mjs"
-import ActorHealthStatesListItemViewModel from "./actor-health-states-list-item-viewmodel.mjs";
+import { CharacterHealthState } from "../../../../../../business/ruleset/health/character-health-state.mjs";
+import { HEALTH_STATES } from "../../../../../../business/ruleset/health/health-states.mjs";
+import LoadHealthStatesSettingUseCase from "../../../../../../business/use-case/load-health-states-setting-use-case.mjs";
+import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
+import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
+import ViewModel from "../../../../../view-model/view-model.mjs";
+import ActorHealthConditionsListItemViewModel from "./actor-health-conditions-list-item-viewmodel.mjs";
 
 /**
  * @property {TransientBaseCharacterActor} document An actor document on which to set the states. 
  * @property {String} listItemTemplate
  * * Read-only
- * @property {Array<ActorHealthStatesListItemViewModel>} stateViewModels
  * 
  * @extends ViewModel
  */
-export default class ActorHealthStatesViewModel extends ViewModel {
+export default class ActorHealthConditionsViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH_STATES; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH_CONDITIONS; }
 
   /**
    * @type {String}
    * @readonly
    */
-  get listItemTemplate() { return ActorHealthStatesListItemViewModel.TEMPLATE; }
+  get conditionTemplate() { return ActorHealthConditionsListItemViewModel.TEMPLATE; }
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  _isExpanded = false;
+  /**
+   * @type {Boolean}
+   */
+  get isExpanded() {
+    return this._isExpanded;
+  }
+  set isExpanded(value) {
+    this._isExpanded = value;
+
+    if (value) {
+      this.conditionViewModels.forEach(vm => {
+        vm.visible = true;
+      });
+      this.element.find("#expansion-indicator-expanded").removeClass("hidden");
+      this.element.find("#expansion-indicator-collapsed").addClass("hidden");
+    } else {
+      this.conditionViewModels.forEach(vm => {
+        vm.visible = vm.stateIntensity.value > 0;
+      });
+      this.element.find("#expansion-indicator-expanded").addClass("hidden");
+      this.element.find("#expansion-indicator-collapsed").removeClass("hidden");
+    }
+    
+    // Immediately write view state. 
+    this.writeViewState();
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -43,10 +74,11 @@ export default class ActorHealthStatesViewModel extends ViewModel {
 
     this.document = args.document;
 
+    this.registerViewStateProperty("_isExpanded");
+    this.readViewState();
+
     // Turn states into view models. 
 
-    this.stateViewModels = [];
-    
     const characterHealthStates = this.document.health.states;
 
     // Get all custom-defined health states. 
@@ -104,10 +136,11 @@ export default class ActorHealthStatesViewModel extends ViewModel {
       }
     });
 
+    this.conditionViewModels = [];
     for (const state of states) {
       const isVisible = stateSettings.hidden.find(stateName => state.name === stateName) === undefined;
       if (isVisible === true) {
-        const vm = new ActorHealthStatesListItemViewModel({
+        const vm = new ActorHealthConditionsListItemViewModel({
           id: this.getSanitizedStateName(state.name),
           parent: this,
           document: this.document,
@@ -119,10 +152,20 @@ export default class ActorHealthStatesViewModel extends ViewModel {
           stateName: state.name,
           stateIntensity: state.intensity,
           stateLimit: state.limit,
+          visible: state.intensity > 0 || this.isExpanded,
         });
-        this.stateViewModels.push(vm);
+        this.conditionViewModels.push(vm);
       }
     }
+
+    this.vmHeaderButton = new ButtonViewModel({
+      id: "vmHeaderButton",
+      parent: this,
+      isEditable: true, // Even those without editing right should be able to see nested content. 
+      onClick: async () => {
+        this.isExpanded = !this.isExpanded;
+      },
+    });
   }
 
   /**

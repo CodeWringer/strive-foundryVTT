@@ -1,0 +1,24 @@
+{{!-- Parameters:
+viewModel: {ActorHealthConditionsViewModel}
+cssClass: {undefined | String}
+--}}
+<div id="{{viewModel.id}}" class="sheet-block">
+  <h2 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0;">
+    {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
+      <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.health.states.label"}}</span>
+      {{!-- Expansion Toggle --}}
+      <div class="flex flex-center">
+        <i id="expansion-indicator-expanded" class="expanded ico ico-chevron-d-solid{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="expansion-indicator-collapsed" class="collapsed ico ico-chevron-r-solid{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+      </div>
+    {{/button}}
+  </h2>
+  {{!-- Conditions --}}
+  <div class="grid-3col">
+    {{#each viewModel.conditionViewModels as |vm index|}}
+      {{#with ../viewModel.conditionTemplate as | template |}}
+        {{> (template) viewModel=vm}}
+      {{/with}}
+    {{/each}}
+  </div>
+</div>

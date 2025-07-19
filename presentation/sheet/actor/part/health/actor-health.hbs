@@ -46,25 +46,25 @@ cssClass: {undefined | String}
         </div>
         {{!-- Grit Points --}}
         {{#with viewModel.gritPointsTemplate as | template |}}
-          {{> (template) viewModel=../viewModel.vmGritPoints}}
+          {{> (template) viewModel=../viewModel.vmGritPoints }}
         {{/with}}
       </div>
       {{!-- Death's Door --}}
       {{#if viewModel.isPC}}
       {{#with viewModel.deathsDoorTemplate as | template |}}
-        {{> (template) viewModel=../viewModel.vmDeathsDoor}}
+        {{> (template) viewModel=../viewModel.vmDeathsDoor }}
       {{/with}}
       {{/if}}
+      {{!-- Conditions --}}
+      {{#with viewModel.healthConditionsTemplate as | template |}}
+        {{> (template) viewModel=../viewModel.vmHealthConditions }}
+      {{/with}}
       {{!-- Armor --}}
       {{#if viewModel.vmArmorListItem}}
       {{#with viewModel.armorListItemTemplate as | template |}}
         {{> (template) viewModel=../viewModel.vmArmorListItem }}
       {{/with}}
       {{/if}}
-      {{!-- Conditions (formerly health states) --}}
-      {{#with viewModel.healthStatesTemplate as | template |}}
-        {{> (template) viewModel=../viewModel.vmHealthStates}}
-      {{/with}}
     </div>
   </div>
   {{!-- Injuries --}}
