@@ -69,11 +69,12 @@ export class AttributeRollSchema extends RollSchema {
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
         template: InputTextFieldViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
           id: id,
           parent: parent,
           placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
           value: "0",
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
@@ -82,10 +83,11 @@ export class AttributeRollSchema extends RollSchema {
         name: nameInputBonusDice,
         localizedLabel: game.i18n.localize("system.roll.bonusDice"),
         template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
           id: id,
           parent: parent,
           value: 0,
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => { return parseInt(value) !== NaN; },
@@ -94,10 +96,11 @@ export class AttributeRollSchema extends RollSchema {
         name: nameInputCompensationPoints,
         localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
         template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
           id: id,
           parent: parent,
           value: 0,
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => { return parseInt(value) !== NaN; },
@@ -106,11 +109,12 @@ export class AttributeRollSchema extends RollSchema {
         name: nameInputRollDiceModifier,
         localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
         template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputDropDownViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
           id: id,
           parent: parent,
           options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
           value: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
+          ...overrides,
         }),
       }),
     );

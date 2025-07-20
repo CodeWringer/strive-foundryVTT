@@ -165,13 +165,15 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         name: this.nameInputCollectionSources,
         localizedLabel: game.i18n.localize("system.general.collection"),
         template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: async (id, parent) => {
+        rememberValue: true,
+        viewModelFactory: async (id, parent, overrides) => {
           const options = DOCUMENT_COLLECTION_SOURCES.asChoices();
           return new InputDropDownViewModel({
             id: id,
             parent: parent,
             options: options,
             value: options.find(it => it.value === DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name),
+            ...overrides,
           });
         },
         onChange: async (oldValue, newValue, dialogViewModel) => {
@@ -187,7 +189,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         name: this.nameInputChoices,
         localizedLabel: game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`),
         template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: async (id, parent) => {
+        viewModelFactory: async (id, parent, overrides) => {
           const sortedOptions = await this._getChoices();
           const customChoice = sortedOptions.find(it => it.value === this.customChoiceValue);
           return new InputDropDownViewModel({
@@ -195,6 +197,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
             parent: parent,
             options: sortedOptions,
             value: customChoice,
+            ...overrides,
           });
         },
         onChange: async (oldValue, newValue, dialogViewModel) => {
@@ -214,13 +217,13 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         new DynamicInputDefinition({
           name: this.nameLabel,
           template: DynamicLabelViewModel.TEMPLATE,
-          viewModelFactory: async (id, parent) => {
+          viewModelFactory: async (id, parent, overrides) => {
             const mappedLabel = await this.selectionLabelMapper(undefined);
-
             return new DynamicLabelViewModel({
               id: id,
               parent: parent,
               localizedLabel: mappedLabel,
+              ...overrides,
             });
           },
         }),
@@ -287,6 +290,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       localizedType
     );
     const dialog = await new DynamicInputDialog({
+      id: "specific-document-creation",
       localizedTitle: localizedDialogTitle,
       inputDefinitions: inputDefinitions,
     }).renderAndAwait(true);

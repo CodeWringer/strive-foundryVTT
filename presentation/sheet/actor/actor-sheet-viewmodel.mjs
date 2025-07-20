@@ -350,43 +350,47 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         name: inputMaxActionPoints,
         localizedLabel: game.i18n.localize("system.actionPoint.max"),
         template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
           id: id,
           parent: parent,
           min: 0,
           value: this.document.actionPoints.maximum,
+          ...overrides,
         }),
       }),
       new DynamicInputDefinition({
         name: inputRefillActionPoints,
         localizedLabel: game.i18n.localize("system.actionPoint.refill"),
         template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
           id: id,
           parent: parent,
           min: 0,
           value: this.document.actionPoints.refill.amount,
+          ...overrides,
         }),
       }),
       new DynamicInputDefinition({
         name: inputAllowRefillActionPoints,
         localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
         template: InputToggleViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputToggleViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
           id: id,
           parent: parent,
           value: this.document.actionPoints.refill.enable,
+          ...overrides,
         }),
       }),
       new DynamicInputDefinition({
         name: inputInitiatives,
         localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
         template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
           id: id,
           parent: parent,
           min: 1,
           value: this.document.initiative.perTurn,
+          ...overrides,
         }),
       }),
     ];
@@ -397,10 +401,11 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           name: inputEnablePersonality,
           localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
           template: InputToggleViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputToggleViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
             id: id,
             parent: parent,
             value: this.document.personalityVisible,
+            ...overrides,
           }),
         })
       );
@@ -409,10 +414,11 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           name: inputEnableProgression,
           localizedLabel: game.i18n.localize("system.character.advancement.label"),
           template: InputToggleViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputToggleViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
             id: id,
             parent: parent,
             value: this.document.progressionVisible,
+            ...overrides,
           }),
         })
       );
@@ -421,10 +427,11 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           name: inputEnableGritPoints,
           localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
           template: InputToggleViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputToggleViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
             id: id,
             parent: parent,
             value: this.document.gritPoints.enable,
+            ...overrides,
           }),
         })
       );

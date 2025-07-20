@@ -21,6 +21,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
 
   /**
    * @param {Object} args 
+   * @param {String | undefined} args.id An ID by which to uniquely identify this instance. 
+   * 
+   * **Required** *in case* any of the inputs' values are to be remembered! 
    * @param {Array<DynamicInputDefinition>} args.inputDefinitions
    * @param {Application} args.ui The dialog that owns this view model. 
    * @param {String | undefined} args.focused Name of the input field to pre-focus when 
@@ -39,6 +42,14 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     this.ui = args.ui;
     this.focused = args.focused;
     this.onReady = args.onReady;
+
+    if (ValidationUtil.isDefined(args.id)) {
+      this.registerViewStateProperty("_definitionValues");
+      this.readViewState();
+      if (!ValidationUtil.isDefined(this._definitionValues)) {
+        this._definitionValues = new Map();
+      }
+    }
 
     this.inputInstances = [];
   }
@@ -61,10 +72,19 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     for await (const definition of this.inputDefinitions) {
       let viewModel;
       if (ValidationUtil.isDefined(definition.viewModelFactory) && ValidationUtil.isNotBlankOrUndefined(definition.template)) {
+        const overrides = {};
+        // Override value with remembered value, if possible. 
+        if (definition.rememberValue) {
+          const rememberedValue = this._definitionValues.get(definition.name);
+          if (rememberedValue !== undefined) {
+            overrides.value = rememberedValue;
+          }
+        }
         // Instantiate the view model. 
         viewModel = await definition.viewModelFactory(
           definition.name, 
           this,
+          overrides,
         );
 
         // Render the view model and attach it to the DOM. 
@@ -163,6 +183,17 @@ export default class DynamicInputDialogViewModel extends ViewModel {
 
   /** @override */
   dispose() {
+    // Ensure input values are remembered. 
+    if (ValidationUtil.isDefined(this._definitionValues)) {
+      this.inputInstances.forEach(instance => {
+        if (instance.rememberValue) {
+          this._definitionValues.set(instance.name, instance.viewModel.value);
+        }
+      });
+    }
+
+    this.writeViewState();
+
     KEYBOARD.offKeyDown(KEY_CODES.ENTER, this._handleConfirm);
     KEYBOARD.offKeyDown(KEY_CODES.ESCAPE, this._handleCancel);
 
@@ -216,6 +247,8 @@ export default class DynamicInputDialogViewModel extends ViewModel {
   }
   
   /**
+   * Invokes the confirmation button when the user presses the ENTER key. 
+   * 
    * @private
    */
   _handleConfirm() { 
@@ -225,6 +258,8 @@ export default class DynamicInputDialogViewModel extends ViewModel {
   }
 
   /**
+   * Invokes the cancelation button when the user presses the ESCAPE key. 
+   * 
    * @private
    */
   _handleCancel() { 
