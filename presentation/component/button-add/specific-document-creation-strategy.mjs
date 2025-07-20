@@ -168,6 +168,9 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         rememberValue: true,
         viewModelFactory: async (id, parent, overrides) => {
           const options = DOCUMENT_COLLECTION_SOURCES.asChoices();
+          if (ValidationUtil.isDefined(overrides.value)) {
+            this._collectionSource = DOCUMENT_COLLECTION_SOURCES.asArray().find(it => it.name === overrides.value.value);
+          }
           return new InputDropDownViewModel({
             id: id,
             parent: parent,
@@ -190,12 +193,12 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         localizedLabel: game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`),
         template: InputDropDownViewModel.TEMPLATE,
         viewModelFactory: async (id, parent, overrides) => {
-          const sortedOptions = await this._getChoices();
-          const customChoice = sortedOptions.find(it => it.value === this.customChoiceValue);
+          const options = await this._getChoices();
+          const customChoice = options.find(it => it.value === this.customChoiceValue);
           return new InputDropDownViewModel({
             id: id,
             parent: parent,
-            options: sortedOptions,
+            options: options,
             value: customChoice,
             ...overrides,
           });
