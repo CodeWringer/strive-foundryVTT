@@ -61,6 +61,8 @@
         "all": "All",
         "allCompendia": "All Compendia",
         "systemCompendia": "System Compendia",
+        "moduleCompendia": "Module Compendia",
+        "systemAndModuleCompendia": "System and Module Compendia",
         "worldCompendia": "World Compendia",
         "world": "World"
       },
