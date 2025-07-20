@@ -127,7 +127,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
       .map(it => new HealthCondition({
         name: it.name,
         limit: it.limit,
-        iconHtml: ValidationUtil.isDefined(it.iconPath) ? `<img src="${it.iconPath}"></img>` : undefined,
+        iconHtml: ValidationUtil.isDefined(it.iconPath) ? `<img class="custom-system-edit custom-icon-sm" src="${it.iconPath}" style="border: none; filter: brightness(0.25);"></img>` : undefined,
       }));
     const systemHealthConditions = HEALTH_CONDITIONS.asArray();
     const allHealthConditions = customHealthConditions.concat(systemHealthConditions);

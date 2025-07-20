@@ -76,6 +76,7 @@ export const HEALTH_CONDITIONS = {
     localizableName: "system.character.health.states.berserk.name",
     localizableToolTip: "system.character.health.states.berserk.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-berserk-solid"></i>`
   }),
   burning: new HealthCondition({
     name: "burning",
@@ -89,96 +90,112 @@ export const HEALTH_CONDITIONS = {
     localizableName: "system.character.health.states.bleeding.name",
     localizableToolTip: "system.character.health.states.bleeding.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-damage-type-bleeding-solid"></i>`
   }),
   dissolving: new HealthCondition({
     name: "dissolving",
     localizableName: "system.character.health.states.dissolving.name",
     localizableToolTip: "system.character.health.states.dissolving.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-damage-type-acid-solid"></i>`
   }),
   drugAddicted: new HealthCondition({
     name: "drugAddicted",
     localizableName: "system.character.health.states.drugAddicted.name",
     localizableToolTip: "system.character.health.states.drugAddicted.tooltip",
     limit: 1,
+    iconHtml: `<i class="ico dark ico-medical-supplies-solid"></i>`
   }),
   electrified: new HealthCondition({
     name: "electrified",
     localizableName: "system.character.health.states.electrified.name",
     localizableToolTip: "system.character.health.states.electrified.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-damage-type-electrical-solid"></i>`
   }),
   exhausted: new HealthCondition({
     name: "exhausted",
     localizableName: "system.character.health.states.exhausted.name",
     localizableToolTip: "system.character.health.states.exhausted.tooltip",
     limit: 1,
+    iconHtml: `<i class="ico dark ico-exhausted-solid"></i>`
   }),
   frostbitten: new HealthCondition({
     name: "frostbitten",
     localizableName: "system.character.health.states.frostbitten.name",
     localizableToolTip: "system.character.health.states.frostbitten.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-damage-type-freezing-solid"></i>`
   }),
   grappled: new HealthCondition({
     name: "grappled",
     localizableName: "system.character.health.states.grappled.name",
     localizableToolTip: "system.character.health.states.grappled.tooltip",
     limit: 1,
+    iconHtml: `<i class="ico dark ico-chain-links-solid"></i>`
   }),
   hasted: new HealthCondition({
     name: "hasted",
     localizableName: "system.character.health.states.hasted.name",
     localizableToolTip: "system.character.health.states.hasted.tooltip",
     limit: 1,
+    iconHtml: `<i class="ico dark ico-sprint-solid"></i>`
   }),
   jealous: new HealthCondition({
     name: "jealous",
     localizableName: "system.character.health.states.jealous.name",
     localizableToolTip: "system.character.health.states.jealous.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-jealous-solid"></i>`
   }),
   pacified: new HealthCondition({
     name: "pacified",
     localizableName: "system.character.health.states.pacified.name",
     localizableToolTip: "system.character.health.states.pacified.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-angel-solid"></i>`
   }),
   poisoned: new HealthCondition({
     name: "poisoned",
     localizableName: "system.character.health.states.poisoned.name",
     localizableToolTip: "system.character.health.states.poisoned.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-damage-type-poisoning-solid"></i>`
   }),
   prone: new HealthCondition({
     name: "prone",
     localizableName: "system.character.health.states.prone.name",
     localizableToolTip: "system.character.health.states.prone.tooltip",
     limit: 1,
+    iconHtml: `<i class="ico dark ico-prone-solid"></i>`
   }),
   rooted: new HealthCondition({
     name: "rooted",
     localizableName: "system.character.health.states.rooted.name",
     localizableToolTip: "system.character.health.states.rooted.tooltip",
     limit: 1,
+    iconHtml: `<i class="ico dark ico-rooted-solid"></i>`
   }),
   stunned: new HealthCondition({
     name: "stunned",
     localizableName: "system.character.health.states.stunned.name",
     localizableToolTip: "system.character.health.states.stunned.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-stunned-solid"></i>`
   }),
   terrified: new HealthCondition({
     name: "terrified",
     localizableName: "system.character.health.states.terrified.name",
     localizableToolTip: "system.character.health.states.terrified.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-terrified-solid"></i>`
   }),
   unconscious: new HealthCondition({
     name: "unconscious",
     localizableName: "system.character.health.states.unconscious.name",
     localizableToolTip: "system.character.health.states.unconscious.tooltip",
     limit: 1,
+    iconHtml: `<i class="ico dark ico-unconscious-solid"></i>`
   }),
 };
 ConstantsUtil.enrichConstant(HEALTH_CONDITIONS);

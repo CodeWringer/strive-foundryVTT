@@ -102,6 +102,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
           isEditable: this.isEditable,
           stateName: ((customHealthState ?? {}).name ?? customHealthState),
           stateLimit: ((customHealthState ?? {}).limit ?? 0),
+          stateIconPath: (customHealthState ?? {}).iconPath,
         });
       },
       newItemDefaultValue: {
