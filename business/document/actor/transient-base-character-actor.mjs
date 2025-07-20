@@ -6,8 +6,8 @@ import CharacterAttribute from '../../ruleset/attribute/character-attribute.mjs'
 import { CharacterHealthCondition } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_CONDITIONS } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
+import GameSystemWorldSettings from '../../setting/game-system-world-settings.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
-import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { PropertyUtil } from '../../util/property-utility.mjs';
 import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
@@ -634,7 +634,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   _getHealthStates() {
     const rawArray = this.document.system.health.states;
-    const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+    const stateSettings = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS);
     const result = [];
     let definition = undefined;
 
@@ -647,17 +647,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         // in older versions, custom health states were defined as a string, instead of object. 
         definition = stateSettings.custom.find(it => (it.name ?? it) === entry.name);
         if (definition === undefined) {
-          game.strive.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
+          game.strive.logger.logWarn(`Failed to get health condition definition '${entry.name}'`);
           continue;
         }
       }
 
       const healthCondition = new CharacterHealthCondition({
-        name: entry.name,
+        ...definition,
         localizableName: definition.localizableName ?? entry.name,
-        localizableToolTip: definition.localizableToolTip,
-        icon: definition.icon, 
-        limit: definition.limit,
         intensity: entry.intensity,
       });
       result.push(healthCondition);

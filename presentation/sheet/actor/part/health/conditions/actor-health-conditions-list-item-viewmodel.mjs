@@ -18,6 +18,7 @@ import ViewModel from "../../../../../view-model/view-model.mjs"
  * @property {ObservableField} stateIntensity
  * @property {ObservableField} activeState
  * @property {Number} stateLimit
+ * @property {String | undefined} iconHtml
  * 
  * @extends ViewModel
  */
@@ -52,6 +53,7 @@ export default class ActorHealthConditionsListItemViewModel extends ViewModel {
    * * Default `0`
    * @param {Number | undefined} args.stateLimit
    * * Default `0`
+   * @param {String | undefined} args.iconHtml
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -62,6 +64,7 @@ export default class ActorHealthConditionsListItemViewModel extends ViewModel {
     this.document = args.document;
     this.localizedLabel = args.localizedLabel;
     this.stateName = args.stateName;
+    this.iconHtml = args.iconHtml;
     
     this.activeState = new ObservableField({ value: (args.stateIntensity > 0)})
     this.activeState.onChange((field, oldValue, newValue) => {

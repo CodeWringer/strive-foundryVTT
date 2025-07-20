@@ -1,5 +1,5 @@
 import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-states.mjs";
-import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
+import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
@@ -66,7 +66,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     this.registerViewStateProperty("stateSettings");
     
     // Load state. 
-    this.stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+    this.stateSettings = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS);
     this.readAllViewState();
 
     // Prepare data for system default health state visibilities. 

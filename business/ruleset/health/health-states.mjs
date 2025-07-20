@@ -12,6 +12,7 @@ import { ValidationUtil } from "../../util/validation-utility.mjs";
  * @property {Number} limit A limit on how many times this health condition may be incurred. 
  * * `0` implies there is no limit. 
  * * Minimum is `0`.
+ * @property {String | undefined} iconHtml
  */
 export class HealthCondition {
   /**
@@ -28,12 +29,11 @@ export class HealthCondition {
    * @param {String} args.name Internal name. 
    * @param {String | undefined} args.localizableName Localization key. 
    * @param {String | undefined} args.localizableToolTip Localizable tool tip text. 
-   * @param {String | undefined} args.icon CSS class of an icon. 
-   * * E. g. `"fas fa-virus"`
    * @param {Number | undefined} args.limit A limit on how many times this health condition may be incurred. 
    * * `0` implies there is no limit. 
    * * Default `0`.
    * * Negative values are clamped to `0`.
+   * @param {String | undefined} args.iconHtml
    */
   constructor(args = {}) {
     ValidationUtil.validateOrThrow(args, ["name"]);
@@ -41,7 +41,7 @@ export class HealthCondition {
     this.name = args.name;
     this.localizableName = args.localizableName;
     this.localizableToolTip = args.localizableToolTip;
-    this.icon = args.icon;
+    this.iconHtml = args.iconHtml;
     this._limit = args.limit ?? 0;
   }
 }
@@ -82,6 +82,7 @@ export const HEALTH_CONDITIONS = {
     localizableName: "system.character.health.states.burning.name",
     localizableToolTip: "system.character.health.states.burning.tooltip",
     limit: 0,
+    iconHtml: `<i class="ico dark ico-damage-type-burning-solid"></i>`
   }),
   bleeding: new HealthCondition({
     name: "bleeding",
