@@ -163,10 +163,11 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
           name: nameInputActor,
           localizedLabel: game.i18n.localize("system.general.actor.label"),
           template: InputDropDownViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
             id: id,
             parent: parent,
             options: choices,
+            ...overrides,
           }),
         }),
       );
@@ -181,10 +182,11 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
           name: nameInputDeleteFromSource,
           localizedLabel: game.i18n.localize("system.character.asset.delete.fromOwner"),
           template: InputToggleViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputToggleViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
             id: id,
             parent: parent,
             value: false,
+            ...overrides,
           }),
         }),
       );
@@ -195,10 +197,11 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
           name: nameInputDeleteFromSource,
           localizedLabel: game.i18n.localize("system.character.asset.delete.fromWorld"),
           template: InputToggleViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputToggleViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
             id: id,
             parent: parent,
             value: false,
+            ...overrides,
           }),
         }),
       );

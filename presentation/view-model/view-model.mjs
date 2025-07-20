@@ -614,7 +614,7 @@ export default class ViewModel {
    * Keep in mind that **only** _this_ view model's state is returned. **No** child view model states 
    * will be included! 
    * 
-   * Whether there is any view state to store, is determined by whether any propertys have been registered 
+   * Whether there is any view state to store, is determined by whether any properties have been registered 
    * and if any of the child view models return view state to store. 
    * 
    * This method should only have to be overridden, if specific data transformations need to be applied to values 
@@ -673,8 +673,8 @@ export default class ViewModel {
   /**
    * Retrieves and applies the view state of _this_ view model, if possible. 
    * 
-   * In order for this operation to succeed, the view state will have 
-   * to have been written out using `writeViewState`, previously. 
+   * In order for this operation to succeed, view state properties must have been 
+   * registered and the view state written out, beforehand. 
    */
   readViewState() {
     const viewState = this._viewStateSource.get(this.id);
@@ -687,8 +687,8 @@ export default class ViewModel {
    * Retrieves and applies the view state of _this_ view model **and** of all 
    * its children, if possible. 
    * 
-   * In order for this operation to succeed, the view state will have 
-   * to have been written out using `writeAllViewState`, previously. 
+   * In order for this operation to succeed, view state properties must have been 
+   * registered and the view state written out, beforehand. 
    */
   readAllViewState() {
     this.readViewState();

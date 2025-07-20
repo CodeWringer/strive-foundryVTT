@@ -110,10 +110,11 @@ export default class GritPointsViewModel extends ViewModel {
               name: inputNumber,
               localizedLabel: game.i18n.localize("system.character.gritPoint.adjustInputLabel"),
               template: InputNumberSpinnerViewModel.TEMPLATE,
-              viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+              viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
                 id: id,
                 parent: parent,
                 value: 0,
+                ...overrides,
               }),
               required: true,
               validationFunc: (value) => { return parseInt(value) !== NaN; },

@@ -33,11 +33,12 @@ export default class SendToChatHandler {
           name: nameInputVisibility,
           localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
           template: InputDropDownViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
             id: id,
             parent: parent,
             options: VISIBILITY_MODES.asChoices(),
             value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+            ...overrides,
           }),
         }),
       ],

@@ -233,11 +233,12 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
           name: inputSlots,
           localizedLabel: game.i18n.localize("system.character.asset.slot.label"),
           template: InputDropDownViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
             id: id,
             parent: parent,
             options: availableSlotChoices,
             value: availableSlotChoices.length > 0 ? availableSlotChoices[0] : undefined,
+            ...overrides,
           }),
         }),
       ],

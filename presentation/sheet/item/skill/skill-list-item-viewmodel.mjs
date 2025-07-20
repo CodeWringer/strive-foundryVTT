@@ -200,7 +200,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         name: this._inputAttributes,
         localizedLabel: game.i18n.localize("system.character.attribute.plural"),
         template: SimpleListViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new SimpleListViewModel({
+        viewModelFactory: (id, parent, overrides) => new SimpleListViewModel({
           id: id,
           parent: parent,
           value: baseAttributes,
@@ -216,6 +216,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           isItemAddable: this.isEditable,
           isItemRemovable: this.isEditable,
           localizedAddLabel: game.i18n.localize("system.general.add.add"),
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => { return value.length > 0; },

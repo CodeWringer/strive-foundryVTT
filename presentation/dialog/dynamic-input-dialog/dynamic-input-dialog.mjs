@@ -37,11 +37,12 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  *       name: "inputChoices",
  *       localizedLabel: game.i18n.localize("system.general.name.label"),
  *       template: InputDropDownViewModel.TEMPLATE,
- *       viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+ *       viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
  *         id: id,
  *         parent: parent,
  *         options: assetChoices,
  *         value: assetChoices[0],
+ *         ...overrides,
  *       }),
  *     }),
  *   ],
@@ -57,7 +58,8 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
   get template() { return game.strive.const.TEMPLATES.DIALOG_DYNAMIC_INPUT; }
 
   /** @override */
-  get id() { return "dynamic-input-dialog"; }
+  get id() { return this._id ?? "dynamic-input-dialog"; }
+  set id(value) { this._id = value; }
 
   /** @override */
   static get defaultOptions() {
@@ -116,6 +118,10 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
 
   /**
    * @param {Object} options 
+   * @param {String | undefined} options.id An ID by which to uniquely identify instances of this 
+   * dialog. 
+   * 
+   * **Required** *in case* any of the inputs' values are to be remembered! 
    * @param {Boolean | undefined} options.easyDismissal If true, allows for easier dialog dismissal, 
    * by clicking anywhere on the backdrop element. Default `true`. 
    * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
@@ -133,6 +139,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     super(options);
     ValidationUtil.validateOrThrow(options, ["inputDefinitions"]);
 
+    this._id = options.id;
     this.inputDefinitions = options.inputDefinitions;
     this.focused = options.focused;
     this.onReady = options.onReady;
@@ -146,6 +153,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     }
 
     this._viewModel = new DynamicInputDialogViewModel({
+      id: this.id,
       inputDefinitions: this.inputDefinitions,
       isEditable: true,
       isSendable: true,
@@ -180,7 +188,6 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       }
 
       // Clean up the view model. 
-      this._viewModel.writeViewState();
       this._viewModel.dispose();
       this._viewModel = undefined;
     }
