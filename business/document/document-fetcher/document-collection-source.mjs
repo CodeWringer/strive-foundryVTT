@@ -52,7 +52,7 @@ export const DOCUMENT_COLLECTION_SOURCES = {
     name: "systemCompendia",
     localizableName: "system.general.collectionSources.systemCompendia"
   }),
-  systemCompendia: new DocumentCollectionSource({
+  moduleCompendia: new DocumentCollectionSource({
     name: "moduleCompendia",
     localizableName: "system.general.collectionSources.moduleCompendia"
   }),

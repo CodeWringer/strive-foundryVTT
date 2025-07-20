@@ -57,9 +57,8 @@ export default class DocumentFetcher {
    * @async
    */
   async find(filter = {}) {
-    if ((filter.id === undefined || filter.id === null) 
-      && (filter.name === undefined || filter.name === null)) {
-        throw new Error("InvalidArgumentException: Either `id` or `name` must be defined");
+    if (!ValidationUtil.isDefined(filter.id) && !ValidationUtil.isDefined(filter.name)) {
+      throw new Error("InvalidArgumentException: Either `id` or `name` must be defined");
     }
 
     filter = this._fixupFilter(filter);
@@ -157,9 +156,8 @@ export default class DocumentFetcher {
    * @throws {Error} Thrown, if neither `documentType`, nor `contentType` are defined. 
    */
   getIndices(filter = {}) {
-    if ((filter.documentType === undefined || filter.documentType === null) 
-      && (filter.contentType === undefined || filter.contentType === null)) {
-        throw new Error("InvalidArgumentException: Either `documentType` or `contentType` must be defined");
+    if (!ValidationUtil.isDefined(filter.documentType) && !ValidationUtil.isDefined(filter.contentType)) {
+      throw new Error("InvalidArgumentException: Either `documentType` or `contentType` must be defined");
     }
 
     let result = [];
@@ -672,11 +670,13 @@ export default class DocumentFetcher {
    * @private
    */
   _shouldSearchCompendia(filter) {
-    const sourceId = filter.source.id;
-    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.allCompendia.id
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.systemCompendia.id
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.id
+    const sourceId = filter.source.name;
+    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.name
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.allCompendia.name
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.systemCompendia.name
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.moduleCompendia.name
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.name
       ) {
       return true;
     }
@@ -698,8 +698,8 @@ export default class DocumentFetcher {
    */
   _shouldSearchWorld(filter) {
     const sourceId = filter.source.id;
-    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id 
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.world.id
+    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.name
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.world.name
     ) {
       return true;
     }
@@ -720,20 +720,30 @@ export default class DocumentFetcher {
    */
   _packSourceFilterMatches(filter, pack) {
     const type = pack.metadata.packageType.toLowerCase();
+    const filterId = filter.source.name;
 
-    if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.systemCompendia.id 
-      && (type === "system") !== true
-    ) {
-      return false;
-    } else if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.worldCompendia.id 
-      && (type === "world") !== true
-    ) {
-      return false;
-    } else if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.world.id) {
-      return false;
-    } else if (filter.includeLocked !== true && pack.locked === true) {
+    // Locked filter precludes all others. 
+    if (filter.includeLocked !== true && pack.locked === true) {
       return false;
     }
-    return true;
+
+    if (filterId === DOCUMENT_COLLECTION_SOURCES.all.name
+      || filterId === DOCUMENT_COLLECTION_SOURCES.allCompendia.name) {
+      return true;
+    } else if ((filterId === DOCUMENT_COLLECTION_SOURCES.systemCompendia.name 
+      || filterId === DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name)
+      && (type === "system")) {
+      return true;
+    } else if ((filterId === DOCUMENT_COLLECTION_SOURCES.moduleCompendia.name 
+      || filterId === DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name)
+      && (type === "module")) {
+      return true;
+    } else if ((filterId === DOCUMENT_COLLECTION_SOURCES.worldCompendia.name
+      || filterId === DOCUMENT_COLLECTION_SOURCES.world.name) 
+      && (type === "world")) {
+      return true;
+    }
+
+    return false;
   }
 }

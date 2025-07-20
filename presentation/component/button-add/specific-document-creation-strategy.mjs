@@ -26,7 +26,7 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document
  * @extends DocumentCreationStrategy
  */
 export default class SpecificDocumentCreationStrategy extends DocumentCreationStrategy {
-  
+
   /**
    * Returns the name of the choices input that allows selection of a document collection source. 
    * 
@@ -35,7 +35,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @protected
    */
   get nameInputCollectionSources() { return "nameInputCollectionSources"; }
-  
+
   /**
    * Returns the name of the choices input. 
    * 
@@ -53,7 +53,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @protected
    */
   get nameLabel() { return "nameLabel"; }
-  
+
   /**
    * Returns the value of the custom choice. Can be used to identify this choice 
    * in the list of choices. 
@@ -91,7 +91,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
     this.documentType = args.documentType;
     this.filter = args.filter ?? (() => { return true });
     this.selectionLabelMapper = args.selectionLabelMapper;
-    
+
     this._collectionSource = DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia;
   }
 
@@ -124,7 +124,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         documents.set(id, transientDocument);
       }
     }
-    
+
     // Map the documents to choices. 
     const options = [];
     for (let i = 0; i < documentIndices.length; i++) {
@@ -132,7 +132,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       const document = documents.get(documentIndex.id);
       if (!ValidationUtil.isDefined(document)) continue;
       const documentNameForDisplay = document.nameForDisplay ?? documentIndex.name;
-      
+
       options.push(new ChoiceOption({
         value: documentIndex.id,
         localizedValue: `${documentNameForDisplay}   (${documentIndex.sourceName})`,
@@ -177,7 +177,9 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         onChange: async (oldValue, newValue, dialogViewModel) => {
           this._collectionSource = DOCUMENT_COLLECTION_SOURCES.asArray().find(it => it.name === newValue.value);
           dialogViewModel.refreshInput(this.nameInputChoices);
-          dialogViewModel.refreshInput(this.nameLabel);
+          if (ValidationUtil.isDefined(this.selectionLabelMapper)) {
+            dialogViewModel.refreshInput(this.nameLabel);
+          }
         },
       }),
       // Document choices input
