@@ -83,6 +83,105 @@ export default class DocumentFetcher {
   }
 
   /**
+   * Returns all documents that matches the given filter parameters. 
+   * 
+   * Can search in a variety of sources, such as compendium packs or the world collections. 
+   * 
+   * May also look for embedded documents.
+   * 
+   * **WARNING**: This process can be very slow for large collections, as full document instances 
+   * are loaded from the data base for **every** match. Make sure to filter as specifically, as 
+   * possible! 
+   * 
+   * @param {Object} filter 
+   * @param {String | undefined} filter.id The id of the documents to fetch. 
+   * @param {String | undefined} filter.name The name of the documents to fetch. 
+   * @param {GENERAL_DOCUMENT_TYPES | String | undefined} filter.documentType A document type. 
+   * * E. g. `"Item"` or `"Actor"`
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
+   * * E. g. `"skill"` or `"npc"`
+   * @param {DocumentCollectionSource | undefined} filter.source A document source to 
+   * filter by. 
+   * * Default `DOCUMENT_COLLECTION_SOURCES.all`.
+   * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
+   * documents. 
+   * * Default `false`. 
+   * * Note, that this setting may slow searches down, **significantly**. 
+   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
+   * copendium packs. 
+   * * Only relevant, if compendium packs are searched. 
+   * * Default `true`.
+   * 
+   * @returns {Array<Document>} 
+   * 
+   * @async
+   */
+  async findAll(filter = {}) {
+    let result = [];
+
+    filter = this._fixupFilter(filter);
+
+    // Search compendia
+    if (this._shouldSearchCompendia(filter) === true) {
+      const documents = await this._findAllInCompendia(filter);
+      result = result.concat(documents);
+    }
+
+    // Search world
+    if (this._shouldSearchWorld(filter) === true) {
+      const documents = this._findAllInWorld(filter);
+      result = result.concat(documents);
+    }
+
+    return result;
+  }
+  
+  /**
+   * Returns all document indices that match the given filter parameters. 
+   * 
+   * Can search in a variety of sources, such as compendium packs or the world collections. 
+   * 
+   * @param {Object} filter 
+   * @param {GENERAL_DOCUMENT_TYPES | String | undefined} filter.documentType A document type. 
+   * * E. g. `"Item"` or `"Actor"`
+   * * If undefined, `contentType` **must** be defined. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
+   * * E. g. `"skill"` or `"npc"`
+   * * If undefined, `documentType` **must** be defined. 
+   * @param {DocumentCollectionSource | undefined} filter.source A document source to 
+   * filter by. 
+   * * Default `DOCUMENT_COLLECTION_SOURCES.all`.
+   * 
+   * @returns {Array<DocumentIndex>} 
+   * 
+   * @throws {Error} Thrown, if neither `documentType`, nor `contentType` are defined. 
+   */
+  getIndices(filter = {}) {
+    if ((filter.documentType === undefined || filter.documentType === null) 
+      && (filter.contentType === undefined || filter.contentType === null)) {
+        throw new Error("InvalidArgumentException: Either `documentType` or `contentType` must be defined");
+    }
+
+    let result = [];
+
+    filter = this._fixupFilter(filter);
+
+    // Search compendia
+    if (this._shouldSearchCompendia(filter)) {
+      const indices = this._getIndicesInCompendia(filter);
+      result = result.concat(indices);
+    }
+
+    // Search world
+    if (this._shouldSearchWorld(filter)) {
+      const indices = this._getIndicesInWorld(filter);
+      result = result.concat(indices);
+    }
+
+    return result;
+  }
+  
+  /**
    * Returns a document that matches the given filter parameters. 
    * 
    * Searches in compendium packs. 
@@ -236,60 +335,6 @@ export default class DocumentFetcher {
       }
     }
     return undefined;
-  }
-  
-  /**
-   * Returns all documents that matches the given filter parameters. 
-   * 
-   * Can search in a variety of sources, such as compendium packs or the world collections. 
-   * 
-   * May also look for embedded documents.
-   * 
-   * **WARNING**: This process can be very slow for large collections, as full document instances 
-   * are loaded from the data base for **every** match. Make sure to filter as specifically, as 
-   * possible! 
-   * 
-   * @param {Object} filter 
-   * @param {String | undefined} filter.id The id of the documents to fetch. 
-   * @param {String | undefined} filter.name The name of the documents to fetch. 
-   * @param {GENERAL_DOCUMENT_TYPES | String | undefined} filter.documentType A document type. 
-   * * E. g. `"Item"` or `"Actor"`
-   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
-   * * E. g. `"skill"` or `"npc"`
-   * @param {DocumentCollectionSource | undefined} filter.source A document source to 
-   * filter by. 
-   * * Default `DOCUMENT_COLLECTION_SOURCES.all`.
-   * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
-   * documents. 
-   * * Default `false`. 
-   * * Note, that this setting may slow searches down, **significantly**. 
-   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
-   * copendium packs. 
-   * * Only relevant, if compendium packs are searched. 
-   * * Default `true`.
-   * 
-   * @returns {Array<Document>} 
-   * 
-   * @async
-   */
-  async findAll(filter = {}) {
-    let result = [];
-
-    filter = this._fixupFilter(filter);
-
-    // Search compendia
-    if (this._shouldSearchCompendia(filter) === true) {
-      const documents = await this._findAllInCompendia(filter);
-      result = result.concat(documents);
-    }
-
-    // Search world
-    if (this._shouldSearchWorld(filter) === true) {
-      const documents = this._findAllInWorld(filter);
-      result = result.concat(documents);
-    }
-
-    return result;
   }
   
   /**
@@ -449,51 +494,6 @@ export default class DocumentFetcher {
     return result;
   }
 
-  /**
-   * Returns all document indices that match the given filter parameters. 
-   * 
-   * Can search in a variety of sources, such as compendium packs or the world collections. 
-   * 
-   * @param {Object} filter 
-   * @param {GENERAL_DOCUMENT_TYPES | String | undefined} filter.documentType A document type. 
-   * * E. g. `"Item"` or `"Actor"`
-   * * If undefined, `contentType` **must** be defined. 
-   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
-   * * E. g. `"skill"` or `"npc"`
-   * * If undefined, `documentType` **must** be defined. 
-   * @param {DocumentCollectionSource | undefined} filter.source A document source to 
-   * filter by. 
-   * * Default `DOCUMENT_COLLECTION_SOURCES.all`.
-   * 
-   * @returns {Array<DocumentIndex>} 
-   * 
-   * @throws {Error} Thrown, if neither `documentType`, nor `contentType` are defined. 
-   */
-  getIndices(filter = {}) {
-    if ((filter.documentType === undefined || filter.documentType === null) 
-      && (filter.contentType === undefined || filter.contentType === null)) {
-        throw new Error("InvalidArgumentException: Either `documentType` or `contentType` must be defined");
-    }
-
-    let result = [];
-
-    filter = this._fixupFilter(filter);
-
-    // Search compendia
-    if (this._shouldSearchCompendia(filter)) {
-      const indices = this._getIndicesInCompendia(filter);
-      result = result.concat(indices);
-    }
-
-    // Search world
-    if (this._shouldSearchWorld(filter)) {
-      const indices = this._getIndicesInWorld(filter);
-      result = result.concat(indices);
-    }
-
-    return result;
-  }
-  
   /**
    * Returns all document indices that match the given filter parameters. 
    * 
