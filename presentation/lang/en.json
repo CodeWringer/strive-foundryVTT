@@ -878,7 +878,7 @@
         "label": "Debug Mode",
         "hint": "Toggles debug mode on - increases log verbosity, at the cost of performance."
       },
-      "healthStates": {
+      "healthConditions": {
         "label": "Condition Customization",
         "hint": "Allows defining new and hiding system default conditions.",
         "configureSystemDefaults": "Configure system condition visibilities",

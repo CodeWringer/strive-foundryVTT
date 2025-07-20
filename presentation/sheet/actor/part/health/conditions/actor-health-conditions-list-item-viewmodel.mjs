@@ -1,4 +1,4 @@
-import { CharacterHealthState } from "../../../../../../business/ruleset/health/character-health-state.mjs"
+import { CharacterHealthCondition } from "../../../../../../business/ruleset/health/character-health-state.mjs"
 import { ArrayUtil } from "../../../../../../business/util/array-utility.mjs"
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs"
 import ObservableField from "../../../../../../common/observables/observable-field.mjs"
@@ -18,6 +18,7 @@ import ViewModel from "../../../../../view-model/view-model.mjs"
  * @property {ObservableField} stateIntensity
  * @property {ObservableField} activeState
  * @property {Number} stateLimit
+ * @property {String | undefined} iconHtml
  * 
  * @extends ViewModel
  */
@@ -52,6 +53,7 @@ export default class ActorHealthConditionsListItemViewModel extends ViewModel {
    * * Default `0`
    * @param {Number | undefined} args.stateLimit
    * * Default `0`
+   * @param {String | undefined} args.iconHtml
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -62,6 +64,7 @@ export default class ActorHealthConditionsListItemViewModel extends ViewModel {
     this.document = args.document;
     this.localizedLabel = args.localizedLabel;
     this.stateName = args.stateName;
+    this.iconHtml = args.iconHtml;
     
     this.activeState = new ObservableField({ value: (args.stateIntensity > 0)})
     this.activeState.onChange((field, oldValue, newValue) => {
@@ -74,20 +77,20 @@ export default class ActorHealthConditionsListItemViewModel extends ViewModel {
     
     this.stateIntensity = new ObservableField({ value: (args.stateIntensity ?? 0)})
     this.stateIntensity.onChange((field, oldValue, newValue) => {
-      let characterHealthStates = this.document.health.states;
-      const healthState = characterHealthStates.find(it => it.name === this.stateName);
+      let characterHealthConditions = this.document.health.states;
+      const healthState = characterHealthConditions.find(it => it.name === this.stateName);
 
       if (newValue < 1 && healthState !== undefined) {
         // Remove health state. 
-        characterHealthStates = ArrayUtil.arrayTakeUnless(
-          characterHealthStates, 
+        characterHealthConditions = ArrayUtil.arrayTakeUnless(
+          characterHealthConditions, 
           it => it.name === this.stateName,
         );
       } else {
         if (healthState === undefined) {
           // Health state does not yet exist on character - add it. 
-          characterHealthStates.push(
-            new CharacterHealthState({
+          characterHealthConditions.push(
+            new CharacterHealthCondition({
               name: this.stateName,
               intensity: newValue,
             })
@@ -98,7 +101,7 @@ export default class ActorHealthConditionsListItemViewModel extends ViewModel {
         }
       }
 
-      this.document.health.states = characterHealthStates;
+      this.document.health.states = characterHealthConditions;
     });
 
     this.stateLimit = args.stateLimit ?? 0;

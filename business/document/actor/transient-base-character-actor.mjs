@@ -3,11 +3,11 @@ import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
 import CharacterAttribute from '../../ruleset/attribute/character-attribute.mjs';
-import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
-import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
+import { CharacterHealthCondition } from '../../ruleset/health/character-health-state.mjs';
+import { HEALTH_CONDITIONS } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
+import GameSystemWorldSettings from '../../setting/game-system-world-settings.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
-import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { PropertyUtil } from '../../util/property-utility.mjs';
 import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
@@ -53,7 +53,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientScar>} health.scars 
  * * Read-only. 
- * @property {Array<CharacterHealthState>} health.states
+ * @property {Array<CharacterHealthCondition>} health.states
  * * Getter returns a safe-copy.
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
@@ -341,10 +341,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       // Conditions (used to be called health states)
       get states() { return thiz._healthStates.concat([]); },
       set states(value) {
-        const dtoArray = value.map((healthState) => {
+        const dtoArray = value.map((healthCondition) => {
           return {
-            name: healthState.name,
-            intensity: healthState.intensity,
+            name: healthCondition.name,
+            intensity: healthCondition.intensity,
           };
         });
         thiz.updateByPath("system.health.states", dtoArray);
@@ -628,39 +628,36 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   /**
    * Returns the health states of the character. 
    * 
-   * @returns {Array<CharacterHealthState>}
+   * @returns {Array<CharacterHealthCondition>}
    * 
    * @private
    */
   _getHealthStates() {
     const rawArray = this.document.system.health.states;
-    const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+    const stateSettings = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS);
     const result = [];
     let definition = undefined;
 
     for (const entry of rawArray) {
       // First try to get system-defined state. 
-      definition = HEALTH_STATES[entry.name];
+      definition = HEALTH_CONDITIONS[entry.name];
       if (definition === undefined) {
         // Second try - is it a custom-defined state?
         // For backwards-compatibility, also attempt to use the `it` directly - 
         // in older versions, custom health states were defined as a string, instead of object. 
         definition = stateSettings.custom.find(it => (it.name ?? it) === entry.name);
         if (definition === undefined) {
-          game.strive.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
+          game.strive.logger.logWarn(`Failed to get health condition definition '${entry.name}'`);
           continue;
         }
       }
 
-      const healthState = new CharacterHealthState({
-        name: entry.name,
+      const healthCondition = new CharacterHealthCondition({
+        ...definition,
         localizableName: definition.localizableName ?? entry.name,
-        localizableToolTip: definition.localizableToolTip,
-        icon: definition.icon, 
-        limit: definition.limit,
         intensity: entry.intensity,
       });
-      result.push(healthState);
+      result.push(healthCondition);
     }
     return result;
   }
