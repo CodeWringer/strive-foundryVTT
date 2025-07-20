@@ -92,34 +92,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
     this.filter = args.filter ?? (() => { return true });
     this.selectionLabelMapper = args.selectionLabelMapper;
     
-    this._collectionSource = DOCUMENT_COLLECTION_SOURCES.systemCompendia;
-  }
-
-  /**
-   * Collects the document collection sources (system, world compendia, world) and returns them 
-   * as `ChoiceOption`s. 
-   * 
-   * @returns {Array<ChoiceOption>}
-   */
-  _getCollectionChoices() {
-    return [
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.systemCompendia.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.systemCompendia"),
-      }),
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.worldCompendia.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.worldCompendia"),
-      }),
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.world.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.world"),
-      }),
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.all.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.all"),
-      }),
-    ];
+    this._collectionSource = DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia;
   }
 
   /**
@@ -193,11 +166,12 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         localizedLabel: game.i18n.localize("system.general.collection"),
         template: InputDropDownViewModel.TEMPLATE,
         viewModelFactory: async (id, parent) => {
-          const sortedOptions = this._getCollectionChoices();
+          const options = DOCUMENT_COLLECTION_SOURCES.asChoices();
           return new InputDropDownViewModel({
             id: id,
             parent: parent,
-            options: sortedOptions,
+            options: options,
+            value: options.find(it => it.value === DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name),
           });
         },
         onChange: async (oldValue, newValue, dialogViewModel) => {
