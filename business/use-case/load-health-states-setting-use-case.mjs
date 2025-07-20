@@ -7,6 +7,6 @@ export default class LoadHealthStatesSettingUseCase extends AbstractUseCase {
    */
   invoke() {
     const ds = new GameSystemWorldSettings();
-    return ds.get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_STATES);
+    return ds.get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS);
   }
 }

@@ -1,4 +1,4 @@
-import { HealthState } from "./health-states.mjs";
+import { HealthCondition } from "./health-states.mjs";
 
 /**
  * Represents a character health state. 
@@ -14,7 +14,7 @@ import { HealthState } from "./health-states.mjs";
  * @property {Number} intensity The current value. 
  * * Minimum is `1`.
 */
-export class CharacterHealthState extends HealthState {
+export class CharacterHealthCondition extends HealthCondition {
   /**
    * @private
    */

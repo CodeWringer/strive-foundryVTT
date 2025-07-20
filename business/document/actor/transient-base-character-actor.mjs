@@ -3,8 +3,8 @@ import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
 import CharacterAttribute from '../../ruleset/attribute/character-attribute.mjs';
-import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
-import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
+import { CharacterHealthCondition } from '../../ruleset/health/character-health-state.mjs';
+import { HEALTH_CONDITIONS } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
@@ -53,7 +53,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientScar>} health.scars 
  * * Read-only. 
- * @property {Array<CharacterHealthState>} health.states
+ * @property {Array<CharacterHealthCondition>} health.states
  * * Getter returns a safe-copy.
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
@@ -341,10 +341,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       // Conditions (used to be called health states)
       get states() { return thiz._healthStates.concat([]); },
       set states(value) {
-        const dtoArray = value.map((healthState) => {
+        const dtoArray = value.map((healthCondition) => {
           return {
-            name: healthState.name,
-            intensity: healthState.intensity,
+            name: healthCondition.name,
+            intensity: healthCondition.intensity,
           };
         });
         thiz.updateByPath("system.health.states", dtoArray);
@@ -628,7 +628,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   /**
    * Returns the health states of the character. 
    * 
-   * @returns {Array<CharacterHealthState>}
+   * @returns {Array<CharacterHealthCondition>}
    * 
    * @private
    */
@@ -640,7 +640,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     for (const entry of rawArray) {
       // First try to get system-defined state. 
-      definition = HEALTH_STATES[entry.name];
+      definition = HEALTH_CONDITIONS[entry.name];
       if (definition === undefined) {
         // Second try - is it a custom-defined state?
         // For backwards-compatibility, also attempt to use the `it` directly - 
@@ -652,7 +652,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         }
       }
 
-      const healthState = new CharacterHealthState({
+      const healthCondition = new CharacterHealthCondition({
         name: entry.name,
         localizableName: definition.localizableName ?? entry.name,
         localizableToolTip: definition.localizableToolTip,
@@ -660,7 +660,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         limit: definition.limit,
         intensity: entry.intensity,
       });
-      result.push(healthState);
+      result.push(healthCondition);
     }
     return result;
   }

@@ -1,5 +1,5 @@
-import { CharacterHealthState } from "../../../../../../business/ruleset/health/character-health-state.mjs";
-import { HEALTH_STATES } from "../../../../../../business/ruleset/health/health-states.mjs";
+import { CharacterHealthCondition } from "../../../../../../business/ruleset/health/character-health-state.mjs";
+import { HEALTH_CONDITIONS } from "../../../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
@@ -79,7 +79,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
 
     // Turn states into view models. 
 
-    const characterHealthStates = this.document.health.states;
+    const characterHealthConditions = this.document.health.states;
 
     // Get all custom-defined health states. 
     // If a particular health state is already on the character, then that instance 
@@ -88,26 +88,26 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     const customHealthStates = stateSettings.custom.map((customDefinition) => {
       // For backwards-compatibility, also attempt to use the `customDefinition` directly - 
       // in older versions, custom health states were defined as a string, instead of object. 
-      const characterHealthState = characterHealthStates.find(it => it.name === (customDefinition.name ?? customDefinition));
-      if (characterHealthState === undefined) {
-        return new CharacterHealthState({
+      const characterHealthCondition = characterHealthConditions.find(it => it.name === (customDefinition.name ?? customDefinition));
+      if (characterHealthCondition === undefined) {
+        return new CharacterHealthCondition({
           name: customDefinition.name ?? customDefinition,
           localizableName: customDefinition.name ?? customDefinition,
           limit: customDefinition.limit ?? 0,
           intensity: 0,
         });
       } else {
-        return characterHealthState;
+        return characterHealthCondition;
       }
     });
 
     // Get all system-defined health states. 
     // If a particular health state is already on the character, then that instance 
     // will be taken, instead of a new "blank" instance. 
-    const systemHealthStates = HEALTH_STATES.asArray().map((healthState) => {
-      const characterHealthState = characterHealthStates.find(it => it.name === healthState.name);
-      if (characterHealthState === undefined) {
-        return new CharacterHealthState({
+    const systemHealthStates = HEALTH_CONDITIONS.asArray().map((healthState) => {
+      const characterHealthCondition = characterHealthConditions.find(it => it.name === healthState.name);
+      if (characterHealthCondition === undefined) {
+        return new CharacterHealthCondition({
           name: healthState.name,
           localizableName: healthState.localizableName,
           localizableToolTip: healthState.localizableToolTip,
@@ -115,7 +115,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
           intensity: 0,
         });
       } else {
-        return characterHealthState;
+        return characterHealthCondition;
       }
     });
 

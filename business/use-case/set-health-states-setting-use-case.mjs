@@ -9,6 +9,6 @@ export default class SetHealthStatesSettingUseCase extends AbstractUseCase {
    */
   invoke(args) {
     const ds = new GameSystemWorldSettings();
-    return ds.set(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_STATES, args);
+    return ds.set(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS, args);
   }
 }

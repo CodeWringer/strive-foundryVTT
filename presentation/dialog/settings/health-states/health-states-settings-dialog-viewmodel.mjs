@@ -1,4 +1,4 @@
-import { HEALTH_STATES } from "../../../../business/ruleset/health/health-states.mjs";
+import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
@@ -22,7 +22,7 @@ import { HealthStateVisibilityItem } from "./health-state-visibility-item.mjs";
  */
 export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_SETTINGS_HEALTH_STATES; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_SETTINGS_HEALTH_CONDITIONS; }
 
   /**
    * @type {Array<HealthStateVisibilityItem>}
@@ -105,12 +105,12 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
         });
       },
       newItemDefaultValue: {
-        name: game.i18n.localize("system.settings.healthStates.newDefaultName"),
+        name: game.i18n.localize("system.settings.healthConditions.newDefaultName"),
         limit: 0,
       },
       isItemAddable: true,
       isItemRemovable: true,
-      localizedAddLabel: game.i18n.localize("system.settings.healthStates.add.label"),
+      localizedAddLabel: game.i18n.localize("system.settings.healthConditions.add.label"),
       onChange: (oldValue, newValue) => {
         this.stateSettings.custom = newValue;
         this._renderFormApplication();
@@ -145,7 +145,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * @private
    */
   _getHealthStateVisibilityViewModels() {
-    const states = HEALTH_STATES.asArray();
+    const states = HEALTH_CONDITIONS.asArray();
     const result = states.map(healthState => new HealthStateVisibilityItem({
       id: healthState.name,
       localizedName: game.i18n.localize(healthState.localizableName),
