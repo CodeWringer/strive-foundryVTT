@@ -28,6 +28,7 @@ $c-tox-button-hover-override-bg: #f0f0e0;
   }
 
   > div.tox.tox-tinymce {
+    height: 100% !important;
     > div.tox-editor-container {
       > div.tox-editor-header {
         background-color: $c-tox-toolbar-override-bg;
