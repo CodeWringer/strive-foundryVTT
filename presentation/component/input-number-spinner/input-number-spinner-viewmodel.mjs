@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { SheetUtil } from "../../sheet/sheet-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -105,6 +106,14 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 
   /**
+   * Returns the value to be rendered in the template. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get valueForDisplay() { return ValidationUtil.isDefined(this.displayValueMapper) ? this.displayValueMapper(this.value) : this.value; }
+
+  /**
    * @param {Object} args
    * 
    * @param {String | undefined} args.localizedToolTip A localized text to display as a tool tip. 
@@ -119,6 +128,10 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Number}`
    * * `newValue: {Number}`
+   * @param {Function | undefined} args.displayValueMapper If not undefined, will invoke this 
+   * function to map the actual value, before it is rendered. This function has no effect on 
+   * the actual value underneath. **Must** return a value. Arguments: 
+   * * `value: Number`
    */
   constructor(args = {}) {
     super(args);
@@ -127,6 +140,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     this._min = args.min ?? undefined;
     this._max = args.max ?? undefined;
     this._step = args.step ?? 1;
+    this.displayValueMapper = args.displayValueMapper;
   }
 
   /** @override */

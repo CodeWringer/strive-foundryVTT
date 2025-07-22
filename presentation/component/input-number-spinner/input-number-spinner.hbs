@@ -3,14 +3,14 @@ viewModel: {InputNumberSpinnerViewModel}
 cssClass: {String | undefined}
 --}}
 {{#if viewModel.isEditable}}
-<span class="spinner-container flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
+<span class="spinner-container flex-middle flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   <input 
     class="custom-system-edit spinner"
     type="number"
     data-dtype="Number"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
-    value="{{viewModel.value}}"
+    value="{{viewModel.valueForDisplay}}"
     {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
     {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
     step="{{viewModel.step}}"
@@ -30,5 +30,5 @@ cssClass: {String | undefined}
     class="custom-system-read-only flex flex-center pad-sm border-solid-sm fill{{#if cssClass}} {{cssClass}}{{/if}}" 
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
-  >{{viewModel.value}}</div>
+  >{{viewModel.valueForDisplay}}</div>
 {{/if}}
