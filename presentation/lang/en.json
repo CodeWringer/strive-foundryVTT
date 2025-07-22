@@ -176,6 +176,7 @@
         "level": "Level",
         "rawLevel": "Raw Level",
         "modifiedLevel": "Modified Level",
+        "modifiedLevelWithPlaceholders": "%{rawLevel} (Level) %{operand} %{modifier} (Modifier) = %{modifiedLevel} (Modified Level)",
         "modifiedOf": "Modified %{name}",
         "minimum": "Minimum Level",
         "modifier": {
