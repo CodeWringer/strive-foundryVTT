@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { SheetUtil } from "../../sheet/sheet-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -7,6 +8,9 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * The user can input a number directly, or increment/decrement via buttons or the scroll wheel. 
  * 
  * @extends InputViewModel
+ * 
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
  * 
  * @property {Number} value The current value. 
  * @property {Number | undefined} min Gets the minimum value. 
@@ -40,7 +44,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   /** @override */
   set value(newValue) {
     const oldValue = this._value;
-    this._value = parseInt(newValue);
+    const parsedValue = parseInt(newValue);
+    if (parsedValue === NaN)
+      this._value = this.hasMin ? this.min : 0;
+    else if (this.hasMin && parsedValue < this.min)
+      this._value = this.min;
+    else if (this.hasMax && parsedValue > this.max)
+      this._value = this.max;
+    else
+      this._value = parsedValue;
     this.onChange(oldValue, this._value);
   }
 
@@ -94,7 +106,18 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 
   /**
+   * Returns the value to be rendered in the template. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get valueForDisplay() { return ValidationUtil.isDefined(this.displayValueMapper) ? this.displayValueMapper(this.value) : this.value; }
+
+  /**
    * @param {Object} args
+   * 
+   * @param {String | undefined} args.localizedToolTip A localized text to display as a tool tip. 
+   * 
    * @param {Number | undefined} args.value The current value. 
    * * default `0`
    * @param {Number | undefined} args.min Optional. The minimum value. 
@@ -105,6 +128,10 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Number}`
    * * `newValue: {Number}`
+   * @param {Function | undefined} args.displayValueMapper If not undefined, will invoke this 
+   * function to map the actual value, before it is rendered. This function has no effect on 
+   * the actual value underneath. **Must** return a value. Arguments: 
+   * * `value: Number`
    */
   constructor(args = {}) {
     super(args);
@@ -113,6 +140,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     this._min = args.min ?? undefined;
     this._max = args.max ?? undefined;
     this._step = args.step ?? 1;
+    this.displayValueMapper = args.displayValueMapper;
   }
 
   /** @override */

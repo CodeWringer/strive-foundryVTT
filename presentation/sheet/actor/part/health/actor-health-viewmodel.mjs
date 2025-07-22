@@ -27,7 +27,7 @@ import IllnessListItemViewModel from "../../../item/illness/illness-list-item-vi
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
 import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.mjs"
-import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
+import ActorHealthConditionsViewModel from "./conditions/actor-health-conditions-viewmodel.mjs"
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
 import InjuryShrugOffBarViewModel from "./injury-shrug-off-bar/injury-shrug-off-bar-viewmodel.mjs"
@@ -77,6 +77,18 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get modifiedMaxHp() { return this.document.health.modifiedMaxHp; }
+  
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxHpModifier() { return this.document.health.maxHpModifier; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get maxHpModifierString() { return `(${this.maxHpModifier >= 0 ? "+" : "-"}${Math.abs(this.maxHpModifier)})`; }
 
   /**
    * @type {Number}
@@ -89,6 +101,18 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get maxExhaustion() { return this.document.health.maxExhaustion; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxExhaustionModifier() { return this.document.health.maxExhaustionModifier; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get maxExhaustionModifierString() { return `(${this.maxExhaustionModifier >= 0 ? "+" : "-"}${Math.abs(this.maxExhaustionModifier)})`; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -118,7 +142,7 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get healthStatesTemplate() { return ActorHealthStatesViewModel.TEMPLATE; }
+  get healthConditionsTemplate() { return ActorHealthConditionsViewModel.TEMPLATE; }
 
   /**
    * @type {String}
@@ -166,39 +190,44 @@ export default class ActorHealthViewModel extends ViewModel {
     const thiz = this;
 
     // HP
-    this.vmMaxHp = new InputNumberSpinnerViewModel({
+    this.vmHpIcon = new ViewModel({
+      id: "vmHpIcon",
       parent: this,
-      id: "vmMaxHp",
-      value: this.document.health.maxHP,
-      isEditable: false, // This should only ever be a read-only view! 
-      localizedToolTip: new RulesetExplainer().getExplanationForMaxHp(this.document),
-    });
-    this.vmMaxHpModifier = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmMaxHpModifier",
-      value: this.document.health.maxHpModifier,
-      onChange: (_, newValue) => {
-        this.document.health.maxHpModifier = newValue;
-      },
-    });
-    this.vmModifiedMaxHp = new ReadOnlyValueViewModel({
-      id: "vmModifiedMaxHp",
-      parent: this,
-      value: this.modifiedMaxHp,
+      localizedToolTip: this.showReminders ?
+        `${game.i18n.localize("system.character.health.hp.label")}<br>${game.i18n.localize("system.character.health.injury.reminder")}` :
+        game.i18n.localize("system.character.health.hp.label"),
     });
     this.vmHp = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmHp",
+      localizedToolTip: game.i18n.localize("system.character.health.hp.label"),
       value: this.document.health.HP,
+      min: 0,
       onChange: (_, newValue) => {
         this.document.health.HP = newValue;
+      },
+    });
+    const maxHpToolTip = StringUtil.format2(game.i18n.localize("system.character.health.hp.maxWithModifier"), {
+      maximum: this.document.health.maxHP,
+      operand: this.document.health.maxHpModifier >= 0 ? "+" : "-",
+      modifier: Math.abs(this.document.health.maxHpModifier),
+      finalValue: this.document.health.modifiedMaxHp,
+    });
+    const maxHpExplanation = new RulesetExplainer().getExplanationForMaxHp(this.document);
+    this.vmMaxHp = new InputNumberSpinnerViewModel({
+      id: "vmMaxHp",
+      parent: this,
+      localizedToolTip: this.showReminders ? `${maxHpToolTip}<br><br>${maxHpExplanation}` : maxHpToolTip,
+      value: this.document.health.modifiedMaxHp,
+      onChange: (_, newValue) => {
+        this.document.health.maxHpModifier = newValue - this.document.health.maxHP;
       },
     });
     this.vmAdjustHp = new ButtonViewModel({
       id: "vmAdjustHp",
       parent: this,
       localizedToolTip: game.i18n.localize("system.character.health.hp.adjust"),
-      iconHtml: '<i class="dark ico ico-modifier-solid interactible" style="height: 22px;"></i>',
+      iconHtml: '<i class="fas fa-edit"></i>',
       onClick: async () => {
         const inputNumber = "inputNumber";
         const dialog = await new DynamicInputDialog({
@@ -209,10 +238,10 @@ export default class ActorHealthViewModel extends ViewModel {
               name: inputNumber,
               localizedLabel: game.i18n.localize("system.character.health.hp.adjustInputLabel"),
               template: InputNumberSpinnerViewModel.TEMPLATE,
-              viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+              viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
                 id: id,
                 parent: parent,
-                value: 0,
+                ...overrides,
               }),
               required: true,
               validationFunc: (value) => { return parseInt(value) !== NaN; },
@@ -223,7 +252,7 @@ export default class ActorHealthViewModel extends ViewModel {
             }),
           ],
         }).renderAndAwait(true);
-        
+
         if (dialog.confirmed !== true) return;
 
         const number = parseInt(dialog[inputNumber]);
@@ -231,41 +260,74 @@ export default class ActorHealthViewModel extends ViewModel {
         const clampedHP = Math.max(0, Math.min(newHP, thiz.document.health.maxHP));
         thiz.document.health.HP = clampedHP;
       },
-    })
-    this.vmHpInjuryReminder = new ViewModel({
-      id: "vmHpInjuryReminder",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.character.health.injury.reminder"),
     });
+
     // Exhaustion
-    this.vmMaxExhaustion = new InputNumberSpinnerViewModel({
+    this.vmExhaustionIcon = new ViewModel({
+      id: "vmExhaustionIcon",
       parent: this,
-      id: "vmMaxExhaustion",
-      value: this.document.health.maxExhaustion,
-      isEditable: false, // This should only ever be a read-only view! 
-      localizedToolTip: new RulesetExplainer().getExplanationForMaxExhaustion(this.document),
-    });
-    this.vmMaxExhaustionModifier = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmMaxExhaustionModifier",
-      value: this.document.health.maxExhaustionModifier,
-      onChange: (_, newValue) => {
-        this.document.health.maxExhaustionModifier = newValue;
-      },
+      localizedToolTip: game.i18n.localize("system.character.health.exhaustion.label"),
     });
     this.vmExhaustion = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmExhaustion",
+      localizedToolTip: game.i18n.localize("system.character.health.exhaustion.label"),
       value: this.document.health.exhaustion,
+      min: 0,
       onChange: (_, newValue) => {
         this.document.health.exhaustion = newValue;
       },
-      min: 0,
     });
-    this.vmModifiedMaxExhaustion = new ReadOnlyValueViewModel({
-      id: "vmModifiedMaxExhaustion",
+    const maxExhaustionToolTip = StringUtil.format2(game.i18n.localize("system.character.health.exhaustion.maxWithModifier"), {
+      maximum: this.document.health.maxExhaustion,
+      operand: this.document.health.maxExhaustionModifier > 0 ? "+" : "-",
+      modifier: Math.abs(this.document.health.maxExhaustionModifier),
+      finalValue: this.document.health.modifiedMaxExhaustion,
+    });
+    const maxExhaustionExplanation = new RulesetExplainer().getExplanationForMaxExhaustion(this.document);
+    this.vmMaxExhaustion = new InputNumberSpinnerViewModel({
       parent: this,
-      value: this.modifiedMaxExhaustion,
+      id: "vmMaxExhaustion",
+      value: this.document.health.modifiedMaxExhaustion,
+      localizedToolTip: this.showReminders ? `${maxExhaustionToolTip}<br><br>${maxExhaustionExplanation}` : maxExhaustionToolTip,
+      onChange: (_, newValue) => {
+        this.document.health.maxExhaustionModifier = newValue - this.document.health.maxExhaustion;
+      },
+    });
+    this.vmAdjustExhaustion = new ButtonViewModel({
+      id: "vmAdjustExhaustion",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.health.exhaustion.adjust"),
+      iconHtml: '<i class="fas fa-edit" style="height: 22px;"></i>',
+      onClick: async () => {
+        const inputNumber = "inputNumber";
+        const dialog = await new DynamicInputDialog({
+          easyDismissal: true,
+          focused: inputNumber,
+          inputDefinitions: [
+            new DynamicInputDefinition({
+              name: inputNumber,
+              localizedLabel: game.i18n.localize("system.character.health.exhaustion.adjustInputLabel"),
+              template: InputNumberSpinnerViewModel.TEMPLATE,
+              viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+                id: id,
+                parent: parent,
+                value: 0,
+                ...overrides,
+              }),
+              required: true,
+              validationFunc: (value) => { return parseInt(value) !== NaN; },
+            }),
+          ],
+        }).renderAndAwait(true);
+
+        if (dialog.confirmed !== true) return;
+
+        const number = parseInt(dialog[inputNumber]);
+        const newValue = thiz.document.health.exhaustion + number;
+        const clampedValue = Math.max(0, newValue);
+        thiz.document.health.exhaustion = clampedValue;
+      },
     });
 
     // Armor list item (if there is one). 
@@ -315,9 +377,9 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
     });
 
-    // Conditions (formerly health states)
-    this.vmHealthStates = new ActorHealthStatesViewModel({
-      id: "vmHealthStates",
+    // Conditions
+    this.vmHealthConditions = new ActorHealthConditionsViewModel({
+      id: "vmHealthConditions",
       parent: this,
       isOwner: this.isOwner,
       document: this.document,
@@ -531,17 +593,17 @@ export default class ActorHealthViewModel extends ViewModel {
     const newIllnesses = this._getIllnessViewModels();
     this._cullObsolete(this.illnesses, newIllnesses);
     this.illnesses = newIllnesses;
-    
+
     // Injuries
     const newInjuries = this._getInjuryViewModels();
     this._cullObsolete(this.injuries, newInjuries);
     this.injuries = newInjuries;
-    
+
     // Mutations
     const newMutations = this._getMutationViewModels();
     this._cullObsolete(this.mutations, newMutations);
     this.mutations = newMutations;
-    
+
     // Scars
     const newScars = this._getScarViewModels();
     this._cullObsolete(this.scars, newScars);
@@ -575,7 +637,7 @@ export default class ActorHealthViewModel extends ViewModel {
       ...updates.get(this.vmScarList),
       listItemViewModels: this.scars,
     });
-    
+
     return updates;
   }
 
@@ -586,12 +648,12 @@ export default class ActorHealthViewModel extends ViewModel {
    */
   _getIllnessViewModels() {
     return this._getViewModels(
-      this.document.health.illnesses, 
+      this.document.health.illnesses,
       this.illnesses,
       (args) => { return new IllnessListItemViewModel(args); }
     );
   }
-  
+
   /**
    * @returns {Array<InjuryListItemViewModel>}
    * 
@@ -599,12 +661,12 @@ export default class ActorHealthViewModel extends ViewModel {
    */
   _getInjuryViewModels() {
     return this._getViewModels(
-      this.document.health.injuries, 
+      this.document.health.injuries,
       this.injuries,
       (args) => { return new InjuryListItemViewModel(args); }
     );
   }
-  
+
   /**
    * @returns {Array<MutationListItemViewModel>}
    * 
@@ -612,12 +674,12 @@ export default class ActorHealthViewModel extends ViewModel {
    */
   _getMutationViewModels() {
     return this._getViewModels(
-      this.document.health.mutations, 
+      this.document.health.mutations,
       this.mutations,
       (args) => { return new MutationListItemViewModel(args); }
     );
   }
-  
+
   /**
    * @returns {Array<ScarListItemViewModel>}
    * 
@@ -625,7 +687,7 @@ export default class ActorHealthViewModel extends ViewModel {
    */
   _getScarViewModels() {
     return this._getViewModels(
-      this.document.health.scars, 
+      this.document.health.scars,
       this.scars,
       (args) => { return new ScarListItemViewModel(args); }
     );

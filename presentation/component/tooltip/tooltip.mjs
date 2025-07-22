@@ -102,6 +102,19 @@ export default class Tooltip {
   }
 
   /**
+   * @returns {Boolean}
+   */
+  get visible() { return this._visible; }
+  set visible(value) {
+    this._visible = value;
+    if (value) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id A unique identifier. 
    * @param {JQuery | undefined} args.anchorElement The element to which to anchor the tooltip. 
@@ -137,6 +150,8 @@ export default class Tooltip {
     this.maxWidth = args.maxWidth ?? "50rem";
     this.showOnHover = args.showOnHover ?? true;
     this.style = args.style ?? "";
+
+    this._visible = false;
 
     this.onShown = args.onShown ?? (() => {});
     this.onHidden = args.onHidden ?? (() => {});
@@ -176,6 +191,7 @@ export default class Tooltip {
    */
   show() {
     if (!ValidationUtil.isDefined(this.anchorElement)) return;
+    this._visible = true;
 
     // Ensure lingering instances are cleared and a clean, new one exists. 
     this._ensureElementRemoved();
@@ -220,6 +236,7 @@ export default class Tooltip {
    * Hides the tooltip, by removing it from the DOM. 
    */
   hide() {
+    this._visible = false;
     this._ensureElementRemoved();
     this.onHidden();
   }

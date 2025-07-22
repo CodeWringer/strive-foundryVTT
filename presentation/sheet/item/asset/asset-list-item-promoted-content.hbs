@@ -1,26 +1,20 @@
 {{!-- Parameters:
 viewModel: {IllnessListItemViewModel}
 --}}
-<div id="{{viewModel.id}}" class="flex flex-row flex-wrap margin-b-md auto-margin-h">
-  <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
-    {{!-- Quantity --}}
-    {{#> labeledControl viewModel=viewModel.vmQuantity localizedIconToolTip=(localize "system.character.asset.quantity.label") iconClass="ico-quantity-solid" cssClass="flex-grow" }}
-      {{> inputNumberSpinner }}
-    {{/labeledControl}}
-    {{!-- Max Quantity --}}
-    {{#> labeledControl viewModel=viewModel.vmMaxQuantity localizedIconToolTip=(localize "system.character.asset.quantity.maximum") iconClass="ico-limit-solid" cssClass="flex-grow" }}
-      {{> inputNumberSpinner }}
-    {{/labeledControl}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-wrap auto-margin-h-md">
+  {{!-- Quantity / Maximum Quantity --}}
+  {{#with viewModel.quantityAndMaxTemplate as |template|}}
+    {{> (template) viewModel=../viewModel.vmCompositeQuantity cssClass="sheet-block" }}
+  {{/with}}
+  {{!-- Quality --}}
+  <div class="flex flex-row flex-middle auto-margin-h-sm sheet-block">
+    <i id="{{viewModel.vmQualityIcon.id}}" class="ico dark ico-quality-solid"></i>
+    {{> inputNumberSpinner viewModel=viewModel.vmQuality cssClass="width-md" }}
   </div>
-  <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
-    {{!-- Quality --}}
-    {{#> labeledControl viewModel=viewModel.vmQuality localizedIconToolTip=(localize "system.character.asset.quality") iconClass="ico-quality-solid" cssClass="flex-grow" }}
-      {{> inputNumberSpinner }}
-    {{/labeledControl}}
-    {{!-- Bulk --}}
-    {{#> labeledControl viewModel=viewModel.vmBulk localizedIconToolTip=(localize "system.character.asset.bulk") iconClass="ico-bulk-solid" cssClass="flex-grow" }}
-      {{> inputNumberSpinner }}
-    {{/labeledControl}}
+  {{!-- Bulk --}}
+  <div class="flex flex-row flex-middle auto-margin-h-sm sheet-block">
+    <i id="{{viewModel.vmBulkIcon.id}}" class="ico dark ico-bulk-solid"></i>
+    {{> inputNumberSpinner viewModel=viewModel.vmBulk cssClass="width-md" }}
   </div>
 </div>
 {{#if viewModel.isProperty}}

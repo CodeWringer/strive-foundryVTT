@@ -72,10 +72,11 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
               name: inputName,
               localizedLabel: game.i18n.localize("system.general.name.label"),
               template: InputTextFieldViewModel.TEMPLATE,
-              viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+              viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
                 id: id,
                 parent: parent,
                 value: "New Asset Slot Group",
+                ...overrides,
               }),
               required: true,
               validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },

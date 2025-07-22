@@ -23,6 +23,9 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
     &.disabled {
       filter: brightness($brightness-disabled-dark);
     }
+    &.active {
+      filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+    }
   }
   &.disabled {
     filter: brightness($brightness-disabled);
@@ -518,5 +521,55 @@ a:hover {
 
 .ico-locked-expertises-solid {
   background: url("/systems/strive/presentation/image/locked-expertises-solid.svg");
+  background-size: cover;
+}
+
+.ico-berserk-solid {
+  background: url("/systems/strive/presentation/image/berserk-solid.svg");
+  background-size: cover;
+}
+
+.ico-exhausted-solid {
+  background: url("/systems/strive/presentation/image/exhausted-solid.svg");
+  background-size: cover;
+}
+
+.ico-sprint-solid {
+  background: url("/systems/strive/presentation/image/sprint-solid.svg");
+  background-size: cover;
+}
+
+.ico-jealous-solid {
+  background: url("/systems/strive/presentation/image/jealous-solid.svg");
+  background-size: cover;
+}
+
+.ico-angel-solid {
+  background: url("/systems/strive/presentation/image/angel-solid.svg");
+  background-size: cover;
+}
+
+.ico-prone-solid {
+  background: url("/systems/strive/presentation/image/prone-solid.svg");
+  background-size: cover;
+}
+
+.ico-rooted-solid {
+  background: url("/systems/strive/presentation/image/rooted-solid.svg");
+  background-size: cover;
+}
+
+.ico-stunned-solid {
+  background: url("/systems/strive/presentation/image/stunned-solid.svg");
+  background-size: cover;
+}
+
+.ico-terrified-solid {
+  background: url("/systems/strive/presentation/image/terrified-solid.svg");
+  background-size: cover;
+}
+
+.ico-unconscious-solid {
+  background: url("/systems/strive/presentation/image/unconscious-solid.svg");
   background-size: cover;
 }

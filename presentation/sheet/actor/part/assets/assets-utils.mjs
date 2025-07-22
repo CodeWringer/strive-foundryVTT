@@ -34,10 +34,11 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
         name: inputName,
         localizedLabel: game.i18n.localize("system.general.name.label"),
         template: InputTextFieldViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
           id: id,
           parent: parent,
           value: (assetSlot.name ?? "New Asset Slot"),
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
@@ -46,22 +47,24 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
         name: inputAcceptedTypes,
         localizedLabel: game.i18n.localize("system.character.asset.slot.acceptedTypes"),
         template: InputTextFieldViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
           id: id,
           parent: parent,
           value: ((assetSlot.acceptedTypes ?? []).join(", ")),
-          placeholder: "holdable, armor, ..."
+          placeholder: "holdable, armor, ...",
+          ...overrides,
         }),
       }),
       new DynamicInputDefinition({
         name: inputMaxBulk,
         localizedLabel: game.i18n.localize("system.character.asset.maxBulk"),
         template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
           id: id,
           parent: parent,
           value: (assetSlot.maxBulk ?? 1),
           min: 1,
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => {

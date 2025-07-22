@@ -12,7 +12,7 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
    * @type {String}
    * @readonly
    */
-  static get KEY_CUSTOM_HEALTH_STATES() { return "customHealthStates"; }
+  static get KEY_CUSTOM_HEALTH_CONDITIONS() { return "customHealthStates"; }
  
   /**
    * @static
@@ -33,9 +33,9 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
 
     this._settings.push(
       new GameSystemSetting({
-        key: GameSystemWorldSettings.KEY_CUSTOM_HEALTH_STATES,
-        name: game.i18n.localize("system.settings.healthStates.label"),
-        hint: game.i18n.localize("system.settings.healthStates.hint"),
+        key: GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS,
+        name: game.i18n.localize("system.settings.healthConditions.label"),
+        hint: game.i18n.localize("system.settings.healthConditions.hint"),
         scope: SettingScopes.WORLD,
         config: false,
         default: {

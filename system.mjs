@@ -14,7 +14,7 @@ import { ARMOR_TYPES } from "./business/ruleset/asset/armor-types.mjs";
 import { WEAPON_TYPES } from "./business/ruleset/asset/weapon-types.mjs";
 import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
 import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
-import { HEALTH_STATES } from "./business/ruleset/health/health-states.mjs";
+import { HEALTH_CONDITIONS } from "./business/ruleset/health/health-states.mjs";
 import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-types.mjs";
 import { ASSET_TAGS, SKILL_TAGS } from "./business/tags/system-tags.mjs";
 import { ACTOR_TYPES } from "./business/document/actor/actor-types.mjs";
@@ -43,8 +43,9 @@ import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
 import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-case.mjs";
 // Dialogs
+import DynamicInputDefinition from "./presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
-import "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 // Document classes
 import { GameSystemActor } from "./business/document/actor/actor.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
@@ -78,39 +79,41 @@ import ViewModelCollection from './presentation/view-model/view-model-collection
 // View models
 import ViewModel from "./presentation/view-model/view-model.mjs";
 // View models - Components
-import InputNumberSpinnerViewModel from "./presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ButtonAddViewModel from "./presentation/component/button-add/button-add-viewmodel.mjs";
 import ButtonCheckBoxViewModel from "./presentation/component/button-checkbox/button-checkbox-viewmodel.mjs";
 import ButtonContextMenuViewModel from "./presentation/component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "./presentation/component/button-delete/button-delete-viewmodel.mjs";
 import ButtonOpenSheetViewModel from "./presentation/component/button-open-sheet/button-open-sheet-viewmodel.mjs";
-import VisibilityToggleListItemViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-item-viewmodel.mjs";
-import VisibilityToggleListViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
-import SortableListViewModel from "./presentation/component/sortable-list/sortable-list-viewmodel.mjs";
-import SortControlsViewModel from "./presentation/component/sort-controls/sort-controls-viewmodel.mjs";
-import SimpleListItemViewModel from "./presentation/component/simple-list/simple-list-item-viewmodel.mjs";
-import SimpleListViewModel from "./presentation/component/simple-list/simple-list-viewmodel.mjs";
-import GmNotesViewModel from "./presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs";
-import LazyRichTextViewModel from "./presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
-import LazyLoadViewModel from "./presentation/component/lazy-load/lazy-load-viewmodel.mjs";
-import InputToggleViewModel from "./presentation/component/input-toggle/input-toggle-viewmodel.mjs";
-import InputTextareaViewModel from "./presentation/component/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "./presentation/component/input-textfield/input-textfield-viewmodel.mjs";
-import InputTagPillViewModel from "./presentation/component/input-tags/input-tag-pill-viewmodel.mjs";
-import InputTagsViewModel from "./presentation/component/input-tags/input-tags-viewmodel.mjs";
-import InputSliderViewModel from "./presentation/component/input-slider/input-slider-viewmodel.mjs";
-import InputSearchTextViewModel from "./presentation/component/input-search/input-search-viewmodel.mjs";
-import InputRichTextViewModel from "./presentation/component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputImageViewModel from "./presentation/component/input-image/input-image-viewmodel.mjs";
-import InputChoiceViewModel from "./presentation/component/input-choice/input-choice-viewmodel.mjs";
-import DiceRollListViewModel from "./presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs";
+import ButtonRollViewModel from "./presentation/component/button-roll/button-roll-viewmodel.mjs";
+import ButtonSendToChatViewModel from "./presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonTakeItemViewModel from "./presentation/component/button-take-item/button-take-item-viewmodel.mjs";
+import ButtonToggleIconViewModel from "./presentation/component/button-toggle-icon/button-toggle-icon-viewmodel.mjs";
+import ButtonToggleVisibilityViewModel from "./presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
+import ButtonViewModel from "./presentation/component/button/button-viewmodel.mjs";
+import CompositeCurrentAndMaximumNumbersViewModel from "./presentation/component/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers-viewmodel.mjs";
 import DamageDefinitionListItemViewModel from "./presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs";
 import DamageDefinitionListViewModel from "./presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs";
-import ButtonToggleVisibilityViewModel from "./presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
-import ButtonToggleIconViewModel from "./presentation/component/button-toggle-icon/button-toggle-icon-viewmodel.mjs";
-import ButtonTakeItemViewModel from "./presentation/component/button-take-item/button-take-item-viewmodel.mjs";
-import ButtonSendToChatViewModel from "./presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import ButtonRollViewModel from "./presentation/component/button-roll/button-roll-viewmodel.mjs";
+import DiceRollListViewModel from "./presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs";
+import GmNotesViewModel from "./presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs";
+import InputChoiceViewModel from "./presentation/component/input-choice/input-choice-viewmodel.mjs";
+import InputImageViewModel from "./presentation/component/input-image/input-image-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "./presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputRichTextViewModel from "./presentation/component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputSearchTextViewModel from "./presentation/component/input-search/input-search-viewmodel.mjs";
+import InputSliderViewModel from "./presentation/component/input-slider/input-slider-viewmodel.mjs";
+import InputTagPillViewModel from "./presentation/component/input-tags/input-tag-pill-viewmodel.mjs";
+import InputTagsViewModel from "./presentation/component/input-tags/input-tags-viewmodel.mjs";
+import InputTextareaViewModel from "./presentation/component/input-textarea/input-textarea-viewmodel.mjs";
+import InputTextFieldViewModel from "./presentation/component/input-textfield/input-textfield-viewmodel.mjs";
+import InputToggleViewModel from "./presentation/component/input-toggle/input-toggle-viewmodel.mjs";
+import LazyLoadViewModel from "./presentation/component/lazy-load/lazy-load-viewmodel.mjs";
+import LazyRichTextViewModel from "./presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
+import SimpleListItemViewModel from "./presentation/component/simple-list/simple-list-item-viewmodel.mjs";
+import SimpleListViewModel from "./presentation/component/simple-list/simple-list-viewmodel.mjs";
+import SortableListViewModel from "./presentation/component/sortable-list/sortable-list-viewmodel.mjs";
+import SortControlsViewModel from "./presentation/component/sort-controls/sort-controls-viewmodel.mjs";
+import VisibilityToggleListItemViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-item-viewmodel.mjs";
+import VisibilityToggleListViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 // View models - Actor
 import './presentation/sheet/actor/part/abilities/actor-attribute-table-viewmodel.mjs';
 import ActorAttributesViewModel from "./presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs";
@@ -223,7 +226,7 @@ Hooks.once('init', function() {
       WEAPON_TYPES: WEAPON_TYPES,
       INJURY_STATES: INJURY_STATES,
       ILLNESS_STATES: ILLNESS_STATES,
-      HEALTH_STATES: HEALTH_STATES,
+      HEALTH_CONDITIONS: HEALTH_CONDITIONS,
       CHARACTER_TEST_TYPES: CHARACTER_TEST_TYPES,
       VISIBILITY_MODES: VISIBILITY_MODES,
     },
@@ -254,8 +257,13 @@ Hooks.once('init', function() {
         TransientMutation: TransientMutation,
         TransientScar: TransientScar,
       },
+      dialog: {
+        DynamicInputDialog: DynamicInputDialog,
+        DynamicInputDefinition: DynamicInputDefinition,
+      },
       viewModel: {
         ViewModel: ViewModel,
+        ButtonViewModel: ButtonViewModel,
         ButtonAddViewModel: ButtonAddViewModel,
         ButtonCheckBoxViewModel: ButtonCheckBoxViewModel,
         ButtonContextMenuViewModel: ButtonContextMenuViewModel,
@@ -290,6 +298,7 @@ Hooks.once('init', function() {
         VisibilityToggleListItemViewModel: VisibilityToggleListItemViewModel,
         InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
         ReadOnlyValueViewModel: ReadOnlyValueViewModel,
+        CompositeCurrentAndMaximumNumbersViewModel: CompositeCurrentAndMaximumNumbersViewModel,
         actor: {
           ActorAttributesViewModel: ActorAttributesViewModel,
           ActorSkillsViewModel: ActorSkillsViewModel,

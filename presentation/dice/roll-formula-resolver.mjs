@@ -209,11 +209,12 @@ export default class RollFormulaResolver {
         name: inputNameVisibility,
         localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
         template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputDropDownViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
           id: id,
           parent: parent,
           options: VISIBILITY_MODES.asChoices(),
           value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+          ...overrides,
         }),
       }),
     ];
@@ -227,10 +228,11 @@ export default class RollFormulaResolver {
         name: unresolvedReference,
         localizedLabel: unresolvedReference,
         template: InputTextFieldViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+        viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
           id: id,
           parent: parent,
           value: "0",
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => {

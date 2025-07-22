@@ -104,11 +104,12 @@ export class RollSchema {
         new DynamicInputDefinition({
           name: this._nameInputVisibility,
           template: InputDropDownViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputDropDownViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
             id: id,
             parent: parent,
             value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
             options: VISIBILITY_MODES.asChoices(),
+            ...overrides,
           }),
           localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
         }),

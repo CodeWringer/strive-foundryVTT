@@ -26,7 +26,7 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document
  * @extends DocumentCreationStrategy
  */
 export default class SpecificDocumentCreationStrategy extends DocumentCreationStrategy {
-  
+
   /**
    * Returns the name of the choices input that allows selection of a document collection source. 
    * 
@@ -35,7 +35,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @protected
    */
   get nameInputCollectionSources() { return "nameInputCollectionSources"; }
-  
+
   /**
    * Returns the name of the choices input. 
    * 
@@ -53,7 +53,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @protected
    */
   get nameLabel() { return "nameLabel"; }
-  
+
   /**
    * Returns the value of the custom choice. Can be used to identify this choice 
    * in the list of choices. 
@@ -91,35 +91,8 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
     this.documentType = args.documentType;
     this.filter = args.filter ?? (() => { return true });
     this.selectionLabelMapper = args.selectionLabelMapper;
-    
-    this._collectionSource = DOCUMENT_COLLECTION_SOURCES.systemCompendia;
-  }
 
-  /**
-   * Collects the document collection sources (system, world compendia, world) and returns them 
-   * as `ChoiceOption`s. 
-   * 
-   * @returns {Array<ChoiceOption>}
-   */
-  _getCollectionChoices() {
-    return [
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.systemCompendia.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.systemCompendia"),
-      }),
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.worldCompendia.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.worldCompendia"),
-      }),
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.world.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.world"),
-      }),
-      new ChoiceOption({
-        value: DOCUMENT_COLLECTION_SOURCES.all.name,
-        localizedValue: game.i18n.localize("system.general.collectionSources.all"),
-      }),
-    ];
+    this._collectionSource = DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia;
   }
 
   /**
@@ -151,7 +124,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         documents.set(id, transientDocument);
       }
     }
-    
+
     // Map the documents to choices. 
     const options = [];
     for (let i = 0; i < documentIndices.length; i++) {
@@ -159,7 +132,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       const document = documents.get(documentIndex.id);
       if (!ValidationUtil.isDefined(document)) continue;
       const documentNameForDisplay = document.nameForDisplay ?? documentIndex.name;
-      
+
       options.push(new ChoiceOption({
         value: documentIndex.id,
         localizedValue: `${documentNameForDisplay}   (${documentIndex.sourceName})`,
@@ -192,18 +165,26 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         name: this.nameInputCollectionSources,
         localizedLabel: game.i18n.localize("system.general.collection"),
         template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: async (id, parent) => {
-          const sortedOptions = this._getCollectionChoices();
+        rememberValue: true,
+        viewModelFactory: async (id, parent, overrides) => {
+          const options = DOCUMENT_COLLECTION_SOURCES.asChoices();
+          if (ValidationUtil.isDefined(overrides.value)) {
+            this._collectionSource = DOCUMENT_COLLECTION_SOURCES.asArray().find(it => it.name === overrides.value.value);
+          }
           return new InputDropDownViewModel({
             id: id,
             parent: parent,
-            options: sortedOptions,
+            options: options,
+            value: options.find(it => it.value === DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name),
+            ...overrides,
           });
         },
         onChange: async (oldValue, newValue, dialogViewModel) => {
           this._collectionSource = DOCUMENT_COLLECTION_SOURCES.asArray().find(it => it.name === newValue.value);
           dialogViewModel.refreshInput(this.nameInputChoices);
-          dialogViewModel.refreshInput(this.nameLabel);
+          if (ValidationUtil.isDefined(this.selectionLabelMapper)) {
+            dialogViewModel.refreshInput(this.nameLabel);
+          }
         },
       }),
       // Document choices input
@@ -211,14 +192,15 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         name: this.nameInputChoices,
         localizedLabel: game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`),
         template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: async (id, parent) => {
-          const sortedOptions = await this._getChoices();
-          const customChoice = sortedOptions.find(it => it.value === this.customChoiceValue);
+        viewModelFactory: async (id, parent, overrides) => {
+          const options = await this._getChoices();
+          const customChoice = options.find(it => it.value === this.customChoiceValue);
           return new InputDropDownViewModel({
             id: id,
             parent: parent,
-            options: sortedOptions,
+            options: options,
             value: customChoice,
+            ...overrides,
           });
         },
         onChange: async (oldValue, newValue, dialogViewModel) => {
@@ -238,13 +220,13 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         new DynamicInputDefinition({
           name: this.nameLabel,
           template: DynamicLabelViewModel.TEMPLATE,
-          viewModelFactory: async (id, parent) => {
+          viewModelFactory: async (id, parent, overrides) => {
             const mappedLabel = await this.selectionLabelMapper(undefined);
-
             return new DynamicLabelViewModel({
               id: id,
               parent: parent,
               localizedLabel: mappedLabel,
+              ...overrides,
             });
           },
         }),
@@ -311,6 +293,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       localizedType
     );
     const dialog = await new DynamicInputDialog({
+      id: "specific-document-creation",
       localizedTitle: localizedDialogTitle,
       inputDefinitions: inputDefinitions,
     }).renderAndAwait(true);

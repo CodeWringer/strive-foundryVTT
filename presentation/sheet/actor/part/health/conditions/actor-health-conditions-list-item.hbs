@@ -1,7 +1,10 @@
 {{!-- Parameters:
-viewModel: {ActorHealthStatesListItemViewModel}
+viewModel: {ActorHealthConditionsListItemViewModel}
 --}}
-<div id="{{viewModel.id}}" class="flex flex-row flex-middle pad-md">
+<div id="{{viewModel.id}}" class="flex flex-row flex-middle pad-md auto-margin-h-sm">
+  {{#if viewModel.iconHtml}}
+  {{{viewModel.iconHtml}}}
+  {{/if}}
   <span>
     {{> inputToggle viewModel=viewModel.btnToggle}}
   </span>

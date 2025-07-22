@@ -52,6 +52,7 @@
         "addTypeOf": "Add %s '%s'",
         "query": "Select %s to Add"
       },
+      "adjustInputLabel": "Amount to add/subtract",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "contextMenu": "Context-Menu",
@@ -60,6 +61,8 @@
         "all": "All",
         "allCompendia": "All Compendia",
         "systemCompendia": "System Compendia",
+        "moduleCompendia": "Module Compendia",
+        "systemAndModuleCompendia": "System and Module Compendia",
         "worldCompendia": "World Compendia",
         "world": "World"
       },
@@ -173,6 +176,7 @@
         "level": "Level",
         "rawLevel": "Raw Level",
         "modifiedLevel": "Modified Level",
+        "modifiedLevelWithPlaceholders": "%{rawLevel} (Level) %{operand} %{modifier} (Modifier) = %{modifiedLevel} (Modified Level)",
         "modifiedOf": "Modified %{name}",
         "minimum": "Minimum Level",
         "modifier": {
@@ -324,7 +328,7 @@
           },
           "fleeCombat": {
             "label": "Flee Combat",
-            "tooltip": "When combat is a decidedly bad idea, one can try to flee from it. A fleeing character can no longer perform any hostile actions. That means, they can no longer attack or hinder any other characters until the end of combat.<br><br>In turn for giving up their offensive capacity, they gain +50% of movement (for an average human on foot, that is +6'/2m) per AP spent. Rules for difficult terrain still apply."
+            "tooltip": "When combat is a decidedly bad idea, one can try to flee from it. A fleeing character can no longer perform any hostile actions. That means, they can no longer attack or hinder any other characters until the end of combat.<br><br>In turn for giving up their offensive capacity, they gain double their sprinting speed per AP spent. Rules for difficult terrain and the exhaustion cost for sprinting still apply."
           },
           "pushThrough": {
             "label": "Push Through",
@@ -441,10 +445,12 @@
       },
       "gritPoint": {
         "abbreviation": "GP",
+        "adjust": "Adjust Grit Points",
+        "adjustInputLabel": "Grit Points to add/subtract",
         "singular": "Grit Point",
         "plural": "Grit Points",
         "toggleLabel": "Enable Grit Points",
-        "tooltip": "A <strong>Grit Point</strong> lets a character stand up in defiance of their injuries and make a last-ditch effort to turn the wheel of fate around. Every time a character suffers an injury, they gain <strong>1</strong> <strong>Grit Point</strong>. <br><br><strong>Grit Points</strong> are one-time use and last until they are spent or until an injury has fully healed. <br><br>You may spend <strong>Grit Points</strong> at any time during a round for the following effects (but only one <strong>Grit Point</strong> per effect, per round): <ul><li>On a test, gain <strong>+2D</strong>.</li><li>On a test, gain <strong>+1</strong> compensation point.</li><li>Reduce exhaustion by <strong>1D4</strong>.</li><li>On your attack, deal <strong>+1D6</strong> points of additional damage of your weapon's strongest type of damage.</li><li>Gain <strong>+1D4</strong> AP.</li></ul>"
+        "tooltip": "A Grit Point lets a character stand up in defiance of their injuries and make a last-ditch effort to turn the wheel of fate around. Every time a character suffers an injury, they gain <code>1</code> Grit Point. <br><br>Grit Points are one-time use and last until they are spent or until an injury has fully healed. <br><br>You may spend Grit Points at any time during a round for the following effects (but only one Grit Point per effect, per round): <ul><li>On a test, gain <code>+2D</code>.</li><li>On a test, gain <code>+1</code> compensation point.</li><li>Reduce exhaustion by <code>1D4</code>.</li><li>On your attack, deal <code>+1D6</code> points of additional damage of your weapon's strongest type of damage.</li><li>Gain <code>+1D4</code> AP.</li></ul>"
       },
       "health": {
         "duration": "Duration",
@@ -458,14 +464,20 @@
         "obstacleTreatment": "Obstacle Treatment",
         "exhaustion": {
           "label": "Exhaustion",
-          "maximum": "Max. Exhaustion"
+          "maximum": "Max. Exhaustion",
+          "adjust": "Adjust Exhaustion",
+          "adjustInputLabel": "Exhaustion to add/subtract",
+          "maxWithModifier": "Maximum Exhaustion<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
+          "maxExplanation": "%{baseExhaustionLimit} (base) + %{toughnessRawLevel} (raw toughness) %{operand} %{modifier} (modifier) = %{maxExhaustion}"
         },
         "hp": {
-          "label": "Hit-Points",
+          "label": "Hit-Points (HP)",
           "abbreviation": "HP",
           "maximum": "Max. HP",
           "adjust": "Adjust HP",
-          "adjustInputLabel": "HP to add/subtract"
+          "adjustInputLabel": "HP to add/subtract",
+          "maxWithModifier": "Maximum Hit-Points (Max. HP)<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
+          "maxExplanation": "%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>10 - (%{toughness} (toughness) / 2 (round down) = %{hpReductionPerInjury} (reduction per injury)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
         },
         "illness": {
           "plural": "Illnesses",
@@ -504,7 +516,7 @@
             "roll": "Roll for a shrug-off test",
             "chatMessage": "Rolls to shrug off an injury"
           },
-          "reminder": "A loss of <code>10+</code> HP may result in an injury. A loss of <code>20+</code> HP may result in two injuries. A shrug-off test (the button below the 'Injuries' heading) will determine whether you actually suffer any injury. <br>On a successful shrug-off, increment the counter of shrug-offs (next to the button). The <b>Ob</b> of the next shrug-off test will be increased by that number."
+          "reminder": "A loss of <code>10+</code> HP may result in an injury.<br>A loss of <code>20+</code> HP may result in two injuries.<br>A shrug-off test will determine whether you actually suffer any injury."
         },
         "mutation": {
           "plural": "Mutations",
@@ -784,8 +796,6 @@
       "skillAdvancementRequirements": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}<br>Failures: %{failureFormula} = %{requiredFailures}",
       "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
       "sprintingSpeed": "(%{localizedAgility} (%{agility}) + %{localizedToughness} (%{toughness})) / 2 (rounded up) = %{sprintingSpeed}",
-      "maxHp": "%{baseHp} + (%{toughness} * %{hpPerLevel}) = %{unmodifiedHp} (Raw maximum HP)<br>10 - (%{toughness} / 2) = 10 - %{halfToughness} (rounded down) = %{hpReductionPerInjury} (Reduction per injury)<br>Raw maximum HP (%{unmodifiedHp}) - (injury count (%{injuryCount}) * reduction per injury (%{hpReductionPerInjury})) = %{unmodifiedHp} - %{hpReduction} = %{finalMaxHp}",
-      "maxExhaustion": "base (%{baseExhaustionLimit}) + raw toughness (%{toughnessRawLevel}) = %{maxExhaustion}",
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {
@@ -869,7 +879,7 @@
         "label": "Debug Mode",
         "hint": "Toggles debug mode on - increases log verbosity, at the cost of performance."
       },
-      "healthStates": {
+      "healthConditions": {
         "label": "Condition Customization",
         "hint": "Allows defining new and hiding system default conditions.",
         "configureSystemDefaults": "Configure system condition visibilities",

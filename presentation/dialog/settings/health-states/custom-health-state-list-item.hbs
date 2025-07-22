@@ -2,16 +2,20 @@
 viewModel: CustomHealthStateListItemViewModel
 --}}
 <div id="{{viewModel.id}}" class="flex flex-row flex-grow flex-middle">
+  {{!-- Icon --}}
+  <div class="list-item-header-img">
+    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+  </div>
   {{!-- Name --}}
   {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.general.name.label"}}{{/label}}
   <span class="flex-grow">
-    {{> inputTextField viewModel=viewModel.vmName}}
+    {{> inputTextField viewModel=viewModel.vmName }}
   </span>
   {{!-- Spacer --}}
   <span class="width-sm"></span>
   {{!-- Limit --}}
   {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.state.limit"}}{{/label}}
   <span class="width-md">
-    {{> inputNumberSpinner viewModel=viewModel.vmLimit}}
+    {{> inputNumberSpinner viewModel=viewModel.vmLimit }}
   </span>
 </div>

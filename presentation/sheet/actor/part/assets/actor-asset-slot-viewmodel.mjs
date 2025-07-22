@@ -185,11 +185,12 @@ export default class ActorAssetSlotViewModel extends ViewModel {
               name: inputChoices,
               localizedLabel: game.i18n.localize("system.general.name.label"),
               template: InputDropDownViewModel.TEMPLATE,
-              viewModelFactory: (id, parent) => new InputDropDownViewModel({
+              viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
                 id: id,
                 parent: parent,
                 options: assetChoices,
                 value: assetChoices.length > 0 ? assetChoices[0] : undefined,
+                ...overrides,
               }),
             }),
           ],

@@ -40,7 +40,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
    * @override
    * @readonly
    */
-  get template() { return game.strive.const.TEMPLATES.DIALOG_SETTINGS_HEALTH_STATES; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_SETTINGS_HEALTH_CONDITIONS; }
 
   /**
    * Returns the localized title of this sheet. 
@@ -48,7 +48,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
    * @type {String}
    * @readonly
    */
-  get title() { return game.i18n.localize("system.settings.healthStates.label"); }
+  get title() { return game.i18n.localize("system.settings.healthConditions.label"); }
 
   /** @override */
   getData() {

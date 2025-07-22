@@ -284,6 +284,48 @@ export default class ViewModel {
   }
 
   /**
+   * @type {String | undefined}
+   */
+  get localizedToolTip() {
+    return this._localizedToolTip;
+  }
+  /**
+   * @param {String | undefined} value 
+   */
+  set localizedToolTip(value) {
+    this._localizedToolTip = value;
+
+    let toolTipVisible = false;
+
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      toolTipVisible = this._toolTip.visible;
+      this._toolTip.deactivateListeners();
+      this._toolTip.hide();
+      this._toolTip = null;
+    }
+
+    if (ValidationUtil.isDefined(value)) {
+      this._toolTip = new Tooltip({
+        id: `${this.id}-tooltip`,
+        content: this.localizedToolTip,
+        enableArrow: true,
+        style: this.toolTipStyle,
+        constraint: this.toolTipConstraint,
+        onShown: () => {
+          this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+        onHidden: () => {
+          this.element.removeClass(ViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+      });
+      this._toolTip.activateListeners(this._element);
+      if (toolTipVisible) {
+        this._toolTip.show();
+      }
+    }
+  }
+
+  /**
    * Returns true, if rule reminders are enabled. 
    * 
    * @type {Boolean}
@@ -308,6 +350,16 @@ export default class ViewModel {
    * @readonly
    */
   get element() { return this._element; }
+
+  get visible() { return this._visible; }
+  set visible(value) {
+    this._visible = value;
+    if (value) {
+      this.element.removeClass("hidden");
+    } else {
+      this.element.addClass("hidden");
+    }
+  }
 
   /**
    * @param {Object} args The arguments object. 
@@ -342,6 +394,8 @@ export default class ViewModel {
    * @param {TooltipPlacementConstraint | undefined} args.toolTipConstraint Sets a constraint that determines 
    * where the tool tip will be placed, around the element. 
    * * default `TOOLTIP_PLACEMENTS.TOP` with offset `0`. 
+   * @param {Boolean | undefined} args.visible
+   * * default `true`
    */
   constructor(args = {}) {
     this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
@@ -349,12 +403,13 @@ export default class ViewModel {
     this.parent = args.parent;
     this.document = args.document;
     this._showFancyFont = args.showFancyFont;
-    this.localizedToolTip = args.localizedToolTip;
+    this._localizedToolTip = args.localizedToolTip;
     this.toolTipStyle = args.toolTipStyle;
     this.toolTipConstraint = args.toolTipConstraint ?? new TooltipPlacementConstraint({
       placement: TOOLTIP_PLACEMENTS.TOP,
       offset: 0,
     });
+    this._visible = args.visible ?? true;
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
@@ -487,6 +542,10 @@ export default class ViewModel {
       game.strive.logger.logWarn(`Failed to get element with id '${this.id}'`);
     }
 
+    if (this.visible !== true) {
+      this.element.addClass("hidden");
+    }
+
     if (ValidationUtil.isDefined(this._toolTip)) {
       this._toolTip.activateListeners(this._element);
     }
@@ -555,7 +614,7 @@ export default class ViewModel {
    * Keep in mind that **only** _this_ view model's state is returned. **No** child view model states 
    * will be included! 
    * 
-   * Whether there is any view state to store, is determined by whether any propertys have been registered 
+   * Whether there is any view state to store, is determined by whether any properties have been registered 
    * and if any of the child view models return view state to store. 
    * 
    * This method should only have to be overridden, if specific data transformations need to be applied to values 
@@ -614,8 +673,8 @@ export default class ViewModel {
   /**
    * Retrieves and applies the view state of _this_ view model, if possible. 
    * 
-   * In order for this operation to succeed, the view state will have 
-   * to have been written out using `writeViewState`, previously. 
+   * In order for this operation to succeed, view state properties must have been 
+   * registered and the view state written out, beforehand. 
    */
   readViewState() {
     const viewState = this._viewStateSource.get(this.id);
@@ -628,8 +687,8 @@ export default class ViewModel {
    * Retrieves and applies the view state of _this_ view model **and** of all 
    * its children, if possible. 
    * 
-   * In order for this operation to succeed, the view state will have 
-   * to have been written out using `writeAllViewState`, previously. 
+   * In order for this operation to succeed, view state properties must have been 
+   * registered and the view state written out, beforehand. 
    */
   readAllViewState() {
     this.readViewState();

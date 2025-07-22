@@ -1,28 +1,14 @@
 {{!-- Parameters:
 viewModel: {SkillListItemViewModel}
 --}}
-<div id="{{viewModel.id}}" class="flex flex-row flex-wrap margin-b-md margin-t-md auto-margin-h">
+<div id="{{viewModel.id}}" class="flex flex-row flex-wrap auto-margin-h">
   {{!-- Level Block --}}
-  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
-    <div class="flex flex-row auto-margin-h">
-      {{!-- Level --}}
-      {{#> labeledControl viewModel=viewModel.vmNsLevel localizedIconToolTip=(localize "system.character.advancement.level") iconClass="ico-level-solid" }}
-        <div class="width-sm">
-          {{> inputNumberSpinner }}
-        </div>
-      {{/labeledControl}}
-      {{!-- Level Modifier --}}
-      {{#> labeledControl viewModel=viewModel.vmNsLevelModifier localizedIconToolTip=(localize "system.character.advancement.modifier.label") iconClass="ico-level-modifier-solid" }}
-        <div class="width-sm">
-          {{> inputNumberSpinner }}
-        </div>
-      {{/labeledControl}}
-      {{!-- Modified Level --}}
-      <div class="flex flex-middle">
-        <span class="pad-t-md pad-b-md pad-r-md font-bold font-bold">=</span>
-        {{> readOnlyValue viewModel=viewModel.vmModifiedLevel cssClass="width-sm font-size-lg flex flex-center" }}
-      </div>
-    </div>
+  <div class="flex flex-row flex-middle auto-margin-h-sm sheet-block">
+    {{!-- Level --}}
+    {{> inputNumberSpinner viewModel=viewModel.vmRawLevel cssClass="width-sm" }}
+    <i class="fa-solid fa-shuffle"></i>
+    {{> inputNumberSpinner viewModel=viewModel.vmLevel cssClass="width-sm" }}
+    <span style="width: 26px;">{{viewModel.maxHpModifierString}}</span>
   </div>
   <div class="flex-grow"></div>
   {{#if viewModel.showAdvancementProgression}}

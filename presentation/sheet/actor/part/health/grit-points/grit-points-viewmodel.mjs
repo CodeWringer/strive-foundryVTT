@@ -1,8 +1,12 @@
 import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
-import GameSystemUserSettings from "../../../../../../business/setting/game-system-user-settings.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
+import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
+import GritPoint from "./grit-point.mjs";
 
 /**
  * Represents the grit points bar on a character sheet. 
@@ -13,8 +17,6 @@ import ViewModel from "../../../../../view-model/view-model.mjs";
  * @property {Number} gritPointLimit 
  * * read-only
  * @property {Array<GritPoint>} gritPoints 
- * @property {Boolean} isInCombatTracker If `true`, adds css classes for improved 
- * rendering in the combat tracker. 
  */
 export default class GritPointsViewModel extends ViewModel {
   /** @override */
@@ -24,13 +26,7 @@ export default class GritPointsViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
-  get gritPointLimit() { 
-    if (this.isInCombatTracker === true) {
-      return 5;
-    } else {
-      return 10;
-    }
-  }
+  get gritPointLimit() { return 10; }
 
   /**
    * Returns true, if the grit points list should be visible. 
@@ -63,75 +59,76 @@ export default class GritPointsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
    * @param {TransientBaseCharacterActor} args.document 
-   * @param {Boolean} args.isInCombatTracker If `true`, adds css classes for improved 
-   * rendering in the combat tracker. 
    */
   constructor(args = {}) {
-    super({
-      ...args,
-      localizedToolTip: (new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS) && !args.isInCombatTracker) ? game.i18n.localize("system.character.gritPoint.tooltip") : undefined,
-    });
-    ValidationUtil.validateOrThrow(args, ["document", "isInCombatTracker"]);
+    super(args);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.isInCombatTracker = args.isInCombatTracker;
 
-    const gritPoints = this.document.gritPoints.current;
-    const gritPointsToRender = Math.max(gritPoints, this.gritPointLimit);
+    const thiz = this;
 
+    const currentGritPoints = this.document.gritPoints.current;
     this.gritPoints = [];
-    for (let i = 0; i < gritPointsToRender; i++) {
+    for (let i = 0; i < currentGritPoints; i++) {
       this.gritPoints.push(new GritPoint({
         id: `${this.id}-${i}`,
-        active: i < gritPoints,
+        active: i < currentGritPoints,
         value: i + 1,
       }));
     }
-  }
 
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    if (this.isEditable !== true) return;
-
-    // Set up reset to 0. 
-    html.find(`#${this.id}-grit-point-0`).click(async (event) => {
-      event.preventDefault();
-
-      this.document.gritPoints.current = 0;
+    this.vmGritPointsIcon = new ViewModel({
+      id: "vmGritPointsIcon",
+      parent: this,
+      localizedToolTip: this.showReminders ?
+        `${game.i18n.localize("system.character.gritPoint.plural")}<br>${game.i18n.localize("system.character.gritPoint.tooltip")}`
+        : game.i18n.localize("system.character.gritPoint.plural"),
     });
+    this.vmGritPointsSpinner = new InputNumberSpinnerViewModel({
+      id: "vmGritPointsSpinner",
+      parent: this,
+      value: this.document.gritPoints.current,
+      min: 0,
+      localizedToolTip: game.i18n.localize("system.character.gritPoint.plural"),
+      onChange: (_, newValue) => {
+        this.document.gritPoints.current = newValue;
+      },
+    });
+    this.vmAdjust = new ButtonViewModel({
+      id: "vmAdjust",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.gritPoint.adjust"),
+      iconHtml: '<i class="fas fa-edit" style="height: 22px;"></i>',
+      onClick: async () => {
+        const inputNumber = "inputNumber";
+        const dialog = await new DynamicInputDialog({
+          easyDismissal: true,
+          focused: inputNumber,
+          inputDefinitions: [
+            new DynamicInputDefinition({
+              name: inputNumber,
+              localizedLabel: game.i18n.localize("system.character.gritPoint.adjustInputLabel"),
+              template: InputNumberSpinnerViewModel.TEMPLATE,
+              viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+                id: id,
+                parent: parent,
+                value: 0,
+                ...overrides,
+              }),
+              required: true,
+              validationFunc: (value) => { return parseInt(value) !== NaN; },
+            }),
+          ],
+        }).renderAndAwait(true);
 
-    // Set up set to value of clicked element. 
-    for (let i = 0; i < this.gritPoints.length; i++) {
-      const gritPoint = this.gritPoints[i];
-      html.find(`#${gritPoint.id}`).click(async (event) => {
-        this.document.gritPoints.current = gritPoint.value;
-      });
-    }
-  }
-}
+        if (dialog.confirmed !== true) return;
 
-/**
- * @property {String} id Internal id of this grit point. 
- * @property {Number} value The represented grit point value. 
- * @property {Boolean} active If `true`, then this grit point is 
- * currently active / available to be spent. 
- */
-export class GritPoint {
-  /**
-   * @param {Object} args 
-   * @param {String} args.id Internal id of this grit point. 
-   * @param {Number} args.value The represented grit point value. 
-   * @param {Boolean | undefined} args.active If `true`, then this grit point is 
-   * currently active / available to be spent. 
-   * * default `false`
-   */
-  constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["id", "value"]);
-
-    this.id = args.id;
-    this.value = args.value;
-    this.active = args.active ?? false;
+        const number = parseInt(dialog[inputNumber]);
+        const newValue = thiz.document.gritPoints.current + number;
+        const clampedValue = Math.max(0, newValue);
+        thiz.document.gritPoints.current = clampedValue;
+      },
+    });
   }
 }

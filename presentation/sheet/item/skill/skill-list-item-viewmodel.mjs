@@ -200,7 +200,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         name: this._inputAttributes,
         localizedLabel: game.i18n.localize("system.character.attribute.plural"),
         template: SimpleListViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new SimpleListViewModel({
+        viewModelFactory: (id, parent, overrides) => new SimpleListViewModel({
           id: id,
           parent: parent,
           value: baseAttributes,
@@ -216,6 +216,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           isItemAddable: this.isEditable,
           isItemRemovable: this.isEditable,
           localizedAddLabel: game.i18n.localize("system.general.add.add"),
+          ...overrides,
         }),
         required: true,
         validationFunc: (value) => { return value.length > 0; },
@@ -253,9 +254,9 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
     });
     // Promoted content
-    this.vmNsLevel = new InputNumberSpinnerViewModel({
+    this.vmRawLevel = new InputNumberSpinnerViewModel({
+      id: "vmRawLevel",
       parent: this,
-      id: "vmNsLevel",
       value: level,
       min: 0,
       localizedToolTip: game.i18n.localize("system.character.advancement.level"),
@@ -263,21 +264,25 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.level = newValue;
       },
     });
-    this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
+    this.vmLevel = new InputNumberSpinnerViewModel({
+      id: "vmLevel",
       parent: this,
-      id: "vmNsLevelModifier",
-      value: this.document.levelModifier,
-      localizedToolTip: game.i18n.localize("system.character.advancement.modifier.label"),
+      value: this.document.level + this.document.levelModifier,
+      localizedToolTip: StringUtil.format2(game.i18n.localize("system.character.advancement.modifiedLevelWithPlaceholders"), {
+        rawLevel: this.document.level,
+        operand: this.document.levelModifier >= 0 ? "+" : "-",
+        modifier: Math.abs(this.document.levelModifier),
+        modifiedLevel: this.document.modifiedLevel,
+      }),
       onChange: (_, newValue) => {
-        this.document.levelModifier = newValue;
+        this.document.levelModifier = newValue - this.document.level;
+      },
+      displayValueMapper: (value) => {
+        return this.document.modifiedLevel;
       },
     });
-    this.vmModifiedLevel = new ReadOnlyValueViewModel({
-      id: "vmModifiedLevel",
-      parent: this,
-      value: this.modifiedLevel,
-      localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
-    });
+    this.maxHpModifierString = `(${this.document.levelModifier >= 0 ? "+" : "-"}${Math.abs(this.document.levelModifier)})`;
+
     if (this.showAdvancementProgression) {
       this.vmNsSuccesses = new InputNumberSpinnerViewModel({
         parent: this,

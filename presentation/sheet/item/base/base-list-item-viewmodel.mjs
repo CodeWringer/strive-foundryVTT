@@ -197,13 +197,14 @@ export default class BaseListItemViewModel extends ViewModel {
         localizedLabel: game.i18n.localize("system.general.tag.plural"),
         iconHtml: '<i class="ico dark ico-tags-solid"></i>',
         template: InputTagsViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => {
+        viewModelFactory: (id, parent, overrides) => {
           return new InputTagsViewModel({
             id: id,
             parent: parent,
             value: this.document.tags,
             systemTags: SKILL_TAGS.asArray()
               .concat(ASSET_TAGS.asArray()),
+            ...overrides,
           });
         },
       }),
@@ -509,10 +510,11 @@ export default class BaseListItemViewModel extends ViewModel {
           name: inputName,
           localizedLabel: game.i18n.localize("system.general.name.label"),
           template: InputTextFieldViewModel.TEMPLATE,
-          viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+          viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
             id: id,
             parent: parent,
             value: this.document.name,
+            ...overrides,
           }),
           required: true,
           validationFunc: (str) => { return str.trim().length > 0; },

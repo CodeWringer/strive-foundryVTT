@@ -3,11 +3,11 @@ viewModel: HealthStatesSettingsDialogViewModel
 --}}
 <section id="{{viewModel.id}}">
   <div class="sheet-block flex flex-column">
-    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "system.settings.healthStates.configureSystemDefaults"}}{{/header2}}
+    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "system.settings.healthConditions.configureSystemDefaults"}}{{/header2}}
     {{> visibilityToggleList viewModel=viewModel.vmVisibilityList}}
   </div>
   <div class="sheet-block flex flex-column">
-    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "system.settings.healthStates.configureCustom"}}{{/header2}}
+    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "system.settings.healthConditions.configureCustom"}}{{/header2}}
     {{> simpleList viewModel=viewModel.vmCustomList}}
   </div>
   <div>
