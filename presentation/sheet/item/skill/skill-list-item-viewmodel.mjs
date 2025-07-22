@@ -277,6 +277,9 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       onChange: (_, newValue) => {
         this.document.levelModifier = newValue - this.document.level;
       },
+      displayValueMapper: (value) => {
+        return this.document.modifiedLevel;
+      },
     });
     this.maxHpModifierString = `(${this.document.levelModifier >= 0 ? "+" : "-"}${Math.abs(this.document.levelModifier)})`;
 
