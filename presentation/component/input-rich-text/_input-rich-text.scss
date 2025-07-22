@@ -22,13 +22,14 @@ $c-tox-button-hover-override-bg: #f0f0e0;
 
 .component-rich-text-container {
   min-height: 2em;
-
+  
   .tox.tox-tinymce {
     border-radius: 0;
   }
-
+  
   > div.tox.tox-tinymce {
     height: 100% !important;
+    min-height: 20em;
     > div.tox-editor-container {
       > div.tox-editor-header {
         background-color: $c-tox-toolbar-override-bg;
