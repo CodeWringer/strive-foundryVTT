@@ -1,7 +1,7 @@
 {{!-- Parameters:
 viewModel: {IllnessListItemViewModel}
 --}}
-<div id="{{viewModel.id}}" class="flex flex-row flex-wrap margin-b-md auto-margin-h-md">
+<div id="{{viewModel.id}}" class="flex flex-row flex-wrap auto-margin-h-md">
   {{!-- Quantity / Maximum Quantity --}}
   {{#with viewModel.quantityAndMaxTemplate as |template|}}
     {{> (template) viewModel=../viewModel.vmCompositeQuantity cssClass="sheet-block" }}
