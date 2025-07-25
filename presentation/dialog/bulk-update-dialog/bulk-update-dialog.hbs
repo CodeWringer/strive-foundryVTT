@@ -1,0 +1,35 @@
+{{!--
+viewModel: BulkUpdateDialogViewModel
+--}}
+<section id="{{viewModel.id}}" class="fill flex flex-column font-primary font-size-default auto-margin-v-md">
+	<div class="flex flex-row flex-middle hint-card warn auto-margin-h-md">
+		<i class="fas fa-exclamation-triangle"></i>
+		<p class="cohesive">Be aware this is a development dialog that has the potential to break documents if not used with care!</p>
+	</div>
+	{{!-- Pack name input --}}
+	<div class="flex flex-column sheet-block">
+		<div class="flex flex-row flex-middle auto-margin-h-sm">
+			<span>Compendium Pack Name</span>
+			<span class="flex-grow">
+				{{> inputTextField viewModel=viewModel.vmPackName }}
+			</span>
+		</div>
+	</div>
+	<div>
+		{{> button viewModel=viewModel.vmBegin fill=true heavy=true }}
+	</div>
+	{{!-- Progress --}}
+	<div id="{{viewModel.vmProgressSection.id}}" class="fill flex flex-center hidden">
+		<span class="flex flex-column">
+			<div class="flex flex-center">
+				<i class="fas fa-spinner spin font-size-xxl"></i>
+			</div>
+			<div class="flex flex-row flex-middle auto-margin-h-sm">
+				<span>Current document:</span><span id="current-document"></span>
+			</div>
+			<div class="flex flex-row flex-middle auto-margin-h-sm">
+				<span id="progress">0</span><span>of</span><span id="maxProgress">0</span><span>documents updated</span>
+			</div>
+		</span>
+	</div>
+</section>

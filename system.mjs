@@ -46,6 +46,7 @@ import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-
 import DynamicInputDefinition from "./presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
+import BulkUpdateDialog from "./presentation/dialog/bulk-update-dialog/bulk-update-dialog.mjs";
 // Document classes
 import { GameSystemActor } from "./business/document/actor/actor.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
@@ -401,6 +402,11 @@ Hooks.once("ready", function() {
 
   // Global event handling setup.
   KEYBOARD.init();
+
+  // Register dev dialogs, if necessary.
+  if (game.strive.debug) {
+    window.BulkUpdateDialog = BulkUpdateDialog;
+  }
 
   // Migration check. 
   const migrator = new MigratorInitiator();
