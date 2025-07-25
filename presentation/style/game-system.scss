@@ -12,17 +12,18 @@
 @import 'utils/variables';
 
 /* Global styles */
-@import 'global/window';
-@import 'global/grid';
-@import 'global/flex';
-@import 'global/roll';
-@import 'global/general';
-@import 'global/icons';
 @import 'global/borders';
+@import 'global/flex';
+@import 'global/general';
+@import 'global/grid';
 @import 'global/headers';
+@import 'global/icons';
 @import 'global/image';
 @import 'global/list';
+@import 'global/roll';
+@import 'global/shadows';
 @import 'global/sheet';
+@import 'global/window';
 
 /* Global and composable component styles */
 @import 'components/input';

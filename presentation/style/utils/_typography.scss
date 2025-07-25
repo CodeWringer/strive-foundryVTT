@@ -6,22 +6,6 @@ $font-fancy: 'Black-Chancery';
   font-family: $font-fancy;
 }
 
-.primary-font {
+.font-primary {
   font-family: $font-primary;
-}
-
-.secondary-font {
-  font-family: $font-secondary;
-}
-
-.text-align {
-  &-l {
-    text-align: left;
-  }
-  &-r {
-    text-align: right;
-  }
-  &-c {
-    text-align: center;
-  }
 }
