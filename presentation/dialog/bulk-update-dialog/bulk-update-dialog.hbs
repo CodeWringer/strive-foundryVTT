@@ -32,4 +32,11 @@ viewModel: BulkUpdateDialogViewModel
 			</div>
 		</span>
 	</div>
+	{{!-- Results --}}
+	<div id="{{viewModel.vmResultsSection.id}}" class="fill flex flex-column flex-center hidden">
+		<p>Updated <span id="{{viewModel.id}}-updated-result-count">0</span> documents</p>
+		<p>The following skills could not be updated:</p>
+		<ul id="{{viewModel.id}}-results-list">
+		</ul>
+	</div>
 </section>

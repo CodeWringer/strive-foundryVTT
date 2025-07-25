@@ -196,8 +196,6 @@ export class GameSystemActorSheet extends ActorSheet {
         creationData.system.level = 1;
       }
 
-      // Update an existing skill, is possible. Only skills support this behavior, as only skills are 
-      // expected to be unique on a character. 
       const existingItem = this.actor.items.find(it => it.id === templateId || it.name === templateItem.name);
       if (existingItem !== undefined) {
         creationData.system.level = existingItem.system.level;

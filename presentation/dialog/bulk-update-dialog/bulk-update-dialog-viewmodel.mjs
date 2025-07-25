@@ -35,6 +35,11 @@ export default class BulkUpdateDialogViewModel extends ViewModel {
       parent: this,
       visible: false,
     });
+    this.vmResultsSection = new ViewModel({
+      id: "vmResultsSection",
+      parent: this,
+      visible: false,
+    });
     this.vmBegin = new ButtonViewModel({
       id: "vmBegin",
       parent: this,
@@ -54,6 +59,16 @@ export default class BulkUpdateDialogViewModel extends ViewModel {
             this.element.find("#progress").text(currentProgress);
             this.element.find("#maxProgress").text(maxProgress);
             this.element.find("#current-document").text(actor.name);
+          },
+          onComplete: (failureSkills, updatedActors) => {
+            this.vmProgressSection.visible = false;
+            this.element.find(`#${this.id}-updated-result-count`).text(updatedActors.length);
+            
+            const listElement = this.element.find(`#${this.id}-results-list`);
+            failureSkills.forEach(failureSkill => {
+              listElement.append(`<li><span>Skill: ${failureSkill.name}, id: ${failureSkill.id}</span></li>`);
+            });
+            this.vmResultsSection.visible = true;
           },
         });
       },

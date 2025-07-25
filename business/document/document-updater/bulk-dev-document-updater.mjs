@@ -20,6 +20,9 @@ export default class BulkDevDocumentUpdater {
    * have begun. 
    * @param {Function | undefined} args.onCompleteDocument Invoked when updates of a document 
    * have finished. 
+   * @param {Function | undefined} args.onComplete Invoked when the process completes. Arguments: 
+   * * `failed: Array<GameSystemItem>` - The list of skills that failed to update. 
+   * * `updatedCount: Array<GameSystemItem>` - The list of updated actors. 
    * 
    * @async
    */
@@ -28,6 +31,7 @@ export default class BulkDevDocumentUpdater {
 
     this.onBeginDocument = args.onBeginDocument ?? (() => {});
     this.onCompleteDocument = args.onCompleteDocument ?? (() => {});
+    this.onComplete = args.onComplete ?? (() => {});
 
     const docFetcher = new DocumentFetcher();
     const actors = await docFetcher.findAll({
@@ -35,7 +39,7 @@ export default class BulkDevDocumentUpdater {
       searchEmbedded: false,
       includeLocked: false,
     });
-    const skills = await docFetcher.findAll({
+    const templateSkills = await docFetcher.findAll({
       documentType: "Item",
       contentType: "skill",
       source: DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia,
@@ -43,7 +47,9 @@ export default class BulkDevDocumentUpdater {
       includeLocked: true,
     });
 
-    let currentProgress = 0;
+    const updateFailures = [];
+
+    let currentProgress = 1;
     const maxProgress = actors.length;
     for await (const actor of actors) {
       if (actor.pack !== args.packName) continue;
@@ -53,11 +59,31 @@ export default class BulkDevDocumentUpdater {
 
       for await (const skill of skillsOfActor) {
         const transientSkill = skill.getTransientObject();
-        if (ArrayUtil.arrayContains(transientSkill.tags, SKILL_TAGS.INNATE.id)) continue;
+        const isInnate = ValidationUtil.isDefined(transientSkill.tags.find(it => it.id === SKILL_TAGS.INNATE.id));
+        if (isInnate || transientSkill.isCustom) continue;
+
+        const templateSkill = templateSkills.find(it => it.id === skill.id || it.name === skill.name);
+        if (!ValidationUtil.isDefined(templateSkill)) {
+          updateFailures.push(skill);
+          continue;
+        }
+
+        const updateData = {
+          system: {
+            ...templateSkill.system,
+            level: skill.system.level,
+            levelModifier: skill.system.levelModifier,
+            successes: skill.system.successes,
+            failures: skill.system.failures,
+          },
+        };
+        await transientSkill.update(updateData);
       }
 
       currentProgress++;
       this.onCompleteDocument(actor, currentProgress, maxProgress);
     }
+
+    this.onComplete(updateFailures, actors);
   }
 }

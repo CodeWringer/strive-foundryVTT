@@ -11,7 +11,6 @@ import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
-import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import { ValidationUtil } from "../../../util/validation-utility.mjs";
 import { UuidUtil } from "../../../util/uuid-utility.mjs";
