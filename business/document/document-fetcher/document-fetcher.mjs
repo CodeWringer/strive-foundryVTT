@@ -697,7 +697,7 @@ export default class DocumentFetcher {
    * @private
    */
   _shouldSearchWorld(filter) {
-    const sourceId = filter.source.id;
+    const sourceId = filter.source.name;
     if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.name
       || sourceId == DOCUMENT_COLLECTION_SOURCES.world.name
     ) {

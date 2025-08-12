@@ -10,6 +10,7 @@ import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import SendToChatHandler from "../../utility/send-to-chat-handler.mjs";
+import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document-fetcher/document-collection-source.mjs";
 
 export class GameSystemActorSheet extends ActorSheet {
   /**
@@ -175,6 +176,7 @@ export class GameSystemActorSheet extends ActorSheet {
       id: templateId,
       documentType: data.type,
       includeLocked: true,
+      source: DOCUMENT_COLLECTION_SOURCES.all,
     });
 
     if (templateItem === undefined) {
