@@ -577,6 +577,10 @@
             "name": "Jealous",
             "tooltip": "A character who has been made unnaturally <strong>jealous</strong>, will do anything in their power to take a thing, whatever <em>it</em> may be, from whoever might have <em>it</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of the jealousy is removed or the character acquires that which they covet. </li></ul>"
           },
+          "marked": {
+            "name": "Marked",
+            "tooltip": "A Marked character suffers <code>-1D</code> to all defense tests and <code>+50%</code> damage (RU) from all direct sources (meaning damage from Bleeding, Burning and Poisoned is excluded)."
+          },
           "pacified": {
             "name": "Pacified",
             "tooltip": "A character who is <strong>pacified</strong>, is unable to <em>willingly</em> take any action that would directly or indirectly harm any other creature. Note, the character is not physically unable to cause harm, but they <strong>really</strong> don't want to. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious or the source of the pacification is removed. </li></ul>"
