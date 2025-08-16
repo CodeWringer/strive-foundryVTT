@@ -555,7 +555,7 @@
           },
           "electrified": {
             "name": "Electrified",
-            "tooltip": "An <strong>electrified</strong> character suffers <strong>-1D</strong> for their every test requiring agility. That means attribute and skills. <ul><li>Graded</li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: After a minute of last suffering one <em>point</em> of <strong>electrified</strong> or at the end of combat. </li></ul>"
+            "tooltip": "An <strong>electrified</strong> character spasms, uncontrollably. They are force moved in a random direction by <code>3'/1m</code>.<ul><li>Automatic shrug-off: At the end of the turn.</li></ul>"
           },
           "exhausted": {
             "name": "Exhausted",
@@ -575,15 +575,15 @@
           },
           "jealous": {
             "name": "Jealous",
-            "tooltip": "A character who has been made unnaturally <strong>jealous</strong>, will do anything in their power to take a thing, whatever <em>it</em> may be, from whoever might have <em>it</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of the jealousy is removed or the character acquires that which they covet. </li></ul>"
+            "tooltip": "A character who has been made unnaturally <strong>jealous</strong>, will do anything in their power to take a thing, whatever <em>it</em> may be, from whoever might have <em>it</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of the jealousy is removed or the character acquires that which they covet. </li><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
           },
           "marked": {
             "name": "Marked",
-            "tooltip": "A Marked character suffers <code>-1D</code> to all defense tests and <code>+50%</code> damage (RU) from all direct sources (meaning damage from Bleeding, Burning and Poisoned is excluded)."
+            "tooltip": "A Marked character suffers <code>-1D</code> to all defense tests and <code>+50%</code> damage (RU) from all direct sources (meaning damage from Bleeding, Burning and Poisoned is excluded).<ul><li>Automatic shrug-off: After <code>1</code> round.</li><li>Immediate cancel: Upon suffering damage.</li></ul>"
           },
           "pacified": {
             "name": "Pacified",
-            "tooltip": "A character who is <strong>pacified</strong>, is unable to <em>willingly</em> take any action that would directly or indirectly harm any other creature. Note, the character is not physically unable to cause harm, but they <strong>really</strong> don't want to. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious or the source of the pacification is removed. </li></ul>"
+            "tooltip": "A character who is <strong>pacified</strong>, is unable to <em>willingly</em> take any action that would directly or indirectly harm any other creature. Note, the character is not physically unable to cause harm, but they <strong>really</strong> don't want to. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious or the source of the pacification is removed. </li><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
           },
           "poisoned": {
             "name": "Poisoned",
@@ -599,15 +599,15 @@
           },
           "stunned": {
             "name": "Stunned",
-            "tooltip": "A <strong>stunned</strong> character is unable to act, at all. During combat, their turn is skipped. <ul><li>Graded</li><li>Automatic shrug-off: 1 <em>point</em> at the end of the turn. </li></ul>"
+            "tooltip": "A <strong>stunned</strong> character is unable to act, at all. During combat, their turn is skipped. <ul><li>Graded</li><li>Automatic shrug-off: 1 <em>point</em> at the end of the turn. </li><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
           },
           "terrified": {
             "name": "Terrified",
-            "tooltip": "A <strong>terrified</strong> character suffers <strong>-2D</strong> to defense tests and <strong>has to</strong> flee from whatever it is that terrified them, until they can no longer perceive it. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of terror is removed or the character can no longer perceive the source of terror in any way for a short time (1-2 turns or 5-10 seconds). </li></ul>"
+            "tooltip": "A <strong>terrified</strong> character suffers <strong>-2D</strong> to defense tests and <strong>has to</strong> flee from whatever it is that terrified them, until they can no longer perceive it. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of terror is removed or the character can no longer perceive the source of terror in any way for a short time (1-2 turns or 5-10 seconds). </li><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
           },
           "unconscious": {
             "name": "Unconscious",
-            "tooltip": "An <strong>unconscious</strong> character is unable to act and is unaware of their surroundings."
+            "tooltip": "An <strong>unconscious</strong> character is unable to act and is unaware of their surroundings.<ul><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
           }
         }
       },

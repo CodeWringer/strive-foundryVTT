@@ -111,7 +111,7 @@ export const HEALTH_CONDITIONS = {
     name: "electrified",
     localizableName: "system.character.health.states.electrified.name",
     localizableToolTip: "system.character.health.states.electrified.tooltip",
-    limit: 0,
+    limit: 1,
     iconHtml: `<i class="ico dark ico-damage-type-electrical-solid"></i>`
   }),
   exhausted: new HealthCondition({
