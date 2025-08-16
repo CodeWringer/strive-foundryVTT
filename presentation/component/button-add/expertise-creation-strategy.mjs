@@ -1,6 +1,9 @@
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 
 /**
@@ -36,8 +39,33 @@ export default class ExpertiseCreationStrategy extends DocumentCreationStrategy 
       throw new Error("InvalidArgumentException: Cannot add item of type 'expertise' to non-'skill'-type item!");
     }
 
+    const inputName = "inputName";
+    const dialog = await new DynamicInputDialog({
+      id: "expertise-creation-strategy-dialog",
+      localizedTitle: game.i18n.localize("system.character.skill.expertise.createExpertise"),
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          name: inputName,
+          localizedLabel: game.i18n.localize("system.general.name.label"),
+          template: InputTextFieldViewModel.TEMPLATE,
+          viewModelFactory: async (id, parent, overrides) => {
+            return new InputTextFieldViewModel({
+              id: id,
+              parent: parent,
+              value: game.i18n.localize("system.character.skill.expertise.newDefaultName"),
+              ...overrides,
+            });
+          },
+        }),
+      ],
+      focused: inputName,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return undefined;
+
     const creationData = {
       isCustom: true,
+      name: dialog[inputName],
     };
 
     return await this.target.createExpertise(creationData);

@@ -79,6 +79,9 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
     this.document = args.document;
 
+    // Aggressively clear out any lingering ToolTips. 
+    Tooltip.removeAllToolTipElements();
+
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
 

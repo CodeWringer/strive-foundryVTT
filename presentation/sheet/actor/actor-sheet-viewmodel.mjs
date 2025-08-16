@@ -111,6 +111,9 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
 
     this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
+    // Aggressively clear out any lingering ToolTips. 
+    Tooltip.removeAllToolTipElements();
+
     this.vmTfName = new InputTextFieldViewModel({
       parent: this,
       id: "vmTfName",

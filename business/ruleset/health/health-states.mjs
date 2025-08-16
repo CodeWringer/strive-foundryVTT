@@ -50,8 +50,8 @@ export class HealthCondition {
  * Represents the defined general health conditions.
  * 
  * @property {HealthCondition} berserk 
- * @property {HealthCondition} burning 
  * @property {HealthCondition} bleeding 
+ * @property {HealthCondition} burning 
  * @property {HealthCondition} dissolving 
  * @property {HealthCondition} drugAddicted 
  * @property {HealthCondition} electrified 
@@ -60,6 +60,7 @@ export class HealthCondition {
  * @property {HealthCondition} grappled 
  * @property {HealthCondition} hasted 
  * @property {HealthCondition} jealous 
+ * @property {HealthCondition} marked
  * @property {HealthCondition} pacified 
  * @property {HealthCondition} poisoned 
  * @property {HealthCondition} prone 
@@ -78,19 +79,19 @@ export const HEALTH_CONDITIONS = {
     limit: 0,
     iconHtml: `<i class="ico dark ico-berserk-solid"></i>`
   }),
-  burning: new HealthCondition({
-    name: "burning",
-    localizableName: "system.character.health.states.burning.name",
-    localizableToolTip: "system.character.health.states.burning.tooltip",
-    limit: 0,
-    iconHtml: `<i class="ico dark ico-damage-type-burning-solid"></i>`
-  }),
   bleeding: new HealthCondition({
     name: "bleeding",
     localizableName: "system.character.health.states.bleeding.name",
     localizableToolTip: "system.character.health.states.bleeding.tooltip",
     limit: 0,
     iconHtml: `<i class="ico dark ico-damage-type-bleeding-solid"></i>`
+  }),
+  burning: new HealthCondition({
+    name: "burning",
+    localizableName: "system.character.health.states.burning.name",
+    localizableToolTip: "system.character.health.states.burning.tooltip",
+    limit: 0,
+    iconHtml: `<i class="ico dark ico-damage-type-burning-solid"></i>`
   }),
   dissolving: new HealthCondition({
     name: "dissolving",
@@ -147,6 +148,13 @@ export const HEALTH_CONDITIONS = {
     localizableToolTip: "system.character.health.states.jealous.tooltip",
     limit: 0,
     iconHtml: `<i class="ico dark ico-jealous-solid"></i>`
+  }),
+  marked: new HealthCondition({
+    name: "marked",
+    localizableName: "system.character.health.states.marked.name",
+    localizableToolTip: "system.character.health.states.marked.tooltip",
+    limit: 1,
+    iconHtml: `<i class="ico dark ico-marked-solid"></i>`
   }),
   pacified: new HealthCondition({
     name: "pacified",
