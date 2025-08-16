@@ -346,7 +346,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
                 const damage = this.document.damage.concat([]);
                 damage.push(new DamageAndType({
                   damage: "",
-                  damageType: DAMAGE_TYPES.none.name,
+                  damageType: DAMAGE_TYPES.pure.name,
                 }));
                 this.document.damage = damage;
               },

@@ -863,6 +863,10 @@
       "electrical": {
         "label": "Electrical",
         "abbreviation": "Electric"
+      },
+      "pure": {
+        "label": "Pure",
+        "abbreviation": "Pure"
       }
     },
     "settings": {
