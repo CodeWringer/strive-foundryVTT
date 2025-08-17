@@ -15,7 +15,7 @@ import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs"
 import { ExtenderUtil } from "../../../common/extender-util.mjs"
-import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../../component/tooltip/tooltip.mjs"
+import Tooltip from "../../component/tooltip/tooltip.mjs"
 import ActorAbilitiesViewModel from "./part/abilities/actor-abilities-viewmodel.mjs"
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
@@ -136,10 +136,6 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         id: "vmActionPoints",
         parent: this,
         localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
-        toolTipConstraint: new TooltipPlacementConstraint({
-          placement: TOOLTIP_PLACEMENTS.BOTTOM,
-          offset: 0,
-        }),
       });
       this.actionPoints = [];
       const currentAp = this.document.actionPoints.current;

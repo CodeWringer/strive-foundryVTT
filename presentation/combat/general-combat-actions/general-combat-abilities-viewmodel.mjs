@@ -48,7 +48,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmActionPoints",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.actionPoints.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "actionPointSavingReminder",
@@ -57,7 +57,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmActionPointSaving",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.actionPointSaving.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "combatMovementReminder",
@@ -66,7 +66,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmCombatMovement",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.combatMovement.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "disengageReminder",
@@ -75,7 +75,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmDisengage",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.disengage.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "fleeCombatReminder",
@@ -84,7 +84,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmFleeCombat",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.fleeCombat.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "pushThroughReminder",
@@ -93,7 +93,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmPushThrough",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.pushThrough.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "swapOutReminder",
@@ -102,7 +102,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmSwapOut",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.swapOut.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "attacksOfOpportunityReminder",
@@ -111,7 +111,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmAttacksOfOpportunity",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.attacksOfOpportunity.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "flankingReminder",
@@ -120,7 +120,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmFlanking",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.flanking.tooltip"),
-        })
+        }),
       }),
       new Reminder({
         id: "defenseStuntsReminder",
@@ -129,7 +129,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
           id: "vmDefenseStunts",
           parent: this,
           localizedToolTip: game.i18n.localize("system.character.abilities.general.defenseStunts.tooltip"),
-        })
+        }),
       }),
     ];
   }

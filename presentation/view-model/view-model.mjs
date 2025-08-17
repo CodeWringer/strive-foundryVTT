@@ -3,7 +3,7 @@ import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font
 import { PropertyUtil } from "../../business/util/property-utility.mjs";
 import { UuidUtil } from "../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
-import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../component/tooltip/tooltip.mjs";
+import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
  * @summary
@@ -93,9 +93,6 @@ import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../comp
  * * Read-only. 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
- * @property {TooltipPlacementConstraint | undefined} toolTipConstraint Sets a constraint that determines 
- * where the tool tip will be placed, around the element. 
- * * default `TOOLTIP_PLACEMENTS.TOP` with offset `0`. 
  */
 export default class ViewModel {
   /**
@@ -308,9 +305,7 @@ export default class ViewModel {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
         content: this.localizedToolTip,
-        enableArrow: true,
         style: this.toolTipStyle,
-        constraint: this.toolTipConstraint,
         onShown: () => {
           this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
         },
@@ -391,9 +386,6 @@ export default class ViewModel {
    * display as a tool tip. 
    * @param {String | undefined} args.toolTipStyle A style override to attach to the tool tip's DOM element. 
    * E. g. `text-align: center`
-   * @param {TooltipPlacementConstraint | undefined} args.toolTipConstraint Sets a constraint that determines 
-   * where the tool tip will be placed, around the element. 
-   * * default `TOOLTIP_PLACEMENTS.TOP` with offset `0`. 
    * @param {Boolean | undefined} args.visible
    * * default `true`
    */
@@ -405,10 +397,6 @@ export default class ViewModel {
     this._showFancyFont = args.showFancyFont;
     this._localizedToolTip = args.localizedToolTip;
     this.toolTipStyle = args.toolTipStyle;
-    this.toolTipConstraint = args.toolTipConstraint ?? new TooltipPlacementConstraint({
-      placement: TOOLTIP_PLACEMENTS.TOP,
-      offset: 0,
-    });
     this._visible = args.visible ?? true;
 
     this.contextTemplate = args.contextTemplate;
@@ -429,9 +417,7 @@ export default class ViewModel {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
         content: this.localizedToolTip,
-        enableArrow: true,
         style: this.toolTipStyle,
-        constraint: this.toolTipConstraint,
         onShown: () => {
           this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
         },
