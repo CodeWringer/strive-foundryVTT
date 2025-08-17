@@ -79,4 +79,16 @@ export default class FoundryWrapper {
   async renderTemplate(templatePath, args = {}) {
     return await renderTemplate(templatePath, args);
   }
+
+  /**
+   * Preloads the given array of relative Handlebars templates. 
+   * 
+   * @param {Array<String>} templateArray 
+   * @returns {Promise<Any>}
+   * 
+   * @async
+   */
+  async loadTemplates(templateArray) {
+    return await loadTemplates(templateArray);
+  }
 }

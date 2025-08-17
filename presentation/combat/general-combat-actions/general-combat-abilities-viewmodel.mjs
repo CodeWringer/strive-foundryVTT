@@ -1,56 +1,34 @@
-import ViewModel from "../../../../view-model/view-model.mjs";
-import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
-import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
-import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import { ChatUtil } from "../../chat/chat-utility.mjs";
+import { VISIBILITY_MODES, VisibilityMode } from "../../chat/visibility-modes.mjs";
 
 /**
  * @property {ViewModel} vmChild
  */
-export default class ActorGeneralCombatAbilitiesViewModel extends ViewModel {
+export default class GeneralCombatAbilitiesViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_GENERAL_COMBAT_ABILITIES; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.GENERAL_COMBAT_ABILITIES_CHAT_MESSAGE; }
 
   /**
-   * @type {Boolean}
-   * @private
-   */
-  _isExpanded = false;
-  /**
-   * Returns the current expansion state. 
+   * Renders an instance of this view model's template and sends it to chat. 
    * 
-   * @type {Boolean}
-   */
-  get isExpanded() { return this._isExpanded; }
-  /**
-   * Sets the current expansion state. 
+   * @param {VisibilityMode | undefined} visibilityMode Chat visibility. 
+   * * default `VISIBILITY_MODES.public` 
    * 
-   * @param {Boolean} value If `true`, will be expanded, else collapsed. 
+   * @async
+   * @static
    */
-  set isExpanded(value) {
-    this._isExpanded = value;
-    this.writeViewState();
-
-    const contentElement = this.element.find(`#${this.id}-content`);
-    const expansionUpIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-up`);
-    const expansionDownIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-down`);
-    if (value === true) {
-      contentElement.removeClass("hidden");
-      contentElement.animate({
-        height: "100%"
-      }, 300, () => {
-      });
-      expansionUpIndicatorElement.removeClass("hidden");
-      expansionDownIndicatorElement.addClass("hidden");
-    } else {
-      contentElement.animate({
-        height: "0%"
-      }, 300, () => {
-        contentElement.addClass("hidden");
-      });
-      expansionUpIndicatorElement.addClass("hidden");
-      expansionDownIndicatorElement.removeClass("hidden");
-    }
+  static async sendToChat(visibilityMode) {
+    const viewModel = new GeneralCombatAbilitiesViewModel({});
+    const rendered = await new FoundryWrapper().renderTemplate(GeneralCombatAbilitiesViewModel.TEMPLATE, {
+      viewModel: viewModel,
+    });
+    await ChatUtil.sendToChat({
+      renderedContent: rendered,
+      visibilityMode: visibilityMode ?? VISIBILITY_MODES.public,
+    });
   }
 
   /**
@@ -58,34 +36,9 @@ export default class ActorGeneralCombatAbilitiesViewModel extends ViewModel {
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * 
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * 
-   * @param {TransientBaseCharacterActor} args.document
-   * @param {Boolean | undefined} args.isExpanded If `true`, will initially render in expanded state. 
-   * 
-   * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["document"]);
-
-    // Own properties.
-    this.document = args.document;
-    this.registerViewStateProperty("_isExpanded");
-    this._isExpanded = args.isExpanded ?? false;
-
-    this.vmHeaderButton = new ButtonViewModel({
-      id: "vmHeaderButton",
-      parent: this,
-      localizedLabel: this.title,
-      onClick: () => {
-        this.isExpanded = !this.isExpanded;
-      },
-      isEditable: true, // Even those without editing right should be able to see nested content. 
-    });
 
     this.reminders = [
       new Reminder({
@@ -183,7 +136,7 @@ export default class ActorGeneralCombatAbilitiesViewModel extends ViewModel {
 
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorGeneralCombatAbilitiesViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(GeneralCombatAbilitiesViewModel));
   }
 
 }

@@ -7,7 +7,6 @@ import ButtonRollViewModel from "../../../../component/button-roll/button-roll-v
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAttributesViewModel from "./actor-attributes-viewmodel.mjs"
-import ActorGeneralCombatAbilitiesViewModel from "./actor-general-combat-abilities-viewmodel.mjs"
 import ActorSkillsViewModel from "./actor-skills-viewmodel.mjs"
 
 /**
@@ -32,12 +31,6 @@ export default class ActorAbilitiesViewModel extends ViewModel {
    */
   get skillsTemplate() { return ActorSkillsViewModel.TEMPLATE; }
 
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get generalCombatAbilitiesTemplate() { return ActorGeneralCombatAbilitiesViewModel.TEMPLATE; }
-  
   /**
    * @type {Boolean}
    * @readonly
@@ -69,13 +62,6 @@ export default class ActorAbilitiesViewModel extends ViewModel {
 
     this.document = args.document;
 
-    if (this.isInCombat) {
-      this.vmGeneralCombatAbilities = new ActorGeneralCombatAbilitiesViewModel({
-        id: "vmGeneralCombatAbilities",
-        parent: this,
-        document: this.document,
-      });
-    }
     this.vmAttributes = new ActorAttributesViewModel({
       id: "vmAttributes",
       parent: this,

@@ -130,6 +130,9 @@
       },
       "ok": "OK",
       "openSheet": "Open Sheet",
+      "reminder": {
+        "ruleReminders": "Rule Reminders"
+      },
       "sendToChat": "Send to Chat",
       "select": "Select",
       "search": "Search",

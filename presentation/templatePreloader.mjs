@@ -1,3 +1,5 @@
+import FoundryWrapper from "../common/foundry-wrapper.mjs";
+
 /**
  * String partial `"systems/strive"`. 
  * 
@@ -89,7 +91,6 @@ export const TEMPLATES = {
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/actor-personals.hbs`,
   ACTOR_PERSONALITY_TRAITS: `${basePathPresentation}/sheet/actor/part/personality/personality-traits/personality-traits.hbs`,
   ACTOR_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-abilities.hbs`,
-  ACTOR_GENERAL_COMBAT_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-general-combat-abilities.hbs`,
   ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/abilities/actor-attribute-table.hbs`,
   ACTOR_ATTRIBUTES: `${basePathPresentation}/sheet/actor/part/abilities/actor-attributes.hbs`,
   ACTOR_SKILLS: `${basePathPresentation}/sheet/actor/part/abilities/actor-skills.hbs`,
@@ -142,7 +143,8 @@ export const TEMPLATES = {
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
   // Mutation
   SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
-  // UI
+  // Combat
+  GENERAL_COMBAT_ABILITIES_CHAT_MESSAGE: `${basePathPresentation}/combat/general-combat-actions/general-combat-abilities-chat-message.hbs`,
   COMBAT_TRACKER: `${basePathPresentation}/combat/combat-tracker.hbs`,
   COMBAT_TRACKER_ACTION_POINTS: `${basePathPresentation}/combat/combat-tracker-action-points.hbs`,
 }
@@ -159,5 +161,5 @@ export const TEMPLATES = {
   for (const propertyName in TEMPLATES) {
     templateArr.push(TEMPLATES[propertyName]);
   }
-  return await loadTemplates(templateArr);
+  return await new FoundryWrapper().loadTemplates(templateArr);
 };
