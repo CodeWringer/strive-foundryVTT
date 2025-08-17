@@ -25,6 +25,7 @@ $arrow-size: 8px;
   &.with-arrow-t {
     &:before {
       @include tooltip-template();
+
       top: calc(0% - ($arrow-size / 2));
       left: calc(50% - ($arrow-size / 2));
       transform: rotate(45deg);
@@ -34,6 +35,8 @@ $arrow-size: 8px;
   &.with-arrow-b {
     &:before {
       @include tooltip-template();
+      height: $arrow-size;
+      width: $arrow-size;
       top: calc(100% - ($arrow-size / 2));
       left: calc(50% - ($arrow-size / 2));
       transform: rotate(45deg);
@@ -43,6 +46,8 @@ $arrow-size: 8px;
   &.with-arrow-l {
     &:before {
       @include tooltip-template();
+      height: $arrow-size;
+      width: $arrow-size;
       top: calc(50% - ($arrow-size / 2));
       left: calc(0% - ($arrow-size / 2));
       transform: rotate(45deg);
@@ -52,46 +57,11 @@ $arrow-size: 8px;
   &.with-arrow-r {
     &:before {
       @include tooltip-template();
+      height: $arrow-size;
+      width: $arrow-size;
       top: calc(50% - ($arrow-size / 2));
       left: calc(100% - ($arrow-size / 2));
       transform: rotate(45deg);
     }
   }
-
-  &.with-arrow-tl {
-    &:before {
-      @include tooltip-template();
-      top: calc(0% - ($arrow-size / 2));
-      left: calc(0% - ($arrow-size / 2));
-      // transform: rotate(45deg);
-    }
-  }
-
-  &.with-arrow-tr {
-    &:before {
-      @include tooltip-template();
-      top: calc(0% - ($arrow-size / 2));
-      left: calc(100% - ($arrow-size / 2));
-      // transform: rotate(45deg);
-    }
-  }
-
-  &.with-arrow-bl {
-    &:before {
-      @include tooltip-template();
-      top: calc(100% - ($arrow-size / 2));
-      left: calc(0% - ($arrow-size / 2));
-      // transform: rotate(45deg);
-    }
-  }
-
-  &.with-arrow-br {
-    &:before {
-      @include tooltip-template();
-      top: calc(100% - ($arrow-size / 2));
-      left: calc(100% - ($arrow-size / 2));
-      // transform: rotate(45deg);
-    }
-  }
-
 }

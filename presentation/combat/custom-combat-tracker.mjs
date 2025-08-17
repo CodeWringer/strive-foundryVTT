@@ -1,7 +1,13 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
+import ButtonViewModel from "../component/button/button-viewmodel.mjs";
+import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import GritPointsCombatTrackerViewModel from "../sheet/actor/part/health/grit-points/grit-points-combat-tracker-viewmodel.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
+import GeneralCombatAbilitiesViewModel from "./general-combat-actions/general-combat-abilities-viewmodel.mjs";
 
 /**
  * @property {Array<CombatTrackerActionPointsViewModel>} actionPointsViewModels
@@ -63,6 +69,43 @@ export default class CustomCombatTracker extends CombatTracker {
         isInCombatTracker: true,
       });
       this.gritPointsViewModels.push(turn.gritPointsViewModel);
+
+      this.vmSendToChatGeneralActions = new ButtonViewModel({
+        id: "vmSendToChatGeneralActions",
+        isEditable: true,
+        onClick: async () => {
+          if (game.user.isGM) {
+            const inputVisibility = "inputVisibility";
+            const dialog = await new DynamicInputDialog({
+              id: "select-visibility-dialog",
+              easyDismissal: true,
+              focused: inputVisibility,
+              localizedTitle: game.i18n.localize("system.character.abilities.general.sendToChatDialogTitle"),
+              inputDefinitions: [
+                new DynamicInputDefinition({
+                  name: inputVisibility,
+                  localizedLabel: game.i18n.localize("system.general.messageVisibility.query"),
+                  template: InputDropDownViewModel.TEMPLATE,
+                  viewModelFactory: (id, parent, overrides) => {
+                    return new InputDropDownViewModel({
+                      id: id,
+                      parent: parent,
+                      options: VISIBILITY_MODES.asChoices(),
+                      ...overrides,
+                    });
+                  },
+                })
+              ],
+            }).renderAndAwait(true);
+
+            if (!dialog.confirmed) return;
+
+            GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.asArray().find(it => it.name === dialog[inputVisibility].value));
+          } else {
+            GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.self);
+          }
+        },
+      });
     }
 
 
@@ -80,6 +123,8 @@ export default class CustomCombatTracker extends CombatTracker {
     for (const viewModel of this.gritPointsViewModels) {
       viewModel.activateListeners(html);
     }
+
+    this.vmSendToChatGeneralActions.activateListeners(html);
   }
 
   /**
