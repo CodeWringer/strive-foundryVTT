@@ -3,42 +3,58 @@ $border-size-md: 2px;
 $border-size-lg: 3px;
 $border-size-xl: 4px;
 
+@mixin directional-border-colorations($direction) {
+  &.highlight {
+    border-#{$direction}-color: $c-border-highlight !important;
+    &.dark {
+      border-#{$direction}-color: $c-border-highlight-dark !important;
+    }
+    &.light {
+      border-#{$direction}-color: $c-border-highlight-light !important;
+    }
+  }
+  &.dark {
+    border-#{$direction}-color: $c-border-dark !important;
+  }
+  &.light {
+    border-#{$direction}-color: $c-border-light !important;
+  }
+}
+
+@mixin border-colorations() {
+  &.highlight {
+    border-color: $c-border-highlight !important;
+    &.dark {
+      border-color: $c-border-highlight-dark !important;
+    }
+    &.light {
+      border-color: $c-border-highlight-light !important;
+    }
+  }
+  &.dark {
+    border-color: $c-border-dark !important;
+  }
+  &.light {
+    border-color: $c-border-light !important;
+  }
+}
+
 @mixin border-template($direction, $style, $color) {
   &-sm {
     border-#{$direction}: $border-size-sm $style $color !important;
-    &.highlight {
-      border-#{$direction}: $border-size-sm $style $c-border-highlight !important;
-    }
-    &.underline {
-      border-#{$direction}: $border-size-sm $style $c-text-underline !important;
-    }
+    @include directional-border-colorations($direction);
   }
   &-md {
     border-#{$direction}: $border-size-md $style $color !important;
-    &.highlight {
-      border-#{$direction}: $border-size-md $style $c-border-highlight !important;
-    }
-    &.underline {
-      border-#{$direction}: $border-size-md $style $c-text-underline !important;
-    }
+    @include directional-border-colorations($direction);
   }
   &-lg {
     border-#{$direction}: $border-size-lg $style $color !important;
-    &.highlight {
-      border-#{$direction}: $border-size-lg $style $c-border-highlight !important;
-    }
-    &.underline {
-      border-#{$direction}: $border-size-lg $style $c-text-underline !important;
-    }
+    @include directional-border-colorations($direction);
   }
   &-xl {
     border-#{$direction}: $border-size-xl $style $color !important;
-    &.highlight {
-      border-#{$direction}: $border-size-xl $style $c-border-highlight !important;
-    }
-    &.underline {
-      border-#{$direction}: $border-size-xl $style $c-text-underline !important;
-    }
+    @include directional-border-colorations($direction);
   }
 }
 
