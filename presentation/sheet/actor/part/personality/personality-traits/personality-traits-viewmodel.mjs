@@ -67,6 +67,7 @@ export default class PersonalityTraitsViewModel extends ViewModel {
   _getTrait(leftTrait, rightTrait, propertyName) {
     const valueOfDocument = `${this.document.personalityTraits[propertyName]}`;
     const options = this._getTraitOptions();
+    const activeOption = options.find(it => it.value === valueOfDocument);
 
     return {
       localizedTraitLeft: game.i18n.localize(`system.character.personalityTrait.traits.${leftTrait}`),
@@ -74,7 +75,7 @@ export default class PersonalityTraitsViewModel extends ViewModel {
         id: `vmRadioButtonGroup-${propertyName}`,
         parent: this,
         options: options,
-        value: options.find(it => it.value === valueOfDocument),
+        value: activeOption,
         onChange: (_, newValue) => {
           if (ValidationUtil.isDefined(newValue)) {
             this.document.personalityTraits[propertyName] = parseInt(newValue.value);
@@ -82,6 +83,8 @@ export default class PersonalityTraitsViewModel extends ViewModel {
         },
       }),
       localizedTraitRight: game.i18n.localize(`system.character.personalityTrait.traits.${rightTrait}`),
+      isSignatureLeft: parseInt(activeOption.value) === -3,
+      isSignatureRight: parseInt(activeOption.value) === 3,
     };
   }
 
@@ -94,37 +97,37 @@ export default class PersonalityTraitsViewModel extends ViewModel {
     return [
       new StatefulChoiceOption({
         value: "-3",
-        activeHtml: "X",
+        activeHtml: `<i class="ico dark interactible ico-locked-solid"></i>`,
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "-2",
-        activeHtml: "X",
+        activeHtml: "&LeftAngleBracket;&LeftAngleBracket;",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "-1",
-        activeHtml: "X",
+        activeHtml: "&LeftAngleBracket;",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "0",
-        activeHtml: "X",
+        activeHtml: "?",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "1",
-        activeHtml: "X",
+        activeHtml: "&RightAngleBracket;",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "2",
-        activeHtml: "X",
+        activeHtml: "&RightAngleBracket;&RightAngleBracket;",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "3",
-        activeHtml: "X",
+        activeHtml: `<i class="ico dark interactible ico-locked-solid"></i>`,
         inactiveHtml: "",
       }),
     ];
