@@ -102,27 +102,27 @@ export default class PersonalityTraitsViewModel extends ViewModel {
       }),
       new StatefulChoiceOption({
         value: "-2",
-        activeHtml: "&LeftAngleBracket;&LeftAngleBracket;",
+        activeHtml: `<span class="font-bold">&LeftAngleBracket;&LeftAngleBracket;</span>`,
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "-1",
-        activeHtml: "&LeftAngleBracket;",
+        activeHtml: `<span class="font-bold">&LeftAngleBracket;</span>`,
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "0",
-        activeHtml: "?",
+        activeHtml: `<span class="font-bold">?</span>`,
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "1",
-        activeHtml: "&RightAngleBracket;",
+        activeHtml: `<span class="font-bold">&RightAngleBracket;</span>`,
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "2",
-        activeHtml: "&RightAngleBracket;&RightAngleBracket;",
+        activeHtml: `<span class="font-bold">&RightAngleBracket;&RightAngleBracket;</span>`,
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
