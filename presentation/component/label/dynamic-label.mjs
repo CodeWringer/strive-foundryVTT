@@ -51,9 +51,6 @@ export default class DynamicLabelViewModel extends ViewModel {
    * display as a tool tip. 
    * @param {String | undefined} args.toolTipStyle A style override to attach to the tool tip's DOM element. 
    * E. g. `text-align: center`
-   * @param {TooltipPlacementConstraint | undefined} args.toolTipConstraint Sets a constraint that determines 
-   * where the tool tip will be placed, around the element. 
-   * * default `TOOLTIP_PLACEMENTS.TOP` with offset `0`. 
    * 
    * @param {String | undefined} args.localizedLabel
    */

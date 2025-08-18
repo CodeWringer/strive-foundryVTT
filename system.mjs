@@ -35,7 +35,6 @@ import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
 import DamageDesignerDialog from "./presentation/dialog/damage-designer-dialog/damage-designer-dialog.mjs";
 import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
-import { activateRollChatMessageListeners } from "./presentation/dice/roll-chat-message.mjs";
 import { Sum, SumComponent } from "./business/ruleset/summed-data.mjs";
 import Tag from "./business/tags/tag.mjs";
 // Migration
@@ -79,6 +78,7 @@ import './presentation/view-model/view-model.mjs';
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 // View models
 import ViewModel from "./presentation/view-model/view-model.mjs";
+import GeneralCombatAbilitiesViewModel from "./presentation/combat/general-combat-actions/general-combat-abilities-viewmodel.mjs";
 // View models - Components
 import ButtonAddViewModel from "./presentation/component/button-add/button-add-viewmodel.mjs";
 import ButtonCheckBoxViewModel from "./presentation/component/button-checkbox/button-checkbox-viewmodel.mjs";
@@ -146,10 +146,14 @@ import ScarListItemViewModel from "./presentation/sheet/item/scar/scar-list-item
 import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
 import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
 import ReadOnlyValueViewModel from "./presentation/component/read-only-value/read-only-value.mjs";
-import { StringUtil } from "./business/util/string-utility.mjs";
+// Utilities
+import { ChatUtil } from "./presentation/chat/chat-utility.mjs";
 import { ConstantsUtil } from "./business/util/constants-utility.mjs";
+import { ExtenderUtil } from "./common/extender-util.mjs";
 import { PropertyUtil } from "./business/util/property-utility.mjs";
+import { StringUtil } from "./business/util/string-utility.mjs";
 import { UuidUtil } from "./business/util/uuid-utility.mjs";
+import FoundryWrapper from "./common/foundry-wrapper.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -243,6 +247,7 @@ Hooks.once('init', function() {
       Sum: Sum,
       Ruleset: Ruleset,
       Tag: Tag,
+      FoundryWrapper: FoundryWrapper,
       document: {
         TransientBaseActor: TransientBaseActor,
         TransientBaseCharacterActor: TransientBaseCharacterActor,
@@ -329,18 +334,28 @@ Hooks.once('init', function() {
           SkillItemSheetViewModel: SkillItemSheetViewModel,
           SkillListItemViewModel: SkillListItemViewModel,
         },
+        chat: {
+          GeneralCombatAbilitiesViewModel: GeneralCombatAbilitiesViewModel,
+        },
       },
     },
+    /**
+     * Namespace for global utility functions. 
+     */
     util: {
       array: ArrayUtil,
       constants: ConstantsUtil,
+      extender: ExtenderUtil,
       property: PropertyUtil,
       string: StringUtil,
       uuid: UuidUtil,
       validation: ValidationUtil,
     },
     /**
-     * Registered extenders. 
+     * Registered extenders. A class may have any number of extenders applied to it, 
+     * which is why the Map's value is an array of extenders. 
+     * 
+     * To register an extender, use `game.strive.util.extender.addExtender(clazz, extender)`
      * 
      * @type {Map<any, Array<Object>>}
      */
@@ -445,89 +460,16 @@ Hooks.once("ready", function() {
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
-Hooks.on("renderChatMessage", async function(message, html, data) {
-  const SELECTOR_CHAT_MESSAGE = "custom-system-chat-message";
-  const element = html.find(`.${SELECTOR_CHAT_MESSAGE}`)[0];
-  
-  // The chat message may just be a normal chat message, without any associated document. 
-  // In such a case it is safe to skip any further operations, here. 
-  if (element === undefined || element === null) return;
-
-  activateRollChatMessageListeners(element);
-
-  // Get data set of element. This assumes the element in question to have the following data defined:
-  // 'data-view-model-id' and 'data-document-id'
-  const dataset = element.dataset;
-  const vmId = dataset.viewModelId;
-  const documentId = dataset.documentId;
-
-  if (documentId === undefined) {
-    return;
-  }
-
-  const document = await new DocumentFetcher().find({
-    id: documentId,
-    searchEmbedded: true,
-    includeLocked: true,
+Hooks.on("renderChatMessage", function(message, html, data) {
+  ChatUtil.handleRenderedChatMessage({
+    message: message,
+    html: html,
+    data: data,
   });
-
-  if (document === undefined) {
-    game.strive.logger.logWarn(`renderChatMessage: Failed to get document represented by chat message`);
-    return;
-  }
-  
-  let viewModel = game.strive.viewModels.get(vmId);
-  if (viewModel === undefined) {
-    // Create new instance of a view model to associate with the chat message. 
-    if (dataset.expertiseId !== undefined) {
-      // Create an expertise chat view model. 
-      const expertiseId = dataset.expertiseId;
-      const skillDocument = document.getTransientObject();
-      const expertise = skillDocument.expertises.find(it => it.id === expertiseId);
-      viewModel = expertise.getChatViewModel({ id: vmId });
-    } else {
-      viewModel = document.getTransientObject().getChatViewModel({ id: vmId });
-    }
-
-    if (viewModel === undefined) {
-      game.strive.logger.logWarn(`renderChatMessage: Failed to create view model for chat message`);
-      return;
-    }
-    // Ensure the view model is stored in the global collection. 
-    if (game.strive.enableViewModelCaching === true) {
-      game.strive.viewModels.set(vmId, viewModel);
-    }
-  }
-
-  await viewModel.activateListeners(html);
 });
 
 Hooks.on("deleteChatMessage", function(args) {
-  const deletedContent = args.content;
-  const rgxViewModelId = /data-view-model-id="([^"]*)"/;
-  const match = deletedContent.match(rgxViewModelId);
-
-  if (match !== undefined && match !== null && match.length === 2) {
-    const vmId = match[1];
-
-    // Dispose the view model, if it supports it. 
-    const vm = game.strive.viewModels.get(vmId);
-
-    if (vm === undefined) return;
-
-    if (vm.dispose !== undefined) {
-      try {
-        vm.dispose();
-      } catch (error) {
-        // It may already be disposed, in which case it might throw an error. 
-        // Of course, if it is already disposed, the error isn't actually a problem. 
-        game.strive.logger.logVerbose(error);
-      }
-    }
-
-    // Remove the view model from the global collection. 
-    game.strive.viewModels.remove(vmId);
-  }
+  ChatUtil.handleDeletionOfChatMessage(args);
 });
 
 Hooks.on("hoverToken", function(token) {

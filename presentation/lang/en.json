@@ -11,6 +11,7 @@
   "TYPES.Item.scar": "Scar",
   "COMBAT.ActionPoints": "Set Action Points",
   "COMBAT.GritPoints": "Set Grit Points",
+  "COMBAT.SendGeneralActionsToChat": "Print general combat actions to chat",
   "system": {
     "migration": {
       "title": "Data Migration",
@@ -130,6 +131,9 @@
       },
       "ok": "OK",
       "openSheet": "Open Sheet",
+      "reminder": {
+        "ruleReminders": "Rule Reminders"
+      },
       "sendToChat": "Send to Chat",
       "select": "Select",
       "search": "Search",
@@ -310,6 +314,7 @@
       "abilities": {
         "general": {
           "header": "General Combat Abilities",
+          "sendToChatDialogTitle": "Send General Combat Actions Reminder to Chat",
           "actionPoints": {
             "label": "Action Points",
             "tooltip": "Every turn, every character gets <strong>3 Action Points (AP)</strong> to spend on actions during their turn. Some skills, boons and penalties can alter this number. <br><br>At the start of a combat encounter, <strong>all non-surprised characters start with 3 AP</strong>. After that, AP are only regained per-character, upon the start of their turn.<ul><li>Any basic action, that is, any action not requiring a test, costs 1 AP. <ul><li>Basic movement counts as a basic action.</li><li>Handing an object over to a character adjacent to you, is a basic action (assuming you don't have to force it on them).</li><li>Pulling something from your bag or getting a weapon ready (from your back, scabbard or wherever you keep it) also counts as a movement action and costs 1 AP.</li></ul></li><li>Any action requiring a test, costs 2 AP.</li><li>Expertises can cost varying amounts of AP. The exact number will be noted on the Expertise in question.</li></ul>Once per turn, it is possible to push yourself to gain <strong>+1 AP</strong>, at the cost of <strong>+1 exhaustion</strong>. Pushing yourself when the additional point of exhaustion would bring you to your threshold is not allowed. <br><br>Speaking or shouting a short phrase is free. If you want to have a proper conversation, that will cost you more AP, depending on how much you have to say."

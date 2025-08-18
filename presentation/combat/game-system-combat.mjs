@@ -3,11 +3,12 @@ import { GENERAL_DOCUMENT_TYPES } from "../../business/document/general-document
 import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs";
 import { ArrayUtil } from "../../business/util/array-utility.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import GeneralCombatAbilitiesViewModel from "./general-combat-actions/general-combat-abilities-viewmodel.mjs";
 
 /**
  * This class extends FoundryVTT's `Combat` document type. 
  * 
- * @see https://foundryvtt.com/api/classes/client.Combat.html 
+ * @see https://foundryvtt.com/api/classes/foundry.documents.Combat.html
  */
 export default class GameSystemCombat extends Combat {
   /**
@@ -120,6 +121,21 @@ export default class GameSystemCombat extends Combat {
     }
 
     return updatedCombat;
+  }
+
+  /**
+   * Begin the combat encounter, advancing to round 1 and turn 1
+   * 
+   * @returns {Promise<documents.Combat>}
+   * 
+   * @async
+   * @override
+   */
+  async startCombat() {
+    // Create reminder chat message for general combat actions. 
+    GeneralCombatAbilitiesViewModel.sendToChat();
+
+    return await super.startCombat();
   }
 
   /**
