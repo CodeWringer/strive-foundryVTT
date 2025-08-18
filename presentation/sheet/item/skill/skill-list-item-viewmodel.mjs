@@ -294,12 +294,17 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         },
         min: 0,
       });
+
+      const localizedRequiredSuccessesLabel = game.i18n.localize("system.character.advancement.requirements.success.required");
+      const localizedRequiredSuccessesExplanation = new RulesetExplainer().getExplanationForSkillAdvancementSuccessRequirements(this.document);
+      const requiredSuccessesToolTip = this.showReminders ? `${localizedRequiredSuccessesLabel}<br>${localizedRequiredSuccessesExplanation}` : localizedRequiredSuccessesLabel;
       this.vmAdvancementRequirementSuccesses = new ReadOnlyValueViewModel({
         id: "vmAdvancementRequirements",
         parent: this,
         value: this.advancementRequirements.successes,
-        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
+        localizedToolTip: requiredSuccessesToolTip,
       });
+
       this.vmNsFailures = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsFailures",
@@ -310,12 +315,17 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         },
         min: 0,
       });
+
+      const localizedRequiredFailuresLabel = game.i18n.localize("system.character.advancement.requirements.failure.required");
+      const localizedRequiredFailuresExplanation = new RulesetExplainer().getExplanationForSkillAdvancementFailureRequirements(this.document);
+      const requiredFailuresToolTip = this.showReminders ? `${localizedRequiredFailuresLabel}<br>${localizedRequiredFailuresExplanation}` : localizedRequiredFailuresLabel;
       this.vmAdvancementRequirementFailures = new ReadOnlyValueViewModel({
         id: "vmAdvancementRequirementFailures",
         parent: this,
         value: this.advancementRequirements.failures,
-        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
+        localizedToolTip: requiredFailuresToolTip,
       });
+
       this.vmAdvanced = new ButtonCheckBoxViewModel({
         parent: this,
         id: "vmAdvanced",

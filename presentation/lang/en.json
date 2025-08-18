@@ -192,15 +192,13 @@
           "abbreviation": "Req.",
           "success": {
             "label": "Successes",
-            "abbreviation": "S"
+            "abbreviation": "S",
+            "required": "Required Successes"
           },
           "failure": {
             "label": "Failures",
-            "abbreviation": "F"
-          },
-          "successAndFailure": {
-            "label": "Required Successes/Failures",
-            "abbreviation": "Req. S/F"
+            "abbreviation": "F",
+            "required": "Required Failures"
           },
           "progress": {
             "label": "Progress",
@@ -803,7 +801,10 @@
     "rules": {
       "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
       "attributeAdvancementRequirements": "raw level (%{rawLevel}) * %{factor} (from %{attributeTier} attribute) = %{advancementRequirements}",
-      "skillAdvancementRequirements": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}<br>Failures: %{failureFormula} = %{requiredFailures}",
+      "skillAdvancementRequirements": {
+        "success": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}",
+        "failure": "from %{tierName} skill:<br>Failures: %{failureFormula} = %{requiredFailures}"
+      },
       "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
       "sprintingSpeed": "(%{localizedAgility} (%{agility}) + %{localizedToughness} (%{toughness})) / 2 (rounded up) = %{sprintingSpeed}",
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"

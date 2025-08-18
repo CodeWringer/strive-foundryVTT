@@ -97,26 +97,46 @@ export default class RulesetExplainer {
    * 
    * @returns {String}
    */
-  getExplanationForSkillAdvancementRequirements(skill) {
+  getExplanationForSkillAdvancementSuccessRequirements(skill) {
     const tier = this._ruleset.getSkillLevelTier(skill.level);
     let successFormula;
-    let failureFormula;
     if (tier.name === SKILL_TIERS.dabbling.name) {
       successFormula = "6";
-      failureFormula = "9";
     } else if (tier.name === SKILL_TIERS.apprentice.name) {
       successFormula = `${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) + 3`;
-      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 4`;
     } else if (tier.name === SKILL_TIERS.master.name) {
       successFormula = `${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) + 4`;
-      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 5`;
     }
     return StringUtil.format2(
-      game.i18n.localize("system.rules.skillAdvancementRequirements"),
+      game.i18n.localize("system.rules.skillAdvancementRequirements.success"),
       {
         tierName: game.i18n.localize(tier.localizableName),
         successFormula: successFormula,
         requiredSuccesses: skill.advancementRequirements.successes,
+      },
+    );
+  }
+  
+
+  /**
+   * @param {TransientSkill} skill 
+   * 
+   * @returns {String}
+   */
+  getExplanationForSkillAdvancementFailureRequirements(skill) {
+    const tier = this._ruleset.getSkillLevelTier(skill.level);
+    let failureFormula;
+    if (tier.name === SKILL_TIERS.dabbling.name) {
+      failureFormula = "9";
+    } else if (tier.name === SKILL_TIERS.apprentice.name) {
+      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 4`;
+    } else if (tier.name === SKILL_TIERS.master.name) {
+      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 5`;
+    }
+    return StringUtil.format2(
+      game.i18n.localize("system.rules.skillAdvancementRequirements.failure"),
+      {
+        tierName: game.i18n.localize(tier.localizableName),
         failureFormula: failureFormula,
         requiredFailures: skill.advancementRequirements.failures,
       },
