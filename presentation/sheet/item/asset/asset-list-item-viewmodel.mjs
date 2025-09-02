@@ -150,7 +150,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnTakeAsset",
           parent: this,
           isEditable: this.getRootOwningDocument() !== undefined && this.isEditable,
-          iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
+          content: '<i class="ico dark interactible ico-take-item"></i>',
           localizedToolTip: game.i18n.localize(takeLabel),
           onClick: async () => {
             // Move "up" on character sheet. 
@@ -172,7 +172,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnDropAsset",
           parent: this,
           isEditable: this.getRootOwningDocument() !== undefined && this.isEditable,
-          iconHtml: '<i class="ico dark interactible ico-drop-item"></i>',
+          content: '<i class="ico dark interactible ico-drop-item"></i>',
           localizedToolTip: game.i18n.localize(dropLabel),
           onClick: async () => {
             // Move "down" on character sheet. 

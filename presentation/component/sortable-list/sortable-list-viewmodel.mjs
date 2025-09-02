@@ -226,7 +226,7 @@ export default class SortableListViewModel extends ViewModel {
       this.vmContextMenu = new ButtonContextMenuViewModel({
         id: "vmContextMenu",
         parent: this,
-        iconHtml: '<i class="fas fa-plus"></i>',
+        content: '<i class="fas fa-plus"></i>',
         localizedToolTip: game.i18n.localize("system.general.add.add"),
         menuItems: menuItems,
       });
@@ -378,7 +378,7 @@ export default class SortableListViewModel extends ViewModel {
         parent: thiz,
         isEditable: upButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveUp`,
-        iconHtml: '<i class="fas fa-angle-up"></i>',
+        content: '<i class="fas fa-angle-up"></i>',
         onClick: (event) => {
           if (event.ctrlKey || event.shiftKey) {
             thiz._moveToTop(id);
@@ -392,7 +392,7 @@ export default class SortableListViewModel extends ViewModel {
         parent: thiz,
         isEditable: downButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveDown`,
-        iconHtml: '<i class="fas fa-angle-down"></i>',
+        content: '<i class="fas fa-angle-down"></i>',
         onClick: (event) => {
           if (event.ctrlKey || event.shiftKey) {
             thiz._moveToBottom(id);

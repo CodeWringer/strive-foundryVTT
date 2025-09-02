@@ -75,8 +75,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     this.vmBtnSave = new ButtonViewModel({
       id: "vmBtnSave",
       parent: this,
-      iconHtml: '<i class="fas fa-save"></i>',
-      localizedLabel: game.i18n.localize("system.settings.saveChanges"),
+      content: `<div class="flex flex-middle auto-margin-h-sm"><i class="fas fa-save"></i><span>${game.i18n.localize("system.settings.saveChanges")}</span></div>`,
       isEditable: this.isEditable,
       onClick: async () => {
         this.formApplication._saveSettings(this.stateSettings);

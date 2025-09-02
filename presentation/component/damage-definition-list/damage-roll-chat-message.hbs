@@ -51,7 +51,7 @@ cssClass: undefined | String
           </div>
           <ol class="dice-rolls auto-margin-h">
             {{#each roll.diceResults as |diceResult diceIndex|}}
-              <li class="flex flex-center{{#if diceResult.isDiceResult}} roll d6 die die-sm{{/if}}">{{diceResult.value}}</li>
+              <li class="flex flex-center{{#if diceResult.isDiceResult}} roll d6 sm{{/if}}">{{diceResult.value}}</li>
             {{/each}}
           </ol>
         </li>

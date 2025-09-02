@@ -9,7 +9,7 @@ viewModel: SimpleListViewModel
     </div>
   {{/with}}
   {{!-- Remove button --}}
-  <div class="button light square {{#if viewModel.isRemovable}}{{else}} hidden{{/if}}">
-    {{> button viewModel=viewModel.vmBtnRemove fill=true }}
-  </div>
+  {{#if viewModel.isRemovable}}
+  {{> button viewModel=viewModel.vmBtnRemove }}
+  {{/if}}
 </li>

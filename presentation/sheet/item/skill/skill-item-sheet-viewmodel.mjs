@@ -268,7 +268,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
     this.vmAddAttribute2 = new ButtonViewModel({
       id: "vmAddAttribute2",
       parent: this,
-      iconHtml: '<i class="fas fa-plus"></i>',
+      content: '<i class="fas fa-plus"></i>',
       localizedToolTip: StringUtil.format(
         game.i18n.localize("system.general.add.addType"),
         game.i18n.localize("system.character.attribute.singular")
@@ -309,7 +309,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
     this.vmAddPrerequisite2 = new ButtonViewModel({
       id: "vmAddPrerequisite2",
       parent: this,
-      iconHtml: '<i class="fas fa-plus"></i>',
+      content: '<i class="fas fa-plus"></i>',
       localizedToolTip: StringUtil.format(
         game.i18n.localize("system.general.add.addType"),
         game.i18n.localize("system.character.skill.prerequisite.singular")

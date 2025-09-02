@@ -110,6 +110,7 @@ export default class ActorFateViewModel extends ViewModel {
       const addViewModel = new ButtonAddViewModel({
         id: `addViewModel-${i}`,
         parent: this,
+        content: '<span class="fill flex flex-center"><i class="fas fa-plus"></i></span>',
         creationStrategy: new SpecificDocumentCreationStrategy({
           documentType: ITEM_TYPES.FATE_CARD,
           target: this.document,

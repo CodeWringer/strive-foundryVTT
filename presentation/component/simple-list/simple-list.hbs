@@ -14,6 +14,6 @@ cssClass: String | undefined
   </ul>
   {{!-- Add button --}}
   <div class="fill flex flex-row flex-right{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
-    {{> button viewModel=viewModel.vmBtnAddItem cssClass="" }}
+    {{> button viewModel=viewModel.vmBtnAddItem }}
   </div>
 </section>

@@ -227,7 +227,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmAdjustHp",
       parent: this,
       localizedToolTip: game.i18n.localize("system.character.health.hp.adjust"),
-      iconHtml: '<i class="fas fa-edit"></i>',
+      content: '<i class="fas fa-edit"></i>',
       onClick: async () => {
         const inputNumber = "inputNumber";
         const dialog = await new DynamicInputDialog({
@@ -298,7 +298,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmAdjustExhaustion",
       parent: this,
       localizedToolTip: game.i18n.localize("system.character.health.exhaustion.adjust"),
-      iconHtml: '<i class="fas fa-edit" style="height: 22px;"></i>',
+      content: '<i class="fas fa-edit" style="height: 22px;"></i>',
       onClick: async () => {
         const inputNumber = "inputNumber";
         const dialog = await new DynamicInputDialog({

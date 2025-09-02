@@ -36,13 +36,15 @@ export default class SimpleListItemViewModel extends ViewModel {
     this.isRemovable = args.isRemovable ?? false;
     this.onRemoveClick = args.onRemoveClick ?? (() => {});
 
-    this.vmBtnRemove = new ButtonViewModel({
-      id: "vmBtnRemove",
-      parent: this,
-      isEditable: this.isEditable,
-      iconHtml: '<i class="fas fa-trash"></i>',
-      localizedToolTip: game.i18n.localize("system.general.delete.delete"),
-      onClick: this.onRemoveClick,
-    });
+    if (this.isRemovable) {
+      this.vmBtnRemove = new ButtonViewModel({
+        id: "vmBtnRemove",
+        parent: this,
+        isEditable: this.isEditable,
+        content: '<i class="fas fa-trash"></i>',
+        localizedToolTip: game.i18n.localize("system.general.delete.delete"),
+        onClick: this.onRemoveClick,
+      });
+    }
   }
 }

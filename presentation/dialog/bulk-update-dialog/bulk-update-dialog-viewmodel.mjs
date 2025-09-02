@@ -43,8 +43,7 @@ export default class BulkUpdateDialogViewModel extends ViewModel {
     this.vmBegin = new ButtonViewModel({
       id: "vmBegin",
       parent: this,
-      localizedLabel: "Begin Update",
-      showFancyFont: false,
+      content: "<span>Begin Update</span>",
       onClick: async () => {
         const packName = this.vmPackName.value;
         this.vmProgressSection.visible = true;

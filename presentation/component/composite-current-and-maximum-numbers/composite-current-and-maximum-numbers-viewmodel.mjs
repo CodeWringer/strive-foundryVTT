@@ -120,7 +120,7 @@ export default class CompositeCurrentAndMaximumNumbersViewModel extends ViewMode
       id: "vmAdjust",
       parent: this,
       localizedToolTip: this.adjustToolTip,
-      iconHtml: '<i class="fas fa-edit" style="height: 26px;"></i>',
+      content: '<i class="fas fa-edit" style="height: 26px;"></i>',
       onClick: async () => {
         const inputNumber = "inputNumber";
         const inputDefinitions = [

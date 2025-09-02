@@ -10,7 +10,5 @@ viewModel: HealthStatesSettingsDialogViewModel
     {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "system.settings.healthConditions.configureCustom"}}{{/header2}}
     {{> simpleList viewModel=viewModel.vmCustomList}}
   </div>
-  <div>
-    {{> button viewModel=viewModel.vmBtnSave cssClass="flex flex-middle flex-center pad-md button-full fill" }}
-  </div>
+  {{> button viewModel=viewModel.vmBtnSave }}
 </section>

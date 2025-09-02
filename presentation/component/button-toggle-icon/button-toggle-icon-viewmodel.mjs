@@ -66,7 +66,7 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
     this.iconActive = args.iconActive;
     this.iconInactive = args.iconInactive;
 
-    this.iconHtml = this._getIconHtml();
+    this.content = this._getContentHtml();
   }
 
   /** @override */
@@ -85,7 +85,7 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
    * 
    * @private
    */
-  _getIconHtml() {
+  _getContentHtml() {
     const icon = this.value === true ? this.iconActive : this.iconInactive;
     return `<span id="${this.id}-icon">${icon}</span>`;
   }
@@ -96,7 +96,7 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
    * @private
    */
   _updateIcon() {
-    this.iconHtml = this._getIconHtml();
-    this.element.html(this.iconHtml);
+    this.content = this._getContentHtml();
+    this.element.html(this.content);
   }
 }

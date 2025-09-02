@@ -63,8 +63,7 @@ export default class DamageHierarchyListItemViewModel extends ViewModel {
     this.vmHeaderButton = new ButtonViewModel({
       id: "vmHeaderButton",
       parent: this,
-      localizedLabel: this.hierarchy.name,
-      showFancyFont: false,
+      content: `<span>${this.hierarchy.name}</span>`,
       onClick: () => {
         this.isExpanded = !this.isExpanded;
       },
