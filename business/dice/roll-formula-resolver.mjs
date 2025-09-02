@@ -1,3 +1,5 @@
+import FoundryWrapper from "../../common/foundry-wrapper.mjs";
+import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 import AtReferencer from "../referencing/at-referencer.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
 import { ValidationUtil } from "../util/validation-utility.mjs";
@@ -183,25 +185,32 @@ export class EvaluatedRollFormula {
    * @async
    */
   async renderForDisplay() {
-    let result = '<div class="flex flex-row flex-middle flex-wrap">';
-    
+    // Expected to contain objects with the following properties:
+    // * cssClass: String
+    // * content: String
+    const faces = [];
+
     for (const term of this.terms) {
-      if (ValidationUtil.isDefined(term.hits)) {
-        // It's a d6 group. 
-        let diceRolls = "";
+      if (ValidationUtil.isDefined(term.hits)) { // It's a d6 group. 
         for (const hit of term.hits) {
-          diceRolls = `${diceRolls}<li class="roll d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}">${hit}</li>`
+          faces.push({
+            cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`,
+            content: hit,
+          });
         }
         for (const miss of term.misses) {
-          diceRolls = `${diceRolls}<li class="roll d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}">${miss}</li>`
+          faces.push({
+            cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`,
+            content: miss,
+          });
         }
-        result = `${result}<ol class="dice-rolls auto-margin-h-sm">${diceRolls}</ol>`;
 
+        return await new FoundryWrapper().renderTemplate(TEMPLATES.DICE_FACES, {
+          faces: faces,
+        });
       } else {
-        result = `${result}${term}`;
+        return `${result}${term}`;
       }
     }
-
-    return `${result}</div>`;
   }
 }

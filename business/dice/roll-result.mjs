@@ -11,6 +11,7 @@ import { ValidationUtil } from "../util/validation-utility.mjs";
 import { UuidUtil } from "../util/uuid-utility.mjs";
 import GameSystemUserSettings from "../setting/game-system-user-settings.mjs";
 import FoundryWrapper from "../../common/foundry-wrapper.mjs";
+import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 
 /**
  * Represents the input data of a dice (pool) roll. 
@@ -191,6 +192,8 @@ export class RollResult {
 
       showReminder: showReminder,
       additionalContent: args.additionalContent,
+
+      diceFacesTemplate: TEMPLATES.DICE_FACES,
     });
 
     return ChatUtil.sendToChat({
@@ -301,12 +304,12 @@ export class RollResult {
       .concat([])
       .sort()
       .reverse()
-      .map(it => { return {cssClass: `roll d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`, content: it}; });
+      .map(it => { return {cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`, content: it}; });
     const missesForRendering = rollStepData.misses
       .concat([])
       .sort()
       .reverse()
-      .map(it => { return {cssClass: `roll d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`, content: it}; });
+      .map(it => { return {cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`, content: it}; });
 
     let combinedResultsForRendering = []
       .concat(hitsForRendering)
@@ -318,7 +321,7 @@ export class RollResult {
     if (obstacle >= rollStepData.faces.length) { // Obstacle greater than number of dice rolled. 
       const blanksForRendering = [];
       for (let i = 0; i < rollStepData.blankCount; i++) {
-        blanksForRendering.push({ cssClass: `roll d6 ${DICE_CONSTANTS.CSS_CLASS_MISSING_DIE}`, content: "" });
+        blanksForRendering.push({ cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_MISSING_DIE}`, content: "" });
       }
       // Add blanks and then the obstacle to the end of the faces list. 
       combinedResultsForRendering = combinedResultsForRendering
