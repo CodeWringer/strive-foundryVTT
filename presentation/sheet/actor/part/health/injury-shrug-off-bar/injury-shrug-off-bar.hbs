@@ -13,7 +13,7 @@ cssClass: String | undefined
   {{#each viewModel.shrugOffs as |shrugOff|}}
   <a id="{{shrugOff.id}}" class="icon-with-centered-label {{#if shrugOff.active}}shrug-off-full{{else}}shrug-off-void{{/if}}">
     <i class="ico {{#if shrugOff.active}}ico-shrug-off-line{{else}}ico-shrug-off-void-line{{/if}} icon-with-centered-label-image"></i>
-    <span class="icon-with-centered-label-label">{{shrugOff.value}}</span>
+    <span class="icon-with-centered-label-label" style="border-radius: 100rem;">{{shrugOff.value}}</span>
   </a>
   {{/each}}
 </div>
