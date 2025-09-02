@@ -30,7 +30,7 @@ export default class DamageAndType {
    */
   constructor(args = {}) {
     this.damage = args.damage ?? "";
-    this.damageType = args.damageType ?? DAMAGE_TYPES.pure.name;
+    this.damageType = args.damageType ?? DAMAGE_TYPES.pure;
   }
 
   /**

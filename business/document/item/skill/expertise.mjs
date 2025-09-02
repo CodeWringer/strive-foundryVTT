@@ -31,13 +31,13 @@ import FoundryWrapper from '../../../../common/foundry-wrapper.mjs';
  * @property {String} img A relative url to an image resource on the server. 
  * @property {String} description 
  * @property {Number} requiredLevel 
- * @property {Number} apCost 
+ * @property {Number | null} apCost 
  * @property {Array<DamageAndType>} damage
- * @property {String | Null} condition 
- * @property {Number | Null} distance 
- * @property {String | Null} obstacle 
- * @property {String | Null} opposedBy 
- * @property {AttackType | Null} attackType 
+ * @property {String | null} condition 
+ * @property {Number | null} distance 
+ * @property {String | null} obstacle 
+ * @property {String | null} opposedBy 
+ * @property {AttackType | null} attackType 
  */
 export default class Expertise {
   /**
@@ -133,7 +133,7 @@ export default class Expertise {
   }
   
   /**
-   * @type {Number}
+   * @type {Number | null}
    */
   get apCost() { return this._apCost; }
   set apCost(value) {
@@ -227,7 +227,7 @@ export default class Expertise {
     this._img = args.img ?? "icons/svg/book.svg";
     this._description = args.description ?? "";
     this._requiredLevel = args.requiredLevel ?? 0;
-    this._apCost = args.apCost ?? 0;
+    this._apCost = args.apCost ?? null;
     this._damage = args.damage ?? [];
     this._condition = args.condition ?? null;
     this._distance = args.distance ?? null;
