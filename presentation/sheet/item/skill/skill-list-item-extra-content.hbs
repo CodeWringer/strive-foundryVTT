@@ -4,13 +4,11 @@ viewModel: {SkillListItemViewModel}
 <section id="{{viewModel.id}}">
   {{!-- Row --}}
   {{!-- Damage --}}
-  <div class="flex flex-row border-solid-t-sm border-solid-b-sm{{#if viewModel.hideDamage}} hidden{{/if}}">
-    <div class="flex flex-center">
-      <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
-        <i class="far fa-question-circle info-button"></i>
-      </span>
-    </div>
+  <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
     {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList cssClass="flex-grow" }}
+    <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
+      <i class="far fa-question-circle info-button"></i>
+    </span>
   </div>
   {{!-- Row --}}
   {{!-- Expertises --}}
