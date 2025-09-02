@@ -69,45 +69,44 @@ export default class CustomCombatTracker extends CombatTracker {
         isInCombatTracker: true,
       });
       this.gritPointsViewModels.push(turn.gritPointsViewModel);
-
-      this.vmSendToChatGeneralActions = new ButtonViewModel({
-        id: "vmSendToChatGeneralActions",
-        isEditable: true,
-        onClick: async () => {
-          if (game.user.isGM) {
-            const inputVisibility = "inputVisibility";
-            const dialog = await new DynamicInputDialog({
-              id: "select-visibility-dialog",
-              easyDismissal: true,
-              focused: inputVisibility,
-              localizedTitle: game.i18n.localize("system.character.abilities.general.sendToChatDialogTitle"),
-              inputDefinitions: [
-                new DynamicInputDefinition({
-                  name: inputVisibility,
-                  localizedLabel: game.i18n.localize("system.general.messageVisibility.query"),
-                  template: InputDropDownViewModel.TEMPLATE,
-                  viewModelFactory: (id, parent, overrides) => {
-                    return new InputDropDownViewModel({
-                      id: id,
-                      parent: parent,
-                      options: VISIBILITY_MODES.asChoices(),
-                      ...overrides,
-                    });
-                  },
-                })
-              ],
-            }).renderAndAwait(true);
-
-            if (!dialog.confirmed) return;
-
-            GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.asArray().find(it => it.name === dialog[inputVisibility].value));
-          } else {
-            GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.self);
-          }
-        },
-      });
     }
 
+    this.vmSendToChatGeneralActions = new ButtonViewModel({
+      id: "vmSendToChatGeneralActions",
+      isEditable: true,
+      onClick: async () => {
+        if (game.user.isGM) {
+          const inputVisibility = "inputVisibility";
+          const dialog = await new DynamicInputDialog({
+            id: "select-visibility-dialog",
+            easyDismissal: true,
+            focused: inputVisibility,
+            localizedTitle: game.i18n.localize("system.character.abilities.general.sendToChatDialogTitle"),
+            inputDefinitions: [
+              new DynamicInputDefinition({
+                name: inputVisibility,
+                localizedLabel: game.i18n.localize("system.general.messageVisibility.query"),
+                template: InputDropDownViewModel.TEMPLATE,
+                viewModelFactory: (id, parent, overrides) => {
+                  return new InputDropDownViewModel({
+                    id: id,
+                    parent: parent,
+                    options: VISIBILITY_MODES.asChoices(),
+                    ...overrides,
+                  });
+                },
+              })
+            ],
+          }).renderAndAwait(true);
+
+          if (!dialog.confirmed) return;
+
+          GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.asArray().find(it => it.name === dialog[inputVisibility].value));
+        } else {
+          GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.self);
+        }
+      },
+    });
 
     return data;
   }
