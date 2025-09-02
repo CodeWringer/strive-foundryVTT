@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -59,8 +60,12 @@ export default class ButtonViewModel extends ViewModel {
    * display as a tool tip. 
    * @param {String | undefined} args.localizedLabel A localized text to 
    * display as a button label. 
+   * * DEPRECATED
    * @param {String | undefined} args.iconHtml Raw HTML to render as 
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+   * * DEPRECATED
+   * @param {String | undefined} args.content Raw HTML to render as the content 
+   * of the button. 
    * @param {Boolean | undefined} args.showFancyFont If `true`, will render 
    * the `localizedLabel` using the "fancy font". 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
@@ -72,8 +77,18 @@ export default class ButtonViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
+    if (ValidationUtil.isDefined(args.localizedLabel)) {
+      game.strive.logger.logWarn("Deprecated parameter, 'localizedLabel', use 'content', instead");
+    }
     this.localizedLabel = args.localizedLabel;
+    
     this.iconHtml = args.iconHtml;
+    if (ValidationUtil.isDefined(args.iconHtml)) {
+      game.strive.logger.logWarn("Deprecated parameter, 'iconHtml', use 'content', instead");
+    }
+    
+    this.content = args.content;
+
     this.onClick = args.onClick ?? (async (event, data) => {});
   }
 

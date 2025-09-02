@@ -229,6 +229,8 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   getPrimaryHeaderButtons() {
     const inherited = super.getPrimaryHeaderButtons();
     const owningDocument = this.getRootOwningDocument();
+    const rollSchema = new Ruleset().getSkillRollSchema();
+    const bestAvailableDice = rollSchema.getAvailableDiceComponents(this.document.owningDocument)[0].total;
     return [
       new TemplatedComponent({
         template: ButtonRollViewModel.TEMPLATE,
@@ -236,12 +238,14 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmBtnRoll",
           target: owningDocument,
-          rollSchema: new Ruleset().getSkillRollSchema(),
+          rollSchema: rollSchema,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           secondaryChatTitle: game.i18n.localize(owningDocument.name),
           secondaryChatImage: owningDocument.img,
           actor: owningDocument.owningDocument,
+          content: `<span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i>`,
+          localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document.owningDocument),
         }),
         isHidden: ValidationUtil.isDefined(owningDocument.owningDocument) === false,
       }),

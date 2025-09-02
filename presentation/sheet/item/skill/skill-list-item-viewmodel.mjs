@@ -26,6 +26,7 @@ import ViewModel from "../../../view-model/view-model.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs"
+import CharacterAttribute from "../../../../business/ruleset/attribute/character-attribute.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -246,7 +247,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     const level = this.document.level;
-    // Header
+    // Modified Level
     this.vmModifiedLevelHeader = new ReadOnlyValueViewModel({
       id: "vmModifiedLevelHeader",
       parent: this,
@@ -463,6 +464,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getPrimaryHeaderButtons() {
     const inherited = super.getPrimaryHeaderButtons();
+    const rollSchema = new Ruleset().getSkillRollSchema();
+    const bestAvailableDice = rollSchema.getAvailableDiceComponents(this.document)[0].total;
     return [
       new TemplatedComponent({
         template: ButtonRollViewModel.TEMPLATE,
@@ -470,10 +473,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmBtnRoll",
           target: this.document,
-          rollSchema: new Ruleset().getSkillRollSchema(),
+          rollSchema: rollSchema,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           actor: this.document.owningDocument.document,
+          content: `<span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i>`,
+          localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document),
         }),
       }),
     ].concat(inherited);
