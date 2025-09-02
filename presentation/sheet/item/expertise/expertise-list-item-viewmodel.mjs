@@ -229,27 +229,32 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   getPrimaryHeaderButtons() {
     const inherited = super.getPrimaryHeaderButtons();
     const owningDocument = this.getRootOwningDocument();
-    const rollSchema = new Ruleset().getSkillRollSchema();
-    const bestAvailableDice = rollSchema.getAvailableDiceComponents(this.document.owningDocument)[0].total;
-    return [
-      new TemplatedComponent({
-        template: ButtonRollViewModel.TEMPLATE,
-        viewModel: new ButtonRollViewModel({
-          parent: this,
-          id: "vmBtnRoll",
-          target: owningDocument,
-          rollSchema: rollSchema,
-          primaryChatTitle: game.i18n.localize(this.document.name),
-          primaryChatImage: this.document.img,
-          secondaryChatTitle: game.i18n.localize(owningDocument.name),
-          secondaryChatImage: owningDocument.img,
-          actor: owningDocument.owningDocument,
-          content: `<div class="flex flex-center auto-margin-h-sm border-solid-b-sm dark"><span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i></div>`,
-          localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document.owningDocument),
+    
+    if (ValidationUtil.isDefined(owningDocument.owningDocument)) {
+      const rollSchema = new Ruleset().getSkillRollSchema();
+      const bestAvailableDice = rollSchema.getAvailableDiceComponents(this.document.owningDocument)[0].total;
+      return [
+        new TemplatedComponent({
+          template: ButtonRollViewModel.TEMPLATE,
+          viewModel: new ButtonRollViewModel({
+            parent: this,
+            id: "vmBtnRoll",
+            target: owningDocument,
+            rollSchema: rollSchema,
+            primaryChatTitle: game.i18n.localize(this.document.name),
+            primaryChatImage: this.document.img,
+            secondaryChatTitle: game.i18n.localize(owningDocument.name),
+            secondaryChatImage: owningDocument.img,
+            actor: owningDocument.owningDocument,
+            content: `<div class="flex flex-center auto-margin-h-sm border-solid-b-sm dark"><span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i></div>`,
+            localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document.owningDocument),
+          }),
+          isHidden: ValidationUtil.isDefined(owningDocument.owningDocument) === false,
         }),
-        isHidden: ValidationUtil.isDefined(owningDocument.owningDocument) === false,
-      }),
-    ].concat(inherited);
+      ].concat(inherited);
+    } else {
+      return inherited;
+    }
   }
 
   /** @override */
