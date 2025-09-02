@@ -477,7 +477,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           actor: this.document.owningDocument.document,
-          content: `<div class="flex flex-center auto-margin-h-sm border-solid-b-sm dark"><span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i></div>`,
+          content: `<div class="flex flex-center auto-margin-h-sm pad-l-sm border-solid-b-sm dark"><span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i></div>`,
           localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document),
         }),
       }),
