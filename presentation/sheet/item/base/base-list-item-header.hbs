@@ -25,9 +25,7 @@ cssClass: {undefined | String}
   <div id="{{viewModel.id}}-primary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
     {{#each viewModel.primaryHeaderButtons as |button|}}
       {{#with button.template as |template|}}
-        <div class="{{#if button.isHidden}}hidden{{/if}}">
-          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
-        </div>
+        {{> (template) viewModel=button.viewModel cssClass=(ifThenElse button.isHidden "hidden" button.cssClass) }}
       {{/with}}
     {{/each}}
   </div>
@@ -35,9 +33,7 @@ cssClass: {undefined | String}
   <div id="{{viewModel.id}}-secondary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
     {{#each viewModel.secondaryHeaderButtons as |button|}}
       {{#with button.template as |template|}}
-        <div class="{{#if button.isHidden}}hidden{{/if}}">
-          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
-        </div>
+        {{> (template) viewModel=button.viewModel cssClass=(ifThenElse button.isHidden "hidden" button.cssClass) }}
       {{/with}}
     {{/each}}
   </div>
