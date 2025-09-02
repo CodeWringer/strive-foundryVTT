@@ -2,6 +2,7 @@ import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs";
 import InputDropDownViewModel from "../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import DynamicInputDefinition from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import RollData from "./roll-data.mjs";
 import RollQueryData from "./roll-query-data.mjs";
 
@@ -117,6 +118,29 @@ export class RollSchema {
     });
 
     return await this._queryRollData(document, dialog);
+  }
+
+  /**
+   * Returns a sum of dice components representing all possible combinations 
+   * a user may choose from when rolling. 
+   * 
+   * @param {TransientSkill} document 
+   * 
+   * @returns {Array<Sum>}
+   */
+  getAvailableDiceComponents(document) {
+    throw new Error("Not implemented");
+  }
+
+  /**
+   * Returns an explanation of how the dice availabilites came to be. 
+   * 
+   * @param {TransientSkill} document 
+   * 
+   * @returns {String}
+   */
+  getAvailableDiceComponentExplanation(document) {
+    throw new Error("Not implemented");
   }
 
   /**

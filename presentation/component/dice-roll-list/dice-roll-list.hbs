@@ -6,9 +6,9 @@ cssClass: {String | undefined}
   <div class="width-sm flex flex-center border-solid-r-md">
     {{> button viewModel=viewModel.vmBtnRoll }}
   </div>
-  <ol class="unstyled-list flex-grow">
+  <ol class="unstyled-list flex-grow auto-margin-v-sm">
     {{#each viewModel.formulaViewModels as |vm index|}}
-    <li class="flex flex-row margin-b-md">
+    <li class="flex flex-row">
       {{!-- Formula list item --}}
       {{#with ../viewModel.formulaListItemTemplate as | template |}}
         {{> (template) viewModel=vm}}

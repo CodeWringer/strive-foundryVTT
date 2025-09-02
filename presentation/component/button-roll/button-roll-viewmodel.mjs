@@ -48,6 +48,12 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * display as a tool tip. 
    * @param {String | undefined} args.localizedLabel A localized text to 
    * display as a button label. 
+   * * DEPRECATED
+   * @param {String | undefined} args.iconHtml Raw HTML to render as 
+   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+   * * DEPRECATED
+   * @param {String | undefined} args.content Raw HTML to render as the content 
+   * of the button. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
    * * `event: Event`
    * * `data: RollResult | Object` - The rolled result. 
@@ -63,7 +69,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      iconHtml: '<i class="fas fa-dice-three"></i>',
+      content: args.content ?? '<i class="fas fa-dice-three"></i>',
       localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.roll.doRoll"),
     });
     ValidationUtil.validateOrThrow(args, ["target", "rollSchema"]);

@@ -785,6 +785,8 @@
         "placeholder": "0 / Opposed+-0 / etc.",
         "rollForPlaceholder": "3 / 3D / 2d + 1 / 2D6 - 1D3"
       },
+      "availableDice": "Available Dice",
+      "availableDiceWithAttribute": "%{skillLevel} (%{skillName}) + %{attributeLevel} (%{attributeName}) = <b>%{total}</b>",
       "backFire": {
         "label": "Backfire"
       },

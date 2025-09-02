@@ -16,6 +16,7 @@ import InputTextFieldViewModel from "../../../../presentation/component/input-te
 import { ValidationUtil } from "../../../util/validation-utility.mjs";
 import InputDropDownViewModel from "../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import { StringUtil } from "../../../util/string-utility.mjs";
 
 /**
  * Defines a schema for rolling dice to test a skill. 
@@ -47,6 +48,42 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     });
   }
 
+  /** @override */
+  getAvailableDiceComponents(document) {
+    const sums = [];
+
+    document.baseAttributes.forEach(baseAttribute => {
+      const characterAttribute = new CharacterAttribute(document.owningDocument.document, baseAttribute.name);
+      const attributeLevel = characterAttribute.modifiedLevel;
+      sums.push(new Sum([
+        new SumComponent("attribute", baseAttribute.localizableName, attributeLevel),
+        new SumComponent("skill", document.name, document.modifiedLevel),
+      ]));
+    });
+    sums.sort((a, b) => b.total - a.total);
+
+    return sums;
+  }
+
+  /** @override */
+  getAvailableDiceComponentExplanation(document) {
+    const sums = this.getAvailableDiceComponents(document);
+
+    const availableDiceStrings = sums.map(sum => {
+      const attributeComponent = sum.components.find(it => it.name === "attribute");
+      const skillComponent = sum.components.find(it => it.name === "skill");
+
+      return StringUtil.format2(game.i18n.localize("system.roll.availableDiceWithAttribute"), {
+        skillLevel: skillComponent.value,
+        skillName: game.i18n.localize(StringUtil.escapeHtml(skillComponent.localizableName)),
+        attributeLevel: attributeComponent.value,
+        attributeName: game.i18n.localize(StringUtil.escapeHtml(attributeComponent.localizableName)),
+        total: sum.total,
+      });
+    });
+    return game.i18n.localize("system.roll.availableDice") + "<br>" + availableDiceStrings.join("<br>");
+  }
+
   /**
    * @param {TransientSkill} document 
    * @param {DynamicInputDialog} dialog 
@@ -70,15 +107,12 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
       localizedValue: game.i18n.localize(attribute.localizableName),
     }));
 
-    let diceComposition = attributes
-      .map(attribute => `${attribute.modifiedLevel} ${game.i18n.localize(attribute.localizableName)}`)
-      .join(" | ");
-    diceComposition = `(${diceComposition}), ${document.modifiedLevel} ${document.name}`;
+    const availableDiceExplanation = this.getAvailableDiceComponentExplanation(document);
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
       new DynamicInputDefinition({
         name: "diceCompositionLabel",
-        localizedLabel: `<p class="font-size-sm">${diceComposition}</p>`,
+        localizedLabel: `<p class="font-size-sm">${availableDiceExplanation}</p>`,
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
@@ -172,7 +206,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
       visbilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this._nameInputVisibility].value),
     });
   }
-  
+
   /**
    * Returns the dice components that comprise the sum of attribute and skill. 
    * 
