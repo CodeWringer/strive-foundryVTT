@@ -16,11 +16,11 @@ cssClass: String | undefined
       </span>
       {{/if}}
       <span class="flex flex-row flex-middle">
-        {{#> button viewModel=option.vmSortAscending cssClass="override sort-ascending"}}{{/button}}
+        {{> button viewModel=option.vmSortAscending cssClass="override sort-ascending"}}
         {{#if ../viewModel.compact}}
-        {{#> button viewModel=option.vmSortDescending cssClass="override sort-descending hidden"}}{{/button}}
+        {{> button viewModel=option.vmSortDescending cssClass="override sort-descending hidden"}}
         {{else}}
-        {{#> button viewModel=option.vmSortDescending cssClass="override sort-descending"}}{{/button}}
+        {{> button viewModel=option.vmSortDescending cssClass="override sort-descending"}}
         {{/if}}
       </span>
     </span>

@@ -104,7 +104,7 @@ export default class InputRichTextViewModel extends InputViewModel {
     this.vmBtnEditMode = new ButtonViewModel({
       id: "vmBtnEditMode",
       parent: this,
-      iconHtml: '<i class="fas fa-edit"></i>',
+      content: '<i class="fas fa-edit"></i>',
       isEditable: this.isEditable,
     });
     this.vmBtnEditMode._onClick = async () => {

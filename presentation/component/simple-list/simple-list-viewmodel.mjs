@@ -122,8 +122,7 @@ export default class SimpleListViewModel extends ViewModel {
       this.vmBtnAddItem = new ButtonViewModel({
         id: "vmBtnAddItem",
         parent: this,
-        iconHtml: '<i class="fas fa-plus"></i>',
-        localizedLabel: this.localizedAddLabel,
+        content: `<div class="flex flex-middle auto-margin-h-sm"><i class="fas fa-plus"></i><span class="font-size-default fancy-font">${this.localizedAddLabel}</span></div>`,
         isEditable: this.isEditable,
         onClick: this.onAddClick,
       });

@@ -99,7 +99,7 @@ export default class GritPointsViewModel extends ViewModel {
       id: "vmAdjust",
       parent: this,
       localizedToolTip: game.i18n.localize("system.character.gritPoint.adjust"),
-      iconHtml: '<i class="fas fa-edit" style="height: 22px;"></i>',
+      content: '<i class="fas fa-edit" style="height: 22px;"></i>',
       onClick: async () => {
         const inputNumber = "inputNumber";
         const dialog = await new DynamicInputDialog({

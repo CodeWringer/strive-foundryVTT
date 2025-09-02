@@ -50,15 +50,15 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
     this.assetSlotGroupViewModels = [];
     this.assetSlotGroupViewModels = this._getAssetSlotGroupViewModels();
 
+    const localizedAddSlotGroupLabel = StringUtil.format(
+      game.i18n.localize("system.general.add.addType"),
+      game.i18n.localize("system.character.asset.slot.group.label"),
+    );
     this.vmBtnAddSlotGroup = new ButtonViewModel({
       id: "vmBtnAddSlotGroup",
       parent: this,
       target: this.document,
-      iconHtml: '<i class="fas fa-plus"></i>',
-      localizedLabel: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.asset.slot.group.label"),
-      ),
+      content: `<div class="flex flex-middle auto-margin-h-sm"><i class="fas fa-plus"></i><span>${localizedAddSlotGroupLabel}</span></div>`,
       onClick: async () => {
         const inputName = "name";
 

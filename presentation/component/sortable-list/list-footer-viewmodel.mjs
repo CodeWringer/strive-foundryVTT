@@ -50,7 +50,7 @@ export default class ListFooterViewModel extends ViewModel {
       parent: this,
       isEditable: true, // Should always be interactible. 
       localizedToolTip: this.localizedCollapseToolTip,
-      iconHtml: '<i class="ico dark interactible ico-double-chevron-u-solid" style="height: 1.2rem;"></i>',
+      content: '<i class="ico dark interactible ico-double-chevron-u-solid" style="height: 1.2rem;"></i>',
       onClick: (event, data) => {
         this.onExpansionToggled(event, data);
       },
@@ -62,7 +62,7 @@ export default class ListFooterViewModel extends ViewModel {
         id: `vmAddItem${i++}`,
         parent: this,
         creationStrategy: it.creationStrategy,
-        localizedLabel: it.localizedLabel,
+        content: `<div class="flex flex-middle auto-margin-h-sm"><i class="fas fa-plus"></i><span>${it.localizedLabel}</span></div>`,
         onClick: (event, data) => {
           if (ValidationUtil.isDefined(data) && ValidationUtil.isDefined(it.onItemAdded)) {
             it.onItemAdded(event, data);

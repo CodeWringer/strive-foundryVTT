@@ -78,10 +78,8 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {String | undefined} args.localizedLabel Returns the localized label of the roll total. 
    * I. e. the localized damage type. 
-   * * Read-only. 
    * @param {String | undefined} args.iconClass Returns the icon representation of the roll. 
    * I. e. the damage type icon. 
-   * * Read-only. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {DamageAndType}`
@@ -128,7 +126,7 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
       parent: this,
       isEditable: this.isEditable,
       localizedToolTip: this.localizedDeletionHint,
-      iconHtml: '<i class="fas fa-trash"></i>',
+      content: '<i class="fas fa-trash"></i>',
       onClick: this.onDelete,
     });
   }

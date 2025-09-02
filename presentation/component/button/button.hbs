@@ -11,8 +11,6 @@ skipPadding: {Boolean | undefined}
   <a class="custom-system-button flex-grow auto-margin-h-sm{{#if fill}} fill{{/if}}{{#if skipPadding}}{{else}} pad-sm{{/if}} flex flex-row{{#if leftAlign}} flex-middle{{else}} flex-center{{/if}}" 
     id="{{viewModel.id}}"
   >
-    {{#if viewModel.iconHtml}}{{{viewModel.iconHtml}}}{{/if}}
-    {{#if viewModel.localizedLabel}}<span class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{viewModel.localizedLabel}}</span>{{/if}}
     {{#if viewModel.content}}{{{viewModel.content}}}{{/if}}
     {{#if @partial-block}}{{> @partial-block }}{{/if}}
   </a>

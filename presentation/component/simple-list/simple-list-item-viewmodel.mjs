@@ -40,7 +40,7 @@ export default class SimpleListItemViewModel extends ViewModel {
       id: "vmBtnRemove",
       parent: this,
       isEditable: this.isEditable,
-      iconHtml: '<i class="fas fa-trash"></i>',
+      content: '<i class="fas fa-trash"></i>',
       localizedToolTip: game.i18n.localize("system.general.delete.delete"),
       onClick: this.onRemoveClick,
     });

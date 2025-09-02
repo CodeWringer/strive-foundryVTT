@@ -22,12 +22,8 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
  * 
- * @property {String | undefined} localizedLabel A localized text to 
- * display as a button label. 
- * @property {String | undefined} iconHtml Raw HTML to render as 
- * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
- * @property {Boolean} showFancyFont If `true`, will render the `localizedLabel` 
- * using the "fancy font". 
+ * @property {String | undefined} content Raw HTML to render as the content 
+ * of the button. 
  * 
  * @method onClick Asynchronous callback that is invoked when 
  * the button is clicked. Arguments: 
@@ -58,16 +54,8 @@ export default class ButtonViewModel extends ViewModel {
    * 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @param {String | undefined} args.localizedLabel A localized text to 
-   * display as a button label. 
-   * * DEPRECATED
-   * @param {String | undefined} args.iconHtml Raw HTML to render as 
-   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
-   * * DEPRECATED
    * @param {String | undefined} args.content Raw HTML to render as the content 
    * of the button. 
-   * @param {Boolean | undefined} args.showFancyFont If `true`, will render 
-   * the `localizedLabel` using the "fancy font". 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. Arguments: 
    * * `event: Event`
@@ -80,9 +68,6 @@ export default class ButtonViewModel extends ViewModel {
     if (ValidationUtil.isDefined(args.localizedLabel)) {
       game.strive.logger.logWarn("Deprecated parameter, 'localizedLabel', use 'content', instead");
     }
-    this.localizedLabel = args.localizedLabel;
-    
-    this.iconHtml = args.iconHtml;
     if (ValidationUtil.isDefined(args.iconHtml)) {
       game.strive.logger.logWarn("Deprecated parameter, 'iconHtml', use 'content', instead");
     }

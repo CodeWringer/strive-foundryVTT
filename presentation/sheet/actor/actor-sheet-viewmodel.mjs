@@ -150,7 +150,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       this.vmBtnConfigure = new ButtonViewModel({
         id: "vmBtnConfigure",
         parent: this,
-        iconHtml: '<i class="fas fa-cog"></i>',
+        content: '<i class="fas fa-cog"></i>',
         localizedToolTip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
           await this.promptConfigure();

@@ -39,8 +39,8 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * display as a tool tip. 
    * * default is to use the `localizedDeletionTarget` in a generic string or if that 
    * is undefined, to use a completley generic string. 
-   * @param {String | undefined} args.localizedLabel A localized text to 
-   * display as a button label. 
+   * @param {String | undefined} args.content Raw HTML to render as the content 
+   * of the button. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
    * * `event: Event`
    * * `data: undefined`
@@ -53,7 +53,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      iconHtml: '<i class="fas fa-trash"></i>',
+      content: args.content ?? '<i class="fas fa-trash"></i>',
       localizedToolTip: args.localizedToolTip ?? (
         ValidationUtil.isDefined(args.localizedDeletionType) ? 
           StringUtil.format(

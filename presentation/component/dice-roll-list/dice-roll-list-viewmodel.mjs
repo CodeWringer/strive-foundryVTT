@@ -65,7 +65,7 @@ export default class DiceRollListViewModel extends ViewModel {
       parent: this,
       isEditable: this.isEditable,
       localizedToolTip: game.i18n.localize("system.roll.doRoll"),
-      iconHtml: '<i class="fas fa-dice-three"></i>',
+      content: '<i class="fas fa-dice-three"></i>',
       onClick: async () => {
         const evaluatedFormulae = await new RollFormulaResolver().evaluateFormulae(this.formulaViewModels);
 

@@ -91,7 +91,7 @@ export default class SortControlsViewModel extends ViewModel {
           id: `${index}-ascending`,
           parent: this,
           localizedToolTip: localizedToolTipSortAscending,
-          iconHtml: '<i class="ico interactible dark ico-ascending-solid"></i>',
+          content: '<i class="ico interactible dark ico-ascending-solid"></i>',
           onClick: (event) => {
             this.onSort(event, (sortable) => {
               sortable.sort(option.sortingFunc);
@@ -102,7 +102,7 @@ export default class SortControlsViewModel extends ViewModel {
           id: `${index}-descending`,
           parent: this,
           localizedToolTip: localizedToolTipSortDescending,
-          iconHtml: '<i class="ico interactible dark ico-descending-solid"></i>',
+          content: '<i class="ico interactible dark ico-descending-solid"></i>',
           onClick: (event) => {
             this.onSort(event, (sortable) => {
               const reverseSort = this._getReverseSortFunc(option.sortingFunc);
