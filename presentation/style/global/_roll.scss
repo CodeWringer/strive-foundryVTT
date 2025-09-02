@@ -1,105 +1,17 @@
-$die-mini-size: 1.1em;
+$c-neutral: #191813;
+$c-neutral-muted: #676662;
 $c-hit: #18520b;
 $c-hit-muted: #5b7455;
 $c-miss: #712625;
 $c-miss-muted: #7b5655;
+$c-ob: #2e2e2e;
 $c-ob-muted: #666666;
 
-.dice-roll-chat-message-container {
-  .dice-rolls-container {
-    overflow: hidden;
+$die-size-sm: 20px;
+$die-size-md: 26px;
 
-    &.mini {
-      li.roll.die {
-        width: $die-mini-size;
-        height: $die-mini-size;
-        line-height: $die-mini-size;
-        font-size: $die-mini-size;
-
-        &.roll-success {
-          color: $c-hit-muted;
-        }
-        &.roll-failure {
-          color: $c-miss-muted;
-        }
-      }
-
-      li.roll-obstacle {
-        height: $die-mini-size;
-        line-height: $die-mini-size;
-        font-size: $die-mini-size;
-        color: $c-ob-muted;
-      }
-    }
-  }
-  .dice-number {
-    font-size: $font-size-default;
-    font-weight: bold;
-  }
-  .dice-composition {
-    color: $c-text-lighter;
-    font-size: $font-size-xs;
-  }
-}
-
-ol.dice-rolls {
-  list-style: none;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-li.roll-obstacle {
-  width: auto;
-  height: 24px;
-  line-height: 24px;
-  padding: 0 3px;
-  margin: 2px;
-  background-color: transparent;
-  border-left: 2px solid $c-border-medium;
-  border-right: 2px solid $c-border-medium;
-  border-radius: 3px;
-  font-weight: bold;
-  font-size: 16px;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.12);
-}
-
-.dice-rolls li.roll {
-  position: relative;
-  width: 24px;
-  line-height: 24px;
-  float: left;
-  margin-right: 1px;
-  font-size: 16px;
-  color: #000;
-  background-color: rgba(0, 0, 0, 0.12);
-  border-radius: 3px;
-  font-weight: bold;
-  text-align: center;
-  margin: 2px;
-
-  &.die-sm {
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-    font-size: 15px;
-  }
-}
-li.roll.die.d6.roll-failure {
-  color: $c-miss;
-}
-li.roll.die.d6.roll-success {
-  color: $c-hit;
-}
-li.roll.die.d6.roll-missing {
-  background-color: transparent;
-  border-style: dashed;
-  border-color: rgba(0, 0, 0, 0.16);
-  border-width: 0.15rem;
-}
+$font-size-sm: 1.1em;
+$font-size-md: 1.3em;
 
 .dice-result {
   font-size: 1.1rem;
@@ -130,4 +42,84 @@ li.roll.die.d6.roll-missing {
 .roll-damage-value-total {
   font-weight: bold;
   font-size: $font-size-xl;
+}
+
+.d6 {
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  color: $c-neutral;
+  float: left;
+  font-weight: bold;
+  margin: 2px;
+  text-align: center;
+  width: $die-size-md;
+  height: $die-size-md;
+  line-height: $die-size-md;
+  font-size: $font-size-md;
+
+  &.failure {
+    color: $c-miss;
+  }
+
+  &.success {
+    color: $c-hit;
+  }
+
+  &.missing {
+    background-color: transparent;
+    border-style: dashed;
+    border-color: rgba(0, 0, 0, 0.16);
+    border-width: 0.15rem;
+  }
+}
+
+.roll-obstacle {
+  height: $die-size-md;
+  line-height: $die-size-md;
+  font-size: $font-size-md;
+  color: $c-ob;
+  width: auto;
+  padding: 0 3px;
+  margin: 2px;
+  background-color: transparent;
+  border-left: 2px solid $c-border-medium;
+  border-right: 2px solid $c-border-medium;
+  border-radius: 3px;
+  font-weight: bold;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+// Overrides
+
+// Apply this to a parent container at any depth and it will override 
+// the way the dice are displayed, making them less emphasized. 
+.override-roll-to-mute {
+  .d6 {
+    width: $die-size-sm;
+    height: $die-size-sm;
+    font-size: $font-size-sm;
+    line-height: $die-size-sm;
+    color: $c-neutral-muted;
+
+    &.success {
+      color: $c-hit-muted;
+    }
+
+    &.failure {
+      color: $c-miss-muted;
+    }
+
+    &.missing {
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .roll-obstacle {
+    height: $die-size-sm;
+    line-height: $die-size-sm;
+    font-size: $font-size-sm;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: $c-ob-muted;
+  }
 }

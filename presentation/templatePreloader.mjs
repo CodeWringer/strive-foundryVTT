@@ -71,6 +71,7 @@ export const TEMPLATES = {
   COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice
   DICE_ROLL_CHAT_MESSAGE: `${basePathPresentation}/dice/roll.hbs`,
+  DICE_FACES: `${basePathPresentation}/dice/roll-faces.hbs`,
   // --- Dialogs
   DIALOG_MODAL: `${basePathPresentation}/dialog/modal-dialog/modal-dialog.hbs`,
   DIALOG_PLAIN: `${basePathPresentation}/dialog/plain-dialog/plain-dialog.hbs`,
