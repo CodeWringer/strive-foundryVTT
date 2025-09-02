@@ -244,7 +244,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           secondaryChatTitle: game.i18n.localize(owningDocument.name),
           secondaryChatImage: owningDocument.img,
           actor: owningDocument.owningDocument,
-          content: `<span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i>`,
+          content: `<div class="flex flex-center auto-margin-h-sm border-solid-b-sm dark"><span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i></div>`,
           localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document.owningDocument),
         }),
         isHidden: ValidationUtil.isDefined(owningDocument.owningDocument) === false,
