@@ -45,7 +45,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.treatmentSkill = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.treatmentSkill"),
+        localizedToolTip: game.i18n.localize("system.character.health.treatmentSkill"),
         iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({
@@ -58,7 +58,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.requiredSupplies = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.requiredSupplies"),
+        localizedToolTip: game.i18n.localize("system.character.health.requiredSupplies"),
         iconClass: "ico-medical-supplies-solid",
       }),
       new DataFieldComponent({
@@ -71,7 +71,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.obstacleTreatment = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.obstacleTreatment"),
+        localizedToolTip: game.i18n.localize("system.character.health.obstacleTreatment"),
         iconClass: "ico-obstacle-treatment-solid",
       }),
       new DataFieldComponent({
@@ -84,7 +84,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.autoTreatment = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.autoTreatment"),
+        localizedToolTip: game.i18n.localize("system.character.health.autoTreatment"),
         iconClass: "ico-self-patch-up-solid",
       }),
       new DataFieldComponent({
@@ -97,7 +97,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.timeToHeal = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.timeToHeal"),
+        localizedToolTip: game.i18n.localize("system.character.health.timeToHeal"),
         iconClass: "ico-time-to-heal-solid",
       }),
       new DataFieldComponent({
@@ -110,7 +110,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.timeToHealTreated = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.timeToHealTreated"),
+        localizedToolTip: game.i18n.localize("system.character.health.timeToHealTreated"),
         iconClass: "ico-time-to-heal-treated-solid",
       }),
       new DataFieldComponent({
@@ -123,7 +123,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.scar = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.scar.singular"),
+        localizedToolTip: game.i18n.localize("system.character.health.scar.singular"),
         iconClass: "ico-scar-solid",
       }),
       new DataFieldComponent({
@@ -137,7 +137,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
           placeholder: game.i18n.localize("system.character.health.injury.limit.placeholder"),
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.injury.limit.label"),
+        localizedToolTip: game.i18n.localize("system.character.health.injury.limit.label"),
         iconClass: "ico-limit-solid",
       }),
     ];

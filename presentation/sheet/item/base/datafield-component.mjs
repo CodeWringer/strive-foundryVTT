@@ -1,3 +1,4 @@
+import ViewModel from "../../../view-model/view-model.mjs";
 import { TemplatedComponent } from "./templated-component.mjs";
 
 /**
@@ -7,9 +8,12 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * @property {ViewModel} viewModel
  * @property {String} cssClass
  * @property {Boolean} isHidden
- * @property {String | undefined} localizedIconToolTip
+ * @property {String | undefined} localizedToolTip
  * @property {String | undefined} localizedLabel
  * @property {String | undefined} iconClass
+ * @property {ViewModel} wrapViewModel An internal view model instance required 
+ * to get the tool tip to display over icon, label and child view model. 
+ * * read-only
  */
 export class DataFieldComponent extends TemplatedComponent {
   /**
@@ -20,15 +24,21 @@ export class DataFieldComponent extends TemplatedComponent {
    * * default `""`
    * @param {Boolean | undefined} args.isHidden 
    * * default `false`
-   * @param {String | undefined} args.localizedIconToolTip 
+   * @param {String | undefined} args.localizedToolTip 
    * @param {String | undefined} args.localizedLabel 
    * @param {String | undefined} args.iconClass 
    */
   constructor(args = {}) {
     super(args);
 
-    this.localizedIconToolTip = args.localizedIconToolTip;
+    this.localizedToolTip = args.localizedToolTip;
     this.localizedLabel = args.localizedLabel;
     this.iconClass = args.iconClass;
+
+    this.wrapViewModel = new ViewModel({
+      id: "wrapViewModel",
+      parent: args.viewModel,
+      localizedToolTip: args.localizedToolTip,
+    });
   }
 }

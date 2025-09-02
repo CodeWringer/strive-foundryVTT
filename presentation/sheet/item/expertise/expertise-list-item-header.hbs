@@ -5,11 +5,9 @@ cssClass: {undefined | String}
 {{!-- Header Row --}}
 <div class="flex flex-row flex-middle list-item-header">
   {{!-- Required Level --}}
-  {{#> labeledControl viewModel=viewModel.vmNsRequiredLevel localizedIconToolTip=(localize "system.character.skill.expertise.requirement") iconClass="ico-level-solid" cssClass="" }}
-    <div class="width-sm">
-      {{> inputNumberSpinner }}
-    </div>
-  {{/labeledControl}}
+  <div class="width-sm">
+    {{> inputNumberSpinner viewModel=viewModel.vmNsRequiredLevel }}
+  </div>
   <span style="width: 1.5rem;"></span>
   {{!-- Identity --}}
   <div class="list-item-header-img">

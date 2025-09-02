@@ -35,6 +35,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
+  get hideActionPoints() { return ValidationUtil.isDefined(this.document.apCost) !== true; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
   get hideObstacle() { return ValidationUtil.isDefined(this.document.obstacle) !== true; }
 
   /**
@@ -82,7 +88,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   }
 
   /**
-   * @returns {Number}
+   * @returns {Number | null}
    * @readonly
    */
   get apCost() { return this.document.apCost; }
@@ -143,8 +149,8 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
             this.document.apCost = newValue;
           },
         }),
-        isHidden: false,
-        localizedIconToolTip: game.i18n.localize("system.actionPoint.requirement"),
+        isHidden: this.hideActionPoints,
+        localizedToolTip: game.i18n.localize("system.actionPoint.requirement"),
         iconClass: "ico-action-point-solid",
       }),
       new DataFieldComponent({
@@ -159,7 +165,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideObstacle,
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
@@ -174,7 +180,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideOpposedBy,
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
       new DataFieldComponent({
@@ -189,7 +195,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideCondition,
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -204,7 +210,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideDistance,
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -219,7 +225,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideAttackType,
-        localizedIconToolTip: game.i18n.localize("system.attackType.label"),
+        localizedToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
     ];
@@ -292,6 +298,16 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
               },
             }),
           ]
+            // Toggle action points
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.actionPoint.plural",
+                propertyOwner: this.document,
+                propertyName: "apCost",
+                activeValue: 0,
+                isEditable: this.isEditable,
+              })
+            )
             // Toggle obstacle
             .concat(
               ButtonContextMenuViewModel.createToggleButtons({

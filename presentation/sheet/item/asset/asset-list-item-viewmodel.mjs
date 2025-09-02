@@ -82,38 +82,49 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       maximumValueIconToolTip: game.i18n.localize("system.character.asset.quantity.maximum"),
     });
     
+    this.vmQualityWrap = new ViewModel({
+      id: "vmQualityWrap",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.asset.quality"),
+    });
     this.vmQualityIcon = new ViewModel({
       id: "vmQualityIcon",
       parent: this,
-      localizedToolTip: game.i18n.localize("system.character.asset.quality"),
     });
     this.vmQuality = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmQuality",
       value: this.document.quality,
       min: 0,
-      localizedToolTip: game.i18n.localize("system.character.asset.quality"),
       onChange: (_, newValue) => {
         this.document.quality = newValue;
       },
     });
 
+    this.vmBulkWrap = new ViewModel({
+      id: "vmBulkWrap",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
+    });
     this.vmBulkIcon = new ViewModel({
       id: "vmBulkIcon",
       parent: this,
-      localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
     });
     this.vmBulk = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmBulk",
       value: this.document.bulk,
       min: 0,
-      localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
       onChange: (_, newValue) => {
         this.document.bulk = newValue;
       },
     });
     
+    this.vmLocationWrap = new ViewModel({
+      id: "vmLocationWrap",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.asset.location.label"),
+    });
     this.vmLocation = new InputTextFieldViewModel({
       parent: this,
       id: "vmLocation",

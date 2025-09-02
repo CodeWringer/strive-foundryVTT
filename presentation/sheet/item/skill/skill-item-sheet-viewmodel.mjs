@@ -114,7 +114,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           min: 0,
         }),
         isHidden: this.hideApCost,
-        localizedIconToolTip: game.i18n.localize("system.actionPoint.plural"),
+        localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
         iconClass: "ico-action-point-solid",
       }),
       new DataFieldComponent({
@@ -129,7 +129,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         }),
         isHidden: this.hideCondition,
         placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -144,7 +144,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         }),
         isHidden: this.hideObstacle,
         placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
@@ -159,7 +159,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         }),
         isHidden: this.hideOpposedBy,
         placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
       new DataFieldComponent({
@@ -174,7 +174,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         }),
         isHidden: this.hideDistance,
         placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -189,7 +189,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           },
         }),
         isHidden: this.hideAttackType,
-        localizedIconToolTip: game.i18n.localize("system.attackType.label"),
+        localizedToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
     ];
@@ -215,6 +215,12 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       parent: this,
       document: this.document,
       expertisesInitiallyVisible: this.document.expertises.length > 0,
+    });
+
+    this.vmTagsWrap = new ViewModel({
+      id: "vmTagsWrap",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.general.tag.plural"),
     });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",

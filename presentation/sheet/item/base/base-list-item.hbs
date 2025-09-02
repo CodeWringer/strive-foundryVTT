@@ -31,10 +31,10 @@ cssClass: {undefined | String}
     <div class="grid-2col grid-gap-sm">
       {{#each viewModel.dataFields as |dataField|}}
         {{#with dataField.template as |template|}}
-          <div class="{{dataField.cssClass}}{{#if dataField.isHidden}}hidden{{/if}}">
-            {{#> labeledControl viewModel=dataField.viewModel localizedIconToolTip=dataField.localizedIconToolTip localizedLabel=dataField.localizedLabel iconClass=dataField.iconClass }}
-              {{> (template) }}
-            {{/labeledControl}}
+          <div id="{{dataField.wrapViewModel.id}}" class="flex flex-row flex-middle auto-margin-h-sm{{#if dataField.cssClass}} {{dataField.cssClass}}{{/if}}{{#if dataField.isHidden}} hidden{{/if}}">
+            {{#if dataField.iconClass}}<i class="ico dark {{dataField.iconClass}}"></i>{{/if}}
+            {{#if dataField.localizedLabel}}<span>{{dataField.localizedLabel}}</span>{{/if}}
+            {{> (template) viewModel=dataField.viewModel }}
           </div>
         {{/with}}
       {{/each}}

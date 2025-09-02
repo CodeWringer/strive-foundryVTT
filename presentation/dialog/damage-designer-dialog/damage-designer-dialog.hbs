@@ -18,11 +18,12 @@ viewModel: DamageDesignerDialogViewModel
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSort }}
       {{/with}}
-      {{#> labeledControl viewModel=viewModel.vmSubstitute localizedLabel="Substitute" }}
+      <div class="flex flex-row flex-middle">
+        <span>Substitute</span>
         <div class="width-md">
-          {{> inputNumberSpinner }}
+          {{> inputNumberSpinner viewModel=viewModel.vmSubstitute }}
         </div>
-      {{/labeledControl}}
+      </div>
     </span>
     <span class="flex flex-row auto-margin-h-md sheet-block auto-border-r-sm">
       {{> inputRadioButtonGroup viewModel=viewModel.vmListViewSelection }}

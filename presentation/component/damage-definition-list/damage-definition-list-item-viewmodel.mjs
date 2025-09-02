@@ -6,6 +6,7 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
 import { StringUtil } from "../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 
 /**
  * Represents the definition of a damage roll formula. 
@@ -96,6 +97,11 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
     this.resolveFormula = args.resolveFormula;
     this.onDelete = args.onDelete ?? (async () => {});
 
+    this.vmDamageFormulaGroup = new ViewModel({
+      id: "vmDamageFormulaGroup",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.damageDefinition.formula"),
+    });
     this.vmTfDamage = new InputTextFieldViewModel({
       parent: this,
       id: "vmTfDamage",
@@ -107,7 +113,12 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
         });
       },
     });
-
+    
+    this.vmDamageTypeGroup = new ViewModel({
+      id: "vmDamageTypeGroup",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.damageType.label"),
+    });
     this.vmDdDamageType = new InputDropDownViewModel({
       id: "vmDdDamageType",
       parent: this,
