@@ -190,12 +190,12 @@ export class EvaluatedRollFormula {
         // It's a d6 group. 
         let diceRolls = "";
         for (const hit of term.hits) {
-          diceRolls = `${diceRolls}<li class="roll die d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}">${hit}</li>`
+          diceRolls = `${diceRolls}<li class="roll d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}">${hit}</li>`
         }
         for (const miss of term.misses) {
-          diceRolls = `${diceRolls}<li class="roll die d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}">${miss}</li>`
+          diceRolls = `${diceRolls}<li class="roll d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}">${miss}</li>`
         }
-        result = `${result}<ol class="dice-rolls">${diceRolls}</ol>`;
+        result = `${result}<ol class="dice-rolls auto-margin-h-sm">${diceRolls}</ol>`;
 
       } else {
         result = `${result}${term}`;

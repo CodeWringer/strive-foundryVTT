@@ -1,4 +1,7 @@
-$die-mini-size: 1.1em;
+$die-size-xs: 1.1em;
+$die-size-sm: 1.25em;
+$die-size-md: 1.4em;
+
 $c-hit: #18520b;
 $c-hit-muted: #5b7455;
 $c-miss: #712625;
@@ -11,10 +14,10 @@ $c-ob-muted: #666666;
 
     &.mini {
       li.roll.die {
-        width: $die-mini-size;
-        height: $die-mini-size;
-        line-height: $die-mini-size;
-        font-size: $die-mini-size;
+        width: $die-size-xs;
+        height: $die-size-xs;
+        line-height: $die-size-xs;
+        font-size: $die-size-xs;
 
         &.roll-success {
           color: $c-hit-muted;
@@ -25,9 +28,9 @@ $c-ob-muted: #666666;
       }
 
       li.roll-obstacle {
-        height: $die-mini-size;
-        line-height: $die-mini-size;
-        font-size: $die-mini-size;
+        height: $die-size-xs;
+        line-height: $die-size-xs;
+        font-size: $die-size-xs;
         color: $c-ob-muted;
       }
     }
@@ -130,4 +133,53 @@ li.roll.die.d6.roll-missing {
 .roll-damage-value-total {
   font-weight: bold;
   font-size: $font-size-xl;
+}
+
+// ABOVE IS DEPRECATED
+
+.d6 {
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  color: #000;
+  float: left;
+  font-weight: bold;
+  margin: 2px;
+  position: relative;
+  text-align: center;
+  width: $die-size-md;
+  height: $die-size-md;
+  line-height: $die-size-md;
+  font-size: $die-size-md;
+
+  &.xs {
+    width: $die-size-xs;
+    height: $die-size-xs;
+    line-height: $die-size-xs;
+    font-size: $die-size-xs;
+  }
+  &.sm {
+    width: $die-size-sm;
+    height: $die-size-sm;
+    line-height: $die-size-sm;
+    font-size: $die-size-sm;
+  }
+
+  &.failure {
+    color: $c-miss;
+    &.muted {
+      color: $c-miss-muted;
+    }
+  }
+  &.success {
+    color: $c-hit;
+    &.muted {
+      color: $c-hit-muted;
+    }
+  }
+  &.missing {
+    background-color: transparent;
+    border-style: dashed;
+    border-color: rgba(0, 0, 0, 0.16);
+    border-width: 0.15rem;
+  }
 }

@@ -301,12 +301,12 @@ export class RollResult {
       .concat([])
       .sort()
       .reverse()
-      .map(it => { return {cssClass: `roll die d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`, content: it}; });
+      .map(it => { return {cssClass: `roll d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`, content: it}; });
     const missesForRendering = rollStepData.misses
       .concat([])
       .sort()
       .reverse()
-      .map(it => { return {cssClass: `roll die d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`, content: it}; });
+      .map(it => { return {cssClass: `roll d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`, content: it}; });
 
     let combinedResultsForRendering = []
       .concat(hitsForRendering)
@@ -318,7 +318,7 @@ export class RollResult {
     if (obstacle >= rollStepData.faces.length) { // Obstacle greater than number of dice rolled. 
       const blanksForRendering = [];
       for (let i = 0; i < rollStepData.blankCount; i++) {
-        blanksForRendering.push({ cssClass: `roll die d6 ${DICE_CONSTANTS.CSS_CLASS_MISSING_DIE}`, content: "" });
+        blanksForRendering.push({ cssClass: `roll d6 ${DICE_CONSTANTS.CSS_CLASS_MISSING_DIE}`, content: "" });
       }
       // Add blanks and then the obstacle to the end of the faces list. 
       combinedResultsForRendering = combinedResultsForRendering
