@@ -257,7 +257,7 @@ export default class ActorHealthViewModel extends ViewModel {
 
         const number = parseInt(dialog[inputNumber]);
         const newHP = thiz.document.health.HP + number;
-        const clampedHP = Math.max(0, Math.min(newHP, thiz.document.health.maxHP));
+        const clampedHP = Math.max(0, newHP);
         thiz.document.health.HP = clampedHP;
       },
     });

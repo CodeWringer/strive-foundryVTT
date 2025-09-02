@@ -350,7 +350,6 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const transientActor = actor.getTransientObject();
     const transientSkill = skill.getTransientObject();
     return transientSkill.modifiedLevel;
   }

@@ -319,7 +319,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
       get HP() { return parseInt(thiz.document.system.health.HP ?? 0); },
       set HP(value) {
-        const clampedHP = Math.max(0, Math.min(value, this.maxHP));
+        const clampedHP = Math.max(0, value);
         thiz.updateByPath("system.health.HP", clampedHP);
       },
 
