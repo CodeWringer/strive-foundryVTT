@@ -105,6 +105,7 @@ export default class InputRichTextViewModel extends InputViewModel {
       id: "vmBtnEditMode",
       parent: this,
       content: '<span class="fill flex flex-center"><i class="fas fa-edit"></i></span>',
+      localizedToolTip: game.i18n.localize("system.general.edit.edit"),
       isEditable: this.isEditable,
     });
     this.vmBtnEditMode._onClick = async () => {

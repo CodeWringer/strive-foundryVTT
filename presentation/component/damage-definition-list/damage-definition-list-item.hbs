@@ -5,13 +5,15 @@ cssClass: {String | undefined}
 <div id="{{viewModel.id}}" class="flex flex-row flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="grid grid-2col grid-gap-sm">
     {{!-- Damage formula --}}
-    {{#> labeledControl viewModel=viewModel.vmTfDamage localizedIconToolTip=(localize "system.damageDefinition.formula") iconClass="ico-damage-roll-solid" cssClass="" }}
-      {{> inputTextField }}
-    {{/labeledControl}}
+    <div id="{{viewModel.vmDamageFormulaGroup.id}}" class="flex flex-row flex-middle">
+      <i class="ico dark ico-damage-roll-solid"></i>
+      {{> inputTextField viewModel=viewModel.vmTfDamage }}
+    </div>
     {{!-- Damage type --}}
-    {{#> labeledControl viewModel=viewModel.vmDdDamageType localizedIconToolTip=(localize "system.damageType.label") iconClass=viewModel.damageTypeIconClass cssClass="" }}
-      {{> inputDropDown }}
-    {{/labeledControl}}
+    <div id="{{viewModel.vmDamageTypeGroup.id}}" class="flex flex-row flex-middle">
+      <i class="ico dark {{viewModel.damageTypeIconClass}}"></i>
+      {{> inputDropDown viewModel=viewModel.vmDdDamageType }}
+    </div>
   </div>
   {{!-- Delete button --}}
   {{> button viewModel=viewModel.vmBtnDelete }}

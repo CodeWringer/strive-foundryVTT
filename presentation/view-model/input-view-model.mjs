@@ -27,8 +27,6 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
  * 
- * @property {String | undefined} iconHtml Raw HTML to render as 
- * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
  * @property {Any | undefined} value The current value. 
  * * Upon change, invokes the `onChange` callback. 
  * @property {String} localizedValue The current value, localized. 
@@ -81,8 +79,6 @@ export default class InputViewModel extends ViewModel {
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
    * 
-   * @param {String | undefined} args.iconHtml Raw HTML to render as 
-   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Any | undefined} args.value The current value. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
@@ -95,7 +91,6 @@ export default class InputViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.iconHtml = args.iconHtml;
     this._value = args.value;
     this.onChange = args.onChange ?? (() => {});
     this.onInput = args.onInput ?? (() => {});

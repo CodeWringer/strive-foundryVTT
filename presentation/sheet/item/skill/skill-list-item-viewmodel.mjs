@@ -26,7 +26,6 @@ import ViewModel from "../../../view-model/view-model.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs"
-import CharacterAttribute from "../../../../business/ruleset/attribute/character-attribute.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -342,6 +341,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       parent: this,
       value: this.document.damage,
       onChange: (_, newValue) => {
+        if (ValidationUtil.isDefined(newValue) !== true) return; 
         this.document.damage = newValue;
       },
       resolveFormulaContext: this.getRootOwningDocument(this.document),
@@ -380,7 +380,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideApCost,
-        localizedIconToolTip: game.i18n.localize("system.actionPoint.plural"),
+        localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
         iconClass: "ico-action-point-solid",
       }),
       new DataFieldComponent({
@@ -395,7 +395,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideCondition,
         placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -410,7 +410,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideObstacle,
         placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
@@ -425,7 +425,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideOpposedBy,
         placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
       new DataFieldComponent({
@@ -440,7 +440,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideDistance,
         placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -455,7 +455,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideAttackType,
-        localizedIconToolTip: game.i18n.localize("system.attackType.label"),
+        localizedToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
     ];

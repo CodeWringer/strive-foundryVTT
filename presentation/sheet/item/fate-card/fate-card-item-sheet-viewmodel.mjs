@@ -21,7 +21,7 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 0,
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.minor.label"),
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.minor.label"),
         localizedLabel: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.minor.abbreviation"),
       }),
       new DataFieldComponent({
@@ -35,7 +35,7 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 0,
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.major.label"),
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.major.label"),
         localizedLabel: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.major.abbreviation"),
       }),
       new DataFieldComponent({
@@ -49,7 +49,7 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 0,
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.ambition.label"),
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.ambition.label"),
         localizedLabel: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.ambition.abbreviation"),
       }),
     ];

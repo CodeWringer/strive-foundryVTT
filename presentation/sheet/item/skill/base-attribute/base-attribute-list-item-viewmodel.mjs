@@ -33,6 +33,7 @@ export default class BaseAttributeListItemViewModel extends ViewModel {
       parent: this,
       options: attributeChoices,
       value: attributeChoices.find(it => it.value === this.attribute.name),
+      localizedToolTip: game.i18n.localize("system.character.attribute.singular"),
       onChange: (_, newValue) => {
         const newAttribute = ATTRIBUTES[newValue.value];
         this.onChange(newAttribute);

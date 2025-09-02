@@ -8,7 +8,7 @@ viewModel: {SkillListItemViewModel}
     {{> inputNumberSpinner viewModel=viewModel.vmRawLevel cssClass="width-sm" }}
     <i class="fa-solid fa-shuffle"></i>
     {{> inputNumberSpinner viewModel=viewModel.vmLevel cssClass="width-sm" }}
-    <span style="width: 26px;">{{viewModel.maxHpModifierString}}</span>
+    <span style="min-width: 26px;">{{viewModel.maxHpModifierString}}</span>
   </div>
   <div class="flex-grow"></div>
   {{#if viewModel.showAdvancementProgression}}
@@ -16,30 +16,26 @@ viewModel: {SkillListItemViewModel}
   <div class="flex flex-row flex-middle auto-margin-h sheet-block">
     {{!-- Successes --}}
     <div class="flex flex-gap-sm flex-middle flex-row">
-      {{#> labeledControl viewModel=viewModel.vmNsSuccesses localizedLabel=(localize "system.character.advancement.requirements.success.abbreviation") }}
-        <div class="width-sm">
-          {{> inputNumberSpinner }}
-        </div>
-      {{/labeledControl}}
+      <span class="font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.advancement.requirements.success.abbreviation"}}</span>
+      <div class="width-sm">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsSuccesses }}
+      </div>
       <span class="font-size-lg">/</span>
       {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirementSuccesses cssClass="width-min-sm" }}
     </div>
     {{!-- Failures --}}
     <div class="flex flex-gap-sm flex-middle flex-row">
-      {{#> labeledControl viewModel=viewModel.vmNsFailures localizedLabel=(localize "system.character.advancement.requirements.failure.abbreviation") }}
-        <div class="width-sm">
-          {{> inputNumberSpinner }}
-        </div>
-      {{/labeledControl}}
+      <span class="font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.advancement.requirements.failure.abbreviation"}}</span>
+      <div class="width-sm">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}
+      </div>
       <span class="font-size-lg">/</span>
       {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirementFailures cssClass="width-min-sm" }}
     </div>
     {{!-- Advanced --}}
-    {{#> labeledControl viewModel=viewModel.vmAdvanced }}
-      <div class="width-sm">
-        {{> buttonCheckbox }}
-      </div>
-    {{/labeledControl}}
+    <div class="width-sm">
+      {{> buttonCheckbox viewModel=viewModel.vmAdvanced }}
+    </div>
   </div>
   {{/if}}
 </div>
