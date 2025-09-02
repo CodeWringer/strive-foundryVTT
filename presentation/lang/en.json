@@ -899,8 +899,8 @@
       "healthConditions": {
         "label": "Condition Customization",
         "hint": "Allows defining new and hiding system default conditions.",
-        "configureSystemDefaults": "Configure system condition visibilities",
-        "configureCustom": "Define custom conditions",
+        "configureSystemDefaults": "Configure System Condition Visibilities",
+        "configureCustom": "Define Custom Conditions",
         "add": {
           "label": "Add Custom Condition"
         },

@@ -47,11 +47,3 @@
     background-color: $c-bg-lighter;
   }
 }
-
-button.button.spaced {
-  margin-right: $padding-md;
-
-  &:last-child {
-    margin-right: unset;
-  }
-}

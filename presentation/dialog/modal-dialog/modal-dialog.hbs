@@ -5,9 +5,9 @@ buttons: {Array<DialogButtonDefinition>}
   <div>
     {{> @partial-block }}
   </div>
-  <div class="flex flex-row">
+  <div class="flex flex-row auto-margin-h-md">
     {{#each buttons as |button index|}}
-    <button id="{{button.id}}" class="button spaced flex flex-center{{#if button.cssClass}} {{button.cssClass}}{{/if}}">
+    <button id="{{button.id}}" class="button flex flex-center{{#if button.cssClass}} {{button.cssClass}}{{/if}}">
       <span class="pad-l-md pad-r-md">
         {{#if button.iconCssClass}}<i class="{{button.iconCssClass}}"></i>{{/if}}
       </span>
