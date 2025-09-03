@@ -24,7 +24,7 @@ export default class TokenActionPoints {
 
     const heightPx = 42 * scale; // 42 because that's the action point image's height. 
     const textScale = 1.2 * scale; // 1.2 magic constant seems a good default text scale. 
-    const caretScale = 0.6 * scale;
+    const caretScale = 0.6;
     const caretSize = {
       width: (heightPx / 2) * caretScale,
       height: heightPx * caretScale,
