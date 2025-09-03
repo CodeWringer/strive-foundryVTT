@@ -46,13 +46,13 @@ export default class TokenExtensions {
     if (token.inCombat === true) {
       if (ValidationUtil.isDefined(token.actionPointContainer) === true) {
         const actionPoints = token.actor.getTransientObject().actionPoints.current;
-        TokenActionPoints.updateActionPoints(token, actionPoints);
+        TokenActionPoints.updateOn(token, actionPoints);
       } else {
-        TokenActionPoints.removeActionPointControls(token);
-        TokenActionPoints.addActionPointControls(token);
+        TokenActionPoints.removeFrom(token);
+        TokenActionPoints.addTo(token);
       }
     } else if (token.inCombat === false && ValidationUtil.isDefined(token.actionPointContainer) === true) {
-      TokenActionPoints.removeActionPointControls(token);
+      TokenActionPoints.removeFrom(token);
     }
   }
 

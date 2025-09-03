@@ -15,14 +15,14 @@ export default class TokenActionPoints {
    * 
    * @static
    */
-  static addActionPointControls(token) {
+  static addTo(token) {
     if (!ValidationUtil.isDefined(token.actor)) return;
 
     const transientActor = token.actor.getTransientObject();
 
     const scale = token.h / 100.0; // Baseline from 100px. If the canvas size changes, this number changes. 
 
-    const heightPx = 42 * scale; // 42 because that's the image's height. 
+    const heightPx = 42 * scale; // 42 because that's the action point image's height. 
     const textScale = 1.2 * scale; // 1.2 magic constant seems a good default text scale. 
     const caretScale = 0.6 * scale;
     const caretSize = {
@@ -76,7 +76,7 @@ export default class TokenActionPoints {
           
           const newActionPoints = Math.max(0, transientActor.actionPoints.current - 1);
           transientActor.actionPoints.current = newActionPoints;
-          TokenActionPoints.updateActionPoints(token, newActionPoints);
+          TokenActionPoints.updateOn(token, newActionPoints);
         },
       });
       caretLeft.width = caretSize.width;
@@ -98,7 +98,7 @@ export default class TokenActionPoints {
           
           const newActionPoints = Math.min(transientActor.actionPoints.maximum, transientActor.actionPoints.current + 1);
           transientActor.actionPoints.current = newActionPoints;
-          TokenActionPoints.updateActionPoints(token, newActionPoints);
+          TokenActionPoints.updateOn(token, newActionPoints);
         },
       });
       caretRight.width = caretSize.width;
@@ -121,7 +121,7 @@ export default class TokenActionPoints {
    * 
    * @static
    */
-  static removeActionPointControls(token) {
+  static removeFrom(token) {
     if (ValidationUtil.isDefined(token.actionPointContainer)) {
       token.removeChild(token.actionPointContainer);
       token.actionPointContainer = undefined;
@@ -139,7 +139,7 @@ export default class TokenActionPoints {
    * 
    * @static
    */
-  static updateActionPoints(token, newActionPoints) {
+  static updateOn(token, newActionPoints) {
     if (ValidationUtil.isDefined(token.actionPointContainer) !== true) return;
     if (ValidationUtil.isDefined(token.actionPointContainer.text) !== true) return;
     if (ValidationUtil.isDefined(token.actionPointContainer.text.text) !== true) return;
