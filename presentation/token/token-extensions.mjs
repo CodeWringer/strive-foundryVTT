@@ -45,14 +45,14 @@ export default class TokenExtensions {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
     
     if (token.inCombat === true) {
-      if (ValidationUtil.isDefined(token.actionPoints) === true) {
+      if (ValidationUtil.isDefined(token.actionPointContainer) === true) {
         const actionPoints = token.actor.getTransientObject().actionPoints.current;
         TokenExtensions._updateActionPoints(token, actionPoints);
       } else {
         TokenExtensions._removeActionPointControls(token);
         TokenExtensions._addActionPointControls(token);
       }
-    } else if (token.inCombat === false && ValidationUtil.isDefined(token.actionPoints) === true) {
+    } else if (token.inCombat === false && ValidationUtil.isDefined(token.actionPointContainer) === true) {
       TokenExtensions._removeActionPointControls(token);
     }
   }
@@ -88,25 +88,53 @@ export default class TokenExtensions {
 
     const transientActor = token.actor.getTransientObject();
 
-    const margin = 5;
-    const caretSizeFactor = 0.5;
-    let x = 0;
+    const scale = token.h / 100.0; // Baseline from 100px. If the canvas size changes, this number changes. 
+
+    const heightPx = 42 * scale; // 42 because that's the image's height. 
+    const textScale = 1.2 * scale; // 1.2 magic constant seems a good default text scale. 
+    const caretScale = 0.6 * scale;
+    const caretSize = {
+      width: (heightPx / 2) * caretScale,
+      height: heightPx * caretScale,
+    }
+    const marginPx = 2 * scale;
 
     // Container
-    token.actionPoints = new PIXI.Container();
+    token.actionPointContainer = new PIXI.Container();
+    token.addChild(token.actionPointContainer);
 
     // Action points sprite
-    let actionPointSprite; 
+    let actionPointTexture;
     if (transientActor.actionPoints.current > 0) {
-      actionPointSprite = new PIXI.Sprite(
-        getPixiTexture(TEXTURES.ACTION_POINT_EMPTY)
-      );
+      actionPointTexture = getPixiTexture(TEXTURES.ACTION_POINT_EMPTY);
     } else {
-      actionPointSprite = new PIXI.Sprite(
-        getPixiTexture(TEXTURES.ACTION_POINT_FULL)
-      );
+      actionPointTexture = getPixiTexture(TEXTURES.ACTION_POINT_FULL);
     }
+    const actionPointSprite = new PIXI.Sprite(
+      actionPointTexture
+    );
+    token.actionPointContainer.actionPointSprite = actionPointSprite;
 
+    actionPointSprite.width = heightPx;
+    actionPointSprite.height = heightPx;
+    actionPointSprite.position.set(
+      (token.w - actionPointSprite.width) / 2,
+      (token.h - actionPointSprite.height) + ((actionPointSprite.height - caretSize.height) / 2)
+    );
+    token.actionPointContainer.addChild(actionPointSprite);
+
+    // Action points text
+    const style = token._getTextStyle();
+    const text = new PreciseText(transientActor.actionPoints.current, style);
+    text.anchor.set(0.5, 0.5);
+    text.scale.set(textScale, textScale);
+    text.position.set(
+      actionPointSprite.x + (actionPointSprite.width / 2), 
+      actionPointSprite.y + (actionPointSprite.height / 2)
+    );
+    token.actionPointContainer.text = text;
+    token.actionPointContainer.addChild(text);
+    
     // Caret left
     if (token.isOwner || game.user.isGM) {
       const caretLeft = new PixiButton({
@@ -119,29 +147,16 @@ export default class TokenExtensions {
           TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });
-      caretLeft.width = caretLeft.width * caretSizeFactor;
-      caretLeft.height = caretLeft.height * caretSizeFactor;
-      caretLeft.position.set(x, (actionPointSprite.height / 2) - (caretLeft.height / 2));
-      token.actionPoints.caretLeft = caretLeft;
-      token.actionPoints.addChild(caretLeft.wrapped);
-      x = caretLeft.x + caretLeft.width + margin;
+      caretLeft.width = caretSize.width;
+      caretLeft.height = caretSize.height;
+      caretLeft.position.set(
+        actionPointSprite.position.x - caretLeft.width - marginPx,
+        actionPointSprite.position.y + (actionPointSprite.height - caretLeft.height) / 2
+      );
+      token.actionPointContainer.caretLeft = caretLeft;
+      token.actionPointContainer.addChild(caretLeft.container);
     }
     
-    // Action points sprite arrangement
-    actionPointSprite.position.set(x, 0);
-    token.actionPoints.sprite = actionPointSprite;
-    token.actionPoints.addChild(actionPointSprite);
-    x = actionPointSprite.x + actionPointSprite.width;
-
-    // Action points text
-    const style = token._getTextStyle();
-    const text = new PreciseText(transientActor.actionPoints.current, style);
-    text.anchor.set(0.5, 0.5);
-    text.scale.set(1.2, 1.2);
-    text.position.set(actionPointSprite.x + actionPointSprite.width / 2, actionPointSprite.y + actionPointSprite.height / 2);
-    token.actionPoints.text = text;
-    token.actionPoints.addChild(text);
-
     // Caret right
     if (token.isOwner || game.user.isGM) {
       const caretRight = new PixiButton({
@@ -154,21 +169,15 @@ export default class TokenExtensions {
           TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });
-      caretRight.width = caretRight.width * caretSizeFactor;
-      caretRight.height = caretRight.height * caretSizeFactor;
-      caretRight.position.set(x + margin, (actionPointSprite.height / 2) - (caretRight.height / 2));
-      token.actionPoints.caretRight = caretRight;
-      token.actionPoints.addChild(caretRight.wrapped);
+      caretRight.width = caretSize.width;
+      caretRight.height = caretSize.height;
+      caretRight.position.set(
+        actionPointSprite.position.x + actionPointSprite.width + marginPx,
+        actionPointSprite.position.y + (actionPointSprite.height - caretRight.height) / 2
+      );
+      token.actionPointContainer.caretRight = caretRight;
+      token.actionPointContainer.addChild(caretRight.container);
     }
-
-    token.addChild(token.actionPoints);
-
-    // Container arrangement
-    const finalHeight = token.h * 0.40;
-    const ratio = finalHeight / token.actionPoints.height;
-    token.actionPoints.width = token.actionPoints.width * ratio;
-    token.actionPoints.height = finalHeight;
-    token.actionPoints.x = (token.w / 2) - (token.actionPoints.width / 2);
   }
   
   /**
@@ -182,9 +191,9 @@ export default class TokenExtensions {
    * @static
    */
   static _removeActionPointControls(token) {
-    if (ValidationUtil.isDefined(token.actionPoints)) {
-      token.removeChild(token.actionPoints);
-      token.actionPoints = undefined;
+    if (ValidationUtil.isDefined(token.actionPointContainer)) {
+      token.removeChild(token.actionPointContainer);
+      token.actionPointContainer = undefined;
     }
   }
 
@@ -201,16 +210,16 @@ export default class TokenExtensions {
    * @static
    */
   static _updateActionPoints(token, newActionPoints) {
-    if (ValidationUtil.isDefined(token.actionPoints) !== true) return;
-    if (ValidationUtil.isDefined(token.actionPoints.text) !== true) return;
-    if (ValidationUtil.isDefined(token.actionPoints.text.text) !== true) return;
+    if (ValidationUtil.isDefined(token.actionPointContainer) !== true) return;
+    if (ValidationUtil.isDefined(token.actionPointContainer.text) !== true) return;
+    if (ValidationUtil.isDefined(token.actionPointContainer.text.text) !== true) return;
 
-    token.actionPoints.text.text = newActionPoints;
+    token.actionPointContainer.text.text = newActionPoints;
 
-    if (newActionPoints === 0) {
-      token.actionPoints.sprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_EMPTY);
+    if (newActionPoints > 0) {
+      token.actionPointContainer.actionPointSprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_FULL);
     } else {
-      token.actionPoints.sprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_FULL);
+      token.actionPointContainer.actionPointSprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_EMPTY);
     }
   }
 }
