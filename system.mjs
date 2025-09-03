@@ -29,7 +29,6 @@ import DocumentFetcher from "./business/document/document-fetcher/document-fetch
 import TokenExtensions from "./presentation/token/token-extensions.mjs";
 import { ValidationUtil } from "./business/util/validation-utility.mjs";
 import { ArrayUtil } from "./business/util/array-utility.mjs";
-import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
@@ -154,6 +153,7 @@ import { PropertyUtil } from "./business/util/property-utility.mjs";
 import { StringUtil } from "./business/util/string-utility.mjs";
 import { UuidUtil } from "./business/util/uuid-utility.mjs";
 import FoundryWrapper from "./common/foundry-wrapper.mjs";
+import { PixiLoader } from "./presentation/pixi/pixi-preloader.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -384,8 +384,9 @@ Hooks.once('init', function() {
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
 
-  // Preload PIXI textures. 
-  preloadPixiTextures();
+  // Preload PixiJs assets. 
+  PixiLoader.preloadTextures();
+  PixiLoader.preloadGraphics();
   
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
