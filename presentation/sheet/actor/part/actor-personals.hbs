@@ -3,21 +3,21 @@ viewModel: {ActorPersonalsViewModel}
 cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="{{cssClass}}">
-  <div class="flex sheet-block">
-    <div class="flex flex-column">
+  <div class="grid grid-2col" style="column-gap: 10px; row-gap: 2px;">
+    <div class="flex flex-row flex-middle auto-margin-h-sm">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.species"}}{{/label}}
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.sex"}}{{/label}}
-    </div>
-    <div class="flex flex-column flex-grow">
       {{> inputTextField viewModel=viewModel.vmTfSpecies }}
+    </div>
+    <div class="flex flex-row flex-middle auto-margin-h-sm">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.sex"}}{{/label}}
       {{> inputTextField viewModel=viewModel.vmTfSex }}
     </div>
-    <div class="flex flex-column margin-l-md">
+    <div class="flex flex-row flex-middle auto-margin-h-sm">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.culture"}}{{/label}}
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.age"}}{{/label}}
-    </div>
-    <div class="flex flex-column flex-grow">
       {{> inputTextField viewModel=viewModel.vmTfCulture }}
+    </div>
+    <div class="flex flex-row flex-middle auto-margin-h-sm">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.age"}}{{/label}}
       {{> inputTextField viewModel=viewModel.vmTfAge }}
     </div>
   </div>
