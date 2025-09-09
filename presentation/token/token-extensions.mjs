@@ -1,6 +1,7 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import TokenActionPoints from "./token-action-points.mjs";
+import TokenHealthConditions from "./token-health-conditions.mjs";
 
 /**
  * Provides token utilities. 
@@ -16,17 +17,15 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenHover(token) {
-    if (!ValidationUtil.isDefined(token.actor) && token.actor.type !== ACTOR_TYPES.NPC) return;
+    if (ValidationUtil.isDefined(token) !== true) return;
+    if (ValidationUtil.isDefined(token.actor) !== true) return;
+    if (token.actor.type === ACTOR_TYPES.PLAIN) return;
 
-    // const displayWhen = token.document.displayName;
-    // const isOwner = token.actor.isOwner || game.user.isGM;
-
-    // if (((displayWhen == CONST.TOKEN_DISPLAY_MODES.CONTROL || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER) && isOwner) 
-    //   || (displayWhen == CONST.TOKEN_DISPLAY_MODES.HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.ALWAYS)) {
-    //   if (token.hover) {
-    //     // Do nothing, atm.
-    //   }
-    // }
+    if (token.hover) {
+      TokenHealthConditions.hoverOn(token);
+    } else {
+      TokenHealthConditions.hoverOff(token);
+    }
   }
 
   /**
@@ -45,8 +44,7 @@ export default class TokenExtensions {
     
     if (token.inCombat === true) {
       if (ValidationUtil.isDefined(token.actionPointContainer) === true) {
-        const actionPoints = token.actor.getTransientObject().actionPoints.current;
-        TokenActionPoints.updateOn(token, actionPoints);
+        TokenActionPoints.updateOn(token);
       } else {
         TokenActionPoints.removeFrom(token);
         TokenActionPoints.addTo(token);
@@ -54,12 +52,12 @@ export default class TokenExtensions {
     } else if (token.inCombat === false && ValidationUtil.isDefined(token.actionPointContainer) === true) {
       TokenActionPoints.removeFrom(token);
     }
+
+    TokenHealthConditions.updateOn(token);
   }
 
   /**
-   * Updates all combatant tokens. 
-   * 
-   * This re-renders the action points. 
+   * Updates and re-renders all combatant tokens. 
    * 
    * @static
    */

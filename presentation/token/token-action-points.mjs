@@ -135,15 +135,15 @@ export default class TokenActionPoints {
    * action point count. 
    * 
    * @param {Token} token 
-   * @param {Number} newActionPoints
    * 
    * @static
    */
-  static updateOn(token, newActionPoints) {
+  static updateOn(token) {
     if (ValidationUtil.isDefined(token.actionPointContainer) !== true) return;
     if (ValidationUtil.isDefined(token.actionPointContainer.text) !== true) return;
     if (ValidationUtil.isDefined(token.actionPointContainer.text.text) !== true) return;
 
+    const newActionPoints = token.actor.getTransientObject().actionPoints.current;
     token.actionPointContainer.text.text = newActionPoints;
 
     if (newActionPoints > 0) {
