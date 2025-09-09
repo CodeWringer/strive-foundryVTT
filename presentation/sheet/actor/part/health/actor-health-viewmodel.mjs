@@ -151,6 +151,12 @@ export default class ActorHealthViewModel extends ViewModel {
   get gritPointsTemplate() { return GritPointsViewModel.TEMPLATE; }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showGritPoints() { return this.isPC || this.document.gritPoints.enable; }
+
+  /**
    * @type {String}
    * @readonly
    */
@@ -559,12 +565,14 @@ export default class ActorHealthViewModel extends ViewModel {
       value: this.scarCount,
     });
 
-    this.vmGritPoints = new GritPointsViewModel({
-      id: "vmGritPoints",
-      parent: this,
-      document: this.document,
-      isInCombatTracker: false,
-    });
+    if (this.showGritPoints) {
+      this.vmGritPoints = new GritPointsViewModel({
+        id: "vmGritPoints",
+        parent: this,
+        document: this.document,
+        isInCombatTracker: false,
+      });
+    }
 
     if (this.isPC) {
       this.vmDeathsDoor = new DeathsDoorViewModel({
