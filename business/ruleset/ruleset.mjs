@@ -221,7 +221,7 @@ export default class Ruleset {
     const unmodifiedHp = this.getUnmodifiedMaximumHp(actor);
     const hpReduction = this.getCharacterMaximumHpReduction(actor);
 
-    return unmodifiedHp - hpReduction;
+    return Math.max(this.getCharacterBaseHp(), (unmodifiedHp - hpReduction));
   }
 
   /**
