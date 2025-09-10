@@ -188,8 +188,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
       listItemViewModels: this.skillViewModels,
       listItemTemplate: SkillListItemViewModel.TEMPLATE,
-      localizedTitle: game.i18n.localize("system.character.skill.plural"),
-      headerLevel: 1,
+      headerLevel: 3,
       addItemParams: addItemParams,
       sortParams: new SortableListSortParams({
         options: this._getSkillSortingOptions(),

@@ -4,6 +4,7 @@ import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAttributesViewModel from "./actor-attributes-viewmodel.mjs"
@@ -73,11 +74,22 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       document: this.document,
     });
 
+    this.vmBaseInitiativeIcon = new ViewModel({
+      id: "vmBaseInitiativeIcon",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.attribute.initiative.baseInitiative"),
+    });
     this.vmBaseInitiative = new ReadOnlyValueViewModel({
       id: "vmBaseInitiative",
       parent: this,
       value: this.document.baseInitiative,
       localizedToolTip: new RulesetExplainer().getExplanationForBaseInitiative(this.document),
+    });
+    
+    this.vmSprintingSpeedIcon = new ViewModel({
+      id: "vmSprintingSpeedIcon",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.attribute.sprintingSpeed.label"),
     });
     this.vmRollSprintingSpeed = new ButtonRollViewModel({
       id: "vmRollSprintingSpeed",

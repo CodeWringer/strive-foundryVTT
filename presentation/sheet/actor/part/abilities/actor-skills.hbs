@@ -2,7 +2,10 @@
 viewModel: {ActorSkillsViewModel}
 cssClass: {undefined | String}
 --}}
-<section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
+<section id="{{viewModel.id}}" class="auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
+  <h1 class="strive-header flex flex-row flex-center {{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
+    <span>{{localize "system.character.skill.plural"}}</span>
+  </h1>
   {{> inputSearch viewModel=viewModel.vmSearch }}
   {{> sortableList viewModel=viewModel.vmSkills }}
 </section>

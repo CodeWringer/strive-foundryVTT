@@ -3,7 +3,6 @@ import TransientBaseCharacterActor from "../document/actor/transient-base-charac
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { StringUtil } from "../util/string-utility.mjs";
-import CharacterAssetSlotGroup from "./asset/character-asset-slot-group.mjs";
 import { ATTRIBUTE_TIERS } from "./attribute/attribute-tier.mjs";
 import { ATTRIBUTES } from "./attribute/attributes.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";

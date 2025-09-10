@@ -7,19 +7,27 @@ cssClass: {undefined | String}
   {{#with viewModel.attributesTemplate as | template |}}
     {{> (template) viewModel=../viewModel.vmAttributes }}
   {{/with}}
-  <div class="grid grid-2col">
+  <div class="flex flex-row flex-center auto-margin-h-lg">
     {{!-- Base Initiative --}}
-    <div class="flex flex-row flex-middle auto-margin-h-md">
-      <span class="flex-grow"></span>
-      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.initiative.baseInitiative"}}</span>
-      {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+    <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
+      {{!-- Icon --}}
+      <div class="flex flex-row flex-middle">
+        <i id="{{viewModel.vmBaseInitiativeIcon.id}}" class="ico dark ico-base-initiative-solid" style="width: 48px; height: 48px;"></i>
+      </div>
+      <div class="flex flex-row flex-middle">
+        {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+      </div>
     </div>
     {{!-- Sprinting Speed --}}
-    <div class="flex flex-row flex-middle auto-margin-h-md">
-      <span class="flex-grow"></span>
-      {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
-      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.sprintingSpeed.label"}}</span>
-      {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
+    <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
+      {{!-- Icon --}}
+      <div class="flex flex-row flex-middle">
+        <i id="{{viewModel.vmSprintingSpeedIcon.id}}" class="ico dark ico-sprinting-speed-solid" style="width: 48px; height: 48px;"></i>
+        {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
+      </div>
+      <div class="flex flex-row flex-middle">
+        {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
+      </div>
     </div>
     {{!-- Experience Points --}}
     <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
