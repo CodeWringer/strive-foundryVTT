@@ -10,18 +10,26 @@ cssClass: {undefined | String}
   <div class="grid grid-2col">
     {{!-- Base Initiative --}}
     <div class="flex flex-row flex-middle auto-margin-h-md">
-      <span class="flex-grow">  </span>
-      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize
-        "system.character.attribute.initiative.baseInitiative"}}</span>
+      <span class="flex-grow"></span>
+      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.initiative.baseInitiative"}}</span>
       {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
     </div>
     {{!-- Sprinting Speed --}}
     <div class="flex flex-row flex-middle auto-margin-h-md">
       <span class="flex-grow"></span>
       {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
-      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize
-        "system.character.attribute.sprintingSpeed.label"}}</span>
+      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.sprintingSpeed.label"}}</span>
       {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
+    </div>
+    {{!-- Experience Points --}}
+    <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
+      {{!-- Symbol --}}
+      <div class="flex flex-row flex-center" style="min-height: 48px;">
+        <span id="{{viewModel.vmExperiencePointsSymbol.id}}" class="fancy-font">{{localize "system.character.advancement.experiencePoint.abbreviation"}}</span>
+      </div>
+      <div class="flex flex-row flex-middle">
+        {{> inputNumberSpinner viewModel=viewModel.vmExperiencePoints cssClass="width-md" }}
+      </div>
     </div>
   </div>
   {{!-- Skills --}}

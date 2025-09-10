@@ -1,4 +1,3 @@
-import LevelAdvancement from "./level-advancement.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
@@ -43,11 +42,11 @@ export default class Ruleset {
     const tier = this.getAttributeLevelTier(level);
 
     if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
-      return level * 10;
+      return level + 1;
     } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
-      return level * 7;
+      return level * 2;
     } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
-      return level * 8;
+      return level * 3;
     } else {
       throw new Error(`Unrecognized attribute tier ${tier.name}`);
     }
@@ -75,32 +74,25 @@ export default class Ruleset {
    * 
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
-   * @returns {LevelAdvancement}
+   * @returns {Number}
    * 
    * @throws When the given level does not result in a valid skill tier. 
    */
   getSkillAdvancementRequirements(level = 0) {
     const tier = this.getSkillLevelTier(level);
-    let successes = 0;
-    let failures = 0;
+    let xp = 0;
 
     if (tier.name === SKILL_TIERS.dabbling.name) {
-      successes = 6;
-      failures = 9;
+      xp = 6;
     } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successes = level + 3;
-      failures = (level * 2) + 4;
+      xp = level + 1;
     } else if (tier.name === SKILL_TIERS.master.name) {
-      successes = level + 4;
-      failures = (level * 2) + 5;
+      xp = level * 2;
     } else {
       throw new Error(`Unrecognized skill tier ${tier.name}`);
     }
 
-    return new LevelAdvancement({
-      successes: successes,
-      failures: failures
-    });
+    return xp;
   }
 
   /**

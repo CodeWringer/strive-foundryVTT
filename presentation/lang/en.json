@@ -174,8 +174,10 @@
     },
     "character": {
       "edit": "Configure",
+      "characteristic": {
+        "baseCharacteristics": "Base Characteristics"
+      },
       "advancement": {
-        "advanced": "Advanced?<br>Whenever an attribute or skill advances (= its level increases), its advancement progress must be reset to `0` and it must be marked as \"advanced\" this session. Once it has advanced, no more progress can be noted for it, for at least the remainder of the session and at most an in-game week.",
         "label": "Advancement",
         "level": "Level",
         "rawLevel": "Raw Level",
@@ -187,23 +189,9 @@
           "label": "Level Modifier",
           "abbreviation": "Mod."
         },
-        "requirements": {
-          "label": "Required",
-          "abbreviation": "Req.",
-          "success": {
-            "label": "Successes",
-            "abbreviation": "S",
-            "required": "Required Successes"
-          },
-          "failure": {
-            "label": "Failures",
-            "abbreviation": "F",
-            "required": "Required Failures"
-          },
-          "progress": {
-            "label": "Progress",
-            "abbreviation": "Prog."
-          }
+        "experiencePoint": {
+          "experiencePoints": "Experience Points",
+          "abbreviation": "XP"
         }
       },
       "asset": {
@@ -738,7 +726,7 @@
       }
     },
     "roll": {
-      "reminder": "Don't forget to note progress on your attribute and/or skill!",
+      "reminder": "Don't forget to increment your Experience Points by <code>+1</code>!",
       "success": "Success",
       "failure": "Failure",
       "absoluteFailure": "Absolute Failure",

@@ -135,6 +135,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * 
  * @property {Object} initiative 
  * @property {Number} initiative.perTurn 
+ * 
+ * @property {Object} xp The current experience points of this character.  
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -510,32 +512,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     this._prepareAssetsData();
     this._healthStates = this._getHealthStates();
-  }
-
-  /**
-   * Sets the level of the attribute with the given name. 
-   * 
-   * @param {String} attName Internal name of an attribute, e.g. `"strength"`. 
-   * @param {Number | undefined} newValue Value to set the attribute to, e.g. `4`. 
-   * * Default `0`
-   * @param {Boolean | undefined} resetProgress If true, will also reset advancement progress. 
-   * * Default `true`
-   * 
-   * @async
-   */
-  async setAttributeLevel(attName, newValue = 0, resetProgress = true) {
-    const propertyPath = `system.attributes.${attName}`;
-
-    if (resetProgress === true) {
-      await this.document.update({
-        [`${propertyPath}.level`]: newValue,
-        [`${propertyPath}.progress`]: 0
-      });
-    } else {
-      await this.document.update({
-        [`${propertyPath}.level`]: newValue,
-      });
-    }
   }
 
   get attributes() {

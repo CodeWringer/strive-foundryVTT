@@ -3,8 +3,6 @@ import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "../transient-base-item.mjs";
-import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
-import Ruleset from "../../../ruleset/ruleset.mjs";
 import Expertise from "./expertise.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
@@ -21,10 +19,6 @@ import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
  * 
  * @extends TransientBaseItem
  * 
- * @property {LevelAdvancement} advancementRequirements The current requirements 
- * to advance the skill. 
- * @property {LevelAdvancement} advancementProgress The current progress towards 
- * advancing the skill. 
  * @property {Number} level The current raw level. 
  * @property {Number} levelModifier The current level modifier. This number can be negative. 
  * @property {Number} modifiedLevel The current modified level. 
@@ -39,7 +33,6 @@ import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
  * @property {String | undefined} obstacle 
  * @property {String | undefined} opposedBy 
  * @property {AttackType | undefined} attackType 
- * @property {Boolean} advanced 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -115,35 +108,6 @@ export default class TransientSkill extends TransientBaseItem {
     }
   }
 
-  /**
-   * @type {LevelAdvancement}
-   */
-  get advancementProgress() {
-    const thiz = this;
-    return {
-      get successes() { return parseInt(thiz.document.system.successes); },
-      set successes(value) {
-        thiz.document.system.successes = value;
-        thiz.updateByPath("system.successes", value);
-      },
-      get failures() { return parseInt(thiz.document.system.failures); },
-      set failures(value) {
-        thiz.document.system.failures = value;
-        thiz.updateByPath("system.failures", value);
-      },
-    };
-  }
-  set advancementProgress(value) {
-    this.document.system.successes = value.successes;
-    this.document.system.failures = value.failures;
-    this.update({
-      system: {
-        successes: value.successes,
-        failures: value.failures,
-      }
-    });
-  }
-  
   /** @override */
   get acceptedTags() { return SKILL_TAGS.asArray(); }
 
@@ -287,19 +251,6 @@ export default class TransientSkill extends TransientBaseItem {
   }
   
   /**
-   * @type {Boolean}
-   */
-  get advanced() {
-    return this.document.system.advanced ?? false;
-  }
-  /**
-   * @param {Boolean} value
-   */
-  set advanced(value) {
-    this.updateByPath("system.advanced", value);
-  }
-
-  /**
    * @param {Item} document An encapsulated item instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -307,7 +258,6 @@ export default class TransientSkill extends TransientBaseItem {
   constructor(document) {
     super(document);
 
-    this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level);
     this._expertises = this._getExpertises();
   }
 
@@ -360,27 +310,6 @@ export default class TransientSkill extends TransientBaseItem {
       visGroupId: UuidUtil.createUUID(),
     });
   }
-
-  /**
-   * Sets the given level of the skill. 
-   * 
-   * @param {Number | undefined} newLevel Value to set the skill to, e.g. `4`. 
-   * * Default `0`
-   * @param {Boolean | undefined} resetProgress If true, will also reset successes and failures. 
-   * * Default `true`
-   * 
-   * @async
-   */
-  async setLevel(newLevel = 0, resetProgress = true) {
-    this.level = newLevel;
-    this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(newLevel);
-    if (resetProgress === true) {
-      this.advancementProgress.successes = 0;
-      this.advancementProgress.failures = 0;
-    }
-
-    await this._persistLevel();
-  };
 
   /**
    * Adds a new expertise. 
@@ -484,22 +413,6 @@ export default class TransientSkill extends TransientBaseItem {
     return result;
   }
   
-  /**
-   * Persists the current level and advancement progress to the data base. 
-   * 
-   * @private
-   * @async
-   */
-  async _persistLevel() {
-    await this.document.update({
-      system: {
-        value: this.level,
-        successes: this.advancementProgress.successes,
-        failures: this.advancementProgress.failures
-      }
-    });
-  }
-
   /**
    * @override
    * 

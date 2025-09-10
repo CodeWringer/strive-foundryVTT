@@ -60,14 +60,6 @@ export default class AttributeTableViewModel extends ViewModel {
   get isNPC() { return this.document.type === ACTOR_TYPES.NPC; }
 
   /**
-   * Returns `true`, if the advancement progress is to be hidden. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get showAdvancementProgression() { return (this.isPC === true) || (this.isNPC && this.document.progressionVisible === true); }
-
-  /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -137,24 +129,6 @@ export default class AttributeTableViewModel extends ViewModel {
           value: attribute.levelModifier,
           onChange: (_, newValue) => {
             attribute.levelModifier = newValue;
-          },
-        }),
-        vmNsProgress: this.showAdvancementProgression !== true ? undefined : new InputNumberSpinnerViewModel({
-          parent: this,
-          id: `vmNsProgress-${attribute.name}`,
-          value: attribute.advancementProgress,
-          onChange: (_, newValue) => {
-            attribute.advancementProgress = newValue;
-          },
-          min: 0,
-        }),
-        vmAdvanced: this.showAdvancementProgression !== true ? undefined : new ButtonCheckBoxViewModel({
-          parent: this,
-          id: `vmAdvanced-${attribute.name}`,
-          value: attribute.advanced,
-          localizedToolTip: game.i18n.localize("system.character.advancement.advanced"),
-          onChange: (_, newValue) => {
-            attribute.advanced = newValue;
           },
         }),
         vmModifiedLevel: new ReadOnlyValueViewModel({

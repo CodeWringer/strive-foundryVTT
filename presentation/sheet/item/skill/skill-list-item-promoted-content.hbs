@@ -10,32 +10,4 @@ viewModel: {SkillListItemViewModel}
     {{> inputNumberSpinner viewModel=viewModel.vmLevel cssClass="width-sm" }}
     <span style="min-width: 26px;">{{viewModel.maxHpModifierString}}</span>
   </div>
-  <div class="flex-grow"></div>
-  {{#if viewModel.showAdvancementProgression}}
-  {{!-- Advancement Requirements --}}
-  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
-    {{!-- Successes --}}
-    <div class="flex flex-gap-sm flex-middle flex-row">
-      <span class="font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.advancement.requirements.success.abbreviation"}}</span>
-      <div class="width-sm">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsSuccesses }}
-      </div>
-      <span class="font-size-lg">/</span>
-      {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirementSuccesses cssClass="width-min-sm" }}
-    </div>
-    {{!-- Failures --}}
-    <div class="flex flex-gap-sm flex-middle flex-row">
-      <span class="font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.advancement.requirements.failure.abbreviation"}}</span>
-      <div class="width-sm">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}
-      </div>
-      <span class="font-size-lg">/</span>
-      {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirementFailures cssClass="width-min-sm" }}
-    </div>
-    {{!-- Advanced --}}
-    <div class="width-sm">
-      {{> buttonCheckbox viewModel=viewModel.vmAdvanced }}
-    </div>
-  </div>
-  {{/if}}
 </div>

@@ -99,6 +99,21 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       value: this.document.sprintingSpeed,
       localizedToolTip: new RulesetExplainer().getExplanationForSprintingSpeed(this.document),
     });
+
+    this.vmExperiencePointsSymbol = new ViewModel({
+      id: "vmExperiencePointsSymbol",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.advancement.experiencePoint.experiencePoints"),
+    });
+    this.vmExperiencePoints = new InputNumberSpinnerViewModel({
+      id: "vmExperiencePoints",
+      parent: this,
+      value: this.document.xp,
+      min: 0,
+      onChange: (_, newValue) => {
+        this.document.xp = newValue;
+      },
+    });
   }
 
   /**
