@@ -739,18 +739,9 @@
     },
     "roll": {
       "reminder": "Don't forget to note progress on your attribute and/or skill!",
-      "success": {
-        "label": "Success",
-        "degree": "Degree of Success"
-      },
-      "failure": {
-        "label": "Failure",
-        "degree": "Degree of Failure"
-      },
-      "partial": {
-        "label": "Partial",
-        "degree": "Degree of partial Success"
-      },
+      "success": "Success",
+      "failure": "Failure",
+      "absoluteFailure": "Absolute Failure",
       "hit": {
         "plural": "Hits",
         "singular": "Hit"

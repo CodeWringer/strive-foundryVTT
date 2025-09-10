@@ -121,13 +121,13 @@ diceFacesTemplate: String
   {{!-- Outcome --}}
   <div class="dice-result-container auto-margin-v-md">
     {{#if (eq outcomeType "SUCCESS")}}
-      <div class="dice-result success">{{localize "system.roll.success.label"}}!</div>
-    {{/if}}
-    {{#if (eq outcomeType "PARTIAL")}}
-      <div class="dice-result partial">{{localize "system.roll.partial.label"}}!</div>
+      <div class="dice-result success">{{localize "system.roll.success"}}!</div>
     {{/if}}
     {{#if (eq outcomeType "FAILURE")}}
-      <div class="dice-result failure">{{localize "system.roll.failure.label"}}!</div>
+      <div class="dice-result failure">{{localize "system.roll.failure"}}!</div>
+    {{/if}}
+    {{#if (eq outcomeType "ABSOLUTE_FAILURE")}}
+      <div class="dice-result failure">{{localize "system.roll.absoluteFailure"}}!</div>
     {{/if}}
     <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg auto-margin-h-sm font-size-default">
       {{!-- Hits --}}
@@ -154,7 +154,7 @@ diceFacesTemplate: String
   </div>
   {{!-- Reminder --}}
   {{#if showReminder}}
-  <p class="border-solid-t-sm" style="text-align: center;">{{localize "system.roll.reminder"}}</p>
+  <p class="border-solid-t-sm" style="text-align: center;">{{{localize "system.roll.reminder"}}}</p>
   {{/if}}
   {{!-- Additional Content --}}
   {{#if additionalContent}}
