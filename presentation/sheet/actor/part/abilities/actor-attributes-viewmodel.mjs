@@ -78,12 +78,15 @@ export default class ActorAttributesViewModel extends ViewModel {
       this[nameVmIcon] = vmIcon;
       
       const nameVmAttribute = `vm${name}Attribute`;
+      const advancementRequirements = StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
+        xp: new Ruleset().getAttributeAdvancementRequirements(characterAttribute.level),
+      });
       const vmAttribute = new InputNumberSpinnerViewModel({
         id: nameVmAttribute,
         parent: this,
         value: characterAttribute.level,
         min: 0,
-        localizedToolTip: game.i18n.localize("system.character.advancement.level"),
+        localizedToolTip: `${game.i18n.localize("system.character.advancement.level")}<br>${advancementRequirements}`,
         onChange: (_, newValue) => {
           characterAttribute.level = newValue;
         },

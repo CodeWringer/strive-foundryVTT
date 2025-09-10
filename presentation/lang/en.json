@@ -191,7 +191,8 @@
         },
         "experiencePoint": {
           "experiencePoints": "Experience Points",
-          "abbreviation": "XP"
+          "abbreviation": "XP",
+          "requiredForAdvancement": "Required Experience Points for Advancement: %{xp}"
         }
       },
       "asset": {
