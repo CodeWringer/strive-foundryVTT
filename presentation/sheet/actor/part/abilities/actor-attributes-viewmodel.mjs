@@ -74,7 +74,7 @@ export default class ActorAttributesViewModel extends ViewModel {
       const vmIcon = new ViewModel({
         id: nameVmIcon,
         parent: this,
-        localizedToolTip: game.i18n.localize(it.localizableName),
+        localizedToolTip: `${game.i18n.localize(it.localizableName)} [${game.i18n.localize(it.localizableAbbreviation)}]`,
       });
       this[nameVmIcon] = vmIcon;
       
