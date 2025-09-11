@@ -23,6 +23,7 @@ import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
  * @property {Number} levelModifier The current level modifier. This number can be negative. 
  * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
+ * @property {Number} advancementProgress 
  * @property {Array<Attribute>} baseAttributes Base attributes of the skill. 
  * * Must always contain at least one entry. By default, this is the first attribute as per the `ATTRIBUTES` definiton. 
  * @property {Array<Expertise>} expertises The array of expertises of this skill. 
@@ -108,6 +109,17 @@ export default class TransientSkill extends TransientBaseItem {
     }
   }
 
+  /**
+   * @type {Number}
+   */
+  get advancementProgress() {
+    return this.document.system.advancementProgress ?? 0;
+  }
+  set advancementProgress(value) {
+    this.document.system.advancementProgress = value;
+    this.updateByPath("system.advancementProgress", value);
+  }
+  
   /** @override */
   get acceptedTags() { return SKILL_TAGS.asArray(); }
 
