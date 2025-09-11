@@ -10,4 +10,24 @@ viewModel: {SkillListItemViewModel}
     {{> inputNumberSpinner viewModel=viewModel.vmLevel cssClass="width-sm" }}
     <span style="min-width: 26px;">{{viewModel.maxHpModifierString}}</span>
   </div>
+  {{!-- Spacer --}}
+  <div class="flex-grow"></div>
+  {{#if viewModel.showAdvancementProgression}}
+  {{!-- Advancement Requirements --}}
+  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+    {{!-- Failures --}}
+    <div class="flex flex-gap-sm flex-middle flex-row">
+      <i id="{{viewModel.vmAdvancementProgressIcon.id}}" class="ico dark ico-dumbbell-solid"></i>
+      <div class="width-sm">
+        {{> inputNumberSpinner viewModel=viewModel.vmAdvancementProgress }}
+      </div>
+      <span class="font-size-lg">/</span>
+      {{> readOnlyValue viewModel=viewModel.vmAdvancementRequiredProgress cssClass="width-min-sm" }}
+    </div>
+    {{!-- Advanced --}}
+    {{!-- <div class="width-sm">
+      {{> buttonCheckbox viewModel=viewModel.vmAdvanced }}
+    </div> --}}
+  </div>
+  {{/if}}
 </div>

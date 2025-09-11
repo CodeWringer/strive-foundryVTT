@@ -285,6 +285,30 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       });
     }
     this.expertisesTemplate = ExpertiseTableViewModel.TEMPLATE;
+
+    if (this.showAdvancementProgression) {
+      this.vmAdvancementProgressIcon = new ViewModel({
+        id: "vmAdvancementProgressIcon",
+        parent: this,
+        localizedToolTip: "TODO",
+      });
+      this.vmAdvancementProgress = new InputNumberSpinnerViewModel({
+        id: "vmAdvancementProgress",
+        parent: this,
+        value: this.document.advancementProgress,
+        min: 0,
+        localizedToolTip: game.i18n.localize("system.character.advancement.requirements"),
+        onChange: (_, newValue) => {
+          this.document.advancementProgress = newValue;
+        },
+      });
+      this.vmAdvancementRequiredProgress = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequiredProgress",
+        parent: this,
+        value: new Ruleset().getSkillAdvancementRequirements(this.document.level),
+        localizedToolTip: "TODO",
+      });
+    }
   }
 
   /** @override */

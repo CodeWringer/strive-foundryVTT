@@ -21,32 +21,6 @@ export default class RulesetExplainer {
   _ruleset = new Ruleset();
 
   /**
-   * @param {CharacterAttribute} attribute 
-   * 
-   * @returns {String}
-   */
-  getExplanationForAttributeAdvancement(attribute) {
-    const tier = this._ruleset.getAttributeLevelTier(attribute.level);
-    let factor;
-    if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
-      factor = 10;
-    } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
-      factor = 7;
-    } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
-      factor = 8;
-    }
-    return StringUtil.format2(
-      game.i18n.localize("system.rules.attributeAdvancementRequirements"),
-      {
-        rawLevel: attribute.level,
-        factor: factor,
-        attributeTier: game.i18n.localize(tier.localizableName),
-        advancementRequirements: attribute.advancementRequirements,
-      }
-    );
-  }
-
-  /**
    * @param {GameSystemActor | TransientBaseCharacterActor} actor 
    * 
    * @returns {String}
@@ -92,56 +66,23 @@ export default class RulesetExplainer {
   }
 
   /**
-   * @param {TransientSkill} skill 
+   * @param {CharacterAttribute} attribute 
    * 
    * @returns {String}
    */
-  getExplanationForSkillAdvancementSuccessRequirements(skill) {
-    const tier = this._ruleset.getSkillLevelTier(skill.level);
-    let successFormula;
-    if (tier.name === SKILL_TIERS.dabbling.name) {
-      successFormula = "6";
-    } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successFormula = `${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) + 3`;
-    } else if (tier.name === SKILL_TIERS.master.name) {
-      successFormula = `${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) + 4`;
-    }
-    return StringUtil.format2(
-      game.i18n.localize("system.rules.skillAdvancementRequirements.success"),
-      {
-        tierName: game.i18n.localize(tier.localizableName),
-        successFormula: successFormula,
-        requiredSuccesses: skill.advancementRequirements.successes,
-      },
-    );
+  getExplanationForAttributeAdvancement(attribute) {
+    return "TODO";
   }
-  
 
   /**
    * @param {TransientSkill} skill 
    * 
    * @returns {String}
    */
-  getExplanationForSkillAdvancementFailureRequirements(skill) {
-    const tier = this._ruleset.getSkillLevelTier(skill.level);
-    let failureFormula;
-    if (tier.name === SKILL_TIERS.dabbling.name) {
-      failureFormula = "9";
-    } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 4`;
-    } else if (tier.name === SKILL_TIERS.master.name) {
-      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 5`;
-    }
-    return StringUtil.format2(
-      game.i18n.localize("system.rules.skillAdvancementRequirements.failure"),
-      {
-        tierName: game.i18n.localize(tier.localizableName),
-        failureFormula: failureFormula,
-        requiredFailures: skill.advancementRequirements.failures,
-      },
-    );
+  getExplanationForSkillAdvancement(skill) {
+    return "TODO";
   }
-  
+
   /**
    * @param {GameSystemActor | TransientBaseCharacterActor} actor 
    * 
