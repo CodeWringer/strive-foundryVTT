@@ -469,7 +469,7 @@
           "adjust": "Adjust HP",
           "adjustInputLabel": "HP to add/subtract",
           "maxWithModifier": "Maximum Hit-Points (Max. HP)<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
-          "maxExplanation": "%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>10 - (%{toughness} (toughness) / 2 (round down) = %{hpReductionPerInjury} (reduction per injury)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
+          "maxExplanation": "%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
         },
         "illness": {
           "plural": "Illnesses",

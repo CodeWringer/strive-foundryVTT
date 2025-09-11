@@ -113,17 +113,12 @@ export default class Ruleset {
   }
 
   /**
-   * Returns the maximum HP reduction per injury of the given actor. 
-   * 
-   * @param {Actor} actor 
+   * Returns the maximum HP reduction per injury. 
    * 
    * @returns {Number}
    */
-  getMaximumHpReductionPerInjury(actor) {
-    const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
-    const hpReductionPerInjury = 10 - Math.floor(toughnessLevel / 2);
-
-    return hpReductionPerInjury;
+  getMaximumHpReductionPerInjury() {
+    return 10;
   }
 
   /**
