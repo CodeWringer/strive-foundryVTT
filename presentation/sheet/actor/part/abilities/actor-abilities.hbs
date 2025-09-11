@@ -2,27 +2,47 @@
 viewModel: {ActorAbilitiesViewModel}
 cssClass: {undefined | String}
 --}}
-<section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
+<section id="{{viewModel.id}}" class="auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Attributes --}}
   {{#with viewModel.attributesTemplate as | template |}}
     {{> (template) viewModel=../viewModel.vmAttributes }}
   {{/with}}
-  <div class="grid grid-2col">
+  {{!-- Divider --}}
+  <span style="display: block; height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 90%);"></span>
+  <div class="flex flex-row flex-center auto-margin-h-lg">
     {{!-- Base Initiative --}}
-    <div class="flex flex-row flex-middle auto-margin-h-md">
-      <span class="flex-grow">  </span>
-      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize
-        "system.character.attribute.initiative.baseInitiative"}}</span>
-      {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+    <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
+      {{!-- Icon --}}
+      <div class="flex flex-row flex-middle">
+        <i id="{{viewModel.vmBaseInitiativeIcon.id}}" class="ico dark ico-base-initiative-solid" style="width: 48px; height: 48px;"></i>
+      </div>
+      <div class="flex flex-row flex-middle">
+        {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+      </div>
     </div>
     {{!-- Sprinting Speed --}}
-    <div class="flex flex-row flex-middle auto-margin-h-md">
-      <span class="flex-grow"></span>
-      {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
-      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize
-        "system.character.attribute.sprintingSpeed.label"}}</span>
-      {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
+    <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
+      {{!-- Icon --}}
+      <div class="flex flex-row flex-middle">
+        <i id="{{viewModel.vmSprintingSpeedIcon.id}}" class="ico dark ico-sprinting-speed-solid" style="width: 32px; height: 32px; margin: 8px;"></i>
+        {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
+      </div>
+      <div class="flex flex-row flex-middle">
+        {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
+      </div>
     </div>
+    {{#if viewModel.advancementEnabled}}
+    {{!-- Experience Points --}}
+    <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
+      {{!-- Symbol --}}
+      <div class="flex flex-row flex-center" style="min-height: 48px;">
+        <span id="{{viewModel.vmExperiencePointsSymbol.id}}" class="fancy-font font-size-lg">{{localize "system.character.advancement.experiencePoint.abbreviation"}}</span>
+      </div>
+      <div class="flex flex-row flex-middle">
+        {{> inputNumberSpinner viewModel=viewModel.vmExperiencePoints cssClass="width-md" }}
+      </div>
+    </div>
+    {{/if}}
   </div>
   {{!-- Skills --}}
   {{#with viewModel.skillsTemplate as | template |}}

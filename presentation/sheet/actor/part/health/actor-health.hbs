@@ -45,9 +45,11 @@ cssClass: {undefined | String}
           </div>
         </div>
         {{!-- Grit Points --}}
+        {{#if viewModel.showGritPoints}}
         {{#with viewModel.gritPointsTemplate as | template |}}
           {{> (template) viewModel=../viewModel.vmGritPoints }}
         {{/with}}
+        {{/if}}
       </div>
       {{!-- Death's Door --}}
       {{#if viewModel.isPC}}

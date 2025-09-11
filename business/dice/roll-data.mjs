@@ -261,10 +261,10 @@ export default class RollData {
         outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
         degree = hitCount - obstacle;
       } else if (hitCount > 0) { // Partial failure
-        outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
+        outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
         degree = hitCount;
       } else {
-        outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
+        outcomeType = DICE_POOL_RESULT_TYPES.ABSOLUTE_FAILURE;
       }
     }
 

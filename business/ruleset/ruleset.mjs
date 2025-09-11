@@ -1,4 +1,3 @@
-import LevelAdvancement from "./level-advancement.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
@@ -40,17 +39,8 @@ export default class Ruleset {
    * @returns {Number}
    */
   getAttributeAdvancementRequirements(level = 0) {
-    const tier = this.getAttributeLevelTier(level);
-
-    if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
-      return level * 10;
-    } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
-      return level * 7;
-    } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
-      return level * 8;
-    } else {
-      throw new Error(`Unrecognized attribute tier ${tier.name}`);
-    }
+    const base = 10;
+    return base + (level * 5);
   }
     
   /**
@@ -75,32 +65,17 @@ export default class Ruleset {
    * 
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
-   * @returns {LevelAdvancement}
+   * @returns {Number}
    * 
    * @throws When the given level does not result in a valid skill tier. 
    */
   getSkillAdvancementRequirements(level = 0) {
-    const tier = this.getSkillLevelTier(level);
-    let successes = 0;
-    let failures = 0;
-
-    if (tier.name === SKILL_TIERS.dabbling.name) {
-      successes = 6;
-      failures = 9;
-    } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successes = level + 3;
-      failures = (level * 2) + 4;
-    } else if (tier.name === SKILL_TIERS.master.name) {
-      successes = level + 4;
-      failures = (level * 2) + 5;
+    if (level === 0) {
+      return 15;
     } else {
-      throw new Error(`Unrecognized skill tier ${tier.name}`);
+      const base = 8;
+      return base + (level * 2);
     }
-
-    return new LevelAdvancement({
-      successes: successes,
-      failures: failures
-    });
   }
 
   /**
@@ -138,17 +113,12 @@ export default class Ruleset {
   }
 
   /**
-   * Returns the maximum HP reduction per injury of the given actor. 
-   * 
-   * @param {Actor} actor 
+   * Returns the maximum HP reduction per injury. 
    * 
    * @returns {Number}
    */
-  getMaximumHpReductionPerInjury(actor) {
-    const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
-    const hpReductionPerInjury = 10 - Math.floor(toughnessLevel / 2);
-
-    return hpReductionPerInjury;
+  getMaximumHpReductionPerInjury() {
+    return 10;
   }
 
   /**
@@ -221,7 +191,7 @@ export default class Ruleset {
     const unmodifiedHp = this.getUnmodifiedMaximumHp(actor);
     const hpReduction = this.getCharacterMaximumHpReduction(actor);
 
-    return unmodifiedHp - hpReduction;
+    return Math.max(this.getCharacterBaseHp(), (unmodifiedHp - hpReduction));
   }
 
   /**

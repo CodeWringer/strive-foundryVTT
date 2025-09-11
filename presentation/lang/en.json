@@ -174,8 +174,10 @@
     },
     "character": {
       "edit": "Configure",
+      "characteristic": {
+        "baseCharacteristics": "Base Characteristics"
+      },
       "advancement": {
-        "advanced": "Advanced?<br>Whenever an attribute or skill advances (= its level increases), its advancement progress must be reset to `0` and it must be marked as \"advanced\" this session. Once it has advanced, no more progress can be noted for it, for at least the remainder of the session and at most an in-game week.",
         "label": "Advancement",
         "level": "Level",
         "rawLevel": "Raw Level",
@@ -187,22 +189,18 @@
           "label": "Level Modifier",
           "abbreviation": "Mod."
         },
-        "requirements": {
-          "label": "Required",
-          "abbreviation": "Req.",
-          "success": {
-            "label": "Successes",
-            "abbreviation": "S",
-            "required": "Required Successes"
-          },
-          "failure": {
-            "label": "Failures",
-            "abbreviation": "F",
-            "required": "Required Failures"
-          },
-          "progress": {
-            "label": "Progress",
-            "abbreviation": "Prog."
+        "experiencePoint": {
+          "experiencePoints": "Experience Points",
+          "abbreviation": "XP",
+          "requiredForAdvancement": "Required Experience Points for Advancement: %{xp}"
+        },
+        "requirement": {
+          "requirements": "Advancement Requirements",
+          "progress": "Advancement Progress",
+          "requiredProgress": "Required Progress to Advance",
+          "explanation": {
+            "learningSkill": "Level 0 (= learning Skill) = 15",
+            "knownSkill": "8 (base) + (%{level} (current level) * 2) = %{result}"
           }
         }
       },
@@ -480,7 +478,7 @@
           "adjust": "Adjust HP",
           "adjustInputLabel": "HP to add/subtract",
           "maxWithModifier": "Maximum Hit-Points (Max. HP)<br>%{maximum} %{operand} %{modifier} (modifier) = %{finalValue}",
-          "maxExplanation": "%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>10 - (%{toughness} (toughness) / 2 (round down) = %{hpReductionPerInjury} (reduction per injury)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
+          "maxExplanation": "%{baseHp} (base) + (%{toughness} (toughness) * %{hpPerLevel}) = %{unmodifiedHp} (Maximum HP)<br>%{unmodifiedHp} (Maximum HP) - (%{injuryCount} (injury count) * %{hpReductionPerInjury} (reduction per injury)) %{operand} %{modifier} (modifier) = %{finalMaxHp}"
         },
         "illness": {
           "plural": "Illnesses",
@@ -738,19 +736,10 @@
       }
     },
     "roll": {
-      "reminder": "Don't forget to note progress on your attribute and/or skill!",
-      "success": {
-        "label": "Success",
-        "degree": "Degree of Success"
-      },
-      "failure": {
-        "label": "Failure",
-        "degree": "Degree of Failure"
-      },
-      "partial": {
-        "label": "Partial",
-        "degree": "Degree of partial Success"
-      },
+      "reminder": "Don't forget to increment your Experience Points by <code>+1</code>!",
+      "success": "Success",
+      "failure": "Failure",
+      "absoluteFailure": "Absolute Failure",
       "hit": {
         "plural": "Hits",
         "singular": "Hit"
@@ -802,11 +791,6 @@
     },
     "rules": {
       "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
-      "attributeAdvancementRequirements": "raw level (%{rawLevel}) * %{factor} (from %{attributeTier} attribute) = %{advancementRequirements}",
-      "skillAdvancementRequirements": {
-        "success": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}",
-        "failure": "from %{tierName} skill:<br>Failures: %{failureFormula} = %{requiredFailures}"
-      },
       "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
       "sprintingSpeed": "(%{localizedAgility} (%{agility}) + %{localizedToughness} (%{toughness})) / 2 (rounded up) = %{sprintingSpeed}",
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"

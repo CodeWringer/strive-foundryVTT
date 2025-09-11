@@ -115,7 +115,6 @@ import SortControlsViewModel from "./presentation/component/sort-controls/sort-c
 import VisibilityToggleListItemViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-item-viewmodel.mjs";
 import VisibilityToggleListViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 // View models - Actor
-import './presentation/sheet/actor/part/abilities/actor-attribute-table-viewmodel.mjs';
 import ActorAttributesViewModel from "./presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs";
 import './presentation/sheet/actor/part/personality/actor-drivers-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
