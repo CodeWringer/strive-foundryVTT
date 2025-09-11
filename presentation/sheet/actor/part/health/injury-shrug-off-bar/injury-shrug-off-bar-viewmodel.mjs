@@ -31,7 +31,10 @@ export default class InjuryShrugOffBarViewModel extends ViewModel {
    * @param {TransientBaseCharacterActor} args.document 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      localizedToolTip: game.i18n.localize("system.character.health.injury.shrugOff.count"),
+    });
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
