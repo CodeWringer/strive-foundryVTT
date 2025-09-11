@@ -5,7 +5,7 @@ cssClass: {String | undefined}
 {{#if viewModel.isEditable}}
 <span class="spinner-container flex-middle flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   <input 
-    class="custom-system-edit spinner"
+    class="custom-system-edit spinner{{#if viewModel.contentCssClass}} {{viewModel.contentCssClass}}{{/if}}"
     type="number"
     data-dtype="Number"
     name="{{viewModel.id}}"

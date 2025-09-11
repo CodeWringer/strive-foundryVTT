@@ -132,6 +132,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * function to map the actual value, before it is rendered. This function has no effect on 
    * the actual value underneath. **Must** return a value. Arguments: 
    * * `value: Number`
+   * @param {String | undefined} args.contentCssClass
    */
   constructor(args = {}) {
     super(args);
@@ -141,6 +142,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     this._max = args.max ?? undefined;
     this._step = args.step ?? 1;
     this.displayValueMapper = args.displayValueMapper;
+    this.contentCssClass = args.contentCssClass;
   }
 
   /** @override */
