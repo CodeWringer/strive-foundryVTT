@@ -156,7 +156,7 @@ export class RollResult {
         if (transientActor.type === ACTOR_TYPES.PC) {
           showReminder = true;
         } else if (transientActor.type === ACTOR_TYPES.NPC) {
-          showReminder = transientActor.progressionVisible;
+          showReminder = transientActor.advancementEnabled;
         }
       }
     }

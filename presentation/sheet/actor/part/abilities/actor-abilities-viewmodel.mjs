@@ -1,4 +1,5 @@
 import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
+import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
@@ -43,6 +44,12 @@ export default class ActorAbilitiesViewModel extends ViewModel {
    * @readonly
    */
   get showGeneralCombatReminders() { return this.isInCombat && this.showReminders; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get advancementEnabled() { return this.document.advancementEnabled; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -112,20 +119,22 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       localizedToolTip: new RulesetExplainer().getExplanationForSprintingSpeed(this.document),
     });
 
-    this.vmExperiencePointsSymbol = new ViewModel({
-      id: "vmExperiencePointsSymbol",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.character.advancement.experiencePoint.experiencePoints"),
-    });
-    this.vmExperiencePoints = new InputNumberSpinnerViewModel({
-      id: "vmExperiencePoints",
-      parent: this,
-      value: this.document.xp,
-      min: 0,
-      onChange: (_, newValue) => {
-        this.document.xp = newValue;
-      },
-    });
+    if (this.advancementEnabled) {
+      this.vmExperiencePointsSymbol = new ViewModel({
+        id: "vmExperiencePointsSymbol",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.advancement.experiencePoint.experiencePoints"),
+      });
+      this.vmExperiencePoints = new InputNumberSpinnerViewModel({
+        id: "vmExperiencePoints",
+        parent: this,
+        value: this.document.xp,
+        min: 0,
+        onChange: (_, newValue) => {
+          this.document.xp = newValue;
+        },
+      });
+    }
   }
 
   /**

@@ -9,6 +9,7 @@ import CharacterAttribute from "../../../../../business/ruleset/attribute/charac
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { StringUtil } from "../../../../../business/util/string-utility.mjs";
+import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs";
 
 /**
  * @property {String} childTemplate
@@ -77,16 +78,18 @@ export default class ActorAttributesViewModel extends ViewModel {
       });
       this[nameVmIcon] = vmIcon;
       
+      const attributeAdvancementExplanation = new RulesetExplainer().getExplanationForAttributeAdvancement(characterAttribute);
+      const attributeAdvancementTitle = game.i18n.localize("system.character.advancement.level");
+      const attributeToolTip = (this.showReminders && this.document.advancementEnabled) 
+        ? `${attributeAdvancementTitle}<br>${attributeAdvancementExplanation}`
+        : attributeAdvancementTitle;
       const nameVmAttribute = `vm${name}Attribute`;
-      const advancementRequirements = StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
-        xp: new Ruleset().getAttributeAdvancementRequirements(characterAttribute.level),
-      });
       const vmAttribute = new InputNumberSpinnerViewModel({
         id: nameVmAttribute,
         parent: this,
         value: characterAttribute.level,
         min: 0,
-        localizedToolTip: `${game.i18n.localize("system.character.advancement.level")}<br>${advancementRequirements}`,
+        localizedToolTip: attributeToolTip,
         onChange: (_, newValue) => {
           characterAttribute.level = newValue;
         },

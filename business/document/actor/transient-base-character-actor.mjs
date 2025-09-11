@@ -137,6 +137,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} initiative.perTurn 
  * 
  * @property {Object} xp The current experience points of this character.  
+ * @property {Object} advancementEnabled If `true`, then this character may advance their abilities. 
+ * * Read-only
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -502,6 +504,24 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     return Math.ceil(result / 2);
   }
 
+  get attributes() {
+    try {
+      return game.strive.const.ATTRIBUTES.asArray().map(attribute => 
+        new CharacterAttribute(this.document, attribute.name)
+      )
+    } catch (error) {
+      game.strive.logger.logError(error);
+    }
+  }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get advancementEnabled() {
+    return false;
+  }
+
   /**
    * @param {Actor} document An encapsulated actor instance. 
    * 
@@ -512,16 +532,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     this._prepareAssetsData();
     this._healthStates = this._getHealthStates();
-  }
-
-  get attributes() {
-    try {
-      return game.strive.const.ATTRIBUTES.asArray().map(attribute => 
-        new CharacterAttribute(this.document, attribute.name)
-      )
-    } catch (error) {
-      game.strive.logger.logError(error);
-    }
   }
 
   /**

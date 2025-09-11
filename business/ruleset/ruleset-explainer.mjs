@@ -71,7 +71,9 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForAttributeAdvancement(attribute) {
-    return "TODO";
+    return StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
+      xp: new Ruleset().getAttributeAdvancementRequirements(attribute.level),
+    });
   }
 
   /**
@@ -80,7 +82,14 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForSkillAdvancement(skill) {
-    return "TODO";
+    if (skill.level === 0) {
+      return game.i18n.localize("system.character.advancement.requirement.explanation.learningSkill");
+    } else {
+      return StringUtil.format2(game.i18n.localize("system.character.advancement.requirement.explanation.knownSkill"), {
+        level: skill.level,
+        result: new Ruleset().getSkillAdvancementRequirements(skill.level),
+      });
+    }
   }
 
   /**

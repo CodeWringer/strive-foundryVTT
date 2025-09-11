@@ -193,6 +193,15 @@
           "experiencePoints": "Experience Points",
           "abbreviation": "XP",
           "requiredForAdvancement": "Required Experience Points for Advancement: %{xp}"
+        },
+        "requirement": {
+          "requirements": "Advancement Requirements",
+          "progress": "Advancement Progress",
+          "requiredProgress": "Required Progress to Advance",
+          "explanation": {
+            "learningSkill": "Level 0 (= learning Skill) = 15",
+            "knownSkill": "8 (base) + (%{level} (current level) * 2) = %{result}"
+          }
         }
       },
       "asset": {

@@ -48,6 +48,15 @@ export default class TransientPc extends TransientBaseCharacterActor {
   }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   * @override
+   */
+  get advancementEnabled() {
+    return true;
+  }
+
+  /**
    * @param {Actor} actor An encapsulated actor instance. 
    * 
    * @throws {Error} Thrown, if `actor` is `undefined`. 

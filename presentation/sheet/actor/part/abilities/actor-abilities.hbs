@@ -31,6 +31,7 @@ cssClass: {undefined | String}
         {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
       </div>
     </div>
+    {{#if viewModel.advancementEnabled}}
     {{!-- Experience Points --}}
     <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
       {{!-- Symbol --}}
@@ -41,6 +42,7 @@ cssClass: {undefined | String}
         {{> inputNumberSpinner viewModel=viewModel.vmExperiencePoints cssClass="width-md" }}
       </div>
     </div>
+    {{/if}}
   </div>
   {{!-- Skills --}}
   {{#with viewModel.skillsTemplate as | template |}}

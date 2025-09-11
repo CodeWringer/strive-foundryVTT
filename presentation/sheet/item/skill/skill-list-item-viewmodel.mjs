@@ -23,6 +23,8 @@ import ViewModel from "../../../view-model/view-model.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs"
+import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
+import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -200,6 +202,17 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get advancementEnabled() {
+    if (ValidationUtil.isDefined(this.document.owningDocument)) {
+      return this.document.owningDocument.advancementEnabled; 
+    }
+    return false;
+  }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -286,27 +299,33 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     }
     this.expertisesTemplate = ExpertiseTableViewModel.TEMPLATE;
 
-    if (this.showAdvancementProgression) {
+    if (this.advancementEnabled) {
       this.vmAdvancementProgressIcon = new ViewModel({
         id: "vmAdvancementProgressIcon",
         parent: this,
-        localizedToolTip: "TODO",
+        localizedToolTip: game.i18n.localize("system.character.advancement.requirement.requirements"),
       });
       this.vmAdvancementProgress = new InputNumberSpinnerViewModel({
         id: "vmAdvancementProgress",
         parent: this,
         value: this.document.advancementProgress,
         min: 0,
-        localizedToolTip: game.i18n.localize("system.character.advancement.requirements"),
+        localizedToolTip: game.i18n.localize("system.character.advancement.requirement.progress"),
         onChange: (_, newValue) => {
           this.document.advancementProgress = newValue;
         },
       });
+
+      const requiredProgressTitle = game.i18n.localize("system.character.advancement.requirement.requiredProgress");
+      const requiredProgressExplanation = new RulesetExplainer().getExplanationForSkillAdvancement(this.document);
+      const requiredProgressToolTip = this.showReminders 
+        ? `${requiredProgressTitle}<br>${requiredProgressExplanation}` 
+        : requiredProgressTitle;
       this.vmAdvancementRequiredProgress = new ReadOnlyValueViewModel({
         id: "vmAdvancementRequiredProgress",
         parent: this,
         value: new Ruleset().getSkillAdvancementRequirements(this.document.level),
-        localizedToolTip: "TODO",
+        localizedToolTip: requiredProgressToolTip,
       });
     }
   }
