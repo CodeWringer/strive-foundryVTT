@@ -27,7 +27,7 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideLearningSkills() { return this.document.progressionVisible === false; }
+  get hideLearningSkills() { return this.document.advancementEnabled === false; }
 
   /**
    * @type {String}
@@ -154,7 +154,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         ),
       }),
     ];
-    if (this.document.type === ACTOR_TYPES.PC || this.document.progressionVisible === true) {
+    if (this.document.type === ACTOR_TYPES.PC || this.document.advancementEnabled === true) {
       // Learning skill add button
       addItemParams.splice(0, 0, new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({
@@ -188,8 +188,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
       listItemViewModels: this.skillViewModels,
       listItemTemplate: SkillListItemViewModel.TEMPLATE,
-      localizedTitle: game.i18n.localize("system.character.skill.plural"),
-      headerLevel: 1,
+      headerLevel: 3,
       addItemParams: addItemParams,
       sortParams: new SortableListSortParams({
         options: this._getSkillSortingOptions(),

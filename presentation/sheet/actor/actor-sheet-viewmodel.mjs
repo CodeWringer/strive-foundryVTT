@@ -416,7 +416,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
             id: id,
             parent: parent,
-            value: this.document.progressionVisible,
+            value: this.document.advancementEnabled,
             ...overrides,
           }),
         })
@@ -450,7 +450,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
 
     if (this.isNPC) {
       this.document.personalityVisible = dialog[inputEnablePersonality] == true;
-      this.document.progressionVisible = dialog[inputEnableProgression] == true;
+      this.document.advancementEnabled = dialog[inputEnableProgression] == true;
       this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
     }
   }

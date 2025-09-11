@@ -8,7 +8,7 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * 
  * @property {Boolean} personalityVisible
  * * default `false`
- * @property {Boolean} progressionVisible
+ * @property {Boolean} advancementEnabled
  * * default `false`
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
@@ -19,11 +19,15 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     this.updateByPath("system.personalityVisible", value);
   }
 
-  get progressionVisible() {
-    return this.document.system.progressionVisible ?? false;
+  /**
+   * @type {Boolean}
+   * @override
+   */
+  get advancementEnabled() {
+    return this.document.system.advancementEnabled ?? false;
   }
-  set progressionVisible(value) {
-    this.updateByPath("system.progressionVisible", value);
+  set advancementEnabled(value) {
+    this.updateByPath("system.advancementEnabled", value);
   }
 
   /** @override */

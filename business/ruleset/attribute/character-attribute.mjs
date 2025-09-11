@@ -1,7 +1,6 @@
 import { GameSystemActor } from "../../document/actor/actor.mjs";
 import TransientBaseCharacterActor from "../../document/actor/transient-base-character-actor.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
-import Ruleset from "../ruleset.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
 /**
@@ -12,18 +11,12 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * @property {String} name Internal name. 
  * @property {String} localizableName Localization key for the full name. 
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
- * @property {Number} advancementRequirements The number of tests required to advance the attribute. 
- * * Read-only. 
- * @property {Number} advancementProgress The current progress towards 
- * advancing the attribute. 
  * @property {Number} level The current raw level. 
  * @property {Number} levelModifier The current level modifier. This number can be negative. 
  * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
  * @property {Number} owningActor The owning character actor. 
  * * Read-only. 
- * @property {Boolean} advanced If `true`, then this attribute is considered advanced 
- * this session. 
  */
 export default class CharacterAttribute {
   /**
@@ -70,46 +63,6 @@ export default class CharacterAttribute {
     }
   }
 
-  /**
-   * @type {Number}
-   */
-  get advancementProgress() { return parseInt((this._actor.system.attributes[this.name] ?? {}).progress ?? 0); }
-  set advancementProgress(value) {
-    this._actor.update({
-      system: {
-        attributes: {
-          [this.name]: {
-            progress: value
-          }
-        }
-      }
-    }); 
-  }
-  
-  /**
-   * @type {Boolean}
-   */
-  get advanced() { return (this._actor.system.attributes[this.name] ?? {}).advanced ?? false; }
-  set advanced(value) {
-    this._actor.update({
-      system: {
-        attributes: {
-          [this.name]: {
-            advanced: value
-          }
-        }
-      }
-    }); 
-  }
-  
-  /**
-   * The current progress towards advancing the attribute. 
-   * 
-   * @type {Number}
-   * @readonly
-   */
-  get advancementRequirements() { return new Ruleset().getAttributeAdvancementRequirements(this.level); }
-  
   /**
    * The owning character actor. 
    * 

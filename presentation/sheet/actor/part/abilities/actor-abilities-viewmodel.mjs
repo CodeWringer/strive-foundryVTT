@@ -1,9 +1,11 @@
 import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
+import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAttributesViewModel from "./actor-attributes-viewmodel.mjs"
@@ -44,6 +46,12 @@ export default class ActorAbilitiesViewModel extends ViewModel {
   get showGeneralCombatReminders() { return this.isInCombat && this.showReminders; }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get advancementEnabled() { return this.document.advancementEnabled; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -73,11 +81,22 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       document: this.document,
     });
 
+    this.vmBaseInitiativeIcon = new ViewModel({
+      id: "vmBaseInitiativeIcon",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.attribute.initiative.baseInitiative"),
+    });
     this.vmBaseInitiative = new ReadOnlyValueViewModel({
       id: "vmBaseInitiative",
       parent: this,
       value: this.document.baseInitiative,
       localizedToolTip: new RulesetExplainer().getExplanationForBaseInitiative(this.document),
+    });
+    
+    this.vmSprintingSpeedIcon = new ViewModel({
+      id: "vmSprintingSpeedIcon",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.attribute.sprintingSpeed.label"),
     });
     this.vmRollSprintingSpeed = new ButtonRollViewModel({
       id: "vmRollSprintingSpeed",
@@ -99,6 +118,23 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       value: this.document.sprintingSpeed,
       localizedToolTip: new RulesetExplainer().getExplanationForSprintingSpeed(this.document),
     });
+
+    if (this.advancementEnabled) {
+      this.vmExperiencePointsSymbol = new ViewModel({
+        id: "vmExperiencePointsSymbol",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.advancement.experiencePoint.experiencePoints"),
+      });
+      this.vmExperiencePoints = new InputNumberSpinnerViewModel({
+        id: "vmExperiencePoints",
+        parent: this,
+        value: this.document.xp,
+        min: 0,
+        onChange: (_, newValue) => {
+          this.document.xp = newValue;
+        },
+      });
+    }
   }
 
   /**
