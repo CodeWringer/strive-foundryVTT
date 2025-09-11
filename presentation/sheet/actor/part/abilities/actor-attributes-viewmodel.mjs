@@ -107,6 +107,7 @@ export default class ActorAttributesViewModel extends ViewModel {
           modifier: Math.abs(characterAttribute.levelModifier),
           modifiedLevel: characterAttribute.modifiedLevel,
         }),
+        contentCssClass: "font-bold font-size-lg",
         onChange: (_, newValue) => {
           characterAttribute.levelModifier = newValue - characterAttribute.level;
         },

@@ -264,6 +264,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         modifier: Math.abs(this.document.levelModifier),
         modifiedLevel: this.document.modifiedLevel,
       }),
+      contentCssClass: "font-bold font-size-lg",
       onChange: (_, newValue) => {
         this.document.levelModifier = newValue - this.document.level;
       },
