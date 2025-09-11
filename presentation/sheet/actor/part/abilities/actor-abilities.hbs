@@ -2,11 +2,13 @@
 viewModel: {ActorAbilitiesViewModel}
 cssClass: {undefined | String}
 --}}
-<section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
+<section id="{{viewModel.id}}" class="auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Attributes --}}
   {{#with viewModel.attributesTemplate as | template |}}
     {{> (template) viewModel=../viewModel.vmAttributes }}
   {{/with}}
+  {{!-- Divider --}}
+  <span style="display: block; height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 90%);"></span>
   <div class="flex flex-row flex-center auto-margin-h-lg">
     {{!-- Base Initiative --}}
     <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
@@ -22,7 +24,7 @@ cssClass: {undefined | String}
     <div class="flex flex-column flex-middle sheet-block" style="width: 100px; height: 90px;">
       {{!-- Icon --}}
       <div class="flex flex-row flex-middle">
-        <i id="{{viewModel.vmSprintingSpeedIcon.id}}" class="ico dark ico-sprinting-speed-solid" style="width: 48px; height: 48px;"></i>
+        <i id="{{viewModel.vmSprintingSpeedIcon.id}}" class="ico dark ico-sprinting-speed-solid" style="width: 32px; height: 32px; margin: 8px;"></i>
         {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
       </div>
       <div class="flex flex-row flex-middle">
