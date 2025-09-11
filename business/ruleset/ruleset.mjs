@@ -39,17 +39,8 @@ export default class Ruleset {
    * @returns {Number}
    */
   getAttributeAdvancementRequirements(level = 0) {
-    const tier = this.getAttributeLevelTier(level);
-
-    if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
-      return (level + 1) * 6;
-    } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
-      return level * 7;
-    } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
-      return level * 8;
-    } else {
-      throw new Error(`Unrecognized attribute tier ${tier.name}`);
-    }
+    const base = 10;
+    return base + (level * 5);
   }
     
   /**
@@ -79,20 +70,12 @@ export default class Ruleset {
    * @throws When the given level does not result in a valid skill tier. 
    */
   getSkillAdvancementRequirements(level = 0) {
-    const tier = this.getSkillLevelTier(level);
-    let xp = 0;
-
-    if (tier.name === SKILL_TIERS.dabbling.name) {
-      xp = 8;
-    } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      xp = level * 5;
-    } else if (tier.name === SKILL_TIERS.master.name) {
-      xp = level * 6;
+    if (level === 0) {
+      return 15;
     } else {
-      throw new Error(`Unrecognized skill tier ${tier.name}`);
+      const base = 8;
+      return base + (level * 2);
     }
-
-    return xp;
   }
 
   /**
