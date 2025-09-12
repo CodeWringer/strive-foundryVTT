@@ -1,4 +1,5 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
+import { CharacterHealthCondition } from "../../business/ruleset/health/character-health-state.mjs";
 import { StringUtil } from "../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { PixiLoader } from "../pixi/pixi-preloader.mjs";
@@ -56,6 +57,21 @@ export default class TokenHealthConditions extends TokenExtender {
   }
 
   /**
+   * @param {Token} token 
+   * @returns {Array<CharacterHealthCondition>}
+   * 
+   * @private
+   */
+  _getTokenHealthConditions(token) {
+    const transientActor = token.actor.getTransientObject();
+    return transientActor.health.states.concat([]).sort((a, b) => {
+      const localizedA = game.i18n.localize(a.localizableName);
+      const localizedB = game.i18n.localize(b.localizableName);
+      return localizedA.localeCompare(localizedB);
+    });
+  }
+
+  /**
    * Removes the static (= non-hover) elements. 
    * 
    * @param {Token} token 
@@ -77,10 +93,10 @@ export default class TokenHealthConditions extends TokenExtender {
    * @private
    */
   async _addStaticTo(token) {
-    const transientActor = token.actor.getTransientObject();
-
     if (ValidationUtil.isDefined(token.healthConditionContainer)) return;
     if (ValidationUtil.isDefined(token.healthConditionHoverContainer)) return;
+
+    const healthConditions = this._getTokenHealthConditions(token);
 
     // Root container
     token.healthConditionContainer = new PIXI.Container();
@@ -92,8 +108,8 @@ export default class TokenHealthConditions extends TokenExtender {
     let x = 0;
     let y = 0;
     let entryCount = 0;
-    for (let i = 0; i < Math.min(this.MAX_STATIC_ICONS + 1, transientActor.health.states.length); i++) {
-      const healthCondition = transientActor.health.states[i];
+    for (let i = 0; i < Math.min(this.MAX_STATIC_ICONS + 1, healthConditions.length); i++) {
+      const healthCondition = healthConditions[i];
       if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
         const container = new PIXI.Container();
         let xInContainer = 0;
@@ -121,6 +137,10 @@ export default class TokenHealthConditions extends TokenExtender {
         container.icon = sprite;
         container.addChild(sprite);
 
+        if (!ValidationUtil.isDefined(token.healthConditionContainer)) {
+          game.strive.logger.logWarn("Undefined container reference");
+          continue;
+        }
         token.healthConditionContainer.addChild(container);
         container.position.set(x, y);
         
@@ -130,15 +150,13 @@ export default class TokenHealthConditions extends TokenExtender {
           x = 0;
           y += container.height;
         }
-      } else {
-        game.strive.logger.logWarn("Failed to load texture: texture undefined");
       }
     }
 
     // Indicator that more hidden Conditions exist.
-    if (entryCount === this.MAX_STATIC_ICONS && transientActor.health.states.length > this.MAX_STATIC_ICONS) {
+    if (entryCount === this.MAX_STATIC_ICONS && healthConditions.length > this.MAX_STATIC_ICONS) {
       const localized = StringUtil.format2(game.i18n.localize("system.character.health.condition.tokenMore"), {
-        moreCount: transientActor.health.states.length - entryCount,
+        moreCount: healthConditions.length - entryCount,
       });
       const moreText = new PreciseText(localized, style);
       moreText.scale.set(textScale, textScale);
@@ -170,9 +188,9 @@ export default class TokenHealthConditions extends TokenExtender {
    * @private
    */
   async _addHoverTo(token) {
-    const transientActor = token.actor.getTransientObject();
-
     if (ValidationUtil.isDefined(token.healthConditionHoverContainer)) return;
+    
+    const healthConditions = this._getTokenHealthConditions(token);
 
     // Root container
     token.healthConditionHoverContainer = new PIXI.Container();
@@ -185,11 +203,17 @@ export default class TokenHealthConditions extends TokenExtender {
     let y = token.h - (this.ICON_SIZE_HOVER.height * scale);
     let entriesInCurrentColumn = 0;
     let maxWidth = 0;
-    for await (const healthCondition of transientActor.health.states) {
-      if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
-        const container = new PIXI.Container();
-        let xInContainer = 0;
+    for await (const healthCondition of healthConditions) {
+      const container = new PIXI.Container();
+      container.position.set(x, y);
+      let xInContainer = 0;
+      if (!ValidationUtil.isDefined(token.healthConditionHoverContainer)) {
+        game.strive.logger.logWarn("Undefined container reference");
+        continue;
+      }
+      token.healthConditionHoverContainer.addChild(container);
 
+      if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
         // Icon
         const texture = await PixiLoader.load(healthCondition.iconTextureUrl);
         const sprite = new PIXI.Sprite(texture);
@@ -198,27 +222,12 @@ export default class TokenHealthConditions extends TokenExtender {
         sprite.position.set(xInContainer, 0);
         container.icon = sprite;
         container.addChild(sprite);
-
-        token.healthConditionHoverContainer.addChild(container);
-        container.position.set(x, y);
         xInContainer += sprite.width + this.MARGIN;
-        
-        if (healthCondition.limit !== 1) {
-          // Intensity
-          const text = new PreciseText(healthCondition.intensity, style);
-          text.scale.set(textScale, textScale);
-          text.position.set(
-            xInContainer,
-            ((this.ICON_SIZE_HOVER.height * scale) - text.height) / 2
-          );
-          container.text = text;
-          container.addChild(text);
+      }
 
-          xInContainer += text.width + this.MARGIN;
-        }
-
-        // Localized name
-        const text = new PreciseText(game.i18n.localize(healthCondition.localizableName), style);
+      if (healthCondition.limit !== 1) {
+        // Intensity
+        const text = new PreciseText(healthCondition.intensity, style);
         text.scale.set(textScale, textScale);
         text.position.set(
           xInContainer,
@@ -228,19 +237,29 @@ export default class TokenHealthConditions extends TokenExtender {
         container.addChild(text);
 
         xInContainer += text.width + this.MARGIN;
+      }
 
-        maxWidth = Math.max(container.width, maxWidth);
-        entriesInCurrentColumn++;
-        if (entriesInCurrentColumn >= 10) {
-          entriesInCurrentColumn = 0;
-          x += maxWidth;
-          maxWidth = 0;
-          y = token.h - (this.ICON_SIZE_HOVER.height * scale);
-        } else {
-          y -= container.height;
-        }
+      // Localized name
+      const text = new PreciseText(game.i18n.localize(healthCondition.localizableName), style);
+      text.scale.set(textScale, textScale);
+      text.position.set(
+        xInContainer,
+        ((this.ICON_SIZE_HOVER.height * scale) - text.height) / 2
+      );
+      container.text = text;
+      container.addChild(text);
+
+      xInContainer += text.width + this.MARGIN;
+
+      maxWidth = Math.max(container.width, maxWidth);
+      entriesInCurrentColumn++;
+      if (entriesInCurrentColumn >= 10) {
+        entriesInCurrentColumn = 0;
+        x += maxWidth;
+        maxWidth = 0;
+        y = token.h - (this.ICON_SIZE_HOVER.height * scale);
       } else {
-        game.strive.logger.logWarn("Failed to load texture: texture undefined");
+        y -= container.height;
       }
     }
   }
