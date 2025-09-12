@@ -1,26 +1,26 @@
+import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { PixiButton } from "../pixi/pixi-button.mjs";
 import { PixiLoader } from "../pixi/pixi-preloader.mjs";
+import TokenExtender from "./token-extender.mjs";
 
 /**
  * Provides token utilities to render and update action points on a token. 
  */
-export default class TokenActionPoints {
+export default class TokenActionPoints extends TokenExtender {
   /**
    * Adds an interactible action point bar to the given token. 
    * 
    * @param {Token} token 
    * 
-   * @see https://foundryvtt.com/api/classes/client.Token.html
-   * 
-   * @static
+   * @private
    */
-  static addTo(token) {
+  addTo(token) {
     if (!ValidationUtil.isDefined(token.actor)) return;
 
     const transientActor = token.actor.getTransientObject();
 
-    const scale = token.h / 100.0; // Baseline from 100px. If the canvas size changes, this number changes. 
+    const scale = this.getScale(token);
 
     const heightPx = 42 * scale; // 42 because that's the action point image's height. 
     const textScale = 1.2 * scale; // 1.2 magic constant seems a good default text scale. 
@@ -42,9 +42,7 @@ export default class TokenActionPoints {
     } else {
       actionPointTexture = PixiLoader.getTexture(PixiLoader.TEXTURES.ACTION_POINT_FULL);
     }
-    const actionPointSprite = new PIXI.Sprite(
-      actionPointTexture
-    );
+    const actionPointSprite = new PIXI.Sprite(actionPointTexture);
     token.actionPointContainer.actionPointSprite = actionPointSprite;
 
     actionPointSprite.width = heightPx;
@@ -76,7 +74,7 @@ export default class TokenActionPoints {
           
           const newActionPoints = Math.max(0, transientActor.actionPoints.current - 1);
           transientActor.actionPoints.current = newActionPoints;
-          TokenActionPoints.updateOn(token, newActionPoints);
+          this.updateOn(token);
         },
       });
       caretLeft.width = caretSize.width;
@@ -98,7 +96,7 @@ export default class TokenActionPoints {
           
           const newActionPoints = Math.min(transientActor.actionPoints.maximum, transientActor.actionPoints.current + 1);
           transientActor.actionPoints.current = newActionPoints;
-          TokenActionPoints.updateOn(token, newActionPoints);
+          this.updateOn(token);
         },
       });
       caretRight.width = caretSize.width;
@@ -117,11 +115,9 @@ export default class TokenActionPoints {
    * 
    * @param {Token} token 
    * 
-   * @see https://foundryvtt.com/api/classes/client.Token.html
-   * 
-   * @static
+   * @private
    */
-  static removeFrom(token) {
+  removeFrom(token) {
     if (ValidationUtil.isDefined(token.actionPointContainer)) {
       token.removeChild(token.actionPointContainer);
       token.actionPointContainer = undefined;
@@ -136,20 +132,30 @@ export default class TokenActionPoints {
    * 
    * @param {Token} token 
    * 
-   * @static
+   * @async
    */
-  static updateOn(token) {
-    if (ValidationUtil.isDefined(token.actionPointContainer) !== true) return;
-    if (ValidationUtil.isDefined(token.actionPointContainer.text) !== true) return;
-    if (ValidationUtil.isDefined(token.actionPointContainer.text.text) !== true) return;
+  async updateOn(token) {
+    if (token.actor.type === ACTOR_TYPES.PLAIN) return;
 
-    const newActionPoints = token.actor.getTransientObject().actionPoints.current;
-    token.actionPointContainer.text.text = newActionPoints;
+    if (token.inCombat === true) {
+      if (ValidationUtil.isDefined(token.actionPointContainer) === true 
+        && ValidationUtil.isDefined(token.actionPointContainer.text)
+        && ValidationUtil.isDefined(token.actionPointContainer.text.text)
+      ) {
+        const newActionPoints = token.actor.getTransientObject().actionPoints.current;
+        token.actionPointContainer.text.text = newActionPoints;
 
-    if (newActionPoints > 0) {
-      token.actionPointContainer.actionPointSprite.texture = PixiLoader.getTexture(PixiLoader.TEXTURES.ACTION_POINT_FULL);
-    } else {
-      token.actionPointContainer.actionPointSprite.texture = PixiLoader.getTexture(PixiLoader.TEXTURES.ACTION_POINT_EMPTY);
+        if (newActionPoints > 0) {
+          token.actionPointContainer.actionPointSprite.texture = PixiLoader.getTexture(PixiLoader.TEXTURES.ACTION_POINT_FULL);
+        } else {
+          token.actionPointContainer.actionPointSprite.texture = PixiLoader.getTexture(PixiLoader.TEXTURES.ACTION_POINT_EMPTY);
+        }
+      } else {
+        this.removeFrom(token);
+        this.addTo(token);
+      }
+    } else if (ValidationUtil.isDefined(token.actionPointContainer) === true) {
+      this.removeFrom(token);
     }
   }
 }

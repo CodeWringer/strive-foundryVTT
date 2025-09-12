@@ -1,4 +1,3 @@
-import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import TokenActionPoints from "./token-action-points.mjs";
 import TokenHealthConditions from "./token-health-conditions.mjs";
@@ -7,6 +6,9 @@ import TokenHealthConditions from "./token-health-conditions.mjs";
  * Provides token utilities. 
  */
 export default class TokenExtensions {
+  static ACTION_POINTS = new TokenActionPoints();
+  static HEALTH_CONDITIONS = new TokenHealthConditions();
+
   /**
    * Handles token hover extensions. 
    * 
@@ -19,12 +21,13 @@ export default class TokenExtensions {
   static updateTokenHover(token) {
     if (ValidationUtil.isDefined(token) !== true) return;
     if (ValidationUtil.isDefined(token.actor) !== true) return;
-    if (token.actor.type === ACTOR_TYPES.PLAIN) return;
 
     if (token.hover) {
-      TokenHealthConditions.hoverOn(token);
+      TokenExtensions.ACTION_POINTS.hoverOn(token);
+      TokenExtensions.HEALTH_CONDITIONS.hoverOn(token);
     } else {
-      TokenHealthConditions.hoverOff(token);
+      TokenExtensions.ACTION_POINTS.hoverOff(token);
+      TokenExtensions.HEALTH_CONDITIONS.hoverOff(token);
     }
   }
 
@@ -36,24 +39,14 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    * 
    * @static
+   * @async
    */
-  static updateTokenCombatant(token) {
+  static async updateTokenCombatant(token) {
     if (ValidationUtil.isDefined(token) !== true) return;
     if (ValidationUtil.isDefined(token.actor) !== true) return;
-    if (token.actor.type === ACTOR_TYPES.PLAIN) return;
     
-    if (token.inCombat === true) {
-      if (ValidationUtil.isDefined(token.actionPointContainer) === true) {
-        TokenActionPoints.updateOn(token);
-      } else {
-        TokenActionPoints.removeFrom(token);
-        TokenActionPoints.addTo(token);
-      }
-    } else if (token.inCombat === false && ValidationUtil.isDefined(token.actionPointContainer) === true) {
-      TokenActionPoints.removeFrom(token);
-    }
-
-    TokenHealthConditions.updateOn(token);
+    await TokenExtensions.ACTION_POINTS.updateOn(token);
+    await TokenExtensions.HEALTH_CONDITIONS.updateOn(token);
   }
 
   /**

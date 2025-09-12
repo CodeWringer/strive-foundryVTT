@@ -36,6 +36,8 @@ export class CharacterHealthCondition extends HealthCondition {
    * @param {Number | undefined} args.intensity The current value. 
    * * Negative values and `0` are clamped to `1`.
    * * Default `1`.
+   * @param {String | undefined} args.iconTextureUrl (Relative) url to a png or svg file, for 
+   * use by PixiJs. 
    */
   constructor(args = {}) {
     super(args);

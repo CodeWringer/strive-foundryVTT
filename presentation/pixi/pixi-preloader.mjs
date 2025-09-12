@@ -1,4 +1,4 @@
-import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
+import { FOUNDRY_10_PIXI_VERSION, FOUNDRY_11_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
 
 const BASE_PATH = "systems/strive/presentation/image";
 
@@ -39,6 +39,7 @@ export const PixiLoader = {
    * @property {String} CARET_RIGHT 
    */
   VECTOR_GRAPHICS: {
+    // HEALTH_CONDITION_BURNING: `${BASE_PATH}/damage-type-burning-solid.svg`,
     // CARET_LEFT: `${BASE_PATH}/caret-left-solid.svg`,
     // CARET_RIGHT: `${BASE_PATH}/caret-right-solid.svg`,
   },
@@ -88,10 +89,15 @@ export const PixiLoader = {
   preloadGraphics: async function () {
     for (const propertyName in this.VECTOR_GRAPHICS) {
       const url = this.VECTOR_GRAPHICS[propertyName];
-      const svg = await PIXI.Assets.load(url, {
-        parseAsGraphicsContext: true, // If false, it returns a texture instead.
-      });
-      const graphics = new Graphics(svg);
+      let svg;
+      if (PIXI_VERSION.greaterThan(FOUNDRY_11_PIXI_VERSION)) {
+        svg = await PIXI.Assets.load(url, {
+          parseAsGraphicsContext: true, // If false, it returns a texture instead.
+        });
+      } else {
+        svg = await PIXI.Assets.load(url);
+      }
+      const graphics = new PIXI.Graphics(svg);
       this._preloadedGraphics.set(url, graphics);
     }
   },
@@ -116,10 +122,21 @@ export const PixiLoader = {
    * 
    * @param {String} key One of the `VECTOR_GRAPHICS` constants. 
    * 
-   * @returns {PIXI.Texture}
+   * @returns {PIXI.Graphics}
    */
   getGraphics: function (key) {
     return this._preloadedGraphics.get(key);
-  }
-};
+  },
 
+  /**
+   * Loads and returns a texture identified by the given url. 
+   * 
+   * @param {String} url (Relative) url to an image file. 
+   * 
+   * @returns {PIXI.Texture}
+   * @async
+   */
+  load: async function(url) {
+    return await PIXI.Assets.load(url);
+  },
+};

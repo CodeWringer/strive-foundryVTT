@@ -63,6 +63,8 @@ import TransientIllness from "./business/document/item/transient-illness.mjs";
 import TransientInjury from "./business/document/item/transient-injury.mjs";
 import TransientMutation from "./business/document/item/transient-mutation.mjs";
 import TransientScar from "./business/document/item/transient-scar.mjs";
+// HUD
+import GameSystemTokenHud from "./presentation/token/game-system-token-hud.mjs";
 // Sheet classes
 import { GameSystemActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
 import { GameSystemItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
@@ -375,6 +377,9 @@ Hooks.once('init', function() {
 
   // Override combat tracker. 
   CONFIG.ui.combat = CustomCombatTracker;
+
+  // Override token hud.
+  CONFIG.Token.hudClass = GameSystemTokenHud;
 
   // Register sheet application classes. 
   Actors.unregisterSheet("core", ActorSheet);
