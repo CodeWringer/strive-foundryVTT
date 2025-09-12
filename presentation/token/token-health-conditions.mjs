@@ -44,9 +44,8 @@ export default class TokenHealthConditions extends TokenExtender {
   async updateOn(token) {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
 
-    // this._removeHoverFrom(token);
-    // this._removeStaticFrom(token);
-    // this._addStaticTo(token);
+    this._removeStaticFrom(token);
+    this._addStaticTo(token);
   }
 
   /**
@@ -74,6 +73,7 @@ export default class TokenHealthConditions extends TokenExtender {
     const transientActor = token.actor.getTransientObject();
 
     if (ValidationUtil.isDefined(token.healthConditionContainer)) return;
+    if (ValidationUtil.isDefined(token.healthConditionHoverContainer)) return;
 
     // Root container
     token.healthConditionContainer = new PIXI.Container();
