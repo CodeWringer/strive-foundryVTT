@@ -16,18 +16,19 @@ export default class TokenExtensions {
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
    * 
+   * @async
    * @static
    */
-  static updateTokenHover(token) {
+  static async updateTokenHover(token) {
     if (ValidationUtil.isDefined(token) !== true) return;
     if (ValidationUtil.isDefined(token.actor) !== true) return;
 
     if (token.hover) {
-      TokenExtensions.ACTION_POINTS.hoverOn(token);
-      TokenExtensions.HEALTH_CONDITIONS.hoverOn(token);
+      await TokenExtensions.ACTION_POINTS.hoverOn(token);
+      await TokenExtensions.HEALTH_CONDITIONS.hoverOn(token);
     } else {
-      TokenExtensions.ACTION_POINTS.hoverOff(token);
-      TokenExtensions.HEALTH_CONDITIONS.hoverOff(token);
+      await TokenExtensions.ACTION_POINTS.hoverOff(token);
+      await TokenExtensions.HEALTH_CONDITIONS.hoverOff(token);
     }
   }
 

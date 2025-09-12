@@ -103,7 +103,7 @@ export class PixiButton {
     const blurStrength = 4;
     const blurQuality = 4;
     this._spriteHover.filters = [
-      new PIXI.filters.BlurFilter(blurStrength, blurQuality)
+      new PIXI.BlurFilter(blurStrength, blurQuality)
     ];
 
     this.container.addChild(this._spriteHover);

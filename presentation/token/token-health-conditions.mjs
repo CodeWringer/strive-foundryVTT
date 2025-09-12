@@ -37,13 +37,13 @@ export default class TokenHealthConditions extends TokenExtender {
   MAX_STATIC_ICONS = 5;
 
   /** @override */
-  hoverOn(token) {
+  async hoverOn(token) {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
-    this._addHoverTo(token);
+    await this._addHoverTo(token);
   }
 
   /** @override */
-  hoverOff(token) {
+  async hoverOff(token) {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
     this._removeHoverFrom(token);
   }
@@ -53,7 +53,7 @@ export default class TokenHealthConditions extends TokenExtender {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
 
     this._removeStaticFrom(token);
-    this._addStaticTo(token);
+    await this._addStaticTo(token);
   }
 
   /**
@@ -96,14 +96,14 @@ export default class TokenHealthConditions extends TokenExtender {
     if (ValidationUtil.isDefined(token.healthConditionContainer)) return;
     if (ValidationUtil.isDefined(token.healthConditionHoverContainer)) return;
 
-    const healthConditions = this._getTokenHealthConditions(token);
-
     // Root container
     token.healthConditionContainer = new PIXI.Container();
     token.addChild(token.healthConditionContainer);
 
+    const healthConditions = this._getTokenHealthConditions(token);
+
     const scale = this.getScale(token);
-    const textScale = 0.8 * scale; // Magic constant seems a good default text scale. 
+    const textScale = 0.65 * scale; // Magic constant seems a good default text scale. 
     const style = token._getTextStyle();
     let x = 0;
     let y = 0;
@@ -127,6 +127,20 @@ export default class TokenHealthConditions extends TokenExtender {
 
           xInContainer += text.width;
         }
+
+        // Backdrop
+        const circleGraphics = new PIXI.Graphics();
+        circleGraphics.beginFill(0x0, 0.5);
+        const radius = this.ICON_SIZE_DEFAULT.width / 2;
+        const backdrop = circleGraphics.drawCircle(0, 0, radius);
+        backdrop.position.set(xInContainer + radius, radius);
+        const blurStrength = 5;
+        const blurQuality = 4;
+        backdrop.filters = [
+          new PIXI.BlurFilter(blurStrength, blurQuality)
+        ];
+        container.backDrop = backdrop;
+        container.addChild(backdrop);
 
         // Icon
         const texture = await PixiLoader.load(healthCondition.iconTextureUrl);

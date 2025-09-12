@@ -19,8 +19,10 @@ export default class TokenExtender {
    * Invoked when the cursor hovers over the token. 
    * 
    * @param {Token} token 
+   * 
+   * @async
    */
-  hoverOn(token) {
+  async hoverOn(token) {
     // Implementation up to inheritors. 
   }
 
@@ -28,8 +30,10 @@ export default class TokenExtender {
    * Invoked when the cursor leaves the token. 
    * 
    * @param {Token} token 
+   * 
+   * @async
    */
-  hoverOff(token) {
+  async hoverOff(token) {
     // Implementation up to inheritors. 
   }
 
@@ -38,7 +42,7 @@ export default class TokenExtender {
    * 
    * @param {Token} token 
    * 
-   * @static
+   * @async
    */
   async updateOn(token) {
     // Implementation up to inheritors. 
