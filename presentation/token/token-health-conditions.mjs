@@ -1,4 +1,5 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
+import { StringUtil } from "../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { PixiLoader } from "../pixi/pixi-preloader.mjs";
 import TokenExtender from "./token-extender.mjs";
@@ -27,6 +28,12 @@ export default class TokenHealthConditions extends TokenExtender {
    * @private
    */
   MARGIN = 5;
+  
+  /**
+   * @constant
+   * @private
+   */
+  MAX_STATIC_ICONS = 5;
 
   /** @override */
   hoverOn(token) {
@@ -83,8 +90,10 @@ export default class TokenHealthConditions extends TokenExtender {
     const textScale = 0.8 * scale; // Magic constant seems a good default text scale. 
     const style = token._getTextStyle();
     let x = 0;
-    let y = -(this.ICON_SIZE_DEFAULT.height * scale);
-    for await (const healthCondition of transientActor.health.states) {
+    let y = 0;
+    let entryCount = 0;
+    for (let i = 0; i < Math.min(this.MAX_STATIC_ICONS + 1, transientActor.health.states.length); i++) {
+      const healthCondition = transientActor.health.states[i];
       if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
         const container = new PIXI.Container();
         let xInContainer = 0;
@@ -115,10 +124,27 @@ export default class TokenHealthConditions extends TokenExtender {
         token.healthConditionContainer.addChild(container);
         container.position.set(x, y);
         
+        entryCount++;
         x += container.width + this.MARGIN;
+        if (x >= token.w) {
+          x = 0;
+          y += container.height;
+        }
       } else {
         game.strive.logger.logWarn("Failed to load texture: texture undefined");
       }
+    }
+
+    // Indicator that more hidden Conditions exist.
+    if (entryCount === this.MAX_STATIC_ICONS && transientActor.health.states.length > this.MAX_STATIC_ICONS) {
+      const localized = StringUtil.format2(game.i18n.localize("system.character.health.condition.tokenMore"), {
+        moreCount: transientActor.health.states.length - entryCount,
+      });
+      const moreText = new PreciseText(localized, style);
+      moreText.scale.set(textScale, textScale);
+      moreText.position.set(x, y);
+      token.healthConditionContainer.moreText = moreText;
+      token.healthConditionContainer.addChild(moreText);
     }
   }
 
@@ -157,6 +183,8 @@ export default class TokenHealthConditions extends TokenExtender {
     const textScale = 1.2 * scale; // Magic constant seems a good default text scale. 
     let x = token.w;
     let y = token.h - (this.ICON_SIZE_HOVER.height * scale);
+    let entriesInCurrentColumn = 0;
+    let maxWidth = 0;
     for await (const healthCondition of transientActor.health.states) {
       if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
         const container = new PIXI.Container();
@@ -201,7 +229,16 @@ export default class TokenHealthConditions extends TokenExtender {
 
         xInContainer += text.width + this.MARGIN;
 
-        y -= container.height;
+        maxWidth = Math.max(container.width, maxWidth);
+        entriesInCurrentColumn++;
+        if (entriesInCurrentColumn >= 10) {
+          entriesInCurrentColumn = 0;
+          x += maxWidth;
+          maxWidth = 0;
+          y = token.h - (this.ICON_SIZE_HOVER.height * scale);
+        } else {
+          y -= container.height;
+        }
       } else {
         game.strive.logger.logWarn("Failed to load texture: texture undefined");
       }
