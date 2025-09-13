@@ -36,6 +36,23 @@ export default class TokenHealthConditions extends TokenExtender {
    */
   MAX_STATIC_ICONS = 5;
 
+  /**
+   * Flag that is only true while a call to `updateOn` is invoked and being executed. 
+   * 
+   * While this flag is true, any further calls to that method will immediately exit, 
+   * hopefully preventing it running multiple times in parallel, which can cause 
+   * issues with token rendering. 
+   * 
+   * It's called "pseudo-Mutex" because repeat method invocations aren't queued, 
+   * they're effectively "dropped". However, it does ensure only a single invocation 
+   * is executed at any time. 
+   * 
+   * @type {Boolean}
+   * @static
+   * @private
+   */
+  static _pseudoMutexEngaged = false;
+
   /** @override */
   async hoverOn(token) {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
@@ -52,8 +69,11 @@ export default class TokenHealthConditions extends TokenExtender {
   async updateOn(token) {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
 
+    if (TokenHealthConditions._pseudoMutexEngaged === true) return;
+    TokenHealthConditions._pseudoMutexEngaged = true;
     this._removeStaticFrom(token);
     await this._addStaticTo(token);
+    TokenHealthConditions._pseudoMutexEngaged = false;
   }
 
   /**
