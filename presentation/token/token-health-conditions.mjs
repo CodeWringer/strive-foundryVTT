@@ -20,8 +20,8 @@ export default class TokenHealthConditions extends TokenExtender {
    * @private
    */
   ICON_SIZE_HOVER = {
-    width: 48,
-    height: 48,
+    width: 32,
+    height: 32,
   };
 
   /**
@@ -151,7 +151,7 @@ export default class TokenHealthConditions extends TokenExtender {
         // Backdrop
         const circleGraphics = new PIXI.Graphics();
         circleGraphics.beginFill(0x0, 0.5);
-        const radius = this.ICON_SIZE_DEFAULT.width / 2;
+        const radius = this.ICON_SIZE_DEFAULT.width * scale / 2;
         const backdrop = circleGraphics.drawCircle(0, 0, radius);
         backdrop.position.set(xInContainer + radius, radius);
         const blurStrength = 5;
@@ -194,7 +194,7 @@ export default class TokenHealthConditions extends TokenExtender {
       });
       const moreText = new PreciseText(localized, style);
       moreText.scale.set(textScale, textScale);
-      moreText.position.set(x, y);
+      moreText.position.set(x, y + ((this.ICON_SIZE_DEFAULT.height - moreText.height) / 2));
       token.healthConditionContainer.moreText = moreText;
       token.healthConditionContainer.addChild(moreText);
     }
@@ -230,11 +230,16 @@ export default class TokenHealthConditions extends TokenExtender {
     token.healthConditionHoverContainer = new PIXI.Container();
     token.addChild(token.healthConditionHoverContainer);
 
-    const scale = this.getScale(token);
+    // This ensures the hover content to always be scaled relative to the view's 
+    // current zoom level. Zooming in increases _viewPosition.scale, 
+    // while zooming out reduces it. It is a float, which means when it's 1.0, 
+    // there is no zoom, at all. 
+    const scale = 1.0 / token.scene._viewPosition.scale;
+
     const style = token._getTextStyle();
-    const textScale = 1.2 * scale; // Magic constant seems a good default text scale. 
+    const textScale = scale; // Magic constant seems a good default text scale. 
     let x = token.w;
-    let y = token.h - (this.ICON_SIZE_HOVER.height * scale);
+    let y = 0;
     let entriesInCurrentColumn = 0;
     let maxWidth = 0;
     for await (const healthCondition of healthConditions) {
@@ -291,9 +296,9 @@ export default class TokenHealthConditions extends TokenExtender {
         entriesInCurrentColumn = 0;
         x += maxWidth;
         maxWidth = 0;
-        y = token.h - (this.ICON_SIZE_HOVER.height * scale);
+        y = 0;
       } else {
-        y -= container.height;
+        y += container.height;
       }
     }
   }
