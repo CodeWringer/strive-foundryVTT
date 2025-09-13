@@ -13,6 +13,10 @@ cssClass: {undefined | String}
       {{> (template) viewModel=../viewModel.driversViewModel }}
     {{/with}}
   {{/if}}
+    {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.sheet.tab.biography"}}{{/header1}}
+    {{#with viewModel.biographyTemplate as | template |}}
+      {{> (template) viewModel=../viewModel.vmBiography }}
+    {{/with}}
   {{#if viewModel.isPC}}
     {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.fateSystem.label"}}{{/header1}}
     {{#with viewModel.fateTemplate as | template |}}

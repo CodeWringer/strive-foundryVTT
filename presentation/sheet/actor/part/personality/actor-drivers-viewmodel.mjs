@@ -1,4 +1,3 @@
-import GameSystemUserSettings from "../../../../../business/setting/game-system-user-settings.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
 import InputTextFieldViewModel from "../../../../component/input-textfield/input-textfield-viewmodel.mjs";

@@ -45,7 +45,9 @@ cssClass: {undefined | String}
         {{/if}}
         <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "system.character.sheet.tab.health"}}</div></a>
         <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "system.character.sheet.tab.assets"}}</div></a>
+        {{#if viewModel.showBiography}}
         <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="biography"><div>{{localize "system.character.sheet.tab.biography"}}</div></a>
+        {{/if}}
       {{else}}
         <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="description"><div>{{localize "system.character.sheet.tab.description"}}</div></a>
       {{/if}}
@@ -76,10 +78,12 @@ cssClass: {undefined | String}
       <div class="tab assets" data-group="primary" data-tab="assets">
         {{> lazy viewModel=viewModel.assetsViewModel}}
       </div>
+      {{#if viewModel.showBiography}}
       {{!-- Biography Tab --}}
       <div class="tab biography" data-group="primary" data-tab="biography">
         {{> lazy viewModel=viewModel.biographyViewModel}}
       </div>
+      {{/if}}
     {{else}}
       <div class="{{#if viewModel.isGM}}tab {{/if}}description" data-group="primary" data-tab="description">
         <div class="sheet-block fill">

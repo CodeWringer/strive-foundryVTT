@@ -91,6 +91,16 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * @readonly
    */
   get showPersonality() { return (this.isPC || (this.document.personalityVisible ?? false)); }
+  
+  /**
+   * Returns `true`, if the biography tab is to be shown. 
+   * 
+   * This is only the case for NPCs for whom the personality tab has not been enabled. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showBiography() { return !this.isPC && !this.document.personalityVisible; }
 
   /**
    * @param {Object} args
@@ -206,16 +216,18 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           id: "assets", 
         },
       });
-      this.biographyViewModel = new LazyLoadViewModel({
-        id: "lazyBiography",
-        parent: this,
-        template: ActorBiographyViewModel.TEMPLATE,
-        viewModelFactoryFunction: (args) => { return new ActorBiographyViewModel(args); },
-        viewModelArgs: {
-          ...args, 
-          id: "biography", 
-        },
-      });
+      if (this.showBiography) {
+        this.biographyViewModel = new LazyLoadViewModel({
+          id: "lazyBiography",
+          parent: this,
+          template: ActorBiographyViewModel.TEMPLATE,
+          viewModelFactoryFunction: (args) => { return new ActorBiographyViewModel(args); },
+          viewModelArgs: {
+            ...args, 
+            id: "biography", 
+          },
+        });
+      }
     } else {
       this.vmRtDescription = new InputRichTextViewModel({
         id: "vmRtDescription",
