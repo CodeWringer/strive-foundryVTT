@@ -1,5 +1,3 @@
-import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
-import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
@@ -15,23 +13,6 @@ import { ValidationUtil } from "../util/validation-utility.mjs";
  */
 export default class Ruleset {
   /**
-   * Returns the tier of the given level of an attribute. 
-   * 
-   * @param {Number} level The level for which to get the attribute tier. 
-   * 
-   * @returns {AttributeTier}
-   */
-  getAttributeLevelTier(level = 0) {
-    if (level < 3) {
-      return ATTRIBUTE_TIERS.underdeveloped;
-    } else if (level < 5) {
-      return ATTRIBUTE_TIERS.average;
-    } else {
-      return ATTRIBUTE_TIERS.exceptional;
-    }
-  }
-
-  /**
    * Returns the advancement requirements for the given level of an attribute. 
    * 
    * @param {Number} level The level for which to get the advancement requirements. 
@@ -42,23 +23,6 @@ export default class Ruleset {
     const base = 10;
     return base + (level * 5);
   }
-    
-  /**
-   * Returns the tier of the given level of a skill. 
-   * 
-   * @param {Number} level The level for which to get the skill tier. 
-   * 
-   * @returns {SkillTier}
-   */
-  getSkillLevelTier(level = 0) {
-    if (level < 1) {
-      return SKILL_TIERS.dabbling;
-    } else if (level < 5) {
-      return SKILL_TIERS.apprentice;
-    } else {
-      return SKILL_TIERS.master;
-    }
-  }
 
   /**
    * Returns the advancement requirements for the given level of a skill. 
@@ -66,15 +30,13 @@ export default class Ruleset {
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
    * @returns {Number}
-   * 
-   * @throws When the given level does not result in a valid skill tier. 
    */
   getSkillAdvancementRequirements(level = 0) {
     if (level === 0) {
       return 15;
     } else {
       const base = 8;
-      return base + (level * 2);
+      return base + (level * 3);
     }
   }
 

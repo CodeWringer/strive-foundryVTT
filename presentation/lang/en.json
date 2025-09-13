@@ -377,11 +377,6 @@
           "label": "Wit",
           "abbreviation": "Wit"
         },
-        "tier": {
-          "underdeveloped": "Underdeveloped",
-          "average": "Average",
-          "exceptional": "Exceptional"
-        },
         "initiative": {
           "initiative": "Initiative",
           "baseInitiative": "Base Initiative",
@@ -709,11 +704,6 @@
         },
         "properties": {
           "innate": "Innate"
-        },
-        "tier": {
-          "dabbling": "Dabbling",
-          "apprentice": "Apprentice",
-          "master": "Master"
         }
       },
       "testType": {
@@ -739,7 +729,7 @@
       }
     },
     "roll": {
-      "reminder": "Don't forget to increment your Experience Points by <code>+1</code>!",
+      "reminder": "Don't forget to increment your Experience Points (and Skill progress) by <code>+1</code>!",
       "success": "Success",
       "failure": "Failure",
       "absoluteFailure": "Absolute Failure",
