@@ -13,3 +13,10 @@ export const PIXI_VERSION = VersionCode.fromString(PIXI.VERSION);
  * @readonly
  */
 export const FOUNDRY_10_PIXI_VERSION = new VersionCode(6, 5, 2);
+
+/**
+ * @type {VersionCode}
+ * @constant
+ * @readonly
+ */
+export const FOUNDRY_11_PIXI_VERSION = new VersionCode(7, 4, 2);

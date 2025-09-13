@@ -342,7 +342,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get injuryShrugOffs() { return parseInt(thiz.document.system.health.injuryShrugOffs ?? 0); },
       set injuryShrugOffs(value) { thiz.updateByPath("system.health.injuryShrugOffs", value); },
 
-      // Conditions (used to be called health states)
+      // Conditions
       get states() { return thiz._healthStates.concat([]); },
       set states(value) {
         const dtoArray = value.map((healthCondition) => {
@@ -639,9 +639,13 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       }
 
       const healthCondition = new CharacterHealthCondition({
-        ...definition,
-        localizableName: definition.localizableName ?? entry.name,
+        name: definition.name,
+        limit: definition.limit,
         intensity: entry.intensity,
+        localizableName: definition.localizableName ?? entry.name,
+        localizableToolTip: definition.localizableToolTip,
+        iconHtml: definition.iconHtml,
+        iconTextureUrl: definition.iconTextureUrl,
       });
       result.push(healthCondition);
     }

@@ -527,6 +527,9 @@
           "plural": "Scars",
           "singular": "Scar"
         },
+        "condition": {
+          "tokenMore": "(+%{moreCount})"
+        },
         "state": {
           "label": "Condition",
           "intensity": "Intensity",

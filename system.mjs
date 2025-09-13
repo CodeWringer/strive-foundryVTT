@@ -29,7 +29,6 @@ import DocumentFetcher from "./business/document/document-fetcher/document-fetch
 import TokenExtensions from "./presentation/token/token-extensions.mjs";
 import { ValidationUtil } from "./business/util/validation-utility.mjs";
 import { ArrayUtil } from "./business/util/array-utility.mjs";
-import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
@@ -64,6 +63,8 @@ import TransientIllness from "./business/document/item/transient-illness.mjs";
 import TransientInjury from "./business/document/item/transient-injury.mjs";
 import TransientMutation from "./business/document/item/transient-mutation.mjs";
 import TransientScar from "./business/document/item/transient-scar.mjs";
+// HUD
+import GameSystemTokenHud from "./presentation/token/game-system-token-hud.mjs";
 // Sheet classes
 import { GameSystemActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
 import { GameSystemItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
@@ -153,6 +154,7 @@ import { PropertyUtil } from "./business/util/property-utility.mjs";
 import { StringUtil } from "./business/util/string-utility.mjs";
 import { UuidUtil } from "./business/util/uuid-utility.mjs";
 import FoundryWrapper from "./common/foundry-wrapper.mjs";
+import { PixiLoader } from "./presentation/pixi/pixi-preloader.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -376,6 +378,9 @@ Hooks.once('init', function() {
   // Override combat tracker. 
   CONFIG.ui.combat = CustomCombatTracker;
 
+  // Override token hud.
+  CONFIG.Token.hudClass = GameSystemTokenHud;
+
   // Register sheet application classes. 
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet(SYSTEM_ID, GameSystemActorSheet, { makeDefault: true });
@@ -383,8 +388,9 @@ Hooks.once('init', function() {
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
 
-  // Preload PIXI textures. 
-  preloadPixiTextures();
+  // Preload PixiJs assets. 
+  PixiLoader.preloadTextures();
+  PixiLoader.preloadGraphics();
   
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
