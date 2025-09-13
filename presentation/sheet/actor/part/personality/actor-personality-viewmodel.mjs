@@ -6,6 +6,7 @@ import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
+import ActorBiographyViewModel from "../actor-biography-viewmodel.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */
@@ -24,13 +25,19 @@ export default class ActorPersonalityViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get driversTemplate() { return game.strive.const.TEMPLATES.ACTOR_DRIVERS; }
+  get driversTemplate() { return ActorDriversViewModel.TEMPLATE; }
 
   /**
    * @type {String}
    * @readonly
    */
-  get fateTemplate() { return game.strive.const.TEMPLATES.ACTOR_FATE; }
+  get biographyTemplate() { return ActorBiographyViewModel.TEMPLATE; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get fateTemplate() { return ActorFateViewModel.TEMPLATE; }
 
   /**
    * Returns true, if the actor is a player character. 
@@ -79,6 +86,12 @@ export default class ActorPersonalityViewModel extends ViewModel {
       isSendable: this.isSendable,
       isEditable: this.isEditable,
       isOwner: this.isOwner,
+      document: this.document,
+    });
+
+    this.vmBiography = new ActorBiographyViewModel({
+      id: "vmBiography",
+      parent: this,
       document: this.document,
     });
 
