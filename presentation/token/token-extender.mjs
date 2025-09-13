@@ -12,7 +12,7 @@ export default class TokenExtender {
    * @returns {Number}
    */
   getScale(token) {
-    return token.h / 100.0; // Baseline from 100px. If the canvas size changes, this number changes. 
+    return token.scene.dimensions.size / 100.0; // Baseline from 100px. If the canvas size changes, this number changes. 
   }
 
   /**
