@@ -4,6 +4,8 @@ import ViewModel from "../../view-model/view-model.mjs";
 import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs";
 import { StringUtil } from "../../../business/util/string-utility.mjs";
 
+// TODO: Persist Momentum
+// TODO: clip middle image based on current value
 export default class MomentumBarViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.MOMENTUM_BAR; }
@@ -19,10 +21,6 @@ export default class MomentumBarViewModel extends ViewModel {
 
     const handleElement = this.element.find(`#${this.vmRange.id}`);
     handleElement.attr("style", `left: ${this.handlePosition};`);
-
-    this.vmCurrent.localizedToolTip = StringUtil.format2(game.i18n.localize("system.combat.momentum.current"), {
-      current: this.value,
-    });
   }
 
   /**
@@ -95,9 +93,6 @@ export default class MomentumBarViewModel extends ViewModel {
       value: this._value,
       min: this.min,
       max: this.max,
-      localizedToolTip: StringUtil.format2(game.i18n.localize("system.combat.momentum.current"), {
-        current: this.value,
-      }),
       onChange: (_, newValue) => {
         this.value = newValue;
       },

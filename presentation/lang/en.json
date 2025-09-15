@@ -32,8 +32,7 @@
       "momentum": {
         "momentum": "Momentum",
         "min": "Minimum Momentum: %{min}",
-        "max": "Maximum Momentum: %{max}",
-        "current": "Momentum: %{current}"
+        "max": "Maximum Momentum: %{max}"
       }
     },
     "general": {
