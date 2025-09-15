@@ -71,6 +71,16 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
+   * Set to `true` when updating the value without wanting events to fire. 
+   * 
+   * This is intended to prevent infinite circular onChange invocations. For use by inheritors 
+   * who want to update the displayed value, but without triggering callbacks. 
+   * @type {Boolean}
+   * @protected
+   */
+  _suppressEvent = false;
+
+  /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
@@ -121,6 +131,7 @@ export default class InputViewModel extends ViewModel {
    * @protected
    */
   _onChange(event) {
+    if (this._suppressEvent) return;
     const newValue = SheetUtil.getElementValue(event.currentTarget);
 
     if (ValidationUtil.isDefined(newValue) !== true) {

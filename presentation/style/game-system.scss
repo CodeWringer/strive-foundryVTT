@@ -50,6 +50,7 @@
 @import '../sheet/actor/part/health/grit-points/grit-points';
 @import '../sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar';
 @import '../dialog/damage-designer-dialog/damage-designer-dialog';
+@import '../combat/momentum/momentum-bar.scss';
 
 /* Sheets / Documents */
 @import '../sheet/actor/part/assets/actor-asset-slot';
@@ -68,6 +69,7 @@
 @import 'global/overrides/editor';
 @import 'global/overrides/textfield';
 @import 'global/overrides/context-menu';
+@import 'global/overrides/image';
 
 /* Animations */
 @import 'anims/spinner';

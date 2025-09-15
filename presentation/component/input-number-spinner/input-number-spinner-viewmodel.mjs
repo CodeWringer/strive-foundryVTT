@@ -53,6 +53,12 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
       this._value = this.max;
     else
       this._value = parsedValue;
+
+    // Update visuals. 
+    this._suppressEvent = true;
+    SheetUtil.setElementValue(this.element, newValue);
+    this._suppressEvent = false;
+
     this.onChange(oldValue, this._value);
   }
 
@@ -165,8 +171,6 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   _onClickNumberSpinnerUp(event) {
     const newValue = parseInt(this.value) + 1;
     if (this.max !== undefined && newValue > this.max) return;
-    
-    SheetUtil.setElementValue(this.element, newValue);
     this.value = newValue;
   }
 
@@ -180,8 +184,6 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   _onClickNumberSpinnerDown(event) {
     const newValue = parseInt(this.value) - 1;
     if (this.min !== undefined && newValue < this.min) return;
-    
-    SheetUtil.setElementValue(this.element, newValue);
     this.value = newValue;
   }
 }

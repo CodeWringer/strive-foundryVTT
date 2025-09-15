@@ -8,6 +8,7 @@ import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dia
 import GritPointsCombatTrackerViewModel from "../sheet/actor/part/health/grit-points/grit-points-combat-tracker-viewmodel.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
 import GeneralCombatAbilitiesViewModel from "./general-combat-actions/general-combat-abilities-viewmodel.mjs";
+import MomentumBarViewModel from "./momentum/momentum-bar-viewmodel.mjs";
 
 /**
  * @property {Array<CombatTrackerActionPointsViewModel>} actionPointsViewModels
@@ -32,6 +33,17 @@ export default class CustomCombatTracker extends CombatTracker {
     // Reset view models.
     this.actionPointsViewModels = [];
     this.gritPointsViewModels = [];
+
+    this.vmMomentum = new MomentumBarViewModel({
+      id: "vmMomentum",
+      isEditable: true,
+      value: data.combat.momentum,
+      onChange: (_, newValue) => {
+        data.combat.momentum = newValue;
+      },
+    });
+    data.vmMomentum = this.vmMomentum;
+    data.momentumTemplate = MomentumBarViewModel.TEMPLATE;
 
     // Extend the "turns" data. 
     for (const turn of data.turns) {
@@ -124,6 +136,7 @@ export default class CustomCombatTracker extends CombatTracker {
     }
 
     this.vmSendToChatGeneralActions.activateListeners(html);
+    this.vmMomentum.activateListeners(html);
   }
 
   /**
