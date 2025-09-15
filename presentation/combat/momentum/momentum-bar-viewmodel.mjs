@@ -3,10 +3,16 @@ import ViewModel from "../../view-model/view-model.mjs";
 import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs";
 import { StringUtil } from "../../../business/util/string-utility.mjs";
 
-// TODO: clip middle image based on current value
 export default class MomentumBarViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.MOMENTUM_BAR; }
+
+  /**
+   * If `true`, then the user is currently dragging the handle to adjust the value. 
+   * @type {Boolean}
+   * @private
+   */
+  _isDragging = false;
 
   /**
    * @type {Number}
@@ -20,17 +26,13 @@ export default class MomentumBarViewModel extends ViewModel {
     const handleElement = this.element.find(`#${this.vmSliderHandle.id}`);
     handleElement.attr("style", `left: ${this.handlePosition};`);
 
+    const centerImageElement = this.element.find(`#${this.id}-center-image`);
+    centerImageElement.attr("style", this.centerImageStyle);
+
     if (this._isDragging === false) {
       this.onChange(oldValue, newValue);
     }
   }
-
-  /**
-   * If `true`, then the user is currently dragging the handle to adjust the value. 
-   * @type {Boolean}
-   * @private
-   */
-  _isDragging = false;
 
   /**
    * @type {Number}
@@ -47,12 +49,26 @@ export default class MomentumBarViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get handlePosition() {
+  get handlePercentage() {
     const absoluteMin = Math.abs(this.min);
     const valueShiftedByMin = this.value + absoluteMin;
     const maxShiftedByMin = this.max + absoluteMin;
-    const percentage = valueShiftedByMin / maxShiftedByMin * 100;
-    return `calc(${percentage}% - 9px)`;
+    return valueShiftedByMin / maxShiftedByMin * 100;
+  }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get handlePosition() { return `calc(${this.handlePercentage}% - 9px)`; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get centerImageStyle() {
+    const percentage = this.handlePercentage;
+    return `clip-path: polygon(50% 0%, ${percentage}% 0%, ${percentage}% 100%, 50% 100%); -webkit-clip-path: polygon(50% 0%, ${percentage}% 0%, ${percentage}% 100%, 50% 100%);`;
   }
 
   /**

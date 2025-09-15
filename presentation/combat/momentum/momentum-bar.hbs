@@ -4,7 +4,7 @@ viewModel: MomentumBarViewModel
 <div id="{{viewModel.id}}" class="momentum-bar-root">
   <div id="{{viewModel.id}}-slider" class="momentum-bar flex flex-row flex-center">
     <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-bg.svg">
-    <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-center.svg">
+    <img id="{{viewModel.id}}-center-image" class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-center.svg" style="{{viewModel.centerImageStyle}}">
     <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-fg.svg">
     <img id="{{viewModel.vmSliderHandle.id}}" class="undecorated momentum-bar-handle" src="/systems/strive/presentation/image/momentum-bar-handle.svg" style="left: {{viewModel.handlePosition}};">
   </div>
