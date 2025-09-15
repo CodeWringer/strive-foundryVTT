@@ -1,6 +1,8 @@
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import InputSliderViewModel from "../../component/input-slider/input-slider-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
+import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
 
 export default class MomentumBarViewModel extends ViewModel {
   /** @override */
@@ -11,7 +13,25 @@ export default class MomentumBarViewModel extends ViewModel {
    * @private
    */
   _value = 0;
-  
+  get value() { return this._value; }
+  set value(newValue) {
+    this._value = Math.max(this.min, Math.min(this.max, newValue));
+
+    const handleElement = this.element.find(`#${this.vmRange.id}`);
+    handleElement.attr("style", `left: ${this.handlePosition};`);
+
+    this.vmCurrent.localizedToolTip = StringUtil.format2(game.i18n.localize("system.combat.momentum.current"), {
+      current: this.value,
+    });
+  }
+
+  /**
+   * If `true`, then the user is currently dragging the handle to adjust the value. 
+   * @type {Boolean}
+   * @private
+   */
+  _isDragging = false;
+
   /**
    * @type {Number}
    * @readonly
@@ -28,7 +48,11 @@ export default class MomentumBarViewModel extends ViewModel {
    * @readonly
    */
   get handlePosition() {
-    return "calc(50% - 9px)";
+    const absoluteMin = Math.abs(this.min);
+    const valueShiftedByMin = this._value + absoluteMin;
+    const maxShiftedByMin = this.max + absoluteMin;
+    const percentage = valueShiftedByMin / maxShiftedByMin * 100;
+    return `calc(${percentage}% - 9px)`;
   }
 
   /**
@@ -48,15 +72,72 @@ export default class MomentumBarViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    this.localizedToolTip = `${game.i18n.localize("system.combat.momentum.momentum")}: ${this._value}`;
+    this.localizedToolTip = game.i18n.localize("system.combat.momentum.momentum"),
 
-    ValidationUtil.validateOrThrow(args, ["document"]);
+      ValidationUtil.validateOrThrow(args, ["document"]);
     this.document = args.document;
 
     this.vmRange = new ViewModel({
       id: "vmRange",
       parent: this,
+    });
+    this.vmMin = new ReadOnlyValueViewModel({
+      id: "vmMin",
+      parent: this,
+      value: this.min,
+      localizedToolTip: StringUtil.format2(game.i18n.localize("system.combat.momentum.min"), {
+        min: this.min,
+      }),
+    });
+    this.vmCurrent = new InputNumberSpinnerViewModel({
+      id: "vmCurrent",
+      parent: this,
       value: this._value,
+      min: this.min,
+      max: this.max,
+      localizedToolTip: StringUtil.format2(game.i18n.localize("system.combat.momentum.current"), {
+        current: this.value,
+      }),
+      onChange: (_, newValue) => {
+        this.value = newValue;
+      },
+    });
+    this.vmMax = new ReadOnlyValueViewModel({
+      id: "vmMax",
+      parent: this,
+      value: this.max,
+      localizedToolTip: StringUtil.format2(game.i18n.localize("system.combat.momentum.max"), {
+        max: this.max,
+      }),
+    });
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    this.element.on("mouseleave", (e) => {
+      this._isDragging = false;
+      this.element.off("mousemove.momentum");
+    });
+    this.element.on("mouseup", (e) => {
+      this._isDragging = false;
+      this.element.off("mousemove.momentum");
+    });
+
+    const handleElement = this.element.find(`#${this.vmRange.id}`);
+    handleElement.on("mousedown", (e) => {
+      this._isDragging = true;
+      this.element.on("mousemove.momentum", (e) => {
+        if (!this._isDragging) return;
+
+        const parentX = this.element.offset().left;
+        const percentageFactor = (e.pageX - parentX) / this.element.width();
+        const absoluteMin = Math.abs(this.min);
+        const maxShiftedByMin = this.max + absoluteMin;
+        const newValue = (maxShiftedByMin * percentageFactor) - absoluteMin;
+        this.vmCurrent.value = Math.round(newValue);
+      });
     });
   }
 }

@@ -1,9 +1,18 @@
 {{!--
 viewModel: MomentumBarViewModel
 --}}
-<div id="{{viewModel.id}}" class="momentum-bar flex flex-row flex-center">
-  <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-bg.svg">
-  <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-center.svg">
-  <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-fg.svg">
-  <img id="{{viewModel.vmRange.id}}" class="undecorated momentum-bar-handle" src="/systems/strive/presentation/image/momentum-bar-handle.svg" style="left: {{viewModel.handlePosition}};">
+<div id="{{viewModel.id}}" class="momentum-bar-root">
+  <div class="momentum-bar flex flex-row flex-center">
+    <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-bg.svg">
+    <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-center.svg">
+    <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-fg.svg">
+    <img id="{{viewModel.vmRange.id}}" class="undecorated momentum-bar-handle" src="/systems/strive/presentation/image/momentum-bar-handle.svg" style="left: {{viewModel.handlePosition}};">
+  </div>
+  <div class="flex flex-row flex-justify font-size-default">
+    {{> readOnlyValue viewModel=viewModel.vmMin cssClass="width-sm" }}
+    <span class="width-md">
+      {{> inputNumberSpinner viewModel=viewModel.vmCurrent }}
+    </span>
+    {{> readOnlyValue viewModel=viewModel.vmMax cssClass="width-sm" }}
+  </div>
 </div>
