@@ -2,11 +2,11 @@
 viewModel: MomentumBarViewModel
 --}}
 <div id="{{viewModel.id}}" class="momentum-bar-root">
-  <div class="momentum-bar flex flex-row flex-center">
+  <div id="{{viewModel.id}}-slider" class="momentum-bar flex flex-row flex-center">
     <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-bg.svg">
     <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-center.svg">
     <img class="undecorated momentum-bar-decoration" src="/systems/strive/presentation/image/momentum-bar-fg.svg">
-    <img id="{{viewModel.vmRange.id}}" class="undecorated momentum-bar-handle" src="/systems/strive/presentation/image/momentum-bar-handle.svg" style="left: {{viewModel.handlePosition}};">
+    <img id="{{viewModel.vmSliderHandle.id}}" class="undecorated momentum-bar-handle" src="/systems/strive/presentation/image/momentum-bar-handle.svg" style="left: {{viewModel.handlePosition}};">
   </div>
   <div class="flex flex-row flex-justify font-size-default" style="height: 26px;">
     {{> readOnlyValue viewModel=viewModel.vmMin cssClass="width-sm" }}

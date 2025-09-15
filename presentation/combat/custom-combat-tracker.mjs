@@ -37,7 +37,10 @@ export default class CustomCombatTracker extends CombatTracker {
     this.vmMomentum = new MomentumBarViewModel({
       id: "vmMomentum",
       isEditable: true,
-      document: data,
+      value: data.combat.momentum,
+      onChange: (_, newValue) => {
+        data.combat.momentum = newValue;
+      },
     });
     data.vmMomentum = this.vmMomentum;
     data.momentumTemplate = MomentumBarViewModel.TEMPLATE;
