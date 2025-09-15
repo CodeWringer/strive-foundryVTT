@@ -28,6 +28,11 @@
       "inProgress": "Migration in progress, please wait...",
       "migrationRequiredUserWarning": "It seems this world is not up to date with the installed system version. Please coordinate with your game master and log out while they migrate the world system."
     },
+    "combat": {
+      "momentum": {
+        "momentum": "Momentum"
+      }
+    },
     "general": {
       "actor": {
         "label": "Actor",

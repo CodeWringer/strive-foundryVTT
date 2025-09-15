@@ -1,0 +1,14 @@
+.momentum-bar {
+  position: relative;
+  height: 64px;
+
+  img.momentum-bar-decoration {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .momentum-bar-handle {
+    position: absolute;
+    cursor: grab;
+  }
+}
