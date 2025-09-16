@@ -50,6 +50,12 @@
       "type": "Item"
     },
     {
+      "name": "momentum-actions",
+      "label": "Momentum Actions",
+      "path": "packs/momentum-actions",
+      "type": "Item"
+    },
+    {
       "name": "mutations",
       "label": "Mutations",
       "path": "packs/mutations",
