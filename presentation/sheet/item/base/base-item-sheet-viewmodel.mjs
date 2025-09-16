@@ -62,6 +62,15 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get showNavigation() { return this.isGM === true }
 
   /**
+   * Returns true, if the description is to be shown. 
+   * 
+   * @type
+   * @protected
+   * @readonly
+   */
+  get showDescription() { return true; }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 

@@ -1,9 +1,9 @@
 import { SKILL_TAGS } from "../../tags/system-tags.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
-import { CONTENT_TYPES } from "../content-types.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../document-fetcher/document-fetcher.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs";
+import { ITEM_TYPES } from "../item/item-types.mjs";
 
 /**
  * 
@@ -42,7 +42,7 @@ export default class BulkDevDocumentUpdater {
     });
     const templateSkills = await docFetcher.findAll({
       documentType: GENERAL_DOCUMENT_TYPES.ITEM,
-      contentType: CONTENT_TYPES.ITEM.SKILL,
+      contentType: ITEM_TYPES.SKILL,
       source: DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia,
       searchEmbedded: false,
       includeLocked: true,
@@ -56,7 +56,7 @@ export default class BulkDevDocumentUpdater {
       if (actor.pack !== args.packName) continue;
 
       this.onBeginDocument(actor, currentProgress, maxProgress);
-      const skillsOfActor = actor.items.filter(it => it.type === CONTENT_TYPES.ITEM.SKILL);
+      const skillsOfActor = actor.items.filter(it => it.type === ITEM_TYPES.SKILL);
 
       for await (const skill of skillsOfActor) {
         const transientSkill = skill.getTransientObject();

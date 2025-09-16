@@ -27,6 +27,7 @@ const basePathComponent = `${basePathPresentation}/component`;
 export const TEMPLATES = {
   // --- Components
   COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
+  COMPONENT_HORIZONTAL_DIVIDER: `${basePathComponent}/divider/h-divider.hbs`,
   // Labels
   COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
   COMPONENT_DYNAMIC_LABEL: `${basePathComponent}/label/dynamic-label.hbs`,
