@@ -52,13 +52,28 @@ export default class MomentumActionChatMessageViewModel extends ViewModel {
 
     this.document = args.document;
 
-    this.vmLazyDescription = new LazyRichTextViewModel({
-      id: "vmLazyDescription",
+    this.imgHeroic = this.document.imgHeroic;
+    this.nameHeroic = this.document.nameHeroic;
+    this.imgDesperate = this.document.imgDesperate;
+    this.nameDesperate = this.document.nameDesperate;
+    this.momentumShiftHeroic = this.document.momentumShiftHeroic;
+    this.momentumShiftDesperate = this.document.momentumShiftDesperate;
+
+    this.vmLazyDescriptionHeroic = new LazyRichTextViewModel({
+      id: "vmLazyDescriptionHeroic",
       parent: this,
       isEditable: this.isEditable,
       isSendable: this.isSendable,
       isOwner: this.isOwner,
-      renderableContent: this.document.description,
+      renderableContent: this.document.descriptionHeroic,
+    });
+    this.vmLazyDescriptionDesperate = new LazyRichTextViewModel({
+      id: "vmLazyDescriptionDesperate",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      renderableContent: this.document.descriptionDesperate,
     });
   }
 }

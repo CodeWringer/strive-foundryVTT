@@ -14,8 +14,26 @@ cssClass: {undefined | String}
     </div>
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
-  {{!-- Description --}}
-  <div class="sheet-block">
-    {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
+  {{!-- Heroics --}}
+  <div class="flex flex-column auto-margin-v-sm sheet-block">
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle auto-margin-h-md"}}
+      <img src="{{viewModel.imgHeroic}}" class="custom-icon-md">
+      <span>{{viewModel.nameHeroic}}</span>
+    {{/header2}}
+    <span>{{localize "system.combat.momentum.shift"}}: {{viewModel.momentumShiftHeroic}}</span>
+    <div class="flex flex-column">
+      {{> lazyRichText viewModel=viewModel.vmLazyDescriptionHeroic}}
+    </div>
+  </div>
+  {{!-- Desperation --}}
+  <div class="flex flex-column auto-margin-v-sm sheet-block">
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle auto-margin-h-md"}}
+      <img src="{{viewModel.imgDesperate}}" class="custom-icon-md">
+      <span>{{viewModel.nameDesperate}}</span>
+    {{/header2}}
+    <span>{{localize "system.combat.momentum.shift"}}: {{viewModel.momentumShiftDesperate}}</span>
+    <div class="flex flex-column">
+      {{> lazyRichText viewModel=viewModel.vmLazyDescriptionDesperate}}
+    </div>
   </div>
 </section>

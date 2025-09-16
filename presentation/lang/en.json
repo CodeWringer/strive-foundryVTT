@@ -43,6 +43,7 @@
         "descriptionHeroic": "Heroic Act Description",
         "shiftDesperate": "Desperate Measure Momentum Shift",
         "shiftHeroic": "Heroic Act Momentum Shift",
+        "shift": "Momentum Shift",
         "reminder": {
           "reminder": "<div class='grid col3 gap-lg borders dark'><h3 class='strive-header'>Gaining Momentum</h3><h3 class='strive-header'>Losing Momentum</h3><h3 class='strive-header'>Notes</h3>%{row1}%{row2}%{row3}%{row4}</div>",
           "row1": "<span>Damaging a foe: <code>+1</code></span><span><b>PC</b> being damaged: <code>-2</code></span><span>Only applies if any damage is actually applied to HP!</span>",
