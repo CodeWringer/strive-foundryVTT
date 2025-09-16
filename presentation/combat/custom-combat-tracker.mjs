@@ -138,7 +138,9 @@ export default class CustomCombatTracker extends CombatTracker {
     }
 
     this.vmSendToChatGeneralActions.activateListeners(html);
-    this.vmMomentum.activateListeners(html);
+    if (ValidationUtil.isDefined(this.vmMomentum)) {
+      this.vmMomentum.activateListeners(html);
+    }
   }
 
   /**
