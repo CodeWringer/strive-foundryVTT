@@ -7,6 +7,7 @@
   "TYPES.Item.fate-card": "Fate-Card",
   "TYPES.Item.injury": "Injury",
   "TYPES.Item.illness": "Illness",
+  "TYPES.Item.momentum-action": "Momentum Action",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
   "COMBAT.ActionPoints": "Set Action Points",
@@ -30,9 +31,18 @@
     },
     "combat": {
       "momentum": {
+        "action": "Momentum Action",
         "momentum": "Momentum",
         "min": "Minimum Momentum: %{min}",
-        "max": "Maximum Momentum: %{max}"
+        "max": "Maximum Momentum: %{max}",
+        "imgDesperate": "Image Desperate Measure",
+        "nameDesperate": "Name Desperate Measure",
+        "descriptionDesperate": "Description Desperate Measure",
+        "imgHeroic": "Image Heroic Act",
+        "nameHeroic": "Name Heroic Act",
+        "descriptionHeroic": "Description Heroic Act",
+        "shiftDesperate": "Desperate Measure Momentum Shift",
+        "shiftHeroic": "Heroic Act Momentum Shift"
       }
     },
     "general": {

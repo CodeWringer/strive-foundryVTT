@@ -138,6 +138,10 @@ export const TEMPLATES = {
   // Illness
   ILLNESS_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/illness/illness-chat-message.hbs`,
   ILLNESS_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/illness/illness-list-item-promoted-content.hbs`,
+  // Momentum
+  MOMENTUM_ACTION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-chat-message.hbs`,
+  MOMENTUM_ACTION_ITEM_SHEET_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-item-sheet-extra-content.hbs`,
+  MOMENTUM_BAR: `${basePathPresentation}/combat/momentum/momentum-bar.hbs`,
   // Mutation
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
   // Mutation
@@ -146,7 +150,6 @@ export const TEMPLATES = {
   GENERAL_COMBAT_ABILITIES_CHAT_MESSAGE: `${basePathPresentation}/combat/general-combat-actions/general-combat-abilities-chat-message.hbs`,
   COMBAT_TRACKER: `${basePathPresentation}/combat/combat-tracker.hbs`,
   COMBAT_TRACKER_ACTION_POINTS: `${basePathPresentation}/combat/combat-tracker-action-points.hbs`,
-  MOMENTUM_BAR: `${basePathPresentation}/combat/momentum/momentum-bar.hbs`,
   // Token HUD
   TOKEN_HUD: `${basePathPresentation}/token/token-hud.hbs`,
 }

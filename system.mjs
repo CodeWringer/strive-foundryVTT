@@ -61,6 +61,7 @@ import TransientBaseItem from "./business/document/item/transient-base-item.mjs"
 import TransientFateCard from "./business/document/item/transient-fate-card.mjs";
 import TransientIllness from "./business/document/item/transient-illness.mjs";
 import TransientInjury from "./business/document/item/transient-injury.mjs";
+import TransientMomentumAction from "./business/document/item/transient-momentum-action.mjs";
 import TransientMutation from "./business/document/item/transient-mutation.mjs";
 import TransientScar from "./business/document/item/transient-scar.mjs";
 // HUD
@@ -139,6 +140,8 @@ import IllnessItemSheetViewModel from "./presentation/sheet/item/illness/illness
 import IllnessListItemViewModel from "./presentation/sheet/item/illness/illness-list-item-viewmodel.mjs";
 import InjuryItemSheetViewModel from "./presentation/sheet/item/injury/injury-item-sheet-viewmodel.mjs";
 import InjuryListItemViewModel from "./presentation/sheet/item/injury/injury-list-item-viewmodel.mjs";
+import MomentumActionItemSheetViewModel from "./presentation/sheet/item/momentum-action/momentum-action-item-sheet-viewmodel.mjs";
+import MomentumActionListItemViewModel from "./presentation/sheet/item/momentum-action/momentum-action-list-item-viewmodel.mjs";
 import MutationItemSheetViewModel from "./presentation/sheet/item/mutation/mutation-item-sheet-viewmodel.mjs";
 import MutationListItemViewModel from "./presentation/sheet/item/mutation/mutation-list-item-viewmodel.mjs";
 import ScarItemSheetViewModel from "./presentation/sheet/item/scar/scar-item-sheet-viewmodel.mjs";
@@ -261,6 +264,7 @@ Hooks.once('init', function() {
         TransientFateCard: TransientFateCard,
         TransientIllness: TransientIllness,
         TransientInjury: TransientInjury,
+        TransientMomentumAction: TransientMomentumAction,
         TransientMutation: TransientMutation,
         TransientScar: TransientScar,
       },
@@ -328,6 +332,8 @@ Hooks.once('init', function() {
           IllnessListItemViewModel: IllnessListItemViewModel,
           InjuryItemSheetViewModel: InjuryItemSheetViewModel,
           InjuryListItemViewModel: InjuryListItemViewModel,
+          MomentumActionItemSheetViewModel: MomentumActionItemSheetViewModel,
+          MomentumActionListItemViewModel: MomentumActionListItemViewModel,
           MutationItemSheetViewModel: MutationItemSheetViewModel,
           MutationListItemViewModel: MutationListItemViewModel,
           ScarItemSheetViewModel: ScarItemSheetViewModel,
