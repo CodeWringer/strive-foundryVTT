@@ -35,12 +35,12 @@
         "momentum": "Momentum",
         "min": "Minimum Momentum: %{min}",
         "max": "Maximum Momentum: %{max}",
-        "imgDesperate": "Image Desperate Measure",
-        "nameDesperate": "Name Desperate Measure",
-        "descriptionDesperate": "Description Desperate Measure",
-        "imgHeroic": "Image Heroic Act",
-        "nameHeroic": "Name Heroic Act",
-        "descriptionHeroic": "Description Heroic Act",
+        "imgDesperate": "Desperate Measure Image",
+        "nameDesperate": "Desperate Measure Name",
+        "descriptionDesperate": "Desperate Measure Description",
+        "imgHeroic": "Heroic Act Image",
+        "nameHeroic": "Heroic Act Name",
+        "descriptionHeroic": "Heroic Act Description",
         "shiftDesperate": "Desperate Measure Momentum Shift",
         "shiftHeroic": "Heroic Act Momentum Shift"
       }

@@ -31,34 +31,6 @@ export default class MomentumActionItemSheetViewModel extends BaseItemSheetViewM
   constructor(args = {}) {
     super(args);
 
-    this.vmImgDesperate = new InputImageViewModel({
-      id: "vmImgDesperate",
-      parent: this,
-      value: this.document.imgDesperate,
-      localizedToolTip: game.i18n.localize("system.combat.momentum.imgDesperate"),
-      onChange: (_, newValue) => {
-        this.document.imgDesperate = newValue;
-      },
-    });
-    this.vmNameDesperate = new InputTextFieldViewModel({
-      id: "vmNameDesperate",
-      parent: this,
-      value: this.document.nameDesperate,
-      localizedToolTip: game.i18n.localize("system.combat.momentum.nameDesperate"),
-      onChange: (_, newValue) => {
-        this.document.nameDesperate = newValue;
-      },
-    });
-    this.vmDescriptionDesperate = new InputRichTextViewModel({
-      id: "vmDescriptionDesperate",
-      parent: this,
-      value: this.document.descriptionDesperate,
-      localizedToolTip: game.i18n.localize("system.combat.momentum.descriptionDesperate"),
-      onChange: (_, newValue) => {
-        this.document.descriptionDesperate = newValue;
-      },
-    });
-
     this.vmImgHeroic = new InputImageViewModel({
       id: "vmImgHeroic",
       parent: this,
@@ -86,24 +58,39 @@ export default class MomentumActionItemSheetViewModel extends BaseItemSheetViewM
         this.document.descriptionHeroic = newValue;
       },
     });
+
+    this.vmImgDesperate = new InputImageViewModel({
+      id: "vmImgDesperate",
+      parent: this,
+      value: this.document.imgDesperate,
+      localizedToolTip: game.i18n.localize("system.combat.momentum.imgDesperate"),
+      onChange: (_, newValue) => {
+        this.document.imgDesperate = newValue;
+      },
+    });
+    this.vmNameDesperate = new InputTextFieldViewModel({
+      id: "vmNameDesperate",
+      parent: this,
+      value: this.document.nameDesperate,
+      localizedToolTip: game.i18n.localize("system.combat.momentum.nameDesperate"),
+      onChange: (_, newValue) => {
+        this.document.nameDesperate = newValue;
+      },
+    });
+    this.vmDescriptionDesperate = new InputRichTextViewModel({
+      id: "vmDescriptionDesperate",
+      parent: this,
+      value: this.document.descriptionDesperate,
+      localizedToolTip: game.i18n.localize("system.combat.momentum.descriptionDesperate"),
+      onChange: (_, newValue) => {
+        this.document.descriptionDesperate = newValue;
+      },
+    });
   }
 
   /** @override */
   getDataFields() {
     return [
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          id: "vmMomentumShiftDesperate",
-          parent: this,
-          value: this.document.momentumShiftDesperate,
-          onChange: (_, newValue) => {
-            this.document.momentumShiftDesperate = newValue;
-          },
-        }),
-        localizedToolTip: game.i18n.localize("system.combat.momentum.shiftDesperate"),
-        iconClass: "",
-      }),
       new DataFieldComponent({
         template: InputNumberSpinnerViewModel.TEMPLATE,
         viewModel: new InputNumberSpinnerViewModel({
@@ -115,6 +102,19 @@ export default class MomentumActionItemSheetViewModel extends BaseItemSheetViewM
           },
         }),
         localizedToolTip: game.i18n.localize("system.combat.momentum.shiftHeroic"),
+        iconClass: "",
+      }),
+      new DataFieldComponent({
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModel: new InputNumberSpinnerViewModel({
+          id: "vmMomentumShiftDesperate",
+          parent: this,
+          value: this.document.momentumShiftDesperate,
+          onChange: (_, newValue) => {
+            this.document.momentumShiftDesperate = newValue;
+          },
+        }),
+        localizedToolTip: game.i18n.localize("system.combat.momentum.shiftDesperate"),
         iconClass: "",
       }),
     ];
