@@ -65,9 +65,11 @@
     </div>
     
     {{!-- Momentum --}}
+    {{#if vmMomentum}}
     {{#with momentumTemplate as |template|}}
       {{> (template) viewModel=../vmMomentum}}
     {{/with}}
+    {{/if}}
   </header>
 
   <ol id="combat-tracker" class="directory-list">
