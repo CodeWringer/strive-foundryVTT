@@ -35,6 +35,7 @@ export function initHandlebarsHelpers() {
  * * `header2` - accepts child content.
  * * `header3` - accepts child content.
  * * `hintCard` - accepts child content.
+ * * `hDivider` - accepts **no** child content.
  */
 export function initHandlebarsPartials() {
   Handlebars.registerPartial('verticalLine', `{{#> "${TEMPLATES.COMPONENT_VERTICAL_LINE}"}}{{/"${TEMPLATES.COMPONENT_VERTICAL_LINE}"}}`);
@@ -43,6 +44,7 @@ export function initHandlebarsPartials() {
   Handlebars.registerPartial('header2', `{{#> "${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}`);
   Handlebars.registerPartial('header3', `{{#> "${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}`);
   Handlebars.registerPartial('hintCard', `{{#> "${TEMPLATES.COMPONENT_HINT_CARD}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HINT_CARD}"}}`);
+  Handlebars.registerPartial('hDivider', `{{> "${TEMPLATES.COMPONENT_HORIZONTAL_DIVIDER}"}}`);
 }
 
 /**

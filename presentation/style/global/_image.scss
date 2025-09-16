@@ -14,13 +14,20 @@ img {
     &-md {
       border: $c-border-input 1px solid;
       flex: none;
-      width: 64px;
-      height: 64px;
+      width: 48px;
+      height: 48px;
     }
     &-lg {
       border: $c-border-input 1px solid;
       flex: none;
-      height: 6.4rem;
+      width: 64px;
+      height: 64px;
+    }
+    &-xl {
+      border: $c-border-input 1px solid;
+      flex: none;
+      width: 100px;
+      height: 100px;
     }
   }
 

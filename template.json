@@ -56,28 +56,23 @@
         "attributes": {
           "agility": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "awareness": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "strength": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "toughness": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "wit": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           }
         },
         "health": {
@@ -145,7 +140,8 @@
             }
           },
           "luggage": []
-        }
+        },
+        "xp": 0
       }
     },
     "pc": {
@@ -173,7 +169,8 @@
       }
     },
     "npc": {
-      "templates": ["base", "character"]
+      "templates": ["base", "character"],
+      "advancementEnabled": false
     },
     "plain": {
       "templates": ["base"]
@@ -203,8 +200,7 @@
       "baseAttributes": ["agility"],
       "level": 0,
       "levelModifier": 0,
-      "successes": 0,
-      "failures": 0,
+      "advancementProgress": 0,
       "abilities": {},
       "prerequisites": []
     },

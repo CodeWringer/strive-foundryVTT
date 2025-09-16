@@ -521,6 +521,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get advancementEnabled() {
     return false;
   }
+  
+  /**
+   * @type {Number}
+   */
+  get xp() { return this.document.system.xp ?? 0; }
+  set xp(value) { this.updateByPath("system.xp", value); }
 
   /**
    * @param {Actor} document An encapsulated actor instance. 

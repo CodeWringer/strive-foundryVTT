@@ -14,7 +14,7 @@ cssClass: {undefined | String}
       {{/with}}
       {{/each}}
       {{!-- Identity --}}
-      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-lg" }}
       {{> inputTextField viewModel=viewModel.vmTfName cssClass="document-title" }}
       {{!-- Secondary header buttons --}}
       {{#each viewModel.secondaryHeaderButtons as |button|}}
@@ -29,7 +29,7 @@ cssClass: {undefined | String}
 
   {{!-- Sheet Tab Navigation --}}
   <nav id="nav-sheet-tabs" class="sheet-tabs tabs flex flex-justify font-size-default{{#if viewModel.showNavigation}}{{else}} hidden{{/if}}" data-group="primary">
-    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="content"><div>{{localize "system.character.sheet.tab.abilities"}}</div></a>
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="content"><div>{{localize "system.general.sheet.tab.content"}}</div></a>
     <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
   </nav>
 
@@ -37,10 +37,12 @@ cssClass: {undefined | String}
   <section class="sheet-body">
     {{!-- Content Tab --}}
     <div class="tab content" data-group="primary" data-tab="content">
+      {{#if viewModel.showDescription }}
       {{!-- Description --}}
       <div class="sheet-block flex flex-column margin-b-md">
         {{> inputRichText viewModel=viewModel.vmRtDescription }}
       </div>
+      {{/if}}
       {{!-- Data Fields --}}
       <div class="grid-2col grid-gap-sm">
         {{#each viewModel.dataFields as |dataField|}}
