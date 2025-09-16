@@ -93,6 +93,7 @@ export const TEMPLATES = {
   ACTOR_PERSONALITY_TRAITS: `${basePathPresentation}/sheet/actor/part/personality/personality-traits/personality-traits.hbs`,
   ACTOR_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-abilities.hbs`,
   ACTOR_ATTRIBUTES: `${basePathPresentation}/sheet/actor/part/abilities/actor-attributes.hbs`,
+  ACTOR_MOMENTUM: `${basePathPresentation}/sheet/actor/part/abilities/momentum/actor-momentum.hbs`,
   ACTOR_SKILLS: `${basePathPresentation}/sheet/actor/part/abilities/actor-skills.hbs`,
   ACTOR_DRIVERS: `${basePathPresentation}/sheet/actor/part/personality/actor-drivers.hbs`,
   ACTOR_FATE: `${basePathPresentation}/sheet/actor/part/personality/actor-fate.hbs`,
@@ -142,6 +143,7 @@ export const TEMPLATES = {
   // Momentum
   MOMENTUM_ACTION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-chat-message.hbs`,
   MOMENTUM_ACTION_ITEM_SHEET_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-item-sheet-extra-content.hbs`,
+  MOMENTUM_ACTION_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-list-item-extra-content.hbs`,
   MOMENTUM_BAR: `${basePathPresentation}/combat/momentum/momentum-bar.hbs`,
   // Mutation
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,

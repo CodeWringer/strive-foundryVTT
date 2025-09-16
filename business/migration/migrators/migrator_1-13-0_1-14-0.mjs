@@ -30,7 +30,7 @@ export default class Migrator_1_13_0__1_14_0 extends AbstractMigrator {
     });
 
     for await (const actor of transientActors) {
-      if (actor.advancementEnabled) {
+      if (actor.advancement.advancementEnabled) {
         // Convert attribute progress to XP. 
         let xp = 0;
         for await (const attribute of actor.attributes) {
@@ -38,7 +38,7 @@ export default class Migrator_1_13_0__1_14_0 extends AbstractMigrator {
           xp += ((rawAttribute ?? {}).progress ?? 0);
           await updater.deleteByPath(actor.document, `system.attributes.${attribute.name}.progress`);
         }
-        await updater.updateByPath(actor.document, "system.xp", xp);
+        await updater.updateByPath(actor.document, "system.advancement.xp", xp);
         
         // Get all skills and convert successes and failures to plain progress. 
         const skills = actor.skills.all;

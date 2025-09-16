@@ -32,6 +32,7 @@
     "combat": {
       "momentum": {
         "action": "Momentum Action",
+        "plural": "Momentum Actions",
         "momentum": "Momentum",
         "min": "Minimum Momentum: %{min}",
         "max": "Maximum Momentum: %{max}",

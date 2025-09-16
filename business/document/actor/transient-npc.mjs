@@ -1,4 +1,5 @@
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
+import { PropertyUtil } from "../../util/property-utility.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
 /**
@@ -8,8 +9,10 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * 
  * @property {Boolean} personalityVisible
  * * default `false`
- * @property {Boolean} advancementEnabled
+ * @property {Object} advancement
+ * @property {Boolean} advancement.advancementEnabled
  * * default `false`
+ * @property {Number} advancement.xp
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
   get personalityVisible() {
@@ -20,14 +23,24 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   }
 
   /**
-   * @type {Boolean}
+   * @type {Object}
+   * @readonly
    * @override
    */
-  get advancementEnabled() {
-    return this.document.system.advancementEnabled ?? false;
-  }
-  set advancementEnabled(value) {
-    this.updateByPath("system.advancementEnabled", value);
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get advancementEnabled() { return thiz.document.system.advancement.advancementEnabled ?? false; },
+      set advancementEnabled(value) { thiz.updateByPath("system.advancement.advancementEnabled", value); },
+      /**
+       * @type {Number}
+       */
+      get xp() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).xp ?? 0; },
+      set xp(value) { thiz.updateByPath("system.advancement.xp", value); },
+    };
   }
 
   /** @override */

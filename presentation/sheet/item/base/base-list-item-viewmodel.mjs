@@ -151,6 +151,15 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /**
+   * Returns true, if the description is to be shown. 
+   * 
+   * @type
+   * @protected
+   * @readonly
+   */
+  get showDescription() { return true; }
+
+  /**
    * Returns `true`, if the expansion controls should be enabled. 
    * 
    * @type {Boolean}
@@ -279,14 +288,16 @@ export default class BaseListItemViewModel extends ViewModel {
         isEditable: true, // Even those without editing right should be able to see nested content. 
       });
     }
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: this,
-      id: "vmRtDescription",
-      value: this.document.description,
-      onChange: (_, newValue) => {
-        this.document.description = newValue;
-      },
-    });
+    if (this.showDescription) {
+      this.vmRtDescription = new InputRichTextViewModel({
+        parent: this,
+        id: "vmRtDescription",
+        value: this.document.description,
+        onChange: (_, newValue) => {
+          this.document.description = newValue;
+        },
+      });
+    }
     if (this.isGM) {
       this.vmGmNotes = new InputRichTextViewModel({
         parent: this,

@@ -24,7 +24,6 @@ import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs"
 import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
-import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -207,7 +206,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    */
   get advancementEnabled() {
     if (ValidationUtil.isDefined(this.document.owningDocument)) {
-      return this.document.owningDocument.advancementEnabled; 
+      return this.document.owningDocument.advancement.advancementEnabled; 
     }
     return false;
   }
