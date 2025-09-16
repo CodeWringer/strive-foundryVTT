@@ -97,6 +97,7 @@ export default class MomentumBarViewModel extends ViewModel {
       row4: game.i18n.localize("system.combat.momentum.reminder.row4"),
     });
     this.localizedToolTip = this.showReminders ? `${localizedTitle}<br>${localizedReminder}` : localizedTitle,
+    this.isEditable = this.isGM;
 
     this._value = args.value ?? 0;
     this.onChange = args.onChange ?? (() => {});
@@ -136,6 +137,8 @@ export default class MomentumBarViewModel extends ViewModel {
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
+
+    if (!this.isEditable) return;
 
     const sliderElement = this.element.find(`#${this.id}-slider`);
     sliderElement.on("mouseleave", (e) => {

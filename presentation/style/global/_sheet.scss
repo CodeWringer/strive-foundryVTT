@@ -1,3 +1,5 @@
+@import './borders';
+
 $c-header-bg: #d4cec3;
 $c-active-tab-bg: #e0dbd1;
 
@@ -63,4 +65,5 @@ header.system-sheet-header {
   &.secret {
     background-color: $c-bg-secret;
   }
+  @include border-colorations();
 }
