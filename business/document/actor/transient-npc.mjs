@@ -33,7 +33,7 @@ export default class TransientNpc extends TransientBaseCharacterActor {
       /**
        * @type {Boolean}
        */
-      get advancementEnabled() { return thiz.document.system.advancement.advancementEnabled ?? false; },
+      get advancementEnabled() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).advancementEnabled ?? false; },
       set advancementEnabled(value) { thiz.updateByPath("system.advancement.advancementEnabled", value); },
       /**
        * @type {Number}
