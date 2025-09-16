@@ -89,7 +89,14 @@ export default class MomentumBarViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    this.localizedToolTip = game.i18n.localize("system.combat.momentum.momentum"),
+    const localizedTitle = game.i18n.localize("system.combat.momentum.momentum");
+    const localizedReminder = StringUtil.format2(game.i18n.localize("system.combat.momentum.reminder.reminder"), {
+      row1: game.i18n.localize("system.combat.momentum.reminder.row1"),
+      row2: game.i18n.localize("system.combat.momentum.reminder.row2"),
+      row3: game.i18n.localize("system.combat.momentum.reminder.row3"),
+      row4: game.i18n.localize("system.combat.momentum.reminder.row4"),
+    });
+    this.localizedToolTip = this.showReminders ? `${localizedTitle}<br>${localizedReminder}` : localizedTitle,
 
     this._value = args.value ?? 0;
     this.onChange = args.onChange ?? (() => {});

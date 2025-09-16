@@ -1,7 +1,115 @@
+@import './borders';
+
+// The following sorcery was partially pilfered from: https://geary.co/internal-borders-css-grid/
+
 // Grid.
+@mixin grid-columns-template($columnCount) {
+  grid-column: span $columnCount / span $columnCount;
+  grid-template-columns: repeat($columnCount, minmax(0, 1fr));
+}
+
+@mixin grid-borders($gap, $borderThickness) {
+  &.borders {
+    $line-offset: calc($gap / 2);
+    > * {
+      position: relative;
+    }
+    > {
+      ::before,
+      ::after {
+        content: '';
+        position: absolute;
+        background-color: $c-border-medium;
+        z-index: 1;
+      }
+  
+      // Row Borders
+      ::after {
+        inline-size: 100vw;
+        block-size: $borderThickness;
+        inset-inline-start: 0;
+        inset-block-start: calc($line-offset * -1);
+      }
+  
+      // Column Borders
+      ::before {
+        inline-size: $borderThickness;
+        block-size: 100vh;
+        inset-inline-start: calc($line-offset * -1);
+      }
+    }
+    &.dark {
+      ::before,
+      ::after {
+        background-color: $c-border-dark;
+      }
+      &.highlight {
+        ::before,
+        ::after {
+          background-color: $c-border-highlight-dark;
+        }
+      }
+    }
+    &.light {
+      ::before,
+      ::after {
+        background-color: $c-border-light;
+      }
+      &.highlight {
+        ::before,
+        ::after {
+          background-color: $c-border-highlight-light;
+        }
+      }
+    }
+  }
+}
+
 .grid {
   display: grid;
-  width: 100%;
+  overflow: hidden;
+
+  &.col2 {
+    @include grid-columns-template(2);
+  }
+  &.col3 {
+    @include grid-columns-template(3);
+  }
+  &.col4 {
+    @include grid-columns-template(4);
+  }
+  &.col5 {
+    @include grid-columns-template(5);
+  }
+  &.col6 {
+    @include grid-columns-template(6);
+  }
+  &.col7 {
+    @include grid-columns-template(7);
+  }
+
+  &.gap {
+    &-xs {
+      gap: $padding-xs;
+      @include grid-borders($padding-xs, 2px);
+    }
+    &-sm {
+      gap: $padding-sm;
+      @include grid-borders($padding-sm, 2px);
+    }
+    &-md {
+      gap: $padding-md;
+      @include grid-borders($padding-md, 2px);
+    }
+    &-lg {
+      gap: $padding-lg;
+      @include grid-borders($padding-lg, 2px);
+    }
+    &-xl {
+      gap: $padding-xl;
+      @include grid-borders($padding-xl, 2px);
+    }
+  }
 }
 
 .grid-2col {
@@ -16,18 +124,6 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.grid-4col {
-  display: grid;
-  grid-column: span 4 / span 4;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.grid-5col {
-  display: grid;
-  grid-column: span 5 / span 5;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
 .grid-6col {
   display: grid;
   grid-column: span 6 / span 6;
@@ -39,49 +135,6 @@
   grid-column: span 7 / span 7;
   grid-template-columns: repeat(7, minmax(0, 1fr));
 }
-
-.grid-8col {
-  display: grid;
-  grid-column: span 8 / span 8;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-}
-
-.grid-9col {
-  display: grid;
-  grid-column: span 9 / span 9;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-}
-
-.grid-10col {
-  display: grid;
-  grid-column: span 10 / span 10;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-}
-
-.grid-11col {
-  display: grid;
-  grid-column: span 11 / span 11;
-  grid-template-columns: repeat(11, minmax(0, 1fr));
-}
-
-.grid-12col {
-  display: grid;
-  grid-column: span 12 / span 12;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-}
-
-// Grid offset.
-.grid-start-2 { grid-column-start: 2 }
-.grid-start-3 { grid-column-start: 3 }
-.grid-start-4 { grid-column-start: 4 }
-.grid-start-5 { grid-column-start: 5 }
-.grid-start-6 { grid-column-start: 6 }
-.grid-start-7 { grid-column-start: 7 }
-.grid-start-8 { grid-column-start: 8 }
-.grid-start-9 { grid-column-start: 9 }
-.grid-start-10 { grid-column-start: 10 }
-.grid-start-11 { grid-column-start: 11 }
-.grid-start-12 { grid-column-start: 12 }
 
 .grid-span-2 { grid-column-end: span 2 }
 .grid-span-3 { grid-column-end: span 3 }
