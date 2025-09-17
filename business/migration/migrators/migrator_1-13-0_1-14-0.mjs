@@ -29,7 +29,7 @@ export default class Migrator_1_13_0__1_14_0 extends AbstractMigrator {
     });
 
     for await (const actor of transientActors) {
-      if (actor.advancement.advancementEnabled) {
+      if ((actor.advancement ?? {}).advancementEnabled) {
         // Convert attribute progress to XP. 
         let xp = 0;
         for await (const attribute of actor.attributes) {
