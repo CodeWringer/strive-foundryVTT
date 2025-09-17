@@ -230,6 +230,7 @@ export default class TokenHealthConditions extends TokenExtender {
     if (ValidationUtil.isDefined(striveHoverLayer.healthConditionHoverContainer)) return;
     
     const healthConditions = this._getTokenHealthConditions(token);
+    if (healthConditions.length === 0) return;
 
     // Root container
     striveHoverLayer.healthConditionHoverContainer = new PIXI.Container();
