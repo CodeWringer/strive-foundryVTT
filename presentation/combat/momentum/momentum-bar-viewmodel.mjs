@@ -46,6 +46,17 @@ export default class MomentumBarViewModel extends ViewModel {
   get max() { return 20; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get desperationThreshold() { return -18; }
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get heroismThreshold() { return 18; }
+
+  /**
    * @type {String}
    * @readonly
    */
@@ -91,10 +102,13 @@ export default class MomentumBarViewModel extends ViewModel {
     super(args);
     const localizedTitle = game.i18n.localize("system.combat.momentum.momentum");
     const localizedReminder = StringUtil.format2(game.i18n.localize("system.combat.momentum.reminder.reminder"), {
+      heroismThreshold: this.heroismThreshold,
+      desperationThreshold: this.desperationThreshold,
       row1: game.i18n.localize("system.combat.momentum.reminder.row1"),
       row2: game.i18n.localize("system.combat.momentum.reminder.row2"),
       row3: game.i18n.localize("system.combat.momentum.reminder.row3"),
       row4: game.i18n.localize("system.combat.momentum.reminder.row4"),
+      row5: game.i18n.localize("system.combat.momentum.reminder.row5"),
     });
     this.localizedToolTip = this.showReminders ? `${localizedTitle}<br>${localizedReminder}` : localizedTitle,
     this.isEditable = this.isGM;
