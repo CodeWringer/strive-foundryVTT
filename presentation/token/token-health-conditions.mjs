@@ -307,9 +307,26 @@ export default class TokenHealthConditions extends TokenExtender {
       }
     }
 
-    striveHoverLayer.healthConditionHoverContainer.position.set(
-      token.x + token.w,
-      token.y
-    );
+    if (ValidationUtil.isDefined(striveHoverLayer.healthConditionHoverContainer)) {
+      const cornerRadius = 8 * scale;
+      const surface = new PIXI.Graphics();
+      surface.beginFill(0x0, 0.5)
+      surface.drawRoundedRect(
+        -cornerRadius, 
+        -cornerRadius, 
+        striveHoverLayer.healthConditionHoverContainer.width + (cornerRadius * 2), 
+        striveHoverLayer.healthConditionHoverContainer.height + (cornerRadius * 2),
+        cornerRadius
+      );
+      // surface.alpha = 0.5;
+      striveHoverLayer.healthConditionHoverContainer.addChildAt(surface, 0);
+
+      striveHoverLayer.healthConditionHoverContainer.position.set(
+        token.x + token.w + cornerRadius,
+        token.y + cornerRadius
+      );
+    } else {
+      game.strive.logger.logWarn("Hover container is undefined");
+    }
   }
 }

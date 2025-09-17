@@ -4,7 +4,7 @@ import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
 /**
  * Represents a clickable sprite, with hover state. 
  */
-export class PixiButton {
+export default class PixiButton {
   /**
    * A blurred version of the icon sprite displayed beneath the icon sprite. 
    * 
