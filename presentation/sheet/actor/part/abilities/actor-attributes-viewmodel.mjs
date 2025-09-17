@@ -80,7 +80,7 @@ export default class ActorAttributesViewModel extends ViewModel {
       
       const attributeAdvancementExplanation = new RulesetExplainer().getExplanationForAttributeAdvancement(characterAttribute);
       const attributeAdvancementTitle = game.i18n.localize("system.character.advancement.level");
-      const attributeToolTip = (this.showReminders && this.document.advancementEnabled) 
+      const attributeToolTip = (this.showReminders && this.document.advancement.advancementEnabled) 
         ? `${attributeAdvancementTitle}<br>${attributeAdvancementExplanation}`
         : attributeAdvancementTitle;
       const nameVmAttribute = `vm${name}Attribute`;

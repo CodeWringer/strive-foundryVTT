@@ -5,6 +5,7 @@ import AssetItemSheet from "./asset/asset-item-sheet.mjs";
 import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
 import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
 import InjuryItemSheet from "./injury/injury-item-sheet.mjs";
+import MomentumActionItemSheet from "./momentum-action/momentum-action-item-sheet.mjs";
 import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
 import ScarItemSheet from "./scar/scar-item-sheet.mjs";
 import SkillItemSheet from "./skill/skill-item-sheet.mjs";
@@ -27,6 +28,7 @@ export class GameSystemItemSheet extends ItemSheet {
         [ITEM_TYPES.ASSET, new AssetItemSheet()],
         [ITEM_TYPES.SKILL, new SkillItemSheet()],
         [ITEM_TYPES.SCAR, new ScarItemSheet()],
+        [ITEM_TYPES.MOMENTUM_ACTION, new MomentumActionItemSheet()],
         [ITEM_TYPES.MUTATION, new MutationItemSheet()],
         [ITEM_TYPES.INJURY, new InjuryItemSheet()],
         [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],

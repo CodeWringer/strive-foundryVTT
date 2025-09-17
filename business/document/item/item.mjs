@@ -4,6 +4,7 @@ import TransientAsset from "./transient-asset.mjs";
 import TransientFateCard from "./transient-fate-card.mjs";
 import TransientIllness from "./transient-illness.mjs";
 import TransientInjury from "./transient-injury.mjs";
+import TransientMomentumAction from "./transient-momentum-action.mjs";
 import TransientMutation from "./transient-mutation.mjs";
 import TransientScar from "./transient-scar.mjs";
 
@@ -33,6 +34,7 @@ export class GameSystemItem extends Item {
       [ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
       [ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
       [ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
+      [ITEM_TYPES.MOMENTUM_ACTION, (document) => { return new TransientMomentumAction(document) }],
       [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
       [ITEM_TYPES.SCAR, (document) => { return new TransientScar(document) }],
       [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],

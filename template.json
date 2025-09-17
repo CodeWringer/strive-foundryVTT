@@ -183,6 +183,7 @@
       "fate-card",
       "injury",
       "illness",
+      "momentum-action",
       "mutation",
       "scar"
     ],
@@ -241,6 +242,15 @@
     },
     "mutation": {
       "templates": ["base"]
+    },
+    "momentum-action": {
+      "templates": ["base"],
+      "imgHeroic": "",
+      "descriptionHeroic": "",
+      "momentumShiftHeroic": 0,
+      "imgDesperate": "",
+      "descriptionDesperate": "",
+      "momentumShiftDesperate": 0
     },
     "scar": {
       "templates": ["base"],

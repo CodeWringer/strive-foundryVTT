@@ -10,6 +10,7 @@ export const ITEM_TYPES = {
   FATE_CARD: "fate-card",
   ILLNESS: "illness",
   INJURY: "injury",
+  MOMENTUM_ACTION: "momentum-action",
   MUTATION: "mutation",
   SCAR: "scar",
 };

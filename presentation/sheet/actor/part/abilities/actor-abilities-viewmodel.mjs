@@ -1,6 +1,6 @@
 import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
-import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
@@ -10,6 +10,7 @@ import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-o
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAttributesViewModel from "./actor-attributes-viewmodel.mjs"
 import ActorSkillsViewModel from "./actor-skills-viewmodel.mjs"
+import ActorMomentumViewModel from "./momentum/actor-momentum-viewmodel.mjs"
 
 /**
  * @extends ViewModel
@@ -34,6 +35,12 @@ export default class ActorAbilitiesViewModel extends ViewModel {
   get skillsTemplate() { return ActorSkillsViewModel.TEMPLATE; }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get momentumActionsTemplate() { return ActorMomentumViewModel.TEMPLATE; }
+
+  /**
    * @type {Boolean}
    * @readonly
    */
@@ -49,7 +56,14 @@ export default class ActorAbilitiesViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get advancementEnabled() { return this.document.advancementEnabled; }
+  get advancementEnabled() { return this.document.advancement.advancementEnabled; }
+  
+  /**
+   * Returns true, if at least one Momentum Action exists on the character. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showMomentum() { return ValidationUtil.isDefined(this.document.items.find(it => it.type === ITEM_TYPES.MOMENTUM_ACTION)); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -80,6 +94,13 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       parent: this,
       document: this.document,
     });
+    if (this.showMomentum) {
+      this.vmMomentumActions = new ActorMomentumViewModel({
+        id: "vmMomentumActions",
+        parent: this,
+        document: this.document,
+      });
+    }
 
     this.vmBaseInitiativeIcon = new ViewModel({
       id: "vmBaseInitiativeIcon",
@@ -128,10 +149,10 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       this.vmExperiencePoints = new InputNumberSpinnerViewModel({
         id: "vmExperiencePoints",
         parent: this,
-        value: this.document.xp,
+        value: this.document.advancement.xp,
         min: 0,
         onChange: (_, newValue) => {
-          this.document.xp = newValue;
+          this.document.advancement.xp = newValue;
         },
       });
     }

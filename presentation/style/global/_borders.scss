@@ -19,6 +19,9 @@ $border-size-xl: 4px;
   &.light {
     border-#{$direction}-color: $c-border-light !important;
   }
+  &.underline {
+    border-#{$direction}-color: $c-text-underline !important;
+  }
 }
 
 @mixin border-colorations() {
@@ -36,6 +39,9 @@ $border-size-xl: 4px;
   }
   &.light {
     border-color: $c-border-light !important;
+  }
+  &.underline {
+    border-color: $c-text-underline !important;
   }
 }
 

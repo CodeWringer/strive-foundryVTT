@@ -27,7 +27,7 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideLearningSkills() { return this.document.advancementEnabled === false; }
+  get hideLearningSkills() { return this.document.advancement.advancementEnabled === false; }
 
   /**
    * @type {String}
@@ -154,7 +154,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         ),
       }),
     ];
-    if (this.document.type === ACTOR_TYPES.PC || this.document.advancementEnabled === true) {
+    if (this.document.type === ACTOR_TYPES.PC || this.document.advancement.advancementEnabled === true) {
       // Learning skill add button
       addItemParams.splice(0, 0, new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({

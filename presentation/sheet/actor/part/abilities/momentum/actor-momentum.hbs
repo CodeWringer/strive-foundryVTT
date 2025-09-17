@@ -1,0 +1,10 @@
+{{!-- Parameters:
+viewModel: {ActorMomentumViewModel}
+cssClass: {undefined | String}
+--}}
+<section id="{{viewModel.id}}" class="auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
+  <h1 class="strive-header flex flex-row flex-center {{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
+    <span>{{localize "system.combat.momentum.plural"}}</span>
+  </h1>
+  {{> sortableList viewModel=viewModel.vmMomentumActions }}
+</section>

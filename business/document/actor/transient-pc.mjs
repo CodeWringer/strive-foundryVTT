@@ -1,6 +1,7 @@
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
 import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
+import { PropertyUtil } from "../../util/property-utility.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
 import { ITEM_TYPES } from "../item/item-types.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
@@ -22,6 +23,10 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Number} fateSystem.miFP
  * @property {Number} fateSystem.maFP
  * @property {Number} fateSystem.AFP
+ * @property {Object} advancement
+ * @property {Boolean} advancement.advancementEnabled
+ * * Read-only.
+ * @property {Number} advancement.xp
  */
 export default class TransientPc extends TransientBaseCharacterActor {
   /**
@@ -48,12 +53,24 @@ export default class TransientPc extends TransientBaseCharacterActor {
   }
 
   /**
-   * @type {Boolean}
+   * @type {Object}
    * @readonly
    * @override
    */
-  get advancementEnabled() {
-    return true;
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       * @readonly
+       */
+      get advancementEnabled() { return true; },
+      /**
+       * @type {Number}
+       */
+      get xp() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).xp ?? 0; },
+      set xp(value) { thiz.updateByPath("system.advancement.xp", value); },
+    };
   }
 
   /**

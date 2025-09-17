@@ -44,6 +44,12 @@ cssClass: {undefined | String}
     </div>
     {{/if}}
   </div>
+  {{!-- Momentum Actions --}}
+  {{#if viewModel.showMomentum}}
+  {{#with viewModel.momentumActionsTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.vmMomentumActions }}
+  {{/with}}
+  {{/if}}
   {{!-- Skills --}}
   {{#with viewModel.skillsTemplate as | template |}}
     {{> (template) viewModel=../viewModel.vmSkills }}

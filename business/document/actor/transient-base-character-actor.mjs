@@ -11,6 +11,7 @@ import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import { PropertyUtil } from '../../util/property-utility.mjs';
 import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
+import TransientMomentumAction from '../item/transient-momentum-action.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
@@ -136,8 +137,14 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Object} initiative 
  * @property {Number} initiative.perTurn 
  * 
- * @property {Object} xp The current experience points of this character.  
- * @property {Object} advancementEnabled If `true`, then this character may advance their abilities. 
+ * @property {Object} advancement The current experience points of this character.  
+ * @property {Number} advancement.xp The current experience points of this character.  
+ * @property {Boolean} advancement.advancementEnabled If `true`, then this character may advance their abilities. 
+ * * Read-only
+ * 
+ * @property {Object} momentum
+ * * Read-only
+ * @property {Array<TransientMomentumAction>} momentum.actions
  * * Read-only
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
@@ -515,18 +522,42 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * @type {Boolean}
+   * @type {Object}
    * @readonly
    */
-  get advancementEnabled() {
-    return false;
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       * @readonly
+       */
+      get advancementEnabled() { return false; },
+      /**
+       * @type {Number}
+       */
+      get xp() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).xp ?? 0; },
+      set xp(value) { thiz.updateByPath("system.advancement.xp", value); },
+    };
   }
-  
+
   /**
-   * @type {Number}
+   * @type {Object}
+   * @readonly
    */
-  get xp() { return this.document.system.xp ?? 0; }
-  set xp(value) { this.updateByPath("system.xp", value); }
+  get momentum() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Array<TransientMomentumAction>}
+       * @readonly
+       */
+      get actions() {
+        return (thiz.items.filter(it => it.type === ITEM_TYPES.MOMENTUM_ACTION) ?? [])
+          .map(it => it.getTransientObject());
+        },
+    };
+  }
 
   /**
    * @param {Actor} document An encapsulated actor instance. 

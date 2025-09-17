@@ -34,16 +34,18 @@ export default class CustomCombatTracker extends CombatTracker {
     this.actionPointsViewModels = [];
     this.gritPointsViewModels = [];
 
-    this.vmMomentum = new MomentumBarViewModel({
-      id: "vmMomentum",
-      isEditable: true,
-      value: data.combat.momentum,
-      onChange: (_, newValue) => {
-        data.combat.momentum = newValue;
-      },
-    });
-    data.vmMomentum = this.vmMomentum;
-    data.momentumTemplate = MomentumBarViewModel.TEMPLATE;
+    if (ValidationUtil.isDefined(data.combat)) {
+      this.vmMomentum = new MomentumBarViewModel({
+        id: "vmMomentum",
+        isEditable: true,
+        value: data.combat.momentum,
+        onChange: (_, newValue) => {
+          data.combat.momentum = newValue;
+        },
+      });
+      data.vmMomentum = this.vmMomentum;
+      data.momentumTemplate = MomentumBarViewModel.TEMPLATE;
+    }
 
     // Extend the "turns" data. 
     for (const turn of data.turns) {
@@ -136,7 +138,9 @@ export default class CustomCombatTracker extends CombatTracker {
     }
 
     this.vmSendToChatGeneralActions.activateListeners(html);
-    this.vmMomentum.activateListeners(html);
+    if (ValidationUtil.isDefined(this.vmMomentum)) {
+      this.vmMomentum.activateListeners(html);
+    }
   }
 
   /**

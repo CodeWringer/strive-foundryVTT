@@ -46,6 +46,17 @@ export default class MomentumBarViewModel extends ViewModel {
   get max() { return 20; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get desperationThreshold() { return -18; }
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get heroismThreshold() { return 18; }
+
+  /**
    * @type {String}
    * @readonly
    */
@@ -89,7 +100,18 @@ export default class MomentumBarViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    this.localizedToolTip = game.i18n.localize("system.combat.momentum.momentum"),
+    const localizedTitle = game.i18n.localize("system.combat.momentum.momentum");
+    const localizedReminder = StringUtil.format2(game.i18n.localize("system.combat.momentum.reminder.reminder"), {
+      heroismThreshold: this.heroismThreshold,
+      desperationThreshold: this.desperationThreshold,
+      row1: game.i18n.localize("system.combat.momentum.reminder.row1"),
+      row2: game.i18n.localize("system.combat.momentum.reminder.row2"),
+      row3: game.i18n.localize("system.combat.momentum.reminder.row3"),
+      row4: game.i18n.localize("system.combat.momentum.reminder.row4"),
+      row5: game.i18n.localize("system.combat.momentum.reminder.row5"),
+    });
+    this.localizedToolTip = this.showReminders ? `${localizedTitle}<br>${localizedReminder}` : localizedTitle,
+    this.isEditable = this.isGM;
 
     this._value = args.value ?? 0;
     this.onChange = args.onChange ?? (() => {});
@@ -129,6 +151,8 @@ export default class MomentumBarViewModel extends ViewModel {
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
+
+    if (!this.isEditable) return;
 
     const sliderElement = this.element.find(`#${this.id}-slider`);
     sliderElement.on("mouseleave", (e) => {
