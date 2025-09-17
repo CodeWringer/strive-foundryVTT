@@ -62,7 +62,7 @@ export default class TokenHealthConditions extends TokenExtender {
   /** @override */
   async hoverOff(token) {
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
-    this._removeHoverFrom(token);
+    this._removeHover();
   }
 
   /** @override */
@@ -203,14 +203,12 @@ export default class TokenHealthConditions extends TokenExtender {
   /**
    * Removes the hover elements. 
    * 
-   * @param {Token} token 
-   * 
    * @private
    */
-  async _removeHoverFrom(token) {
-    if (ValidationUtil.isDefined(token.healthConditionHoverContainer)) {
-      token.removeChild(token.healthConditionHoverContainer);
-      token.healthConditionHoverContainer = undefined;
+  async _removeHover() {
+    if (ValidationUtil.isDefined(game.canvas.tokens.striveHoverLayer)) {
+      game.canvas.tokens.striveHoverLayer.removeChildren();
+      game.canvas.tokens.striveHoverLayer.healthConditionHoverContainer = undefined;
     }
   }
 
@@ -222,14 +220,21 @@ export default class TokenHealthConditions extends TokenExtender {
    * @private
    */
   async _addHoverTo(token) {
-    if (ValidationUtil.isDefined(token.healthConditionHoverContainer)) return;
+    // Ensure our own layer exists.
+    if (!ValidationUtil.isDefined(game.canvas.tokens.striveHoverLayer)) {
+      game.canvas.tokens.striveHoverLayer = new PIXI.Container();
+      game.canvas.tokens.addChild(game.canvas.tokens.striveHoverLayer);
+    }
+    const striveHoverLayer = game.canvas.tokens.striveHoverLayer;
+
+    if (ValidationUtil.isDefined(striveHoverLayer.healthConditionHoverContainer)) return;
     
     const healthConditions = this._getTokenHealthConditions(token);
 
     // Root container
-    token.healthConditionHoverContainer = new PIXI.Container();
-    token.addChild(token.healthConditionHoverContainer);
-
+    striveHoverLayer.healthConditionHoverContainer = new PIXI.Container();
+    striveHoverLayer.addChild(striveHoverLayer.healthConditionHoverContainer);
+    
     // This ensures the hover content to always be scaled relative to the view's 
     // current zoom level. Zooming in increases _viewPosition.scale, 
     // while zooming out reduces it. It is a float, which means when it's 1.0, 
@@ -238,7 +243,7 @@ export default class TokenHealthConditions extends TokenExtender {
 
     const style = token._getTextStyle();
     const textScale = scale; // Magic constant seems a good default text scale. 
-    let x = token.w;
+    let x = 0;
     let y = 0;
     let entriesInCurrentColumn = 0;
     let maxWidth = 0;
@@ -246,11 +251,11 @@ export default class TokenHealthConditions extends TokenExtender {
       const container = new PIXI.Container();
       container.position.set(x, y);
       let xInContainer = 0;
-      if (!ValidationUtil.isDefined(token.healthConditionHoverContainer)) {
+      if (!ValidationUtil.isDefined(striveHoverLayer.healthConditionHoverContainer)) {
         game.strive.logger.logWarn("Undefined container reference");
         continue;
       }
-      token.healthConditionHoverContainer.addChild(container);
+      striveHoverLayer.healthConditionHoverContainer.addChild(container);
 
       if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
         // Icon
@@ -300,6 +305,28 @@ export default class TokenHealthConditions extends TokenExtender {
       } else {
         y += container.height;
       }
+    }
+
+    if (ValidationUtil.isDefined(striveHoverLayer.healthConditionHoverContainer)) {
+      const cornerRadius = 8 * scale;
+      const surface = new PIXI.Graphics();
+      surface.beginFill(0x0, 0.5)
+      surface.drawRoundedRect(
+        -cornerRadius, 
+        -cornerRadius, 
+        striveHoverLayer.healthConditionHoverContainer.width + (cornerRadius * 2), 
+        striveHoverLayer.healthConditionHoverContainer.height + (cornerRadius * 2),
+        cornerRadius
+      );
+      // surface.alpha = 0.5;
+      striveHoverLayer.healthConditionHoverContainer.addChildAt(surface, 0);
+
+      striveHoverLayer.healthConditionHoverContainer.position.set(
+        token.x + token.w + cornerRadius,
+        token.y + cornerRadius
+      );
+    } else {
+      game.strive.logger.logWarn("Hover container is undefined");
     }
   }
 }
