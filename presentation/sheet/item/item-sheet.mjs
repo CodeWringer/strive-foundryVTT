@@ -127,6 +127,12 @@ export class GameSystemItemSheet extends ItemSheet {
    */
   get viewModel() { return this._viewModel; }
 
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isOwner() { return ((this.actor ?? this.item) ?? {}).isOwner ?? false; }
+
   /** 
    * Returns an object that represents sheet and enriched item data. 
    * 
@@ -152,12 +158,10 @@ export class GameSystemItemSheet extends ItemSheet {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    const isOwner = (this.actor ?? this.item).isOwner;
-    
     await this.subType.activateListeners(html);
     await this.viewModel.activateListeners(html);
 
-    if (!isOwner) return;
+    if (!this.isOwner) return;
 
     // Drag events for macros.
     const handler = ev => this._onDragStart(ev);
@@ -184,7 +188,7 @@ export class GameSystemItemSheet extends ItemSheet {
   /** @override */
   _getHeaderButtons() {
     const buttons = super._getHeaderButtons();
-    if (game.user.isGM || this.actor.isOwner) {
+    if (game.user.isGM || this.isOwner) {
       buttons.splice(0, 0, {
         class: "send-to-chat",
         icon: "fas fa-comments",
