@@ -1,4 +1,3 @@
-import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
