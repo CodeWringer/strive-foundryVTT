@@ -102,7 +102,7 @@ export default class MomentumActionItemSheetViewModel extends BaseItemSheetViewM
           },
         }),
         localizedToolTip: game.i18n.localize("system.combat.momentum.shiftHeroic"),
-        iconClass: "",
+        iconClass: this.document.momentumShiftHeroic >= 0 ? "ico-momentum-shift-heroism-solid" : "ico-momentum-shift-desperation-solid",
       }),
       new DataFieldComponent({
         template: InputNumberSpinnerViewModel.TEMPLATE,
@@ -115,7 +115,7 @@ export default class MomentumActionItemSheetViewModel extends BaseItemSheetViewM
           },
         }),
         localizedToolTip: game.i18n.localize("system.combat.momentum.shiftDesperate"),
-        iconClass: "",
+        iconClass: this.document.momentumShiftDesperate >= 0 ? "ico-momentum-shift-heroism-solid" : "ico-momentum-shift-desperation-solid",
       }),
     ];
   }
