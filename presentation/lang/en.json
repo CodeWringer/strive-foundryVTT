@@ -27,7 +27,8 @@
       "completion": "Data migration completed!",
       "completionHint": "Please exit and save your world once to ensure the migration changes are properly saved, before continuing to use the world. After that, your world should be good to go!",
       "inProgress": "Migration in progress, please wait...",
-      "migrationRequiredUserWarning": "It seems this world is not up to date with the installed system version. Please coordinate with your game master and log out while they migrate the world system."
+      "migrationRequiredUserWarning": "It seems this world is not up to date with the installed system version. Please coordinate with your game master and log out while they migrate the world system.",
+      "progressNumbers": "Step %{current} of %{total}"
     },
     "combat": {
       "momentum": {

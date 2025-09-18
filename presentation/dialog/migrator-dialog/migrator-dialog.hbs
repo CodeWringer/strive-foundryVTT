@@ -1,38 +1,53 @@
-<section class="fill flex font-size-default">
-	{{!-- Initial screen --}}
-	<div id="section-initial" class="fill flex flex-column">
-		<p><span>{{localize "system.migration.fromVersion"}}</span> <span id="field-migrationFrom"></span></p>
-		<p><span>{{localize "system.migration.toVersion"}}</span> <span id="field-migrationTo"></span></p>
-		<hr>
+{{!--
+viewModel: MigratorDialogViewModel
+--}}
+<section id="{{viewModel.id}}" class="fill flex flex-column auto-margin-v-md font-size-default">
+	{{!-- Initial --}}
+	<div id="{{viewModel.vmInitialSection.id}}" class="flex flex-column flex-grow">
+		<p><span>{{localize "system.migration.fromVersion"}}</span> <span>{{viewModel.migrationFrom}}</span></p>
+		<p><span>{{localize "system.migration.toVersion"}}</span> <span>{{viewModel.migrationTo}}</span></p>
+		{{> hDivider}}
 		<p class="hint-card warn"><i class="fas fa-exclamation-circle"></i> {{localize "system.migration.initialHint"}}</p>
 		<p class="hint-card info"><i class="fas fa-question-circle"></i> {{localize "system.migration.cancelNote"}}</p>
-    <div class="flex-grow"></div>
-		<div class="flex flex-row">
-			<button id="confirm" class="button pad-l-md pad-r-md primary-button">{{localize "system.general.confirm"}}</button>
-			<span class="width-xs"></span>
-			<button id="cancel" class="button pad-l-md pad-r-md secondary-button">{{localize "system.general.cancel"}}</button>
-		</div>
 	</div>
-	{{!-- Progress screen --}}
-	<div id="section-progress" class="fill flex flex-center hidden">
+	{{!-- Progress --}}
+	<div id="{{viewModel.vmProgressSection.id}}" class="flex flex-center hidden">
 		<span class="flex flex-column">
-			<div class="flex flex-center">
-				<i class="fas fa-spinner spin font-size-xxl"></i>
+			<div class="flex flex-column flex-center">
+				<i class="fas fa-spinner anim-spin font-size-xxl"></i>
+				<span>{{localize "system.migration.inProgress"}}</span>
 			</div>
-			<p>{{localize "system.migration.inProgress"}}</p>
+			<div class="flex flex-column flex-middle auto-margin-h-sm">
+				<h3 id="{{viewModel.vmWorkTitle.id}}"></h3>
+				<p id="{{viewModel.vmProgressNumbers.id}}"></p>
+				<p id="{{viewModel.vmWorkIncrement.id}}"></p>
+			</div>
 		</span>
 	</div>
-	{{!-- Error screen --}}
-	<div id="section-error" class="fill hidden">
+	{{!-- Error --}}
+	<div id="{{viewModel.vmErrorSection.id}}" class="flex flex-column hidden">
 		<h2 class="hint-card error"><i class="fas fa-exclamation-triangle"></i> {{localize "system.migration.error"}}</h2>
-		<p class="hint-card error cohesive" id="field-error"></p>
+		<p id="{{viewModel.vmErrorDetails.id}}" class="hint-card error cohesive"></p>
 		<p class="hint-card warn">{{localize "system.migration.errorHint"}} <a href="https://github.com/CodeWringer/strive-foundryVTT/issues">https://github.com/CodeWringer/strive-foundryVTT/issues</a></p>
 	</div>
-	{{!-- Success screen --}}
-	<div id="section-completion" class="fill flex flex-column hidden">
+	{{!-- Success --}}
+	<div id="{{viewModel.vmSuccessSection.id}}" class="flex flex-column hidden">
 		<h2 class="hint-card success"><i class="fas fa-check-circle"></i> {{localize "system.migration.completion"}}</h2>
 		<p class="hint-card success cohesive">{{localize "system.migration.completionHint"}}</p>
-    <div class="flex-grow"></div>
-		<button id="ok" class="button pad-l-md pad-r-md primary-button">{{localize "system.general.ok"}}</button>
+	</div>
+	{{!-- Log --}}
+	<div id="{{viewModel.vmLogSection.id}}" class="hidden" style="overflow: auto;">
+		<ul id="{{viewModel.vmLog.id}}">
+		</ul>
+	</div>
+	{{!-- Buttons --}}
+	<div class="flex flex-right">
+		<div id="{{viewModel.vmInitialButtonSection.id}}" class="flex flex-row flex-grow auto-margin-h-lg">
+			{{> button viewModel=viewModel.vmBegin fill=true heavy=true }}
+			{{> button viewModel=viewModel.vmCancel fill=true heavy=true }}
+		</div>
+		<div id="{{viewModel.vmCompletedButtonSection.id}}" class="flex flex-row flex-grow auto-margin-h-lg">
+			{{> button viewModel=viewModel.vmClose fill=true heavy=true }}
+		</div>
 	</div>
 </section>
