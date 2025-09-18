@@ -9,10 +9,10 @@ import { ArrayUtil } from "../../util/array-utility.mjs";
 
 export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
   /** @override */
-  get targetVersion() { return new VersionCode(1, 5, 4) };
+  get fromVersion() { return new VersionCode(1, 5, 4) };
 
   /** @override */
-  get migratedVersion() { return new VersionCode(1, 5, 5) };
+  get toVersion() { return new VersionCode(1, 5, 5) };
 
   /**
    * @type {DocumentUpdater}

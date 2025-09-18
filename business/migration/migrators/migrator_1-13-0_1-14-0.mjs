@@ -8,10 +8,10 @@ import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_13_0__1_14_0 extends AbstractMigrator {
   /** @override */
-  get targetVersion() { return new VersionCode(1, 13, 0) };
+  get fromVersion() { return new VersionCode(1, 13, 0) };
 
   /** @override */
-  get migratedVersion() { return new VersionCode(1, 14, 0) };
+  get toVersion() { return new VersionCode(1, 14, 0) };
 
   /** @override */
   async _doWork() {

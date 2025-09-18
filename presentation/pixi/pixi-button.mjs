@@ -84,7 +84,7 @@ export default class PixiButton {
     // Actual sprite. 
     this._sprite = new PIXI.Sprite(args.texture);
 
-    if (PIXI_VERSION.greaterThan(FOUNDRY_10_PIXI_VERSION)) {
+    if (PIXI_VERSION.greater(FOUNDRY_10_PIXI_VERSION)) {
       this._sprite.eventMode = "static";
     } else {
       this._sprite.interactive = true;
