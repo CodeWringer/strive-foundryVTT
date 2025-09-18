@@ -1,15 +1,7 @@
-import MigratorInitiator from "../../../business/migration/migrator-initiator.mjs";
-import { WorldSystemVersion } from "../../../business/migration/world-system-version.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ModalDialog from "../modal-dialog/modal-dialog.mjs";
-
-/**
- * The localization key of the dialog title. 
- * 
- * @type {String}
- * @constant
- */
-const DIALOG_TITLE = "system.migration.title";
+import MigratorDialogViewModel from "./migrator-dialog-viewmodel.mjs";
 
 /**
  * Encapsulates the main migration dialog. 
@@ -22,6 +14,7 @@ export default class MigratorDialog extends ModalDialog {
     return new FoundryWrapper().mergeObject(super.defaultOptions, {
       width: 500,
       height: 330,
+      resizable: true,
     });
   }
 
@@ -43,83 +36,45 @@ export default class MigratorDialog extends ModalDialog {
     super({
       ...options,
       easyDismissal: false,
-      localizedTitle: options.localizedTitle ?? game.i18n.localize(DIALOG_TITLE),
+      localizedTitle: game.i18n.localize("system.migration.title"),
+    });
+  }
+
+  /** @override */
+  getData(options) {
+    if (ValidationUtil.isDefined(this._viewModel) === true) {
+      this._viewModel.dispose();
+      this._viewModel = undefined;
+    }
+
+    this._viewModel = new MigratorDialogViewModel({
+      ui: this,
     });
 
-    this.migrator = new MigratorInitiator();
-
-    this.worldVersionString = WorldSystemVersion.get().toString();
-    this.worldVersionMigratedString = this.migrator.finalMigrationVersion.toString();
+    return {
+      ...super.getData(options),
+      viewModel: this._viewModel,
+    }
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    const thiz = this;
-
-    html.find("#field-migrationFrom").text(this.worldVersionString);
-    html.find("#field-migrationTo").text(this.worldVersionMigratedString);
-    
-    html.find("#confirm").click(() => {
-      thiz._beginMigration(html);
-    });
-    html.find("#cancel").click(() => {
-      thiz.close();
-    });
-    html.find("#ok").click(() => {
-      thiz.close();
-    });
+    await this._viewModel.activateListeners(html);
   }
   
   /**
-   * Begins the migration process and shows its progress. 
-   * 
-   * @param {JQuery} html The dialog's DOM. 
-   * 
-   * @async
-   * @private
+   * @override
+   * @see https://foundryvtt.com/api/FormApplication.html#close
    */
-  async _beginMigration(html) {
-    const thiz = this;
-    game.strive.logger.logDebug("Commencing migration");
-
-    html.find("#section-initial").toggleClass("hidden");
-    html.find("#section-progress").toggleClass("hidden");
-
-    try {
-      await this.migrator.migrateAsPossible();
-      thiz._showCompletion(html);
-    } catch(e) {
-      thiz._showError(html, e);
+  async close() {
+    if (ValidationUtil.isDefined(this._viewModel)) {
+      // Clean up the view model. 
+      this._viewModel.dispose();
+      this._viewModel = undefined;
     }
-  }
-  
-  /**
-   * Shows elements that inform the user of the given error. 
-   * 
-   * @param {JQuery} html The dialog's DOM. 
-   * @param {Error} e The error that occurred. 
-   * 
-   * @private
-   */
-  _showError(html, e) {
-    console.error(e);
 
-    html.find("#section-progress").toggleClass("hidden");
-    html.find("#section-error").toggleClass("hidden");
-    html.find("#field-error").text(e.toString());
-  }
-
-  /**
-   * Shows elements that inform the user of the migration's success. 
-   * 
-   * @param {JQuery} html The dialog's DOM. 
-   * 
-   * @private
-   */
-  _showCompletion(html) {
-    html.find("#section-progress").toggleClass("hidden");
-    html.find("#section-completion").toggleClass("hidden");
+    return super.close();
   }
 }

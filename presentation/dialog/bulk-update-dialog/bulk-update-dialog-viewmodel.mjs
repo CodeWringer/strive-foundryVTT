@@ -5,13 +5,12 @@ import InputTextFieldViewModel from "../../component/input-textfield/input-textf
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
- * Encapsulates the main migration dialog. 
+ * View model for the bulk updater dialog. 
  * 
  * @extends ViewModel 
  */
 export default class BulkUpdateDialogViewModel extends ViewModel {
   /**
-   * 
    * @param {Object} args 
    * @param {Dialog} args.ui 
    */

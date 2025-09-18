@@ -216,7 +216,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     };
 
     $(instance.viewModel.element).remove();
-    $(this.element).find(`#${instance.name}-slot`).append(`<div id="${instance.name}-placeholder" class="flex flex-center"><i class="fa-spinner fas font-size-lg spin"></i></div>`)
+    $(this.element).find(`#${instance.name}-slot`).append(`<div id="${instance.name}-placeholder" class="flex flex-center"><i class="fa-spinner fas font-size-lg anim-spin"></i></div>`)
 
     // Re-create the view model instance. 
     instance.viewModel = await instance.viewModelFactory(instance.name, this);

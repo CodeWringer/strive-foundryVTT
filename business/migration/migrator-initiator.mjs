@@ -10,14 +10,36 @@ export default class MigratorInitiator {
   /**
    * Runs through all migrators, one by one, and sequentally executes their migration function, 
    * if applicable. 
-   * @async
+   * 
+   * @param {Object} args
+   * @param {Function | undefined} args.onBegin Invoked when the work begins. Arguments:
+   * * `totalProgress: Number`
+   * * `localizedTitle: String` - A brief localized description of the kind of work that will be done. 
+   * @param {Function | undefined} args.onBeginIncrement Invoked when an increment of the work is begun. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onCompleteIncrement Invoked when an increment of the work is completed. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onComplete Invoked when work is completed. 
+   * 
    * @throws {Error} Any error that occurs during processing. 
+   * 
+   * @async
    */
-  async migrateAsPossible() {
+  async migrateAsPossible(args = {}) {
+    const safeArgs = {
+      onBegin: args.onBegin ?? (() => {}),
+      onBeginIncrement: args.onBeginIncrement ?? (() => {}),
+      onCompleteIncrement: args.onCompleteIncrement ?? (() => {}),
+      onComplete: args.onComplete ?? (() => {}),
+    };
     const migrators = this._getMigrators();
     for (const migrator of migrators) {
       if (migrator.isApplicable()) {
-        await migrator.migrate();
+        await migrator.migrate(safeArgs);
       }
     }
   }

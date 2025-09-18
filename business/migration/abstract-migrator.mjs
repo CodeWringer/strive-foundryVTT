@@ -61,12 +61,26 @@ export default class AbstractMigrator {
   /**
    * Begins the migration process. 
    * 
-   * @param {Function | undefined} progressCallback
+   * Note the callbacks that can be passed via `args` can be used to update the ui with current progress. 
+   * 
+   * @param {Object} args
+   * @param {Function | undefined} args.onBegin Invoked when the work begins. Arguments:
+   * * `totalProgress: Number`
+   * * `localizedTitle: String` - A brief localized description of the kind of work that will be done. 
+   * @param {Function | undefined} args.onBeginIncrement Invoked when an increment of the work is begun. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onCompleteIncrement Invoked when an increment of the work is completed. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onComplete Invoked when work is completed. 
    * 
    * @async
    */
-  async migrate(progressCallback = {}) {
-    await this._doWork(progressCallback);
+  async migrate(args = {}) {
+    await this._doWork(args);
     
     // Update world system version. 
     await WorldSystemVersion.set(this.toVersion);
@@ -77,13 +91,25 @@ export default class AbstractMigrator {
    * 
    * Implementing types **must** override this and provide an implementation!
    * 
-   * @param {Function | undefined} progressCallback
+   * @param {Object} args
+   * @param {Function | undefined} args.onBegin Invoked when the work begins. Arguments:
+   * * `totalProgress: Number`
+   * * `localizedTitle: String` - A brief localized description of the kind of work that will be done. 
+   * @param {Function | undefined} args.onBeginIncrement Invoked when an increment of the work is begun. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onCompleteIncrement Invoked when an increment of the work is completed. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onComplete Invoked when work is completed. 
    * 
    * @async
    * @abstract
    * @protected
    */
-  async _doWork(progressCallback = {}) {
+  async _doWork(args = {}) {
     throw new Error("NotImplementedException");
   }
 
