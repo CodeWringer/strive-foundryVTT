@@ -185,7 +185,8 @@
       "illness",
       "momentum-action",
       "mutation",
-      "scar"
+      "scar",
+      "health-condition"
     ],
     "templates": {
       "base": {
@@ -255,6 +256,11 @@
     "scar": {
       "templates": ["base"],
       "limit": ""
+    },
+    "health-condition": {
+      "templates": ["base"],
+      "current": 0,
+      "limit": 0
     }
   }
 }

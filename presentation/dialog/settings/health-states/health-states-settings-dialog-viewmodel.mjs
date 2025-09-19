@@ -1,4 +1,4 @@
-import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-states.mjs";
+import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-conditions.mjs";
 import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";

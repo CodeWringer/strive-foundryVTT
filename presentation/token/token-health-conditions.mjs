@@ -84,9 +84,9 @@ export default class TokenHealthConditions extends TokenExtender {
    */
   _getTokenHealthConditions(token) {
     const transientActor = token.actor.getTransientObject();
-    return transientActor.health.states.concat([]).sort((a, b) => {
-      const localizedA = game.i18n.localize(a.localizableName);
-      const localizedB = game.i18n.localize(b.localizableName);
+    return transientActor.health.conditions.concat([]).sort((a, b) => {
+      const localizedA = game.i18n.localize(a.name);
+      const localizedB = game.i18n.localize(b.name);
       return localizedA.localeCompare(localizedB);
     });
   }

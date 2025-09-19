@@ -1,5 +1,4 @@
-import { CharacterHealthCondition } from "../../../../../../business/ruleset/health/character-health-state.mjs";
-import { HEALTH_CONDITIONS, HealthCondition } from "../../../../../../business/ruleset/health/health-states.mjs";
+import { HEALTH_CONDITIONS, HealthCondition } from "../../../../../../business/ruleset/health/health-conditions.mjs";
 import GameSystemWorldSettings from "../../../../../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
@@ -80,7 +79,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     this.readViewState();
 
     const sortedHealthConditions = this._getSortedHealthConditions();
-    const characterHealthConditions = this.document.health.states;
+    const characterHealthConditions = this.document.health.conditions;
 
     this.conditionViewModels = [];
     for (const condition of sortedHealthConditions) {

@@ -11,6 +11,7 @@ export const ITEM_TYPES = {
   ILLNESS: "illness",
   INJURY: "injury",
   MOMENTUM_ACTION: "momentum-action",
+  HEALTH_CONDITION: "health-condition",
   MUTATION: "mutation",
   SCAR: "scar",
 };

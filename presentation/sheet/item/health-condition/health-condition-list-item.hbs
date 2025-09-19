@@ -1,0 +1,19 @@
+{{!-- Parameters:
+viewModel: HealthConditionListItemViewModel
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-middle pad-md auto-margin-h-sm">
+  <div class="list-item-header-img">
+    <img src="{{viewModel.document.img}}" class="custom-icon-sm">
+  </div>
+  <span>
+    {{> inputToggle viewModel=viewModel.vmToggle }}
+  </span>
+  {{#if viewModel.showIntensity}}
+    <span class="width-md">
+      {{> inputNumberSpinner viewModel=viewModel.vmIntensity }}
+    </span>
+  {{/if}}
+  <span class="flex flex-grow pad-l-lg">
+    {{#> label showFancyFont=viewModel.showFancyFont}}{{viewModel.localizedName}}{{/label}}
+  </span>
+</div>

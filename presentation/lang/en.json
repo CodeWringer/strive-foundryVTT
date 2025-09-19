@@ -8,6 +8,7 @@
   "TYPES.Item.injury": "Injury",
   "TYPES.Item.illness": "Illness",
   "TYPES.Item.momentum-action": "Momentum Action",
+  "TYPES.Item.health-condition": "Health Condition",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
   "COMBAT.ActionPoints": "Set Action Points",
@@ -551,7 +552,10 @@
           "singular": "Scar"
         },
         "condition": {
-          "tokenMore": "(+%{moreCount})"
+          "condition": "Health Condition",
+          "tokenMore": "(+%{moreCount})",
+          "current": "Current",
+          "limit": "Limit"
         },
         "state": {
           "label": "Condition",
