@@ -141,9 +141,14 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
       if (ValidationUtil.isDefined(condition.internalName)) continue;
 
       const localizedName = condition.name;
-      const localizedToolTip = (this.isGM && ValidationUtil.isDefined(condition.gmNotes) && condition.gmNotes.length > 0) 
+      const hasDescription = ValidationUtil.isDefined(condition.description) && condition.description.length > 0;
+      const hasGmNotes = ValidationUtil.isDefined(condition.gmNotes) && condition.gmNotes.length > 0;
+      let localizedToolTip;
+      if (hasDescription || hasGmNotes) {
+        localizedToolTip = (this.isGM && hasGmNotes) 
         ? `${condition.description}<div class="border-solid-t-sm">${condition.gmNotes}</div>` 
-        : condition.description;
+        : condition.description
+      }
       const vm = new HealthConditionListItemViewModel({
         id: condition.name,
         parent: this,
