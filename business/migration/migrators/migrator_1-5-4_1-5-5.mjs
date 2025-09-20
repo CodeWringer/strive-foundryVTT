@@ -3,7 +3,7 @@ import AbstractMigrator from "../abstract-migrator.mjs";
 import VersionCode from "../version-code.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
-import { HEALTH_CONDITIONS } from "../../ruleset/health/health-states.mjs";
+import { HEALTH_CONDITIONS } from "../../ruleset/health/health-conditions.mjs";
 import { PropertyUtil } from "../../util/property-utility.mjs";
 import { ArrayUtil } from "../../util/array-utility.mjs";
 

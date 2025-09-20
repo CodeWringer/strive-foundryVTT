@@ -559,7 +559,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     super(document);
 
     this._prepareAssetsData();
-    this._prepareHealthConditions();
   }
 
   /**
@@ -637,30 +636,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     }
 
     return result;
-  }
-
-  /**
-   * Ensures the system defined Health Conditions exist on the character. 
-   * 
-   * @async
-   * @private
-   */
-  async _prepareHealthConditions() {
-    const systemDefinedHealthConditions = HEALTH_CONDITIONS.asArray();
-    for await (const condition of systemDefinedHealthConditions) {
-      const alreadyExists = ValidationUtil.isDefined(this.health.conditions.find(it => it.name === condition.name));
-      if (!alreadyExists) {
-        await Item.create({
-          name: condition.name,
-          type: ITEM_TYPES.HEALTH_CONDITION,
-          img: condition.img,
-          system: {
-            isCustom: false,
-            description: condition.localizableToolTip,
-          }
-        }, { parent: this.document });
-      }
-    }
   }
 
   /**

@@ -9,9 +9,6 @@ import TransientHealthCondition from "../../../../business/document/item/transie
  */
 export default class HealthConditionItemSheetViewModel extends BaseItemSheetViewModel {
   
-  /** @override */
-  get showDescription() { return false; }
-  
   /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

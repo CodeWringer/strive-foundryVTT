@@ -1,4 +1,4 @@
-import { HealthStateVisibilityItem } from "../../dialog/settings/health-states/health-state-visibility-item.mjs";
+import { HealthConditionVisibilityItem } from "../../dialog/settings/health-settings/health-settings-visibility-item.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import VisibilityToggleListItemViewModel from "./visibility-toggle-list-item-viewmodel.mjs";
 
@@ -21,12 +21,12 @@ import VisibilityToggleListItemViewModel from "./visibility-toggle-list-item-vie
  * * Read-only
  * @property {Array<VisibilityToggleListItemViewModel>} itemViewModels
  * * Read-only
- * @property {Array<HealthStateVisibilityItem>} value
+ * @property {Array<HealthConditionVisibilityItem>} value
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
- * * `oldValue: {Array<HealthStateVisibilityItem>}`
- * * `newValue: {Array<HealthStateVisibilityItem>}`
+ * * `oldValue: {Array<HealthConditionVisibilityItem>}`
+ * * `newValue: {Array<HealthConditionVisibilityItem>}`
  * 
  * @extends InputViewModel
  */
@@ -58,10 +58,10 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Array<HealthStateVisibilityItem>}`
-   * * `newValue: {Array<HealthStateVisibilityItem>}`
+   * * `oldValue: {Array<HealthConditionVisibilityItem>}`
+   * * `newValue: {Array<HealthConditionVisibilityItem>}`
    * 
-   * @param {Array<HealthStateVisibilityItem> | undefined} args.value 
+   * @param {Array<HealthConditionVisibilityItem> | undefined} args.value 
    */
   constructor(args = {}) {
     super(args);
@@ -96,7 +96,7 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
           // Preserve the old value for use by consumers of the onChange callback. 
           const oldItemArray = this.value.concat([]);
           const index = oldItemArray.findIndex(it => it.id === item.id)
-          oldItemArray[index] = new HealthStateVisibilityItem({
+          oldItemArray[index] = new HealthConditionVisibilityItem({
             id: item.id,
             localizedName: item.localizedName,
             value: oldValue,
@@ -104,7 +104,7 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
 
           // Update the new value in the list. 
           const newItemArray = this.value.concat([]);
-          newItemArray[index] = new HealthStateVisibilityItem({
+          newItemArray[index] = new HealthConditionVisibilityItem({
             id: item.id,
             localizedName: item.localizedName,
             value: newValue,

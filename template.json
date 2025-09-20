@@ -259,7 +259,7 @@
     },
     "health-condition": {
       "templates": ["base"],
-      "current": 0,
+      "current": 1,
       "limit": 0
     }
   }

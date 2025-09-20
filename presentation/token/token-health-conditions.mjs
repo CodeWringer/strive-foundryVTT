@@ -1,5 +1,4 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
-import { CharacterHealthCondition } from "../../business/ruleset/health/character-health-state.mjs";
 import { StringUtil } from "../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { PixiLoader } from "../pixi/pixi-preloader.mjs";
@@ -78,7 +77,7 @@ export default class TokenHealthConditions extends TokenExtender {
 
   /**
    * @param {Token} token 
-   * @returns {Array<CharacterHealthCondition>}
+   * @returns {Array<TransientHealthCondition>}
    * 
    * @private
    */

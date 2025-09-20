@@ -1,9 +1,10 @@
-import { HEALTH_CONDITIONS, HealthCondition } from "../../../../../../business/ruleset/health/health-conditions.mjs";
+import { ITEM_TYPES } from "../../../../../../business/document/item/item-types.mjs";
+import { HEALTH_CONDITIONS } from "../../../../../../business/ruleset/health/health-conditions.mjs";
 import GameSystemWorldSettings from "../../../../../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
-import ActorHealthConditionsListItemViewModel from "./actor-health-conditions-list-item-viewmodel.mjs";
+import HealthConditionListItemViewModel from "../../../../item/health-condition/health-condition-list-item-viewmodel.mjs";
 
 /**
  * @property {TransientBaseCharacterActor} document An actor document on which to set the states. 
@@ -20,7 +21,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get conditionTemplate() { return ActorHealthConditionsListItemViewModel.TEMPLATE; }
+  get conditionTemplate() { return HealthConditionListItemViewModel.TEMPLATE; }
 
   /**
    * @type {Boolean}
@@ -38,15 +39,13 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
 
     if (value) {
       this.conditionViewModels.forEach(vm => {
-        const isHiddenBySetting = this._isHiddenBySettings(vm.stateName);
-        vm.visible = isHiddenBySetting ? false : true;
+        vm.visible = true;
       });
       this.element.find("#expansion-indicator-expanded").removeClass("hidden");
       this.element.find("#expansion-indicator-collapsed").addClass("hidden");
     } else {
       this.conditionViewModels.forEach(vm => {
-        const isHiddenBySetting = this._isHiddenBySettings(vm.stateName);
-        vm.visible = isHiddenBySetting ? false : (vm.stateIntensity.value > 0);
+        vm.visible = vm.current > 0;
       });
       this.element.find("#expansion-indicator-expanded").addClass("hidden");
       this.element.find("#expansion-indicator-collapsed").removeClass("hidden");
@@ -78,28 +77,57 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     this.registerViewStateProperty("_isExpanded");
     this.readViewState();
 
-    const sortedHealthConditions = this._getSortedHealthConditions();
+    const systemHealthConditions = HEALTH_CONDITIONS.asArray();
     const characterHealthConditions = this.document.health.conditions;
-
     this.conditionViewModels = [];
-    for (const condition of sortedHealthConditions) {
+
+    for (const condition of systemHealthConditions) {
       const isHiddenBySetting = this._isHiddenBySettings(condition.name);
+      if (isHiddenBySetting) continue;
 
-      const conditionOnCharacter = characterHealthConditions.find(it => it.name === condition.name);
-      const intensity = ValidationUtil.isDefined(conditionOnCharacter) ? conditionOnCharacter.intensity : undefined;
-      const hasIntensity = ValidationUtil.isDefined(conditionOnCharacter) ? conditionOnCharacter.intensity > 0 : false;
+      const characterHealthCondition = characterHealthConditions.find(it => it.internalName === condition.name);
+      const isOnCharacter = ValidationUtil.isDefined(characterHealthCondition);
+      const hasIntensity = isOnCharacter ? characterHealthCondition.current > 0 : false;
 
-      const vm = new ActorHealthConditionsListItemViewModel({
+      const localizedName = game.i18n.localize(condition.localizableName);
+      const localizedToolTip = game.i18n.localize(condition.localizableToolTip);
+      const vm = new HealthConditionListItemViewModel({
         id: condition.name,
+        internalName: condition.name,
         parent: this,
-        document: this.document,
-        localizedLabel: game.i18n.localize(condition.localizableName) ?? condition.name,
-        localizedToolTip: this.showReminders ? game.i18n.localize(condition.localizableToolTip) : undefined,
-        iconHtml: condition.iconHtml,
-        stateName: condition.name,
-        stateIntensity: intensity,
-        stateLimit: condition.limit,
-        visible: !isHiddenBySetting && (hasIntensity || this.isExpanded),
+        current: isOnCharacter ? characterHealthCondition.current : 0,
+        limit: condition.limit,
+        localizedName: localizedName,
+        localizedToolTip: localizedToolTip,
+        img: condition.img,
+        visible: hasIntensity || this.isExpanded,
+        onChange: async (oldValue, newValue) => {
+          if (newValue > 0) {
+            // Update or create
+            if (isOnCharacter) {
+              // Update
+              characterHealthCondition.current = newValue;
+            } else {
+              // Create
+              await Item.create({
+                name: localizedName,
+                img: condition.img,
+                type: ITEM_TYPES.HEALTH_CONDITION,
+                system: {
+                  internalName: condition.name,
+                  current: 1,
+                  limit: condition.limit,
+                  description: localizedToolTip,
+                }
+              }, { parent: this.document.document });
+            }
+          } else {
+            // Delete
+            if (isOnCharacter) {
+              characterHealthCondition.delete();
+            }
+          }
+        },
       });
       this.conditionViewModels.push(vm);
     }
@@ -115,46 +143,13 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
   }
 
   /**
-   * Returns all health condition definitions (custom and from the system) and sorted alphabetically. 
-   * 
-   * @returns {Array<HealthCondition>}
-   * 
-   * @private
-   */
-  _getSortedHealthConditions() {
-    const customHealthConditions = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS).custom
-      .map(it => new HealthCondition({
-        name: it.name,
-        limit: it.limit,
-        iconHtml: ValidationUtil.isDefined(it.iconPath) ? `<img class="custom-system-edit custom-icon-sm" src="${it.iconPath}" style="border: none; filter: brightness(0.25);"></img>` : undefined,
-      }));
-    const systemHealthConditions = HEALTH_CONDITIONS.asArray();
-    const allHealthConditions = customHealthConditions.concat(systemHealthConditions);
-    // Sort alphabetically. 
-    allHealthConditions.sort((a, b) => {
-      const lowerA = a.name.toLowerCase();
-      const lowerB = b.name.toLowerCase();
-
-      if (lowerA > lowerB) {
-        return 1;
-      } else if (lowerA < lowerB) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
-
-    return allHealthConditions;
-  }
-
-  /**
    * Returns `true`, if the health condition with the given name has been hidden via game settings. 
    * 
    * @param {String} name 
    * @returns {Boolean}
    */
   _isHiddenBySettings(name) {
-    const hiddenHealthConditions = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS).hidden;
+    const hiddenHealthConditions = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_HEALTH_SETTINGS).hidden;
     return ValidationUtil.isDefined(hiddenHealthConditions.find(it => it === name));
   }
 }

@@ -1,7 +1,7 @@
 import { SYSTEM_ID } from "../../../../system-id.mjs";
-import SetHealthStatesSettingUseCase from "../../../../business/use-case/set-health-states-setting-use-case.mjs";
-import HealthStatesSettingsDialogViewModel from "./health-states-settings-dialog-viewmodel.mjs";
+import HealthStatesSettingsDialogViewModel from "./health-settings-dialog-viewmodel.mjs";
 import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
+import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
 
 /**
  * Represents a dialog for customizing character health states globally. 
@@ -83,6 +83,6 @@ export default class HealthStatesSettingsDialog extends FormApplication {
    * @protected
    */
   _saveSettings(settings) {
-    new SetHealthStatesSettingUseCase().invoke(settings);
+    new GameSystemWorldSettings().set(GameSystemWorldSettings.KEY_HEALTH_SETTINGS, settings);
   }
 }

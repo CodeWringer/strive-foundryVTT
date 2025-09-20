@@ -1,6 +1,3 @@
-import TransientHealthCondition from "../../../../business/document/item/transient-health-condition.mjs";
-import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-conditions.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
@@ -20,16 +17,7 @@ export default class HealthConditionListItemViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showIntensity() { return (this.document.limit !== 1) && (this.document.current > 0); }
-
-  get localizedName() {
-    const definedBySystem = HEALTH_CONDITIONS.asArray().find(it => it.name == this.document.name);
-    if (ValidationUtil.isDefined(definedBySystem)) {
-      return game.i18n.localize(definedBySystem.localizableName);
-    } else {
-      return this.document.name;
-    }
-  }
+  get showIntensity() { return (this.limit !== 1) && (this.current > 0); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -37,37 +25,52 @@ export default class HealthConditionListItemViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {TransientHealthCondition} args.document 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
-   * @param {String | undefined} args.visGroupId
+   * @param {Number | undefined} args.current
+   * @param {Number | undefined} args.limit
+   * @param {String | undefined} args.img
+   * @param {String | undefined} args.internalName If it is a system-defined Condition, this field is to be defined as 
+   * the internal name. 
+   * @param {String | undefined} args.localizedName
+   * @param {String | undefined} args.localizedToolTip
+   * @param {Function | undefined} args.onChange Invoked when the current value changes. Arguments:
+   * * `oldValue: Number`
+   * * `newValue: Number`
    */
   constructor(args = {}) {
-    super(args);
-    ValidationUtil.validateOrThrow(args, ["document"]);
+    super({
+      ...args,
+      localizedToolTip: args.localizedToolTip,
+    });
 
-    this.localizedToolTip = game.i18n.localize(this.document.description);
+    this.current = args.current ?? 0;
+    this.limit = args.limit ?? 0;
+    this.img = args.img;
+    this.internalName = args.internalName;
+    this.localizedName = args.localizedName;
+    this.onChange = args.onChange ?? (() => {});
 
     this.vmToggle = new InputToggleViewModel({
       id: "vmToggle",
       parent: this,
-      value: this.document.current > 0,
+      value: this.current > 0,
       onChange: (_, newValue) => {
-        this.document.current = this.document.current > 0 ? 0 : 1;
+        this.onChange(this.current, this.current > 0 ? 0 : 1);
       },
     });
     if (this.showIntensity === true) {
       this.vmIntensity = new InputNumberSpinnerViewModel({
         id: "vmIntensity",
         parent: this,
-        value: this.document.current,
+        value: this.current,
         onChange: (_, newValue) => {
-          this.document.current = newValue;
+          this.onChange(this.current, newValue);
         },
         min: 0,
-        max: (this.stateLimit > 0) ? this.stateLimit : undefined,
+        max: (this.limit > 0) ? this.limit : undefined,
       });
     }
   }

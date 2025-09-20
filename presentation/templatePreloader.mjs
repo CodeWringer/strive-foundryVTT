@@ -85,8 +85,7 @@ export const TEMPLATES = {
   DIALOG_ROLLABLE_SELECTION: `${basePathPresentation}/dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.hbs`,
   DIALOG_BULK_UPDATER: `${basePathPresentation}/dialog/bulk-update-dialog/bulk-update-dialog.hbs`,
   // --- Settings Dialogs
-  DIALOG_SETTINGS_HEALTH_CONDITIONS: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
-  CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,
+  DIALOG_SETTINGS_HEALTH_CONDITIONS: `${basePathPresentation}/dialog/settings/health-settings/health-settings-dialog.hbs`,
   // --- Actor
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/actor-personals.hbs`,
@@ -100,7 +99,6 @@ export const TEMPLATES = {
   ACTOR_PERSONALITY: `${basePathPresentation}/sheet/actor/part/personality/actor-personality.hbs`,
   ACTOR_HEALTH: `${basePathPresentation}/sheet/actor/part/health/actor-health.hbs`,
   ACTOR_HEALTH_CONDITIONS: `${basePathPresentation}/sheet/actor/part/health/conditions/actor-health-conditions.hbs`,
-  ACTOR_HEALTH_CONDITIONS_LIST_ITEM: `${basePathPresentation}/sheet/actor/part/health/conditions/actor-health-conditions-list-item.hbs`,
   ACTOR_HEALTH_DEATH_SAVES: `${basePathPresentation}/sheet/actor/part/health/deaths-door/deaths-door.hbs`,
   ACTOR_GRIT_POINTS: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points.hbs`,
   ACTOR_GRIT_POINTS_COMBAT_TRACKER: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points-combat-tracker.hbs`,

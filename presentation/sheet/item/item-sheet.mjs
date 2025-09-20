@@ -13,6 +13,7 @@ import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import SendToChatHandler from "../../utility/send-to-chat-handler.mjs";
+import HealthConditionItemSheet from "./health-condition/health-condition-item-sheet.mjs";
 
 export class GameSystemItemSheet extends ItemSheet {
   /**
@@ -33,6 +34,7 @@ export class GameSystemItemSheet extends ItemSheet {
         [ITEM_TYPES.INJURY, new InjuryItemSheet()],
         [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
         [ITEM_TYPES.FATE_CARD, new FateItemSheet()],
+        [ITEM_TYPES.HEALTH_CONDITION, new HealthConditionItemSheet()],
       ]);
     }
 

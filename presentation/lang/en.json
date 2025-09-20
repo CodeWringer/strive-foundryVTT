@@ -553,6 +553,7 @@
         },
         "condition": {
           "condition": "Health Condition",
+          "conditions": "Health Conditions",
           "tokenMore": "(+%{moreCount})",
           "current": "Current",
           "limit": "Limit"
@@ -907,13 +908,8 @@
       },
       "healthConditions": {
         "label": "Condition Customization",
-        "hint": "Allows defining new and hiding system default conditions.",
-        "configureSystemDefaults": "Configure System Condition Visibilities",
-        "configureCustom": "Define Custom Conditions",
-        "add": {
-          "label": "Add Custom Condition"
-        },
-        "newDefaultName": "New Health State"
+        "hint": "Allows hiding system default Conditions.",
+        "configureSystemDefaults": "Configure System Condition Visibilities"
       },
       "toggleReminders": {
         "label": "Reminder Hints",
