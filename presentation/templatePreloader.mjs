@@ -85,8 +85,7 @@ export const TEMPLATES = {
   DIALOG_ROLLABLE_SELECTION: `${basePathPresentation}/dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.hbs`,
   DIALOG_BULK_UPDATER: `${basePathPresentation}/dialog/bulk-update-dialog/bulk-update-dialog.hbs`,
   // --- Settings Dialogs
-  DIALOG_SETTINGS_HEALTH_CONDITIONS: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
-  CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,
+  DIALOG_SETTINGS_HEALTH_CONDITIONS: `${basePathPresentation}/dialog/settings/health-settings/health-settings-dialog.hbs`,
   // --- Actor
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/actor-personals.hbs`,
@@ -100,7 +99,6 @@ export const TEMPLATES = {
   ACTOR_PERSONALITY: `${basePathPresentation}/sheet/actor/part/personality/actor-personality.hbs`,
   ACTOR_HEALTH: `${basePathPresentation}/sheet/actor/part/health/actor-health.hbs`,
   ACTOR_HEALTH_CONDITIONS: `${basePathPresentation}/sheet/actor/part/health/conditions/actor-health-conditions.hbs`,
-  ACTOR_HEALTH_CONDITIONS_LIST_ITEM: `${basePathPresentation}/sheet/actor/part/health/conditions/actor-health-conditions-list-item.hbs`,
   ACTOR_HEALTH_DEATH_SAVES: `${basePathPresentation}/sheet/actor/part/health/deaths-door/deaths-door.hbs`,
   ACTOR_GRIT_POINTS: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points.hbs`,
   ACTOR_GRIT_POINTS_COMBAT_TRACKER: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points-combat-tracker.hbs`,
@@ -113,6 +111,7 @@ export const TEMPLATES = {
   ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
   // --- Item
   // Base
+  BASE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/base/base-chat-message.hbs`,
   BASE_LIST_ITEM: `${basePathPresentation}/sheet/item/base/base-list-item.hbs`,
   BASE_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/base/base-list-item-header.hbs`,
   BASE_ITEM_SHEET: `${basePathPresentation}/sheet/item/base/base-item-sheet.hbs`,
@@ -147,8 +146,10 @@ export const TEMPLATES = {
   MOMENTUM_BAR: `${basePathPresentation}/combat/momentum/momentum-bar.hbs`,
   // Mutation
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
-  // Mutation
+  // Scar
   SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
+  // Health Condition
+  HEALTH_CONDITION_LIST_ITEM: `${basePathPresentation}/sheet/item/health-condition/health-condition-list-item.hbs`,
   // Combat
   GENERAL_COMBAT_ABILITIES_CHAT_MESSAGE: `${basePathPresentation}/combat/general-combat-actions/general-combat-abilities-chat-message.hbs`,
   COMBAT_TRACKER: `${basePathPresentation}/combat/combat-tracker.hbs`,

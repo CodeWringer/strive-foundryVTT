@@ -14,7 +14,7 @@ import { ARMOR_TYPES } from "./business/ruleset/asset/armor-types.mjs";
 import { WEAPON_TYPES } from "./business/ruleset/asset/weapon-types.mjs";
 import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
 import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
-import { HEALTH_CONDITIONS } from "./business/ruleset/health/health-states.mjs";
+import { HEALTH_CONDITIONS } from "./business/ruleset/health/health-conditions.mjs";
 import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-types.mjs";
 import { ASSET_TAGS, SKILL_TAGS } from "./business/tags/system-tags.mjs";
 import { ACTOR_TYPES } from "./business/document/actor/actor-types.mjs";
@@ -50,6 +50,7 @@ import { GameSystemActor } from "./business/document/actor/actor.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
 import GameSystemCombat from "./presentation/combat/game-system-combat.mjs";
 import GameSystemCombatant from "./presentation/combat/game-system-combatant.mjs";
+import TransientBaseItem from "./business/document/item/transient-base-item.mjs";
 import TransientBaseCharacterActor from "./business/document/actor/transient-base-character-actor.mjs";
 import TransientBaseActor from "./business/document/actor/transient-base-actor.mjs";
 import TransientNpc from "./business/document/actor/transient-npc.mjs";
@@ -57,13 +58,13 @@ import TransientPc from "./business/document/actor/transient-pc.mjs";
 import TransientPlainActor from "./business/document/actor/transient-plain-actor.mjs";
 import TransientSkill from "./business/document/item/skill/transient-skill.mjs";
 import TransientAsset from "./business/document/item/transient-asset.mjs";
-import TransientBaseItem from "./business/document/item/transient-base-item.mjs";
 import TransientFateCard from "./business/document/item/transient-fate-card.mjs";
 import TransientIllness from "./business/document/item/transient-illness.mjs";
 import TransientInjury from "./business/document/item/transient-injury.mjs";
 import TransientMomentumAction from "./business/document/item/transient-momentum-action.mjs";
 import TransientMutation from "./business/document/item/transient-mutation.mjs";
 import TransientScar from "./business/document/item/transient-scar.mjs";
+import TransientHealthCondition from "./business/document/item/transient-health-condition.mjs";
 // HUD
 import GameSystemTokenHud from "./presentation/token/game-system-token-hud.mjs";
 // Sheet classes
@@ -131,6 +132,7 @@ import ActorSheetViewModel from "./presentation/sheet/actor/actor-sheet-viewmode
 // View models - Item
 import AssetListItemViewModel from "./presentation/sheet/item/asset/asset-list-item-viewmodel.mjs";
 import AssetItemSheetViewModel from "./presentation/sheet/item/asset/asset-item-sheet-viewmodel.mjs";
+import BaseChatMessageViewModel from "./presentation/sheet/item/base/base-chat-message-viewmodel.mjs";
 import BaseItemSheetViewModel from "./presentation/sheet/item/base/base-item-sheet-viewmodel.mjs";
 import BaseListItemViewModel from "./presentation/sheet/item/base/base-list-item-viewmodel.mjs";
 import ExpertiseListItemViewModel from "./presentation/sheet/item/expertise/expertise-list-item-viewmodel.mjs";
@@ -148,6 +150,7 @@ import ScarItemSheetViewModel from "./presentation/sheet/item/scar/scar-item-she
 import ScarListItemViewModel from "./presentation/sheet/item/scar/scar-list-item-viewmodel.mjs";
 import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
 import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
+import HealthConditionItemSheet from "./presentation/sheet/item/health-condition/health-condition-item-sheet.mjs";
 import ReadOnlyValueViewModel from "./presentation/component/read-only-value/read-only-value.mjs";
 // Utilities
 import { ChatUtil } from "./presentation/chat/chat-utility.mjs";
@@ -267,6 +270,7 @@ Hooks.once('init', function() {
         TransientMomentumAction: TransientMomentumAction,
         TransientMutation: TransientMutation,
         TransientScar: TransientScar,
+        TransientHealthCondition: TransientHealthCondition,
       },
       dialog: {
         DynamicInputDialog: DynamicInputDialog,
@@ -323,6 +327,7 @@ Hooks.once('init', function() {
         item: {
           AssetListItemViewModel: AssetListItemViewModel,
           AssetItemSheetViewModel: AssetItemSheetViewModel,
+          BaseChatMessageViewModel: BaseChatMessageViewModel,
           BaseItemSheetViewModel: BaseItemSheetViewModel,
           BaseListItemViewModel: BaseListItemViewModel,
           ExpertiseListItemViewModel: ExpertiseListItemViewModel,
@@ -340,6 +345,7 @@ Hooks.once('init', function() {
           ScarListItemViewModel: ScarListItemViewModel,
           SkillItemSheetViewModel: SkillItemSheetViewModel,
           SkillListItemViewModel: SkillListItemViewModel,
+          HealthConditionItemSheet: HealthConditionItemSheet,
         },
         chat: {
           GeneralCombatAbilitiesViewModel: GeneralCombatAbilitiesViewModel,

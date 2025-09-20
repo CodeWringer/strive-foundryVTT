@@ -7,7 +7,7 @@ import { ValidationUtil } from "../../../../business/util/validation-utility.mjs
  * @property {String} localizedName A localized name for display. 
  * @property {Boolean} value Gets or sets the value. 
  */
-export class HealthStateVisibilityItem {
+export class HealthConditionVisibilityItem {
   /**
    * @param {Object} args 
    * @param {String} args.id Unique ID of this entry. 

@@ -1,4 +1,4 @@
-import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-states/health-states-settings-dialog.mjs";
+import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-settings/health-settings-dialog.mjs";
 import GameSystemSetting from "./game-system-setting.mjs";
 import GameSystemSettings from "./game-system-settings.mjs";
 import { SettingScopes } from "./setting-scopes.mjs";
@@ -12,7 +12,7 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
    * @type {String}
    * @readonly
    */
-  static get KEY_CUSTOM_HEALTH_CONDITIONS() { return "customHealthStates"; }
+  static get KEY_HEALTH_SETTINGS() { return "healthSettings"; }
  
   /**
    * @static
@@ -33,14 +33,13 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
 
     this._settings.push(
       new GameSystemSetting({
-        key: GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS,
+        key: GameSystemWorldSettings.KEY_HEALTH_SETTINGS,
         name: game.i18n.localize("system.settings.healthConditions.label"),
         hint: game.i18n.localize("system.settings.healthConditions.hint"),
         scope: SettingScopes.WORLD,
         config: false,
         default: {
           hidden: [],
-          custom: [],
         },
         type: Object,
         menu: HealthStatesSettingsDialog,

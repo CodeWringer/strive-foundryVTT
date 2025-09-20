@@ -11,31 +11,6 @@ export default class MomentumActionChatMessageViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
-   * @type {Boolean}
-   * @readonly
-   */
-  allowPickup = false;
-  
-  /**
-   * @type {String}
-   * @readonly
-   */
-  sourceType = undefined;
-  
-  /**
-   * @type {String}
-   * @readonly
-   */
-  sourceId = undefined;
-  
-  /**
-   * An array of user IDs, which identify those users whose characters would be permitted to pick the item up. 
-   * @type {Array<String>}
-   * @readonly
-   */
-  allowPickupBy = [];
-
-  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 

@@ -2,6 +2,7 @@ import { ITEM_TYPES } from "./item-types.mjs";
 import TransientSkill from "./skill/transient-skill.mjs";
 import TransientAsset from "./transient-asset.mjs";
 import TransientFateCard from "./transient-fate-card.mjs";
+import TransientHealthCondition from "./transient-health-condition.mjs";
 import TransientIllness from "./transient-illness.mjs";
 import TransientInjury from "./transient-injury.mjs";
 import TransientMomentumAction from "./transient-momentum-action.mjs";
@@ -38,6 +39,7 @@ export class GameSystemItem extends Item {
       [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
       [ITEM_TYPES.SCAR, (document) => { return new TransientScar(document) }],
       [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
+      [ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
     ]);
   }
 
@@ -85,7 +87,7 @@ export class GameSystemItem extends Item {
   /** @override */
   async _preCreate(data, options, user) {
     this.updateSource({
-      img: this.defaultImg,
+      img: data.img ?? this.defaultImg,
     });
 
     return super._preCreate(data, options, user);

@@ -8,6 +8,7 @@
   "TYPES.Item.injury": "Injury",
   "TYPES.Item.illness": "Illness",
   "TYPES.Item.momentum-action": "Momentum Action",
+  "TYPES.Item.health-condition": "Health Condition",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
   "COMBAT.ActionPoints": "Set Action Points",
@@ -551,7 +552,11 @@
           "singular": "Scar"
         },
         "condition": {
-          "tokenMore": "(+%{moreCount})"
+          "condition": "Health Condition",
+          "conditions": "Health Conditions",
+          "tokenMore": "(+%{moreCount})",
+          "current": "Current",
+          "limit": "Limit"
         },
         "state": {
           "label": "Condition",
@@ -903,13 +908,8 @@
       },
       "healthConditions": {
         "label": "Condition Customization",
-        "hint": "Allows defining new and hiding system default conditions.",
-        "configureSystemDefaults": "Configure System Condition Visibilities",
-        "configureCustom": "Define Custom Conditions",
-        "add": {
-          "label": "Add Custom Condition"
-        },
-        "newDefaultName": "New Health State"
+        "hint": "Allows hiding system default Conditions.",
+        "configureSystemDefaults": "Configure System Condition Visibilities"
       },
       "toggleReminders": {
         "label": "Reminder Hints",

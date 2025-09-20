@@ -186,6 +186,7 @@ export class GameSystemActorSheet extends ActorSheet {
     const creationData = {
       name: templateItem.name,
       type: templateItem.type,
+      img: templateItem.img,
       system: {
         ...templateItem.system,
         isCustom: false,

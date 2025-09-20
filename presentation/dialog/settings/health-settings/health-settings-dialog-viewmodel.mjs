@@ -1,12 +1,10 @@
-import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-states.mjs";
+import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-conditions.mjs";
 import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
-import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
-import CustomHealthStateListItemViewModel from "./custom-health-state-list-item-viewmodel.mjs";
-import { HealthStateVisibilityItem } from "./health-state-visibility-item.mjs";
+import { HealthConditionVisibilityItem } from "./health-settings-visibility-item.mjs";
 
 /**
  * @extends ViewModel
@@ -14,18 +12,17 @@ import { HealthStateVisibilityItem } from "./health-state-visibility-item.mjs";
  * @property {Object} stateSettings Represents the current health settings. 
  * * Has the following properties: 
  * * * `{Array<String>} hidden` - A list of health condition IDs to hide on character sheets. 
- * * * `{Array<Object>} custom` - A list of custom health conditions to add to character sheets. 
  * * Private
  * * Cached
  * @property {Array<ViewModel>} stateViewModels
- * @property {Array<HealthStateVisibilityItem>} stateVisibilityItems
+ * @property {Array<HealthConditionVisibilityItem>} stateVisibilityItems
  */
 export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_SETTINGS_HEALTH_CONDITIONS; }
 
   /**
-   * @type {Array<HealthStateVisibilityItem>}
+   * @type {Array<HealthConditionVisibilityItem>}
    */
   get stateVisibilityItems() { return this._stateVisibilityItems; }
   set stateVisibilityItems(value) {
@@ -39,12 +36,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     }
     this._renderFormApplication();
   }
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get customHealthStateListItemTemplate() { return CustomHealthStateListItemViewModel.TEMPLATE; }
 
   /**
    * @param {Object} args
@@ -66,7 +57,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     this.registerViewStateProperty("stateSettings");
     
     // Load state. 
-    this.stateSettings = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_CONDITIONS);
+    this.stateSettings = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_HEALTH_SETTINGS);
     this.readAllViewState();
 
     // Prepare data for system default health state visibilities. 
@@ -90,32 +81,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
         this.stateVisibilityItems = newValue;
       }
     });
-    this.vmCustomList = new SimpleListViewModel({
-      id: "vmCustomList",
-      parent: this,
-      value: this.stateSettings.custom,
-      contentItemTemplate: this.customHealthStateListItemTemplate,
-      contentItemViewModelFactory: (index, customHealthState) => {
-        return new CustomHealthStateListItemViewModel({
-          id: `vmAttribute${index}`,
-          isEditable: this.isEditable,
-          stateName: ((customHealthState ?? {}).name ?? customHealthState),
-          stateLimit: ((customHealthState ?? {}).limit ?? 0),
-          stateIconPath: (customHealthState ?? {}).iconPath,
-        });
-      },
-      newItemDefaultValue: {
-        name: game.i18n.localize("system.settings.healthConditions.newDefaultName"),
-        limit: 0,
-      },
-      isItemAddable: true,
-      isItemRemovable: true,
-      localizedAddLabel: game.i18n.localize("system.settings.healthConditions.add.label"),
-      onChange: (oldValue, newValue) => {
-        this.stateSettings.custom = newValue;
-        this._renderFormApplication();
-      },
-    });
   }
 
   /** @override */
@@ -128,25 +93,14 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     super.update(args);
   }
 
-  /** @override */
-  _getChildUpdates() {
-    const updates = super._getChildUpdates();
-
-    updates.set(this.vmCustomList, {
-      ...updates.get(this.vmCustomList),
-    });
-
-    return updates;
-  }
-
   /**
-   * @returns {Array<HealthStateVisibilityItem>}
+   * @returns {Array<HealthConditionVisibilityItem>}
    * 
    * @private
    */
   _getHealthStateVisibilityViewModels() {
     const states = HEALTH_CONDITIONS.asArray();
-    const result = states.map(healthState => new HealthStateVisibilityItem({
+    const result = states.map(healthState => new HealthConditionVisibilityItem({
       id: healthState.name,
       localizedName: game.i18n.localize(healthState.localizableName),
       value: this.stateSettings.hidden.find(stateName => stateName === healthState.name) === undefined,
