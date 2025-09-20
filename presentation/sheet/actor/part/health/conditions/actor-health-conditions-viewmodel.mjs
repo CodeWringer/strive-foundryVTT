@@ -81,9 +81,9 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     const characterHealthConditions = this.document.health.conditions;
     this.conditionViewModels = [];
 
+    // Iterating instances of `HealthCondition`s - system-defined Health Conditions. 
     for (const condition of systemHealthConditions) {
-      const isHiddenBySetting = this._isHiddenBySettings(condition.name);
-      if (isHiddenBySetting) continue;
+      if (this._isHiddenBySettings(condition.name)) continue;
 
       const characterHealthCondition = characterHealthConditions.find(it => it.internalName === condition.name);
       const isOnCharacter = ValidationUtil.isDefined(characterHealthCondition);
@@ -101,7 +101,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
         localizedToolTip: localizedToolTip,
         img: condition.img,
         visible: hasIntensity || this.isExpanded,
-        onChange: async (oldValue, newValue) => {
+        onChange: async (_, newValue) => {
           if (newValue > 0) {
             // Update or create
             if (isOnCharacter) {
@@ -126,6 +126,40 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
             if (isOnCharacter) {
               characterHealthCondition.delete();
             }
+          }
+        },
+      });
+      this.conditionViewModels.push(vm);
+    }
+
+    // Iterating instances of `TransientHealthCondition`s - instances of system-defined 
+    // **and** custom Health Conditions (but actually, only custom ones will be worked with here).
+    for (const condition of characterHealthConditions) {
+      if (this._isHiddenBySettings(condition.name)) continue;
+      // If the internalName is defined, the condition comes from the system. These have already 
+      // been handled by the previous iteration and mustn't be considered, again. 
+      if (ValidationUtil.isDefined(condition.internalName)) continue;
+
+      const localizedName = condition.name;
+      const localizedToolTip = (this.isGM && ValidationUtil.isDefined(condition.gmNotes) && condition.gmNotes.length > 0) 
+        ? `${condition.description}<div class="border-solid-t-sm">${condition.gmNotes}</div>` 
+        : condition.description;
+      const vm = new HealthConditionListItemViewModel({
+        id: condition.name,
+        parent: this,
+        current: condition.current,
+        limit: condition.limit,
+        localizedName: localizedName,
+        localizedToolTip: localizedToolTip,
+        img: condition.img,
+        visible: true, // Assumed to always be true, as a custom-defined Condition shouldn't have a `current` value of 0. 
+        onChange: async (_, newValue) => {
+          if (newValue > 0) {
+            // Update
+            condition.current = newValue;
+          } else {
+            // Delete
+            condition.delete();
           }
         },
       });

@@ -47,6 +47,16 @@ export default class TransientHealthCondition extends TransientBaseItem {
    * @readonly
    */
   get internalName() { return this.document.system.internalName; }
+
+  /**
+   * @param {GameSystemItem} document An encapsulated document instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
+   */
+  constructor(document) {
+    super(document);
+    this.document.system.current = Math.max(1, this.document.system.current);
+  }
   
   /** @override */
   async getChatData() {

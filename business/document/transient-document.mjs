@@ -163,17 +163,6 @@ export default class TransientDocument {
   }
   
   /**
-   * @type {String}
-   */
-  get gmNotes() {
-    return this.document.system.gmNotes;
-  }
-  set gmNotes(value) {
-    this.document.system.gmNotes = value;
-    this.updateByPath("system.gmNotes", value);
-  }
-  
-  /**
    * @type {Boolean}
    */
   get isCustom() {

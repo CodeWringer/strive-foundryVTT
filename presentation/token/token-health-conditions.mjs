@@ -130,58 +130,60 @@ export default class TokenHealthConditions extends TokenExtender {
     for (let i = 0; i < Math.min(this.MAX_STATIC_ICONS + 1, healthConditions.length); i++) {
       const healthCondition = healthConditions[i];
       if (ValidationUtil.isDefined(healthCondition.img)) {
-        const container = new PIXI.Container();
-        let xInContainer = 0;
-
-        if (healthCondition.limit !== 1) {
-          // Intensity
-          const text = new PreciseText(healthCondition.current, style);
-          text.scale.set(textScale, textScale);
-          text.position.set(
-            0,
-            ((this.ICON_SIZE_DEFAULT.height * scale) - text.height) / 2
-          );
-          container.text = text;
-          container.addChild(text);
-
-          xInContainer += text.width;
-        }
-
-        // Backdrop
-        const circleGraphics = new PIXI.Graphics();
-        circleGraphics.beginFill(0x0, 0.5);
-        const radius = this.ICON_SIZE_DEFAULT.width * scale / 2;
-        const backdrop = circleGraphics.drawCircle(0, 0, radius);
-        backdrop.position.set(xInContainer + radius, radius);
-        const blurStrength = 5;
-        const blurQuality = 4;
-        backdrop.filters = [
-          new PIXI.BlurFilter(blurStrength, blurQuality)
-        ];
-        container.backDrop = backdrop;
-        container.addChild(backdrop);
-
-        // Icon
         const texture = await PixiLoader.load(healthCondition.img);
-        const sprite = new PIXI.Sprite(texture);
-        sprite.width = this.ICON_SIZE_DEFAULT.width * scale;
-        sprite.height = this.ICON_SIZE_DEFAULT.height * scale;
-        sprite.position.set(xInContainer, 0);
-        container.icon = sprite;
-        container.addChild(sprite);
-
-        if (!ValidationUtil.isDefined(token.healthConditionContainer)) {
-          game.strive.logger.logWarn("Undefined container reference");
-          continue;
-        }
-        token.healthConditionContainer.addChild(container);
-        container.position.set(x, y);
-        
-        entryCount++;
-        x += container.width + this.MARGIN;
-        if (x >= token.w) {
-          x = 0;
-          y += container.height;
+        if (!ValidationUtil.isString(texture)) {
+          const container = new PIXI.Container();
+          let xInContainer = 0;
+  
+          if (healthCondition.limit !== 1) {
+            // Intensity
+            const text = new PreciseText(healthCondition.current, style);
+            text.scale.set(textScale, textScale);
+            text.position.set(
+              0,
+              ((this.ICON_SIZE_DEFAULT.height * scale) - text.height) / 2
+            );
+            container.text = text;
+            container.addChild(text);
+  
+            xInContainer += text.width;
+          }
+  
+          // Backdrop
+          const circleGraphics = new PIXI.Graphics();
+          circleGraphics.beginFill(0x0, 0.5);
+          const radius = this.ICON_SIZE_DEFAULT.width * scale / 2;
+          const backdrop = circleGraphics.drawCircle(0, 0, radius);
+          backdrop.position.set(xInContainer + radius, radius);
+          const blurStrength = 5;
+          const blurQuality = 4;
+          backdrop.filters = [
+            new PIXI.BlurFilter(blurStrength, blurQuality)
+          ];
+          container.backDrop = backdrop;
+          container.addChild(backdrop);
+  
+          // Icon
+          const sprite = new PIXI.Sprite(texture);
+          sprite.width = this.ICON_SIZE_DEFAULT.width * scale;
+          sprite.height = this.ICON_SIZE_DEFAULT.height * scale;
+          sprite.position.set(xInContainer, 0);
+          container.icon = sprite;
+          container.addChild(sprite);
+          
+          if (!ValidationUtil.isDefined(token.healthConditionContainer)) {
+            game.strive.logger.logWarn("Undefined container reference");
+            continue;
+          }
+          token.healthConditionContainer.addChild(container);
+          container.position.set(x, y);
+          
+          entryCount++;
+          x += container.width + this.MARGIN;
+          if (x >= token.w) {
+            x = 0;
+            y += container.height;
+          }
         }
       }
     }
@@ -260,13 +262,15 @@ export default class TokenHealthConditions extends TokenExtender {
       if (ValidationUtil.isDefined(healthCondition.img)) {
         // Icon
         const texture = await PixiLoader.load(healthCondition.img);
-        const sprite = new PIXI.Sprite(texture);
-        sprite.width = this.ICON_SIZE_HOVER.width * scale;
-        sprite.height = this.ICON_SIZE_HOVER.height * scale;
-        sprite.position.set(xInContainer, 0);
-        container.icon = sprite;
-        container.addChild(sprite);
-        xInContainer += sprite.width + this.MARGIN;
+        if (!ValidationUtil.isString(texture)) {
+          const sprite = new PIXI.Sprite(texture);
+          sprite.width = this.ICON_SIZE_HOVER.width * scale;
+          sprite.height = this.ICON_SIZE_HOVER.height * scale;
+          sprite.position.set(xInContainer, 0);
+          container.icon = sprite;
+          container.addChild(sprite);
+          xInContainer += sprite.width + this.MARGIN;
+        }
       }
 
       if (healthCondition.limit !== 1) {
