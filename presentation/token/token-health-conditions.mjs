@@ -129,13 +129,13 @@ export default class TokenHealthConditions extends TokenExtender {
     let entryCount = 0;
     for (let i = 0; i < Math.min(this.MAX_STATIC_ICONS + 1, healthConditions.length); i++) {
       const healthCondition = healthConditions[i];
-      if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
+      if (ValidationUtil.isDefined(healthCondition.img)) {
         const container = new PIXI.Container();
         let xInContainer = 0;
 
         if (healthCondition.limit !== 1) {
           // Intensity
-          const text = new PreciseText(healthCondition.intensity, style);
+          const text = new PreciseText(healthCondition.current, style);
           text.scale.set(textScale, textScale);
           text.position.set(
             0,
@@ -162,7 +162,7 @@ export default class TokenHealthConditions extends TokenExtender {
         container.addChild(backdrop);
 
         // Icon
-        const texture = await PixiLoader.load(healthCondition.iconTextureUrl);
+        const texture = await PixiLoader.load(healthCondition.img);
         const sprite = new PIXI.Sprite(texture);
         sprite.width = this.ICON_SIZE_DEFAULT.width * scale;
         sprite.height = this.ICON_SIZE_DEFAULT.height * scale;
@@ -257,9 +257,9 @@ export default class TokenHealthConditions extends TokenExtender {
       }
       striveHoverLayer.healthConditionHoverContainer.addChild(container);
 
-      if (ValidationUtil.isDefined(healthCondition.iconTextureUrl)) {
+      if (ValidationUtil.isDefined(healthCondition.img)) {
         // Icon
-        const texture = await PixiLoader.load(healthCondition.iconTextureUrl);
+        const texture = await PixiLoader.load(healthCondition.img);
         const sprite = new PIXI.Sprite(texture);
         sprite.width = this.ICON_SIZE_HOVER.width * scale;
         sprite.height = this.ICON_SIZE_HOVER.height * scale;
@@ -271,7 +271,7 @@ export default class TokenHealthConditions extends TokenExtender {
 
       if (healthCondition.limit !== 1) {
         // Intensity
-        const text = new PreciseText(healthCondition.intensity, style);
+        const text = new PreciseText(healthCondition.current, style);
         text.scale.set(textScale, textScale);
         text.position.set(
           xInContainer,
@@ -284,7 +284,7 @@ export default class TokenHealthConditions extends TokenExtender {
       }
 
       // Localized name
-      const text = new PreciseText(game.i18n.localize(healthCondition.localizableName), style);
+      const text = new PreciseText(healthCondition.name, style);
       text.scale.set(textScale, textScale);
       text.position.set(
         xInContainer,

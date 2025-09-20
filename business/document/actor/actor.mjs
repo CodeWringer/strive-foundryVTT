@@ -76,7 +76,7 @@ export class GameSystemActor extends Actor {
   /** @override */
   async _preCreate(data, options, user) {
     this.updateSource({
-      img: this.defaultImg,
+      img: data.img ?? this.defaultImg,
     });
 
     return super._preCreate(data, options, user);
