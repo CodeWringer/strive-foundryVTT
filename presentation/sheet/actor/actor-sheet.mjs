@@ -200,10 +200,19 @@ export class GameSystemActorSheet extends ActorSheet {
       }
 
       const existingItem = this.actor.items.find(it => it.id === templateId || it.name === templateItem.name);
-      if (existingItem !== undefined) {
+      if (ValidationUtil.isDefined(existingItem)) {
         creationData.system.level = existingItem.system.level;
         creationData.system.levelModifier = existingItem.system.levelModifier;
         creationData.system.advancementProgress = existingItem.system.advancementProgress;
+
+        // Synchronize Expertises. 
+        for (const propName in existingItem.system.abilities) {
+          if (!Object.hasOwn(existingItem.system.abilities, propName)) continue;
+          
+          if (!ValidationUtil.isDefined(templateItem.system.abilities[propName])) {
+            creationData.system.abilities[`-=${[propName]}`] = null;
+          }
+        }
 
         await existingItem.update(creationData);
         return existingItem;
