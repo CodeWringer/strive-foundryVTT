@@ -5,8 +5,8 @@ This is the **STRIVE** table-top role-playing game system for FoundryVTT.
 See also the companion repository that contains the ruleset: https://github.com/CodeWringer/strive-ttrpg
 
 # Build & Deploy
-1. Create a new `Migrator`, which will sync any loaded world's version to the new system version. 
-2. Increase the `version` number in the `system.json` and `package.json` on branch `develop`. 
+1. Increase the `version` number in the `system.json` and `package.json` on branch `develop`. 
+2. If data migration is necessary, create a new `Migrator`, which will sync any loaded world's version to the new system version. 
 3. Create a new **signed** tag on branch `develop` with the corresponding version, using the semantic versioning scheme `vMAJOR.MINOR.PATCH`, e. g. `v1.3.2`. 
 4. Run npm script `build`, then upload the resulting `build/system.json` and `build/system.zip` to a new release on GitHub, whose name is the version name, e. g. `v1.3.2`. 
 
