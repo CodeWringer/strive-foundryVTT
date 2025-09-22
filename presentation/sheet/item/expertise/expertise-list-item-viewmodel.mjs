@@ -143,7 +143,6 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmApCost",
           value: this.document.apCost,
-          localizedToolTip: game.i18n.localize("system.actionPoint.requirement"),
           min: 0,
           onChange: (_, newValue) => {
             this.document.apCost = newValue;

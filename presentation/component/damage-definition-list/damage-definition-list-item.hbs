@@ -3,7 +3,7 @@ viewModel: {DamageDefinitionListItemViewModel}
 cssClass: {String | undefined}
 --}}
 <div id="{{viewModel.id}}" class="flex flex-row flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
-  <div class="grid grid-2col grid-gap-sm">
+  <div class="grid grid-2col grid-gap-sm flex-grow">
     {{!-- Damage formula --}}
     <div id="{{viewModel.vmDamageFormulaGroup.id}}" class="flex flex-row flex-middle">
       <i class="ico dark ico-damage-roll-solid"></i>

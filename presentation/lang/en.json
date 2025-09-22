@@ -599,11 +599,11 @@
           },
           "grappled": {
             "name": "Grappled",
-            "tooltip": "A <strong>grappled</strong> character is unable to move and suffers <strong>-1D</strong> to all defense tests, for as long as they are <strong>grappled</strong>. A <strong>grappled</strong> character can break free, by <strong>completely succeeding</strong> an unarmed combat test against the other character grappling them. <br><br>A character who is grappled, counts as flanked (to one additional degree)."
+            "tooltip": "A <strong>grappled</strong> character is unable to move freely and suffers <strong>-1D</strong> to all defense tests, for as long as they are <strong>grappled</strong>. A <strong>grappled</strong> character can break free, by <strong>completely succeeding</strong> an unarmed combat test against the other character grappling them. <br><br>A character who is grappled, counts as flanked (to one additional degree)."
           },
           "hasted": {
             "name": "Hasted",
-            "tooltip": "A <strong>hasted</strong> character has an additional AP to spend and an additional 9'/3m of movement per AP or every 5 seconds."
+            "tooltip": "A <strong>hasted</strong> character has an additional AP to spend and an additional <code>9'/3m</code> of movement per AP or every <code>5</code> seconds."
           },
           "jealous": {
             "name": "Jealous",
@@ -822,8 +822,7 @@
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {
-      "label": "Attack Type",
-      "abbreviation": "Att. Type",
+      "label": "Targeting Type",
       "singleTarget": {
         "label": "Single-Target",
         "abbreviation": "ST"
