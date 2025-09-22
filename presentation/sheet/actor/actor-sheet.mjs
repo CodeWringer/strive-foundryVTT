@@ -203,8 +203,7 @@ export class GameSystemActorSheet extends ActorSheet {
       if (existingItem !== undefined) {
         creationData.system.level = existingItem.system.level;
         creationData.system.levelModifier = existingItem.system.levelModifier;
-        creationData.system.successes = existingItem.system.successes;
-        creationData.system.failures = existingItem.system.failures;
+        creationData.system.advancementProgress = existingItem.system.advancementProgress;
 
         await existingItem.update(creationData);
         return existingItem;
