@@ -18,8 +18,8 @@ readOnlyCssClass: {String | undefined}
           {{{option.displayHtmlOverride}}}
         {{else}}
           {{#if option.shouldDisplayIcon}}
-            {{#if option.iconIsFontAwesome}}
-              <i class="{{option.icon}}"></i>
+            {{#if option.hasIconClass}}
+              <i class="ico dark {{option.icon}}"></i>
             {{else}}
               <img class="radio-button-icon" src="{{option.icon}}" />
             {{/if}}

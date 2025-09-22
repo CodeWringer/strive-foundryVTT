@@ -1,3 +1,5 @@
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+
 /**
  * Represents a choice option for drop-downs, radio-buttons or check-boxes. 
  * 
@@ -53,11 +55,11 @@ export default class ChoiceOption {
   get icon() { return this._icon; }
 
   /**
-   * Returns true, if the icon string represents a FontAwesome icon class. 
+   * Returns true, if the icon string represents a FontAwesome or custom icon CSS class. 
    * @returns {Boolean}
    */
-  get iconIsFontAwesome() {
-    if (this.icon !== undefined && this.icon.startsWith("fas fa-")) {
+  get hasIconClass() {
+    if (ValidationUtil.isDefined(this.icon) && (this.icon.startsWith("fas fa-") || this.icon.startsWith("ico"))) {
       return true;
     } else {
       return false;
