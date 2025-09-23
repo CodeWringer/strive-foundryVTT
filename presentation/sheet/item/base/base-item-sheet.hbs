@@ -4,7 +4,7 @@ cssClass: {undefined | String}
 --}}
 <form id="{{viewModel.id}}" class="{{cssClass}}" autocomplete="off">
   <header class="system-sheet-header pad-b-md">
-    <div class="flex flex-row flex-middle auto-margin-h">
+    <div class="flex flex-row flex-middle auto-margin-h-sm">
       {{!-- Primary header buttons --}}
       {{#each viewModel.primaryHeaderButtons as |button|}}
       {{#with button.template as |template|}}
@@ -36,7 +36,7 @@ cssClass: {undefined | String}
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{!-- Content Tab --}}
-    <div class="tab content" data-group="primary" data-tab="content">
+    <div class="tab content auto-margin-v-md" data-group="primary" data-tab="content">
       {{#if viewModel.showDescription }}
       {{!-- Description --}}
       <div class="sheet-block flex flex-column margin-b-md">

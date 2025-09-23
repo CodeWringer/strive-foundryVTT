@@ -78,6 +78,12 @@ export default class ExpertiseTableViewModel extends ViewModel {
    * @readonly
    */
   get hasLockedExpertises() { return (this.lockedExpertises.length > 0); }
+  
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get hasContent() { return this.document.expertises.length > 0; }
 
   /**
    * @param {Object} args 

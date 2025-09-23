@@ -6,6 +6,7 @@ cssClass: {undefined | String}
   {{!-- Header --}}
   <h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin: 0;">
     {{!-- Expansion Toggle or Plain Title --}}
+    {{#if viewModel.hasContent }}
     {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
       <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{../viewModel.localizedTitle}}</span>
       <div class="flex flex-center">
@@ -13,6 +14,9 @@ cssClass: {undefined | String}
         <i class="collapsed ico ico-chevron-r-solid{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
       </div>
     {{/button}}
+    {{else}}
+      <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.localizedTitle}}</span>
+    {{/if}}
     {{!-- Button Add Item --}}
     {{#if viewModel.isEditable}}
     {{> buttonAdd viewModel=viewModel.vmAddItem }}
@@ -50,6 +54,8 @@ cssClass: {undefined | String}
       {{/each}}
     </ol>
     {{!-- Footer --}}
+    {{#if viewModel.hasContent }}
     {{> listFooter viewModel=viewModel.vmFooter }}
+    {{/if}}
   </div>
 </div>
