@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import ButtonViewModel from "../../button/button-viewmodel.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 import StatefulChoiceOption from "../stateful-choice-option.mjs";
 
@@ -43,36 +44,20 @@ export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel
 
     // Ensure the active option has its isActive flag set accordingly. 
     this.value.isActive = true;
-  }
 
-  /**
-   * @override
-   * 
-   * @throws {Error} NullPointerException Thrown if the radio button container could not be found. 
-   */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    if (this.isEditable !== true) return;
-
-    const radioButtonContainer = this.element.find(".radio-button-container");
-
-    if (radioButtonContainer === undefined || radioButtonContainer === null || radioButtonContainer.length === 0) {
-      throw new Error("NullPointerException: Failed to find radio button container");
-    }
-
-    const radioButtons = radioButtonContainer.find('.radio-button');
-    for (const radioButton of radioButtons) {
-      // Hook up events on radio button options. 
-      radioButton.onchange = (event) => {
-        const option = this.options.find(it => it.value === event.currentTarget.value);
-        if (ValidationUtil.isDefined(option)) {
-          this.value = option;
-        } else {
-          game.strive.logger.logWarn("Failed to get selected radio button option");
-        }
+    this._mappedOptions = args.options.map(choice => {
+      return {
+        ...choice,
+        vm: new ButtonViewModel({
+          id: choice.value,
+          parent: this,
+          localizedToolTip: choice.tooltip,
+          onClick: () => {
+            this.value = choice;
+          },
+        }),
       }
-    }
+    });
   }
 
   /** @override */
