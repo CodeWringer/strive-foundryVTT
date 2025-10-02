@@ -87,7 +87,13 @@ export const TEMPLATES = {
   // --- Settings Dialogs
   DIALOG_SETTINGS_HEALTH_CONDITIONS: `${basePathPresentation}/dialog/settings/health-settings/health-settings-dialog.hbs`,
   // --- Actor
-  ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
+  // Plain
+  ACTOR_PLAIN_SHEET: `${basePathPresentation}/sheet/actor/plain/plain-actor-sheet.hbs`,
+  // PC
+  ACTOR_PC_SHEET: `${basePathPresentation}/sheet/actor/pc/pc-actor-sheet.hbs`,
+  // NPC
+  ACTOR_NPC_SHEET: `${basePathPresentation}/sheet/actor/npc/npc-actor-sheet.hbs`,
+  // Parts
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/actor-personals.hbs`,
   ACTOR_PERSONALITY_TRAITS: `${basePathPresentation}/sheet/actor/part/personality/personality-traits/personality-traits.hbs`,
   ACTOR_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-abilities.hbs`,

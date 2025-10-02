@@ -1,4 +1,5 @@
-import ActorSheetViewModel from "./actor-sheet-viewmodel.mjs";
+import SendToChatHandler from "../../../utility/send-to-chat-handler.mjs";
+import ActorSheetViewModel from "../actor-sheet-viewmodel.mjs";
 
 /**
  * Represents the base contract for a "specific" actor sheet "sub-type". 
@@ -7,14 +8,17 @@ import ActorSheetViewModel from "./actor-sheet-viewmodel.mjs";
  * 
  * This particular type also doubles as the definition for the actor of type `"plain"`. 
  */
-export default class GameSystemBaseActorSheet {
+export default class BaseActorSheet {
   /**
    * Returns the template path. 
-   * @type {String} Path to the template. 
+   * 
+   * @type {String}
+   * 
+   * @static
    * @readonly
    * @virtual
    */
-  get template() { return game.strive.const.TEMPLATES.ACTOR_SHEET;  }
+  get template() { return game.strive.const.TEMPLATES.ACTOR_PLAIN_SHEET;  }
 
   /**
    * Returns the localized title of this sheet type. 
@@ -85,4 +89,31 @@ export default class GameSystemBaseActorSheet {
    * @async
    */
   async activateListeners(html) { /** Do nothing */}
+
+  /**
+   * Returns the definitions of the header buttons. These are displayed in the window title bar. 
+   * By default, contains a SendToChat button. 
+   * 
+   * @returns {Array<TemplatedComponent>}
+   * 
+   * @virtual
+   * @protected
+   */
+  getHeaderButtons() {
+    const buttons = [];
+    if (game.user.isGM || this.actor.isOwner) {
+      buttons.splice(0, 0, {
+        class: "send-to-chat",
+        icon: "fas fa-comments",
+        onclick: async () => {
+          await new SendToChatHandler().prompt({
+            target: this.document,
+            dialogTitle: game.i18n.localize("system.general.sendToChat"),
+          });
+        },
+      });
+    }
+    return buttons;
+  }
+
 }

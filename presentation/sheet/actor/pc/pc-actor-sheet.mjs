@@ -1,4 +1,4 @@
-import GameSystemBaseActorSheet from "./game-system-base-actor-sheet.mjs";
+import GameSystemBaseActorSheet from "../base/base-actor-sheet.mjs";
 
 export default class GameSystemPcActorSheet extends GameSystemBaseActorSheet {
   /** @override */

@@ -1,0 +1,40 @@
+{{!-- Requires context:
+viewModel: {PlainActorSheetViewModel}
+cssClass: {undefined | String}
+--}}
+<form id="{{viewModel.id}}" class="{{viewModel.document.type}} flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+  {{!-- Sheet Header --}}
+  <header class="system-sheet-header pad-b-md">
+    <div class="flex flex-row flex-middle auto-margin-h">
+      {{!-- Identity --}}
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-xl" }}
+      {{!-- Name --}}
+      {{> inputTextField viewModel=viewModel.vmTfName cssClass="document-title" }}
+    </div>
+  </header>
+
+  {{#if viewModel.showNavigation}}
+    {{!-- Sheet Tab Navigation --}}
+    <nav id="nav-sheet-tabs" class="sheet-tabs tabs flex flex-justify font-size-default" data-group="primary">
+      <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="description"><div>{{localize "system.character.sheet.tab.description"}}</div></a>
+      {{#if viewModel.isGM }}
+        <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
+      {{/if}}
+    </nav>
+  {{/if}}
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    <div class="{{#if viewModel.isGM}}tab {{/if}}description" data-group="primary" data-tab="description">
+      <div class="sheet-block fill">
+        {{> inputRichText viewModel=viewModel.vmRtDescription }}
+      </div>
+    </div>
+    {{!-- GM Notes Tab --}}
+    {{#if viewModel.isGM }}
+      <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
+        {{> lazy viewModel=viewModel.gmNotesViewModel}}
+      </div>
+    {{/if}}
+  </section>
+</form>
