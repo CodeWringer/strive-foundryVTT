@@ -138,7 +138,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.document.damage.length === 0; }
+  get showDamageList() { return ValidationUtil.isDefined(this.document.damage); }
 
   /**
    * @private
@@ -273,22 +273,23 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
     this.maxHpModifierString = `(${this.document.levelModifier >= 0 ? "+" : "-"}${Math.abs(this.document.levelModifier)})`;
 
+    if (this.showDamageList) {
     this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
       id: `vmDamageDefinitionList`,
       parent: this,
       value: this.document.damage,
       onChange: (_, newValue) => {
-        if (ValidationUtil.isDefined(newValue) !== true) return; 
+          if (ValidationUtil.isDefined(newValue) && newValue.length > 0) {
         this.document.damage = newValue;
+          } else {
+            this.document.damage = null;
+          }
       },
       resolveFormulaContext: this.getRootOwningDocument(this.document),
       chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
     });
-    this.vmDamageFormulaInfo = new ViewModel({
-      id: "damage-info",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
-    });
+    }
+
     if (this.showExpertises === true) {
       this.vmExpertiseTable = new ExpertiseTableViewModel({
         id: "vmExpertiseTable",
@@ -463,7 +464,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         icon: '<i class="fas fa-plus"></i>',
         condition: this.isEditable,
         callback: () => {
-          const damage = this.document.damage.concat([]);
+          let damage = [];
+          if (ValidationUtil.isDefined(this.document.damage)) {
+            damage = this.document.damage.concat([]);
+          }
           damage.push(new DamageAndType({
             damage: "",
             damageType: DAMAGE_TYPES.pure.name,
