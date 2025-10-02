@@ -138,7 +138,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.document.damage.length === 0; }
+  get showDamageList() { return ValidationUtil.isDefined(this.document.damage); }
 
   /**
    * @returns {Number}
@@ -422,7 +422,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         icon: '<i class="fas fa-plus"></i>',
         condition: this.isEditable,
         callback: () => {
-          const damage = this.document.damage.concat([]);
+          let damage = [];
+          if (ValidationUtil.isDefined(this.document.damage)) {
+            damage = this.document.damage.concat([]);
+          }
           damage.push(new DamageAndType({
             damage: "",
             damageType: DAMAGE_TYPES.pure.name,

@@ -4,18 +4,15 @@ viewModel: {SkillListItemViewModel}
 <section id="{{viewModel.id}}" class="auto-margin-v-md">
   {{!-- Row --}}
   {{!-- Damage --}}
-  <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
-    {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList cssClass="flex-grow" }}
-    <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
-      <i class="far fa-question-circle info-button"></i>
-    </span>
-  </div>
+  {{#if viewModel.showDamageList}}
+  {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList cssClass="flex-grow" }}
+  {{/if}}
   {{!-- Row --}}
   {{!-- Expertises --}}
   {{#if viewModel.showExpertises}}
-    {{#with viewModel.expertisesTemplate as |template|}}
+  {{#with viewModel.expertisesTemplate as |template|}}
     {{> (template) viewModel=../viewModel.vmExpertiseTable }}
-    {{/with}}
+  {{/with}}
   {{/if}}
   {{!-- Row --}}
   {{!-- Prerequisites --}}

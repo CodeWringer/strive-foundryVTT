@@ -28,7 +28,7 @@ import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
  * * Must always contain at least one entry. By default, this is the first attribute as per the `ATTRIBUTES` definiton. 
  * @property {Array<Expertise>} expertises The array of expertises of this skill. 
  * @property {Number | undefined} apCost 
- * @property {Array<DamageAndType>} damage
+ * @property {Array<DamageAndType> | undefined} damage
  * @property {String | undefined} condition 
  * @property {Number | undefined} distance 
  * @property {String | undefined} obstacle 
@@ -174,12 +174,19 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   get damage() {
-    return (this.document.system.damage ?? []).map(dto => 
-      DamageAndType.fromDto(dto)
-    );
+    const value = this.document.system.damage;
+    if (ValidationUtil.isDefined(value)) {
+      return value.map(dto => DamageAndType.fromDto(dto));
+    } else {
+      return null;
+    }
   }
   set damage(value) {
-    this.updateByPath("system.damage", value.map(it => it.toDto()));
+    if (ValidationUtil.isDefined(value)) {
+      this.updateByPath("system.damage", value.map(it => it.toDto()));
+    } else {
+      this.updateByPath("system.damage", null);
+    }
   }
   
   get condition() {

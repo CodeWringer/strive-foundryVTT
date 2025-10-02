@@ -75,7 +75,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.document.damage.length === 0; }
+  get showDamageList() { return ValidationUtil.isDefined(this.document.damage); }
 
   /**
    * Returns the CSS class of the icon that represents the current attack type. 
@@ -232,21 +232,22 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
     });
 
-    this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
-      id: `vmDamageDefinitionList`,
-      parent: this,
-      value: this.document.damage,
-      onChange: (_, newValue) => {
-        this.document.damage = newValue;
-      },
-      resolveFormulaContext: this._getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
-    });
-    this.vmDamageFormulaInfo = new ViewModel({
-      id: "damage-info",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
-    });
+    if (this.showDamageList) {
+      this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
+        id: `vmDamageDefinitionList`,
+        parent: this,
+        value: this.document.damage,
+        onChange: (_, newValue) => {
+          if (ValidationUtil.isDefined(newValue) && newValue.length > 0) {
+            this.document.damage = newValue;
+          } else {
+            this.document.damage = null;
+          }
+        },
+        resolveFormulaContext: this._getRootOwningDocument(this.document),
+        chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
+      });
+    }
 
     this.vmBaseAttributeList = new SimpleListViewModel({
       id: "vmBaseAttributeList",
@@ -349,7 +350,10 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
               icon: '<i class="fas fa-plus"></i>',
               condition: this.isEditable,
               callback: () => {
-                const damage = this.document.damage.concat([]);
+                let damage = [];
+                if (ValidationUtil.isDefined(this.document.damage)) {
+                  damage = this.document.damage.concat([]);
+                }
                 damage.push(new DamageAndType({
                   damage: "",
                   damageType: DAMAGE_TYPES.pure.name,
