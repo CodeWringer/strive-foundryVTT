@@ -10,17 +10,14 @@ readOnlyCssClass: {String | undefined}
   id="{{viewModel.id}}"
   value="{{viewModel.value.value}}"
 >
-  {{#each viewModel.options as |option index|}}
+  {{#each viewModel._mappedOptions as |option|}}
     <div class="radio-button-container flex flex-row flex-grow{{#if option.isActive}} active{{/if}}{{#if option.cssClass}} {{option.cssClass}}{{/if}}">
-      <label class="flex flex-center flex-grow{{#if ../viewModel.isEditable}} interactible{{else}} custom-system-read-only disabled{{/if}}{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}" 
-        {{#if option.tooltip}}title="{{option.tooltip}}"{{/if}}
-      >
-      {{#if ../viewModel.isEditable}}
+      <label id="{{option.vm.id}}" class="flex flex-center flex-grow{{#if option.vm.isEditable}} interactible{{else}} custom-system-read-only disabled{{/if}}{{#if option.vm.showFancyFont}} fancy-font{{/if}}">
+      {{#if option.vm.isEditable}}
         <input 
           type="radio" 
           class="radio-button" 
           name="{{../viewModel.id}}-group" 
-          id="{{../viewModel.id}}-{{option.value}}" 
           value="{{option.value}}"
         />
       {{/if}}
