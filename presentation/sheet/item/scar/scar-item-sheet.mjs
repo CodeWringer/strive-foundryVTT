@@ -1,7 +1,7 @@
-import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
+import ItemSheetSubType from "../item-sheet-subtype.mjs";
 import ScarItemSheetViewModel from "./scar-item-sheet-viewmodel.mjs";
 
-export default class ScarItemSheet extends GameSystemBaseItemSheet {
+export default class ScarItemSheet extends ItemSheetSubType {
   /** @override */
   get template() { return ScarItemSheetViewModel.TEMPLATE; }
 
@@ -9,7 +9,7 @@ export default class ScarItemSheet extends GameSystemBaseItemSheet {
   get localizedType() { return game.i18n.localize("system.character.health.scar.singular"); }
 
   /** @override */
-  _getViewModel(context, document, sheet) {
+  createViewModel(context, document, sheet) {
     return new ScarItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),

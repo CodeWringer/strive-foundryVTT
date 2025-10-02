@@ -1,11 +1,19 @@
+import { GameSystemItemSheet } from "./item-sheet.mjs";
+
 /**
- * Represents the abstract base contract for a "specific" item sheet "sub-type". 
+ * Defines an ItemSheet sub-type, specific to one of the Item document types. 
  * 
- * Such a "sub-type" is really only an "enhancer", which adds properties and/or methods to a given `ItemSheet` instance. 
+ * @abstract Inheritors MUST override:
+ * * `template`
+ * * `localizedType`
+ * * `createViewModel`
  * 
- * @abstract
+ * Inheritors *may* override: 
+ * * `getTitle`
+ * * `activateListeners`
+ * * `getHeaderButtons`
  */
-export default class GameSystemBaseItemSheet {
+export default class ItemSheetSubType {
   /**
    * Returns the template path. 
    * 
@@ -50,7 +58,7 @@ export default class GameSystemBaseItemSheet {
   getViewModel(context, document, sheet) {
     let viewModel = game.strive.viewModels.get(document.id);
     if (viewModel === undefined) {
-      viewModel = this._getViewModel(context, document, sheet);
+      viewModel = this.createViewModel(context, document, sheet);
       if (game.strive.enableViewModelCaching === true) {
         game.strive.viewModels.set(document.id, viewModel);
       }
@@ -76,7 +84,7 @@ export default class GameSystemBaseItemSheet {
    * @abstract
    * @protected
    */
-  _getViewModel(context, document, sheet) { throw new Error("NotImplementedException"); }
+  createViewModel(context, document, sheet) { throw new Error("NotImplementedException"); }
   
   /**
    * Register any DOM-reliant event listeners and manipulations here. 
@@ -87,4 +95,34 @@ export default class GameSystemBaseItemSheet {
    * @async
    */
   async activateListeners(html) { /** Do nothing */}
+
+  /**
+   * Returns the button definitions for the sheet's window header bar. 
+   * 
+   * By default, includes a SendToChat button. 
+   * 
+   * @param {GameSystemItemSheet} itemSheet 
+   * @param {Array<Object>} baseButtons Definitions as they come from FoundryVTT's ItemSheet. 
+   * 
+   * @returns {Array<Object>} Each object must have the following properties: 
+   * * `class: String`
+   * * `icon: String`
+   * * `onClick: async Function | Function`
+   */
+  getHeaderButtons(itemSheet, baseButtons) {
+    const buttons = baseButtons.concat([]); // Safe-copy.
+    if (game.user.isGM || this.isOwner) {
+      buttons.splice(0, 0, {
+        class: "send-to-chat",
+        icon: "fas fa-comments",
+        onclick: async () => {
+          await new SendToChatHandler().prompt({
+            target: itemSheet.viewModel.document,
+            dialogTitle: game.i18n.localize("system.general.sendToChat"),
+          });
+        },
+      });
+    }
+    return buttons;
+  }
 }
