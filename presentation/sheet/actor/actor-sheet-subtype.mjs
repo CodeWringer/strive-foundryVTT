@@ -1,7 +1,7 @@
 import BaseSheetSubType from "../base-sheet-subtype.mjs";
 
 /**
- * Defines an ItemSheet sub-type, specific to one of the Item document types. 
+ * Defines an ActorSheet sub-type, specific to one of the Actor document types. 
  * 
  * @abstract Inheritors MUST override:
  * * `template`
@@ -16,6 +16,6 @@ import BaseSheetSubType from "../base-sheet-subtype.mjs";
  * 
  * @extends BaseSheetSubType
  */
-export default class ItemSheetSubType extends BaseSheetSubType {
+export default class ActorSheetSubType extends BaseSheetSubType {
   // No custom logic, atm.
 }

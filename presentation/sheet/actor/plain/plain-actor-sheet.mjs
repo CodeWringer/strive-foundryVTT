@@ -1,6 +1,22 @@
-import GameSystemBaseActorSheet from "../base/base-actor-sheet.mjs";
+import ActorSheetSubType from "../actor-sheet-subtype.mjs";
+import PlainActorSheetViewModel from "./plain-actor-sheet-viewmodel.mjs";
 
-export default class GameSystemPlainActorSheet extends GameSystemBaseActorSheet {
+export default class PlainActorSheet extends ActorSheetSubType {
   /** @override */
-  get title() { return game.i18n.localize("system.general.actor.plain.label"); }
+  get template() { return PlainActorSheetViewModel.TEMPLATE; }
+
+  /** @override */
+  get localizedType() { return game.i18n.localize("system.general.actor.plain.abbreviation"); }
+  
+  /** @override */
+  createViewModel(context, document, sheet) {
+    return new PlainActorSheetViewModel({
+      id: document.id,
+      document: document,
+      isEditable: context.isEditable,
+      isSendable: context.isSendable,
+      isOwner: context.isOwner,
+      sheet: sheet,
+    });
+  }
 }

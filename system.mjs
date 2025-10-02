@@ -128,7 +128,6 @@ import ActorAssetsViewModel from "./presentation/sheet/actor/part/assets/actor-a
 import ActorPersonalityViewModel from "./presentation/sheet/actor/part/personality/actor-personality-viewmodel.mjs";
 import ActorFateViewModel from "./presentation/sheet/actor/part/personality/actor-fate-viewmodel.mjs";
 import ActorPersonalsViewModel from "./presentation/sheet/actor/part/actor-personals-viewmodel.mjs";
-import ActorSheetViewModel from "./presentation/sheet/actor/actor-sheet-viewmodel.mjs";
 // View models - Item
 import AssetListItemViewModel from "./presentation/sheet/item/asset/asset-list-item-viewmodel.mjs";
 import AssetItemSheetViewModel from "./presentation/sheet/item/asset/asset-item-sheet-viewmodel.mjs";
@@ -161,6 +160,9 @@ import { StringUtil } from "./business/util/string-utility.mjs";
 import { UuidUtil } from "./business/util/uuid-utility.mjs";
 import FoundryWrapper from "./common/foundry-wrapper.mjs";
 import { PixiLoader } from "./presentation/pixi/pixi-preloader.mjs";
+import PlainActorSheetViewModel from "./presentation/sheet/actor/plain/plain-actor-sheet-viewmodel.mjs";
+import NpcActorSheetViewModel from "./presentation/sheet/actor/npc/npc-actor-sheet-viewmodel.mjs";
+import PcActorSheetViewModel from "./presentation/sheet/actor/pc/pc-actor-sheet-viewmodel.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -315,6 +317,9 @@ Hooks.once('init', function() {
         ReadOnlyValueViewModel: ReadOnlyValueViewModel,
         CompositeCurrentAndMaximumNumbersViewModel: CompositeCurrentAndMaximumNumbersViewModel,
         actor: {
+          NpcActorSheetViewModel: NpcActorSheetViewModel,
+          PcActorSheetViewModel: PcActorSheetViewModel,
+          PlainActorSheetViewModel: PlainActorSheetViewModel,
           ActorAttributesViewModel: ActorAttributesViewModel,
           ActorSkillsViewModel: ActorSkillsViewModel,
           ActorAssetsViewModel: ActorAssetsViewModel,
@@ -322,7 +327,6 @@ Hooks.once('init', function() {
           ActorPersonalityViewModel: ActorPersonalityViewModel,
           ActorFateViewModel: ActorFateViewModel,
           ActorPersonalsViewModel: ActorPersonalsViewModel,
-          ActorSheetViewModel: ActorSheetViewModel,
         },
         item: {
           AssetListItemViewModel: AssetListItemViewModel,

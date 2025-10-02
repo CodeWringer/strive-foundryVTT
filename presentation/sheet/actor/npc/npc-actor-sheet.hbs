@@ -1,0 +1,83 @@
+{{!-- Requires context:
+viewModel: {NpcActorSheetViewModel}
+cssClass: {undefined | String}
+--}}
+<form id="{{viewModel.id}}" class="{{viewModel.document.type}} flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+  {{!-- Sheet Header --}}
+  <header class="system-sheet-header pad-b-md">
+    <div class="flex flex-row flex-middle auto-margin-h">
+      {{!-- Identity --}}
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-xl" }}
+      <div class="flex flex-column flex-grow auto-margin-v">
+        {{!-- Name Row --}}
+        {{> inputTextField viewModel=viewModel.vmName cssClass="document-title" }}
+        {{!-- Personals --}}
+        {{#with viewModel.templatePersonals as | template |}}
+          {{> (template) viewModel=../viewModel.personalsViewModel }}
+        {{/with}}
+      </div>
+      {{!-- Action Points --}}
+      <div id="{{viewModel.vmActionPoints.id}}" class="flex flex-column flex-wrap flex-gap-sm pad-md sheet-block" style="max-height: 9.5rem;">
+        {{#each viewModel.actionPoints as |actionPoint|}}
+        <div style="width: 21px; height: 21px;">
+        <{{#if ../viewModel.isEditable}}a{{else}}div{{/if}} id="{{actionPoint.id}}" class="combatant-action-point">
+          <img class="combatant-action-point-image unstyled" src="{{#if actionPoint.full}}systems/strive/presentation/image/action-point-full.png{{else}}systems/strive/presentation/image/action-point-empty.png{{/if}}" />
+          <div class="combatant-action-point-label{{#if actionPoint.full}} active{{/if}}">{{actionPoint.value}}</div>
+        </{{#if ../viewModel.isEditable}}a{{else}}div{{/if}}>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav id="nav-sheet-tabs" class="sheet-tabs tabs flex flex-justify font-size-default" data-group="primary">
+    {{!-- Default tab is specified in actor-sheet.mjs --}}
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="abilities"><div>{{localize "system.character.sheet.tab.abilities"}}</div></a>
+    {{#if viewModel.showPersonality }}
+      <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="drivers-fate"><div>{{localize "system.character.sheet.tab.personality"}}</div></a>
+    {{/if}}
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "system.character.sheet.tab.health"}}</div></a>
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "system.character.sheet.tab.assets"}}</div></a>
+    {{#if viewModel.showBiography}}
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="biography"><div>{{localize "system.character.sheet.tab.biography"}}</div></a>
+    {{/if}}
+    {{#if viewModel.isGM }}
+      <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
+    {{/if}}
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Abilities Tab --}}
+    <div class="tab abilities auto-margin-v-lg" data-group="primary" data-tab="abilities">
+      {{> lazy viewModel=viewModel.abilitiesViewModel}}
+    </div>
+    {{!-- Drivers & Fate Tab --}}
+    {{#if viewModel.showPersonality }}
+      <div class="tab drivers-fate" data-group="primary" data-tab="drivers-fate">
+        {{> lazy viewModel=viewModel.personalityViewModel}}
+      </div>
+    {{/if}}
+    {{!-- Health Tab --}}
+    <div class="tab health" data-group="primary" data-tab="health">
+      {{> lazy viewModel=viewModel.healthViewModel}}
+    </div>
+    {{!-- Assets Tab --}}
+    <div class="tab assets" data-group="primary" data-tab="assets">
+      {{> lazy viewModel=viewModel.assetsViewModel}}
+    </div>
+    {{#if viewModel.showBiography}}
+    {{!-- Biography Tab --}}
+    <div class="tab biography" data-group="primary" data-tab="biography">
+      {{> lazy viewModel=viewModel.biographyViewModel}}
+    </div>
+    {{/if}}
+    {{!-- GM Notes Tab --}}
+    {{#if viewModel.isGM }}
+      <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
+        {{> lazy viewModel=viewModel.gmNotesViewModel}}
+      </div>
+    {{/if}}
+  </section>
+</form>

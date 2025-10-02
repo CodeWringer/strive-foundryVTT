@@ -120,7 +120,8 @@ export class GameSystemItemSheet extends ItemSheet {
 
   /**
    * Returns the template path. 
-   * @returns {String} Path to the template. 
+   * 
+   * @type {String}
    * @virtual
    * @override
    * @readonly
@@ -129,8 +130,9 @@ export class GameSystemItemSheet extends ItemSheet {
 
   /**
    * Returns the localized title of this sheet. 
-   * @override
+   * 
    * @type {String}
+   * @override
    * @readonly
    */
   get title() { return this.subType.getTitle(this.item); }
@@ -154,7 +156,7 @@ export class GameSystemItemSheet extends ItemSheet {
     const context = super.getData();
     SheetUtil.enrichData(context);
 
-    // Prepare a new view model instance. 
+    // Ensure view model. 
     this.viewModel = this.subType.getViewModel(context, context.item, this);
     this.viewModel.readAllViewState();
     context.viewModel = this.viewModel;
@@ -184,8 +186,13 @@ export class GameSystemItemSheet extends ItemSheet {
   }
 
   /** @override */
+  async _onDropItem(event, data) {
+    await this.subType.onDropItem(event, data, this.item);
+  }
+
+  /** @override */
   _getHeaderButtons() {
     const baseButtons = super._getHeaderButtons();
-    return this.subType.getHeaderButtons(this, baseButtons);
+    return this.subType.getHeaderButtons(this).concat(baseButtons);
   }
 }
