@@ -141,14 +141,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get hideDamage() { return this.document.damage.length === 0; }
 
   /**
-   * @private
-   * @readonly
-   * 
-   * @returns {String}
-   */
-  get _inputAttributes() { return "inputAttributes"; }
-
-  /**
    * @returns {Number}
    * @readonly
    */
@@ -165,40 +157,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get isInnateSkill() { return ValidationUtil.isDefined(this.document.tags.find(it => it.id === SKILL_TAGS.INNATE.id)); }
-
-  /** @override */
-  get metaDataInputDefinitions() {
-    const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
-    const metaData = super.metaDataInputDefinitions;
-    metaData.splice(0, 0, 
-      new DynamicInputDefinition({
-        name: this._inputAttributes,
-        localizedLabel: game.i18n.localize("system.character.attribute.plural"),
-        template: SimpleListViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new SimpleListViewModel({
-          id: id,
-          parent: parent,
-          value: baseAttributes,
-          contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
-          contentItemViewModelFactory: (index, attribute) => {
-            return new BaseAttributeListItemViewModel({
-              id: `vmAttribute${index}`,
-              isEditable: true,
-              attribute: attribute,
-            });
-          },
-          newItemDefaultValue: ATTRIBUTES.agility,
-          isItemAddable: this.isEditable,
-          isItemRemovable: this.isEditable,
-          localizedAddLabel: game.i18n.localize("system.general.add.add"),
-          ...overrides,
-        }),
-        required: true,
-        validationFunc: (value) => { return value.length > 0; },
-      }),
-    );
-    return metaData;
-  }
 
   /**
    * @type {Boolean}
@@ -273,22 +231,23 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
     this.maxHpModifierString = `(${this.document.levelModifier >= 0 ? "+" : "-"}${Math.abs(this.document.levelModifier)})`;
 
-    this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
-      id: `vmDamageDefinitionList`,
-      parent: this,
-      value: this.document.damage,
-      onChange: (_, newValue) => {
-        if (ValidationUtil.isDefined(newValue) !== true) return; 
-        this.document.damage = newValue;
-      },
-      resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
-    });
-    this.vmDamageFormulaInfo = new ViewModel({
-      id: "damage-info",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
-    });
+    if (this.showDamageList) {
+      this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
+        id: `vmDamageDefinitionList`,
+        parent: this,
+        value: this.document.damage,
+        onChange: (_, newValue) => {
+          if (ValidationUtil.isDefined(newValue) && newValue.length > 0) {
+            this.document.damage = newValue;
+          } else {
+            this.document.damage = null;
+          }
+        },
+        resolveFormulaContext: this.getRootOwningDocument(this.document),
+        chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
+      });
+    }
+
     if (this.showExpertises === true) {
       this.vmExpertiseTable = new ExpertiseTableViewModel({
         id: "vmExpertiseTable",
@@ -429,8 +388,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getPrimaryHeaderButtons() {
-    const inherited = super.getPrimaryHeaderButtons();
+  getHeaderButtons() {
+    const inherited = super.getHeaderButtons();
     const rollSchema = new Ruleset().getSkillRollSchema();
     const bestAvailableDice = rollSchema.getAvailableDiceComponents(this.document)[0].total;
     return [
@@ -559,12 +518,46 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
+  getMetaDataInputDefinitions() {
+    const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
+    const metaData = super.metaDataInputDefinitions;
+    metaData.splice(0, 0, 
+      new DynamicInputDefinition({
+        name: "inputAttributes",
+        localizedLabel: game.i18n.localize("system.character.attribute.plural"),
+        template: SimpleListViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new SimpleListViewModel({
+          id: id,
+          parent: parent,
+          value: baseAttributes,
+          contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
+          contentItemViewModelFactory: (index, attribute) => {
+            return new BaseAttributeListItemViewModel({
+              id: `vmAttribute${index}`,
+              isEditable: true,
+              attribute: attribute,
+            });
+          },
+          newItemDefaultValue: ATTRIBUTES.agility,
+          isItemAddable: this.isEditable,
+          isItemRemovable: this.isEditable,
+          localizedAddLabel: game.i18n.localize("system.general.add.add"),
+          ...overrides,
+        }),
+        required: true,
+        validationFunc: (value) => { return value.length > 0; },
+      }),
+    );
+    return metaData;
+  }
+
+  /** @override */
   async editMetaData() {
     const dialog = await super.editMetaData();
     
     if (ValidationUtil.isDefined(dialog) !== true) return;
 
-    const deltaAttributes = dialog[this._inputAttributes];
+    const deltaAttributes = dialog["inputAttributes"];
     if (ValidationUtil.isDefined(deltaAttributes) === true)
       this.document.baseAttributes = deltaAttributes;
   }

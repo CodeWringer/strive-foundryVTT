@@ -41,15 +41,9 @@ export const LIST_ITEM_DETAIL_MODES = {
  * 
  * @abstract Inheriting types should override: 
  * * `getDataFields`
- * * `getPrimaryHeaderButtons`
- * * `getSecondaryHeaderButtons`
+ * * `getHeaderButtons`
  * 
- * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
- * header buttons. 
- * * Note that each of the provided view model instances will be available for access on 
- * this view model instance, as a property whose name is the id of the provided 
- * view model instance. 
- * @property {Array<TemplatedComponent>} secondaryHeaderButtons An array of the secondary  
+ * @property {Array<TemplatedComponent>} headerButtons An array of the secondary  
  * header buttons. 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
@@ -122,16 +116,13 @@ export default class BaseListItemViewModel extends ViewModel {
     }
 
     if (this.detailMode === LIST_ITEM_DETAIL_MODES.MINIMAL_COLLAPSED) {
-      const primaryHeaderButtonsElement = this.element.find(`#${this.id}-primary-header-buttons`);
-      const secondaryHeaderButtonsElement = this.element.find(`#${this.id}-secondary-header-buttons`);
+      const headerButtonsElement = this.element.find(`#${this.id}-header-buttons`);
       const descriptionElement = this.element.find(`#${this.id}-description`);
       if (value === true) {
-        primaryHeaderButtonsElement.removeClass("hidden");
-        secondaryHeaderButtonsElement.removeClass("hidden");
+        headerButtonsElement.removeClass("hidden");
         descriptionElement.removeClass("hidden");
       } else {
-        primaryHeaderButtonsElement.addClass("hidden");
-        secondaryHeaderButtonsElement.addClass("hidden");
+        headerButtonsElement.addClass("hidden");
         descriptionElement.addClass("hidden");
       }
     }
@@ -173,54 +164,6 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /**
-   * For use in `metaDataInputDefinitions`. 
-   * 
-   * @private
-   * @readonly
-   * 
-   * @returns {String}
-   */
-  get _inputTags() { return "inputTags"; }
-
-  /**
-   * Returns the list of input definitions for use in the "Edit Metadata" dialog. 
-   * 
-   * Can be overriden by children classes to add their own definitions. E. g. 
-   * ```JS
-   * get metaDataInputDefinitions() {
-   *   return super.metaDataInputDefinitions.concat([
-   *     new DynamicInputDefinition({ ... }),
-   *   ]);
-   * }
-   * ```
-   * 
-   * @readonly
-   * @virtual
-   * 
-   * @returns {Array<DynamicInputDefinition>}
-   */
-  get metaDataInputDefinitions() {
-    return [
-      new DynamicInputDefinition({
-        name: this._inputTags,
-        localizedLabel: game.i18n.localize("system.general.tag.plural"),
-        iconHtml: '<i class="ico dark ico-tags-solid"></i>',
-        template: InputTagsViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => {
-          return new InputTagsViewModel({
-            id: id,
-            parent: parent,
-            value: this.document.tags,
-            systemTags: SKILL_TAGS.asArray()
-              .concat(ASSET_TAGS.asArray()),
-            ...overrides,
-          });
-        },
-      }),
-    ];
-  }
-
-  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -252,11 +195,8 @@ export default class BaseListItemViewModel extends ViewModel {
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
 
-    this.primaryHeaderButtons = this.getPrimaryHeaderButtons();
-    this._ensureViewModelsAsProperties(this.primaryHeaderButtons);
-    
-    this.secondaryHeaderButtons = this.getSecondaryHeaderButtons();
-    this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
+    this.headerButtons = this.getHeaderButtons();
+    this._ensureViewModelsAsProperties(this.headerButtons);
     
     this.headerTemplate = this.getHeaderTemplate();
     
@@ -346,15 +286,17 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /**
-   * Returns the definitions of the primary header buttons. 
-   * * By default, contains a send to chat button. 
+   * Returns the definitions of the header buttons. 
+   * 
+   * By default, contains a SendToChat, context menu and delete button. 
    * 
    * @returns {Array<TemplatedComponent>}
    * 
    * @virtual
    * @protected
    */
-  getPrimaryHeaderButtons() {
+  getHeaderButtons() {
+    const thiz = this;
     return [
       // Send to chat button
       new TemplatedComponent({
@@ -367,22 +309,6 @@ export default class BaseListItemViewModel extends ViewModel {
           localizedToolTip: game.i18n.localize("system.general.sendToChat"),
         }),
       }),
-    ]; 
-  }
-
-  /**
-   * Returns the definitions of the secondary header buttons. 
-   * 
-   * By default, contains a context menu and delete button. 
-   * 
-   * @returns {Array<TemplatedComponent>}
-   * 
-   * @virtual
-   * @protected
-   */
-  getSecondaryHeaderButtons() {
-    const thiz = this;
-    return [
       // Toggle GM notes
       new TemplatedComponent({
         template: ButtonContextMenuViewModel.TEMPLATE,
@@ -608,6 +534,43 @@ export default class BaseListItemViewModel extends ViewModel {
   }
   
   /**
+   * Returns the list of input definitions for use in the "Edit Metadata" dialog. 
+   * 
+   * Can be overriden by children classes to add their own definitions. E. g. 
+   * ```JS
+   * getMetaDataInputDefinitions() {
+   *   return super.getMetaDataInputDefinitions().concat([
+   *     new DynamicInputDefinition({ ... }),
+   *   ]);
+   * }
+   * ```
+   * 
+   * @returns {Array<DynamicInputDefinition>}
+   * 
+   * @virtual
+   */
+  getMetaDataInputDefinitions() {
+    return [
+      new DynamicInputDefinition({
+        name: "inputTags",
+        localizedLabel: game.i18n.localize("system.general.tag.plural"),
+        iconHtml: '<i class="ico dark ico-tags-solid"></i>',
+        template: InputTagsViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => {
+          return new InputTagsViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.tags,
+            systemTags: SKILL_TAGS.asArray()
+              .concat(ASSET_TAGS.asArray()),
+            ...overrides,
+          });
+        },
+      }),
+    ];
+  }
+
+  /**
    * Prompts the user to configure the meta data. 
    * 
    * @virtual
@@ -616,7 +579,7 @@ export default class BaseListItemViewModel extends ViewModel {
    * 
    * @returns {DynamicInputDialog} The dialog instance. 
    * Children of this class can use the dialog to check for input fields they added 
-   * in their own overriden `metaDataInputDefinitions` getter. E. g. 
+   * in their own overriden `getMetaDataInputDefinitions`. E. g. 
    * ```JS
    * async editMetaData() {
    *   const dialog = await super.editMetaData();
@@ -632,12 +595,12 @@ export default class BaseListItemViewModel extends ViewModel {
         game.i18n.localize("system.general.input.queryFor"),
         this.document.name,
       ),
-      inputDefinitions: this.metaDataInputDefinitions,
+      inputDefinitions: this.getMetaDataInputDefinitions(),
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return null;
 
-    const deltaTags = dialog[this._inputTags];
+    const deltaTags = dialog["inputTags"];
     this.document.tags = deltaTags;
 
     return dialog;
