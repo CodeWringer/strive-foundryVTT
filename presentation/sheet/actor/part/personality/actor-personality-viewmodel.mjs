@@ -6,7 +6,7 @@ import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
-import ActorBiographyViewModel from "../actor-biography-viewmodel.mjs"
+import ActorBiographyViewModel from "../biography/actor-biography-viewmodel.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */

@@ -120,14 +120,12 @@ import VisibilityToggleListItemViewModel from "./presentation/component/visibili
 import VisibilityToggleListViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 // View models - Actor
 import ActorAttributesViewModel from "./presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs";
-import './presentation/sheet/actor/part/personality/actor-drivers-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import ActorHealthViewModel from './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import ActorSkillsViewModel from "./presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs";
 import ActorAssetsViewModel from "./presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs";
 import ActorPersonalityViewModel from "./presentation/sheet/actor/part/personality/actor-personality-viewmodel.mjs";
 import ActorFateViewModel from "./presentation/sheet/actor/part/personality/actor-fate-viewmodel.mjs";
-import ActorPersonalsViewModel from "./presentation/sheet/actor/part/actor-personals-viewmodel.mjs";
+import ActorPersonalsViewModel from "./presentation/sheet/actor/part/personals/actor-personals-viewmodel.mjs";
 // View models - Item
 import AssetListItemViewModel from "./presentation/sheet/item/asset/asset-list-item-viewmodel.mjs";
 import AssetItemSheetViewModel from "./presentation/sheet/item/asset/asset-item-sheet-viewmodel.mjs";
