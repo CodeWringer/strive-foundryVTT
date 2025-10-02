@@ -1,7 +1,7 @@
-import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
+import ItemSheetSubType from "../item-sheet-subtype.mjs";
 import FateCardItemSheetViewModel from "./fate-card-item-sheet-viewmodel.mjs";
 
-export default class FateItemSheet extends GameSystemBaseItemSheet {
+export default class FateItemSheet extends ItemSheetSubType {
   /** @override */
   get template() { return FateCardItemSheetViewModel.TEMPLATE; }
 
@@ -9,7 +9,7 @@ export default class FateItemSheet extends GameSystemBaseItemSheet {
   get localizedType() { return game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"); }
 
   /** @override */
-  _getViewModel(context, document, sheet) {
+  createViewModel(context, document, sheet) {
     return new FateCardItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),

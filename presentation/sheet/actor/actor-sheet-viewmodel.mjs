@@ -36,9 +36,6 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_SHEET; }
 
-  /** @override */
-  get entityId() { return this.document.id; }
-
   /**
    * Returns true, if the actor is a player character. 
    * 
@@ -76,14 +73,6 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    */
   get templatePersonals() { return ActorPersonalsViewModel.TEMPLATE; }
   
-  /**
-   * Returns the CSS class for use in the context menu. 
-   * 
-   * @type {String}
-   * @readonly
-   */
-  get contextMenuClass() { return this.isNPC ? "" : "hidden"; };
-
   /**
    * Returns `true`, if the personality tab is to be shown. 
    * 

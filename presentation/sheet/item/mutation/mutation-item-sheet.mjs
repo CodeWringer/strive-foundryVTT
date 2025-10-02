@@ -1,7 +1,7 @@
-import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
+import ItemSheetSubType from "../item-sheet-subtype.mjs";
 import MutationItemSheetViewModel from "./mutation-item-sheet-viewmodel.mjs";
 
-export default class MutationItemSheet extends GameSystemBaseItemSheet {
+export default class MutationItemSheet extends ItemSheetSubType {
   /** @override */
   get template() { return MutationItemSheetViewModel.TEMPLATE; }
 
@@ -9,7 +9,7 @@ export default class MutationItemSheet extends GameSystemBaseItemSheet {
   get localizedType() { return game.i18n.localize("system.character.health.mutation.singular"); }
 
   /** @override */
-  _getViewModel(context, document, sheet) {
+  createViewModel(context, document, sheet) {
     return new MutationItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),

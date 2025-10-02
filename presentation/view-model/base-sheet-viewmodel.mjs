@@ -7,10 +7,13 @@ import ViewModel from "./view-model.mjs";
  * 
  * @extends ViewModel
  * 
+ * @property {TransientDocument} document The underlying data document instance. 
+ * This represents a concrete Actor or Item document instance. 
  * @property {Number} _scrollValue Cached scroll value of the sheet. 
  * * Private
  * 
- * @abstract
+ * @abstract Inheritors MUST override: 
+ * * `TEMPLATE`
 */
 export default class BaseSheetViewModel extends ViewModel {
   /** @override */
@@ -28,8 +31,6 @@ export default class BaseSheetViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
    * 
    * @param {TransientDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 

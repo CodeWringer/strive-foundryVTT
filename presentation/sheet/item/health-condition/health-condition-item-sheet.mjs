@@ -1,7 +1,7 @@
-import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
+import ItemSheetSubType from "../item-sheet-subtype.mjs";
 import HealthConditionItemSheetViewModel from "./health-condition-item-sheet-viewmodel.mjs";
 
-export default class HealthConditionItemSheet extends GameSystemBaseItemSheet {
+export default class HealthConditionItemSheet extends ItemSheetSubType {
   /** @override */
   get template() { return HealthConditionItemSheetViewModel.TEMPLATE; }
 
@@ -9,7 +9,7 @@ export default class HealthConditionItemSheet extends GameSystemBaseItemSheet {
   get localizedType() { return game.i18n.localize("system.character.health.condition.condition"); }
 
   /** @override */
-  _getViewModel(context, document, sheet) {
+  createViewModel(context, document, sheet) {
     return new HealthConditionItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),

@@ -1,7 +1,7 @@
-import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
+import ItemSheetSubType from "../item-sheet-subtype.mjs";
 import SkillItemSheetViewModel from "./skill-item-sheet-viewmodel.mjs";
 
-export default class SkillItemSheet extends GameSystemBaseItemSheet {
+export default class SkillItemSheet extends ItemSheetSubType {
   /** @override */
   get template() { return SkillItemSheetViewModel.TEMPLATE; }
 
@@ -12,7 +12,7 @@ export default class SkillItemSheet extends GameSystemBaseItemSheet {
   getTitle(item) { return item.getTransientObject().nameForDisplay; }
 
   /** @override */
-  _getViewModel(context, document, sheet) {
+  createViewModel(context, document, sheet) {
     return new SkillItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),

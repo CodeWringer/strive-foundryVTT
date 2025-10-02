@@ -1,7 +1,7 @@
-import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
+import ItemSheetSubType from "../item-sheet-subtype.mjs";
 import MomentumActionItemSheetViewModel from "./momentum-action-item-sheet-viewmodel.mjs";
 
-export default class MomentumActionItemSheet extends GameSystemBaseItemSheet {
+export default class MomentumActionItemSheet extends ItemSheetSubType {
   /** @override */
   get template() { return MomentumActionItemSheetViewModel.TEMPLATE; }
 
@@ -9,7 +9,7 @@ export default class MomentumActionItemSheet extends GameSystemBaseItemSheet {
   get localizedType() { return game.i18n.localize("system.combat.momentum.action"); }
 
   /** @override */
-  _getViewModel(context, document, sheet) {
+  createViewModel(context, document, sheet) {
     return new MomentumActionItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),
