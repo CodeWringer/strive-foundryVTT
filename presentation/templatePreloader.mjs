@@ -89,10 +89,13 @@ export const TEMPLATES = {
   // --- Actor
   // Plain
   ACTOR_PLAIN_SHEET: `${basePathPresentation}/sheet/actor/plain/plain-actor-sheet.hbs`,
+  ACTOR_PLAIN_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/plain/plain-actor-chat-message.hbs`,
   // PC
   ACTOR_PC_SHEET: `${basePathPresentation}/sheet/actor/pc/pc-actor-sheet.hbs`,
+  ACTOR_PC_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/pc/pc-actor-chat-message.hbs`,
   // NPC
   ACTOR_NPC_SHEET: `${basePathPresentation}/sheet/actor/npc/npc-actor-sheet.hbs`,
+  ACTOR_NPC_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/npc/npc-actor-chat-message.hbs`,
   // Parts
   ACTOR_ACTION_POINTS: `${basePathPresentation}/sheet/actor/part/action-points/actor-action-points.hbs`,
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/personals/actor-personals.hbs`,
@@ -114,7 +117,6 @@ export const TEMPLATES = {
   ACTOR_ASSET_SLOT_GROUP: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot-group.hbs`,
   ACTOR_ASSET_SLOT: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot.hbs`,
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/biography/actor-biography.hbs`,
-  ACTOR_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/actor-chat-message.hbs`,
   ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
   // --- Item
   // Base

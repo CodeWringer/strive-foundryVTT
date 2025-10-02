@@ -1,4 +1,5 @@
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
+import PcActorChatMessageViewModel from "../../../presentation/sheet/actor/pc/pc-actor-chat-message-viewmodel.mjs";
 import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
 import { PropertyUtil } from "../../util/property-utility.mjs";
@@ -29,6 +30,15 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Number} advancement.xp
  */
 export default class TransientPc extends TransientBaseCharacterActor {
+  /**
+   * Returns the Chat message template path. 
+   * 
+   * @type {String}
+   * @virtual
+   * @readonly
+   */
+  get chatMessageTemplate() { return PcActorChatMessageViewModel.TEMPLATE; }
+  
   /**
    * @type {Object}
    * @readonly
@@ -73,15 +83,19 @@ export default class TransientPc extends TransientBaseCharacterActor {
     };
   }
 
-  /**
-   * @param {Actor} actor An encapsulated actor instance. 
-   * 
-   * @throws {Error} Thrown, if `actor` is `undefined`. 
-   */
-  constructor(actor) {
-    super(actor);
+  /** @override */
+  getChatViewModel(overrides = {}) {
+    return new PcActorChatMessageViewModel({
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
+      isOwner: this.isOwner,
+      isGM: game.user.isGM,
+      document: this,
+    });
   }
-
+  
   /**
    * Tries to resolve the given reference in the embedded documents of 
    * this document. 

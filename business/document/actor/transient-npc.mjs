@@ -1,4 +1,5 @@
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
+import NpcActorChatMessageViewModel from "../../../presentation/sheet/actor/npc/npc-actor-chat-message-viewmodel.mjs";
 import { PropertyUtil } from "../../util/property-utility.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
@@ -23,6 +24,15 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   }
 
   /**
+   * Returns the Chat message template path. 
+   * 
+   * @type {String}
+   * @virtual
+   * @readonly
+   */
+  get chatMessageTemplate() { return NpcActorChatMessageViewModel.TEMPLATE; }
+  
+  /**
    * @type {Object}
    * @readonly
    * @override
@@ -43,6 +53,19 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     };
   }
 
+  /** @override */
+  getChatViewModel(overrides = {}) {
+    return new NpcActorChatMessageViewModel({
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
+      isOwner: this.isOwner,
+      isGM: game.user.isGM,
+      document: this,
+    });
+  }
+  
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientNpc));

@@ -23,9 +23,9 @@ import { ValidationUtil } from '../util/validation-utility.mjs';
  * So, if some other code wants to access an document's derived data, they will need 
  * to first fetch an instance of an inheriting type of this class. 
  * 
- * Inheriting types **must** implement `defaultImg` and `chatMessageTemplate`.
- * 
- * @abstract
+ * @abstract Inheritors MUST implement
+ * * `defaultImg`
+ * * `chatMessageTemplate`
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.

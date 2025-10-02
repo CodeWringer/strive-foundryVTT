@@ -3,7 +3,6 @@ import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
 import CharacterAttribute from '../../ruleset/attribute/character-attribute.mjs';
-import { HEALTH_CONDITIONS } from '../../ruleset/health/health-conditions.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import { PropertyUtil } from '../../util/property-utility.mjs';
@@ -149,9 +148,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
   
-  /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ACTOR_CHAT_MESSAGE; }
-
   /**
    * @type {Object}
    * @readonly
