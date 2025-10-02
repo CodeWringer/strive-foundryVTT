@@ -27,7 +27,7 @@ export const ExtenderUtil = {
    * Registers an extender with the strive game system. 
    * 
    * @param {Class} clazz The class definition of the type to extend. 
-   * E. g. `game.strive.classDef.viewModel.actor.ActorSheetViewModel` 
+   * E. g. `game.strive.classDef.viewModel.actor.PcActorSheetViewModel` 
    * @param {Object} extender An extender instance that will be used 
    * to extend instances of `clazz`. This **must** be an object which 
    * exposes a `extend` method, which takes the following arguments:
