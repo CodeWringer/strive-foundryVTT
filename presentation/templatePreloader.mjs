@@ -94,6 +94,7 @@ export const TEMPLATES = {
   // NPC
   ACTOR_NPC_SHEET: `${basePathPresentation}/sheet/actor/npc/npc-actor-sheet.hbs`,
   // Parts
+  ACTOR_ACTION_POINTS: `${basePathPresentation}/sheet/actor/part/action-points/actor-action-points.hbs`,
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/actor-personals.hbs`,
   ACTOR_PERSONALITY_TRAITS: `${basePathPresentation}/sheet/actor/part/personality/personality-traits/personality-traits.hbs`,
   ACTOR_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-abilities.hbs`,

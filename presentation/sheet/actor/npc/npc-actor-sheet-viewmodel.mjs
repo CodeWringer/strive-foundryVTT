@@ -11,6 +11,7 @@ import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import ActorAbilitiesViewModel from "../part/abilities/actor-abilities-viewmodel.mjs";
+import ActorActionPointsViewModel from "../part/action-points/actor-action-points-viewmodel.mjs";
 import ActorBiographyViewModel from "../part/actor-biography-viewmodel.mjs";
 import ActorPersonalsViewModel from "../part/actor-personals-viewmodel.mjs";
 import ActorAssetsViewModel from "../part/assets/actor-assets-viewmodel.mjs";
@@ -28,6 +29,12 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
    * @readonly
    */
   get templatePersonals() { return ActorPersonalsViewModel.TEMPLATE; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get templateActionPoints() { return ActorActionPointsViewModel.TEMPLATE; }
 
   /**
    * Returns `true`, if the personality tab is to be shown. 
@@ -82,20 +89,12 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
         this.document.img = newValue;
       },
     });
-    this.vmActionPoints = new ViewModel({
+    this.vmActionPoints = new ActorActionPointsViewModel({
       id: "vmActionPoints",
       parent: this,
       localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
+      document: this.document,
     });
-    this.actionPoints = [];
-    const currentAp = this.document.actionPoints.current;
-    for (let i = 0; i < (this.document.actionPoints.maximum + 1); i++) {
-      this.actionPoints.push({
-        id: `${this.vmActionPoints.id}-ap-${i}`,
-        full: (i > 0) && (i <= currentAp),
-        value: i,
-      });
-    }
 
     this.vmBtnConfigure = new ButtonViewModel({
       id: "vmBtnConfigure",
@@ -191,17 +190,6 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
     tabs.on("click", function (e) {
       const tab = $(e.currentTarget).data("tab");
       thiz._renderLazyTab(tab);
-    });
-
-    this.actionPoints.forEach(ap => {
-      const element = this.vmActionPoints.element.find(`#${ap.id}`);
-      element.click(async (event) => {
-        event.preventDefault(); // Prevents side-effects from event-bubbling. 
-
-        if (this.isEditable === true) {
-          this.document.actionPoints.current = ap.value;
-        }
-      });
     });
 
     await this._renderActiveTab(html);

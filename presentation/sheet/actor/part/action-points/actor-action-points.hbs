@@ -1,0 +1,10 @@
+<div id="{{viewModel.id}}" class="flex flex-column flex-wrap flex-gap-sm pad-md sheet-block" style="max-height: 9.5rem;">
+  {{#each viewModel.actionPoints as |actionPoint|}}
+  <div style="width: 21px; height: 21px;">
+  <{{#if ../viewModel.isEditable}}a{{else}}div{{/if}} id="{{actionPoint.id}}" class="combatant-action-point">
+    <img class="combatant-action-point-image unstyled" src="{{#if actionPoint.full}}systems/strive/presentation/image/action-point-full.png{{else}}systems/strive/presentation/image/action-point-empty.png{{/if}}" />
+    <div class="combatant-action-point-label{{#if actionPoint.full}} active{{/if}}">{{actionPoint.value}}</div>
+  </{{#if ../viewModel.isEditable}}a{{else}}div{{/if}}>
+  </div>
+  {{/each}}
+</div>
