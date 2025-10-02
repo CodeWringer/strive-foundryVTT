@@ -224,6 +224,28 @@ export class GameSystemActorSheet extends ActorSheet {
   /** @override */
   _getHeaderButtons() {
     const buttons = super._getHeaderButtons();
-    buttons.splice(0, 0, this.viewModel.getHeaderButtons());
+    if (game.user.isGM || this.actor.isOwner) {
+      buttons.splice(0, 0, {
+        class: "send-to-chat",
+        icon: "fas fa-comments",
+        onclick: async () => {
+          await new SendToChatHandler().prompt({
+            target: this.viewModel.document,
+            dialogTitle: game.i18n.localize("system.general.sendToChat"),
+          });
+        },
+      });
+    }
+    if ((game.user.isGM || this.actor.isOwner) && this.actor.type !== ACTOR_TYPES.PLAIN) {
+      buttons.splice(0, 0, {
+        label: game.i18n.localize("system.character.edit"),
+        class: "edit-meta",
+        icon: "fas fa-cog",
+        onclick: async () => {
+          await this.viewModel.promptConfigure();
+        },
+      });
+    }
+    return buttons;
   }
 }
