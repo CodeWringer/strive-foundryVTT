@@ -32,7 +32,7 @@ import FoundryWrapper from '../../../../common/foundry-wrapper.mjs';
  * @property {String} description 
  * @property {Number} requiredLevel 
  * @property {Number | null} apCost 
- * @property {Array<DamageAndType>} damage
+ * @property {Array<DamageAndType> | null} damage
  * @property {String | null} condition 
  * @property {Number | null} distance 
  * @property {String | null} obstacle 
@@ -142,12 +142,23 @@ export default class Expertise {
   }
   
   /**
-   * @type {Array<DamageAndType>} 
+   * @type {Array<DamageAndType> | null} 
    */
-  get damage() { return this._damage; }
+  get damage() {
+    if (ValidationUtil.isDefined(this._damage)) {
+      return this._damage.map(dto => DamageAndType.fromDto(dto));
+    } else {
+      return null;
+    }
+  }
   set damage(value) {
-    this._damage = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
+    if (ValidationUtil.isDefined(value)) {
+      this._damage = value;
+      this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
+    } else {
+      this._damage = null;
+      this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, null);
+    }
   }
   
   /**
@@ -228,7 +239,7 @@ export default class Expertise {
     this._description = args.description ?? "";
     this._requiredLevel = args.requiredLevel ?? 0;
     this._apCost = args.apCost ?? null;
-    this._damage = args.damage ?? [];
+    this._damage = args.damage ?? null;
     this._condition = args.condition ?? null;
     this._distance = args.distance ?? null;
     this._obstacle = args.obstacle ?? null;
@@ -420,9 +431,7 @@ export default class Expertise {
       description: this.description,
       requiredLevel: this.requiredLevel,
       apCost: this.apCost,
-      damage: this.damage.map(it => {
-        return { damage: it.damage, damageType: it.damageType.name }
-      }),
+      damage: this.damage.map(it => it.toDto()),
       condition: this.condition,
       distance: this.distance,
       obstacle: this.obstacle,
