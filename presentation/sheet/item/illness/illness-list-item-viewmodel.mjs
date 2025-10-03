@@ -84,8 +84,8 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    return super.getSecondaryHeaderButtons().concat([
+  getHeaderButtons() {
+    return super.getHeaderButtons().concat([
       new TemplatedComponent({
         template: InputRadioButtonGroupViewModel.TEMPLATE,
         viewModel: new InputRadioButtonGroupViewModel({

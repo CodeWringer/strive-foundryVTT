@@ -144,7 +144,18 @@ export default class Expertise {
   /**
    * @type {Array<DamageAndType> | null} 
    */
-  get damage() { return this._damage; }
+  get damage() {
+    const value = this._damage;
+    if (ValidationUtil.isDefined(value)) {
+      if (value.length > 0) {
+        return value;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
   set damage(value) {
     if (ValidationUtil.isDefined(value)) {
       this._damage = value;

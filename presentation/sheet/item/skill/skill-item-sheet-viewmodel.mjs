@@ -331,8 +331,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    const inherited = super.getSecondaryHeaderButtons();
+  getHeaderButtons() {
+    const inherited = super.getHeaderButtons();
     return [
       // Context menu button
       new TemplatedComponent({

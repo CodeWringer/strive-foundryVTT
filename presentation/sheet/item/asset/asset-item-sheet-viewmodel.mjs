@@ -89,8 +89,8 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    const inherited = super.getSecondaryHeaderButtons();
+  getHeaderButtons() {
+    const inherited = super.getHeaderButtons();
     return [
       new TemplatedComponent({
         template: ButtonTakeItemViewModel.TEMPLATE,
