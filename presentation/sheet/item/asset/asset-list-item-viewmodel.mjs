@@ -137,7 +137,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getPrimaryHeaderButtons() {
+  getHeaderButtons() {
     const thiz = this;
 
     let takeLabel = "system.character.asset.take";
@@ -154,7 +154,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       dropLabel = "system.character.asset.dropToProperty";
     }
 
-    return super.getPrimaryHeaderButtons().concat([
+    const buttons = [
       new TemplatedComponent({
         template: ButtonViewModel.TEMPLATE,
         viewModel: new ButtonViewModel({
@@ -196,7 +196,8 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.isProperty,
       }),
-    ]);
+    ];
+    return buttons.concat(super.getHeaderButtons());
   }
 
   /** @override */

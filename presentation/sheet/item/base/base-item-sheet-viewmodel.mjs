@@ -20,17 +20,10 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * 
  * @abstract Inheriting types should override: 
  * * `getDataFields`
- * * `getPrimaryHeaderButtons`
- * * `getSecondaryHeaderButtons`
+ * * `getHeaderButtons`
  * * `getAdditionalContent`
  * 
- * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
- * header buttons. 
- * * Note that each of the provided view model instances will be available for access on 
- * this view model instance, as a property whose name is the id of the provided 
- * view model instance. 
- * @property {Array<TemplatedComponent>} secondaryHeaderButtons An array of the secondary  
- * header buttons. 
+ * @property {Array<TemplatedComponent>} headerButtons An array of the header buttons. 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
@@ -93,11 +86,8 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
 
-    this.primaryHeaderButtons = this.getPrimaryHeaderButtons();
-    this._ensureViewModelsAsProperties(this.primaryHeaderButtons);
-    
-    this.secondaryHeaderButtons = this.getSecondaryHeaderButtons();
-    this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
+    this.headerButtons = this.getHeaderButtons();
+    this._ensureViewModelsAsProperties(this.headerButtons);
     
     this.additionalContent = this.getAdditionalContent();
     if (ValidationUtil.isDefined(this.additionalContent)) {
@@ -159,27 +149,14 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   }
 
   /**
-   * Returns the definitions of the primary header buttons. 
-   * * By default, contains a send to chat button. 
+   * Returns the definitions of the header buttons. 
    * 
    * @returns {Array<TemplatedComponent>}
    * 
    * @virtual
    * @protected
    */
-  getPrimaryHeaderButtons() {
-    return []; 
-  }
-
-  /**
-   * Returns the definitions of the secondary header buttons. 
-   * 
-   * @returns {Array<TemplatedComponent>}
-   * 
-   * @virtual
-   * @protected
-   */
-  getSecondaryHeaderButtons() {
+  getHeaderButtons() {
     return []; 
   }
   

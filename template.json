@@ -4,7 +4,7 @@
     "templates": {
       "base": {
         "description": "",
-        "gmNotes": "",
+        "gmNotes": null,
         "isCustom": false,
         "displayOrders": {
           "luggage": [],
@@ -191,7 +191,7 @@
     "templates": {
       "base": {
         "description": "",
-        "gmNotes": "",
+        "gmNotes": null,
         "isCustom": false,
         "displayOrders": {},
         "properties": []

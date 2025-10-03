@@ -176,7 +176,11 @@ export default class TransientSkill extends TransientBaseItem {
   get damage() {
     const value = this.document.system.damage;
     if (ValidationUtil.isDefined(value)) {
-      return value.map(dto => DamageAndType.fromDto(dto));
+      if (value.length > 0) {
+        return value.map(dto => DamageAndType.fromDto(dto));
+      } else {
+        return null;
+      }
     } else {
       return null;
     }

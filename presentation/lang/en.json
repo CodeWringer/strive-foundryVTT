@@ -715,6 +715,7 @@
             "placeholder": "3' / 1m / 0 / etc."
           },
           "expertisesOf": "Expertises of '%{skill}'",
+          "duplicateExpertise": "Duplicate Expertise",
           "createExpertise": "Create Expertise",
           "newDefaultName": "New Expertise",
           "requirement": "Required Skill Level",
