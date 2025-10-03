@@ -38,6 +38,7 @@ import FoundryWrapper from '../../../../common/foundry-wrapper.mjs';
  * @property {String | null} obstacle 
  * @property {String | null} opposedBy 
  * @property {AttackType | null} attackType 
+ * @property {String | null} gmNotes
  */
 export default class Expertise {
   /**
@@ -67,6 +68,7 @@ export default class Expertise {
       obstacle: dto.obstacle,
       opposedBy: dto.opposedBy,
       attackType: dto.attackType === undefined ? undefined : ATTACK_TYPES[dto.attackType],
+      gmNotes: dto.gmNotes,
     });
   }
 
@@ -208,7 +210,17 @@ export default class Expertise {
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? null : value.name);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, ValidationUtil.isDefined(value) ? value.name : null);
+  }
+  
+  
+  /**
+   * @type {String | null}
+   */
+  get gmNotes() { return this._gmNotes; }
+  set gmNotes(value) {
+    this._gmNotes = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.gmNotes`, ValidationUtil.isDefined(value) ? value.name : null);
   }
   
   /**
@@ -227,6 +239,7 @@ export default class Expertise {
    * @param {String | undefined} args.obstacle 
    * @param {String | undefined} args.opposedBy 
    * @param {AttackType | undefined} args.attackType 
+   * @param {String | undefined} args.gmNotes 
    * 
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
@@ -250,6 +263,7 @@ export default class Expertise {
     this._obstacle = args.obstacle ?? null;
     this._opposedBy = args.opposedBy ?? null;
     this._attackType = args.attackType ?? null;
+    this._gmNotes = args.gmNotes ?? null;
   }
 
   /**
@@ -440,8 +454,9 @@ export default class Expertise {
       condition: this.condition,
       distance: this.distance,
       obstacle: this.obstacle,
-      attackType: (this.attackType ?? {}).name,
       opposedBy: this.opposedBy,
+      attackType: (this.attackType ?? {}).name,
+      gmNotes: this.gmNotes,
     };
   }
 

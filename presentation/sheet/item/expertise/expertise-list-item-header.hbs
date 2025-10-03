@@ -41,7 +41,7 @@ cssClass: {undefined | String}
     {{/if}}
   </div>
   {{!-- Header buttons --}}
-  <div id="{{viewModel.id}}-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
+  <div id="{{viewModel.id}}-header-buttons" class="flex flex-row border-solid-l-sm pad-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
     {{#each viewModel.headerButtons as |button|}}
       {{#with button.template as |template|}}
         {{> (template) viewModel=button.viewModel cssClass=(ifThenElse button.isHidden "hidden" button.cssClass) }}

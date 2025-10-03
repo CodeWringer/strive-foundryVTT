@@ -51,7 +51,7 @@ import { ValidationUtil } from '../util/validation-utility.mjs';
  * * Read-only.
  * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
  * @property {String} description
- * @property {String} gmNotes
+ * @property {String | null} gmNotes
  * @property {Boolean} isCustom
  */
 export default class TransientDocument {
@@ -186,14 +186,17 @@ export default class TransientDocument {
     this.updateByPath("system.displayOrders", value);
   }
   
-  
   /**
    * Arbitrary notes only visible to game-masters. 
    * 
-   * @type {String}
+   * @type {String | null}
    */
   get gmNotes() {
-    return this.document.system.gmNotes;
+    const value = this.document.system.gmNotes;
+    // Check for length > 0, because the field wasn't always nullable and all existing 
+    // documents will have an empty string defined, by default. But that doesn't mean 
+    // they actually have GM notes defined...
+    return (ValidationUtil.isDefined(value) && value.length > 0) ? value : null; 
   }
   set gmNotes(value) {
     this.document.system.gmNotes = value;

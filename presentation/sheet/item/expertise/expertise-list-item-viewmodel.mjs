@@ -16,6 +16,7 @@ import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 
 /**
  * @property {Expertise} document 
@@ -101,7 +102,10 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @param {Expertise} args.document 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      isImportable: false,
+    });
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.vmNsRequiredLevel = new InputNumberSpinnerViewModel({
@@ -386,6 +390,50 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
     this.document.attackType = dialog["dynamicInputAttackType"] ? ATTACK_TYPES.none : null;
     this.document.condition = dialog["dynamicInputCondition"] ? "" : null;
     this.document.damage = dialog["dynamicInputDamage"] ? [new DamageAndType({ damage: "", damageType: DAMAGE_TYPES.pure, })] : null;
+  }
+
+  /** @override */
+  async duplicate() {
+    const inputName = "inputName";
+    const dialog = await new DynamicInputDialog({
+      id: "expertise-duplication-dialog",
+      localizedTitle: game.i18n.localize("system.character.skill.expertise.duplicateExpertise"),
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          name: inputName,
+          localizedLabel: game.i18n.localize("system.general.name.label"),
+          template: InputTextFieldViewModel.TEMPLATE,
+          viewModelFactory: async (id, parent, overrides) => {
+            return new InputTextFieldViewModel({
+              id: id,
+              parent: parent,
+              value: this.document.name,
+              ...overrides,
+            });
+          },
+        }),
+      ],
+      focused: inputName,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return undefined;
+
+    const creationData = {
+      name: dialog[inputName],
+      img: this.document.img,
+      description: this.document.description,
+      requiredLevel: this.document.requiredLevel,
+      apCost: this.document.apCost,
+      damage: this.document.damage,
+      condition: this.document.condition,
+      distance: this.document.distance,
+      obstacle: this.document.obstacle,
+      opposedBy: this.document.opposedBy,
+      attackType: this.document.attackType,
+      gmNotes: this.document.gmNotes,
+    };
+
+    return await this.document.owningDocument.createExpertise(creationData);
   }
 
   /** @override */

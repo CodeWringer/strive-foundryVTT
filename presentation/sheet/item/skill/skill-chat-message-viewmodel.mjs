@@ -71,7 +71,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showDamage() { return this.document.damage.length > 0 }
+  get showDamageList() { return ValidationUtil.isDefined(this.document.damage); }
 
   /**
    * @type {Boolean}
