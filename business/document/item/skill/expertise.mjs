@@ -61,7 +61,7 @@ export default class Expertise {
       description: dto.description,
       requiredLevel: dto.requiredLevel,
       apCost: dto.apCost,
-      damage: dto.damage.map(it => DamageAndType.fromDto(it)),
+      damage: ValidationUtil.isDefined(dto.damage) ? dto.damage.map(it => DamageAndType.fromDto(it)) : undefined,
       condition: dto.condition,
       distance: dto.distance,
       obstacle: dto.obstacle,
@@ -144,13 +144,7 @@ export default class Expertise {
   /**
    * @type {Array<DamageAndType> | null} 
    */
-  get damage() {
-    if (ValidationUtil.isDefined(this._damage)) {
-      return this._damage.map(dto => DamageAndType.fromDto(dto));
-    } else {
-      return null;
-    }
-  }
+  get damage() { return this._damage; }
   set damage(value) {
     if (ValidationUtil.isDefined(value)) {
       this._damage = value;
@@ -431,7 +425,7 @@ export default class Expertise {
       description: this.description,
       requiredLevel: this.requiredLevel,
       apCost: this.apCost,
-      damage: this.damage.map(it => it.toDto()),
+      damage: ValidationUtil.isDefined(this.damage) ? this.damage.map(it => it.toDto()) : null,
       condition: this.condition,
       distance: this.distance,
       obstacle: this.obstacle,

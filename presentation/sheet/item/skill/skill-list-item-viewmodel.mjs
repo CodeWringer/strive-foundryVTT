@@ -436,7 +436,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
 
   /** @override */
   getMetaDataInputDefinitions() {
-    const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
     const metaData = super.getMetaDataInputDefinitions();
     metaData.splice(0, 0, 
       // Toggle ap cost
@@ -531,7 +530,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         viewModelFactory: (id, parent, overrides) => new SimpleListViewModel({
           id: id,
           parent: parent,
-          value: baseAttributes,
+          value: this.document.baseAttributes.concat([]), // Safe-copy.
           contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
           contentItemViewModelFactory: (index, attribute) => {
             return new BaseAttributeListItemViewModel({

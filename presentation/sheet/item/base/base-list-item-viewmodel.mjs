@@ -342,7 +342,6 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnDelete",
           target: this.document,
           withDialog: true,
-          localizedDeletionType: game.i18n.localize(`TYPES.Item.${this.document.type}`),
           localizedDeletionTarget: this.document.name,
         }),
       }),

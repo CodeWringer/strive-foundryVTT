@@ -11,7 +11,7 @@ viewModel: {SkillListItemViewModel}
   {{!-- Expertises --}}
   {{#if viewModel.showExpertises}}
   {{#with viewModel.expertisesTemplate as |template|}}
-    {{> (template) viewModel=../viewModel.vmExpertiseTable }}
+    {{> (template) viewModel=../viewModel.vmExpertiseTable cssClass="border-solid-t-sm" }}
   {{/with}}
   {{/if}}
   {{!-- Row --}}
