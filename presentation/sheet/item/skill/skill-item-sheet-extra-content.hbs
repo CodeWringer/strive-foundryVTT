@@ -30,10 +30,4 @@ viewModel: {SkillItemSheetViewModel}
     {{/header3}}
     {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
   </div>
-  {{!-- Row --}}
-  <div id="{{viewModel.vmTagsWrap.id}}" class="flex flex-row flex-middle auto-margin-h">
-    {{!-- Tags --}}
-    <i class="ico dark ico-tags-solid"></i>
-    {{> inputTags viewModel=viewModel.vmTags }}
-  </div>
 </section>

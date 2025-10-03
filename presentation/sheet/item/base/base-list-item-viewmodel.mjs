@@ -599,8 +599,7 @@ export default class BaseListItemViewModel extends ViewModel {
 
     if (dialog.confirmed !== true) return null;
 
-    const deltaTags = dialog["inputTags"];
-    this.document.tags = deltaTags;
+    this.document.tags = dialog["inputTags"];
 
     return dialog;
   }
