@@ -125,6 +125,7 @@ export const TEMPLATES = {
   ACTOR_ASSETS_EQUIPPED: `${basePathPresentation}/sheet/actor/part/assets/actor-assets-equipped.hbs`,
   ACTOR_ASSET_SLOT_GROUP: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot-group.hbs`,
   ACTOR_ASSET_SLOT: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot.hbs`,
+  ACTOR_ASSET_LUGGAGE_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/assets/part/actor-asset-luggage-extra-header.hbs`,
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/biography/actor-biography.hbs`,
   ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
   // --- Item
