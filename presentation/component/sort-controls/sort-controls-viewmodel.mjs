@@ -170,6 +170,7 @@ export default class SortControlsViewModel extends ViewModel {
    * the same way `Array.sort` does. Allowed numbers are `-1`, `0` and `1`. 
    * 
    * @returns {Function<Number>} 
+   * @private
    */
   _getReverseSortFunc(sortingFunc) {
     return (a, b) => {

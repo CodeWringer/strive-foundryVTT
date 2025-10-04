@@ -2,9 +2,10 @@ import { ITEM_TYPES } from "../../../../../../business/document/item/item-types.
 import { StringUtil } from "../../../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 import SpecificDocumentCreationStrategy from "../../../../../component/button-add/specific-document-creation-strategy.mjs";
+import CompositeSortableListViewModel from "../../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs";
 import { SortingOption } from "../../../../../component/sort-controls/sort-controls-viewmodel.mjs";
 import DocumentListItemOrderDataSource from "../../../../../component/sortable-list/document-list-item-order-datasource.mjs";
-import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../../component/sortable-list/sortable-list-viewmodel.mjs";
+import { SortableListAddItemParams } from "../../../../../component/sortable-list/sortable-list-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 import MomentumActionListItemViewModel from "../../../../item/momentum-action/momentum-action-list-item-viewmodel.mjs";
 
@@ -33,17 +34,16 @@ export default class ActorMomentumViewModel extends ViewModel {
 
     this.listItemViewModels = this._getListItemViewModels();
 
-    this.vmMomentumActions = new SortableListViewModel({
+    this.vmMomentumActions = new CompositeSortableListViewModel({
       id: "vmMomentumActions",
       parent: this,
-      isCollapsible: false,
+      listItemTemplate: MomentumActionListItemViewModel.TEMPLATE,
+      listItemViewModels: this.listItemViewModels,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "momentum-actions",
       }),
-      listItemViewModels: this.listItemViewModels,
-      listItemTemplate: MomentumActionListItemViewModel.TEMPLATE,
-      headerLevel: 3,
+      localizedTitle: game.i18n.localize("system.combat.momentum.plural"),
       addItemParams: [
         new SortableListAddItemParams({
           creationStrategy: new SpecificDocumentCreationStrategy({
@@ -60,18 +60,18 @@ export default class ActorMomentumViewModel extends ViewModel {
           ),
         }),
       ],
-      sortParams: new SortableListSortParams({
-        options: [
-          new SortingOption({
-            iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-            localizedToolTip: game.i18n.localize("system.general.name.label"),
-            sortingFunc: (a, b) => {
-              return a.document.name.localeCompare(b.document.name);
-            },
-          }),
-        ],
-        compact: true,
-      }),
+      sortingOptions: [
+        new SortingOption({
+          iconHtml: '<i class="ico ico-tags-solid"></i>',
+          localizedToolTip: game.i18n.localize("system.general.name.label"),
+          sortingFunc: (a, b) => {
+            return a.document.name.localeCompare(b.document.name);
+          },
+        }),
+      ],
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: false,
     });
   }
 

@@ -4,140 +4,17 @@ cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- General health stats --}}
-  <div class="auto-margin-v-md">
-    {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.healthStats"}}{{/header1}}
-    <div class="flex flex-column auto-margin-v-md">
-      <div class="flex flex-justify flex-row flex-wrap auto-margin-h-md">
-        {{!-- HP --}}
-        <div class="flex flex-column flex-middle sheet-block" style="width: 20%;">
-          {{!-- Icon --}}
-          <i id="{{viewModel.vmHpIcon.id}}" class="ico dark ico-heart-solid" style="width: 48px; height: 48px;"></i>
-          <div class="flex flex-row flex-middle">
-            {{!-- Current HP --}}
-            {{> inputNumberSpinner viewModel=viewModel.vmHp cssClass="width-md" }}
-            {{!-- Adjust button --}}
-            {{> button viewModel=viewModel.vmAdjustHp heavy=false fill=false skipPadding=true }}
-          </div>
-          {{!-- Divider --}}
-          <span class="margin-t-md margin-b-md" style="height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 90%);"></span>
-          {{!-- Max HP --}}
-          <div class="flex flex-row flex-middle">
-            {{> inputNumberSpinner viewModel=viewModel.vmMaxHp cssClass="width-md" }}
-            <span style="width: 26px;">{{viewModel.maxHpModifierString}}</span>
-          </div>
-        </div>
-        {{!-- Exhaustion --}}
-        <div class="flex flex-column flex-middle sheet-block" style="width: 20%;">
-          {{!-- Icon --}}
-          <i id="{{viewModel.vmExhaustionIcon.id}}" class="ico dark ico-lung-solid" style="width: 48px; height: 48px;"></i>
-          <div class="flex flex-row flex-middle">
-            {{!-- Current Exhaustion --}}
-            {{> inputNumberSpinner viewModel=viewModel.vmExhaustion cssClass="width-md" }}
-            {{!-- Adjust button --}}
-            {{> button viewModel=viewModel.vmAdjustExhaustion heavy=false fill=false skipPadding=true }}
-          </div>
-          {{!-- Divider --}}
-          <span class="margin-t-md margin-b-md" style="height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 90%);"></span>
-          {{!-- Max Exhaustion --}}
-          <div class="flex flex-row flex-middle">
-            {{> inputNumberSpinner viewModel=viewModel.vmMaxExhaustion cssClass="width-md" }}
-            <span style="width: 26px;">{{viewModel.maxExhaustionModifierString}}</span>
-          </div>
-        </div>
-        {{!-- Grit Points --}}
-        {{#if viewModel.showGritPoints}}
-        {{#with viewModel.gritPointsTemplate as | template |}}
-          {{> (template) viewModel=../viewModel.vmGritPoints }}
-        {{/with}}
-        {{/if}}
-      </div>
-      {{!-- Death's Door --}}
-      {{#if viewModel.isPC}}
-      {{#with viewModel.deathsDoorTemplate as | template |}}
-        {{> (template) viewModel=../viewModel.vmDeathsDoor }}
-      {{/with}}
-      {{/if}}
-      {{!-- Conditions --}}
-      {{#with viewModel.healthConditionsTemplate as | template |}}
-        {{> (template) viewModel=../viewModel.vmHealthConditions }}
-      {{/with}}
-      {{!-- Armor --}}
-      {{#if viewModel.vmArmorListItem}}
-      {{#with viewModel.armorListItemTemplate as | template |}}
-        {{> (template) viewModel=../viewModel.vmArmorListItem }}
-      {{/with}}
-      {{/if}}
-    </div>
-  </div>
+  {{#with viewModel.generalHealthStatsTemplate as |context|}}
+  {{#with context.template as |template|}}
+  {{> (template) viewModel=context.viewModel cssClass=context.cssClass }}
+  {{/with}}
+  {{/with}}
   {{!-- Injuries --}}
-  {{#> sortableList viewModel=viewModel.vmInjuryList }}
-    {{#*inline "sortableListExtraHeader"}}
-    <div class="grid-3col grid-gap-md margin-b-md">
-      {{!-- Shrug off --}}
-      <div class="flex flex-row grid-span-2 auto-margin-h-md sheet-block">
-        {{> button viewModel=../viewModel.vmRollShrugOff }}
-        {{#with ../viewModel.shrugOffBarTemplate as | template |}}
-          {{> (template) viewModel=../../viewModel.vmShrugOffBar }}
-        {{/with}}
-      </div>
-      {{!-- Current injury count --}}
-      <div class="flex flex-row sheet-block">
-        <div class="flex-grow">
-          {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.injury.plural"}}{{/label}}
-        </div>
-        <span class="width-md">
-          {{> readOnlyValue viewModel=../viewModel.vmInjuryCount }}
-        </span>
-      </div>
-    </div>
-    {{/inline}}
-  {{/sortableList}}
+  {{> compositeSortableList viewModel=viewModel.vmInjuries }}
   {{!-- Illnesses --}}
-  {{#> sortableList viewModel=viewModel.vmIllnessList }}
-    {{#*inline "sortableListExtraHeader"}}
-    <div class="grid-2col grid-gap-md margin-b-md">
-      <div></div>
-      <div class="flex flex-row sheet-block">
-        <div class="flex-grow">
-          {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.illness.plural"}}{{/label}}
-        </div>
-        <span class="width-md">
-          {{> readOnlyValue viewModel=../viewModel.vmIllnessCount }}
-        </span>
-      </div>
-    </div>
-    {{/inline}}
-  {{/sortableList}}
+  {{> compositeSortableList viewModel=viewModel.vmIllnesses }}
   {{!-- Mutations --}}
-  {{#> sortableList viewModel=viewModel.vmMutationList }}
-    {{#*inline "sortableListExtraHeader"}}
-    <div class="grid-2col grid-gap-md margin-b-md">
-      <div></div>
-      <div class="flex flex-row sheet-block">
-        <div class="flex-grow">
-          {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.mutation.plural"}}{{/label}}
-        </div>
-        <span class="width-md">
-          {{> readOnlyValue viewModel=../viewModel.vmMutationCount }}
-        </span>
-      </div>
-    </div>
-    {{/inline}}
-  {{/sortableList}}
+  {{> compositeSortableList viewModel=viewModel.vmMutations }}
   {{!-- Scars --}}
-  {{#> sortableList viewModel=viewModel.vmScarList }}
-    {{#*inline "sortableListExtraHeader"}}
-    <div class="grid-2col grid-gap-md margin-b-md">
-      <div></div>
-      <div class="flex flex-row sheet-block">
-        <div class="flex-grow">
-          {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.scar.plural"}}{{/label}}
-        </div>
-        <span class="width-md">
-          {{> readOnlyValue viewModel=../viewModel.vmScarCount }}
-        </span>
-      </div>
-    </div>
-    {{/inline}}
-  {{/sortableList}}
+  {{> compositeSortableList viewModel=viewModel.vmScars }}
 </section>

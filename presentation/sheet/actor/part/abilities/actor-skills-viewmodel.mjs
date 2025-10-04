@@ -1,16 +1,16 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
-import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
+import { SearchItem } from "../../../../../business/search/search.mjs"
 import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
-import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
+import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import { SortableListAddItemParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
 
@@ -28,29 +28,6 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @readonly
    */
   get hideLearningSkills() { return this.document.advancement.advancementEnabled === false; }
-
-  /**
-   * @type {String}
-   * @private
-   */
-  _searchTerm = "";
-  /**
-   * @type {String}
-   */
-  get searchTerm() {
-    return this._searchTerm;
-  }
-  set searchTerm(value) {
-    this._searchTerm = value;
-    if (ValidationUtil.isDefined(this.vmSearch)) {
-      this.vmSearch.value = value;
-    }
-
-    this._filterSkills(value);
-
-    // Immediately write view state. 
-    this.writeViewState();
-  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -71,27 +48,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    // Own properties.
     this.document = args.document;
-
-    // View state.
-    this.registerViewStateProperty("_searchTerm");
-    this.readViewState();
-
-    // Child view models. 
-
-    this.vmSearch = new InputSearchTextViewModel({
-      id: "vmSearch",
-      parent: this,
-      isEditable: true, // Should always be true so that observers can also filter. 
-      value: this.searchTerm,
-      localizedPlaceholder: game.i18n.localize("system.character.skill.search"),
-      onChange: (oldValue, newValue) => {
-        if (oldValue != newValue) {
-          this.searchTerm = newValue;
-        }
-      },
-    });
 
     this.skillViewModels = this._getSkillViewModels();
     const nonInnateSkillFilter = (document) => {
@@ -178,22 +135,35 @@ export default class ActorSkillsViewModel extends ViewModel {
       }));
     }
 
-    this.vmSkills = new SortableListViewModel({
+    this.vmSkills = new CompositeSortableListViewModel({
       id: "vmSkills",
       parent: this,
-      isCollapsible: false,
+      listItemTemplate: SkillListItemViewModel.TEMPLATE,
+      listItemViewModels: this.skillViewModels,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "skills",
       }),
-      listItemViewModels: this.skillViewModels,
-      listItemTemplate: SkillListItemViewModel.TEMPLATE,
-      headerLevel: 3,
+      localizedTitle: game.i18n.localize("system.character.skill.plural"),
       addItemParams: addItemParams,
-      sortParams: new SortableListSortParams({
-        options: this._getSkillSortingOptions(),
-        compact: true,
-      }),
+      sortingOptions: this._getSkillSortingOptions(),
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: true,
+      searchItemProvder: () => {
+        let skills = this.document.skills.known;
+        skills = skills.concat(this.document.skills.innate);
+        if (this.hideLearningSkills === false) {
+          skills = skills.concat(this.document.skills.learning);
+        }
+
+        return skills.map(it =>
+          new SearchItem({
+            id: it.id,
+            term: it.name,
+          })
+        );
+      },
     });
   }
 
@@ -216,29 +186,6 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.skillViewModels = newSkillViewModels;
 
     super.update(args);
-  }
-
-  /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    this._filterSkills(this.searchTerm);
-  }
-
-  /** @override */
-  _getChildUpdates() {
-    const updates = super._getChildUpdates();
-
-    updates.set(this.vmKnownSkillList, {
-      ...updates.get(this.vmKnownSkillList),
-      listItemViewModels: this.knownSkillViewModels,
-    });
-    updates.set(this.vmLearningSkillList, {
-      ...updates.get(this.vmLearningSkillList),
-      listItemViewModels: this.learningSkillViewModels,
-    });
-
-    return updates;
   }
 
   /**
@@ -299,55 +246,6 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
 
   /**
-   * Filters the skills by the given search term. 
-   * 
-   * @param {String} searchTerm 
-   * 
-   * @private
-   */
-  _filterSkills(searchTerm) {
-    const elements = this.vmSkills.getListElements();
-    const trimmedSearchTerm = searchTerm.trim();
-    if (trimmedSearchTerm.length > 0) {
-      // At first, hide all elements. They will be un-hidden again, once the search is done. 
-      for (const element of elements) {
-        $(element).addClass("hidden");
-      }
-
-      let skills = this.document.skills.known;
-      skills = skills.concat(this.document.skills.innate);
-      if (this.hideLearningSkills === false) {
-        skills = skills.concat(this.document.skills.learning);
-      }
-
-      const searchItems = skills.map(it =>
-        new SearchItem({
-          id: it.id,
-          term: it.name,
-        })
-      );
-      const results = new Search().search(searchItems, trimmedSearchTerm, SEARCH_MODES.STRICT_CASE_INSENSITIVE);
-      for (const result of results) {
-        for (let i = 0; i < elements.length; i++) {
-          const element = elements[i];
-          if (element.id !== result.id) continue;
-          if (result.score > 0) {
-            $(element).removeClass("hidden");
-          } else {
-            $(element).addClass("hidden");
-          }
-          break;
-        }
-      }
-    } else {
-      // Reset visibilities. 
-      for (const element of elements) {
-        $(element).removeClass("hidden");
-      }
-    }
-  }
-
-  /**
    * Returns the sorting options for known and innate skill lists. 
    * 
    * @returns {Array<SortingOption>}
@@ -357,14 +255,14 @@ export default class ActorSkillsViewModel extends ViewModel {
   _getSkillSortingOptions() {
     return [
       new SortingOption({
-        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        iconHtml: '<i class="ico ico-tags-solid custom-icon-sm"></i>',
         localizedToolTip: game.i18n.localize("system.general.name.label"),
         sortingFunc: (a, b) => {
           return a.document.name.localeCompare(b.document.name);
         },
       }),
       new SortingOption({
-        iconHtml: '<i class="ico ico-level-solid dark"></i>',
+        iconHtml: '<i class="ico ico-level-solid custom-icon-sm"></i>',
         localizedToolTip: game.i18n.localize("system.character.advancement.level"),
         sortingFunc: (a, b) => {
           return a.document.compareLevel(b.document);

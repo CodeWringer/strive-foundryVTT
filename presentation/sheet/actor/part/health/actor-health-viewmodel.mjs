@@ -14,6 +14,7 @@ import RollableSpecificDocumentCreationStrategy from "../../../../component/butt
 import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
+import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
@@ -23,6 +24,7 @@ import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dyna
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
+import { TemplatedComponent } from "../../../item/base/templated-component.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
@@ -192,8 +194,13 @@ export default class ActorHealthViewModel extends ViewModel {
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.contextType = args.contextType ?? "actor-health";
     const thiz = this;
+
+    this.generalHealthStatsTemplate = new TemplatedComponent({
+      id: "generalHealthStatsTemplate",
+      template: game.strive.const.TEMPLATES.ACTOR_HEALTH_GENERAL_STATS,
+      viewModel: this,
+    });
 
     // HP
     this.vmHpIcon = new ViewModel({
@@ -351,13 +358,6 @@ export default class ActorHealthViewModel extends ViewModel {
       });
     }
 
-    // Injury
-    this.vmShrugOffBar = new InjuryShrugOffBarViewModel({
-      id: "vmShrugOffBar",
-      parent: this,
-      document: this.document,
-    });
-
     const toughnessAttribute = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
     this.vmRollShrugOff = new ButtonRollViewModel({
       id: "vmRollShrugOff",
@@ -391,61 +391,18 @@ export default class ActorHealthViewModel extends ViewModel {
       document: this.document,
     });
 
-    // Prepare illnesses list view models. 
-    this.illnesses = this._getIllnessViewModels();
-    this.vmIllnessList = new SortableListViewModel({
-      id: "vmIllnessList",
-      parent: this,
-      isCollapsible: false,
-      indexDataSource: new DocumentListItemOrderDataSource({
-        document: this.document,
-        listName: "illnesses",
-      }),
-      listItemViewModels: this.illnesses,
-      listItemTemplate: IllnessListItemViewModel.TEMPLATE,
-      localizedTitle: game.i18n.localize("system.character.health.illness.plural"),
-      headerLevel: 1,
-      addItemParams: [
-        new SortableListAddItemParams({
-          creationStrategy: new RollableSpecificDocumentCreationStrategy({
-            rollTables: ["Illnesses"],
-            localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.ILLNESS}`),
-            target: this.document,
-          }),
-          localizedLabel: StringUtil.format(
-            game.i18n.localize("system.general.add.addType"),
-            game.i18n.localize("system.character.health.illness.singular"),
-          ),
-          localizedToolTip: StringUtil.format(
-            game.i18n.localize("system.general.add.addType"),
-            game.i18n.localize("system.character.health.illness.singular"),
-          ),
-        })
-      ],
-      sortParams: new SortableListSortParams({
-        options: this._getTreatableSortingOptions(),
-        compact: true,
-      }),
-    });
-    this.vmIllnessCount = new ReadOnlyValueViewModel({
-      id: "vmIllnessCount",
-      parent: this,
-      value: this.illnessCount,
-    });
-
-    // Prepare injuries list view models. 
+    // Injuries
     this.injuries = this._getInjuryViewModels();
-    this.vmInjuryList = new SortableListViewModel({
-      id: "vmInjuryList",
+    this.vmInjuries = new CompositeSortableListViewModel({
+      id: "vmInjuries",
       parent: this,
+      listItemTemplate: InjuryListItemViewModel.TEMPLATE,
+      listItemViewModels: this.injuries,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "injuries",
       }),
-      listItemViewModels: this.injuries,
-      listItemTemplate: InjuryListItemViewModel.TEMPLATE,
       localizedTitle: game.i18n.localize("system.character.health.injury.plural"),
-      headerLevel: 1,
       addItemParams: [
         new SortableListAddItemParams({
           creationStrategy: new RollableSpecificDocumentCreationStrategy({
@@ -473,30 +430,82 @@ export default class ActorHealthViewModel extends ViewModel {
           ),
         })
       ],
-      sortParams: new SortableListSortParams({
-        options: this._getTreatableSortingOptions(),
-        compact: true,
+      headerExtraContent: new TemplatedComponent({
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_INJURIES_EXTRA_HEADER,
+        viewModel: this,
       }),
+      sortingOptions: this._getTreatableSortingOptions(),
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: false,
     });
     this.vmInjuryCount = new ReadOnlyValueViewModel({
       id: "vmInjuryCount",
       parent: this,
       value: this.injuryCount,
     });
-
-    // Prepare mutations list view models. 
-    this.mutations = this._getMutationViewModels();
-    this.vmMutationList = new SortableListViewModel({
-      id: "vmMutationList",
+    this.vmShrugOffBar = new InjuryShrugOffBarViewModel({
+      id: "vmShrugOffBar",
       parent: this,
+      document: this.document,
+    });
+
+    // Illnesses
+    this.illnesses = this._getIllnessViewModels();
+    this.vmIllnesses = new CompositeSortableListViewModel({
+      id: "vmIllnesses",
+      parent: this,
+      listItemTemplate: IllnessListItemViewModel.TEMPLATE,
+      listItemViewModels: this.illnesses,
+      indexDataSource: new DocumentListItemOrderDataSource({
+        document: this.document,
+        listName: "illnesses",
+      }),
+      localizedTitle: game.i18n.localize("system.character.health.illness.plural"),
+      addItemParams: [
+        new SortableListAddItemParams({
+          creationStrategy: new RollableSpecificDocumentCreationStrategy({
+            rollTables: ["Illnesses"],
+            localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.ILLNESS}`),
+            target: this.document,
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.health.illness.singular"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.health.illness.singular"),
+          ),
+        })
+      ],
+      headerExtraContent: new TemplatedComponent({
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER,
+        viewModel: this,
+      }),
+      sortingOptions: this._getTreatableSortingOptions(),
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: false,
+    });
+    this.vmIllnessCount = new ReadOnlyValueViewModel({
+      id: "vmIllnessCount",
+      parent: this,
+      value: this.illnessCount,
+    });
+
+    // Mutations
+    this.mutations = this._getMutationViewModels();
+    this.vmMutations = new CompositeSortableListViewModel({
+      id: "vmMutations",
+      parent: this,
+      listItemTemplate: MutationListItemViewModel.TEMPLATE,
+      listItemViewModels: this.mutations,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "mutations",
       }),
-      listItemViewModels: this.mutations,
-      listItemTemplate: MutationListItemViewModel.TEMPLATE,
       localizedTitle: game.i18n.localize("system.character.health.mutation.plural"),
-      headerLevel: 1,
       addItemParams: [
         new SortableListAddItemParams({
           creationStrategy: new RollableSpecificDocumentCreationStrategy({
@@ -514,10 +523,14 @@ export default class ActorHealthViewModel extends ViewModel {
           ),
         })
       ],
-      sortParams: new SortableListSortParams({
-        options: this._getNameSortingOptions(),
-        compact: true,
+      headerExtraContent: new TemplatedComponent({
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER,
+        viewModel: this,
       }),
+      sortingOptions: this._getNameSortingOptions(),
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: false,
     });
     this.vmMutationCount = new ReadOnlyValueViewModel({
       id: "vmMutationCount",
@@ -525,19 +538,18 @@ export default class ActorHealthViewModel extends ViewModel {
       value: this.mutationCount,
     });
 
-    // Prepare scars list view models. 
+    // Scars
     this.scars = this._getScarViewModels();
-    this.vmScarList = new SortableListViewModel({
-      id: "vmScarList",
+    this.vmScars = new CompositeSortableListViewModel({
+      id: "vmScars",
       parent: this,
+      listItemTemplate: ScarListItemViewModel.TEMPLATE,
+      listItemViewModels: this.scars,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "scars",
       }),
-      listItemViewModels: this.scars,
-      listItemTemplate: ScarListItemViewModel.TEMPLATE,
       localizedTitle: game.i18n.localize("system.character.health.scar.plural"),
-      headerLevel: 1,
       addItemParams: [
         new SortableListAddItemParams({
           creationStrategy: new SpecificDocumentCreationStrategy({
@@ -554,10 +566,14 @@ export default class ActorHealthViewModel extends ViewModel {
           ),
         })
       ],
-      sortParams: new SortableListSortParams({
-        options: this._getNameSortingOptions(),
-        compact: true,
+      headerExtraContent: new TemplatedComponent({
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER,
+        viewModel: this,
       }),
+      sortingOptions: this._getNameSortingOptions(),
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: false,
     });
     this.vmScarCount = new ReadOnlyValueViewModel({
       id: "vmScarCount",
@@ -711,7 +727,7 @@ export default class ActorHealthViewModel extends ViewModel {
   _getTreatableSortingOptions() {
     return [
       new SortingOption({
-        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        iconHtml: '<i class="ico ico-tags-solid"></i>',
         localizedToolTip: game.i18n.localize("system.general.name.label"),
         sortingFunc: (a, b) => {
           return a.document.name.localeCompare(b.document.name);
@@ -737,7 +753,7 @@ export default class ActorHealthViewModel extends ViewModel {
   _getNameSortingOptions() {
     return [
       new SortingOption({
-        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        iconHtml: '<i class="ico ico-tags-solid"></i>',
         localizedToolTip: game.i18n.localize("system.general.name.label"),
         sortingFunc: (a, b) => {
           return a.document.name.localeCompare(b.document.name);
