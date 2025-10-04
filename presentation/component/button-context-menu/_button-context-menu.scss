@@ -4,16 +4,25 @@ a.context.highlight {
   }
 }
 
-li.context-item {
-  font-family: var(--font-primary);
-  text-align: left;
-
-  &:hover {
-    text-shadow: 0 0 8px $c-text-highlight;
-    background-color: #47453c;
-  }
-}
-
 nav#context-menu {
-  width: 12rem;
+  width: 14rem;
+  
+  li.context-item {
+    font-family: var(--font-primary);
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  
+    &:hover {
+      text-shadow: 0 0 8px $c-text-highlight;
+      background-color: #47453c;
+    }
+
+    > i, i.fa-fw {
+      height: 20px;
+      line-height: 20px;
+      width: unset;
+    }
+  }
 }

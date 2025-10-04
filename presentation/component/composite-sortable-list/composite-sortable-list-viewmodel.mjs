@@ -1,4 +1,5 @@
 import { Search, SEARCH_MODES } from "../../../business/search/search.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonContextMenuViewModel, { ContextMenuItem } from "../button-context-menu/button-context-menu-viewmodel.mjs";
@@ -152,11 +153,27 @@ export default class CompositeSortableListViewModel extends ViewModel {
     }
     if (ValidationUtil.isDefined(this.sortingOptions)) {
       for (const sortingOption of this.sortingOptions) {
+        // Ascending sort
+        const localizedLabelAscendingSort = StringUtil.format(game.i18n.localize("system.general.sort.sortAscendingBy"),
+          (sortingOption.localizedLabel ?? sortingOption.localizedToolTip)
+        );
         contextMenuItems.push(new ContextMenuItem({
-          name: sortingOption.localizedLabel ?? sortingOption.localizedToolTip,
+          name: localizedLabelAscendingSort,
           icon: sortingOption.iconHtml,
           callback: () => {
             this._sort(sortingOption.sortingFunc);
+          },
+        }));
+        // Descending sort
+        const localizedLabelDescendingSort = StringUtil.format(game.i18n.localize("system.general.sort.sortDescendingBy"),
+          (sortingOption.localizedLabel ?? sortingOption.localizedToolTip)
+        );
+        const descendingSort = this._getReverseSortFunc(sortingOption.sortingFunc);
+        contextMenuItems.push(new ContextMenuItem({
+          name: localizedLabelDescendingSort,
+          icon: sortingOption.iconHtml,
+          callback: () => {
+            this._sort(descendingSort);
           },
         }));
       }
@@ -232,4 +249,18 @@ export default class CompositeSortableListViewModel extends ViewModel {
     }
   }
 
+  /**
+   * Wraps the given function in a new function which reverses the result, useful for 'descending' sorting. 
+   * 
+   * @param {Function<Number>} sortingFunc A function with which to do comparisons. Must return a numeric result, 
+   * the same way `Array.sort` does. Allowed numbers are `-1`, `0` and `1`. 
+   * 
+   * @returns {Function<Number>} 
+   * @private
+   */
+  _getReverseSortFunc(sortingFunc) {
+    return (a, b) => {
+      return sortingFunc(b, a);
+    }  
+  }
 }

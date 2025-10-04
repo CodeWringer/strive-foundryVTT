@@ -8,6 +8,8 @@ cssClass: {undefined | String}
     <span class="flex-grow">{{viewModel.localizedTitle}}</span>
     {{> buttonContextMenu viewModel=viewModel.vmContextMenu }}
   </h1>
+  {{!-- Extra content --}}
+  {{#> sortableListExtraHeader }}{{/sortableListExtraHeader}}
   {{!-- Search --}}
   {{#if viewModel.isSearchable}}
   {{> inputSearch viewModel=viewModel.vmSearch }}
