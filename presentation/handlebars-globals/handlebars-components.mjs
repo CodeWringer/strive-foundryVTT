@@ -31,6 +31,7 @@ import InputSearchTextViewModel from "../component/input-search/input-search-vie
 import InputSliderViewModel from "../component/input-slider/input-slider-viewmodel.mjs";
 import ReadOnlyValueViewModel from "../component/read-only-value/read-only-value.mjs";
 import ListFooterViewModel from "../component/sortable-list/list-footer-viewmodel.mjs";
+import CompositeSortableListViewModel from "../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs";
 
 /**
  * Registers the Handlebars partials of the components. 
@@ -69,4 +70,5 @@ export function initHandlebarsComponents() {
   ModalDialog.registerHandlebarsPartial();
   ReadOnlyValueViewModel.registerHandlebarsPartial();
   ListFooterViewModel.registerHandlebarsPartial();
+  CompositeSortableListViewModel.registerHandlebarsPartial();
 }
