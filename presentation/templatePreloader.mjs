@@ -108,11 +108,19 @@ export const TEMPLATES = {
   ACTOR_DRIVERS: `${basePathPresentation}/sheet/actor/part/personality/actor-drivers.hbs`,
   ACTOR_FATE: `${basePathPresentation}/sheet/actor/part/personality/actor-fate.hbs`,
   ACTOR_PERSONALITY: `${basePathPresentation}/sheet/actor/part/personality/actor-personality.hbs`,
+  // Health
   ACTOR_HEALTH: `${basePathPresentation}/sheet/actor/part/health/actor-health.hbs`,
   ACTOR_HEALTH_CONDITIONS: `${basePathPresentation}/sheet/actor/part/health/conditions/actor-health-conditions.hbs`,
   ACTOR_HEALTH_DEATH_SAVES: `${basePathPresentation}/sheet/actor/part/health/deaths-door/deaths-door.hbs`,
+  ACTOR_HEALTH_GENERAL_STATS: `${basePathPresentation}/sheet/actor/part/health/part/actor-general-health-stats.hbs`,
+  ACTOR_HEALTH_INJURIES_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-injuries-extra-header.hbs`,
+  ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-illnesses-extra-header.hbs`,
+  ACTOR_HEALTH_MUTATIONS_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-mutations-extra-header.hbs`,
+  ACTOR_HEALTH_SCARS_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-scars-extra-header.hbs`,
+  // Grit Points
   ACTOR_GRIT_POINTS: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points.hbs`,
   ACTOR_GRIT_POINTS_COMBAT_TRACKER: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points-combat-tracker.hbs`,
+  // Assets
   ACTOR_ASSETS: `${basePathPresentation}/sheet/actor/part/assets/actor-assets.hbs`,
   ACTOR_ASSETS_EQUIPPED: `${basePathPresentation}/sheet/actor/part/assets/actor-assets-equipped.hbs`,
   ACTOR_ASSET_SLOT_GROUP: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot-group.hbs`,

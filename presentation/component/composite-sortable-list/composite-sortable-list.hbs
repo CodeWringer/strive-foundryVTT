@@ -9,7 +9,13 @@ cssClass: {undefined | String}
     {{> buttonContextMenu viewModel=viewModel.vmContextMenu }}
   </h1>
   {{!-- Extra content --}}
-  {{#> sortableListExtraHeader }}{{/sortableListExtraHeader}}
+  {{#if viewModel.hasHeaderExtraContent}}
+  {{#with viewModel.headerExtraContent as |context|}}
+  {{#with context.template as |template|}}
+  {{> (template) viewModel=context.viewModel cssClass=context.cssClass }}
+  {{/with}}
+  {{/with}}
+  {{/if}}
   {{!-- Search --}}
   {{#if viewModel.isSearchable}}
   {{> inputSearch viewModel=viewModel.vmSearch }}

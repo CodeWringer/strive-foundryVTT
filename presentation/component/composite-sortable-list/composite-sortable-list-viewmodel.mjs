@@ -1,6 +1,7 @@
 import { Search, SEARCH_MODES } from "../../../business/search/search.mjs";
 import { StringUtil } from "../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { TemplatedComponent } from "../../sheet/item/base/templated-component.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonContextMenuViewModel, { ContextMenuItem } from "../button-context-menu/button-context-menu-viewmodel.mjs";
 import InputSearchTextViewModel from "../input-search/input-search-viewmodel.mjs";
@@ -39,6 +40,12 @@ export default class CompositeSortableListViewModel extends ViewModel {
   }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasHeaderExtraContent() { return ValidationUtil.isDefined(this.headerExtraContent); }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -62,6 +69,7 @@ export default class CompositeSortableListViewModel extends ViewModel {
    * * default `false`
    * @param {Function | undefined} args.searchItemProvder Expected to return `Array<SearchItem>`
    * * If `isSearchable` is true, then this argument should not be left undefined! 
+   * @param {TemplatedComponent | undefined} args.headerExtraContent 
    */
   constructor(args = {}) {
     super(args);
@@ -78,6 +86,7 @@ export default class CompositeSortableListViewModel extends ViewModel {
     this.enableFooter = args.enableFooter ?? false;
     this.isSearchable = args.isSearchable ?? false;
     this.searchItemProvder = args.searchItemProvder ?? (() => { return []; });
+    this.headerExtraContent = args.headerExtraContent;
 
     // View state.
     this.registerViewStateProperty("_searchTerm");
@@ -128,8 +137,10 @@ export default class CompositeSortableListViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    // Initial filter, in case a search term is already defined. 
-    this._filter(value, this.searchItemProvder());
+    if (this.isSearchable) {
+      // Initial filter, in case a search term is already defined. 
+      this._filter(this.searchTerm, this.searchItemProvder());
+    }
   }
 
   /**

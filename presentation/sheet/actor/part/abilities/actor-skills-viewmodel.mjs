@@ -136,7 +136,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     }
 
     this.vmSkills = new CompositeSortableListViewModel({
-      id: "CompositeSortableListViewModel",
+      id: "vmSkills",
       parent: this,
       listItemTemplate: SkillListItemViewModel.TEMPLATE,
       listItemViewModels: this.skillViewModels,
@@ -163,7 +163,7 @@ export default class ActorSkillsViewModel extends ViewModel {
             term: it.name,
           })
         );
-      }
+      },
     });
   }
 
