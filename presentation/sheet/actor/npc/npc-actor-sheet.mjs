@@ -77,10 +77,17 @@ export default class NpcActorSheet extends ActorSheetSubType {
   }
 
   /** @override */
-  _getHeaderButtons(sheet) {
-    const buttons = super.getHeaderButtons();
+  getHeaderButtons(sheet) {
+    const buttons = super.getHeaderButtons(sheet);
 
     if (game.user.isGM || sheet.actor.isOwner) {
+      buttons.push({
+        class: "roll-synthetic",
+        icon: "fas fa-dice-three",
+        onclick: async () => {
+          await sheet.viewModel.promptRollSynthetic();
+        },
+      });
       buttons.push({
         label: game.i18n.localize("system.character.edit"),
         class: "edit-meta",

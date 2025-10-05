@@ -59,6 +59,7 @@ export default class CompositeSortableListViewModel extends ViewModel {
    * @param {Array<ViewModel>} args.listItemViewModels 
    * @param {AbstractListItemIndexDataSource} args.indexDataSource The data source of the indices. 
    * @param {String | undefined} args.localizedTitle 
+   * @param {Array<ContextMenuItem> | undefined} args.additionalContextMenuItems 
    * @param {Array<SortableListAddItemParams> | undefined} args.addItemParams 
    * @param {Array<SortingOption> | undefined} args.sortingOptions 
    * @param {Boolean | undefined} args.isCollapsible 
@@ -80,6 +81,7 @@ export default class CompositeSortableListViewModel extends ViewModel {
     this.listItemViewModels = args.listItemViewModels;
     this.indexDataSource = args.indexDataSource;
     this.localizedTitle = args.localizedTitle ?? "";
+    this.additionalContextMenuItems = args.additionalContextMenuItems;
     this.addItemParams = args.addItemParams;
     this.sortingOptions = args.sortingOptions;
     this.isCollapsible = args.isCollapsible ?? false;
@@ -149,7 +151,7 @@ export default class CompositeSortableListViewModel extends ViewModel {
    * @private
    */
   getContextMenuItems() {
-    const contextMenuItems = [];
+    const contextMenuItems = this.additionalContextMenuItems ?? [];
 
     if (ValidationUtil.isDefined(this.addItemParams)) {
       for (const addItemParam of this.addItemParams) {

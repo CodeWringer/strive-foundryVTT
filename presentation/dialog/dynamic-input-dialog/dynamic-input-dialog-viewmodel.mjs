@@ -90,6 +90,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         // Render the view model and attach it to the DOM. 
         const renderedTemplate = await new FoundryWrapper().renderTemplate(definition.template, {
           viewModel: viewModel,
+          cssClass: "flex-grow",
         });
         this.element.find(`#${definition.name}-placeholder`).remove();
         this.element.find(`#${definition.name}-slot`).append(renderedTemplate);
