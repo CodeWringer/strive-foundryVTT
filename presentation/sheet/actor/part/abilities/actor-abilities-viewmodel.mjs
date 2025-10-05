@@ -1,6 +1,5 @@
 import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
-import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
@@ -10,6 +9,7 @@ import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-o
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAttributesViewModel from "./actor-attributes-viewmodel.mjs"
 import ActorSkillsViewModel from "./actor-skills-viewmodel.mjs"
+import ActorTraitsViewModel from "./actor-traits-viewmodel.mjs"
 import ActorMomentumViewModel from "./momentum/actor-momentum-viewmodel.mjs"
 
 /**
@@ -41,6 +41,12 @@ export default class ActorAbilitiesViewModel extends ViewModel {
   get momentumActionsTemplate() { return ActorMomentumViewModel.TEMPLATE; }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get traitsTemplate() { return ActorTraitsViewModel.TEMPLATE; }
+
+  /**
    * @type {Boolean}
    * @readonly
    */
@@ -63,7 +69,14 @@ export default class ActorAbilitiesViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showMomentum() { return ValidationUtil.isDefined(this.document.items.find(it => it.type === ITEM_TYPES.MOMENTUM_ACTION)); }
+  get showMomentum() { return this.document.momentum.actions.length > 0; }
+  
+  /**
+   * Returns true, if at least one Trait exists on the character. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showTraits() { return this.document.traits.length > 0; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -97,6 +110,13 @@ export default class ActorAbilitiesViewModel extends ViewModel {
     if (this.showMomentum) {
       this.vmMomentumActions = new ActorMomentumViewModel({
         id: "vmMomentumActions",
+        parent: this,
+        document: this.document,
+      });
+    }
+    if (this.showTraits) {
+      this.vmTraits = new ActorTraitsViewModel({
+        id: "vmTraits",
         parent: this,
         document: this.document,
       });

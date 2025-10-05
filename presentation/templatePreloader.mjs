@@ -117,6 +117,7 @@ export const TEMPLATES = {
   ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-illnesses-extra-header.hbs`,
   ACTOR_HEALTH_MUTATIONS_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-mutations-extra-header.hbs`,
   ACTOR_HEALTH_SCARS_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-scars-extra-header.hbs`,
+  ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
   // Grit Points
   ACTOR_GRIT_POINTS: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points.hbs`,
   ACTOR_GRIT_POINTS_COMBAT_TRACKER: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points-combat-tracker.hbs`,
@@ -126,8 +127,10 @@ export const TEMPLATES = {
   ACTOR_ASSET_SLOT_GROUP: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot-group.hbs`,
   ACTOR_ASSET_SLOT: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot.hbs`,
   ACTOR_ASSET_LUGGAGE_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/assets/part/actor-asset-luggage-extra-header.hbs`,
+  // Biography
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/biography/actor-biography.hbs`,
-  ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
+  // Traits
+  ACTOR_TRAITS: `${basePathPresentation}/sheet/actor/part/abilities/actor-traits.hbs`,
   // --- Item
   // Base
   BASE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/base/base-chat-message.hbs`,

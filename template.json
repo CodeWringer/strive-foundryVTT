@@ -14,7 +14,9 @@
           "injuries": [],
           "illnesses": [],
           "mutations": [],
-          "scars": []
+          "scars": [],
+          "momentum-actions": [],
+          "traits": []
         },
         "properties": []
       },
@@ -186,7 +188,8 @@
       "momentum-action",
       "mutation",
       "scar",
-      "health-condition"
+      "health-condition",
+      "trait"
     ],
     "templates": {
       "base": {
@@ -261,6 +264,9 @@
       "templates": ["base"],
       "current": 1,
       "limit": 0
+    },
+    "trait": {
+      "templates": ["base"]
     }
   }
 }

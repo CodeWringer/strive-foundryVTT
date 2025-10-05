@@ -8,6 +8,7 @@ import TransientInjury from "./transient-injury.mjs";
 import TransientMomentumAction from "./transient-momentum-action.mjs";
 import TransientMutation from "./transient-mutation.mjs";
 import TransientScar from "./transient-scar.mjs";
+import TransientTrait from "./transient-trait.mjs";
 
 /**
  * @summary
@@ -40,6 +41,7 @@ export class GameSystemItem extends Item {
       [ITEM_TYPES.SCAR, (document) => { return new TransientScar(document) }],
       [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
       [ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
+      [ITEM_TYPES.TRAIT, (document) => { return new TransientTrait(document) }],
     ]);
   }
 

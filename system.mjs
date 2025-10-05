@@ -65,6 +65,7 @@ import TransientMomentumAction from "./business/document/item/transient-momentum
 import TransientMutation from "./business/document/item/transient-mutation.mjs";
 import TransientScar from "./business/document/item/transient-scar.mjs";
 import TransientHealthCondition from "./business/document/item/transient-health-condition.mjs";
+import TransientTrait from "./business/document/item/transient-trait.mjs";
 // HUD
 import GameSystemTokenHud from "./presentation/token/game-system-token-hud.mjs";
 // Sheet classes
@@ -271,6 +272,7 @@ Hooks.once('init', function() {
         TransientMutation: TransientMutation,
         TransientScar: TransientScar,
         TransientHealthCondition: TransientHealthCondition,
+        TransientTrait: TransientTrait,
       },
       dialog: {
         DynamicInputDialog: DynamicInputDialog,
