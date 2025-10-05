@@ -776,6 +776,7 @@
       "success": "Success",
       "failure": "Failure",
       "absoluteFailure": "Absolute Failure",
+      "syntheticSkill": "Roll Synthetic Skill",
       "hit": {
         "plural": "Hits",
         "singular": "Hit"

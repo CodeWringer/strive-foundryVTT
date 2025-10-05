@@ -7,12 +7,14 @@ import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
+import { ContextMenuItem } from "../../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import { SortableListAddItemParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
+import SyntheticRollStrategy from "../../npc/synthetic-roll-strategy.mjs"
 
 export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
@@ -164,6 +166,17 @@ export default class ActorSkillsViewModel extends ViewModel {
           })
         );
       },
+      // Ideally, this would be done by overriding the viewmodel, specifically for NPCs. 
+      // However, this introduced difficult to debug issues with the context menus. 
+      additionalContextMenuItems: (this.document.type === ACTOR_TYPES.NPC) ? [
+        new ContextMenuItem({
+          name: game.i18n.localize("system.roll.syntheticSkill"),
+          icon: '<i class="fas fa-dice-three"></i>',
+          callback: async () => {
+            await this._promptRollSynthetic();
+          }
+        }),
+      ] : [],
     });
   }
 
@@ -269,6 +282,18 @@ export default class ActorSkillsViewModel extends ViewModel {
         },
       }),
     ];
+  }
+
+  /**
+   * Opens the dialog to roll a synthetic Skill for the character. 
+   * 
+   * @async
+   * @private
+   */
+  async _promptRollSynthetic() {
+    new SyntheticRollStrategy({
+      target: this.document,
+    }).prompt();
   }
 
   /** @override */

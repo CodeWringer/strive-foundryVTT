@@ -17,6 +17,7 @@ import { ValidationUtil } from "../../../util/validation-utility.mjs";
 import InputDropDownViewModel from "../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { StringUtil } from "../../../util/string-utility.mjs";
+import TransientBaseActor from "../../../document/actor/transient-base-actor.mjs";
 
 /**
  * Defines a schema for rolling dice to test a skill. 
@@ -27,6 +28,23 @@ import { StringUtil } from "../../../util/string-utility.mjs";
  * @extends SkillRollSchema
  */
 export class AttributeAndSkillRollSchema extends SkillRollSchema {
+  /**
+   * @param {Object} args 
+   * @param {Number | undefined} args.dieFaces The number of faces on a die. 
+   * * default `6`
+   * @param {Number | undefined} args.hitThreshold Sets the lower bound of faces that are considered 
+   * hits. Any face turning up this number and numbers above, are considered hits. 
+   * * default `5`
+   * 
+   * @param {TransientBaseActor | undefined} args.owningDocumentOverride If set, will be treated as the Skill's parent, 
+   * even if it isn't. This is for use in synthetic Skill rolling. 
+   */
+  constructor(args = {}) {
+    super(args);
+
+    this._owningDocumentOverride = args.owningDocumentOverride;
+  }
+
   /**
    * @param {TransientSkill} document 
    * @param {AttributeAndSkillRollQueryData} rollQueryData 
@@ -53,7 +71,8 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     const sums = [];
 
     document.baseAttributes.forEach(baseAttribute => {
-      const characterAttribute = new CharacterAttribute(document.owningDocument.document, baseAttribute.name);
+      const owningDocument = this._owningDocumentOverride ?? document.owningDocument;
+      const characterAttribute = new CharacterAttribute(owningDocument.document, baseAttribute.name);
       const attributeLevel = characterAttribute.modifiedLevel;
       sums.push(new Sum([
         new SumComponent("attribute", baseAttribute.localizableName, attributeLevel),
@@ -98,7 +117,8 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     const nameInputCompensationPoints = "inputCompensationPoints";
     const nameInputRollDiceModifier = "inputRollDiceModifier";
 
-    const actor = document.owningDocument.document;
+    const owningDocument = this._owningDocumentOverride ?? document.owningDocument;
+    const actor = owningDocument.document;
     const attributes = document.baseAttributes.map(attribute => new CharacterAttribute(actor, attribute.name));
 
     const bestAttribute = this._getBestAttribute(attributes);
@@ -183,7 +203,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     );
 
     const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
-    const isPC = document.owningDocument.type === ACTOR_TYPES.PC;
+    const isPC = owningDocument.type === ACTOR_TYPES.PC;
     if (showReminders && isPC) {
       dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
         new DynamicInputDefinition({

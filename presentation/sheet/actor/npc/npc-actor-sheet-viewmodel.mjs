@@ -18,6 +18,7 @@ import ActorAssetsViewModel from "../part/assets/actor-assets-viewmodel.mjs";
 import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import SyntheticRollStrategy from "./synthetic-roll-strategy.mjs";
 
 export default class NpcActorSheetViewModel extends BaseSheetViewModel {
   /** @override */
@@ -364,6 +365,18 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
     this.document.personalityVisible = dialog[inputEnablePersonality] == true;
     this.document.advancement.advancementEnabled = dialog[inputEnableProgression] == true;
     this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
+  }
+
+  /**
+   * Opens the dialog to roll a synthetic Skill for the character. 
+   * 
+   * @async
+   * @protected
+   */
+  async promptRollSynthetic() {
+    new SyntheticRollStrategy({
+      target: this.document,
+    }).prompt();
   }
 
   /** @override */
