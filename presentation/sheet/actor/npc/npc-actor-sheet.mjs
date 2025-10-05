@@ -77,8 +77,8 @@ export default class NpcActorSheet extends ActorSheetSubType {
   }
 
   /** @override */
-  _getHeaderButtons(sheet) {
-    const buttons = super.getHeaderButtons();
+  getHeaderButtons(sheet) {
+    const buttons = super.getHeaderButtons(sheet);
 
     if (game.user.isGM || sheet.actor.isOwner) {
       buttons.push({
