@@ -14,4 +14,5 @@ export const ITEM_TYPES = {
   HEALTH_CONDITION: "health-condition",
   MUTATION: "mutation",
   SCAR: "scar",
+  TRAIT: "trait",
 };

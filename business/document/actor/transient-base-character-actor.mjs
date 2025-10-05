@@ -9,6 +9,7 @@ import { PropertyUtil } from '../../util/property-utility.mjs';
 import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
 import TransientMomentumAction from '../item/transient-momentum-action.mjs';
+import TransientTrait from '../item/transient-trait.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
@@ -143,6 +144,10 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only
  * @property {Array<TransientMomentumAction>} momentum.actions
  * * Read-only
+ * 
+ * @property {Array<TransientTrait>} traits A list of character traits. These are **not** the same as 
+ * personality traits! 
+ * * Read-only. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -547,6 +552,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
+   * @type {Array<TransientTrait>}
+   * @readonly
+   */
+  get traits() { return this.items.filter(it => it.type === ITEM_TYPES.TRAIT); }
+
+  /**
    * @param {Actor} document An encapsulated actor instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -639,14 +650,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * 
    * Searches in: 
    * * Attribute names.
-   * * Embedded skill name.
-   * * Embedded expertise name.
-   * * Embedded asset name.
-   * * Embedded injury name.
-   * * Embedded illness name.
-   * * Embedded mutation name.
-   * * Embedded scar name.
-   * * Embedded asset name.
+   * * Embedded documents.
    */
   resolveReference(comparableReference, propertyPath) {
     // Search attributes. 
@@ -666,6 +670,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       this.health.illnesses,
       this.health.mutations,
       this.health.scars,
+      this.health.conditions,
+      this.momentum.actions,
+      this.traits,
     ];
     return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
   }

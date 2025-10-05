@@ -11,6 +11,7 @@
   "TYPES.Item.health-condition": "Health Condition",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
+  "TYPES.Item.trait": "Trait",
   "COMBAT.ActionPoints": "Set Action Points",
   "COMBAT.GritPoints": "Set Grit Points",
   "COMBAT.SendGeneralActionsToChat": "Print general combat actions to chat",
@@ -769,6 +770,10 @@
         "opposed": {
           "label": "Opposed test"
         }
+      },
+      "trait": {
+        "trait": "Trait",
+        "traits": "Traits"
       }
     },
     "roll": {

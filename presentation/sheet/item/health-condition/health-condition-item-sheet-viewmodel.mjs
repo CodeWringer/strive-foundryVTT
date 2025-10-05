@@ -5,7 +5,7 @@ import InputNumberSpinnerViewModel from "../../../component/input-number-spinner
 import TransientHealthCondition from "../../../../business/document/item/transient-health-condition.mjs";
 
 /**
- * @property {TransientMomentumAction} document
+ * @property {TransientHealthCondition} document
  */
 export default class HealthConditionItemSheetViewModel extends BaseItemSheetViewModel {
   
