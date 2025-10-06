@@ -18,19 +18,26 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * 
  * @extends BaseSheetViewModel
  * 
- * @abstract Inheriting types should override: 
+ * @abstract Inheriting types *may* override: 
  * * `getDataFields`
  * * `getHeaderButtons`
  * * `getAdditionalContent`
+ * * `getPromotedContent`
  * 
  * @property {Array<TemplatedComponent>} headerButtons An array of the header buttons. 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
+ * * private
  * @property {Array<TemplatedComponent>} dataFields 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
+ * * private
+ * @property {TemplatedComponent | undefined} additionalContent
+ * * private
+ * @property {TemplatedComponent | undefined} promotedContent
+ * * private
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
@@ -63,6 +70,15 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get showDescription() { return true; }
 
   /**
+   * Returns true, if the promoted content is to be shown. 
+   * 
+   * @type
+   * @protected
+   * @readonly
+   */
+  get showPromotedContent() { return ValidationUtil.isDefined(this.promotedContent); }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -92,6 +108,11 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this.additionalContent = this.getAdditionalContent();
     if (ValidationUtil.isDefined(this.additionalContent)) {
       this._ensureViewModelsAsProperties([this.additionalContent]);
+    }
+
+    this.promotedContent = this.getPromotedContent();
+    if (ValidationUtil.isDefined(this.promotedContent)) {
+      this._ensureViewModelsAsProperties([this.promotedContent]);
     }
 
     this.vmImg = new InputImageViewModel({
@@ -169,6 +190,18 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @protected
    */
   getAdditionalContent() {
+    return undefined;
+  }
+  
+  /**
+   * Returns the definition of the promoted content, if there is one. 
+   * 
+   * @returns {TemplatedComponent | undefined}
+   * 
+   * @virtual
+   * @protected
+   */
+  getPromotedContent() {
     return undefined;
   }
 

@@ -63,6 +63,7 @@ import TransientIllness from "./business/document/item/transient-illness.mjs";
 import TransientInjury from "./business/document/item/transient-injury.mjs";
 import TransientMomentumAction from "./business/document/item/transient-momentum-action.mjs";
 import TransientMutation from "./business/document/item/transient-mutation.mjs";
+import TransientProject from "./business/document/item/transient-project.mjs";
 import TransientScar from "./business/document/item/transient-scar.mjs";
 import TransientHealthCondition from "./business/document/item/transient-health-condition.mjs";
 import TransientTrait from "./business/document/item/transient-trait.mjs";
@@ -113,8 +114,8 @@ import InputTextFieldViewModel from "./presentation/component/input-textfield/in
 import InputToggleViewModel from "./presentation/component/input-toggle/input-toggle-viewmodel.mjs";
 import LazyLoadViewModel from "./presentation/component/lazy-load/lazy-load-viewmodel.mjs";
 import LazyRichTextViewModel from "./presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
-import SimpleListItemViewModel from "./presentation/component/simple-list/simple-list-item-viewmodel.mjs";
-import SimpleListViewModel from "./presentation/component/simple-list/simple-list-viewmodel.mjs";
+import ListItemViewModel from "./presentation/component/list/list-item-viewmodel.mjs";
+import ListViewModel from "./presentation/component/list/list-viewmodel.mjs";
 import SortableListViewModel from "./presentation/component/sortable-list/sortable-list-viewmodel.mjs";
 import SortControlsViewModel from "./presentation/component/sort-controls/sort-controls-viewmodel.mjs";
 import VisibilityToggleListItemViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-item-viewmodel.mjs";
@@ -270,6 +271,7 @@ Hooks.once('init', function() {
         TransientInjury: TransientInjury,
         TransientMomentumAction: TransientMomentumAction,
         TransientMutation: TransientMutation,
+        TransientProject: TransientProject,
         TransientScar: TransientScar,
         TransientHealthCondition: TransientHealthCondition,
         TransientTrait: TransientTrait,
@@ -307,8 +309,8 @@ Hooks.once('init', function() {
         LazyLoadViewModel: LazyLoadViewModel,
         LazyRichTextViewModel: LazyRichTextViewModel,
         GmNotesViewModel: GmNotesViewModel,
-        SimpleListViewModel: SimpleListViewModel,
-        SimpleListItemViewModel: SimpleListItemViewModel,
+        ListViewModel: ListViewModel,
+        ListItemViewModel: ListItemViewModel,
         SortControlsViewModel: SortControlsViewModel,
         SortableListViewModel: SortableListViewModel,
         VisibilityToggleListViewModel: VisibilityToggleListViewModel,

@@ -1,5 +1,5 @@
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
-import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
+import ListViewModel from "../../../component/list/list-viewmodel.mjs";
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -139,7 +139,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       });
     }
 
-    this.vmBaseAttributeList = new SimpleListViewModel({
+    this.vmBaseAttributeList = new ListViewModel({
       id: "vmBaseAttributeList",
       parent: this,
       value: this.document.baseAttributes.concat([]),
@@ -178,7 +178,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
     });
 
-    this.vmPrerequisiteList = new SimpleListViewModel({
+    this.vmPrerequisiteList = new ListViewModel({
       id: "vmPrerequisiteList",
       parent: this,
       value: this.document.prerequisites.concat([]),

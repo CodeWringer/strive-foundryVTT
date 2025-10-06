@@ -15,4 +15,5 @@ export const ITEM_TYPES = {
   MUTATION: "mutation",
   SCAR: "scar",
   TRAIT: "trait",
+  PROJECT: "project",
 };

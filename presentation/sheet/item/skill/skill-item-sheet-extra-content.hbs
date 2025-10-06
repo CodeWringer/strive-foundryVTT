@@ -19,7 +19,7 @@ viewModel: {SkillItemSheetViewModel}
       <span class="flex-grow">{{localize "system.character.attribute.plural"}}</span>
       {{> buttonAdd viewModel=viewModel.vmAddAttribute2 cssClass="font-size-default" }}
     {{/header3}}
-    {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
+    {{> list viewModel=viewModel.vmBaseAttributeList}}
   </div>
   {{!-- Row --}}
   {{!-- Prerequisites --}}
@@ -28,6 +28,6 @@ viewModel: {SkillItemSheetViewModel}
       <span class="flex-grow">{{localize "system.character.skill.prerequisite.plural"}}</span>
       {{> buttonAdd viewModel=viewModel.vmAddPrerequisite2 cssClass="font-size-default" }}
     {{/header3}}
-    {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
+    {{> list viewModel=viewModel.vmPrerequisiteList}}
   </div>
 </section>

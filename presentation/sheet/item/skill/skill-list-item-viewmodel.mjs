@@ -21,7 +21,7 @@ import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only
 import ViewModel from "../../../view-model/view-model.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
-import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs"
+import ListViewModel from "../../../component/list/list-viewmodel.mjs"
 import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
 import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs"
 
@@ -419,7 +419,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getPromotedContentTemplate() {
+  getPromotedContent() {
     return new TemplatedComponent({
       template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,
@@ -526,8 +526,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       new DynamicInputDefinition({
         name: "dynamicInputAttributes",
         localizedLabel: game.i18n.localize("system.character.attribute.plural"),
-        template: SimpleListViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new SimpleListViewModel({
+        template: ListViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new ListViewModel({
           id: id,
           parent: parent,
           value: this.document.baseAttributes.concat([]), // Safe-copy.

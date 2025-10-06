@@ -102,7 +102,7 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
   }
   
   /** @override */
-  getPromotedContentTemplate() {
+  getPromotedContent() {
     return new TemplatedComponent({
       template: game.strive.const.TEMPLATES.ILLNESS_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,

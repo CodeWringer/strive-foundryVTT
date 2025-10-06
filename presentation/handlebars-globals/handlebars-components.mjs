@@ -22,7 +22,7 @@ import InputTextareaViewModel from "../component/input-textarea/input-textarea-v
 import InputTextFieldViewModel from "../component/input-textfield/input-textfield-viewmodel.mjs";
 import LazyLoadViewModel from "../component/lazy-load/lazy-load-viewmodel.mjs";
 import LazyRichTextViewModel from "../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
-import SimpleListViewModel from "../component/simple-list/simple-list-viewmodel.mjs";
+import ListViewModel from "../component/list/list-viewmodel.mjs";
 import SortableListViewModel from "../component/sortable-list/sortable-list-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import ModalDialog from "../dialog/modal-dialog/modal-dialog.mjs";
@@ -62,7 +62,7 @@ export function initHandlebarsComponents() {
   InputToggleViewModel.registerHandlebarsPartial();
   LazyLoadViewModel.registerHandlebarsPartial();
   LazyRichTextViewModel.registerHandlebarsPartial();
-  SimpleListViewModel.registerHandlebarsPartial();
+  ListViewModel.registerHandlebarsPartial();
   SortableListViewModel.registerHandlebarsPartial();
   VisibilityToggleListViewModel.registerHandlebarsPartial();
   InputSearchTextViewModel.registerHandlebarsPartial();

@@ -31,6 +31,7 @@ cssClass: {undefined | String}
     <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "system.character.sheet.tab.health"}}</div></a>
     <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "system.character.sheet.tab.assets"}}</div></a>
     <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="biography"><div>{{localize "system.character.sheet.tab.biography"}}</div></a>
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="projects"><div>{{localize "system.character.sheet.tab.projects"}}</div></a>
     {{#if viewModel.isGM }}
       <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
     {{/if}}
@@ -57,6 +58,10 @@ cssClass: {undefined | String}
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="biography">
       {{> lazy viewModel=viewModel.biographyViewModel}}
+    </div>
+    {{!-- Projects Tab --}}
+    <div class="tab projects" data-group="primary" data-tab="projects">
+      {{> lazy viewModel=viewModel.projectsViewModel}}
     </div>
     {{!-- GM Notes Tab --}}
     {{#if viewModel.isGM }}

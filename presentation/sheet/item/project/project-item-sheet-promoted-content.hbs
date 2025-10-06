@@ -1,0 +1,16 @@
+{{!--
+viewModel: ProjectItemSheetViewModel
+--}}
+<section class="sheet-block flex flex-row flex-middle">
+  {{> inputSlider viewModel=viewModel.vmProgressRange }}
+  <div class="flex flex-column flex-middle">
+    {{!-- Current Progress --}}
+    <div class="flex flex-row flex-middle">
+      {{> inputNumberSpinner viewModel=viewModel.vmProgress cssClass="width-md" }}
+    </div>
+    {{!-- Divider --}}
+    <span class="margin-t-md margin-b-md" style="height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 90%);"></span>
+    {{!-- Total Progress --}}
+    {{> inputNumberSpinner viewModel=viewModel.vmTotalProgress cssClass="width-md" }}
+  </div>
+</section>
