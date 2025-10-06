@@ -54,8 +54,8 @@ export const TEMPLATES = {
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
   COMPONENT_SORT_CONTROLS: `${basePathComponent}/sort-controls/sort-controls.hbs`,
-  COMPONENT_SIMPLE_LIST: `${basePathComponent}/simple-list/simple-list.hbs`,
-  COMPONENT_SIMPLE_LIST_ITEM: `${basePathComponent}/simple-list/simple-list-item.hbs`,
+  COMPONENT_LIST: `${basePathComponent}/list/list.hbs`,
+  COMPONENT_LIST_ITEM: `${basePathComponent}/list/list-item.hbs`,
   DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
   COMPONENT_DAMAGE_DEFINITION_LIST_ITEM: `${basePathComponent}/damage-definition-list/damage-definition-list-item.hbs`,
   COMPONENT_DAMAGE_DEFINITION_LIST: `${basePathComponent}/damage-definition-list/damage-definition-list.hbs`,
@@ -108,6 +108,7 @@ export const TEMPLATES = {
   ACTOR_DRIVERS: `${basePathPresentation}/sheet/actor/part/personality/actor-drivers.hbs`,
   ACTOR_FATE: `${basePathPresentation}/sheet/actor/part/personality/actor-fate.hbs`,
   ACTOR_PERSONALITY: `${basePathPresentation}/sheet/actor/part/personality/actor-personality.hbs`,
+  ACTOR_PROJECTS: `${basePathPresentation}/sheet/actor/part/projects/actor-projects.hbs`,
   // Health
   ACTOR_HEALTH: `${basePathPresentation}/sheet/actor/part/health/actor-health.hbs`,
   ACTOR_HEALTH_CONDITIONS: `${basePathPresentation}/sheet/actor/part/health/conditions/actor-health-conditions.hbs`,
@@ -168,6 +169,11 @@ export const TEMPLATES = {
   MOMENTUM_BAR: `${basePathPresentation}/combat/momentum/momentum-bar.hbs`,
   // Mutation
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
+  // Project
+  PROJECT_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/project/project-chat-message.hbs`,
+  PROJECT_ITEM_SHEET_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/project/project-item-sheet-promoted-content.hbs`,
+  PROJECT_ITEM_SHEET_ADDITIONAL_CONTENT: `${basePathPresentation}/sheet/item/project/project-item-sheet-additional-content.hbs`,
+  PROJECT_COMPLICATION_LIST_ITEM: `${basePathPresentation}/sheet/item/project/complication/project-complication-list-item.hbs`,
   // Scar
   SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
   // Health Condition

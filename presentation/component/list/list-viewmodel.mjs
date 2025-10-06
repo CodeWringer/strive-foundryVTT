@@ -2,7 +2,7 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
+import ListItemViewModel from "./list-item-viewmodel.mjs";
 
 /**
  * Represents a simple item list in the sense that the presentation of 
@@ -24,9 +24,9 @@ import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
  * 
  * @extends ViewModel
  */
-export default class SimpleListViewModel extends ViewModel {
+export default class ListViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_SIMPLE_LIST; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_LIST; }
 
   /**
    * Registers the Handlebars partial for this component. 
@@ -34,14 +34,14 @@ export default class SimpleListViewModel extends ViewModel {
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('simpleList', `{{> "${SimpleListViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('list', `{{> "${ListViewModel.TEMPLATE}"}}`);
   }
 
   /**
    * @type {String}
    * @readonly
    */
-  get itemTemplate() { return SimpleListItemViewModel.TEMPLATE; }
+  get itemTemplate() { return ListItemViewModel.TEMPLATE; }
 
   /**
    * Returns the current value. 
@@ -69,7 +69,9 @@ export default class SimpleListViewModel extends ViewModel {
    * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
    * 
    * @param {String} args.contentItemTemplate
-   * @param {Function} args.contentItemViewModelFactory
+   * @param {Function} args.contentItemViewModelFactory Expected to return a view model instance for list items. Arguments: 
+   * * `index: Number`
+   * * `item: Any`
    * @param {Any} args.newItemDefaultValue 
    * @param {Array<Any> | undefined} args.value
    * @param {Boolean | undefined} args.isItemAddable 
@@ -99,7 +101,7 @@ export default class SimpleListViewModel extends ViewModel {
     this.onAddClick = async () => {
       const index = this.value.length;
       const vm = this._generateItemViewModel(index, this.newItemDefaultValue);
-      const renderedItem = await new FoundryWrapper().renderTemplate(SimpleListItemViewModel.TEMPLATE, {
+      const renderedItem = await new FoundryWrapper().renderTemplate(ListItemViewModel.TEMPLATE, {
         viewModel: vm,
       });
       const listElement = this.element.find(`#${this.id}-ul`);
@@ -140,7 +142,7 @@ export default class SimpleListViewModel extends ViewModel {
   }
 
   /**
-   * @returns {Array<SimpleListItemViewModel>}
+   * @returns {Array<ListItemViewModel>}
    * 
    * @private
    */
@@ -160,7 +162,7 @@ export default class SimpleListViewModel extends ViewModel {
    * @param {Number} index 
    * @param {Any} item 
    * 
-   * @returns {SimpleListItemViewModel}
+   * @returns {ListItemViewModel}
    * 
    * @private
    */
@@ -173,8 +175,8 @@ export default class SimpleListViewModel extends ViewModel {
         this.value = newValues;
       };
     }
-    const vm = new SimpleListItemViewModel({
-      id: `simpleListItem-${index}`,
+    const vm = new ListItemViewModel({
+      id: `listItem-${index}`,
       parent: this,
       isEditable: this.isEditable,
       isSendable: this.isSendable,

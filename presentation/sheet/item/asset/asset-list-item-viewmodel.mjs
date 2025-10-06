@@ -201,7 +201,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getPromotedContentTemplate() {
+  getPromotedContent() {
     return new TemplatedComponent({
       template: game.strive.const.TEMPLATES.ASSET_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,

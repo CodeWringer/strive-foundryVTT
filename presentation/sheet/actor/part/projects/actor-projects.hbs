@@ -1,0 +1,7 @@
+{{!-- Parameters:
+viewModel: {ActorProjectsViewModel}
+cssClass: {undefined | String}
+--}}
+<section id="{{viewModel.id}}" class="{{cssClass}}">
+  {{> compositeSortableList viewModel=viewModel.vmProjects }}
+</section>

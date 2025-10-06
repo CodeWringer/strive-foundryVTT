@@ -18,6 +18,7 @@ import ActorAssetsViewModel from "../part/assets/actor-assets-viewmodel.mjs";
 import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import ActorProjectsViewModel from "../part/projects/actor-projects-viewmodel.mjs";
 
 export default class PcActorSheetViewModel extends BaseSheetViewModel {
   /** @override */
@@ -144,6 +145,16 @@ export default class PcActorSheetViewModel extends BaseSheetViewModel {
         id: "biography",
       },
     });
+    this.projectsViewModel = new LazyLoadViewModel({
+      id: "lazyProjects",
+      parent: this,
+      template: ActorProjectsViewModel.TEMPLATE,
+      viewModelFactoryFunction: (args) => { return new ActorProjectsViewModel(args); },
+      viewModelArgs: {
+        ...args,
+        id: "projects",
+      },
+    });
 
     if (this.isGM === true) {
       this.gmNotesViewModel = new LazyLoadViewModel({
@@ -220,6 +231,8 @@ export default class PcActorSheetViewModel extends BaseSheetViewModel {
       await this.biographyViewModel.render();
     } else if (tab === "gm-notes") {
       await this.gmNotesViewModel.render();
+    } else if (tab === "projects") {
+      await this.projectsViewModel.render();
     }
   }
 

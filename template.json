@@ -16,7 +16,8 @@
           "mutations": [],
           "scars": [],
           "momentum-actions": [],
-          "traits": []
+          "traits": [],
+          "projects": []
         },
         "properties": []
       },
@@ -189,7 +190,8 @@
       "mutation",
       "scar",
       "health-condition",
-      "trait"
+      "trait",
+      "project"
     ],
     "templates": {
       "base": {
@@ -267,6 +269,17 @@
     },
     "trait": {
       "templates": ["base"]
+    },
+    "project": {
+      "templates": ["base"],
+      "complications": null,
+      "progress": 0,
+      "progressIncrement": 0,
+      "projectSkill": null,
+      "pushes": 0,
+      "quality": 1,
+      "timeIncrement": "",
+      "totalProgress": 0
     }
   }
 }

@@ -14,6 +14,7 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import HealthConditionItemSheet from "./health-condition/health-condition-item-sheet.mjs";
 import ItemSheetSubType from "./item-sheet-subtype.mjs";
 import TraitItemSheet from "./trait/trait-item-sheet.mjs";
+import ProjectItemSheet from "./project/project-item-sheet.mjs";
 
 /**
  * Global definition of an Item sheet. This is what FoundryVTT instantiates to render 
@@ -48,6 +49,7 @@ export class GameSystemItemSheet extends ItemSheet {
       [ITEM_TYPES.SCAR, new ScarItemSheet()],
       [ITEM_TYPES.MOMENTUM_ACTION, new MomentumActionItemSheet()],
       [ITEM_TYPES.MUTATION, new MutationItemSheet()],
+      [ITEM_TYPES.PROJECT, new ProjectItemSheet()],
       [ITEM_TYPES.INJURY, new InjuryItemSheet()],
       [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
       [ITEM_TYPES.FATE_CARD, new FateItemSheet()],

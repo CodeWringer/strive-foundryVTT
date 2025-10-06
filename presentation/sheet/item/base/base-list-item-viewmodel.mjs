@@ -42,9 +42,11 @@ export const LIST_ITEM_DETAIL_MODES = {
  * Represents the abstract base class for all view models that represent 
  * a list item. 
  * 
- * @abstract Inheriting types should override: 
+ * @abstract Inheriting types *may* override: 
  * * `getDataFields`
  * * `getHeaderButtons`
+ * * `getAdditionalContent`
+ * * `getPromotedContent`
  * 
  * @property {Array<TemplatedComponent>} headerButtons An array of the secondary  
  * header buttons. 
@@ -207,7 +209,7 @@ export default class BaseListItemViewModel extends ViewModel {
     
     this.headerTemplate = this.getHeaderTemplate();
     
-    this.promotedContent = this.getPromotedContentTemplate();
+    this.promotedContent = this.getPromotedContent();
     if (ValidationUtil.isDefined(this.promotedContent)) {
       this._ensureViewModelsAsProperties([this.promotedContent]);
     }
@@ -397,7 +399,7 @@ export default class BaseListItemViewModel extends ViewModel {
    * @virtual
    * @protected
    */
-  getPromotedContentTemplate() {
+  getPromotedContent() {
     return undefined;
   }
   

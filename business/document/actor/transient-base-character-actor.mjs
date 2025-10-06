@@ -148,6 +148,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Array<TransientTrait>} traits A list of character traits. These are **not** the same as 
  * personality traits! 
  * * Read-only. 
+ * @property {Array<TransientProject>} projects
+ * * Read-only. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -556,6 +558,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @readonly
    */
   get traits() { return this.items.filter(it => it.type === ITEM_TYPES.TRAIT); }
+
+  /**
+   * @type {Array<TransientTrait>}
+   * @readonly
+   */
+  get projects() { return this.items.filter(it => it.type === ITEM_TYPES.PROJECT); }
 
   /**
    * @param {Actor} document An encapsulated actor instance. 

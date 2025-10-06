@@ -10,6 +10,7 @@
   "TYPES.Item.momentum-action": "Momentum Action",
   "TYPES.Item.health-condition": "Health Condition",
   "TYPES.Item.mutation": "Mutation",
+  "TYPES.Item.project": "Project",
   "TYPES.Item.scar": "Scar",
   "TYPES.Item.trait": "Trait",
   "COMBAT.ActionPoints": "Set Action Points",
@@ -210,6 +211,21 @@
       "refill": "Action Point Regain",
       "allowRefill": "Automatic Action Point Regain",
       "requirement": "Required Action Points"
+    },
+    "project": {
+      "complication": {
+        "complications": "Complications",
+        "defaultValue": "New Complication"
+      },
+      "progress": "Project Progress",
+      "progressIncrement": "Progress Increment",
+      "progressOf": "Progress: '%s'",
+      "project": "Project",
+      "projectSkill": "Project Skill",
+      "pushes": "Pushes",
+      "quality": "Project Quality",
+      "timeIncrement": "Time Increment",
+      "totalProgress": "Total Progress"
     },
     "character": {
       "edit": "Configure",
@@ -698,6 +714,7 @@
           "health": "Health",
           "assets": "Assets",
           "biography": "Biography",
+          "projects": "Projects",
           "description": "Description"
         }
       },

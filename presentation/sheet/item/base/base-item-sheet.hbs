@@ -29,11 +29,19 @@ cssClass: {undefined | String}
   <section class="sheet-body">
     {{!-- Content Tab --}}
     <div class="tab content auto-margin-v-md" data-group="primary" data-tab="content">
-      {{#if viewModel.showDescription }}
       {{!-- Description --}}
-      <div class="sheet-block flex flex-column margin-b-md">
+      {{#if viewModel.showDescription }}
+      <div class="sheet-block flex flex-column">
         {{> inputRichText viewModel=viewModel.vmRtDescription }}
       </div>
+      {{/if}}
+      {{!-- Promoted Content --}}
+      {{#if viewModel.showPromotedContent }}
+      {{#with viewModel.promotedContent as |content|}}
+      {{#with content.template as |template|}}
+        {{> (template) viewModel=content.viewModel cssClass=content.cssClass }}
+      {{/with}}
+      {{/with}}
       {{/if}}
       {{!-- Data Fields --}}
       <div class="grid-2col grid-gap-sm">
