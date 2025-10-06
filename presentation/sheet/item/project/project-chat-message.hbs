@@ -2,7 +2,7 @@
 viewModel: {ProjectChatMessageViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+<section class="custom-system-chat-message auto-margin-v-sm{{#if cssClass}} {{cssClass}}{{/if}}" 
   id="{{viewModel.id}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.entityId}}"
@@ -17,5 +17,59 @@ cssClass: {undefined | String}
   {{!-- Description --}}
   <div class="sheet-block">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
+  </div>
+  {{!-- Progress --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.project.progress"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.progress}} / {{viewModel.document.totalProgress}}
+    </div>
+  </div>
+  {{!-- progressIncrement --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.project.progressIncrement"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.progressIncrement}}
+    </div>
+  </div>
+  {{!-- timeIncrement --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.project.timeIncrement"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.timeIncrement}}
+    </div>
+  </div>
+  {{!-- projectSkill --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.project.projectSkill"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.projectSkill}}
+    </div>
+  </div>
+  {{!-- pushes --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.project.pushes"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.pushes}}
+    </div>
+  </div>
+  {{!-- quality --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.project.quality"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.quality}}
+    </div>
   </div>
 </section>
