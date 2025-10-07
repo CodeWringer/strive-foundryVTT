@@ -467,14 +467,26 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
 
     if (dialog.confirmed !== true) return null;
 
+    const getNewValue = function(toggleValue, currentValue, defaultValue) {
+      if (toggleValue) {
+        if (ValidationUtil.isDefined(currentValue)) {
+          return currentValue;
+        } else {
+          return defaultValue;
+        }
+      } else {
+        return null;
+      }
+    }
+
     this.document.tags = dialog["inputTags"];
-    this.document.apCost = dialog["dynamicInputApCost"] ? 1 : null;
-    this.document.obstacle = dialog["dynamicInputObstacle"] ? "" : null;
-    this.document.opposedBy = dialog["dynamicInputOpposedBy"] ? "" : null;
-    this.document.distance = dialog["dynamicInputDistance"] ? "" : null;
-    this.document.attackType = dialog["dynamicInputAttackType"] ? ATTACK_TYPES.none : null;
-    this.document.condition = dialog["dynamicInputCondition"] ? "" : null;
-    this.document.damage = dialog["dynamicInputDamage"] ? [new DamageAndType({ damage: "", damageType: DAMAGE_TYPES.pure, })] : null;
+    this.document.apCost = getNewValue(dialog["dynamicInputApCost"], this.document.apCost, 1);
+    this.document.obstacle = getNewValue(dialog["dynamicInputObstacle"], this.document.obstacle, "");
+    this.document.opposedBy = getNewValue(dialog["dynamicInputOpposedBy"], this.document.opposedBy, "");
+    this.document.distance = getNewValue(dialog["dynamicInputDistance"], this.document.distance, "");
+    this.document.attackType = getNewValue(dialog["dynamicInputAttackType"], this.document.attackType, ATTACK_TYPES.none);
+    this.document.condition = getNewValue(dialog["dynamicInputCondition"], this.document.condition, "");
+    this.document.damage = getNewValue(dialog["dynamicInputDamage"], this.document.damage, [new DamageAndType({ damage: "", damageType: DAMAGE_TYPES.pure, })]);
 
     return dialog;
   }

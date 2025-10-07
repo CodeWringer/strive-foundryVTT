@@ -56,12 +56,6 @@
       "type": "Item"
     },
     {
-      "name": "scars",
-      "label": "Scars",
-      "path": "packs/scars",
-      "type": "Item"
-    },
-    {
       "name": "rolltables",
       "label": "RollTables",
       "path": "packs/rolltables",
@@ -79,7 +73,6 @@
         "skills",
         "momentum-actions",
         "mutations",
-        "scars",
         "rolltables"
       ]
     }

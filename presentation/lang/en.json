@@ -672,11 +672,11 @@
           },
           "poisoned": {
             "name": "Poisoned",
-            "tooltip": "A <strong>poisoned</strong> character suffers <strong>1 D4</strong> points of poison damage every <em>tick</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a toughness test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: With proper treatment. </li></ul>"
+            "tooltip": "A <strong>poisoned</strong> character suffers <strong>1 D4</strong> points of poison damage every <em>tick</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a toughness test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: With an antidote. </li></ul>"
           },
           "prone": {
             "name": "Prone",
-            "tooltip": "A character who is prone, is harder to hit with ranged attacks, easier to hit with melee attacks and counts as flanked (to one additional degree), in melee. <ul><li><strong>-2D</strong> to melee defense tests.</li><li><strong>+2D</strong> to ranged defense tests.</li><li><strong>-2D</strong> to any melee attack tests.</li><li><strong>-2D</strong> to any ranged attack tests with a bow, sling, thrown, or similar weapon.</li></ul>It costs 1 AP to stand up."
+            "tooltip": "A character who is prone, is harder to hit with ranged attacks, easier to hit with melee attacks and counts as flanked (to one additional degree), in melee. <ul><li><strong>-2D</strong> to melee defense tests.</li><li><strong>+2D</strong> to ranged defense tests.</li><li><strong>-2D</strong> to any melee attack tests.</li><li><strong>-2D</strong> to any ranged attack tests with a bow, sling, thrown, or similar weapon.</li></ul>It costs <code>1</code> AP to stand up."
           },
           "rooted": {
             "name": "Rooted",
@@ -688,7 +688,7 @@
           },
           "terrified": {
             "name": "Terrified",
-            "tooltip": "A <strong>terrified</strong> character suffers <strong>-2D</strong> to defense tests and <strong>has to</strong> flee from whatever it is that terrified them, until they can no longer perceive it. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of terror is removed or the character can no longer perceive the source of terror in any way for a short time (1-2 turns or 5-10 seconds). </li><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
+            "tooltip": "A <strong>terrified</strong> character <strong>must</strong> flee from whatever it is that terrified them, until they can no longer perceive it. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of terror is removed or the character can no longer perceive the source of terror in any way for a short time (1-2 turns or 5-10 seconds). </li><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
           },
           "unconscious": {
             "name": "Unconscious",
@@ -818,6 +818,9 @@
       "trait": {
         "trait": "Trait",
         "traits": "Traits"
+      },
+      "stability": {
+        "stability": "Stability"
       }
     },
     "roll": {
@@ -879,6 +882,7 @@
       "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
       "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
       "sprintingSpeed": "(%{localizedAgility} (%{agility}) + %{localizedToughness} (%{toughness})) / 2 (rounded up) = %{sprintingSpeed}",
+      "stability": "(%{localizedStrength} (%{strength}) + %{localizedToughness} (%{toughness})) / 3 (rounded up) = %{stability}",
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {

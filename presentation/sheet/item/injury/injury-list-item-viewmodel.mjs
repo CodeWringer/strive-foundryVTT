@@ -138,9 +138,9 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmRbgState",
           options: this.stateOptions,
-          value: this.stateOptions.find(it => it.value === this.document.state),
+          value: this.stateOptions.find(it => it.value === this.document.state.name),
           onChange: (_, newValue) => {
-            this.document.state = newValue.value;
+            this.document.state = INJURY_STATES[newValue.value];
           },
         }),
       }),
