@@ -818,6 +818,9 @@
       "trait": {
         "trait": "Trait",
         "traits": "Traits"
+      },
+      "stability": {
+        "stability": "Stability"
       }
     },
     "roll": {
@@ -879,6 +882,7 @@
       "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
       "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
       "sprintingSpeed": "(%{localizedAgility} (%{agility}) + %{localizedToughness} (%{toughness})) / 2 (rounded up) = %{sprintingSpeed}",
+      "stability": "(%{localizedStrength} (%{strength}) + %{localizedToughness} (%{toughness})) / 3 (rounded up) = %{stability}",
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {

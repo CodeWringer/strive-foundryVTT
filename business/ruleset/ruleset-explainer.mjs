@@ -64,6 +64,27 @@ export default class RulesetExplainer {
   }
 
   /**
+   * @param {GameSystemActor | TransientBaseCharacterActor} actor 
+   * 
+   * @returns {String}
+   */
+  getExplanationForStability(actor) {
+    const transientActor = actor.getTransientObject();
+    const characterStrength = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
+    const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
+    return StringUtil.format2(
+      game.i18n.localize("system.rules.stability"),
+      {
+        localizedStrength: game.i18n.localize(ATTRIBUTES.strength.localizableName),
+        strength: characterStrength.modifiedLevel,
+        localizedToughness: game.i18n.localize(ATTRIBUTES.toughness.localizableName),
+        toughness: characterToughness.modifiedLevel,
+        stability: transientActor.stability,
+      }
+    );
+  }
+
+  /**
    * @param {CharacterAttribute} attribute 
    * 
    * @returns {String}

@@ -150,6 +150,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientProject>} projects
  * * Read-only. 
+ * @property {Number} stability
+ * * Read-only. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -564,6 +566,24 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @readonly
    */
   get projects() { return this.items.filter(it => it.type === ITEM_TYPES.PROJECT); }
+
+  /**
+   * @type {Array<TransientTrait>}
+   * @readonly
+   */
+  get stability() {
+    const attributesToSum = [
+      this.attributes.find(it => it.name === ATTRIBUTES.strength.name),
+      this.attributes.find(it => it.name === ATTRIBUTES.toughness.name),
+    ];
+
+    let result = 0;
+    attributesToSum.forEach(attribute => {
+      result += parseInt(attribute.modifiedLevel);
+    });
+
+    return Math.ceil(result / 3);
+  }
 
   /**
    * @param {Actor} document An encapsulated actor instance. 

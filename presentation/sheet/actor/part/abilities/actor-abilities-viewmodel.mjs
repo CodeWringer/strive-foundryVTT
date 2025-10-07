@@ -160,6 +160,18 @@ export default class ActorAbilitiesViewModel extends ViewModel {
       localizedToolTip: new RulesetExplainer().getExplanationForSprintingSpeed(this.document),
     });
 
+    this.vmStabilityIcon = new ViewModel({
+      id: "vmStabilityIcon",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.stability.stability"),
+    }); 
+    this.vmStability = new ReadOnlyValueViewModel({
+      id: "vmStability",
+      parent: this,
+      value: this.document.sprintingSpeed,
+      localizedToolTip: new RulesetExplainer().getExplanationForStability(this.document),
+    });
+
     if (this.advancementEnabled) {
       this.vmExperiencePointsSymbol = new ViewModel({
         id: "vmExperiencePointsSymbol",
