@@ -20,7 +20,7 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.treatmentSkill = newValue;
           },
         }),
-        localizedToolTip: game.i18n.localize("system.character.health.treatmentSkill"),
+        localizedToolTip: game.i18n.localize("system.character.health.treatmentSkill.treatmentSkill"),
         iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({
@@ -46,7 +46,7 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.obstacleTreatment = newValue;
           },
         }),
-        localizedToolTip: game.i18n.localize("system.character.health.obstacleTreatment"),
+        localizedToolTip: game.i18n.localize("system.character.health.obstacleTreatment.obstacleTreatment"),
         iconClass: "ico-obstacle-treatment-solid",
       }),
       new DataFieldComponent({
@@ -72,7 +72,7 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.timeToHeal = newValue;
           },
         }),
-        localizedToolTip: game.i18n.localize("system.character.health.timeToHeal"),
+        localizedToolTip: game.i18n.localize("system.character.health.timeToHeal.timeToHeal"),
         iconClass: "ico-time-to-heal-solid",
       }),
       new DataFieldComponent({

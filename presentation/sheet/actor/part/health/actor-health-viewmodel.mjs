@@ -33,6 +33,7 @@ import ActorHealthConditionsViewModel from "./conditions/actor-health-conditions
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
 import InjuryShrugOffBarViewModel from "./injury-shrug-off-bar/injury-shrug-off-bar-viewmodel.mjs"
+import InjuryCreationStrategy from "../../../../../business/document/creation/injury-creation-strategy.mjs"
 
 /**
  * @extends ViewModel
@@ -403,19 +404,21 @@ export default class ActorHealthViewModel extends ViewModel {
         listName: "injuries",
       }),
       localizedTitle: game.i18n.localize("system.character.health.injury.plural"),
-      // addItemParams: [
-      //   new SortableListAddItemParams({
-      //     creationStrategy: ,
-      //     localizedLabel: StringUtil.format(
-      //       game.i18n.localize("system.general.add.addType"),
-      //       game.i18n.localize("system.character.health.injury.singular"),
-      //     ),
-      //     localizedToolTip: StringUtil.format(
-      //       game.i18n.localize("system.general.add.addType"),
-      //       game.i18n.localize("system.character.health.injury.singular"),
-      //     ),
-      //   })
-      // ],
+      addItemParams: [
+        new SortableListAddItemParams({
+          creationStrategy: new InjuryCreationStrategy({
+            target: this.document,
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.health.injury.singular"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.health.injury.singular"),
+          ),
+        })
+      ],
       headerExtraContent: new TemplatedComponent({
         template: game.strive.const.TEMPLATES.ACTOR_HEALTH_INJURIES_EXTRA_HEADER,
         viewModel: this,

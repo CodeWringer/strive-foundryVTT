@@ -7,6 +7,12 @@ import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 /**
  * Represents a means of determining the creation data for a new 
  * document to be instantiated. 
+ * 
+ * @abstract Inheritors **must** override:
+ * * `_getCreationData`
+ * 
+ * Inheritors *may* override:
+ * * `selectAndCreate`
  */
 export default class DocumentCreationStrategy {
   /**
@@ -30,7 +36,7 @@ export default class DocumentCreationStrategy {
    * 
    * @returns {Object} The created document. 
    * 
-   * @abstract
+   * @virtual
    * @async
    */
   async selectAndCreate() {

@@ -5,21 +5,21 @@ import TransientBaseItem from "./transient-base-item.mjs";
 import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 
 /**
  * Represents the full transient data of an injury. 
  * 
  * @extends TransientBaseItem
  * 
- * @property {String} state
- * @property {String} timeToHeal
- * @property {String} timeToHealTreated
- * @property {String} limit 
- * @property {String} scar 
- * @property {String} autoTreatment 
- * @property {String} treatmentSkill 
- * @property {String} requiredSupplies 
+ * @property {String} lastTreatmentTime 
  * @property {String} obstacleTreatment 
+ * @property {String} requiredSupplies 
+ * @property {String | null} scar 
+ * @property {INJURY_STATES} state 
+ * @property {Number} timeToHeal Total time to heal, in days. 
+ * @property {Number} timeToHealElapsed Elapsed healing days. 
+ * @property {String} treatmentSkill Name of the treatment Skill. 
  */
 export default class TransientInjury extends TransientBaseItem {
   /** @override */
@@ -31,81 +31,81 @@ export default class TransientInjury extends TransientBaseItem {
   /**
    * @type {String}
    */
-  get state() {
-    return this.document.system.state;
+  get lastTreatmentTime() {
+    return this.document.system.lastTreatmentTime;
   }
-  set state(value) {
-    this.document.system.state = value;
-    this.updateByPath("system.state", value);
+  set lastTreatmentTime(value) {
+    this.document.system.lastTreatmentTime = value;
+    this.updateByPath("system.lastTreatmentTime", value);
   }
-  
+
   /**
    * @type {String}
    */
+  get requiredSupplies() {
+    return this.document.system.requiredSupplies;
+  }
+  set requiredSupplies(value) {
+    this.document.system.requiredSupplies = value;
+    this.updateByPath("system.requiredSupplies", value);
+  }
+
+  /**
+   * @type {String}
+   */
+  get obstacleTreatment() {
+    return this.document.system.obstacleTreatment;
+  }
+  set obstacleTreatment(value) {
+    this.document.system.obstacleTreatment = value;
+    this.updateByPath("system.obstacleTreatment", value);
+  }
+
+  /**
+   * @type {String | null}
+   */
+  get scar() {
+    const value = this.document.system.scar;
+    return ValidationUtil.isDefined(value) ? value : null;
+  }
+  set scar(value) {
+    this.document.system.scar = value;
+    this.updateByPath("system.scar", value);
+  }
+
+  /**
+   * @type {INJURY_STATES}
+   */
+  get state() {
+    return INJURY_STATES[this.document.system.state] ?? INJURY_STATES.active;
+  }
+  set state(value) {
+    this.document.system.state = value;
+    this.updateByPath("system.state", value.name);
+  }
+
+  /**
+   * @type {Number}
+   */
   get timeToHeal() {
-    return this.document.system.timeToHeal;
+    return parseInt(this.document.system.timeToHeal);
   }
   set timeToHeal(value) {
     this.document.system.timeToHeal = value;
     this.updateByPath("system.timeToHeal", value);
   }
-  
+
   /**
-   * @type {String}
+   * @type {Number}
    */
-  get limit() {
-    return this.document.system.limit;
+  get timeToHealElapsed() {
+    return this.document.system.timeToHealElapsed;
   }
-  /**
-   * @param {String} value
-   */
-  set limit(value) {
-    this.document.system.limit = value;
-    this.updateByPath("system.limit", value);
+  set timeToHealElapsed(value) {
+    this.document.system.timeToHealElapsed = value;
+    this.updateByPath("system.timeToHealElapsed", value);
   }
-  
-  /**
-   * @type {String}
-   */
-  get scar() {
-    return this.document.system.scar;
-  }
-  /**
-   * @param {String} value
-   */
-  set scar(value) {
-    this.document.system.scar = value;
-    this.updateByPath("system.scar", value);
-  }
-  
-  /**
-   * @type {String}
-   */
-  get timeToHealTreated() {
-    return this.document.system.timeToHealTreated;
-  }
-  /**
-   * @param {String} value
-   */
-  set timeToHealTreated(value) {
-    this.document.system.timeToHealTreated = value;
-    this.updateByPath("system.timeToHealTreated", value);
-  }
-  
-  /**
-   * @type {String}
-   */
-  get autoTreatment() {
-    return this.document.system.autoTreatment;
-  }
-  /**
-   * @param {String} value
-   */
-  set autoTreatment(value) {
-    this.document.system.autoTreatment = value;
-    this.updateByPath("system.autoTreatment", value);
-  }
-  
+
   /**
    * @type {String}
    */
@@ -119,35 +119,7 @@ export default class TransientInjury extends TransientBaseItem {
     this.document.system.treatmentSkill = value;
     this.updateByPath("system.treatmentSkill", value);
   }
-  
-  /**
-   * @type {String}
-   */
-  get requiredSupplies() {
-    return this.document.system.requiredSupplies;
-  }
-  /**
-   * @param {String} value
-   */
-  set requiredSupplies(value) {
-    this.document.system.requiredSupplies = value;
-    this.updateByPath("system.requiredSupplies", value);
-  }
-    
-  /**
-   * @type {String}
-   */
-  get obstacleTreatment() {
-    return this.document.system.obstacleTreatment;
-  }
-  /**
-   * @param {String} value
-   */
-  set obstacleTreatment(value) {
-    this.document.system.obstacleTreatment = value;
-    this.updateByPath("system.obstacleTreatment", value);
-  }
-  
+
   /** @override */
   async getChatData() {
     const vm = this.getChatViewModel();
@@ -158,7 +130,7 @@ export default class TransientInjury extends TransientBaseItem {
 
     return new PreparedChatData({
       renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document, 
+      actor: (this.owningDocument ?? {}).document,
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("system.character.health.injury.singular"),
@@ -194,7 +166,7 @@ export default class TransientInjury extends TransientBaseItem {
       document: this,
     });
   }
-  
+
   /**
    * Compares the treatment state of this instance with a given instance and returns a numeric comparison result. 
    * 
@@ -206,15 +178,15 @@ export default class TransientInjury extends TransientBaseItem {
    * is more than / greater than `other`. 
    */
   compareTreatment(other) {
-    if (this.state === INJURY_STATES.active.name && other.state !== INJURY_STATES.active.name) {
+    if (this.state == INJURY_STATES.active && other.state != INJURY_STATES.active) {
       return -1;
-    } else if (this.state === INJURY_STATES.treated.name && other.state !== INJURY_STATES.treated.name) {
+    } else if (this.state == INJURY_STATES.treated && other.state != INJURY_STATES.treated) {
       return 1;
     } else {
       return 0;
     }
   }
-  
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientInjury));
