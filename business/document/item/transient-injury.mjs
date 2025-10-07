@@ -88,7 +88,7 @@ export default class TransientInjury extends TransientBaseItem {
    * @type {Number}
    */
   get timeToHeal() {
-    return parseInt(this.document.system.timeToHeal);
+    return parseInt(this.document.system.timeToHeal ?? 0);
   }
   set timeToHeal(value) {
     this.document.system.timeToHeal = value;
@@ -99,7 +99,7 @@ export default class TransientInjury extends TransientBaseItem {
    * @type {Number}
    */
   get timeToHealElapsed() {
-    return this.document.system.timeToHealElapsed;
+    return parseInt(this.document.system.timeToHealElapsed ?? 0);
   }
   set timeToHealElapsed(value) {
     this.document.system.timeToHealElapsed = value;

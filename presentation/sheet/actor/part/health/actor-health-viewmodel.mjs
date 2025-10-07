@@ -372,7 +372,7 @@ export default class ActorHealthViewModel extends ViewModel {
         rollData: new RollData({
           dieFaces: 6,
           hitThreshold: 5,
-          obFormula: `${this.injuryCount + 1 + this.document.health.injuryShrugOffs}`,
+          obFormula: `${1 + this.document.health.injuryShrugOffs}`,
           diceComponents: new Sum([
             new SumComponent(ATTRIBUTES.toughness.name, ATTRIBUTES.toughness.localizableName, toughnessAttribute.modifiedLevel),
           ]),

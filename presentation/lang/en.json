@@ -519,6 +519,7 @@
         "lastTreatmentTime": "Last treatment time",
         "healingTime": {
           "total": "Healing time in days",
+          "totalReminder": "Determined by a <code>2D10 + 10</code> roll.",
           "current": "Current healing progress"
         },
         "requiredSupplies": "Required Supplies",

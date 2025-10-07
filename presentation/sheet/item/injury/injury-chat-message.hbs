@@ -2,7 +2,7 @@
 viewModel: {InjuryChatMessageViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+<section class="custom-system-chat-message auto-margin-v-sm{{#if cssClass}} {{cssClass}}{{/if}}" 
   id="{{viewModel.id}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.entityId}}"
@@ -14,8 +14,26 @@ cssClass: {undefined | String}
     </div>
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
+  {{!-- treatmentTime --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.healingTime.total"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.timeToHealElapsed}} / {{viewModel.document.timeToHeal}}
+    </div>
+  </div>
+  {{!-- lastTreatmentTime --}}
+  <div class="flex flex-row auto-margin-h-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.lastTreatmentTime"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.lastTreatmentTime}}
+    </div>
+  </div>
   {{!-- treatmentSkill --}}
-  <div class="flex flex-row sheet-block margin-b-md">
+  <div class="flex flex-row auto-margin-h-md">
     <div class="width-min-xxl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.treatmentSkill.treatmentSkill"}}{{/label}}
     </div>
@@ -24,7 +42,7 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- requiredSupplies --}}
-  <div class="flex flex-row sheet-block margin-b-md">
+  <div class="flex flex-row auto-margin-h-md">
     <div class="width-min-xxl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.requiredSupplies"}}{{/label}}
     </div>
@@ -33,7 +51,7 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- obstacleTreatment --}}
-  <div class="flex flex-row sheet-block margin-b-md">
+  <div class="flex flex-row auto-margin-h-md">
     <div class="width-min-xxl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.obstacleTreatment.obstacleTreatment"}}{{/label}}
     </div>
@@ -41,44 +59,8 @@ cssClass: {undefined | String}
       {{viewModel.document.obstacleTreatment}}
     </div>
   </div>
-  {{!-- timeToHeal --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.timeToHeal.timeToHeal"}}{{/label}}
-    </div>
-    <div class="flex-grow">
-      {{viewModel.document.timeToHeal}}
-    </div>
-  </div>
-  {{!-- timeToHealTreated --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.timeToHealTreated"}}{{/label}}
-    </div>
-    <div class="flex-grow">
-      {{viewModel.document.timeToHealTreated}}
-    </div>
-  </div>
-  {{!-- autoTreatment --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.autoTreatment"}}{{/label}}
-    </div>
-    <div class="flex-grow">
-      {{viewModel.document.autoTreatment}}
-    </div>
-  </div>
-  {{!-- Limit --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.injury.limit.label"}}{{/label}}
-    </div>
-    <div class="flex-grow">
-      {{viewModel.document.limit}}
-    </div>
-  </div>
-  {{!-- Scar --}}
-  <div class="flex flex-row sheet-block margin-b-md">
+  {{!-- scar --}}
+  <div class="flex flex-row auto-margin-h-md">
     <div class="width-min-xxl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.scar.singular"}}{{/label}}
     </div>

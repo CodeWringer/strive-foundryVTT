@@ -47,7 +47,10 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           currentValueIconClass: "ico dark ico-time-to-heal-solid",
           maximumValue: this.document.timeToHeal,
           maximumValueMin: 0,
-          maximumValueToolTip: game.i18n.localize("system.character.health.healingTime.total"),
+          maximumValueToolTip: this.showReminders 
+            ? `${game.i18n.localize("system.character.health.healingTime.total")}<br>${game.i18n.localize("system.character.health.healingTime.totalReminder")}`
+            : game.i18n.localize("system.character.health.healingTime.total"),
+          iconClass: "ico-obstacle-solid",
           onCurrentValueChange: (_, newValue) => {
             this.document.timeToHealElapsed = newValue;
           },
@@ -105,7 +108,9 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.obstacleTreatment = newValue;
           },
         }),
-        localizedToolTip: game.i18n.localize("system.character.health.obstacleTreatment.obstacleTreatment"),
+        localizedToolTip: this.showReminders 
+          ? `${game.i18n.localize("system.character.health.obstacleTreatment.obstacleTreatment")}<br>${game.i18n.localize("system.character.health.obstacleTreatment.reminder")}`
+          : game.i18n.localize("system.character.health.obstacleTreatment.obstacleTreatment"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
