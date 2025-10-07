@@ -38,12 +38,6 @@
       "type": "Item"
     },
     {
-      "name": "injuries",
-      "label": "Injuries",
-      "path": "packs/injuries",
-      "type": "Item"
-    },
-    {
       "name": "skills",
       "label": "Skills",
       "path": "packs/skills",
@@ -82,7 +76,6 @@
         "assets",
         "fatecards",
         "illnesses",
-        "injuries",
         "skills",
         "momentum-actions",
         "mutations",

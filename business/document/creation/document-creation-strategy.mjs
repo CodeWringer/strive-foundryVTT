@@ -1,12 +1,18 @@
-import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
-import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs";
+import TransientBaseActor from "../actor/transient-base-actor.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
+import { ACTOR_TYPES } from "../actor/actor-types.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
  * Represents a means of determining the creation data for a new 
  * document to be instantiated. 
+ * 
+ * @abstract Inheritors **must** override:
+ * * `_getCreationData`
+ * 
+ * Inheritors *may* override:
+ * * `selectAndCreate`
  */
 export default class DocumentCreationStrategy {
   /**
@@ -30,7 +36,7 @@ export default class DocumentCreationStrategy {
    * 
    * @returns {Object} The created document. 
    * 
-   * @abstract
+   * @virtual
    * @async
    */
   async selectAndCreate() {

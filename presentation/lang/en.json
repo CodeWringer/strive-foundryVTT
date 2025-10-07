@@ -506,13 +506,27 @@
       "health": {
         "duration": "Duration",
         "healthStats": "General Health Stats",
-        "timeToHeal": "Time to heal",
+        "timeToHeal": {
+          "timeToHeal": "Time to heal",
+          "reminder": "Determined by a <code>2D10 + 10</code> roll."
+        },
         "treatment": "Treatment",
-        "treatmentSkill": "Treatment Skill",
-        "timeToHealTreated": "Treated Heal Time Reduction",
-        "autoTreatment": "Automatic Treatment",
+        "treatmentSkill": {
+          "treatmentSkill": "Treatment Skill",
+          "medicine": "Medicine",
+          "surgery": "Surgery"
+        },
+        "lastTreatmentTime": "Last treatment time",
+        "healingTime": {
+          "total": "Healing time in days",
+          "totalReminder": "Determined by a <code>2D10 + 10</code> roll.",
+          "current": "Current healing progress"
+        },
         "requiredSupplies": "Required Supplies",
-        "obstacleTreatment": "Obstacle Treatment",
+        "obstacleTreatment": {
+          "obstacleTreatment": "Obstacle Treatment",
+          "reminder": "Determined by a <code>1D4</code> roll."
+        },
         "exhaustion": {
           "label": "Exhaustion",
           "maximum": "Max. Exhaustion",
@@ -544,10 +558,23 @@
           }
         },
         "injury": {
-          "limit": {
-            "label": "Limit",
-            "placeholder": "Arm Count / 2 / None (/)"
+          "create": {
+            "dialogTitle": "Select Injury to Add"
           },
+          "additionalPenalties": {
+            "acid": "<code>-1</code> AP",
+            "bleeding": "<code>+1</code> Bleeding",
+            "bludgeoning": "<code>+1</code> Exhaustion",
+            "burning": "<code>+1</code> Burning",
+            "electrical": "<code>+1</code> Electrified",
+            "freezing": "<code>+1</code> Frostbitten",
+            "piercing": "<code>+1</code> Bleeding",
+            "poison": "Flip a coin. On heads - <code>+1</code> Berserk, on tails - <code>+1</code> Terrified",
+            "pure": "",
+            "slashing": "<code>+1</code> Bleeding"
+          },
+          "automaticDescription": "<code>-1</code> to %{attribute}; %{additionalPenalties}",
+          "requiredSupplies": "1 Medical Supplies",
           "plural": "Injuries",
           "singular": "Injury",
           "state": {

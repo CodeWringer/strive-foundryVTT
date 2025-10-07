@@ -1,7 +1,7 @@
-import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import RollableSelectionModalDialog from "../../dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.mjs";
+import DocumentFetcher from "../document-fetcher/document-fetcher.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
+import RollableSelectionModalDialog from "../../../presentation/dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.mjs";
 import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 
 /**

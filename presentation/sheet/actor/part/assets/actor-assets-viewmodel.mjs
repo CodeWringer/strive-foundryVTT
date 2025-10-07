@@ -5,7 +5,7 @@ import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
+import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs"
 import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"

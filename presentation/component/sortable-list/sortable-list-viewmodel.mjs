@@ -3,7 +3,7 @@ import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonAddViewModel from "../button-add/button-add-viewmodel.mjs";
-import DocumentCreationStrategy from "../button-add/document-creation-strategy.mjs";
+import DocumentCreationStrategy from "../../../business/document/creation/document-creation-strategy.mjs";
 import ButtonContextMenuViewModel, { ContextMenuItem } from "../button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonToggleVisibilityViewModel from "../button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";

@@ -33,7 +33,7 @@ export default class IllnessItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.treatmentSkill = newValue;
           },
         }),
-        localizedToolTip: game.i18n.localize("system.character.health.treatmentSkill"),
+        localizedToolTip: game.i18n.localize("system.character.health.treatmentSkill.treatmentSkill"),
         iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({

@@ -229,15 +229,14 @@
     },
     "injury": {
       "templates": ["base"],
-      "state": "active",
-      "timeToHeal": "",
-      "timeToHealTreated": "",
-      "limit": "",
-      "scar": "",
-      "autoTreatment": "",
-      "treatmentSkill": "",
+      "lastTreatmentTime": "",
+      "obstacleTreatment": "",
       "requiredSupplies": "",
-      "obstacleTreatment": ""
+      "scar": null,
+      "state": "active",
+      "timeToHeal": 0,
+      "timeToHealElapsed": 0,
+      "treatmentSkill": ""
     },
     "illness": {
       "templates": ["base"],

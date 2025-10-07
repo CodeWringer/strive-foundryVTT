@@ -10,8 +10,8 @@ import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.m
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import RollableSpecificDocumentCreationStrategy from "../../../../component/button-add/rollable-specific-document-creation-strategy.mjs"
-import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
+import RollableSpecificDocumentCreationStrategy from "../../../../../business/document/creation/rollable-specific-document-creation-strategy.mjs"
+import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
 import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
@@ -33,6 +33,7 @@ import ActorHealthConditionsViewModel from "./conditions/actor-health-conditions
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
 import InjuryShrugOffBarViewModel from "./injury-shrug-off-bar/injury-shrug-off-bar-viewmodel.mjs"
+import InjuryCreationStrategy from "../../../../../business/document/creation/injury-creation-strategy.mjs"
 
 /**
  * @extends ViewModel
@@ -371,7 +372,7 @@ export default class ActorHealthViewModel extends ViewModel {
         rollData: new RollData({
           dieFaces: 6,
           hitThreshold: 5,
-          obFormula: `${this.injuryCount + 1 + this.document.health.injuryShrugOffs}`,
+          obFormula: `${1 + this.document.health.injuryShrugOffs}`,
           diceComponents: new Sum([
             new SumComponent(ATTRIBUTES.toughness.name, ATTRIBUTES.toughness.localizableName, toughnessAttribute.modifiedLevel),
           ]),
@@ -405,19 +406,7 @@ export default class ActorHealthViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.health.injury.plural"),
       addItemParams: [
         new SortableListAddItemParams({
-          creationStrategy: new RollableSpecificDocumentCreationStrategy({
-            rollTables: [
-              "Injuries (Acid)",
-              "Injuries (Bleeding)",
-              "Injuries (Bludgeoning)",
-              "Injuries (Burning)",
-              "Injuries (Electrical)",
-              "Injuries (Freezing)",
-              "Injuries (Piercing)",
-              "Injuries (Poison)",
-              "Injuries (Slashing)",
-            ],
-            localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.INJURY}`),
+          creationStrategy: new InjuryCreationStrategy({
             target: this.document,
           }),
           localizedLabel: StringUtil.format(
