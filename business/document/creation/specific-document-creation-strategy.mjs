@@ -1,16 +1,16 @@
-import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
-import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs";
-import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
-import { StringUtil } from "../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import ChoiceOption from "../input-choice/choice-option.mjs";
+import { ACTOR_TYPES } from "../actor/actor-types.mjs";
+import TransientBaseActor from "../actor/transient-base-actor.mjs";
+import DocumentFetcher from "../document-fetcher/document-fetcher.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs";
+import { StringUtil } from "../../util/string-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
+import DynamicInputDialog from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import ChoiceOption from "../../../presentation/component/input-choice/choice-option.mjs";
 import DocumentCreationStrategy from "./document-creation-strategy.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import DynamicLabelViewModel from "../label/dynamic-label.mjs";
-import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document-fetcher/document-collection-source.mjs";
+import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import DynamicLabelViewModel from "../../../presentation/component/label/dynamic-label.mjs";
+import { DOCUMENT_COLLECTION_SOURCES } from "../document-fetcher/document-collection-source.mjs";
 
 /**
  * Lets the user select a specific template document from a given list of options. 

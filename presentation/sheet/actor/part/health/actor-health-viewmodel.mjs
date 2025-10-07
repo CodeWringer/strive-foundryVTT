@@ -10,8 +10,8 @@ import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.m
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import RollableSpecificDocumentCreationStrategy from "../../../../component/button-add/rollable-specific-document-creation-strategy.mjs"
-import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
+import RollableSpecificDocumentCreationStrategy from "../../../../../business/document/creation/rollable-specific-document-creation-strategy.mjs"
+import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
 import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
@@ -403,33 +403,19 @@ export default class ActorHealthViewModel extends ViewModel {
         listName: "injuries",
       }),
       localizedTitle: game.i18n.localize("system.character.health.injury.plural"),
-      addItemParams: [
-        new SortableListAddItemParams({
-          creationStrategy: new RollableSpecificDocumentCreationStrategy({
-            rollTables: [
-              "Injuries (Acid)",
-              "Injuries (Bleeding)",
-              "Injuries (Bludgeoning)",
-              "Injuries (Burning)",
-              "Injuries (Electrical)",
-              "Injuries (Freezing)",
-              "Injuries (Piercing)",
-              "Injuries (Poison)",
-              "Injuries (Slashing)",
-            ],
-            localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.INJURY}`),
-            target: this.document,
-          }),
-          localizedLabel: StringUtil.format(
-            game.i18n.localize("system.general.add.addType"),
-            game.i18n.localize("system.character.health.injury.singular"),
-          ),
-          localizedToolTip: StringUtil.format(
-            game.i18n.localize("system.general.add.addType"),
-            game.i18n.localize("system.character.health.injury.singular"),
-          ),
-        })
-      ],
+      // addItemParams: [
+      //   new SortableListAddItemParams({
+      //     creationStrategy: ,
+      //     localizedLabel: StringUtil.format(
+      //       game.i18n.localize("system.general.add.addType"),
+      //       game.i18n.localize("system.character.health.injury.singular"),
+      //     ),
+      //     localizedToolTip: StringUtil.format(
+      //       game.i18n.localize("system.general.add.addType"),
+      //       game.i18n.localize("system.character.health.injury.singular"),
+      //     ),
+      //   })
+      // ],
       headerExtraContent: new TemplatedComponent({
         template: game.strive.const.TEMPLATES.ACTOR_HEALTH_INJURIES_EXTRA_HEADER,
         viewModel: this,

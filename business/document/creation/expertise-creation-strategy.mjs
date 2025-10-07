@@ -1,9 +1,9 @@
-import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
-import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
+import { ITEM_TYPES } from "../item/item-types.mjs";
+import TransientSkill from "../item/skill/transient-skill.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
+import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 
 /**

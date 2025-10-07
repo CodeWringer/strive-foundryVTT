@@ -5,7 +5,7 @@ import { StringUtil } from "../../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs";
-import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs";
+import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs"

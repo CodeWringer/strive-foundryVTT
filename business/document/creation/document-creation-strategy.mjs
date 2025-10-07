@@ -1,7 +1,7 @@
-import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
-import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs";
+import TransientBaseActor from "../actor/transient-base-actor.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
+import { ACTOR_TYPES } from "../actor/actor-types.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
