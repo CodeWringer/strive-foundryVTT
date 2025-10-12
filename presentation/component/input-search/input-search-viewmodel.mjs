@@ -47,8 +47,8 @@ export default class InputSearchTextViewModel extends InputViewModel {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this.element.keydown((event) => {
       if (event.keyCode === 13) {

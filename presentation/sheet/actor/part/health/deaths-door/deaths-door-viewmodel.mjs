@@ -56,8 +56,8 @@ export default class DeathsDoorViewModel extends ViewModel {
 
   
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     if (this.isEditable !== true) return;
 
