@@ -91,10 +91,10 @@
         },
         "assets": {
           "equipment": {
-            "b0fed8b3-1aa4-4b8e-a150-7c2fb647fe7e": {
+            "b0fed8b31aa44b8e": {
               "name": "clothing",
               "slots": {
-                "458e47e6-f6ce-4841-83b2-0ac05c160a52": {
+                "458e47e6f6ce4841": {
                   "name": "clothing",
                   "acceptedTypes": ["clothing"],
                   "alottedId": null,
@@ -102,10 +102,10 @@
                 }
               }
             },
-            "5af8c4db-de4a-4d2f-a3ed-9f8f18233cc5": {
+            "5af8c4dbde4a4d2f": {
               "name": "armor",
               "slots": {
-                "16b24ed7-de48-46fd-8849-82d7b2648b8d": {
+                "16b24ed7de4846fd": {
                   "name": "armor",
                   "acceptedTypes": ["armor"],
                   "alottedId": null,
@@ -113,16 +113,16 @@
                 }
               }
             },
-            "d7c46adc-848a-4fc9-a73d-a3ba37c18cb3": {
+            "d7c46adc848a4fc9": {
               "name": "hand",
               "slots": {
-                "5321c233-8aef-43a5-b6a0-3b3309d31732": {
+                "5321c2338aef43a5": {
                   "name": "hand",
                   "acceptedTypes": ["holdable"],
                   "alottedId": null,
                   "maxBulk": 2
                 },
-                "6348fbf9-0ec1-4dea-b6c7-d3a650c5a313": {
+                "6348fbf90ec14dea": {
                   "name": "hand",
                   "acceptedTypes": ["holdable"],
                   "alottedId": null,
@@ -130,10 +130,10 @@
                 }
               }
             },
-            "4f44dbc4-8fd4-486d-a6d0-16d8b7642852": {
+            "4f44dbc48fd4486d": {
               "name": "back",
               "slots": {
-                "112d2056-8754-48e3-bad0-31a6ef5d6a38": {
+                "112d2056875448e3": {
                   "name": "back",
                   "acceptedTypes": ["holdable", "strappable"],
                   "alottedId": null,
