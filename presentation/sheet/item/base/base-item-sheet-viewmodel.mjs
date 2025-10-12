@@ -132,14 +132,17 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
       },
       placeholder: game.i18n.localize("system.general.name.label"),
     });
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: this,
-      id: "vmRtDescription",
-      value: this.document.description,
-      onChange: (_, newValue) => {
-        this.document.description = newValue;
-      },
-    });
+
+    if (this.showDescription) {
+      this.vmRtDescription = new InputRichTextViewModel({
+        parent: this,
+        id: "vmRtDescription",
+        value: this.document.description,
+        onChange: (_, newValue) => {
+          this.document.description = newValue;
+        },
+      });
+    }
 
     if (this.isGM === true) {
       this.gmNotesViewModel = new LazyLoadViewModel({
