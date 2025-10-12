@@ -1,8 +1,14 @@
+import { Search, SEARCH_MODES, SearchItem, SearchResult } from "../../../business/search/search.mjs";
 import Tag from "../../../business/tags/tag.mjs";
+import { ArrayUtil } from "../../../business/util/array-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import { TemplatedComponent } from "../../sheet/item/base/templated-component.mjs";
+import { SheetUtil } from "../../sheet/sheet-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
+import ButtonViewModel from "../button/button-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
+import Tooltip from "../tooltip/tooltip.mjs";
 import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
 
 /**
@@ -105,11 +111,16 @@ export default class InputTagsViewModel extends ViewModel {
     super(args);
 
     this.systemTags = args.systemTags ?? [];
-
     this._value = args.value ?? [];
     this.tagViewModels = [];
     this.tagViewModels = this._getTagViewModels();
     this.onChange = args.onChange ?? (() => {});
+
+    this.systemTagSearchItems = this.systemTags.map(systemTag => new SearchItem({
+      id: systemTag.id,
+      term: game.i18n.localize(systemTag.localizableName),
+    }));
+    this.systemTagListItems = this._getSystemTags();
 
     this.vmAddNew = new InputTextFieldViewModel({
       id: "vmAddNew",
@@ -119,25 +130,19 @@ export default class InputTagsViewModel extends ViewModel {
         // Do nothing on empty value. This is the case when the user cancels. 
         if (newValue.trim().length === 0) return;
 
-        // Try to find a matching tag by id. 
-        // Search case-insensitively and replace spaces with underscores, so users needn't know the internal IDs and can 
-        // instead simply type the exact text they may find on other documents and expect it to work. 
-        let tag = this.systemTags.find(it => it.id.toLowerCase() === newValue.toLowerCase().replace(" ", "_"));
-        if (tag === undefined) {
-          // Not a system tag - so a new one. 
-          tag = new Tag({
-            id: newValue,
-            localizableName: newValue,
-          });
-        }
-
-        const tags = this.value.concat([]); // safe copy
-        // Prevent adding the same tag twice. 
-        if (tags.find(it => it.id === tag.id) !== undefined) return;
-
-        tags.push(tag);
-
-        this.value = tags;
+        this._addTag(newValue.trim());
+      },
+      onInput: async (event, _) => {
+        const currentValue = SheetUtil.getElementValue(event.currentTarget);
+        this.systemTagListItems = this._getSystemTagsFilteredBy(currentValue);
+        await this._refreshToolTip();
+        this._autoCompleteTooltip.show();
+      },
+      onFocus: () => {
+        this._autoCompleteTooltip.show();
+      },
+      onFocusLost: () => {
+        this._autoCompleteTooltip.hide();
       },
     });
   }
@@ -157,6 +162,107 @@ export default class InputTagsViewModel extends ViewModel {
     this.tagViewModels = newTagViewModels;
 
     super.update(args);
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    super.activateListeners(html);
+
+    await this._refreshToolTip();
+  }
+
+  /**
+   * @param {String} tagName 
+   * 
+   * @private
+   */
+  _addTag(tagName) {
+    // Try to find a matching tag by id. 
+    // Search case-insensitively and replace spaces with underscores, so users needn't know the internal IDs and can 
+    // instead simply type the exact text they may find on other documents and expect it to work. 
+    let tag = this.systemTags.find(it => it.id.toLowerCase() === tagName.toLowerCase().replace(" ", "_"));
+    if (!ValidationUtil.isDefined(tag)) {
+      // Not a system tag - so a new one. 
+      tag = new Tag({
+        id: tagName,
+        localizableName: tagName,
+      });
+    }
+
+    const tags = this.value.concat([]); // safe copy
+    // Prevent adding the same tag twice. 
+    if (tags.find(it => it.id === tag.id) !== undefined) return;
+
+    tags.push(tag);
+
+    this.value = tags;
+  }
+
+  /**
+   * Returns all system tags, mapped to objects for easy rendering. 
+   * 
+   * @returns {Array<Object>} Properties:
+   * * `id: String`
+   * * `localizedName: String`
+   * 
+   * @private
+   */
+  _getSystemTags() {
+    return this.systemTags.map(systemTag => {
+      return {
+        id: systemTag.id,
+        localizedName: game.i18n.localize(systemTag.localizableName),
+      };
+    });
+  }
+
+  /**
+   * Returns all system tags that at least partially match the given `searchTerm`. 
+   * 
+   * @param {String} searchTerm Case-insensitive search term. 
+   * 
+   * @returns {Array<Object>} Properties:
+   * * `id: String`
+   * * `localizedName: String`
+   * 
+   * @private
+   */
+  _getSystemTagsFilteredBy(searchTerm) {
+    const systemTags = this._getSystemTags();
+    const trimmedSearchTerm = searchTerm.trim();
+    if (trimmedSearchTerm.length > 0) {
+      const searchResults = new Search().search(this.systemTagSearchItems, trimmedSearchTerm, SEARCH_MODES.STRICT_CASE_INSENSITIVE);
+      const filtered = ArrayUtil.arrayTakeWhen(systemTags, (systemTag) => {
+        const searchResult = searchResults.find(searchResult => searchResult.id === systemTag.id);
+        return (searchResult ?? {}).score > 0;
+      });
+      return filtered;
+    } else {
+      return systemTags;
+    }
+  }
+
+  /**
+   * Re-creates the tool tip, by re-rendering its content, based on the current value 
+   * of `this.systemTagListItems`. 
+   * 
+   * @async
+   * @private
+   */
+  async _refreshToolTip() {
+    const renderedAutoCompleteContent = await new FoundryWrapper().renderTemplate(game.strive.const.TEMPLATES.COMPONENT_INPUT_TAGS_AUTOCOMPLETE, {
+      viewModel: this,
+    });
+    if (ValidationUtil.isDefined(this._autoCompleteTooltip)) {
+      this._autoCompleteTooltip.deactivateListeners();
+    }
+    this._autoCompleteTooltip = new Tooltip({
+      id: "autoCompleteTooltip",
+      anchorElement: this.element,
+      showOnHover: false,
+      content: renderedAutoCompleteContent,
+    });
+    await this._autoCompleteTooltip.activateListeners(this.element);
   }
 
   /**
@@ -244,6 +350,7 @@ export default class InputTagsViewModel extends ViewModel {
         viewModel: vm,
       });
       $(this.element).prepend(`<li>${rendered}</li>`);
+      await vm.activateListeners(this.element);
     }
     
     if (ValidationUtil.isDefined(this.onChange))
