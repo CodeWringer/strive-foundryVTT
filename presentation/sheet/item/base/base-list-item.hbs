@@ -18,7 +18,7 @@ cssClass: {undefined | String}
   {{!-- Description --}}
   {{#if viewModel.showDescription}}
   <div id="{{viewModel.id}}-description" class="flex flex-row border-solid-t-sm border-solid-b-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
-    {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
+    {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="" }}
   </div>
   {{/if}}
   {{!-- Expandable Content --}}

@@ -111,6 +111,7 @@ export default class BaseListItemViewModel extends ViewModel {
       });
       expansionUpIndicatorElement.removeClass("hidden");
       expansionDownIndicatorElement.addClass("hidden");
+      this._unshortenDescription();
     } else {
       contentElement.animate({
         height: "0%"
@@ -119,6 +120,12 @@ export default class BaseListItemViewModel extends ViewModel {
       });
       expansionUpIndicatorElement.addClass("hidden");
       expansionDownIndicatorElement.removeClass("hidden");
+
+      if (this._isDescriptionTooLong()) {
+        this._shortenDescription();
+      } else {
+        this._unshortenDescription();
+      }
     }
 
     if (this.detailMode === LIST_ITEM_DETAIL_MODES.MINIMAL_COLLAPSED) {
@@ -164,10 +171,20 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   get enableExpansion() {
     const dataFields = (this.dataFields ?? []);
-    return (dataFields.length > 0 && dataFields.find(it => it.isHidden === false) !== undefined)
+    return (dataFields.length > 0 && ValidationUtil.isDefined(dataFields.find(it => it.isHidden === false)))
       || this.additionalContent !== undefined
-      || this.showGmNotes === true;
+      || this.showGmNotes === true
+      || this._isDescriptionTooLong();
   }
+
+  /**
+   * Returns the maximum permitted height of the description field, in pixels. 
+   * 
+   * @type {Number}
+   * @readonly
+   * @virtual
+   */
+  get maxDescriptionHeight() { return 48; }
 
   /**
    * @param {Object} args 
@@ -227,16 +244,14 @@ export default class BaseListItemViewModel extends ViewModel {
         this.document.img = newValue;
       },
     });
-    if (this.enableExpansion === true) {
-      this.vmHeaderButton = new ButtonViewModel({
-        id: "vmHeaderButton",
-        parent: this,
-        onClick: () => {
-          this.isExpanded = !this.isExpanded;
-        },
-        isEditable: true, // Even those without editing right should be able to see nested content. 
-      });
-    }
+    this.vmHeaderButton = new ButtonViewModel({
+      id: "vmHeaderButton",
+      parent: this,
+      onClick: () => {
+        this.isExpanded = !this.isExpanded;
+      },
+      isEditable: true, // Even those without editing right should be able to see nested content. 
+    });
     if (this.showDescription) {
       this.vmRtDescription = new InputRichTextViewModel({
         parent: this,
@@ -261,8 +276,8 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     if (this.isEditable === true) {
       new ContextMenu(html, `#${this.id}-name-area`, [
@@ -278,6 +293,18 @@ export default class BaseListItemViewModel extends ViewModel {
           condition: this.isGM,
         },
       ]);
+    }
+
+    // Shorten description as necessary. 
+    if (this._isDescriptionTooLong()) {
+      if (!this.isExpanded) {
+        this._shortenDescription();
+      }
+      // Ensure expandability. 
+      this.vmHeaderButton.element.removeClass("hidden");
+      this.element.find(`#${this.id}-plain-identity`).addClass("hidden");
+    } else {
+      this._unshortenDescription();
     }
   }
 
@@ -633,6 +660,37 @@ export default class BaseListItemViewModel extends ViewModel {
         await this.document.delete();
       },
     }).renderAndAwait(true);
+  }
+
+  /**
+   * @private
+   */
+  _isDescriptionTooLong() {
+    if (ValidationUtil.isDefined(this.vmRtDescription) && ValidationUtil.isDefined(this.vmRtDescription.element)) {
+      const height = this.vmRtDescription.element.outerHeight();
+      if (height > this.maxDescriptionHeight) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @private
+   */
+  _shortenDescription() {
+    if (ValidationUtil.isDefined(this.vmRtDescription) && ValidationUtil.isDefined(this.vmRtDescription.element)) {
+      this.vmRtDescription.element.addClass("limited");
+    }
+  }
+  
+  /**
+   * @private
+   */
+  _unshortenDescription() {
+    if (ValidationUtil.isDefined(this.vmRtDescription) && ValidationUtil.isDefined(this.vmRtDescription.element)) {
+      this.vmRtDescription.element.removeClass("limited");
+    }
   }
 
   /** @override */
