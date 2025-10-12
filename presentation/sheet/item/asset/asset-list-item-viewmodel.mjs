@@ -120,20 +120,22 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       },
     });
     
-    this.vmLocationWrap = new ViewModel({
-      id: "vmLocationWrap",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.character.asset.location.label"),
-    });
-    this.vmLocation = new InputTextFieldViewModel({
-      parent: this,
-      id: "vmLocation",
-      value: this.document.location,
-      placeholder: game.i18n.localize("system.character.asset.location.placeholder"),
-      onChange: (_, newValue) => {
-        this.document.location = newValue;
-      },
-    })
+    if (this.isProperty) {
+      this.vmLocationWrap = new ViewModel({
+        id: "vmLocationWrap",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.asset.location.label"),
+      });
+      this.vmLocation = new InputTextFieldViewModel({
+        parent: this,
+        id: "vmLocation",
+        value: this.document.location,
+        placeholder: game.i18n.localize("system.character.asset.location.placeholder"),
+        onChange: (_, newValue) => {
+          this.document.location = newValue;
+        },
+      });
+    }
   }
 
   /** @override */

@@ -262,7 +262,7 @@ export default class BaseListItemViewModel extends ViewModel {
         },
       });
     }
-    if (this.isGM) {
+    if (this.showGmNotes) {
       this.vmGmNotes = new InputRichTextViewModel({
         parent: this,
         id: "vmGmNotes",

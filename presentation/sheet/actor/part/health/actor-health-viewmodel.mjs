@@ -14,12 +14,11 @@ import RollableSpecificDocumentCreationStrategy from "../../../../../business/do
 import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
-import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
+import CompositeSortableListViewModel, { SortableListAddItemParams } from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
@@ -513,7 +512,7 @@ export default class ActorHealthViewModel extends ViewModel {
         })
       ],
       headerExtraContent: new TemplatedComponent({
-        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER,
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_MUTATIONS_EXTRA_HEADER,
         viewModel: this,
       }),
       sortingOptions: this._getNameSortingOptions(),
@@ -556,7 +555,7 @@ export default class ActorHealthViewModel extends ViewModel {
         })
       ],
       headerExtraContent: new TemplatedComponent({
-        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER,
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_SCARS_EXTRA_HEADER,
         viewModel: this,
       }),
       sortingOptions: this._getNameSortingOptions(),

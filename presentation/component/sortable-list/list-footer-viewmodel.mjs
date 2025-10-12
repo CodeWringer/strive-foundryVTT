@@ -2,6 +2,7 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonAddViewModel from "../button-add/button-add-viewmodel.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import { SortableListAddItemParams } from "../composite-sortable-list/composite-sortable-list-viewmodel.mjs";
 
 /**
  * Represents the footer of a list, whose contents can be edited. 
@@ -45,16 +46,18 @@ export default class ListFooterViewModel extends ViewModel {
     this._addItemParams = args.addItemParams ?? [];
     this.localizedCollapseToolTip = args.localizedCollapseToolTip;
 
-    this.vmToggleExpansion = new ButtonViewModel({
-      id: "vmToggleExpansion",
-      parent: this,
-      isEditable: true, // Should always be interactible. 
-      localizedToolTip: this.localizedCollapseToolTip,
-      content: '<i class="ico dark interactible ico-double-chevron-u-solid" style="height: 1.2rem;"></i>',
-      onClick: (event, data) => {
-        this.onExpansionToggled(event, data);
-      },
-    });
+    if (this.isCollapsible) {
+      this.vmToggleExpansion = new ButtonViewModel({
+        id: "vmToggleExpansion",
+        parent: this,
+        isEditable: true, // Should always be interactible. 
+        localizedToolTip: this.localizedCollapseToolTip,
+        content: '<i class="ico dark interactible ico-double-chevron-u-solid" style="height: 1.2rem;"></i>',
+        onClick: (event, data) => {
+          this.onExpansionToggled(event, data);
+        },
+      });
+    }
 
     let i = 0;
     this.addItemButtonViewModels = this._addItemParams.map(it => 

@@ -116,47 +116,49 @@ export default class CompositeCurrentAndMaximumNumbersViewModel extends ViewMode
       parent: this,
       localizedToolTip: this.maximumValueIconToolTip,
     });
-    this.vmAdjust = new ButtonViewModel({
-      id: "vmAdjust",
-      parent: this,
-      localizedToolTip: this.adjustToolTip,
-      content: '<i class="fas fa-edit" style="height: 26px;"></i>',
-      onClick: async () => {
-        const inputNumber = "inputNumber";
-        const inputDefinitions = [
-          new DynamicInputDefinition({
-            name: inputNumber,
-            localizedLabel: game.i18n.localize("system.general.adjustInputLabel"),
-            template: InputNumberSpinnerViewModel.TEMPLATE,
-            viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-              id: id,
-              parent: parent,
-              ...overrides,
-            }),
-            required: true,
-            validationFunc: (value) => { return parseInt(value) !== NaN; },
-          }),
-        ];
-        if (ValidationUtil.isDefined(this.adjustReminder)) {
-          inputDefinitions.push(
+    if (this.renderAdjustButton) {
+      this.vmAdjust = new ButtonViewModel({
+        id: "vmAdjust",
+        parent: this,
+        localizedToolTip: this.adjustToolTip,
+        content: '<i class="fas fa-edit" style="height: 26px;"></i>',
+        onClick: async () => {
+          const inputNumber = "inputNumber";
+          const inputDefinitions = [
             new DynamicInputDefinition({
-              name: "reminder",
-              localizedLabel: this.adjustReminder,
-            })
-          );
-        }
-
-        const dialog = await new DynamicInputDialog({
-          easyDismissal: true,
-          focused: inputNumber,
-          inputDefinitions: inputDefinitions,
-        }).renderAndAwait(true);
-
-        if (dialog.confirmed !== true) return;
-
-        const number = parseInt(dialog[inputNumber]);
-        this.onAdjusted(number);
-      },
-    });
+              name: inputNumber,
+              localizedLabel: game.i18n.localize("system.general.adjustInputLabel"),
+              template: InputNumberSpinnerViewModel.TEMPLATE,
+              viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+                id: id,
+                parent: parent,
+                ...overrides,
+              }),
+              required: true,
+              validationFunc: (value) => { return parseInt(value) !== NaN; },
+            }),
+          ];
+          if (ValidationUtil.isDefined(this.adjustReminder)) {
+            inputDefinitions.push(
+              new DynamicInputDefinition({
+                name: "reminder",
+                localizedLabel: this.adjustReminder,
+              })
+            );
+          }
+  
+          const dialog = await new DynamicInputDialog({
+            easyDismissal: true,
+            focused: inputNumber,
+            inputDefinitions: inputDefinitions,
+          }).renderAndAwait(true);
+  
+          if (dialog.confirmed !== true) return;
+  
+          const number = parseInt(dialog[inputNumber]);
+          this.onAdjusted(number);
+        },
+      });
+    }
   }
 }

@@ -10,10 +10,10 @@ import ExpertiseCreationStrategy from "../../../../business/document/creation/ex
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ListFooterViewModel from "../../../component/sortable-list/list-footer-viewmodel.mjs"
-import { SortableListAddItemParams } from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import { LIST_ITEM_DETAIL_MODES } from "../base/base-list-item-viewmodel.mjs"
 import ExpertiseListItemViewModel from "./expertise-list-item-viewmodel.mjs"
+import { SortableListAddItemParams } from "../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -125,14 +125,33 @@ export default class ExpertiseTableViewModel extends ViewModel {
 
     this.registerViewStateProperty("_isExpanded");
 
-    this.vmHeaderButton = new ButtonViewModel({
-      id: "vmHeaderButton",
-      parent: this,
-      onClick: async () => {
-        this.isExpanded = !this.isExpanded;
-      },
-      isEditable: true, // Even those without editing right should be able to see nested content. 
-    });
+    if (this.hasContent) {
+      this.vmHeaderButton = new ButtonViewModel({
+        id: "vmHeaderButton",
+        parent: this,
+        onClick: async () => {
+          this.isExpanded = !this.isExpanded;
+        },
+        isEditable: true, // Even those without editing right should be able to see nested content. 
+      });
+      this.vmFooter = new ListFooterViewModel({
+        id: "vmFooter",
+        parent: this,
+        isCollapsible: true,
+        addItemParams: [this.addItemParams],
+        localizedCollapseToolTip: StringUtil.format2(
+          game.i18n.localize("system.general.expansion.collapseOf"),
+          { s: StringUtil.format2(
+            game.i18n.localize("system.character.skill.expertise.expertisesOf"),
+            { skill: this.document.name, }
+          ) }
+        ),
+        onExpansionToggled: () => {
+          this.isExpanded = !this.isExpanded;
+        },
+      });
+    }
+
     if (this.isEditable === true) {
       this.vmAddItem = new ButtonAddViewModel({
         id: "vmAddItem",
@@ -147,27 +166,13 @@ export default class ExpertiseTableViewModel extends ViewModel {
       });
     }
 
-    this.vmFooter = new ListFooterViewModel({
-      id: "vmFooter",
-      parent: this,
-      isCollapsible: true,
-      addItemParams: [this.addItemParams],
-      localizedCollapseToolTip: StringUtil.format2(
-        game.i18n.localize("system.general.expansion.collapseOf"),
-        { s: StringUtil.format2(
-          game.i18n.localize("system.character.skill.expertise.expertisesOf"),
-          { skill: this.document.name, }
-        ) }
-      ),
-      onExpansionToggled: () => {
-        this.isExpanded = !this.isExpanded;
-      },
-    });
-    this.vmLockedExpertisesSeparator = new ViewModel({
-      id: "vmLockedExpertisesSeparator",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.character.skill.expertise.lockedExplanation"),
-    });
+    if (this.hasLockedExpertises) {
+      this.vmLockedExpertisesSeparator = new ViewModel({
+        id: "vmLockedExpertisesSeparator",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.lockedExplanation"),
+      });
+    }
   }
 
   /**

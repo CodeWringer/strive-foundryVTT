@@ -80,16 +80,6 @@ export default class PcActorSheetViewModel extends BaseSheetViewModel {
       document: this.document,
     });
 
-    this.vmBtnConfigure = new ButtonViewModel({
-      id: "vmBtnConfigure",
-      parent: this,
-      content: '<i class="fas fa-cog"></i>',
-      localizedToolTip: game.i18n.localize("system.character.edit"),
-      onClick: async () => {
-        await this.promptConfigure();
-      },
-    });
-
     this.personalsViewModel = new ActorPersonalsViewModel({
       ...args,
       id: "personals",

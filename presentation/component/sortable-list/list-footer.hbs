@@ -2,7 +2,7 @@
 viewModel: ListFooterViewModel
 cssClass: String | undefined
 --}}
-<div class="flex flex-row flex-middle">
+<div id="{{viewModel.id}}" class="flex flex-row flex-middle">
   {{!-- Collapse button --}}
   {{#if viewModel.isCollapsible}}
   {{> button viewModel=viewModel.vmToggleExpansion cssClass="flex-grow" }}
