@@ -46,16 +46,18 @@ export default class ListFooterViewModel extends ViewModel {
     this._addItemParams = args.addItemParams ?? [];
     this.localizedCollapseToolTip = args.localizedCollapseToolTip;
 
-    this.vmToggleExpansion = new ButtonViewModel({
-      id: "vmToggleExpansion",
-      parent: this,
-      isEditable: true, // Should always be interactible. 
-      localizedToolTip: this.localizedCollapseToolTip,
-      content: '<i class="ico dark interactible ico-double-chevron-u-solid" style="height: 1.2rem;"></i>',
-      onClick: (event, data) => {
-        this.onExpansionToggled(event, data);
-      },
-    });
+    if (this.isCollapsible) {
+      this.vmToggleExpansion = new ButtonViewModel({
+        id: "vmToggleExpansion",
+        parent: this,
+        isEditable: true, // Should always be interactible. 
+        localizedToolTip: this.localizedCollapseToolTip,
+        content: '<i class="ico dark interactible ico-double-chevron-u-solid" style="height: 1.2rem;"></i>',
+        onClick: (event, data) => {
+          this.onExpansionToggled(event, data);
+        },
+      });
+    }
 
     let i = 0;
     this.addItemButtonViewModels = this._addItemParams.map(it => 

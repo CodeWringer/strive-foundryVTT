@@ -512,7 +512,7 @@ export default class ActorHealthViewModel extends ViewModel {
         })
       ],
       headerExtraContent: new TemplatedComponent({
-        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER,
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_MUTATIONS_EXTRA_HEADER,
         viewModel: this,
       }),
       sortingOptions: this._getNameSortingOptions(),
@@ -555,7 +555,7 @@ export default class ActorHealthViewModel extends ViewModel {
         })
       ],
       headerExtraContent: new TemplatedComponent({
-        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER,
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_SCARS_EXTRA_HEADER,
         viewModel: this,
       }),
       sortingOptions: this._getNameSortingOptions(),
