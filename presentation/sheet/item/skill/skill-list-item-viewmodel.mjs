@@ -570,7 +570,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       }
     }
 
-    this.document.baseAttributes = getNewValue(dialog["inputAttributes"], this.document.baseAttributes, []);
+    this.document.baseAttributes = dialog["dynamicInputAttributes"];
     this.document.apCost = getNewValue(dialog["dynamicInputApCost"], this.document.apCost, 1);
     this.document.obstacle = getNewValue(dialog["dynamicInputObstacle"], this.document.obstacle, "");
     this.document.opposedBy = getNewValue(dialog["dynamicInputOpposedBy"], this.document.opposedBy, "");
