@@ -168,7 +168,7 @@ export default class ActorAbilitiesViewModel extends ViewModel {
     this.vmStability = new ReadOnlyValueViewModel({
       id: "vmStability",
       parent: this,
-      value: this.document.sprintingSpeed,
+      value: this.document.stability,
       localizedToolTip: new RulesetExplainer().getExplanationForStability(this.document),
     });
 
