@@ -25,7 +25,7 @@ $arrow-size-corner: 12px;
   border-radius: 0.3rem;
   background-color: $c-bg-tooltip;
   color: var(--color-text-light-highlight);
-  z-index: 600;
+  z-index: 9999;
   padding: 0.25rem;
   filter: opacity(0.9);
 

@@ -39,6 +39,12 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @method onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
  * * `event: {Event}`
  * * `viewModel: {ViewModel}`
+ * @method onFocus Callback that is invoked when the input element is focused. 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
+ * @method onFocusLost Callback that is invoked when the input element is unfocused. 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
  */
 export default class InputViewModel extends ViewModel {
 
@@ -97,6 +103,12 @@ export default class InputViewModel extends ViewModel {
    * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocus Callback that is invoked when the input element is focused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
    */
   constructor(args = {}) {
     super(args);
@@ -104,6 +116,8 @@ export default class InputViewModel extends ViewModel {
     this._value = args.value;
     this.onChange = args.onChange ?? (() => {});
     this.onInput = args.onInput ?? (() => {});
+    this.onFocus = args.onFocus ?? (() => {});
+    this.onFocusLost = args.onFocusLost ?? (() => {});
   }
 
   /** @override */
@@ -114,6 +128,8 @@ export default class InputViewModel extends ViewModel {
 
     this.element.change(this._onChange.bind(this));
     this.element.on("input", this._onInput.bind(this));
+    this.element.on("focus", this._onFocus.bind(this));
+    this.element.on("focusout", this._onFocusLost.bind(this));
   }
   
   /** @override */
@@ -150,5 +166,27 @@ export default class InputViewModel extends ViewModel {
    */
   _onInput(event) {
     this.onInput(event, this);
+  }
+
+  /**
+   * Internal callback for onFocus. 
+   * 
+   * @param {Event} event 
+   * 
+   * @protected
+   */
+  _onFocus(event) {
+    this.onFocus(event, this);
+  }
+
+  /**
+   * Internal callback for onFocusLost. 
+   * 
+   * @param {Event} event 
+   * 
+   * @protected
+   */
+  _onFocusLost(event) {
+    this.onFocusLost(event, this);
   }
 }

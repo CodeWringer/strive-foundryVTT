@@ -46,6 +46,7 @@ export const TEMPLATES = {
   COMPONENT_INPUT_SEARCH: `${basePathComponent}/input-search/input-search.hbs`,
   COMPONENT_INPUT_SLIDER: `${basePathComponent}/input-slider/input-slider.hbs`,
   COMPONENT_INPUT_TAGS: `${basePathComponent}/input-tags/input-tags.hbs`,
+  COMPONENT_INPUT_TAGS_AUTOCOMPLETE: `${basePathComponent}/input-tags/input-tags-autocomplete.hbs`,
   COMPONENT_INPUT_TAG: `${basePathComponent}/input-tags/input-tag-pill.hbs`,
   COMPONENT_INPUT_TOGGLE: `${basePathComponent}/input-toggle/input-toggle.hbs`,
   // Buttons
