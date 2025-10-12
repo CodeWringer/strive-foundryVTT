@@ -10,10 +10,10 @@ import ExpertiseCreationStrategy from "../../../../business/document/creation/ex
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ListFooterViewModel from "../../../component/sortable-list/list-footer-viewmodel.mjs"
-import { SortableListAddItemParams } from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import { LIST_ITEM_DETAIL_MODES } from "../base/base-list-item-viewmodel.mjs"
 import ExpertiseListItemViewModel from "./expertise-list-item-viewmodel.mjs"
+import { SortableListAddItemParams } from "../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document

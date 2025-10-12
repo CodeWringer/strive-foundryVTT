@@ -2,6 +2,7 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonAddViewModel from "../button-add/button-add-viewmodel.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import { SortableListAddItemParams } from "../composite-sortable-list/composite-sortable-list-viewmodel.mjs";
 
 /**
  * Represents the footer of a list, whose contents can be edited. 

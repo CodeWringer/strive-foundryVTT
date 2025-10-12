@@ -1,4 +1,6 @@
 {{!-- Parameters:
-viewModel: {ActorSkillsViewModel}
+viewModel: ActorTraitsViewModel
 --}}
-{{> compositeSortableList viewModel=viewModel.vmTraits }}
+<section id="{{viewModel.id}}">
+  {{> compositeSortableList viewModel=viewModel.vmTraits }}
+</section>

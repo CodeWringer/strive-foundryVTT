@@ -102,11 +102,9 @@ export default class CompositeSortableListViewModel extends ViewModel {
     this.vmSortableList = new SortableListViewModel({
       id: "vmSortableList",
       parent: this,
-      isCollapsible: this.isCollapsible,
       indexDataSource: this.indexDataSource,
       listItemViewModels: this.listItemViewModels,
       listItemTemplate: this.listItemTemplate,
-      headerLevel: 3,
     });
     if (this.isSearchable) {
       this.vmSearch = new InputSearchTextViewModel({
@@ -275,5 +273,44 @@ export default class CompositeSortableListViewModel extends ViewModel {
     return (a, b) => {
       return sortingFunc(b, a);
     }  
+  }
+}
+
+/**
+ * Provides the parameters for the buttons that enable adding items. 
+ * 
+ * @property {DocumentCreationStrategy} creationStrategy Determines how a user might 
+ * be prompted for input, if at all, to determine the creation data for a new document. 
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
+ * @property {String | undefined} localizedLabel A localized text to 
+ * display as a button label. 
+ * @property {Function | undefined} onItemAdded If defined, this function will be 
+ * invoked upon item creation. Arguments:
+ * * `event: Event`
+ * * `document: Document`
+*/
+export class SortableListAddItemParams {
+  /**
+   * @param {Object} args 
+   * @param {DocumentCreationStrategy} args.creationStrategy Determines how a user might 
+   * be prompted for input, if at all, to determine the creation data for a new document. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * 
+   * @param {Function | undefined} args.onItemAdded If defined, this callback function will be 
+   * invoked after item creation. Arguments:
+   * * `event: Event`
+   * * `document: Document`
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["creationStrategy"]);
+
+    this.creationStrategy = args.creationStrategy;
+    this.localizedToolTip = args.localizedToolTip;
+    this.localizedLabel = args.localizedLabel;
+    this.onItemAdded = args.onItemAdded;
   }
 }

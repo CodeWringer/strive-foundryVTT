@@ -1,14 +1,8 @@
 import { ArrayUtil } from "../../../business/util/array-utility.mjs";
-import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import ButtonAddViewModel from "../button-add/button-add-viewmodel.mjs";
-import DocumentCreationStrategy from "../../../business/document/creation/document-creation-strategy.mjs";
-import ButtonContextMenuViewModel, { ContextMenuItem } from "../button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonToggleVisibilityViewModel from "../button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SortControlsViewModel from "../sort-controls/sort-controls-viewmodel.mjs";
-import ListFooterViewModel from "./list-footer-viewmodel.mjs";
 
 /**
  * Represents a sortable and orderable list of arbitrary entries. 
@@ -85,181 +79,25 @@ export default class SortableListViewModel extends ViewModel {
   get hasSortControls() { return ValidationUtil.isDefined(this.vmSortControls); }
   
   /**
-   * @type {Boolean}
-   * @private
-   */
-  _isCollapsible = false;
-  /**
-   * @type {Boolean}
-   */
-  get isCollapsible() {
-    return this._isCollapsible;
-  }
-  set isCollapsible(value) {
-    this._isCollapsible = value;
-    if (value === false) {
-      this.isExpanded = true;
-    }
-  }
-  
-  /**
-   * @type {Boolean}
-   * @private
-   */
-  _isExpanded = true;
-  /**
-   * @type {Boolean}
-   */
-  get isExpanded() {
-    return this._isExpanded;
-  }
-  set isExpanded(value) {
-    if (!this.isCollapsible) return;
-
-    this._isExpanded = value;
-    
-    const elements = document.querySelectorAll(`[${ButtonToggleVisibilityViewModel.ATTRIBUTE_VIS_GROUP}='${this.visGroupId}']`);
-    
-    // Synchronize visibilities. 
-    this.vmFooter.vmToggleExpansion.value = value;
-    if (value === true) { // Expanded
-      this.vmFooter.vmToggleExpansion.element.parent().removeClass("hidden");
-      this.vmHeaderButton.element.find(".expanded").removeClass("hidden");
-      this.vmHeaderButton.element.find(".collapsed").addClass("hidden");
-      for (const element of elements) {
-        element.classList.remove("hidden");
-      }
-    } else { // Collapsed
-      this.vmFooter.vmToggleExpansion.element.parent().addClass("hidden");
-      this.vmHeaderButton.element.find(".expanded").addClass("hidden");
-      this.vmHeaderButton.element.find(".collapsed").removeClass("hidden");
-      for (const element of elements) {
-        element.classList.add("hidden");
-      }
-    }
-
-    // Immediately write view state. 
-    this.writeViewState();
-  }
-
-  /**
-   * @returns {Boolean}
-   * @readonly
-   */
-  get showFooter() { return (this.addParamCount > 0 || this.isCollapsible); }
-
-  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {ViewModel | undefined} args.parent 
    * 
    * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
    * 
    * @param {AbstractListItemIndexDataSource} args.indexDataSource The data source of the indices. 
    * @param {Array<ViewModel>} args.listItemViewModels A list of item view models.
    * @param {String} args.listItemTemplate The absolute path of the template to use for list items. 
-   * @param {String | undefined} args.localizedTitle The localized title to display at 
-   * the head of the list. 
-   * @param {Number | undefined} args.headerLevel
-   * * Default `1`
-   * @param {Boolean | undefined} args.isCollapsible If `true`, the list will be collapsible. 
-   * * Default `false`
-   * @param {Boolean | undefined} args.isExpanded If `true`, the list is initially expanded. 
-   * * Default `true`
-   * * If `isCollapsible` is set to `false`, will **always** be `true`. 
-   * @param {Array<SortableListAddItemParams> | undefined} args.addItemParams If defined, 
-   * buttons to add items will be shown, using these settings. 
-   * @param {SortableListSortParams | undefined} args.sortParams If defined, 
-   * buttons to sort items will be shown, using these settings. 
    */
   constructor(args = {}) {
     super(args);
     ValidationUtil.validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate"]);
 
     this.indexDataSource = args.indexDataSource;
-    this.contextTemplate = args.contextTemplate ?? "sortable-list";
-    this.listItemTemplate = args.listItemTemplate;
-    this.localizedTitle = args.localizedTitle;
-    this.headerLevel = args.headerLevel ?? 1;
-    this._isCollapsible = args.isCollapsible ?? false;
-    this._isExpanded = args.isCollapsible ? (args.isExpanded ?? true) : true;
-    this._addItemParams = args.addItemParams ?? [];
-    this.visGroupId = UuidUtil.createUUID();
-
-    this.registerViewStateProperty("_isExpanded");
-
-    this.vmHeaderButton = new ButtonViewModel({
-      id: "vmHeaderButton",
-      parent: this,
-      onClick: async () => {
-        this.isExpanded = !this.isExpanded;
-      },
-      isEditable: true, // Even those without editing right should be able to see nested content. 
-    });
-
-    if (this._addItemParams.length === 1) {
-      const addItemParams = this._addItemParams[0];
-      this.vmAddItem = new ButtonAddViewModel({
-        id: "vmAddItem",
-        parent: this,
-        creationStrategy: addItemParams.creationStrategy,
-        localizedToolTip: addItemParams.localizedToolTip,
-        onClick: (event, data) => {
-          if (ValidationUtil.isDefined(addItemParams.onItemAdded)) {
-            addItemParams.onItemAdded(event, data);
-          }
-        },
-      });
-    } else if (this._addItemParams.length > 1) {
-      const menuItems = this._addItemParams.map(it => 
-        new ContextMenuItem({
-          name: it.localizedLabel,
-          icon: `<i class="fas fa-plus"></i>`,
-          callback: async () => {
-            await it.creationStrategy.selectAndCreate();
-            // Invoke potential callback _after_ item creation. 
-            (it.onItemAdded ?? (() => {}))();
-          },
-        })
-      );
-      this.vmContextMenu = new ButtonContextMenuViewModel({
-        id: "vmContextMenu",
-        parent: this,
-        content: '<i class="fas fa-plus"></i>',
-        localizedToolTip: game.i18n.localize("system.general.add.add"),
-        menuItems: menuItems,
-      });
-    }
-
-    if (ValidationUtil.isDefined(args.sortParams) && args.sortParams.options.length > 0) {
-      this.vmSortControls = new SortControlsViewModel({
-        id: "vmSortControls",
-        parent: this,
-        options: args.sortParams.options,
-        compact: args.sortParams.compact,
-        onSort: (event, provideSortable) => {
-          provideSortable(this);
-          if (ValidationUtil.isDefined(args.sortParams.onSort)) {
-            args.sortParams.onSort(event);
-          }
-        },
-      });
-    }
-    if (this.addParamCount > 0 || this.isCollapsible) {
-      this.vmFooter = new ListFooterViewModel({
-        id: "vmFooter",
-        parent: this,
-        isCollapsible: this.isCollapsible,
-        addItemParams: this._addItemParams,
-        onExpansionToggled: () => {
-          this.isExpanded = !this.isExpanded;
-        },
-      })
-    }
-    
-    // Prepare given list. 
     this.listItemViewModels = args.listItemViewModels;
+    this.listItemTemplate = args.listItemTemplate;
+
+    // Prepare given list. 
     for (const listItemViewModel of this.listItemViewModels) {
       listItemViewModel.parent = this;
     }
@@ -546,71 +384,5 @@ class SortableListViewModelGroup {
     this.vmBtnMoveUp = args.vmBtnMoveUp;
     this.vmBtnMoveDown = args.vmBtnMoveDown;
     this.listItemViewModel = args.listItemViewModel;
-  }
-}
-
-/**
- * Provides the parameters for the buttons that enable adding items. 
- * 
- * @property {DocumentCreationStrategy} creationStrategy Determines how a user might 
- * be prompted for input, if at all, to determine the creation data for a new document. 
- * @property {String | undefined} localizedToolTip A localized text to 
- * display as a tool tip. 
- * @property {String | undefined} localizedLabel A localized text to 
- * display as a button label. 
- * @property {Function | undefined} onItemAdded If defined, this function will be 
- * invoked upon item creation. Arguments:
- * * `event: Event`
- * * `document: Document`
-*/
-export class SortableListAddItemParams {
-  /**
-   * @param {Object} args 
-   * @param {DocumentCreationStrategy} args.creationStrategy Determines how a user might 
-   * be prompted for input, if at all, to determine the creation data for a new document. 
-   * @param {String | undefined} args.localizedToolTip A localized text to 
-   * display as a tool tip. 
-   * @param {String | undefined} args.localizedLabel A localized text to 
-   * display as a button label. 
-   * 
-   * @param {Function | undefined} args.onItemAdded If defined, this callback function will be 
-   * invoked after item creation. Arguments:
-   * * `event: Event`
-   * * `document: Document`
-   */
-  constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["creationStrategy"]);
-
-    this.creationStrategy = args.creationStrategy;
-    this.localizedToolTip = args.localizedToolTip;
-    this.localizedLabel = args.localizedLabel;
-    this.onItemAdded = args.onItemAdded;
-  }
-}
-
-/**
- * Provides the parameters for the buttons that enable sorting items. 
- * 
- * @property {Array<SortingOption>} options
- * @property {Boolean} compact
- * @property {Function} onSort If defined, this callback function will be 
- * invoked upon item sorting. Arguments:
- * * `event: Event`
- */
-export class SortableListSortParams {
-  /**
-   * @param {Object} args 
-   * @param {Array<SortingOption>} args.options
-   * @param {Boolean} args.compact
-   * @param {Function} args.onSort If defined, this callback function will be 
-   * invoked upon item sorting. Arguments:
-   * * `event: Event`
-   */
-  constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["options", "compact"]);
-
-    this.options = args.options;
-    this.compact = args.compact;
-    this.onSort = args.onSort;
   }
 }

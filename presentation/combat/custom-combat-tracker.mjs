@@ -74,15 +74,16 @@ export default class CustomCombatTracker extends CombatTracker {
       const transientActor = document.getTransientObject();
       turn.gritPointsTemplate = GritPointsCombatTrackerViewModel.TEMPLATE;
       turn.renderGritPoints = transientActor.type === ACTOR_TYPES.PC 
-      || (transientActor.type === ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);
-
-      turn.gritPointsViewModel = new GritPointsCombatTrackerViewModel({
-        id: `${turn.id}-gplist`,
-        isEditable: true,
-        document: transientActor,
-        isInCombatTracker: true,
-      });
-      this.gritPointsViewModels.push(turn.gritPointsViewModel);
+        || (transientActor.type === ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);
+      if (turn.renderGritPoints) {
+        turn.gritPointsViewModel = new GritPointsCombatTrackerViewModel({
+          id: `${turn.id}-gplist`,
+          isEditable: true,
+          document: transientActor,
+          isInCombatTracker: true,
+        });
+        this.gritPointsViewModels.push(turn.gritPointsViewModel);
+      }
     }
 
     this.vmSendToChatGeneralActions = new ButtonViewModel({
