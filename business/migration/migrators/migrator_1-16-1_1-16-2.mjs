@@ -1,3 +1,4 @@
+import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../document/general-document-types.mjs";
@@ -5,12 +6,12 @@ import { ValidationUtil } from "../../util/validation-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import VersionCode from "../version-code.mjs";
 
-export default class Migrator_1_16_1__1_17_0 extends AbstractMigrator {
+export default class Migrator_1_16_1__1_16_2 extends AbstractMigrator {
   /** @override */
   get fromVersion() { return new VersionCode(1, 16, 1) };
 
   /** @override */
-  get toVersion() { return new VersionCode(1, 17, 0) };
+  get toVersion() { return new VersionCode(1, 16, 2) };
 
   /** @override */
   async _doWork(args = {}) {
@@ -28,6 +29,11 @@ export default class Migrator_1_16_1__1_17_0 extends AbstractMigrator {
     for await (const actor of transientActors) {
       const incrementTitle = ValidationUtil.isDefined(actor.pack) ? `${actor.pack} - ${actor.name}` : actor.name;
       args.onBeginIncrement(totalProgress, currentProgress, `Begun ${incrementTitle}`);
+
+      if (actor.type === ACTOR_TYPES.PLAIN) {
+        args.onCompleteIncrement(totalProgress, currentProgress, `Skipped ${incrementTitle} (plain actor)`);
+        continue;
+      }
 
       const slotGroups = [
         // Clothing
@@ -69,18 +75,20 @@ export default class Migrator_1_16_1__1_17_0 extends AbstractMigrator {
         const oldGroup = actor.assets.equipmentSlotGroups.find(slot => slot.id === slotGroup.oldId);
         const newGroup = actor.assets.equipmentSlotGroups.find(slot => slot.id === slotGroup.newId);
 
-        if (ValidationUtil.isDefined(newGroup)) {
-          // Move alotted asset IDs over. 
-          for (const slot of slotGroup.slots) {
-            const oldSlot = oldGroup.slots.find(it => it.id === slot.oldId);
-            const newSlot = newGroup.slots.find(it => it.id === slot.newId);
-
-            if (ValidationUtil.isDefined(oldSlot) && ValidationUtil.isDefined(newSlot)) {
-              newSlot.alottedId = oldSlot.alottedId;
+        if (ValidationUtil.isDefined(oldGroup)) {
+          if (ValidationUtil.isDefined(newGroup)) {
+            // Move alotted asset IDs over. 
+            for (const slot of slotGroup.slots) {
+              const oldSlot = oldGroup.slots.find(it => it.id === slot.oldId);
+              const newSlot = newGroup.slots.find(it => it.id === slot.newId);
+  
+              if (ValidationUtil.isDefined(oldSlot) && ValidationUtil.isDefined(newSlot)) {
+                newSlot.alottedId = oldSlot.alottedId;
+              }
             }
           }
+          await oldGroup.delete();
         }
-        await oldGroup.delete();
       }
 
       args.onCompleteIncrement(totalProgress, currentProgress, `Completed ${incrementTitle}`);
