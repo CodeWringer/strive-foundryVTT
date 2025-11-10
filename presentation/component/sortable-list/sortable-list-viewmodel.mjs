@@ -32,7 +32,7 @@ export default class SortableListViewModel extends ViewModel {
    * @readonly
    * @private
    */
-  static CSS_SELECTOR_LIST_ITEMS = "ol.sortable-list > li";
+  static CSS_SELECTOR_LIST_ITEMS = "> li";
 
   /**
    * This is a list of `entityId`s, in the order that they should be rendered in the list. 
