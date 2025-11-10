@@ -1,4 +1,5 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
+import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
 import ButtonViewModel from "../component/button/button-viewmodel.mjs";
@@ -26,6 +27,16 @@ export default class CustomCombatTracker extends CombatTracker {
     };
   }
 
+  /**
+   * Returns true, if the Momentum Bar is to be rendered. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get enableMomentumBar() {
+    return new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_ENABLE_MOMENTUM_BAR);
+  }
+
   /** @override */
   async getData(options) {
     const data = await super.getData(options);
@@ -34,7 +45,8 @@ export default class CustomCombatTracker extends CombatTracker {
     this.actionPointsViewModels = [];
     this.gritPointsViewModels = [];
 
-    if (ValidationUtil.isDefined(data.combat)) {
+    // Add Momentum Bar
+    if (this.enableMomentumBar && ValidationUtil.isDefined(data.combat)) {
       this.vmMomentum = new MomentumBarViewModel({
         id: "vmMomentum",
         isEditable: true,
