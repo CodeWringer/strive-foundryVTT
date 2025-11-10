@@ -4,7 +4,7 @@
     "templates": {
       "base": {
         "description": "",
-        "gmNotes": "",
+        "gmNotes": null,
         "isCustom": false,
         "displayOrders": {
           "luggage": [],
@@ -14,7 +14,10 @@
           "injuries": [],
           "illnesses": [],
           "mutations": [],
-          "scars": []
+          "scars": [],
+          "momentum-actions": [],
+          "traits": [],
+          "projects": []
         },
         "properties": []
       },
@@ -56,28 +59,23 @@
         "attributes": {
           "agility": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "awareness": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "strength": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "toughness": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           },
           "wit": {
             "level": 1,
-            "levelModifier": 0,
-            "progress": 0
+            "levelModifier": 0
           }
         },
         "health": {
@@ -93,10 +91,10 @@
         },
         "assets": {
           "equipment": {
-            "b0fed8b3-1aa4-4b8e-a150-7c2fb647fe7e": {
+            "b0fed8b31aa44b8e": {
               "name": "clothing",
               "slots": {
-                "458e47e6-f6ce-4841-83b2-0ac05c160a52": {
+                "458e47e6f6ce4841": {
                   "name": "clothing",
                   "acceptedTypes": ["clothing"],
                   "alottedId": null,
@@ -104,10 +102,10 @@
                 }
               }
             },
-            "5af8c4db-de4a-4d2f-a3ed-9f8f18233cc5": {
+            "5af8c4dbde4a4d2f": {
               "name": "armor",
               "slots": {
-                "16b24ed7-de48-46fd-8849-82d7b2648b8d": {
+                "16b24ed7de4846fd": {
                   "name": "armor",
                   "acceptedTypes": ["armor"],
                   "alottedId": null,
@@ -115,16 +113,16 @@
                 }
               }
             },
-            "d7c46adc-848a-4fc9-a73d-a3ba37c18cb3": {
+            "d7c46adc848a4fc9": {
               "name": "hand",
               "slots": {
-                "5321c233-8aef-43a5-b6a0-3b3309d31732": {
+                "5321c2338aef43a5": {
                   "name": "hand",
                   "acceptedTypes": ["holdable"],
                   "alottedId": null,
                   "maxBulk": 2
                 },
-                "6348fbf9-0ec1-4dea-b6c7-d3a650c5a313": {
+                "6348fbf90ec14dea": {
                   "name": "hand",
                   "acceptedTypes": ["holdable"],
                   "alottedId": null,
@@ -132,10 +130,10 @@
                 }
               }
             },
-            "4f44dbc4-8fd4-486d-a6d0-16d8b7642852": {
+            "4f44dbc48fd4486d": {
               "name": "back",
               "slots": {
-                "112d2056-8754-48e3-bad0-31a6ef5d6a38": {
+                "112d2056875448e3": {
                   "name": "back",
                   "acceptedTypes": ["holdable", "strappable"],
                   "alottedId": null,
@@ -145,7 +143,8 @@
             }
           },
           "luggage": []
-        }
+        },
+        "xp": 0
       }
     },
     "pc": {
@@ -173,7 +172,8 @@
       }
     },
     "npc": {
-      "templates": ["base", "character"]
+      "templates": ["base", "character"],
+      "advancementEnabled": false
     },
     "plain": {
       "templates": ["base"]
@@ -186,13 +186,17 @@
       "fate-card",
       "injury",
       "illness",
+      "momentum-action",
       "mutation",
-      "scar"
+      "scar",
+      "health-condition",
+      "trait",
+      "project"
     ],
     "templates": {
       "base": {
         "description": "",
-        "gmNotes": "",
+        "gmNotes": null,
         "isCustom": false,
         "displayOrders": {},
         "properties": []
@@ -203,8 +207,7 @@
       "baseAttributes": ["agility"],
       "level": 0,
       "levelModifier": 0,
-      "successes": 0,
-      "failures": 0,
+      "advancementProgress": 0,
       "abilities": {},
       "prerequisites": []
     },
@@ -226,15 +229,14 @@
     },
     "injury": {
       "templates": ["base"],
-      "state": "active",
-      "timeToHeal": "",
-      "timeToHealTreated": "",
-      "limit": "",
-      "scar": "",
-      "autoTreatment": "",
-      "treatmentSkill": "",
+      "lastTreatmentTime": "",
+      "obstacleTreatment": "",
       "requiredSupplies": "",
-      "obstacleTreatment": ""
+      "scar": null,
+      "state": "active",
+      "timeToHeal": 0,
+      "timeToHealElapsed": 0,
+      "treatmentSkill": ""
     },
     "illness": {
       "templates": ["base"],
@@ -246,9 +248,37 @@
     "mutation": {
       "templates": ["base"]
     },
+    "momentum-action": {
+      "templates": ["base"],
+      "imgHeroic": "",
+      "descriptionHeroic": "",
+      "momentumShiftHeroic": 0,
+      "imgDesperate": "",
+      "descriptionDesperate": "",
+      "momentumShiftDesperate": 0
+    },
     "scar": {
       "templates": ["base"],
       "limit": ""
+    },
+    "health-condition": {
+      "templates": ["base"],
+      "current": 1,
+      "limit": 0
+    },
+    "trait": {
+      "templates": ["base"]
+    },
+    "project": {
+      "templates": ["base"],
+      "complications": null,
+      "progress": 0,
+      "progressIncrement": 0,
+      "projectSkill": null,
+      "pushes": 0,
+      "quality": 1,
+      "timeIncrement": "",
+      "totalProgress": 0
     }
   }
 }

@@ -14,7 +14,7 @@ import { WorldSystemVersion } from "./world-system-version.mjs";
  * its defined migrated version. NOTE: In order for this to work, the migrator sets a world scope setting 
  * with which to track the world system version. 
  * 
- * Implementing migrators **must** provide implementations for 'targetVersion', 'migratedVersion' and 
+ * Implementing migrators **must** provide implementations for 'fromVersion', 'toVersion' and 
  * '_doWork'!
  * 
  * @abstract
@@ -30,7 +30,7 @@ export default class AbstractMigrator {
    * @readonly
    * @virtual
    */
-  get targetVersion() { throw new Error("NotImplementedException"); };
+  get fromVersion() { throw new Error("NotImplementedException"); };
   
   /**
    * This is the system version that the world is set to, once this migrator's work is complete. 
@@ -42,7 +42,7 @@ export default class AbstractMigrator {
    * @readonly
    * @virtual
    */
-  get migratedVersion() { throw new Error("NotImplementedException"); };
+  get toVersion() { throw new Error("NotImplementedException"); };
 
   /**
    * Returns true, if this migrator can be applied to the current world system version. 
@@ -50,13 +50,9 @@ export default class AbstractMigrator {
    * @returns {Boolean} True, if this migrator can be applied to the current world system version. 
    */
   isApplicable() {
-    const version = WorldSystemVersion.get();
+    const worldVersion = WorldSystemVersion.get();
     
-    const majorApplies = version.major === this.targetVersion.major;
-    const minorApplies = version.minor === this.targetVersion.minor;
-    const patchApplies = version.patch === this.targetVersion.patch;
-
-    if (majorApplies === true && minorApplies === true && patchApplies === true) {
+    if (worldVersion.equals(this.fromVersion)) {
       return true;
     }
     return false;
@@ -65,7 +61,21 @@ export default class AbstractMigrator {
   /**
    * Begins the migration process. 
    * 
-   * @param {Object|undefined} args An optional arguments object. 
+   * Note the callbacks that can be passed via `args` can be used to update the ui with current progress. 
+   * 
+   * @param {Object} args
+   * @param {Function | undefined} args.onBegin Invoked when the work begins. Arguments:
+   * * `totalProgress: Number`
+   * * `localizedTitle: String` - A brief localized description of the kind of work that will be done. 
+   * @param {Function | undefined} args.onBeginIncrement Invoked when an increment of the work is begun. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onCompleteIncrement Invoked when an increment of the work is completed. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onComplete Invoked when work is completed. 
    * 
    * @async
    */
@@ -73,7 +83,7 @@ export default class AbstractMigrator {
     await this._doWork(args);
     
     // Update world system version. 
-    await WorldSystemVersion.set(this.migratedVersion);
+    await WorldSystemVersion.set(this.toVersion);
   }
   
   /**
@@ -81,7 +91,19 @@ export default class AbstractMigrator {
    * 
    * Implementing types **must** override this and provide an implementation!
    * 
-   * @param {Object|undefined} args An optional arguments object. 
+   * @param {Object} args
+   * @param {Function | undefined} args.onBegin Invoked when the work begins. Arguments:
+   * * `totalProgress: Number`
+   * * `localizedTitle: String` - A brief localized description of the kind of work that will be done. 
+   * @param {Function | undefined} args.onBeginIncrement Invoked when an increment of the work is begun. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onCompleteIncrement Invoked when an increment of the work is completed. Arguments:
+   * * `totalProgress: Number`
+   * * `progress: Number`
+   * * `localizedTitle: String` - A brief localized description of the current work increment. 
+   * @param {Function | undefined} args.onComplete Invoked when work is completed. 
    * 
    * @async
    * @abstract

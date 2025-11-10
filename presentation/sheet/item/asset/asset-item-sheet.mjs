@@ -1,10 +1,10 @@
-import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
+import ItemSheetSubType from "../item-sheet-subtype.mjs";
 import AssetItemSheetViewModel from "./asset-item-sheet-viewmodel.mjs";
 
 /**
  * Represents an "asset" type item sheet. 
  */
-export default class AssetItemSheet extends GameSystemBaseItemSheet {
+export default class AssetItemSheet extends ItemSheetSubType {
   /** @override */
   get template() { return AssetItemSheetViewModel.TEMPLATE;  }
   
@@ -12,7 +12,7 @@ export default class AssetItemSheet extends GameSystemBaseItemSheet {
   get localizedType() { return game.i18n.localize("system.character.asset.singular"); }
 
   /** @override */
-  _getViewModel(context, document, sheet) {
+  createViewModel(context, document, sheet) {
     return new AssetItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),

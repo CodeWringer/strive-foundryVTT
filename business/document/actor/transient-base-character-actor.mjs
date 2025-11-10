@@ -3,14 +3,13 @@ import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
 import CharacterAttribute from '../../ruleset/attribute/character-attribute.mjs';
-import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
-import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
-import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { PropertyUtil } from '../../util/property-utility.mjs';
 import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
+import TransientMomentumAction from '../item/transient-momentum-action.mjs';
+import TransientTrait from '../item/transient-trait.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
@@ -53,14 +52,20 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientScar>} health.scars 
  * * Read-only. 
- * @property {Array<CharacterHealthState>} health.states
- * * Getter returns a safe-copy.
+ * @property {Array<TransientHealthCondition>} health.conditions
+ * * Read-only. 
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
+ * * Read-only. 
+ * @property {Number} health.maxHpModifier 
+ * @property {Number} health.modifiedMaxHp 
  * * Read-only. 
  * @property {Number} health.injuryShrugOffs 
  * @property {Number} health.exhaustion 
  * @property {Number} health.maxExhaustion 
+ * * Read-only. 
+ * @property {Number} health.maxExhaustionModifier 
+ * @property {Number} health.modifiedMaxExhaustion 
  * * Read-only. 
  * @property {Number} health.deathSaves
  * @property {Number} health.deathSaveLimit
@@ -129,14 +134,29 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * 
  * @property {Object} initiative 
  * @property {Number} initiative.perTurn 
+ * 
+ * @property {Object} advancement The current experience points of this character.  
+ * @property {Number} advancement.xp The current experience points of this character.  
+ * @property {Boolean} advancement.advancementEnabled If `true`, then this character may advance their abilities. 
+ * * Read-only
+ * 
+ * @property {Object} momentum
+ * * Read-only
+ * @property {Array<TransientMomentumAction>} momentum.actions
+ * * Read-only
+ * 
+ * @property {Array<TransientTrait>} traits A list of character traits. These are **not** the same as 
+ * personality traits! 
+ * * Read-only. 
+ * @property {Array<TransientProject>} projects
+ * * Read-only. 
+ * @property {Number} stability
+ * * Read-only. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
   
-  /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ACTOR_CHAT_MESSAGE; }
-
   /**
    * @type {Object}
    * @readonly
@@ -312,7 +332,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get modifiedMaxHp() { return this.maxHP + this.maxHpModifier; },
 
       get HP() { return parseInt(thiz.document.system.health.HP ?? 0); },
-      set HP(value) { thiz.updateByPath("system.health.HP", value); },
+      set HP(value) {
+        const clampedHP = Math.max(0, value);
+        thiz.updateByPath("system.health.HP", clampedHP);
+      },
 
       // Exhaustion
       get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },
@@ -329,16 +352,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get injuryShrugOffs() { return parseInt(thiz.document.system.health.injuryShrugOffs ?? 0); },
       set injuryShrugOffs(value) { thiz.updateByPath("system.health.injuryShrugOffs", value); },
 
-      // Conditions (used to be called health states)
-      get states() { return thiz._healthStates.concat([]); },
-      set states(value) {
-        const dtoArray = value.map((healthState) => {
-          return {
-            name: healthState.name,
-            intensity: healthState.intensity,
-          };
-        });
-        thiz.updateByPath("system.health.states", dtoArray);
+      // Conditions
+      get conditions() {
+        return thiz.items.filter(it => it.type === ITEM_TYPES.HEALTH_CONDITION);
       },
 
       // Death saves
@@ -491,6 +507,84 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     return Math.ceil(result / 2);
   }
 
+  get attributes() {
+    try {
+      return game.strive.const.ATTRIBUTES.asArray().map(attribute => 
+        new CharacterAttribute(this.document, attribute.name)
+      )
+    } catch (error) {
+      game.strive.logger.logError(error);
+    }
+  }
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       * @readonly
+       */
+      get advancementEnabled() { return false; },
+      /**
+       * @type {Number}
+       */
+      get xp() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).xp ?? 0; },
+      set xp(value) { thiz.updateByPath("system.advancement.xp", value); },
+    };
+  }
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get momentum() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Array<TransientMomentumAction>}
+       * @readonly
+       */
+      get actions() {
+        return (thiz.items.filter(it => it.type === ITEM_TYPES.MOMENTUM_ACTION) ?? [])
+          .map(it => it.getTransientObject());
+        },
+    };
+  }
+
+  /**
+   * @type {Array<TransientTrait>}
+   * @readonly
+   */
+  get traits() { return this.items.filter(it => it.type === ITEM_TYPES.TRAIT); }
+
+  /**
+   * @type {Array<TransientTrait>}
+   * @readonly
+   */
+  get projects() { return this.items.filter(it => it.type === ITEM_TYPES.PROJECT); }
+
+  /**
+   * @type {Array<TransientTrait>}
+   * @readonly
+   */
+  get stability() {
+    const attributesToSum = [
+      this.attributes.find(it => it.name === ATTRIBUTES.strength.name),
+      this.attributes.find(it => it.name === ATTRIBUTES.toughness.name),
+    ];
+
+    let result = 0;
+    attributesToSum.forEach(attribute => {
+      result += parseInt(attribute.modifiedLevel);
+    });
+
+    return Math.ceil(result / 3);
+  }
+
   /**
    * @param {Actor} document An encapsulated actor instance. 
    * 
@@ -500,43 +594,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     super(document);
 
     this._prepareAssetsData();
-    this._healthStates = this._getHealthStates();
-  }
-
-  /**
-   * Sets the level of the attribute with the given name. 
-   * 
-   * @param {String} attName Internal name of an attribute, e.g. `"strength"`. 
-   * @param {Number | undefined} newValue Value to set the attribute to, e.g. `4`. 
-   * * Default `0`
-   * @param {Boolean | undefined} resetProgress If true, will also reset advancement progress. 
-   * * Default `true`
-   * 
-   * @async
-   */
-  async setAttributeLevel(attName, newValue = 0, resetProgress = true) {
-    const propertyPath = `system.attributes.${attName}`;
-
-    if (resetProgress === true) {
-      await this.document.update({
-        [`${propertyPath}.level`]: newValue,
-        [`${propertyPath}.progress`]: 0
-      });
-    } else {
-      await this.document.update({
-        [`${propertyPath}.level`]: newValue,
-      });
-    }
-  }
-
-  get attributes() {
-    try {
-      return game.strive.const.ATTRIBUTES.asArray().map(attribute => 
-        new CharacterAttribute(this.document, attribute.name)
-      )
-    } catch (error) {
-      game.strive.logger.logError(error);
-    }
   }
 
   /**
@@ -617,57 +674,11 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Returns the health states of the character. 
-   * 
-   * @returns {Array<CharacterHealthState>}
-   * 
-   * @private
-   */
-  _getHealthStates() {
-    const rawArray = this.document.system.health.states;
-    const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
-    const result = [];
-    let definition = undefined;
-
-    for (const entry of rawArray) {
-      // First try to get system-defined state. 
-      definition = HEALTH_STATES[entry.name];
-      if (definition === undefined) {
-        // Second try - is it a custom-defined state?
-        // For backwards-compatibility, also attempt to use the `it` directly - 
-        // in older versions, custom health states were defined as a string, instead of object. 
-        definition = stateSettings.custom.find(it => (it.name ?? it) === entry.name);
-        if (definition === undefined) {
-          game.strive.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
-          continue;
-        }
-      }
-
-      const healthState = new CharacterHealthState({
-        name: entry.name,
-        localizableName: definition.localizableName ?? entry.name,
-        icon: definition.icon, 
-        limit: definition.limit,
-        intensity: entry.intensity,
-      });
-      result.push(healthState);
-    }
-    return result;
-  }
-
-  /**
    * @override
    * 
    * Searches in: 
    * * Attribute names.
-   * * Embedded skill name.
-   * * Embedded expertise name.
-   * * Embedded asset name.
-   * * Embedded injury name.
-   * * Embedded illness name.
-   * * Embedded mutation name.
-   * * Embedded scar name.
-   * * Embedded asset name.
+   * * Embedded documents.
    */
   resolveReference(comparableReference, propertyPath) {
     // Search attributes. 
@@ -687,6 +698,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       this.health.illnesses,
       this.health.mutations,
       this.health.scars,
+      this.health.conditions,
+      this.momentum.actions,
+      this.traits,
     ];
     return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
   }

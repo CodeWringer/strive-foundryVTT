@@ -1,19 +1,17 @@
 import TransientAsset from "../../../../business/document/item/transient-asset.mjs"
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
-import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../common/extender-util.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
+import CompositeCurrentAndMaximumNumbersViewModel from "../../../component/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers-viewmodel.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
-import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
 
 /**
@@ -37,6 +35,12 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get quantityAndMaxTemplate() { return CompositeCurrentAndMaximumNumbersViewModel.TEMPLATE; }
+
+  /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -52,76 +56,90 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    this.vmQuantity = new InputNumberSpinnerViewModel({
+    // Promoted content
+    this.vmCompositeQuantity = new CompositeCurrentAndMaximumNumbersViewModel({
+      id: "vmCompositeQuantity",
       parent: this,
-      id: "vmQuantity",
-      value: this.document.quantity,
-      onChange: (_, newValue) => {
+      
+      currentValue: this.document.quantity,
+      onCurrentValueChange: (_, newValue) => {
         this.document.quantity = newValue;
       },
-      min: 1,
-    });
-    this.vmMaxQuantity = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmMaxQuantity",
-      value: this.document.maxQuantity,
-      onChange: (_, newValue) => {
+      currentValueMin: 0,
+      currentValueToolTip: game.i18n.localize("system.character.asset.quantity.label"),
+
+      currentValueIconClass: "ico dark ico-quantity-solid",
+      currentValueIconToolTip: game.i18n.localize("system.character.asset.quantity.label"),
+
+      maximumValue: this.document.maxQuantity,
+      onMaximumValueChange: (_, newValue) => {
         this.document.maxQuantity = newValue;
       },
-      min: 1,
+      maximumValueMin: 1,
+      maximumValueToolTip: game.i18n.localize("system.character.asset.quantity.maximum"),
+
+      maximumValueIconClass: "ico dark ico-limit-solid",
+      maximumValueIconToolTip: game.i18n.localize("system.character.asset.quantity.maximum"),
+    });
+    
+    this.vmQualityWrap = new ViewModel({
+      id: "vmQualityWrap",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.asset.quality"),
+    });
+    this.vmQualityIcon = new ViewModel({
+      id: "vmQualityIcon",
+      parent: this,
     });
     this.vmQuality = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmQuality",
       value: this.document.quality,
+      min: 0,
       onChange: (_, newValue) => {
         this.document.quality = newValue;
       },
-      min: 0,
+    });
+
+    this.vmBulkWrap = new ViewModel({
+      id: "vmBulkWrap",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
+    });
+    this.vmBulkIcon = new ViewModel({
+      id: "vmBulkIcon",
+      parent: this,
     });
     this.vmBulk = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmBulk",
       value: this.document.bulk,
+      min: 0,
       onChange: (_, newValue) => {
         this.document.bulk = newValue;
       },
-      min: 0,
     });
-    this.vmLocation = new InputTextFieldViewModel({
-      parent: this,
-      id: "vmLocation",
-      value: this.document.location,
-      placeholder: game.i18n.localize("system.character.asset.location.placeholder"),
-      onChange: (_, newValue) => {
-        this.document.location = newValue;
-      },
-    })
+    
+    if (this.isProperty) {
+      this.vmLocationWrap = new ViewModel({
+        id: "vmLocationWrap",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.asset.location.label"),
+      });
+      this.vmLocation = new InputTextFieldViewModel({
+        parent: this,
+        id: "vmLocation",
+        value: this.document.location,
+        placeholder: game.i18n.localize("system.character.asset.location.placeholder"),
+        onChange: (_, newValue) => {
+          this.document.location = newValue;
+        },
+      });
+    }
   }
 
   /** @override */
-  getDataFields() {
-    return [
-      new DataFieldComponent({
-        template: InputTagsViewModel.TEMPLATE,
-        viewModel: new InputTagsViewModel({
-          id: "vmTags",
-          parent: this,
-          systemTags: ASSET_TAGS.asArray(),
-          value: this.document.tags,
-          onChange: (_, newValue) => {
-            this.document.tags = newValue;
-          },
-        }),
-        localizedIconToolTip: game.i18n.localize("system.general.tag.plural"),
-        iconClass: "ico-tags-solid",
-        cssClass: "grid-span-2",
-      }),
-    ];
-  }
-
-  /** @override */
-  getPrimaryHeaderButtons() {
+  getHeaderButtons() {
     const thiz = this;
 
     let takeLabel = "system.character.asset.take";
@@ -138,14 +156,14 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       dropLabel = "system.character.asset.dropToProperty";
     }
 
-    return super.getPrimaryHeaderButtons().concat([
+    const buttons = [
       new TemplatedComponent({
         template: ButtonViewModel.TEMPLATE,
         viewModel: new ButtonViewModel({
           id: "vmBtnTakeAsset",
           parent: this,
           isEditable: this.getRootOwningDocument() !== undefined && this.isEditable,
-          iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
+          content: '<i class="ico dark interactible ico-take-item"></i>',
           localizedToolTip: game.i18n.localize(takeLabel),
           onClick: async () => {
             // Move "up" on character sheet. 
@@ -167,7 +185,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnDropAsset",
           parent: this,
           isEditable: this.getRootOwningDocument() !== undefined && this.isEditable,
-          iconHtml: '<i class="ico dark interactible ico-drop-item"></i>',
+          content: '<i class="ico dark interactible ico-drop-item"></i>',
           localizedToolTip: game.i18n.localize(dropLabel),
           onClick: async () => {
             // Move "down" on character sheet. 
@@ -180,13 +198,14 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.isProperty,
       }),
-    ]);
+    ];
+    return buttons.concat(super.getHeaderButtons());
   }
 
   /** @override */
-  getAdditionalHeaderContent() {
+  getPromotedContent() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.ASSET_LIST_ITEM_EXTRA_HEADER,
+      template: game.strive.const.TEMPLATES.ASSET_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,
     });
   }
@@ -225,14 +244,16 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       easyDismissal: true,
       inputDefinitions: [
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: inputSlots,
           localizedLabel: game.i18n.localize("system.character.asset.slot.label"),
-          required: true,
-          defaultValue: availableSlotChoices.length > 0 ? availableSlotChoices[0] : undefined,
-          specificArgs: {
+          template: InputDropDownViewModel.TEMPLATE,
+          viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
+            id: id,
+            parent: parent,
             options: availableSlotChoices,
-          },
+            value: availableSlotChoices.length > 0 ? availableSlotChoices[0] : undefined,
+            ...overrides,
+          }),
         }),
       ],
     }).renderAndAwait(true);

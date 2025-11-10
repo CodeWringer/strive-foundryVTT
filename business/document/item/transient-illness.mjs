@@ -4,6 +4,7 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
  * Represents the full transient data of an illness. 
@@ -70,7 +71,7 @@ export default class TransientIllness extends TransientBaseItem {
   async getChatData() {
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 

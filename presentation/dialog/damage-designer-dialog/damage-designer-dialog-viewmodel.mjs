@@ -85,7 +85,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       id: "vmRefresh",
       parent: this,
       localizedToolTip: "Refresh",
-      iconHtml: '<i class="fas fa-sync-alt"></i>',
+      content: '<i class="fas fa-sync-alt"></i>',
       onClick: (async () => {
         const findings = await this._getDamageFindings();
         await this._updateTable(findings);
@@ -96,7 +96,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       id: "vmCollapseAll",
       parent: this,
       localizedToolTip: "Collapse All",
-      iconHtml: '<i class="fas fa-angle-double-up"></i>',
+      content: '<i class="fas fa-angle-double-up"></i>',
       onClick: (async () => {
         this.hierarchyViewModels.forEach(vm => {
           vm.isExpanded = false;
@@ -107,7 +107,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       id: "vmExpandAll",
       parent: this,
       localizedToolTip: "Expand All",
-      iconHtml: '<i class="fas fa-angle-double-down"></i>',
+      content: '<i class="fas fa-angle-double-down"></i>',
       onClick: (async () => {
         this.hierarchyViewModels.forEach(vm => {
           vm.isExpanded = true;

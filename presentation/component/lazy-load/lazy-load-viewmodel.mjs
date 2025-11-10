@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -146,7 +147,7 @@ export default class LazyLoadViewModel extends ViewModel {
 
     // Render as needed. 
     if (this._renderedContent === undefined || this._invalidated === true) {
-      this._renderedContent = await renderTemplate(this.template, {
+      this._renderedContent = await new FoundryWrapper().renderTemplate(this.template, {
         viewModel: this.viewModel,
       });
       this._invalidated = false;

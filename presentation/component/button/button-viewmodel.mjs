@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -21,12 +22,8 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
  * 
- * @property {String | undefined} localizedLabel A localized text to 
- * display as a button label. 
- * @property {String | undefined} iconHtml Raw HTML to render as 
- * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
- * @property {Boolean} showFancyFont If `true`, will render the `localizedLabel` 
- * using the "fancy font". 
+ * @property {String | undefined} content Raw HTML to render as the content 
+ * of the button. 
  * 
  * @method onClick Asynchronous callback that is invoked when 
  * the button is clicked. Arguments: 
@@ -50,16 +47,15 @@ export default class ButtonViewModel extends ViewModel {
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @param {String | undefined} args.localizedLabel A localized text to 
-   * display as a button label. 
-   * @param {String | undefined} args.iconHtml Raw HTML to render as 
-   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
-   * @param {Boolean | undefined} args.showFancyFont If `true`, will render 
-   * the `localizedLabel` using the "fancy font". 
+   * @param {String | undefined} args.content Raw HTML to render as the content 
+   * of the button. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. Arguments: 
    * * `event: Event`
@@ -69,8 +65,15 @@ export default class ButtonViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.localizedLabel = args.localizedLabel;
-    this.iconHtml = args.iconHtml;
+    if (ValidationUtil.isDefined(args.localizedLabel)) {
+      game.strive.logger.logWarn("Deprecated parameter, 'localizedLabel', use 'content', instead");
+    }
+    if (ValidationUtil.isDefined(args.iconHtml)) {
+      game.strive.logger.logWarn("Deprecated parameter, 'iconHtml', use 'content', instead");
+    }
+    
+    this.content = args.content;
+
     this.onClick = args.onClick ?? (async (event, data) => {});
   }
 

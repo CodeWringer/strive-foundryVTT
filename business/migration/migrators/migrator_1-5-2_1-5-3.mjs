@@ -9,10 +9,10 @@ import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_5_2__1_5_3 extends AbstractMigrator {
   /** @override */
-  get targetVersion() { return new VersionCode(1, 5, 2) };
+  get fromVersion() { return new VersionCode(1, 5, 2) };
 
   /** @override */
-  get migratedVersion() { return new VersionCode(1, 5, 3) };
+  get toVersion() { return new VersionCode(1, 5, 3) };
 
   /**
    * @type {DocumentUpdater}

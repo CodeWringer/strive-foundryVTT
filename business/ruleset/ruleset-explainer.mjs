@@ -3,12 +3,9 @@ import TransientBaseCharacterActor from "../document/actor/transient-base-charac
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { StringUtil } from "../util/string-utility.mjs";
-import CharacterAssetSlotGroup from "./asset/character-asset-slot-group.mjs";
-import { ATTRIBUTE_TIERS } from "./attribute/attribute-tier.mjs";
 import { ATTRIBUTES } from "./attribute/attributes.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
 import Ruleset from "./ruleset.mjs";
-import { SKILL_TIERS } from "./skill/skill-tier.mjs";
 
 /**
  * Provides strings that explain derived values, based on the ruleset. 
@@ -20,32 +17,6 @@ export default class RulesetExplainer {
    * @private
    */
   _ruleset = new Ruleset();
-
-  /**
-   * @param {CharacterAttribute} attribute 
-   * 
-   * @returns {String}
-   */
-  getExplanationForAttributeAdvancement(attribute) {
-    const tier = this._ruleset.getAttributeLevelTier(attribute.level);
-    let factor;
-    if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
-      factor = 10;
-    } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
-      factor = 7;
-    } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
-      factor = 8;
-    }
-    return StringUtil.format2(
-      game.i18n.localize("system.rules.attributeAdvancementRequirements"),
-      {
-        rawLevel: attribute.level,
-        factor: factor,
-        attributeTier: game.i18n.localize(tier.localizableName),
-        advancementRequirements: attribute.advancementRequirements,
-      }
-    );
-  }
 
   /**
    * @param {GameSystemActor | TransientBaseCharacterActor} actor 
@@ -93,36 +64,53 @@ export default class RulesetExplainer {
   }
 
   /**
+   * @param {GameSystemActor | TransientBaseCharacterActor} actor 
+   * 
+   * @returns {String}
+   */
+  getExplanationForStability(actor) {
+    const transientActor = actor.getTransientObject();
+    const characterStrength = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
+    const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
+    return StringUtil.format2(
+      game.i18n.localize("system.rules.stability"),
+      {
+        localizedStrength: game.i18n.localize(ATTRIBUTES.strength.localizableName),
+        strength: characterStrength.modifiedLevel,
+        localizedToughness: game.i18n.localize(ATTRIBUTES.toughness.localizableName),
+        toughness: characterToughness.modifiedLevel,
+        stability: transientActor.stability,
+      }
+    );
+  }
+
+  /**
+   * @param {CharacterAttribute} attribute 
+   * 
+   * @returns {String}
+   */
+  getExplanationForAttributeAdvancement(attribute) {
+    return StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
+      xp: new Ruleset().getAttributeAdvancementRequirements(attribute.level),
+    });
+  }
+
+  /**
    * @param {TransientSkill} skill 
    * 
    * @returns {String}
    */
-  getExplanationForSkillAdvancementRequirements(skill) {
-    const tier = this._ruleset.getSkillLevelTier(skill.level);
-    let successFormula;
-    let failureFormula;
-    if (tier.name === SKILL_TIERS.dabbling.name) {
-      successFormula = "6";
-      failureFormula = "9";
-    } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successFormula = `${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) + 3`;
-      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 4`;
-    } else if (tier.name === SKILL_TIERS.master.name) {
-      successFormula = `${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) + 4`;
-      failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 5`;
+  getExplanationForSkillAdvancement(skill) {
+    if (skill.level === 0) {
+      return game.i18n.localize("system.character.advancement.requirement.explanation.learningSkill");
+    } else {
+      return StringUtil.format2(game.i18n.localize("system.character.advancement.requirement.explanation.knownSkill"), {
+        level: skill.level,
+        result: new Ruleset().getSkillAdvancementRequirements(skill.level),
+      });
     }
-    return StringUtil.format2(
-      game.i18n.localize("system.rules.skillAdvancementRequirements"),
-      {
-        tierName: game.i18n.localize(tier.localizableName),
-        successFormula: successFormula,
-        requiredSuccesses: skill.advancementRequirements.successes,
-        failureFormula: failureFormula,
-        requiredFailures: skill.advancementRequirements.failures,
-      },
-    );
   }
-  
+
   /**
    * @param {GameSystemActor | TransientBaseCharacterActor} actor 
    * 
@@ -134,45 +122,20 @@ export default class RulesetExplainer {
     const baseHp = this._ruleset.getCharacterBaseHp();
     const toughnessLevel = parseInt(this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, transientActor));
     const hpReductionPerInjury = this._ruleset.getMaximumHpReductionPerInjury(actor);
-
-    const modifiedToughnessString = StringUtil.format2(
-      game.i18n.localize("system.character.advancement.modifiedOf"),
-      {
-        name: game.i18n.localize(ATTRIBUTES.toughness.localizableName),
-      }
-    );
-
     const unmodifiedHp = this._ruleset.getUnmodifiedMaximumHp(actor);
-    const hpReduction = this._ruleset.getCharacterMaximumHpReduction(actor);
-
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
     return StringUtil.format2(
-      game.i18n.localize("system.rules.maxHp"),
+      game.i18n.localize("system.character.health.hp.maxExplanation"),
       {
         baseHp: baseHp,
-        toughness: `${modifiedToughnessString} (${toughnessLevel})`,
+        toughness: toughnessLevel,
         hpPerLevel: this._ruleset.hpPerLevel,
         unmodifiedHp: unmodifiedHp,
-        halfToughness: Math.floor(toughnessLevel / 2),
         hpReductionPerInjury: hpReductionPerInjury,
         injuryCount: injuryCount,
-        hpReduction: hpReduction,
-        finalMaxHp: transientActor.health.maxHP,
-      }
-    );
-  }
-  
-  /**
-   * @param {CharacterAssetSlotGroup} group 
-   * 
-   * @returns {String}
-   */
-  getExplanationForAssetSlotGroupBulk(group) {
-    
-    return StringUtil.format2(
-      game.i18n.localize("system.rules.assetSlotGroupBulk"),
-      {
-
+        finalMaxHp: transientActor.health.modifiedMaxHp,
+        operand: transientActor.health.maxHpModifier >= 0 ? "+" : "-",
+        modifier: Math.abs(transientActor.health.maxHpModifier),
       }
     );
   }
@@ -183,14 +146,17 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForMaxExhaustion(actor) {
-    const level = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
-    const maxExhaustion = this._ruleset.getCharacterMaximumExhaustion(actor);
+    const transientActor = actor.getTransientObject();
+
+    const rawLevel = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
     return StringUtil.format2(
-      game.i18n.localize("system.rules.maxExhaustion"),
+      game.i18n.localize("system.character.health.exhaustion.maxExplanation"),
       {
         baseExhaustionLimit: 1,
-        toughnessRawLevel: level,
-        maxExhaustion: maxExhaustion,
+        toughnessRawLevel: rawLevel,
+        maxExhaustion: transientActor.health.modifiedMaxExhaustion,
+        operand: transientActor.health.maxExhaustionModifier >= 0 ? "+" : "-",
+        modifier: Math.abs(transientActor.health.maxExhaustionModifier),
       }
     );
   }

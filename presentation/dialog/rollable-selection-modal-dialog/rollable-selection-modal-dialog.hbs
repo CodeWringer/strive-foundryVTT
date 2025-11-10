@@ -7,8 +7,8 @@ viewModel: RollableSelectionModalDialogViewModel
       {{#> button viewModel=viewModel.vmToggleRollSection leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
       <div class="flex-grow"></div>
       <div class="flex flex-center margin-l-md">
-        <i id="{{../viewModel.id}}-roll-section-expanded" class="ico ico-details-visible interactible dark{{#if ../viewModel.isRollSectionExpanded}}{{else}} hidden{{/if}}"></i>
-        <i id="{{../viewModel.id}}-roll-section-collapsed" class="ico ico-details-hidden interactible dark{{#if ../viewModel.isRollSectionExpanded}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-roll-section-expanded" class="ico ico-chevron-d-solid interactible dark{{#if ../viewModel.isRollSectionExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-roll-section-collapsed" class="ico ico-chevron-r-solid interactible dark{{#if ../viewModel.isRollSectionExpanded}} hidden{{/if}}"></i>
       </div>
       {{/button}}
     </h2>
@@ -61,8 +61,8 @@ viewModel: RollableSelectionModalDialogViewModel
       {{#> button viewModel=viewModel.vmToggleSelectSection leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
       <div class="flex-grow"></div>
       <div class="flex flex-center margin-l-md">
-        <i id="{{../viewModel.id}}-select-section-expanded" class="ico ico-details-visible interactible dark{{#if ../viewModel.isSelectSectionExpanded}}{{else}} hidden{{/if}}"></i>
-        <i id="{{../viewModel.id}}-select-section-collapsed" class="ico ico-details-hidden interactible dark{{#if ../viewModel.isSelectSectionExpanded}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-select-section-expanded" class="ico ico-chevron-d-solid interactible dark{{#if ../viewModel.isSelectSectionExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-select-section-collapsed" class="ico ico-chevron-r-solid interactible dark{{#if ../viewModel.isSelectSectionExpanded}} hidden{{/if}}"></i>
       </div>
       {{/button}}
     </h2>

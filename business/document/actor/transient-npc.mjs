@@ -1,6 +1,6 @@
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
-import ChallengeRating from "../../ruleset/attribute/challenge-rating.mjs";
-import { ValidationUtil } from "../../util/validation-utility.mjs";
+import NpcActorChatMessageViewModel from "../../../presentation/sheet/actor/npc/npc-actor-chat-message-viewmodel.mjs";
+import { PropertyUtil } from "../../util/property-utility.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
 /**
@@ -10,21 +10,12 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * 
  * @property {Boolean} personalityVisible
  * * default `false`
- * @property {Boolean} progressionVisible
+ * @property {Object} advancement
+ * @property {Boolean} advancement.advancementEnabled
  * * default `false`
- * @property {ChallengeRating} challengeRating
- * @property {Boolean} isChallengeRatingEnabled
+ * @property {Number} advancement.xp
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
-  /** @override */
-  get baseInitiative() {
-    if (this.isChallengeRatingEnabled) {
-      return (this.challengeRating.value * 3);
-    } else {
-      return super.baseInitiative;
-    }
-  }
-
   get personalityVisible() {
     return this.document.system.personalityVisible ?? false;
   }
@@ -32,54 +23,47 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     this.updateByPath("system.personalityVisible", value);
   }
 
-  get progressionVisible() {
-    return this.document.system.progressionVisible ?? false;
-  }
-  set progressionVisible(value) {
-    this.updateByPath("system.progressionVisible", value);
-  }
-
-  get challengeRating() {
-    if (ValidationUtil.isDefined(this.document.system.challengeRating)) {
-      return ChallengeRating.fromDto(this.document.system.challengeRating);
-    } else {
-      return new ChallengeRating({
-        value: 1,
-        modifier: 0,
-      });
-    }
-  }
   /**
-   * @param {ChallengeRating} value
-   */
-  set challengeRating(value) {
-    this.updateByPath("system.challengeRating", value.toDto());
-  }
-
-  get isChallengeRatingEnabled() {
-    return this.document.system.isChallengeRatingEnabled ?? false;
-  }
-  /**
-   * @param {Boolean} newValue
-   */
-  set isChallengeRatingEnabled(newValue) {
-    this.updateByPath("system.isChallengeRatingEnabled", newValue);
-  }
-
-  /**
-   * @override
+   * Returns the Chat message template path. 
    * 
-   * Searches in: 
-   * * Attributes under consideration of the challenge rating, if it is defined. 
+   * @type {String}
+   * @virtual
+   * @readonly
    */
-  resolveReference(comparableReference, propertyPath) {
-    // Attempt to resolve a challenge rating. 
-    const isAttributeReference = this.attributes.find(it => it.name === comparableReference) !== undefined;
-    if (isAttributeReference === true && this.isChallengeRatingEnabled === true) {
-      return this.challengeRating;
-    } else {
-      return super.resolveReference(comparableReference, propertyPath);
-    }
+  get chatMessageTemplate() { return NpcActorChatMessageViewModel.TEMPLATE; }
+  
+  /**
+   * @type {Object}
+   * @readonly
+   * @override
+   */
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get advancementEnabled() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).advancementEnabled ?? false; },
+      set advancementEnabled(value) { thiz.updateByPath("system.advancement.advancementEnabled", value); },
+      /**
+       * @type {Number}
+       */
+      get xp() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).xp ?? 0; },
+      set xp(value) { thiz.updateByPath("system.advancement.xp", value); },
+    };
+  }
+
+  /** @override */
+  getChatViewModel(overrides = {}) {
+    return new NpcActorChatMessageViewModel({
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
+      isOwner: this.isOwner,
+      isGM: game.user.isGM,
+      document: this,
+    });
   }
   
   /** @override */

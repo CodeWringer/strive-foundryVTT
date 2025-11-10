@@ -72,7 +72,7 @@ class WorldSystemVersionType {
     // Ensures the setting is registered and available. 
     game.settings.register(this._settingNamespace, this._settingKey, {
       name: this._settingName,
-      hint: "Used to know if world migration is necessary",
+      hint: "Determines whether world migration is necessary",
       scope: "world",
       config: false,
       default: systemVersion.toString(), 

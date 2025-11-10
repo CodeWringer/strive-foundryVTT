@@ -1,35 +1,51 @@
-import GameSystemBaseActorSheet from "./game-system-base-actor-sheet.mjs";
-import GameSystemNpcActorSheet from "./game-system-npc-actor-sheet.mjs";
-import GameSystemPcActorSheet from "./game-system-pc-actor-sheet.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
-import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
-import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import PlainActorSheet from "./plain/plain-actor-sheet.mjs";
+import ActorSheetSubType from "./actor-sheet-subtype.mjs";
+import NpcActorSheet from "./npc/npc-actor-sheet.mjs";
+import PcActorSheet from "./pc/pc-actor-sheet.mjs";
 
+/**
+ * Global definition of an Actor sheet. This is what FoundryVTT instantiates to render 
+ * an Actor sheet. 
+ * 
+ * Unfortunately, FoundryVTT only allows registering a single ActorSheet class definition. 
+ * This prevents OOP, as it is not possible to register specific ActorSheet derivatives 
+ * for each Actor document type. To circumvent this limitation and enable OOP after all, 
+ * STRIVE introduces so-called sub-types. 
+ * 
+ * There is one sub-type for each Actor document type. ALL of these sub-types MUST be 
+ * registered in the static `SUB_TYPES` property! 
+ * 
+ * @extends ActorSheet
+ * @see https://foundryvtt.com/api/v12/classes/client.ActorSheet.html
+ * 
+ * @property {ViewModel} viewModel
+ */
 export class GameSystemActorSheet extends ActorSheet {
   /**
    * Returns a map of `ActorSheet` sub-types and their factory functions. 
    * 
-   * @type {Map<String, Function<TransientBaseActor>>}
+   * @type {Map<String, ActorSheetSubType>}
    * @static
    * @readonly
    * @private
    */
   static get SUB_TYPES() {
     return new Map([
-      [ACTOR_TYPES.PLAIN, new GameSystemBaseActorSheet()],
-      [ACTOR_TYPES.NPC, new GameSystemNpcActorSheet()],
-      [ACTOR_TYPES.PC, new GameSystemPcActorSheet()],
+      [ACTOR_TYPES.PLAIN, new PlainActorSheet()],
+      [ACTOR_TYPES.NPC, new NpcActorSheet()],
+      [ACTOR_TYPES.PC, new PcActorSheet()],
     ]);
   }
 
   /**
-   * Type-dependent object which pseudo-extends the logic of this object. 
-   * @type {GameSystemBaseActorSheet}
+   * Returns the sub-type. 
+   * 
+   * @type {ActorSheetSubType}
    * @readonly
    */
   get subType() {
@@ -85,7 +101,7 @@ export class GameSystemActorSheet extends ActorSheet {
   static get defaultOptions() {
     return new FoundryWrapper().mergeObject(super.defaultOptions, {
       classes: [SYSTEM_ID, "sheet", "actor"],
-      width: 700,
+      width: 650,
       height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
     });
@@ -93,33 +109,22 @@ export class GameSystemActorSheet extends ActorSheet {
 
   /**
    * Returns the template path. 
-   * @returns {String} Path to the template. 
+   * 
+   * @type {String}
    * @virtual
    * @override
    * @readonly
-   * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() { return this.subType.template; }
 
   /**
    * Returns the localized title of this sheet. 
-   * @override
+   * 
    * @type {String}
-   * @readonly
-   * @see https://foundryvtt.com/api/ActorSheet.html#title
-   */
-  get title() { return `${this.subType.title} - ${this.actor.name}` }
-
-  /**
-   * @type {ViewModel}
-   * @private
-   */
-  _viewModel = undefined;
-  /**
-   * @type {ViewModel}
+   * @override
    * @readonly
    */
-  get viewModel() { return this._viewModel; }
+  get title() { return this.subType.getTitle(this.actor); }
 
   /** 
    * Returns an object that represents sheet and enriched actor data. 
@@ -135,15 +140,10 @@ export class GameSystemActorSheet extends ActorSheet {
     const context = super.getData();
     SheetUtil.enrichData(context);
 
-    // Prepare a new view model instance. 
-    game.strive.logger.logPerf(this, "actor.getData (getViewModel)", () => {
-      this._viewModel = this.subType.getViewModel(context, context.actor, this);
-    });
-    game.strive.logger.logPerf(this, "actor.getData (readAllViewState)", () => {
-      this._viewModel.readAllViewState();
-    });
-
-    context.viewModel = this._viewModel;
+    // Ensure view model. 
+    this.viewModel = this.subType.getViewModel(context, context.actor, this);
+    this.viewModel.readAllViewState();
+    context.viewModel = this.viewModel;
     
     return context;
   }
@@ -152,12 +152,8 @@ export class GameSystemActorSheet extends ActorSheet {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
-      await this.subType.activateListeners(html);
-    });
-    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
-      await this.viewModel.activateListeners(html);
-    });
+    await this.subType.activateListeners(html);
+    await this.viewModel.activateListeners(html);
   }
 
   /**
@@ -175,48 +171,12 @@ export class GameSystemActorSheet extends ActorSheet {
 
   /** @override */
   async _onDropItem(event, data) {
-    const templateId = data.uuid.substring(data.uuid.lastIndexOf(".") + 1);
+    await this.subType.onDropItem(event, data, this.actor);
+  }
 
-    const docFetcher = new DocumentFetcher();
-    const templateItem = await docFetcher.find({
-      id: templateId,
-      documentType: data.type,
-      includeLocked: true,
-    });
-
-    if (templateItem === undefined) {
-      return false;
-    }
-
-    const creationData = {
-      name: templateItem.name,
-      type: templateItem.type,
-      system: {
-        ...templateItem.system,
-        isCustom: false,
-      }
-    };
-
-    if (templateItem.type === ITEM_TYPES.SKILL) {
-      // For NPCs, ensure skills have at least level one. 
-      if (this.actor.type === ACTOR_TYPES.NPC) {
-        creationData.system.level = 1;
-      }
-
-      // Update an existing skill, is possible. Only skills support this behavior, as only skills are 
-      // expected to be unique on a character. 
-      const existingItem = this.actor.items.find(it => it.id === templateId || it.name === templateItem.name);
-      if (existingItem !== undefined) {
-        creationData.system.level = existingItem.system.level;
-        creationData.system.levelModifier = existingItem.system.levelModifier;
-        creationData.system.successes = existingItem.system.successes;
-        creationData.system.failures = existingItem.system.failures;
-
-        await existingItem.update(creationData);
-        return existingItem;
-      }
-    }
-
-    return await Item.create(creationData, { parent: this.actor });
+  /** @override */
+  _getHeaderButtons() {
+    const baseButtons = super._getHeaderButtons();
+    return this.subType.getHeaderButtons(this).concat(baseButtons);
   }
 }

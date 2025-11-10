@@ -1,5 +1,4 @@
 import TransientDocument from "../transient-document.mjs";
-import ActorChatMessageViewModel from '../../../presentation/sheet/actor/actor-chat-message-viewmodel.mjs';
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
 
 /**
@@ -39,15 +38,6 @@ export default class TransientBaseActor extends TransientDocument {
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
 
   /**
-   * Returns the Chat message template path. 
-   * 
-   * @type {String}
-   * @virtual
-   * @readonly
-   */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ACTOR_CHAT_MESSAGE; }
-  
-  /**
    * @private
    */
   _items;
@@ -74,36 +64,6 @@ export default class TransientBaseActor extends TransientDocument {
     this._items = this.items;
   }
 
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {ActorChatMessageViewModel}
-   * 
-   * @override
-   */
-  getChatViewModel(overrides = {}) {
-    return new ActorChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
-      document: this,
-    });
-  }
-  
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientBaseActor));

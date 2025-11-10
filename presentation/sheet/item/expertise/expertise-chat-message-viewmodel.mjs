@@ -53,7 +53,7 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.expertise.damage.length <= 0; }
+  get showDamageList() { return ValidationUtil.isDefined(this.expertise.damage); }
 
   /**
    * @type {String}

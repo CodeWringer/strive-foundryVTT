@@ -1,11 +1,19 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
+import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
-import GritPointsViewModel from "../sheet/actor/part/health/grit-points/grit-points-viewmodel.mjs";
+import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
+import ButtonViewModel from "../component/button/button-viewmodel.mjs";
+import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import GritPointsCombatTrackerViewModel from "../sheet/actor/part/health/grit-points/grit-points-combat-tracker-viewmodel.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
+import GeneralCombatAbilitiesViewModel from "./general-combat-actions/general-combat-abilities-viewmodel.mjs";
+import MomentumBarViewModel from "./momentum/momentum-bar-viewmodel.mjs";
 
 /**
  * @property {Array<CombatTrackerActionPointsViewModel>} actionPointsViewModels
- * @property {Array<GritPointsViewModel>} gritPointsViewModels
+ * @property {Array<GritPointsCombatTrackerViewModel>} gritPointsViewModels
  * 
  * @extends CombatTracker
  * @see https://foundryvtt.com/api/v10/classes/client.CombatTracker.html
@@ -19,6 +27,16 @@ export default class CustomCombatTracker extends CombatTracker {
     };
   }
 
+  /**
+   * Returns true, if the Momentum Bar is to be rendered. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get enableMomentumBar() {
+    return new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_ENABLE_MOMENTUM_BAR);
+  }
+
   /** @override */
   async getData(options) {
     const data = await super.getData(options);
@@ -26,6 +44,20 @@ export default class CustomCombatTracker extends CombatTracker {
     // Reset view models.
     this.actionPointsViewModels = [];
     this.gritPointsViewModels = [];
+
+    // Add Momentum Bar
+    if (this.enableMomentumBar && ValidationUtil.isDefined(data.combat)) {
+      this.vmMomentum = new MomentumBarViewModel({
+        id: "vmMomentum",
+        isEditable: true,
+        value: data.combat.momentum,
+        onChange: (_, newValue) => {
+          data.combat.momentum = newValue;
+        },
+      });
+      data.vmMomentum = this.vmMomentum;
+      data.momentumTemplate = MomentumBarViewModel.TEMPLATE;
+    }
 
     // Extend the "turns" data. 
     for (const turn of data.turns) {
@@ -42,7 +74,7 @@ export default class CustomCombatTracker extends CombatTracker {
       
       // Add action points view model. 
       turn.renderActionPoints = document.type !== ACTOR_TYPES.PLAIN;
-      turn.actionPointsTemplate = game.strive.const.TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
+      turn.actionPointsTemplate = CombatTrackerActionPointsViewModel.TEMPLATE;
       turn.actionPointsViewModel = new CombatTrackerActionPointsViewModel({
         id: `${turn.id}-aplist`,
         document: document,
@@ -52,19 +84,56 @@ export default class CustomCombatTracker extends CombatTracker {
       
       // Add grit points view model. 
       const transientActor = document.getTransientObject();
-      turn.gritPointsTemplate = game.strive.const.TEMPLATES.ACTOR_GRIT_POINTS;
+      turn.gritPointsTemplate = GritPointsCombatTrackerViewModel.TEMPLATE;
       turn.renderGritPoints = transientActor.type === ACTOR_TYPES.PC 
-      || (transientActor.type === ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);
-
-      turn.gritPointsViewModel = new GritPointsViewModel({
-        id: `${turn.id}-gplist`,
-        isEditable: true,
-        document: transientActor,
-        isInCombatTracker: true,
-      });
-      this.gritPointsViewModels.push(turn.gritPointsViewModel);
+        || (transientActor.type === ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);
+      if (turn.renderGritPoints) {
+        turn.gritPointsViewModel = new GritPointsCombatTrackerViewModel({
+          id: `${turn.id}-gplist`,
+          isEditable: true,
+          document: transientActor,
+          isInCombatTracker: true,
+        });
+        this.gritPointsViewModels.push(turn.gritPointsViewModel);
+      }
     }
 
+    this.vmSendToChatGeneralActions = new ButtonViewModel({
+      id: "vmSendToChatGeneralActions",
+      isEditable: true,
+      onClick: async () => {
+        if (game.user.isGM) {
+          const inputVisibility = "inputVisibility";
+          const dialog = await new DynamicInputDialog({
+            id: "select-visibility-dialog",
+            easyDismissal: true,
+            focused: inputVisibility,
+            localizedTitle: game.i18n.localize("system.character.abilities.general.sendToChatDialogTitle"),
+            inputDefinitions: [
+              new DynamicInputDefinition({
+                name: inputVisibility,
+                localizedLabel: game.i18n.localize("system.general.messageVisibility.query"),
+                template: InputDropDownViewModel.TEMPLATE,
+                viewModelFactory: (id, parent, overrides) => {
+                  return new InputDropDownViewModel({
+                    id: id,
+                    parent: parent,
+                    options: VISIBILITY_MODES.asChoices(),
+                    ...overrides,
+                  });
+                },
+              })
+            ],
+          }).renderAndAwait(true);
+
+          if (!dialog.confirmed) return;
+
+          GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.asArray().find(it => it.name === dialog[inputVisibility].value));
+        } else {
+          GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.self);
+        }
+      },
+    });
 
     return data;
   }
@@ -79,6 +148,11 @@ export default class CustomCombatTracker extends CombatTracker {
 
     for (const viewModel of this.gritPointsViewModels) {
       viewModel.activateListeners(html);
+    }
+
+    this.vmSendToChatGeneralActions.activateListeners(html);
+    if (ValidationUtil.isDefined(this.vmMomentum)) {
+      this.vmMomentum.activateListeners(html);
     }
   }
 

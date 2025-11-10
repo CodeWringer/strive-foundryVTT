@@ -9,7 +9,7 @@ import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel
  */
 export default class GmNotesViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_BIOGRAPHY; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_GM_NOTES; }
 
   /**
    * @type {Document}

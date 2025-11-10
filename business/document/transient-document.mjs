@@ -6,6 +6,8 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
 import AtReferencer from "../referencing/at-referencer.mjs";
 import { ChatUtil } from '../../presentation/chat/chat-utility.mjs';
 import { PropertyUtil } from '../util/property-utility.mjs';
+import FoundryWrapper from '../../common/foundry-wrapper.mjs';
+import { ValidationUtil } from '../util/validation-utility.mjs';
 
 /**
  * @summary
@@ -21,9 +23,9 @@ import { PropertyUtil } from '../util/property-utility.mjs';
  * So, if some other code wants to access an document's derived data, they will need 
  * to first fetch an instance of an inheriting type of this class. 
  * 
- * Inheriting types **must** implement `defaultImg` and `chatMessageTemplate`.
- * 
- * @abstract
+ * @abstract Inheritors MUST implement
+ * * `defaultImg`
+ * * `chatMessageTemplate`
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -49,7 +51,7 @@ import { PropertyUtil } from '../util/property-utility.mjs';
  * * Read-only.
  * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
  * @property {String} description
- * @property {String} gmNotes
+ * @property {String | null} gmNotes
  * @property {Boolean} isCustom
  */
 export default class TransientDocument {
@@ -161,17 +163,6 @@ export default class TransientDocument {
   }
   
   /**
-   * @type {String}
-   */
-  get gmNotes() {
-    return this.document.system.gmNotes;
-  }
-  set gmNotes(value) {
-    this.document.system.gmNotes = value;
-    this.updateByPath("system.gmNotes", value);
-  }
-  
-  /**
    * @type {Boolean}
    */
   get isCustom() {
@@ -195,14 +186,17 @@ export default class TransientDocument {
     this.updateByPath("system.displayOrders", value);
   }
   
-  
   /**
    * Arbitrary notes only visible to game-masters. 
    * 
-   * @type {String}
+   * @type {String | null}
    */
   get gmNotes() {
-    return this.document.system.gmNotes;
+    const value = this.document.system.gmNotes;
+    // Check for length > 0, because the field wasn't always nullable and all existing 
+    // documents will have an empty string defined, by default. But that doesn't mean 
+    // they actually have GM notes defined...
+    return (ValidationUtil.isDefined(value) && value.length > 0) ? value : null; 
   }
   set gmNotes(value) {
     this.document.system.gmNotes = value;
@@ -249,9 +243,10 @@ export default class TransientDocument {
    * @param {Document} document A Foundry {Document}. 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    *  * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"system.attributes[0].level" `
-   * * E.g.: `"system.attributes[4]" `
-   * * E.g.: `"system.attributes" `
+   * * E.g.: `"system.attributes[0].level" ` - supported
+   * * E.g.: `"system.attributes[4]" ` - supported
+   * * E.g.: `"system.attributes" ` - supported
+   * * E.g.: `"system.attributes['level']"` - NOT supported
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
    * 
@@ -267,7 +262,8 @@ export default class TransientDocument {
    * 
    * @param {String} propertyPath Path leading to the property to update, on the document. 
    * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"system.attributes[0].level"`
+   * * E.g.: `"system.attributes[0].level"` - supported
+   * * E.g.: `"system.attributes['level']"` - NOT supported
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
@@ -277,6 +273,46 @@ export default class TransientDocument {
    */
   async updateByPath(propertyPath, newValue, render = true) {
     await this._updater.updateByPath(this.document, propertyPath, newValue, render);
+  }
+
+  /**
+   * Returns the value of the document, identified by the given `propertyPath`, 
+   * or `undefined`, if there is no value. 
+   * 
+   * Handles missing pieces in the path by substituting empty objects. 
+   * 
+   * @param {String} propertyPath Path leading to the property to return, on the document. 
+   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"system.attributes[0].level"` - supported
+   * * E.g.: `"system.attributes['level']"` - NOT supported
+   * 
+   * @returns {Any | undefined}
+   */
+  getByPath(propertyPath) {
+    if (propertyPath === undefined || propertyPath.trim().length < 1) {
+      throw new Error(`Invalid property path '${propertyPath}'`);
+    }
+    
+    const propertyNames = game.strive.util.property.splitPropertyPath(propertyPath);
+    
+    if (propertyNames.length < 1) {
+      throw new Error(`Invalid property path '${propertyPath}'`);
+    }
+
+    let previousProperty = this.document;
+    for (let i = 0; i < propertyNames.length - 1; i++) {
+      const propertyName = propertyNames[i];
+      let current = previousProperty[propertyName];
+
+      if (ValidationUtil.isDefined(current)) {
+        previousProperty = current;
+      } else {
+        previousProperty = {};
+      }
+    }
+
+    const finalPropertyName = propertyNames[propertyNames.length - 1];
+    return previousProperty[finalPropertyName];
   }
 
   /**
@@ -303,7 +339,7 @@ export default class TransientDocument {
   async getChatData() {
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 

@@ -4,9 +4,10 @@ import DocumentFetcher from "../../../business/document/document-fetcher/documen
 import TransientAsset from "../../../business/document/item/transient-asset.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputToggleViewModel from "../input-toggle/input-toggle-viewmodel.mjs";
 
 /**
  * @property {String} chatMessage
@@ -52,8 +53,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @param {String | undefined} args.localizedLabel A localized text to 
-   * display as a button label. 
+   * @param {String | undefined} args.content Raw HTML to render as the content 
+   * of the button. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
    * * `event: Event`
    * * `data: undefined`
@@ -69,7 +70,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
+      content: args.content ?? '<i class="ico dark interactible ico-take-item"></i>',
       localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.character.asset.take"),
     });
     ValidationUtil.validateOrThrow(args, ["target", "contextType"]);
@@ -159,13 +160,15 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
       inputDefinitions.push(
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: nameInputActor,
           localizedLabel: game.i18n.localize("system.general.actor.label"),
-          required: true,
-          specificArgs: {
+          template: InputDropDownViewModel.TEMPLATE,
+          viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
+            id: id,
+            parent: parent,
             options: choices,
-          }
+            ...overrides,
+          }),
         }),
       );
     }
@@ -176,22 +179,30 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     if (ValidationUtil.isDefined(assetDocument.owningDocument)) { // Embedded -> removable from actor. 
       inputDefinitions.push(
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TOGGLE,
           name: nameInputDeleteFromSource,
           localizedLabel: game.i18n.localize("system.character.asset.delete.fromOwner"),
-          required: true,
-          defaultValue: false,
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: false,
+            ...overrides,
+          }),
         }),
       );
       assetIsRemovable = true;
     } else if (!ValidationUtil.isDefined(assetDocument.pack)) { // Not embedded and not in a pack -> removable from world. 
       inputDefinitions.push(
         new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TOGGLE,
           name: nameInputDeleteFromSource,
           localizedLabel: game.i18n.localize("system.character.asset.delete.fromWorld"),
-          required: true,
-          defaultValue: false,
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: false,
+            ...overrides,
+          }),
         }),
       );
       assetIsRemovable = true;

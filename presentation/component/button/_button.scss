@@ -12,6 +12,11 @@
     border-radius: unset;
     border: unset;
     background-color: unset;
+
+    &:hover {
+      border-color: unset;
+      background-color: unset;
+    }
   }
 
   &.disabled {
@@ -36,12 +41,9 @@
     min-width: unset;
     min-height: unset;
   }
-}
 
-button.button.spaced {
-  margin-right: $padding-md;
-
-  &:last-child {
-    margin-right: unset;
+  &:hover {
+    border-color: $c-border-highlight-light;
+    background-color: $c-bg-lighter;
   }
 }

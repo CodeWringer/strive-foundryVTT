@@ -5,13 +5,14 @@ import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
+import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs"
+import CompositeSortableListViewModel, { SortableListAddItemParams } from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
+import { TemplatedComponent } from "../../../item/base/templated-component.mjs"
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
 
 /**
@@ -98,79 +99,83 @@ export default class ActorAssetsViewModel extends ViewModel {
 
     this.luggageViewModels = [];
     this.luggageViewModels = this._getAssetViewModels(this.document.assets.luggage, this.luggageViewModels);
-    this.vmLuggageList = new SortableListViewModel({
-      id: "vmLuggageList",
+    this.vmLuggage = new CompositeSortableListViewModel({
+      id: "vmLuggage",
       parent: this,
-      isCollapsible: false,
+      listItemTemplate: AssetListItemViewModel.TEMPLATE,
+      listItemViewModels: this.luggageViewModels,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "luggage",
       }),
-      listItemViewModels: this.luggageViewModels,
-      listItemTemplate: AssetListItemViewModel.TEMPLATE,
       localizedTitle: game.i18n.localize("system.character.asset.luggage"),
-      headerLevel: 1,
-      addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          documentType: ITEM_TYPES.ASSET,
-          target: this.document,
-        }),
-        localizedLabel: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.luggage"),
-        ),
-        localizedToolTip: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.luggage"),
-        ),
-        onItemAdded: (_, document) => {
-          this.document.assets.luggage = this.document.assets.luggage.concat([
-            document.getTransientObject(),
-          ]);
-        },
+      addItemParams: [
+        new SortableListAddItemParams({
+          creationStrategy: new SpecificDocumentCreationStrategy({
+            documentType: ITEM_TYPES.ASSET,
+            target: this.document,
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.luggage"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.luggage"),
+          ),
+          onItemAdded: (_, document) => {
+            this.document.assets.luggage = this.document.assets.luggage.concat([
+              document.getTransientObject(),
+            ]);
+          },
+        })
+      ],
+      headerExtraContent: new TemplatedComponent({
+        template: game.strive.const.TEMPLATES.ACTOR_ASSET_LUGGAGE_EXTRA_HEADER,
+        viewModel: this,
       }),
-      sortParams: new SortableListSortParams({
-        options: this._getAssetSortingOptions(),
-        compact: true,
-      }),
+      sortingOptions: this._getAssetSortingOptions(),
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: false,
     });
     
     this.propertyViewModels = [];
     this.propertyViewModels = this._getAssetViewModels(this.document.assets.property, this.propertyViewModels);
-    this.vmPropertyList = new SortableListViewModel({
-      id: "vmPropertyList",
+    this.vmProperties = new CompositeSortableListViewModel({
+      id: "vmProperties",
       parent: this,
-      isCollapsible: false,
+      listItemTemplate: AssetListItemViewModel.TEMPLATE,
+      listItemViewModels: this.propertyViewModels,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "property",
       }),
-      listItemViewModels: this.propertyViewModels,
-      listItemTemplate: AssetListItemViewModel.TEMPLATE,
       localizedTitle: game.i18n.localize("system.character.asset.property"),
-      headerLevel: 1,
-      addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          documentType: ITEM_TYPES.ASSET,
-          target: this.document,
-        }),
-        localizedLabel: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.property"),
-        ),
-        localizedToolTip: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.property"),
-        ),
-      }),
-      sortParams: new SortableListSortParams({
-        options: this._getAssetSortingOptions(),
-        compact: true,
-      }),
+      addItemParams: [
+          new SortableListAddItemParams({
+          creationStrategy: new SpecificDocumentCreationStrategy({
+            documentType: ITEM_TYPES.ASSET,
+            target: this.document,
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.property"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.property"),
+          ),
+        })
+      ],
+      sortingOptions: this._getAssetSortingOptions(),
+      isCollapsible: false,
+      enableFooter: true,
+      isSearchable: false,
     });
 
     this.vmCurrentBulk = new ReadOnlyValueViewModel({
@@ -210,12 +215,12 @@ export default class ActorAssetsViewModel extends ViewModel {
   _getChildUpdates() {
     const updates = super._getChildUpdates();
 
-    updates.set(this.vmLuggageList, {
-      ...updates.get(this.vmLuggageList),
+    updates.set(this.vmLuggage, {
+      ...updates.get(this.vmLuggage),
       listItemViewModels: this.luggageViewModels,
     });
-    updates.set(this.vmPropertyList, {
-      ...updates.get(this.vmPropertyList),
+    updates.set(this.vmProperty, {
+      ...updates.get(this.vmProperty),
       listItemViewModels: this.propertyViewModels,
     });
 
@@ -260,14 +265,14 @@ export default class ActorAssetsViewModel extends ViewModel {
   _getAssetSortingOptions() {
     return [
       new SortingOption({
-        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        iconHtml: '<i class="ico ico-tags-solid"></i>',
         localizedToolTip: game.i18n.localize("system.general.name.label"),
         sortingFunc: (a, b) => {
           return a.document.name.localeCompare(b.document.name);
         },
       }),
       new SortingOption({
-        iconHtml: '<i class="ico ico-bulk-solid dark"></i>',
+        iconHtml: '<i class="ico ico-bulk-solid"></i>',
         localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
         sortingFunc: (a, b) => {
           return a.document.compareBulk(b.document);

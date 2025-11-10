@@ -25,11 +25,7 @@ export const StringUtil = {
    * @constant
    */
   REGEX_INT: /-?\d+/,
-  
-  
-  
 
-  
   /**
    * Pattern for detection of a placeholder. 
    * 
@@ -96,11 +92,7 @@ export const StringUtil = {
 
     return newString;
   },
-  
-  
-  
 
-  
   /**
    * Returns a new String, based on the given string, with any placeholders 
    * replaced with the other given arguments, in the order that they appear. 

@@ -1,0 +1,21 @@
+{{!-- Required context:
+viewModel: ListFooterViewModel
+cssClass: String | undefined
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-middle">
+  {{!-- Collapse button --}}
+  {{#if viewModel.isCollapsible}}
+  {{> button viewModel=viewModel.vmToggleExpansion cssClass="flex-grow" }}
+  {{else}}
+  {{!-- Spacer --}}
+  <div class="flex-grow"></div>
+  {{/if}}
+  {{!-- Add button(s) --}}
+  {{#if viewModel.isEditable}}
+  <div class="flex flex-row auto-margin-h-md">
+    {{#each viewModel.addItemButtonViewModels as |viewModel|}}
+    {{> buttonAdd viewModel=viewModel }}
+    {{/each}}
+  </div>
+  {{/if}}
+</div>

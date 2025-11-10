@@ -10,26 +10,18 @@ readOnlyCssClass: {String | undefined}
   id="{{viewModel.id}}"
   value="{{viewModel.value.value}}"
 >
-  {{#each viewModel.options as |option index|}}
-    <div class="radio-button-container flex flex-row flex-grow{{#if option.isActive}} active{{/if}}">
-      {{#if ../viewModel.isEditable}}
+  {{#each viewModel._mappedOptions as |option|}}
+    <div class="radio-button-container flex flex-row flex-grow{{#if option.isActive}} active{{/if}}{{#if option.cssClass}} {{option.cssClass}}{{/if}}">
+      <label id="{{option.vm.id}}" class="flex flex-center flex-grow{{#if option.vm.isEditable}} interactible{{else}} custom-system-read-only disabled{{/if}}{{#if option.vm.showFancyFont}} fancy-font{{/if}}">
+      {{#if option.vm.isEditable}}
         <input 
           type="radio" 
           class="radio-button" 
-          name="{{../viewModel.id}}-{{option.value}}" 
-          id="{{../viewModel.id}}-{{option.value}}" 
+          name="{{../viewModel.id}}-group" 
           value="{{option.value}}"
         />
       {{/if}}
-      <label class="flex flex-center flex-grow{{#if ../viewModel.isEditable}} interactible{{else}} custom-system-read-only disabled{{/if}}{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}" 
-        for="{{../viewModel.id}}-{{option.value}}"
-        {{#if option.tooltip}}title="{{option.tooltip}}"{{/if}}
-      >
-      {{#if option.isActive}}
-        {{{option.activeHtml}}}
-      {{else}}
-        {{{option.inactiveHtml}}}
-      {{/if}}
+      {{#if option.isActive}}{{{option.activeHtml}}}{{else}}{{{option.inactiveHtml}}}{{/if}}
       </label>
     </div>
   {{/each}}

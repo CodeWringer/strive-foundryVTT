@@ -27,8 +27,6 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
  * 
- * @property {String | undefined} iconHtml Raw HTML to render as 
- * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
  * @property {Any | undefined} value The current value. 
  * * Upon change, invokes the `onChange` callback. 
  * @property {String} localizedValue The current value, localized. 
@@ -38,6 +36,15 @@ export const SELECTOR_READ = "custom-system-read-only";
  * Receives the following arguments: 
  * * `oldValue: {Any}`
  * * `newValue: {Any}`
+ * @method onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
+ * @method onFocus Callback that is invoked when the input element is focused. 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
+ * @method onFocusLost Callback that is invoked when the input element is unfocused. 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
  */
 export default class InputViewModel extends ViewModel {
 
@@ -70,6 +77,16 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
+   * Set to `true` when updating the value without wanting events to fire. 
+   * 
+   * This is intended to prevent infinite circular onChange invocations. For use by inheritors 
+   * who want to update the displayed value, but without triggering callbacks. 
+   * @type {Boolean}
+   * @protected
+   */
+  _suppressEvent = false;
+
+  /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
@@ -78,20 +95,29 @@ export default class InputViewModel extends ViewModel {
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
    * 
-   * @param {String | undefined} args.iconHtml Raw HTML to render as 
-   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Any | undefined} args.value The current value. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocus Callback that is invoked when the input element is focused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
    */
   constructor(args = {}) {
     super(args);
 
-    this.iconHtml = args.iconHtml;
     this._value = args.value;
     this.onChange = args.onChange ?? (() => {});
+    this.onInput = args.onInput ?? (() => {});
+    this.onFocus = args.onFocus ?? (() => {});
+    this.onFocusLost = args.onFocusLost ?? (() => {});
   }
 
   /** @override */
@@ -101,6 +127,9 @@ export default class InputViewModel extends ViewModel {
     if (this.isEditable !== true) return;
 
     this.element.change(this._onChange.bind(this));
+    this.element.on("input", this._onInput.bind(this));
+    this.element.on("focus", this._onFocus.bind(this));
+    this.element.on("focusout", this._onFocusLost.bind(this));
   }
   
   /** @override */
@@ -118,6 +147,7 @@ export default class InputViewModel extends ViewModel {
    * @protected
    */
   _onChange(event) {
+    if (this._suppressEvent) return;
     const newValue = SheetUtil.getElementValue(event.currentTarget);
 
     if (ValidationUtil.isDefined(newValue) !== true) {
@@ -125,5 +155,38 @@ export default class InputViewModel extends ViewModel {
     }
 
     this.value = newValue;
+  }
+
+  /**
+   * Internal callback for onInput. 
+   * 
+   * @param {Event} event 
+   * 
+   * @protected
+   */
+  _onInput(event) {
+    this.onInput(event, this);
+  }
+
+  /**
+   * Internal callback for onFocus. 
+   * 
+   * @param {Event} event 
+   * 
+   * @protected
+   */
+  _onFocus(event) {
+    this.onFocus(event, this);
+  }
+
+  /**
+   * Internal callback for onFocusLost. 
+   * 
+   * @param {Event} event 
+   * 
+   * @protected
+   */
+  _onFocusLost(event) {
+    this.onFocusLost(event, this);
   }
 }

@@ -11,6 +11,7 @@ import { ITEM_TYPES } from '../item-types.mjs';
 import { ChatUtil } from '../../../../presentation/chat/chat-utility.mjs';
 import { ValidationUtil } from '../../../util/validation-utility.mjs';
 import { UuidUtil } from '../../../util/uuid-utility.mjs';
+import FoundryWrapper from '../../../../common/foundry-wrapper.mjs';
 
 /**
  * Represents an expertise. 
@@ -30,13 +31,14 @@ import { UuidUtil } from '../../../util/uuid-utility.mjs';
  * @property {String} img A relative url to an image resource on the server. 
  * @property {String} description 
  * @property {Number} requiredLevel 
- * @property {Number} apCost 
- * @property {Array<DamageAndType>} damage
- * @property {String | Null} condition 
- * @property {Number | Null} distance 
- * @property {String | Null} obstacle 
- * @property {String | Null} opposedBy 
- * @property {AttackType | Null} attackType 
+ * @property {Number | null} apCost 
+ * @property {Array<DamageAndType> | null} damage
+ * @property {String | null} condition 
+ * @property {Number | null} distance 
+ * @property {String | null} obstacle 
+ * @property {String | null} opposedBy 
+ * @property {AttackType | null} attackType 
+ * @property {String | null} gmNotes
  */
 export default class Expertise {
   /**
@@ -60,12 +62,13 @@ export default class Expertise {
       description: dto.description,
       requiredLevel: dto.requiredLevel,
       apCost: dto.apCost,
-      damage: dto.damage.map(it => DamageAndType.fromDto(it)),
+      damage: ValidationUtil.isDefined(dto.damage) ? dto.damage.map(it => DamageAndType.fromDto(it)) : undefined,
       condition: dto.condition,
       distance: dto.distance,
       obstacle: dto.obstacle,
       opposedBy: dto.opposedBy,
       attackType: dto.attackType === undefined ? undefined : ATTACK_TYPES[dto.attackType],
+      gmNotes: dto.gmNotes,
     });
   }
 
@@ -132,7 +135,7 @@ export default class Expertise {
   }
   
   /**
-   * @type {Number}
+   * @type {Number | null}
    */
   get apCost() { return this._apCost; }
   set apCost(value) {
@@ -141,12 +144,28 @@ export default class Expertise {
   }
   
   /**
-   * @type {Array<DamageAndType>} 
+   * @type {Array<DamageAndType> | null} 
    */
-  get damage() { return this._damage; }
+  get damage() {
+    const value = this._damage;
+    if (ValidationUtil.isDefined(value)) {
+      if (value.length > 0) {
+        return value;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
   set damage(value) {
-    this._damage = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
+    if (ValidationUtil.isDefined(value)) {
+      this._damage = value;
+      this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
+    } else {
+      this._damage = null;
+      this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, null);
+    }
   }
   
   /**
@@ -191,7 +210,17 @@ export default class Expertise {
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? null : value.name);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, ValidationUtil.isDefined(value) ? value.name : null);
+  }
+  
+  
+  /**
+   * @type {String | null}
+   */
+  get gmNotes() { return this._gmNotes; }
+  set gmNotes(value) {
+    this._gmNotes = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.gmNotes`, ValidationUtil.isDefined(value) ? value.name : null);
   }
   
   /**
@@ -210,6 +239,7 @@ export default class Expertise {
    * @param {String | undefined} args.obstacle 
    * @param {String | undefined} args.opposedBy 
    * @param {AttackType | undefined} args.attackType 
+   * @param {String | undefined} args.gmNotes 
    * 
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
@@ -226,13 +256,14 @@ export default class Expertise {
     this._img = args.img ?? "icons/svg/book.svg";
     this._description = args.description ?? "";
     this._requiredLevel = args.requiredLevel ?? 0;
-    this._apCost = args.apCost ?? 0;
-    this._damage = args.damage ?? [];
+    this._apCost = args.apCost ?? null;
+    this._damage = args.damage ?? null;
     this._condition = args.condition ?? null;
     this._distance = args.distance ?? null;
     this._obstacle = args.obstacle ?? null;
     this._opposedBy = args.opposedBy ?? null;
     this._attackType = args.attackType ?? null;
+    this._gmNotes = args.gmNotes ?? null;
   }
 
   /**
@@ -252,7 +283,7 @@ export default class Expertise {
     const actor = ((this.owningDocument ?? {}).owningDocument ?? {}).document;
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 
@@ -419,14 +450,13 @@ export default class Expertise {
       description: this.description,
       requiredLevel: this.requiredLevel,
       apCost: this.apCost,
-      damage: this.damage.map(it => {
-        return { damage: it.damage, damageType: it.damageType.name }
-      }),
+      damage: ValidationUtil.isDefined(this.damage) ? this.damage.map(it => it.toDto()) : null,
       condition: this.condition,
       distance: this.distance,
       obstacle: this.obstacle,
-      attackType: (this.attackType ?? {}).name,
       opposedBy: this.opposedBy,
+      attackType: (this.attackType ?? {}).name,
+      gmNotes: this.gmNotes,
     };
   }
 

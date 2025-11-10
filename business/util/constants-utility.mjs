@@ -1,4 +1,5 @@
 import ChoiceOption from "../../presentation/component/input-choice/choice-option.mjs";
+import { ValidationUtil } from "./validation-utility.mjs";
 
 /**
  * @constant
@@ -41,14 +42,14 @@ export const ConstantsUtil = {
   getAsChoices: function(constantsObject, exclude) {
     return this._getAs(constantsObject, exclude, (entry) => {
       const localizedName = entry.localizableName !== undefined ? game.i18n.localize(entry.localizableName) : undefined;
-      const icon = entry.icon;
+      const icon = entry.img ?? entry.icon;
   
       return new ChoiceOption({
         value: entry.name,
         localizedValue: localizedName,
         icon: icon,
-        shouldDisplayValue: localizedName !== undefined ? true : false,
-        shouldDisplayIcon: icon !== undefined ? true : false,
+        shouldDisplayValue: ValidationUtil.isDefined(localizedName),
+        shouldDisplayIcon: ValidationUtil.isDefined(icon),
       });
     });
   },

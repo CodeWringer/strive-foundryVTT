@@ -22,7 +22,6 @@
 
 div.list-item-header {
   background-color: #7d7d7d3d;
-  margin-bottom: $padding-md;
   border-bottom: $c-text-underline solid 1px;
 
   &-img {
@@ -32,6 +31,8 @@ div.list-item-header {
     & > img {
       width: 100%;
       height: 100%;
+      border: unset;
+      padding: 0.08rem;
     }
   }
 }

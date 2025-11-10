@@ -2,7 +2,7 @@ import CharacterAssetSlotGroup from "../../../../../business/ruleset/asset/chara
 import { StringUtil } from "../../../../../business/util/string-utility.mjs";
 import { UuidUtil } from "../../../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
-import ButtonContextMenuViewModel from "../../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import ConfirmablePlainDialog from "../../../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
@@ -115,7 +115,7 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
       isEditable: this.isEditable,
       isOwner: this.isOwner,
       menuItems: [
-        {
+        new ContextMenuItem({
           name: StringUtil.format(
             game.i18n.localize("system.general.add.addType"),
             game.i18n.localize("system.character.asset.slot.label"),
@@ -133,8 +133,8 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
               maxBulk: data.maxBulk,
             });
           },
-        },
-        {
+        }),
+        new ContextMenuItem({
           name: StringUtil.format(
             game.i18n.localize("system.general.delete.deleteType"), 
             game.i18n.localize("system.character.asset.slot.group.label")
@@ -155,7 +155,7 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
 
             thiz.group.delete();
           },
-        },
+        }),
       ],
     });
     this.assetSlotViewModels = [];

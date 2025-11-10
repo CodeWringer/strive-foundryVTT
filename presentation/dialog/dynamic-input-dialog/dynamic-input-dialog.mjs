@@ -12,6 +12,8 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  * 
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input fields 
  * to include. 
+ * @property {String | undefined} focused Name of the input field to pre-focus when 
+ * the dialog is opened. 
  * 
  * @example
  * ```JS
@@ -32,14 +34,16 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  *   ),
  *   inputDefinitions: [
  *     new DynamicInputDefinition({
- *       type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
  *       name: "inputChoices",
  *       localizedLabel: game.i18n.localize("system.general.name.label"),
- *       required: true,
- *       defaultValue: assetChoices[0], // This must be of type `ChoiceOption`! 
- *       specificArgs: {
- *         options: assetChoices, // This must be of type `Array<ChoiceOption>`! 
- *       }
+ *       template: InputDropDownViewModel.TEMPLATE,
+ *       viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
+ *         id: id,
+ *         parent: parent,
+ *         options: assetChoices,
+ *         value: assetChoices[0],
+ *         ...overrides,
+ *       }),
  *     }),
  *   ],
  * }).renderAndAwait(true); 
@@ -54,23 +58,33 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
   get template() { return game.strive.const.TEMPLATES.DIALOG_DYNAMIC_INPUT; }
 
   /** @override */
-  get id() { return "dynamic-input-dialog"; }
+  get id() { return this._id ?? "dynamic-input-dialog"; }
+  set id(value) { this._id = value; }
+
+  /** @override */
+  static get defaultOptions() {
+    const r = super.defaultOptions;
+    r.classes = ["width-max-lg"].concat(r.classes);
+    return r;
+  }
 
   /** @override */
   get buttons() { return [
     new DialogButtonDefinition({
-      id: "confirm",
+      id: ConfirmableModalDialog.CONFIRM_ID,
       clickCallback: (html, dialog) => {
+        if (!ValidationUtil.isDefined(dialog._viewModel)) return; // Hack - can not be caught with debugger. Race condition?
+
         const validationResult = dialog._viewModel.validate();
         if (validationResult.allValid === true) {
           dialog.confirmed = true;
-  
+
           if (dialog.closeOnConfirm === true) {
             dialog.close();
           }
         } else {
           html.find("#required-input-warning").removeClass("hidden");
-          
+
           const requiredListElement = html.find("#required-input-list");
           requiredListElement.empty();
           for (const definitionResult of validationResult.validations) {
@@ -86,7 +100,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       localizedLabel: game.i18n.localize("system.general.confirm"),
     }),
     new DialogButtonDefinition({
-      id: "cancel",
+      id: ConfirmableModalDialog.CANCEL_ID,
       clickCallback: (html, dialog) => {
         dialog.close();
       },
@@ -104,18 +118,31 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
 
   /**
    * @param {Object} options 
+   * @param {String | undefined} options.id An ID by which to uniquely identify instances of this 
+   * dialog. 
+   * 
+   * **Required** *in case* any of the inputs' values are to be remembered! 
    * @param {Boolean | undefined} options.easyDismissal If true, allows for easier dialog dismissal, 
    * by clicking anywhere on the backdrop element. Default `true`. 
    * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
    * of the dialog. Receives this dialog instance as its only argument. 
    * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
    * @param {Array<DynamicInputDefinition>} options.inputDefinitions
+   * @param {String | undefined} options.focused Name of the input field to pre-focus when 
+   * the dialog is opened. 
+   * 
+   * @param {Function | undefined} options.onReady Invoked once all view model instances have 
+   * been created. Receives arguments:
+   * * `dialogViewModel: DynamicInputDialogViewModel`
    */
   constructor(options = {}) {
     super(options);
     ValidationUtil.validateOrThrow(options, ["inputDefinitions"]);
 
+    this._id = options.id;
     this.inputDefinitions = options.inputDefinitions;
+    this.focused = options.focused;
+    this.onReady = options.onReady;
   }
   
   /** @override */
@@ -126,10 +153,13 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     }
 
     this._viewModel = new DynamicInputDialogViewModel({
+      id: this.id,
       inputDefinitions: this.inputDefinitions,
       isEditable: true,
       isSendable: true,
       ui: this,
+      focused: this.focused,
+      onReady: this.onReady,
     });
 
     return {
@@ -158,7 +188,6 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       }
 
       // Clean up the view model. 
-      this._viewModel.writeViewState();
       this._viewModel.dispose();
       this._viewModel = undefined;
     }

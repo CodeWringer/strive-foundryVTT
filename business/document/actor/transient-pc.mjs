@@ -1,6 +1,8 @@
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
+import PcActorChatMessageViewModel from "../../../presentation/sheet/actor/pc/pc-actor-chat-message-viewmodel.mjs";
 import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
+import { PropertyUtil } from "../../util/property-utility.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
 import { ITEM_TYPES } from "../item/item-types.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
@@ -22,8 +24,21 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Number} fateSystem.miFP
  * @property {Number} fateSystem.maFP
  * @property {Number} fateSystem.AFP
+ * @property {Object} advancement
+ * @property {Boolean} advancement.advancementEnabled
+ * * Read-only.
+ * @property {Number} advancement.xp
  */
 export default class TransientPc extends TransientBaseCharacterActor {
+  /**
+   * Returns the Chat message template path. 
+   * 
+   * @type {String}
+   * @virtual
+   * @readonly
+   */
+  get chatMessageTemplate() { return PcActorChatMessageViewModel.TEMPLATE; }
+  
   /**
    * @type {Object}
    * @readonly
@@ -48,14 +63,39 @@ export default class TransientPc extends TransientBaseCharacterActor {
   }
 
   /**
-   * @param {Actor} actor An encapsulated actor instance. 
-   * 
-   * @throws {Error} Thrown, if `actor` is `undefined`. 
+   * @type {Object}
+   * @readonly
+   * @override
    */
-  constructor(actor) {
-    super(actor);
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       * @readonly
+       */
+      get advancementEnabled() { return true; },
+      /**
+       * @type {Number}
+       */
+      get xp() { return PropertyUtil.guaranteeObject(thiz.document.system.advancement).xp ?? 0; },
+      set xp(value) { thiz.updateByPath("system.advancement.xp", value); },
+    };
   }
 
+  /** @override */
+  getChatViewModel(overrides = {}) {
+    return new PcActorChatMessageViewModel({
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
+      isOwner: this.isOwner,
+      isGM: game.user.isGM,
+      document: this,
+    });
+  }
+  
   /**
    * Tries to resolve the given reference in the embedded documents of 
    * this document. 

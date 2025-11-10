@@ -1,39 +1,37 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
-import { ATTRIBUTES, Attribute } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
-import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
-import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 import Ruleset from "../../../../business/ruleset/ruleset.mjs"
-import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
 import { StringUtil } from "../../../../business/util/string-utility.mjs"
 import { ExtenderUtil } from "../../../../common/extender-util.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
-import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
 import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
+import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import ListViewModel from "../../../component/list/list-viewmodel.mjs"
+import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document
  */
 export default class SkillListItemViewModel extends BaseListItemViewModel {
+  /** @override */
+  static get HEADER_TEMPLATE() { return game.strive.const.TEMPLATES.SKILL_LIST_ITEM_HEADER; }
+
   /**
    * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
@@ -42,19 +40,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get isExpertiseListVisible() { return (this.isEditable === true) || this.document.expertises.length !== 0 }
 
   /**
-   * Returns the current advancement requirements. 
-   * @type {Object}
-   * @readonly
-   */
-  get advancementRequirements() { return this.document.advancementRequirements; }
-
-  /**
    * Returns true, if the expertise list should be rendered. 
    * @type {Boolean}
    * @readonly
    */
   get showExpertises() { return this.isEditable === true || this.document.expertises.length > 0; }
-  
+
   /**
    * Returns true, if the list of prerequisites should be rendered. 
    * @type {Boolean}
@@ -67,7 +58,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get modifiedLevel() { return this.document.modifiedLevel; }
-  
+
   /**
    * @type {Array<Object>}
    * @readonly
@@ -91,22 +82,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
       };
     });
-  }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get showAdvancementProgression() {
-    if (ValidationUtil.isDefined(this.document.owningDocument) === true) {
-      const type = this.document.owningDocument.type;
-      if (type === ACTOR_TYPES.NPC && this.document.owningDocument.progressionVisible === true) {
-        return true;
-      } else if (type === ACTOR_TYPES.PC) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /**
@@ -163,7 +138,36 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.document.damage.length === 0; }
+  get showDamageList() { return ValidationUtil.isDefined(this.document.damage); }
+
+  /**
+   * @returns {Number}
+   * @readonly
+   */
+  get apCost() { return this.document.apCost; }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get isLearningSkill() { return this.document.level === 0; }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get isInnateSkill() { return ValidationUtil.isDefined(this.document.tags.find(it => it.id === SKILL_TAGS.INNATE.id)); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get advancementEnabled() {
+    if (ValidationUtil.isDefined(this.document.owningDocument)) {
+      return this.document.owningDocument.advancement.advancementEnabled; 
+    }
+    return false;
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -185,90 +189,65 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    this.vmTags = new InputTagsViewModel({
-      id: "vmTags",
+    const level = this.document.level;
+    // Modified Level
+    this.vmModifiedLevelHeader = new ReadOnlyValueViewModel({
+      id: "vmModifiedLevelHeader",
       parent: this,
-      systemTags: SKILL_TAGS.asArray(),
-      value: this.document.tags,
-      onChange: (_, newValue) => {
-        this.document.tags = newValue;
-      },
+      value: this.modifiedLevel,
+      localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
     });
-
-    const level = this.document.dependsOnActiveCr === true ? (this.document.owningDocument.challengeRating.modified) : this.document.level;
-    this.vmNsLevel = new InputNumberSpinnerViewModel({
+    // Promoted content
+    const advancementRequirements = StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
+      xp: new Ruleset().getSkillAdvancementRequirements(this.document.level),
+    });
+    this.vmRawLevel = new InputNumberSpinnerViewModel({
+      id: "vmRawLevel",
       parent: this,
-      id: "vmNsLevel",
       value: level,
-      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
+      min: 0,
+      localizedToolTip: `${game.i18n.localize("system.character.advancement.level")}<br>${advancementRequirements}`,
       onChange: (_, newValue) => {
         this.document.level = newValue;
       },
-      min: 0,
     });
-    this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
+    this.vmLevel = new InputNumberSpinnerViewModel({
+      id: "vmLevel",
       parent: this,
-      id: "vmNsLevelModifier",
-      value: this.document.levelModifier,
+      value: this.document.level + this.document.levelModifier,
+      localizedToolTip: StringUtil.format2(game.i18n.localize("system.character.advancement.modifiedLevelWithPlaceholders"), {
+        rawLevel: this.document.level,
+        operand: this.document.levelModifier >= 0 ? "+" : "-",
+        modifier: Math.abs(this.document.levelModifier),
+        modifiedLevel: this.document.modifiedLevel,
+      }),
+      contentCssClass: "font-bold font-size-lg",
       onChange: (_, newValue) => {
-        this.document.levelModifier = newValue;
+        this.document.levelModifier = newValue - this.document.level;
+      },
+      displayValueMapper: (value) => {
+        return this.document.modifiedLevel;
       },
     });
-    this.vmModifiedLevel = new ReadOnlyValueViewModel({
-      id: "vmModifiedLevel",
-      parent: this,
-      value: this.modifiedLevel,
-    });
-    if (this.showAdvancementProgression) {
-      this.vmAdvancementRequirements = new ReadOnlyValueViewModel({
-        id: "vmAdvancementRequirements",
+    this.maxHpModifierString = `(${this.document.levelModifier >= 0 ? "+" : "-"}${Math.abs(this.document.levelModifier)})`;
+
+    if (this.showDamageList) {
+      this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
+        id: `vmDamageDefinitionList`,
         parent: this,
-        value: `${this.advancementRequirements.successes} / ${this.advancementRequirements.failures}`,
-        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
-      });
-      this.vmNsSuccesses = new InputNumberSpinnerViewModel({
-        parent: this,
-        id: "vmNsSuccesses",
-        value: this.document.advancementProgress.successes,
+        value: this.document.damage,
         onChange: (_, newValue) => {
-          this.document.advancementProgress.successes = newValue;
+          if (ValidationUtil.isDefined(newValue) && newValue.length > 0) {
+            this.document.damage = newValue;
+          } else {
+            this.document.damage = null;
+          }
         },
-        min: 0,
-      });
-      this.vmNsFailures = new InputNumberSpinnerViewModel({
-        parent: this,
-        id: "vmNsFailures",
-        value: this.document.advancementProgress.failures,
-        onChange: (_, newValue) => {
-          this.document.advancementProgress.failures = newValue;
-        },
-        min: 0,
-      });
-      this.vmAdvanced = new ButtonCheckBoxViewModel({
-        parent: this,
-        id: "vmAdvanced",
-        value: this.document.advanced,
-        localizedToolTip: game.i18n.localize("system.character.advancement.advanced"),
-        onChange: (_, newValue) => {
-          this.document.advanced = newValue;
-        },
+        resolveFormulaContext: this.getRootOwningDocument(this.document),
+        chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
       });
     }
-    this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
-      id: `vmDamageDefinitionList`,
-      parent: this,
-      value: this.document.damage,
-      onChange: (_, newValue) => {
-        this.document.damage = newValue;
-      },
-      resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
-    });
-    this.vmDamageFormulaInfo = new ViewModel({
-      id: "damage-info",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
-    });
+
     if (this.showExpertises === true) {
       this.vmExpertiseTable = new ExpertiseTableViewModel({
         id: "vmExpertiseTable",
@@ -278,6 +257,36 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       });
     }
     this.expertisesTemplate = ExpertiseTableViewModel.TEMPLATE;
+
+    if (this.advancementEnabled) {
+      this.vmAdvancementProgressIcon = new ViewModel({
+        id: "vmAdvancementProgressIcon",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.advancement.requirement.requirements"),
+      });
+      this.vmAdvancementProgress = new InputNumberSpinnerViewModel({
+        id: "vmAdvancementProgress",
+        parent: this,
+        value: this.document.advancementProgress,
+        min: 0,
+        localizedToolTip: game.i18n.localize("system.character.advancement.requirement.progress"),
+        onChange: (_, newValue) => {
+          this.document.advancementProgress = newValue;
+        },
+      });
+
+      const requiredProgressTitle = game.i18n.localize("system.character.advancement.requirement.requiredProgress");
+      const requiredProgressExplanation = new RulesetExplainer().getExplanationForSkillAdvancement(this.document);
+      const requiredProgressToolTip = this.showReminders 
+        ? `${requiredProgressTitle}<br>${requiredProgressExplanation}` 
+        : requiredProgressTitle;
+      this.vmAdvancementRequiredProgress = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequiredProgress",
+        parent: this,
+        value: new Ruleset().getSkillAdvancementRequirements(this.document.level),
+        localizedToolTip: requiredProgressToolTip,
+      });
+    }
   }
 
   /** @override */
@@ -291,13 +300,13 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmApCost",
           value: this.document.apCost,
+          min: 0,
           onChange: (_, newValue) => {
             this.document.apCost = newValue;
           },
-          min: 0,
         }),
         isHidden: this.hideApCost,
-        localizedIconToolTip: game.i18n.localize("system.actionPoint.plural"),
+        localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
         iconClass: "ico-action-point-solid",
       }),
       new DataFieldComponent({
@@ -312,7 +321,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideCondition,
         placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -327,7 +336,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideObstacle,
         placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
@@ -342,7 +351,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideOpposedBy,
         placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
       new DataFieldComponent({
@@ -357,7 +366,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         }),
         isHidden: this.hideDistance,
         placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -372,15 +381,17 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideAttackType,
-        localizedIconToolTip: game.i18n.localize("system.attackType.label"),
+        localizedToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
     ];
   }
 
   /** @override */
-  getPrimaryHeaderButtons() {
-    const inherited = super.getPrimaryHeaderButtons();
+  getHeaderButtons() {
+    const inherited = super.getHeaderButtons();
+    const rollSchema = new Ruleset().getSkillRollSchema();
+    const bestAvailableDice = rollSchema.getAvailableDiceComponents(this.document)[0].total;
     return [
       new TemplatedComponent({
         template: ButtonRollViewModel.TEMPLATE,
@@ -388,74 +399,29 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmBtnRoll",
           target: this.document,
-          rollSchema: new Ruleset().getSkillRollSchema(),
+          rollSchema: rollSchema,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           actor: this.document.owningDocument.document,
+          content: `<div class="flex flex-center auto-margin-h-sm pad-l-sm border-solid-b-sm dark"><span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i></div>`,
+          localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document),
         }),
       }),
     ].concat(inherited);
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    return [
-      // Edit button
-      new TemplatedComponent({
-        template: ButtonViewModel.TEMPLATE,
-        viewModel: new ButtonViewModel({
-          id: "vmBtnEdit",
-          parent: this,
-          iconHtml: '<i class="fas fa-cog"></i>',
-          localizedToolTip: game.i18n.localize("system.general.edit"),
-          onClick: async () => {
-            const delta = await this._queryAttributesConfiguration();
-            if (ValidationUtil.isDefined(delta) !== true) return;
-            this.document.baseAttributes = delta;
-          },
-        }),
-      }),
-    ].concat(super.getSecondaryHeaderButtons());
-  }
-
-  /** @override */
-  getContextMenuButtons() {
-    return super.getContextMenuButtons().concat([
-      // Add damage
-      {
-        name: StringUtil.format(
-          game.i18n.localize("system.general.add.addType"),
-          game.i18n.localize("system.damageDefinition.label")
-        ),
-        icon: '<i class="fas fa-plus"></i>',
-        callback: () => {
-          const damage = this.document.damage.concat([]);
-          damage.push(new DamageAndType({
-            damage: "",
-            damageType: DAMAGE_TYPES.none.name,
-          }));
-          this.document.damage = damage;
-        },
-      },
-    ])
-    // Toggle ap cost
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.apCost", this.document, "apCost", 0))
-    // Toggle obstacle
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
-    // Toggle opposed by
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
-    // Toggle distance
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
-    // Toggle attack type
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
-    // Toggle condition
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", ""));
-  }
-
-  /** @override */
-  getAdditionalHeaderContent() {
+  getHeaderTemplate() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_EXTRA_HEADER,
+      template: SkillListItemViewModel.HEADER_TEMPLATE,
+      viewModel: this,
+    });
+  }
+
+  /** @override */
+  getPromotedContent() {
+    return new TemplatedComponent({
+      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,
     });
   }
@@ -468,60 +434,152 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
   }
 
-  /**
-   * Prompts the user to configure the base attributes of the skill and 
-   * returns the updated list. 
-   * 
-   * @returns {Array<Attribute>}
-   * 
-   * @private
-   * @async
-   */
-  async _queryAttributesConfiguration() {
-    const inputAttributes = "attributes";
-    const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
-
-    const dialog = await new DynamicInputDialog({
-      localizedTitle: StringUtil.format(
-        game.i18n.localize("system.general.input.queryFor"), 
-        this.document.name, 
-      ),
-      inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.SIMPLE_LIST,
-          name: inputAttributes,
-          localizedLabel: game.i18n.localize("system.character.attribute.plural"),
-          required: true,
-          defaultValue: baseAttributes,
-          validationFunc: (value) => {
-            return value.length > 0;
-          },
-          specificArgs: {
-            contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
-            contentItemViewModelFactory: (index, attributes) => {
-              return new BaseAttributeListItemViewModel({
-                id: `vmAttribute${index}`,
-                isEditable: true,
-                attribute: attributes[index],
-                onChange: (newAttribute) => {
-                  attributes[index] = newAttribute;
-                },
-              })
-            },
-            newItemDefaultValue: ATTRIBUTES.agility,
-            isItemAddable: this.isEditable,
-            isItemRemovable: this.isEditable,
-            localizedAddLabel: game.i18n.localize("system.general.add.add"),
-          },
+  /** @override */
+  getMetaDataInputDefinitions() {
+    const metaData = super.getMetaDataInputDefinitions();
+    metaData.splice(0, 0, 
+      // Toggle ap cost
+      new DynamicInputDefinition({
+        name: "dynamicInputApCost",
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.apCost"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.apCost),
+          ...overrides,
         }),
-      ],
-    }).renderAndAwait(true);
-    
-    if (dialog.confirmed !== true) return;
-  
-    return dialog[inputAttributes];
+      }),
+      // Toggle obstacle
+      new DynamicInputDefinition({
+        name: "dynamicInputObstacle",
+        localizedLabel: game.i18n.localize("system.roll.obstacle.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.obstacle),
+          ...overrides,
+        }),
+      }),
+      // Toggle opposed by
+      new DynamicInputDefinition({
+        name: "dynamicInputOpposedBy",
+        localizedLabel: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.opposedBy),
+          ...overrides,
+        }),
+      }),
+      // Toggle distance
+      new DynamicInputDefinition({
+        name: "dynamicInputDistance",
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.distance.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.distance),
+          ...overrides,
+        }),
+      }),
+      // Toggle attack type
+      new DynamicInputDefinition({
+        name: "dynamicInputAttackType",
+        localizedLabel: game.i18n.localize("system.attackType.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.attackType),
+          ...overrides,
+        }),
+      }),
+      // Toggle condition
+      new DynamicInputDefinition({
+        name: "dynamicInputCondition",
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.condition.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.condition),
+          ...overrides,
+        }),
+      }),
+      // Toggle damage
+      new DynamicInputDefinition({
+        name: "dynamicInputDamage",
+        localizedLabel: game.i18n.localize("system.damageDefinition.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.damage),
+          ...overrides,
+        }),
+      }),
+      // Base attributes
+      new DynamicInputDefinition({
+        name: "dynamicInputAttributes",
+        localizedLabel: game.i18n.localize("system.character.attribute.plural"),
+        template: ListViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new ListViewModel({
+          id: id,
+          parent: parent,
+          value: this.document.baseAttributes.concat([]), // Safe-copy.
+          contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
+          contentItemViewModelFactory: (index, attribute) => {
+            return new BaseAttributeListItemViewModel({
+              id: `vmAttribute${index}`,
+              isEditable: true,
+              attribute: attribute,
+            });
+          },
+          newItemDefaultValue: ATTRIBUTES.agility,
+          isItemAddable: this.isEditable,
+          isItemRemovable: this.isEditable,
+          localizedAddLabel: game.i18n.localize("system.general.add.add"),
+          ...overrides,
+        }),
+        required: true,
+        validationFunc: (value) => { return value.length > 0; },
+      }),
+    );
+    return metaData;
   }
-  
+
+  /** @override */
+  async editMetaData() {
+    const dialog = await super.editMetaData();
+    
+    if (ValidationUtil.isDefined(dialog) !== true) return;
+
+    const getNewValue = function(toggleValue, currentValue, defaultValue) {
+      if (toggleValue) {
+        if (ValidationUtil.isDefined(currentValue)) {
+          return currentValue;
+        } else {
+          return defaultValue;
+        }
+      } else {
+        return null;
+      }
+    }
+
+    this.document.baseAttributes = dialog["dynamicInputAttributes"];
+    this.document.apCost = getNewValue(dialog["dynamicInputApCost"], this.document.apCost, 1);
+    this.document.obstacle = getNewValue(dialog["dynamicInputObstacle"], this.document.obstacle, "");
+    this.document.opposedBy = getNewValue(dialog["dynamicInputOpposedBy"], this.document.opposedBy, "");
+    this.document.distance = getNewValue(dialog["dynamicInputDistance"], this.document.distance, "");
+    this.document.attackType = getNewValue(dialog["dynamicInputAttackType"], this.document.attackType, ATTACK_TYPES.none);
+    this.document.condition = getNewValue(dialog["dynamicInputCondition"], this.document.condition, "");
+    this.document.damage = getNewValue(dialog["dynamicInputDamage"], this.document.damage, [new DamageAndType({ damage: "", damageType: DAMAGE_TYPES.pure, })]);
+  }
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(SkillListItemViewModel));

@@ -2,10 +2,14 @@ import { ITEM_TYPES } from "./item-types.mjs";
 import TransientSkill from "./skill/transient-skill.mjs";
 import TransientAsset from "./transient-asset.mjs";
 import TransientFateCard from "./transient-fate-card.mjs";
+import TransientHealthCondition from "./transient-health-condition.mjs";
 import TransientIllness from "./transient-illness.mjs";
 import TransientInjury from "./transient-injury.mjs";
+import TransientMomentumAction from "./transient-momentum-action.mjs";
 import TransientMutation from "./transient-mutation.mjs";
+import TransientProject from "./transient-project.mjs";
 import TransientScar from "./transient-scar.mjs";
+import TransientTrait from "./transient-trait.mjs";
 
 /**
  * @summary
@@ -33,9 +37,13 @@ export class GameSystemItem extends Item {
       [ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
       [ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
       [ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
+      [ITEM_TYPES.MOMENTUM_ACTION, (document) => { return new TransientMomentumAction(document) }],
       [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
+      [ITEM_TYPES.PROJECT, (document) => { return new TransientProject(document) }],
       [ITEM_TYPES.SCAR, (document) => { return new TransientScar(document) }],
       [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
+      [ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
+      [ITEM_TYPES.TRAIT, (document) => { return new TransientTrait(document) }],
     ]);
   }
 
@@ -75,9 +83,7 @@ export class GameSystemItem extends Item {
         throw new Error(`InvalidTypeException: Item subtype ${this.type} is unrecognized!`);
       }
 
-      game.strive.logger.logPerf(this, "item.getTransientObject (non-cached)", () => {
-        this._transientObject = factoryFunction(this);
-      });
+      this._transientObject = factoryFunction(this);
     }
     return this._transientObject.getTransientObject();
   }
@@ -85,7 +91,7 @@ export class GameSystemItem extends Item {
   /** @override */
   async _preCreate(data, options, user) {
     this.updateSource({
-      img: this.defaultImg,
+      img: data.img ?? this.defaultImg,
     });
 
     return super._preCreate(data, options, user);

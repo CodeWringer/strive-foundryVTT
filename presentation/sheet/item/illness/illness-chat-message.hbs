@@ -10,7 +10,7 @@ cssClass: {undefined | String}
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
+      <img class="inline-img custom-icon-chat margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
     </div>
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
@@ -26,7 +26,7 @@ cssClass: {undefined | String}
   {{!-- Treatment skill --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.treatmentSkill"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.treatmentSkill.treatmentSkill"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.treatmentSkill}}

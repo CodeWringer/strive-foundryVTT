@@ -3,43 +3,37 @@ import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "../transient-base-item.mjs";
-import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
-import Ruleset from "../../../ruleset/ruleset.mjs";
 import Expertise from "./expertise.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
-import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import { ValidationUtil } from "../../../util/validation-utility.mjs";
 import { UuidUtil } from "../../../util/uuid-utility.mjs";
+import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
 
 /**
  * Represents the full transient data of a skill. 
  * 
  * @extends TransientBaseItem
  * 
- * @property {LevelAdvancement} advancementRequirements The current requirements 
- * to advance the skill. 
- * @property {LevelAdvancement} advancementProgress The current progress towards 
- * advancing the skill. 
  * @property {Number} level The current raw level. 
  * @property {Number} levelModifier The current level modifier. This number can be negative. 
  * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
+ * @property {Number} advancementProgress 
  * @property {Array<Attribute>} baseAttributes Base attributes of the skill. 
  * * Must always contain at least one entry. By default, this is the first attribute as per the `ATTRIBUTES` definiton. 
  * @property {Array<Expertise>} expertises The array of expertises of this skill. 
  * @property {Number | undefined} apCost 
- * @property {Array<DamageAndType>} damage
+ * @property {Array<DamageAndType> | undefined} damage
  * @property {String | undefined} condition 
  * @property {Number | undefined} distance 
  * @property {String | undefined} obstacle 
  * @property {String | undefined} opposedBy 
  * @property {AttackType | undefined} attackType 
- * @property {Boolean} advanced 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -106,7 +100,7 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    const level = this.dependsOnActiveCr === true ? (this.owningDocument.challengeRating.modified) : this.level;
+    const level = this.level;
 
     if (level > 0) {
       return Math.max(level + this.levelModifier, 1);
@@ -116,32 +110,14 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * @type {LevelAdvancement}
+   * @type {Number}
    */
   get advancementProgress() {
-    const thiz = this;
-    return {
-      get successes() { return parseInt(thiz.document.system.successes); },
-      set successes(value) {
-        thiz.document.system.successes = value;
-        thiz.updateByPath("system.successes", value);
-      },
-      get failures() { return parseInt(thiz.document.system.failures); },
-      set failures(value) {
-        thiz.document.system.failures = value;
-        thiz.updateByPath("system.failures", value);
-      },
-    };
+    return this.document.system.advancementProgress ?? 0;
   }
   set advancementProgress(value) {
-    this.document.system.successes = value.successes;
-    this.document.system.failures = value.failures;
-    this.update({
-      system: {
-        successes: value.successes,
-        failures: value.failures,
-      }
-    });
+    this.document.system.advancementProgress = value;
+    this.updateByPath("system.advancementProgress", value);
   }
   
   /** @override */
@@ -198,12 +174,23 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   get damage() {
-    return (this.document.system.damage ?? []).map(dto => 
-      DamageAndType.fromDto(dto)
-    );
+    const value = this.document.system.damage;
+    if (ValidationUtil.isDefined(value)) {
+      if (value.length > 0) {
+        return value.map(dto => DamageAndType.fromDto(dto));
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
   }
   set damage(value) {
-    this.updateByPath("system.damage", value.map(it => it.toDto()));
+    if (ValidationUtil.isDefined(value)) {
+      this.updateByPath("system.damage", value.map(it => it.toDto()));
+    } else {
+      this.updateByPath("system.damage", null);
+    }
   }
   
   get condition() {
@@ -287,37 +274,6 @@ export default class TransientSkill extends TransientBaseItem {
   }
   
   /**
-   * @type {Boolean}
-   */
-  get advanced() {
-    return this.document.system.advanced ?? false;
-  }
-  /**
-   * @param {Boolean} value
-   */
-  set advanced(value) {
-    this.updateByPath("system.advanced", value);
-  }
-
-  /**
-   * Returns `true`, if the skill's embedded on an actor for which 
-   * a challenge rating is active. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get dependsOnActiveCr() {
-    const owningDocument = this.owningDocument;
-    if (ValidationUtil.isDefined(owningDocument) 
-      && owningDocument.type === ACTOR_TYPES.NPC
-      && owningDocument.isChallengeRatingEnabled) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
    * @param {Item} document An encapsulated item instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -325,7 +281,6 @@ export default class TransientSkill extends TransientBaseItem {
   constructor(document) {
     super(document);
 
-    this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level);
     this._expertises = this._getExpertises();
   }
 
@@ -333,7 +288,7 @@ export default class TransientSkill extends TransientBaseItem {
   async getChatData() {
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 
@@ -378,27 +333,6 @@ export default class TransientSkill extends TransientBaseItem {
       visGroupId: UuidUtil.createUUID(),
     });
   }
-
-  /**
-   * Sets the given level of the skill. 
-   * 
-   * @param {Number | undefined} newLevel Value to set the skill to, e.g. `4`. 
-   * * Default `0`
-   * @param {Boolean | undefined} resetProgress If true, will also reset successes and failures. 
-   * * Default `true`
-   * 
-   * @async
-   */
-  async setLevel(newLevel = 0, resetProgress = true) {
-    this.level = newLevel;
-    this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(newLevel);
-    if (resetProgress === true) {
-      this.advancementProgress.successes = 0;
-      this.advancementProgress.failures = 0;
-    }
-
-    await this._persistLevel();
-  };
 
   /**
    * Adds a new expertise. 
@@ -502,22 +436,6 @@ export default class TransientSkill extends TransientBaseItem {
     return result;
   }
   
-  /**
-   * Persists the current level and advancement progress to the data base. 
-   * 
-   * @private
-   * @async
-   */
-  async _persistLevel() {
-    await this.document.update({
-      system: {
-        value: this.level,
-        successes: this.advancementProgress.successes,
-        failures: this.advancementProgress.failures
-      }
-    });
-  }
-
   /**
    * @override
    * 

@@ -1,0 +1,14 @@
+{{!--
+viewModel: ActorHealthViewModel
+--}}
+<div class="grid-2col grid-gap-md margin-b-md">
+  <div></div>
+  <div class="flex flex-row sheet-block">
+    <div class="flex-grow">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.scar.plural"}}{{/label}}
+    </div>
+    <span class="width-md">
+      {{> readOnlyValue viewModel=viewModel.vmScarCount }}
+    </span>
+  </div>
+</div>

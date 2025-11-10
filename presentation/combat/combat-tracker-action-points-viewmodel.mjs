@@ -10,6 +10,9 @@ import ViewModel from "../view-model/view-model.mjs";
  * @property {Actor} document 
  */
 export default class CombatTrackerActionPointsViewModel extends ViewModel {
+  /** @override */
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMBAT_TRACKER_ACTION_POINTS; }
+
   /**
    * @param {Object} args 
    * @param {Actor} args.document 
@@ -31,8 +34,8 @@ export default class CombatTrackerActionPointsViewModel extends ViewModel {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     const transientActor = this.document.getTransientObject();
 

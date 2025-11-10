@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import { DamageFinding } from "./damage-finding.mjs";
 
@@ -30,7 +31,7 @@ export default class DamageFindingListItemViewModel extends ViewModel {
    * @returns {String}
    */
   async render() {
-    return await renderTemplate(DamageFindingListItemViewModel.TEMPLATE, {
+    return await new FoundryWrapper().renderTemplate(DamageFindingListItemViewModel.TEMPLATE, {
       viewModel: this,
     });
   }

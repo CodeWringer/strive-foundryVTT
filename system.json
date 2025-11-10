@@ -2,15 +2,15 @@
   "id": "strive",
   "title": "STRIVE",
   "description": "The STRIVE system for FoundryVTT",
-  "version": "1.7.6",
+  "version": "1.16.2",
   "compatibility": {
     "minimum": 11,
     "maximum": 12,
-    "verified": 12.331
+    "verified": 12.343
   },
   "authors": [
 		{
-			"name": "Nicolas H.",
+			"name": "Nicolas 'Krubi' H.",
 			"url": "https://github.com/CodeWringer",
 			"discord": "Krubi#1695"
 		}
@@ -38,27 +38,21 @@
       "type": "Item"
     },
     {
-      "name": "injuries",
-      "label": "Injuries",
-      "path": "packs/injuries",
-      "type": "Item"
-    },
-    {
       "name": "skills",
       "label": "Skills",
       "path": "packs/skills",
       "type": "Item"
     },
     {
-      "name": "mutations",
-      "label": "Mutations",
-      "path": "packs/mutations",
+      "name": "momentum-actions",
+      "label": "Momentum Actions",
+      "path": "packs/momentum-actions",
       "type": "Item"
     },
     {
-      "name": "scars",
-      "label": "Scars",
-      "path": "packs/scars",
+      "name": "mutations",
+      "label": "Mutations",
+      "path": "packs/mutations",
       "type": "Item"
     },
     {
@@ -76,10 +70,9 @@
         "assets",
         "fatecards",
         "illnesses",
-        "injuries",
         "skills",
+        "momentum-actions",
         "mutations",
-        "scars",
         "rolltables"
       ]
     }

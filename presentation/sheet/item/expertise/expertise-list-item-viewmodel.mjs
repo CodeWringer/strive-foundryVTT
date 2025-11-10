@@ -8,25 +8,34 @@ import InputNumberSpinnerViewModel from "../../../component/input-number-spinner
 import Expertise from "../../../../business/document/item/skill/expertise.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
 import Ruleset from "../../../../business/ruleset/ruleset.mjs";
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 
 /**
  * @property {Expertise} document 
  */
 export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
+  /** @override */
+  static get HEADER_TEMPLATE() { return game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_HEADER; }
+
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
    */
   get attackTypeOptions() { return ATTACK_TYPES.asChoices(); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideActionPoints() { return ValidationUtil.isDefined(this.document.apCost) !== true; }
 
   /**
    * @type {Boolean}
@@ -62,7 +71,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.document.damage.length < 1; }
+  get showDamageList() { return ValidationUtil.isDefined(this.document.damage); }
 
   /**
    * Returns the CSS class of the icon that represents the current attack type. 
@@ -79,6 +88,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   }
 
   /**
+   * @returns {Number | null}
+   * @readonly
+   */
+  get apCost() { return this.document.apCost; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -87,42 +102,39 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @param {Expertise} args.document 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      isImportable: false,
+    });
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.vmNsRequiredLevel = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsRequiredLevel",
       value: this.document.requiredLevel,
+      localizedToolTip: game.i18n.localize("system.character.skill.expertise.requirement"),
       onChange: (_, newValue) => {
         this.document.requiredLevel = newValue;
       },
       min: 0,
     });
-    this.vmNsApCost = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmNsApCost",
-      value: this.document.apCost,
-      onChange: (_, newValue) => {
-        this.document.apCost = newValue;
-      },
-      min: 0,
-    });
-    this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
-      id: `vmDamageDefinitionList`,
-      parent: this,
-      value: this.document.damage,
-      onChange: (_, newValue) => {
-        this.document.damage = newValue;
-      },
-      resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
-    });
-    this.vmDamageFormulaInfo = new ViewModel({
-      id: "damage-info",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
-    });
+
+    if (this.showDamageList) {
+      this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
+        id: `vmDamageDefinitionList`,
+        parent: this,
+        value: this.document.damage,
+        onChange: (_, newValue) => {
+          if (ValidationUtil.isDefined(newValue) && newValue.length > 0) {
+            this.document.damage = newValue;
+          } else {
+            this.document.damage = null;
+          }
+        },
+        resolveFormulaContext: this.getRootOwningDocument(this.document),
+        chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
+      });
+    }
   }
 
   /** @override */
@@ -131,18 +143,33 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
 
     return [
       new DataFieldComponent({
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModel: new InputNumberSpinnerViewModel({
+          parent: this,
+          id: "vmApCost",
+          value: this.document.apCost,
+          min: 0,
+          onChange: (_, newValue) => {
+            this.document.apCost = newValue;
+          },
+        }),
+        isHidden: this.hideActionPoints,
+        localizedToolTip: game.i18n.localize("system.actionPoint.requirement"),
+        iconClass: "ico-action-point-solid",
+      }),
+      new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
         viewModel: new InputTextFieldViewModel({
           parent: this,
           id: "vmObstacle",
           value: this.document.obstacle,
+          placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
           onChange: (_, newValue) => {
             this.document.obstacle = newValue;
           },
         }),
         isHidden: this.hideObstacle,
-        placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
@@ -151,13 +178,13 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmOpposedBy",
           value: this.document.opposedBy,
+          placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
           onChange: (_, newValue) => {
             this.document.opposedBy = newValue;
           },
         }),
         isHidden: this.hideOpposedBy,
-        placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
+        localizedToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
       new DataFieldComponent({
@@ -166,13 +193,13 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmCondition",
           value: this.document.condition,
+          placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
           onChange: (_, newValue) => {
             this.document.condition = newValue;
           },
         }),
         isHidden: this.hideCondition,
-        placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -181,13 +208,13 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmDistance",
           value: this.document.distance,
+          placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
           onChange: (_, newValue) => {
             this.document.distance = newValue;
           },
         }),
         isHidden: this.hideDistance,
-        placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
+        localizedToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -202,109 +229,223 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideAttackType,
-        localizedIconToolTip: game.i18n.localize("system.attackType.label"),
+        localizedToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
     ];
   }
 
   /** @override */
-  getPrimaryHeaderButtons() {
-    const inherited = super.getPrimaryHeaderButtons();
+  getHeaderButtons() {
+    const inherited = super.getHeaderButtons();
     const owningDocument = this.getRootOwningDocument();
-    return [
-      new TemplatedComponent({
-        template: ButtonRollViewModel.TEMPLATE,
-        viewModel: new ButtonRollViewModel({
-          parent: this,
-          id: "vmBtnRoll",
-          target: owningDocument,
-          rollSchema: new Ruleset().getSkillRollSchema(),
-          primaryChatTitle: game.i18n.localize(this.document.name),
-          primaryChatImage: this.document.img,
-          secondaryChatTitle: game.i18n.localize(owningDocument.name),
-          secondaryChatImage: owningDocument.img,
-          actor: owningDocument.owningDocument,
+
+    if (ValidationUtil.isDefined(owningDocument.owningDocument)) {
+      const rollSchema = new Ruleset().getSkillRollSchema();
+      const bestAvailableDice = rollSchema.getAvailableDiceComponents(this.document.owningDocument)[0].total;
+      return [
+        new TemplatedComponent({
+          template: ButtonRollViewModel.TEMPLATE,
+          viewModel: new ButtonRollViewModel({
+            parent: this,
+            id: "vmBtnRoll",
+            target: owningDocument,
+            rollSchema: rollSchema,
+            primaryChatTitle: game.i18n.localize(this.document.name),
+            primaryChatImage: this.document.img,
+            secondaryChatTitle: game.i18n.localize(owningDocument.name),
+            secondaryChatImage: owningDocument.img,
+            actor: owningDocument.owningDocument,
+            content: `<div class="flex flex-center auto-margin-h-sm border-solid-b-sm dark"><span>${bestAvailableDice}</span><i class="fas fa-dice-three"></i></div>`,
+            localizedToolTip: rollSchema.getAvailableDiceComponentExplanation(this.document.owningDocument),
+          }),
+          isHidden: ValidationUtil.isDefined(owningDocument.owningDocument) === false,
         }),
-        isHidden: ValidationUtil.isDefined(owningDocument.owningDocument) === false,
-      }),
-    ].concat(inherited);
+      ].concat(inherited);
+    } else {
+      return inherited;
+    }
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    return [
-      // Context menu button
-      new TemplatedComponent({
-        template: ButtonContextMenuViewModel.TEMPLATE,
-        viewModel: new ButtonContextMenuViewModel({
-          id: "vmBtnContextMenu",
-          parent: this,
-          menuItems: [
-            // Edit name
-            {
-              name: game.i18n.localize("system.general.name.edit"),
-              icon: '<i class="fas fa-edit"></i>',
-              callback: this.queryEditName.bind(this),
-            },
-            // Add damage
-            {
-              name: StringUtil.format(
-                game.i18n.localize("system.general.add.addType"),
-                game.i18n.localize("system.damageDefinition.label")
-              ),
-              icon: '<i class="fas fa-plus"></i>',
-              callback: () => {
-                const damage = this.document.damage.concat([]);
-                damage.push(new DamageAndType({
-                  damage: "",
-                  damageType: DAMAGE_TYPES.none.name,
-                }));
-                this.document.damage = damage;
-              },
-            },
-          ]
-          // Toggle obstacle
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
-          // Toggle opposed by
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
-          // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
-          // Toggle attack type
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
-          // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", "")),
-        }),
-      }),
-      // Delete button
-      new TemplatedComponent({
-        template: ButtonDeleteViewModel.TEMPLATE,
-        viewModel: new ButtonDeleteViewModel({
-          parent: this,
-          id: "vmBtnDelete",
-          target: this.document,
-          withDialog: true,
-        }),
-      }),
-    ]; 
-  }
-
-  /** @override */
-  getAdditionalHeaderContent() {
+  getHeaderTemplate() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_HEADER,
+      template: ExpertiseListItemViewModel.HEADER_TEMPLATE,
       viewModel: this,
     });
   }
 
   /** @override */
   getAdditionalContent() {
-    if (this.hideDamage === false) {
+    if (this.showDamageList) {
       return new TemplatedComponent({
         template: game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_CONTENT,
         viewModel: this,
       });
     }
+  }
+
+  /** @override */
+  getMetaDataInputDefinitions() {
+    const metaData = super.getMetaDataInputDefinitions();
+    metaData.splice(0, 0,
+      // Toggle ap cost
+      new DynamicInputDefinition({
+        name: "dynamicInputApCost",
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.apCost"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.apCost),
+          ...overrides,
+        }),
+      }),
+      // Toggle obstacle
+      new DynamicInputDefinition({
+        name: "dynamicInputObstacle",
+        localizedLabel: game.i18n.localize("system.roll.obstacle.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.obstacle),
+          ...overrides,
+        }),
+      }),
+      // Toggle opposed by
+      new DynamicInputDefinition({
+        name: "dynamicInputOpposedBy",
+        localizedLabel: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.opposedBy),
+          ...overrides,
+        }),
+      }),
+      // Toggle distance
+      new DynamicInputDefinition({
+        name: "dynamicInputDistance",
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.distance.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.distance),
+          ...overrides,
+        }),
+      }),
+      // Toggle attack type
+      new DynamicInputDefinition({
+        name: "dynamicInputAttackType",
+        localizedLabel: game.i18n.localize("system.attackType.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.attackType),
+          ...overrides,
+        }),
+      }),
+      // Toggle condition
+      new DynamicInputDefinition({
+        name: "dynamicInputCondition",
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.condition.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.condition),
+          ...overrides,
+        }),
+      }),
+      // Toggle damage
+      new DynamicInputDefinition({
+        name: "dynamicInputDamage",
+        localizedLabel: game.i18n.localize("system.damageDefinition.label"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: ValidationUtil.isDefined(this.document.damage),
+          ...overrides,
+        }),
+      }),
+    );
+    return metaData;
+  }
+
+  /** @override */
+  async editMetaData() {
+    const dialog = await super.editMetaData();
+
+    if (ValidationUtil.isDefined(dialog) !== true) return;
+
+    const getNewValue = function(toggleValue, currentValue, defaultValue) {
+      if (toggleValue) {
+        if (ValidationUtil.isDefined(currentValue)) {
+          return currentValue;
+        } else {
+          return defaultValue;
+        }
+      } else {
+        return null;
+      }
+    }
+
+    this.document.apCost = getNewValue(dialog["dynamicInputApCost"], this.document.apCost, 1);
+    this.document.obstacle = getNewValue(dialog["dynamicInputObstacle"], this.document.obstacle, "");
+    this.document.opposedBy = getNewValue(dialog["dynamicInputOpposedBy"], this.document.opposedBy, "");
+    this.document.distance = getNewValue(dialog["dynamicInputDistance"], this.document.distance, "");
+    this.document.attackType = getNewValue(dialog["dynamicInputAttackType"], this.document.attackType, ATTACK_TYPES.none);
+    this.document.condition = getNewValue(dialog["dynamicInputCondition"], this.document.condition, "");
+    this.document.damage = getNewValue(dialog["dynamicInputDamage"], this.document.damage, [new DamageAndType({ damage: "", damageType: DAMAGE_TYPES.pure, })]);
+  }
+
+  /** @override */
+  async duplicate() {
+    const inputName = "inputName";
+    const dialog = await new DynamicInputDialog({
+      id: "expertise-duplication-dialog",
+      localizedTitle: game.i18n.localize("system.character.skill.expertise.duplicateExpertise"),
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          name: inputName,
+          localizedLabel: game.i18n.localize("system.general.name.label"),
+          template: InputTextFieldViewModel.TEMPLATE,
+          viewModelFactory: async (id, parent, overrides) => {
+            return new InputTextFieldViewModel({
+              id: id,
+              parent: parent,
+              value: this.document.name,
+              ...overrides,
+            });
+          },
+        }),
+      ],
+      focused: inputName,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return undefined;
+
+    const creationData = {
+      name: dialog[inputName],
+      img: this.document.img,
+      description: this.document.description,
+      requiredLevel: this.document.requiredLevel,
+      apCost: this.document.apCost,
+      damage: this.document.damage,
+      condition: this.document.condition,
+      distance: this.document.distance,
+      obstacle: this.document.obstacle,
+      opposedBy: this.document.opposedBy,
+      attackType: this.document.attackType,
+      gmNotes: this.document.gmNotes,
+    };
+
+    return await this.document.owningDocument.createExpertise(creationData);
   }
 
   /** @override */

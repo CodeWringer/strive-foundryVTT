@@ -1,6 +1,5 @@
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -19,30 +18,26 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * 
  * @extends BaseSheetViewModel
  * 
- * @abstract Inheriting types should override: 
+ * @abstract Inheriting types *may* override: 
  * * `getDataFields`
- * * `getPrimaryHeaderButtons`
- * * `getSecondaryHeaderButtons`
+ * * `getHeaderButtons`
  * * `getAdditionalContent`
- * * `getAdditionalHeaderContent`
+ * * `getPromotedContent`
  * 
- * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
- * header buttons. 
+ * @property {Array<TemplatedComponent>} headerButtons An array of the header buttons. 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
- * @property {Array<TemplatedComponent>} secondaryHeaderButtons An array of the secondary  
- * header buttons. 
- * * Note that each of the provided view model instances will be available for access on 
- * this view model instance, as a property whose name is the id of the provided 
- * view model instance. 
- * @property {additionalHeaderContent | undefined} additionalHeaderContent Additional 
- * header content. Will not be collapsible and will be rendered directly beneath the 
- * header. 
+ * * private
  * @property {Array<TemplatedComponent>} dataFields 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
+ * * private
+ * @property {TemplatedComponent | undefined} additionalContent
+ * * private
+ * @property {TemplatedComponent | undefined} promotedContent
+ * * private
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
@@ -66,6 +61,24 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get showNavigation() { return this.isGM === true }
 
   /**
+   * Returns true, if the description is to be shown. 
+   * 
+   * @type
+   * @protected
+   * @readonly
+   */
+  get showDescription() { return true; }
+
+  /**
+   * Returns true, if the promoted content is to be shown. 
+   * 
+   * @type
+   * @protected
+   * @readonly
+   */
+  get showPromotedContent() { return ValidationUtil.isDefined(this.promotedContent); }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -83,23 +96,23 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
     this.document = args.document;
 
+    // Aggressively clear out any lingering ToolTips. 
+    Tooltip.removeAllToolTipElements();
+
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
 
-    this.primaryHeaderButtons = this.getPrimaryHeaderButtons();
-    this._ensureViewModelsAsProperties(this.primaryHeaderButtons);
-    
-    this.secondaryHeaderButtons = this.getSecondaryHeaderButtons();
-    this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
-    
-    this.additionalHeaderContent = this.getAdditionalHeaderContent();
-    if (ValidationUtil.isDefined(this.additionalHeaderContent)) {
-      this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
-    }
+    this.headerButtons = this.getHeaderButtons();
+    this._ensureViewModelsAsProperties(this.headerButtons);
     
     this.additionalContent = this.getAdditionalContent();
     if (ValidationUtil.isDefined(this.additionalContent)) {
       this._ensureViewModelsAsProperties([this.additionalContent]);
+    }
+
+    this.promotedContent = this.getPromotedContent();
+    if (ValidationUtil.isDefined(this.promotedContent)) {
+      this._ensureViewModelsAsProperties([this.promotedContent]);
     }
 
     this.vmImg = new InputImageViewModel({
@@ -119,14 +132,17 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
       },
       placeholder: game.i18n.localize("system.general.name.label"),
     });
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: this,
-      id: "vmRtDescription",
-      value: this.document.description,
-      onChange: (_, newValue) => {
-        this.document.description = newValue;
-      },
-    });
+
+    if (this.showDescription) {
+      this.vmRtDescription = new InputRichTextViewModel({
+        parent: this,
+        id: "vmRtDescription",
+        value: this.document.description,
+        onChange: (_, newValue) => {
+          this.document.description = newValue;
+        },
+      });
+    }
 
     if (this.isGM === true) {
       this.gmNotesViewModel = new LazyLoadViewModel({
@@ -157,52 +173,15 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   }
 
   /**
-   * Returns the definitions of the primary header buttons. 
-   * * By default, contains a send to chat button. 
+   * Returns the definitions of the header buttons. 
    * 
    * @returns {Array<TemplatedComponent>}
    * 
    * @virtual
    * @protected
    */
-  getPrimaryHeaderButtons() {
+  getHeaderButtons() {
     return []; 
-  }
-
-  /**
-   * Returns the definitions of the secondary header buttons. 
-   * 
-   * @returns {Array<TemplatedComponent>}
-   * 
-   * @virtual
-   * @protected
-   */
-  getSecondaryHeaderButtons() {
-    return [
-      // Send to chat button
-      new TemplatedComponent({
-        template: ButtonSendToChatViewModel.TEMPLATE,
-        viewModel: new ButtonSendToChatViewModel({
-          id: "vmBtnSendToChat",
-          parent: this,
-          isEditable: true,
-          target: this.document,
-          localizedToolTip: game.i18n.localize("system.general.sendToChat"),
-        }),
-      }),
-    ]; 
-  }
-  
-  /**
-   * Returns the definition of the additional header content, if there is one. 
-   * 
-   * @returns {TemplatedComponent | undefined}
-   * 
-   * @virtual
-   * @protected
-   */
-  getAdditionalHeaderContent() {
-    return undefined;
   }
   
   /**
@@ -214,6 +193,18 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @protected
    */
   getAdditionalContent() {
+    return undefined;
+  }
+  
+  /**
+   * Returns the definition of the promoted content, if there is one. 
+   * 
+   * @returns {TemplatedComponent | undefined}
+   * 
+   * @virtual
+   * @protected
+   */
+  getPromotedContent() {
     return undefined;
   }
 

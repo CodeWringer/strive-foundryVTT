@@ -85,7 +85,7 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
     this.vmToggleRollSection = new ButtonViewModel({
       id: "vmToggleRollSection",
       parent: this,
-      localizedLabel: game.i18n.localize("system.general.input.rollForIt"),
+      content: `<span>${game.i18n.localize("system.general.input.rollForIt")}</span>`,
       isEditable: true,
       onClick: () => {
         this.isRollSectionExpanded = true;
@@ -95,7 +95,7 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
     this.vmToggleSelectSection = new ButtonViewModel({
       id: "vmToggleSelectSection",
       parent: this,
-      localizedLabel: game.i18n.localize("system.general.input.selectSpecific"),
+      content: `<span>${game.i18n.localize("system.general.input.selectSpecific")}</span>`,
       isEditable: true,
       onClick: () => {
         this.isRollSectionExpanded = false;
@@ -148,7 +148,7 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
     this.vmRoll = new ButtonViewModel({
       id: "vmRoll",
       parent: this,
-      iconHtml: '<i class="fas fa-dice-three"></i>',
+      content: '<i class="fas fa-dice-three"></i>',
       isEditable: true,
       onClick: async () => {
         const roll = await this.selectedRollTable.roll();

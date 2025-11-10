@@ -20,7 +20,7 @@ export class DamageType {
 /**
  * Represents the defined damage types.
  * 
- * @property {DamageType} none A placeholder damage type. 
+ * @property {DamageType} pure The "pure" damage type.
  * @property {DamageType} acid The "acid" damage type. 
  * @property {DamageType} bleeding The "bleeding" damage type. 
  * @property {DamageType} bludgeoning The "bludgeoning" damage type. 
@@ -34,11 +34,11 @@ export class DamageType {
  * @constant
  */
 export const DAMAGE_TYPES = {
-  none: new DamageType({
-    name: "none",
-    localizableName: "system.general.none.label",
-    localizableAbbreviation: "system.general.none.abbreviation",
-    iconClass: "ico-crossed-circle-solid"
+  pure: new DamageType({
+    name: "pure",
+    localizableName: "system.damageType.pure.label",
+    localizableAbbreviation: "system.damageType.pure.abbreviation",
+    iconClass: "ico-god-finger-solid"
   }),
   acid: new DamageType({
     name: "acid",

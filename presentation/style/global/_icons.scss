@@ -23,6 +23,9 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
     &.disabled {
       filter: brightness($brightness-disabled-dark);
     }
+    &.active {
+      filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+    }
   }
   &.disabled {
     filter: brightness($brightness-disabled);
@@ -463,5 +466,200 @@ a:hover {
 
 .ico-details-hidden {
   background: url("/systems/strive/presentation/image/details-hidden.svg");
+  background-size: cover;
+}
+
+.ico-chevron-u-solid {
+  background: url("/systems/strive/presentation/image/chevron-u-solid.svg");
+  background-size: cover;
+}
+
+.ico-chevron-r-solid {
+  background: url("/systems/strive/presentation/image/chevron-r-solid.svg");
+  background-size: cover;
+}
+
+.ico-chevron-d-solid {
+  background: url("/systems/strive/presentation/image/chevron-d-solid.svg");
+  background-size: cover;
+}
+
+.ico-chevron-l-solid {
+  background: url("/systems/strive/presentation/image/chevron-l-solid.svg");
+  background-size: cover;
+}
+
+.ico-double-chevron-u-solid {
+  background: url("/systems/strive/presentation/image/double-chevron-u-solid.svg");
+  background-size: cover;
+}
+
+.ico-double-chevron-r-solid {
+  background: url("/systems/strive/presentation/image/double-chevron-r-solid.svg");
+  background-size: cover;
+}
+
+.ico-double-chevron-d-solid {
+  background: url("/systems/strive/presentation/image/double-chevron-d-solid.svg");
+  background-size: cover;
+}
+
+.ico-double-chevron-l-solid {
+  background: url("/systems/strive/presentation/image/double-chevron-l-solid.svg");
+  background-size: cover;
+}
+
+.ico-locked-solid {
+  background: url("/systems/strive/presentation/image/locked-solid.svg");
+  background-size: cover;
+}
+
+.ico-unlocked-solid {
+  background: url("/systems/strive/presentation/image/unlocked-solid.svg");
+  background-size: cover;
+}
+
+.ico-locked-expertises-solid {
+  background: url("/systems/strive/presentation/image/locked-expertises-solid.svg");
+  background-size: cover;
+}
+
+.ico-berserk-solid {
+  background: url("/systems/strive/presentation/image/berserk-solid.svg");
+  background-size: cover;
+}
+
+.ico-exhausted-solid {
+  background: url("/systems/strive/presentation/image/exhausted-solid.svg");
+  background-size: cover;
+}
+
+.ico-sprint-solid {
+  background: url("/systems/strive/presentation/image/sprint-solid.svg");
+  background-size: cover;
+}
+
+.ico-jealous-solid {
+  background: url("/systems/strive/presentation/image/jealous-solid.svg");
+  background-size: cover;
+}
+
+.ico-marked-solid {
+  background: url("/systems/strive/presentation/image/marked-solid.svg");
+  background-size: cover;
+}
+
+.ico-angel-solid {
+  background: url("/systems/strive/presentation/image/angel-solid.svg");
+  background-size: cover;
+}
+
+.ico-prone-solid {
+  background: url("/systems/strive/presentation/image/prone-solid.svg");
+  background-size: cover;
+}
+
+.ico-rooted-solid {
+  background: url("/systems/strive/presentation/image/rooted-solid.svg");
+  background-size: cover;
+}
+
+.ico-stunned-solid {
+  background: url("/systems/strive/presentation/image/stunned-solid.svg");
+  background-size: cover;
+}
+
+.ico-terrified-solid {
+  background: url("/systems/strive/presentation/image/terrified-solid.svg");
+  background-size: cover;
+}
+
+.ico-unconscious-solid {
+  background: url("/systems/strive/presentation/image/unconscious-solid.svg");
+  background-size: cover;
+}
+
+.ico-god-finger-solid {
+  background: url("/systems/strive/presentation/image/god-finger-solid.svg");
+  background-size: cover;
+}
+
+.ico-agility-solid {
+  background: url("/systems/strive/presentation/image/agility-solid.svg");
+  background-size: cover;
+}
+
+.ico-awareness-solid {
+  background: url("/systems/strive/presentation/image/awareness-solid.svg");
+  background-size: cover;
+}
+
+.ico-strength-solid {
+  background: url("/systems/strive/presentation/image/strongarm-solid.svg");
+  background-size: cover;
+}
+
+.ico-toughness-solid {
+  background: url("/systems/strive/presentation/image/toughness-solid.svg");
+  background-size: cover;
+}
+
+.ico-wit-solid {
+  background: url("/systems/strive/presentation/image/brain-solid.svg");
+  background-size: cover;
+}
+
+.ico-base-initiative-solid {
+  background: url("/systems/strive/presentation/image/base-initiative-solid.svg");
+  background-size: cover;
+}
+
+.ico-sprinting-speed-solid {
+  background: url("/systems/strive/presentation/image/sprint-solid.svg");
+  background-size: cover;
+}
+
+.ico-arrows-switch-ltr-solid {
+  background: url("/systems/strive/presentation/image/arrows-switch-ltr-solid.svg");
+  background-size: cover;
+}
+
+.ico-arrows-switch-ttb-solid {
+  background: url("/systems/strive/presentation/image/arrows-switch-ttb-solid.svg");
+  background-size: cover;
+}
+
+.ico-momentum-shift-desperation-solid {
+  background: url("/systems/strive/presentation/image/momentum-shift_desperation.svg");
+  background-size: cover;
+}
+
+.ico-momentum-shift-heroism-solid {
+  background: url("/systems/strive/presentation/image/momentum-shift_heroism.svg");
+  background-size: cover;
+}
+
+.ico-project-push-solid {
+  background: url("/systems/strive/presentation/image/project-push-solid.svg");
+  background-size: cover;
+}
+
+.ico-hourglass-solid {
+  background: url("/systems/strive/presentation/image/hourglass-solid.svg");
+  background-size: cover;
+}
+
+.ico-gear-wheel-solid {
+  background: url("/systems/strive/presentation/image/gear-wheel-solid.svg");
+  background-size: cover;
+}
+
+.ico-gear-wheel-broken-solid {
+  background: url("/systems/strive/presentation/image/gear-wheel-broken-solid.svg");
+  background-size: cover;
+}
+
+.ico-stability-solid {
+  background: url("/systems/strive/presentation/image/stability-solid.svg");
   background-size: cover;
 }

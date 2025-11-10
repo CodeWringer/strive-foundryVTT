@@ -3,11 +3,29 @@ viewModel: {ActorAttributesViewModel}
 cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
-  {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-    <span class="flex-grow">{{localize "system.character.attribute.plural"}}</span>
-  {{/header1}}
-  {{#with viewModel.childTemplate as | template |}}
-    {{> (template) viewModel=../viewModel.vmChild }}
-  {{/with}}
-  </ul>
+  <h1 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
+    <span class="flex-grow">{{localize "system.character.characteristic.baseCharacteristics"}}</span>
+  </h1>
+  <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg">
+    {{#each viewModel.attributes as |attribute|}}
+    <div class="flex flex-column flex-middle sheet-block" style="width: 90px;">
+      {{!-- Icon --}}
+      <div class="flex flex-row flex-middle">
+        <i id="{{attribute.vmIcon.id}}" class="ico dark {{attribute.icon}}" style="width: 48px; height: 48px;"></i>
+        {{> buttonRoll viewModel=attribute.vmRoll }}
+      </div>
+      {{!-- Level --}}
+      <div class="flex flex-row flex-middle">
+        {{> inputNumberSpinner viewModel=attribute.vmAttribute cssClass="width-sm" }}
+      </div>
+      {{!-- Divider --}}
+      <span class="margin-t-md margin-b-md" style="height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 90%);"></span>
+      {{!-- Modified --}}
+      <div class="flex flex-row flex-middle">
+        {{> inputNumberSpinner viewModel=attribute.vmModified cssClass="width-md" }}
+        <span style="width: 26px;">{{attribute.modifier}}</span>
+      </div>
+    </div>
+    {{/each}}
+  </div>
 </section>

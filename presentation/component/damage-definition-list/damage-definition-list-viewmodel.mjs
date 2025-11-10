@@ -4,6 +4,10 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
 import TransientDocument from "../../../business/document/transient-document.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
+import ButtonViewModel from "../button/button-viewmodel.mjs";
+import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
 
 /**
  * Represents a rollable list of damage definitions. 
@@ -127,5 +131,30 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
         };
       },
     });
+
+    this.vmAddItem = new ButtonViewModel({
+      id: "vmAddItem",
+      parent: this,
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addOf"),
+        game.i18n.localize("system.damageDefinition.label"),
+      ),
+      content: '<i class="fas fa-plus"></i>',
+      onClick: () => {
+        const newDamageDefinitions = this.value.concat([new DamageAndType({
+          damage: "",
+          damageType: DAMAGE_TYPES.pure,
+        })]);
+        this.value = newDamageDefinitions;
+      },
+    })
+    this.vmDamageFormulaInfo = new ViewModel({
+      id: "damage-info",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
+    });
   }
+
+  /** @override */
+  _onChange() { /** Prevent inherited re-invocation of _onChange. */ }
 }

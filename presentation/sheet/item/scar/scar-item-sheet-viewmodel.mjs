@@ -20,7 +20,7 @@ export default class ScarItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.limit = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.injury.limit.label"),
+        localizedToolTip: game.i18n.localize("system.character.health.injury.limit.label"),
         iconClass: "ico-limit-solid",
       }),
     ];

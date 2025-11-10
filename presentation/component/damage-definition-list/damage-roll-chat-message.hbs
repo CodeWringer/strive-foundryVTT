@@ -14,50 +14,47 @@ rolls: Array<Object> = {
 }
 title: String
 cssClass: undefined | String
+diceFacesTemplate: String
 --}}
-<div id="{{id}}" class="dice-roll-chat-message-container custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{id}}" class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#if title}}
     <a id="{{id}}-toggle-details">
       <h2 class="flex flex-row flex-grow">
         <span class="flex-grow">{{title}}</span>
         <div>
-          <i class="ico ico-details-hidden interactible dark toggle-with-details"></i>
-          <i class="ico ico-details-visible hidden interactible dark toggle-with-details"></i>
+          <i class="ico ico-chevron-r-solid interactible dark toggle-with-details"></i>
+          <i class="ico ico-chevron-d-solid hidden interactible dark toggle-with-details"></i>
         </div>
       </h2>
     </a>
   {{/if}}
-  <div class="dice-rolls-container">
-    <ol class="unstyled-list">
-      {{#each rolls as |roll index|}}
-        <li class="flex flex-column margin-b-md{{#if roll.cssClass}} {{roll.cssClass}}{{/if}}">
-          <div class="flex flex-center pad-sm">
-            <span class="strive-pill flex flex-row flex-grow font-size-default" title="{{localize "system.damageDefinition.label"}}">
-              <div class="flex flex-center">
-                <span class="dice-number">{{roll.rollTotal}}</span>
-              </div>
-              <div class="flex flex-center margin-l-md margin-r-md">
-                {{> verticalLine}}
-              </div>
-              <div class="flex flex-middle flex-grow auto-margin-h-md">
-                <i class="ico interactible {{roll.iconClass}} dark"></i>
-                <span>{{roll.localizedLabel}}</span>
-              </div>
-            </span>
-          </div>
-          <div id="{{../id}}-details" class="sheet-block hidden">
-            {{!-- Formula --}}
-            <div class="dice-composition">{{formula}}</div>
-          </div>
-          <ol class="dice-rolls auto-margin-h">
-            {{#each roll.diceResults as |diceResult diceIndex|}}
-              <li class="flex flex-center{{#if diceResult.isDiceResult}} roll d6 die die-sm{{/if}}">{{diceResult.value}}</li>
-            {{/each}}
-          </ol>
-        </li>
-      {{/each}}
-    </ol>
-  </div>
+  <ol class="unstyled-list">
+    {{#each rolls as |roll index|}}
+      <li class="flex flex-column margin-b-md{{#if roll.cssClass}} {{roll.cssClass}}{{/if}}">
+        <div class="flex flex-center pad-sm">
+          <span class="strive-pill flex flex-row flex-grow font-size-default" title="{{localize "system.damageDefinition.label"}}">
+            <span class="flex flex-center font-bold">{{roll.rollTotal}}</span>
+            <div class="flex flex-center margin-l-md margin-r-md">
+              {{> verticalLine}}
+            </div>
+            <div class="flex flex-middle flex-grow auto-margin-h-md">
+              <i class="ico interactible {{roll.iconClass}} dark"></i>
+              <span>{{roll.localizedLabel}}</span>
+            </div>
+          </span>
+        </div>
+        <div id="{{../id}}-details" class="sheet-block hidden">
+          {{!-- Formula --}}
+          <div class="dice-composition">{{formula}}</div>
+        </div>
+        <div class="flex flex-row flex-wrap override-roll-to-mute">
+          {{#each roll.diceResults as |diceResult diceIndex|}}
+            <span class="flex flex-center{{#if diceResult.isDiceResult}} d6{{/if}}">{{diceResult.value}}</span>
+          {{/each}}
+        </div>
+      </li>
+    {{/each}}
+  </ol>
   <div class="flex flex-center">
     <h3 class="roll-damage-value-total">{{rollTotal}}</h3>
   </div>

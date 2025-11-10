@@ -5,10 +5,10 @@ import { ValidationUtil } from "../../../../../business/util/validation-utility.
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
+import InputDropDownViewModel from "../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs";
 import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
@@ -157,7 +157,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
       parent: this,
-      iconHtml: '<i class="fas fa-cog"></i>',
+      content: '<i class="fas fa-cog"></i>',
       localizedToolTip: game.i18n.localize("system.character.asset.slot.edit"),
       onClick: async () => {
         const delta = await queryAssetSlotConfiguration(this.assetSlot);
@@ -165,43 +165,46 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       },
     });
 
-    this.vmBtnAssign = new ButtonViewModel({
-      id: "vmBtnAssign",
-      parent: this,
-      target: this.document,
-      iconHtml: '<i class="fas fa-plus"></i>',
-      localizedLabel: game.i18n.localize("system.character.asset.slot.assign.label"),
-      onClick: async () => {
-        const inputChoices = "inputChoices";
-        const assetChoices = this._getAssetsAsChoices();
-
-        const dialog = await new DynamicInputDialog({
-          localizedTitle: StringUtil.format(
-            game.i18n.localize("system.general.input.queryFor"), 
-            game.i18n.localize("system.character.asset.slot.label"), 
-          ),
-          inputDefinitions: [
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
-              name: inputChoices,
-              localizedLabel: game.i18n.localize("system.general.name.label"),
-              required: true,
-              defaultValue: assetChoices.length > 0 ? assetChoices[0] : undefined,
-              specificArgs: {
-                options: assetChoices,
-              }
-            }),
-          ],
-        }).renderAndAwait(true);
-        
-        if (dialog.confirmed !== true) return;
-        
-        // Assign the asset to the slot, via its `moveToAssetSlot` method. 
-        const assetIdToAlot = dialog[inputChoices].value;
-        const assetToAlot = this.availableAssets.find(it => it.id === assetIdToAlot);
-        assetToAlot.moveToAssetSlot(this.assetSlot);
-      },
-    });
+    if (!this.hasAsset) {
+      this.vmBtnAssign = new ButtonViewModel({
+        id: "vmBtnAssign",
+        parent: this,
+        target: this.document,
+        content: `<div class="flex flex-middle auto-margin-h-sm"><i class="fas fa-plus"></i><span>${game.i18n.localize("system.character.asset.slot.assign.label")}</span></div>`,
+        onClick: async () => {
+          const inputChoices = "inputChoices";
+          const assetChoices = this._getAssetsAsChoices();
+  
+          const dialog = await new DynamicInputDialog({
+            localizedTitle: StringUtil.format(
+              game.i18n.localize("system.general.input.queryFor"), 
+              game.i18n.localize("system.character.asset.slot.label"), 
+            ),
+            inputDefinitions: [
+              new DynamicInputDefinition({
+                name: inputChoices,
+                localizedLabel: game.i18n.localize("system.general.name.label"),
+                template: InputDropDownViewModel.TEMPLATE,
+                viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
+                  id: id,
+                  parent: parent,
+                  options: assetChoices,
+                  value: assetChoices.length > 0 ? assetChoices[0] : undefined,
+                  ...overrides,
+                }),
+              }),
+            ],
+          }).renderAndAwait(true);
+          
+          if (dialog.confirmed !== true) return;
+          
+          // Assign the asset to the slot, via its `moveToAssetSlot` method. 
+          const assetIdToAlot = dialog[inputChoices].value;
+          const assetToAlot = this.availableAssets.find(it => it.id === assetIdToAlot);
+          assetToAlot.moveToAssetSlot(this.assetSlot);
+        },
+      });
+    }
 
     this.vmBtnDelete = new ButtonDeleteViewModel({
       id: "vmBtnDelete",

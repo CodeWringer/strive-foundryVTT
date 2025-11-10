@@ -1,7 +1,7 @@
 {{!-- Required context:
 viewModel: {InputTagPillViewModel}
 --}}
-<div id="{{viewModel.id}}" class="strive-pill flex flex-row flex-middle">
+<div id="{{viewModel.id}}" class="strive-pill flex flex-row flex-center">
   <span>{{viewModel.localizedName}}</span>
   <span{{#if viewModel.isEditable}}{{else}} class="hidden"{{/if}}>
     {{> button viewModel=viewModel.vmBtnDelete }}

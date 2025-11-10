@@ -46,7 +46,7 @@ export default class InputTagPillViewModel extends ViewModel {
     this.vmBtnDelete = new ButtonViewModel({
       id: "vmBtnDelete",
       parent: this,
-      iconHtml: '<i class="fas fa-times"></i>',
+      content: '<i class="fas fa-times"></i>',
       isEditable: this.isEditable,
       localizedToolTip: StringUtil.format(
         game.i18n.localize("system.general.delete.deleteTypeOf"),

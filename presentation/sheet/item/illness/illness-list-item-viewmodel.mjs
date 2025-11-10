@@ -6,6 +6,7 @@ import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
 import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
 
 /**
  * @property {TransientIllness} document
@@ -35,6 +36,11 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
   constructor(args = {}) {
     super(args);
 
+    this.vmDurationWrap = new ViewModel({
+      id: "vmDurationWrap",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.health.duration"),
+    });
     this.vmDuration = new InputTextFieldViewModel({
       parent: this,
       id: "vmDuration",
@@ -58,7 +64,7 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
             this.document.treatmentSkill = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.treatmentSkill"),
+        localizedToolTip: game.i18n.localize("system.character.health.treatmentSkill.treatmentSkill"),
         iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({
@@ -71,15 +77,15 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
             this.document.treatment = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.treatment"),
+        localizedToolTip: game.i18n.localize("system.character.health.treatment"),
         iconClass: "ico-treatment-solid",
       }),
     ];
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    return super.getSecondaryHeaderButtons().concat([
+  getHeaderButtons() {
+    return [
       new TemplatedComponent({
         template: InputRadioButtonGroupViewModel.TEMPLATE,
         viewModel: new InputRadioButtonGroupViewModel({
@@ -92,13 +98,13 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
           },
         }),
       }),
-    ]);
+    ].concat(super.getHeaderButtons());
   }
   
   /** @override */
-  getAdditionalHeaderContent() {
+  getPromotedContent() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.ILLNESS_LIST_ITEM_EXTRA_HEADER,
+      template: game.strive.const.TEMPLATES.ILLNESS_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,
     });
   }

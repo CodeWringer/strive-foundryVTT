@@ -2,52 +2,12 @@ import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
- * Defines valid relative tooltip placements. 
- * 
- * These are relative to the anchor element. 
- * 
- * @constant
- */
-export const TOOLTIP_PLACEMENTS = {
-  TOP: "TOP",
-  RIGHT: "RIGHT",
-  BOTTOM: "BOTTOM",
-  LEFT: "LEFT",
-}
-
-/**
- * Defines tooltip positioning constraints. 
- * 
- * These are relative to the anchor element. 
- * 
- * @see Tooltip
- */
-export class TooltipPlacementConstraint {
-  /**
-   * @param {Object} args 
-   * @param {TOOLTIP_PLACEMENTS | undefined} args.placement 
-   * * default `TOOLTIP_PLACEMENTS.TOP`
-   * @param {Number | undefined} args.offset Sets an additional distance, in pixels, 
-   * from the anchor element. 
-   * * default `0`
-   */
-  constructor(args = {}) {
-    this.placement = args.placement ?? TOOLTIP_PLACEMENTS.TOP;
-    this.offset = args.offset ?? 0;
-  }
-}
-
-/**
  * Displays informative content when users hover over a specified element. 
  * 
  * @property {JQuery | undefined} anchorElement The element to which to anchor the tooltip. 
  * This is also the element that controls the tooltips visibility on hover. 
  * @property {String | undefined} content The content to display in the tooltip. 
  * This can be any valid HTML content, or just a simple text. 
- * @property {Boolean | undefined} enableArrow If `true`, will add a little arrow to the 
- * tooltip, for visual distinction. 
- * @property {TooltipPlacementConstraint | undefined} constraint Defines positioning 
- * constraints. 
  * @property {String | undefined} maxWidth Sets the maximum width the tooltip can assume. 
  * This must be a numeric value with css unit. E. g. `"10rem"`. 
  * @property {Boolean | undefined} showOnHover If `true`, will automatically show the 
@@ -78,7 +38,7 @@ export default class Tooltip {
    * @private
    */
   static CSS_CLASS = "custom-tooltip";
-  
+
   /**
    * The size of the "arrow" decoration, in pixels. 
    * 
@@ -102,24 +62,34 @@ export default class Tooltip {
   }
 
   /**
+   * @returns {Boolean}
+   */
+  get visible() { return this._visible; }
+  set visible(value) {
+    this._visible = value;
+    if (value) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id A unique identifier. 
    * @param {JQuery | undefined} args.anchorElement The element to which to anchor the tooltip. 
    * This is also the element that controls the tooltips visibility on hover. 
    * @param {String | undefined} args.content The content to display in the tooltip. 
    * This can be any valid HTML content, or just a simple text. 
-   * @param {Boolean | undefined} args.enableArrow If `true`, will add a little arrow to the 
-   * tooltip, for visual distinction. 
-   * * default `false`
-   * @param {TooltipPlacementConstraint | undefined} args.constraint Defines positioning 
-   * constraints. 
    * @param {String | undefined} args.maxWidth Sets the maximum width the tooltip can assume. 
-   * This must be a numeric value with css unit. E. g. `"10rem"`. 
+   * This must be a numeric value with css unit. E. g. `"50rem"`. 
    * * default `"50rem"`
    * @param {Boolean | undefined} args.showOnHover If `true`, will automatically show the 
    * tooltip when the `anchorElement` is hovered over. If `false`, then the tooltip must 
    * be manually shown and hidden. 
    * * default `true`
+   * @param {String | undefined} args.style A style override to attach to the tool tip's DOM element. 
+   * E. g. `text-align: center`
    * @param {Function | undefined} args.onShown Callback that is invoked whenever the 
    * tooltip is shown. 
    * @param {Function | undefined} args.onHidden Callback that is invoked whenever the 
@@ -130,13 +100,14 @@ export default class Tooltip {
 
     this.anchorElement = args.anchorElement;
     this.content = args.content;
-    this.enableArrow = args.enableArrow ?? false;
-    this.constraint = args.constraint ?? new TooltipPlacementConstraint();
     this.maxWidth = args.maxWidth ?? "50rem";
     this.showOnHover = args.showOnHover ?? true;
+    this.style = args.style ?? "";
 
-    this.onShown = args.onShown ?? (() => {});
-    this.onHidden = args.onHidden ?? (() => {});
+    this._visible = false;
+
+    this.onShown = args.onShown ?? (() => { });
+    this.onHidden = args.onHidden ?? (() => { });
   }
 
   /**
@@ -174,49 +145,94 @@ export default class Tooltip {
   show() {
     if (!ValidationUtil.isDefined(this.anchorElement)) return;
 
+    this._visible = true;
+
     // Ensure lingering instances are cleared and a clean, new one exists. 
     this._ensureElementRemoved();
     this._ensureElement();
     // Ensure the content is up to date. 
     this._element.html(this.content);
 
-    const parentPos = this.anchorElement.offset();
-    const parentSize = { 
-      width: this.anchorElement.outerWidth(), 
-      height: this.anchorElement.outerHeight() 
-    };
-    
-    const size = { 
-      width: this._element.outerWidth(), 
-      height: this._element.outerHeight() 
+    // Determine position and bounds. 
+
+    // Get tool tip size. 
+    const size = {
+      width: this._element.outerWidth(),
+      height: this._element.outerHeight(),
     };
 
-    let x = 0;
-    let y = 0;
-    const offset = this.enableArrow ? (this.constraint.offset + Tooltip.ARROW_SIZE) : this.constraint.offset;
+    const parentRect = this._getParentRect();
+    // By default, try to horizontally center above the anchor element. 
+    const tooltipRect = new Rect({
+      x: parentRect.left + (parentRect.width / 2) - (size.width / 2),
+      y: parentRect.top - (size.height + Tooltip.ARROW_SIZE),
+      width: size.width,
+      height: size.height,
+    });
+    let arrowCssClass = "with-arrow-b";
 
-    if (this.constraint.placement === TOOLTIP_PLACEMENTS.TOP) {
-      x = parentPos.left + (parentSize.width / 2) - (size.width / 2);
-      y = parentPos.top - size.height - offset;
-    } else if (this.constraint.placement === TOOLTIP_PLACEMENTS.BOTTOM) {
-      x = parentPos.left + (parentSize.width / 2) - (size.width / 2);
-      y = parentPos.top + parentSize.height +  offset;
-    } else if (this.constraint.placement === TOOLTIP_PLACEMENTS.RIGHT) {
-      x = parentPos.left + parentSize.width + offset;
-      y = parentPos.top + (parentSize.height / 2) - (size.height / 2);
-    } else if (this.constraint.placement === TOOLTIP_PLACEMENTS.LEFT) {
-      x = parentPos.left - size.width - offset;
-      y = parentPos.top + (parentSize.height / 2) - (size.height / 2);
+    // Now ensure the tool tip stays bounded in the window.
+
+    // Flags to keep track of which window borders the tool tip rectangle is out-of-bounds. 
+    let oobTop = false;
+    let oobBottom = false;
+    let oobLeft = false;
+    let oobRight = false;
+
+    if (tooltipRect.top < 0) {
+      oobTop = true;
+    } else if (tooltipRect.bottom > window.screen.height) {
+      oobBottom = true;
+    }
+    if (tooltipRect.left < 0) {
+      oobLeft = true;
+    } else if (tooltipRect.right > window.screen.width) {
+      oobRight = true;
     }
 
-    this._element.attr("style", `left: ${x}px; top: ${y}px; max-width: ${this.maxWidth};`);
+    if (oobTop && oobLeft) {
+      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
+      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-tl";
+    } else if (oobTop && oobRight) {
+      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
+      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-tr";
+    } else if (oobBottom && oobLeft) {
+      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
+      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-bl";
+    } else if (oobBottom && oobRight) {
+      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
+      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-br";
+    } else if (oobTop) {
+      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-t";
+    } else if (oobBottom) {
+      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-b";
+    } else if (oobLeft) {
+      tooltipRect.top = parentRect.top + (parentRect.height / 2) - (tooltipRect.height / 2);
+      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-l";
+    } else if (oobRight) {
+      tooltipRect.top = parentRect.top + (parentRect.height / 2) - (tooltipRect.height / 2);
+      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-r";
+    }
+
+    const cssClass = `${Tooltip.CSS_CLASS} ${arrowCssClass}`;
+    this._element.attr("class", cssClass);
+    this._element.attr("style", `left: ${tooltipRect.left}px; top: ${tooltipRect.top}px; max-width: ${this.maxWidth}; ${this.style}`);
     this.onShown();
   }
-  
+
   /**
    * Hides the tooltip, by removing it from the DOM. 
    */
   hide() {
+    this._visible = false;
     this._ensureElementRemoved();
     this.onHidden();
   }
@@ -248,23 +264,8 @@ export default class Tooltip {
     if (ValidationUtil.isDefined(elementInDom)) {
       this._element = elementInDom;
     } else {
-      let cssClass = Tooltip.CSS_CLASS;
-  
-      if (this.enableArrow) {
-        if (this.constraint.placement === TOOLTIP_PLACEMENTS.BOTTOM) {
-          cssClass = `${cssClass} with-arrow-t`;
-        } else if (this.constraint.placement === TOOLTIP_PLACEMENTS.TOP) {
-          cssClass = `${cssClass} with-arrow-b`;
-        } else if (this.constraint.placement === TOOLTIP_PLACEMENTS.LEFT) {
-          cssClass = `${cssClass} with-arrow-r`;
-        } else if (this.constraint.placement === TOOLTIP_PLACEMENTS.RIGHT) {
-          cssClass = `${cssClass} with-arrow-l`;
-        }
-      }
-  
-      const elementCreationString = `<div id="${this._id}" class="${cssClass}" style="max-width: ${this.maxWidth};">${this.content}</div>`;
+      const elementCreationString = `<div class="${Tooltip.CSS_CLASS}" id="${this._id}" style="max-width:${this.maxWidth}">${this.content}</div>`;
       this._element = $($("body").add(elementCreationString)[1]);
-  
       $("body").append(this._element);
     }
   }
@@ -285,5 +286,54 @@ export default class Tooltip {
     }
 
     this._element = undefined;
+  }
+
+  /**
+   * Returns the anchor element's rectangle. 
+   * 
+   * @returns {Rect}
+   * 
+   * @private
+   */
+  _getParentRect() {
+    const parentPos = this.anchorElement.offset();
+    return new Rect({
+      x: parentPos.left,
+      y: parentPos.top,
+      width: this.anchorElement.outerWidth(),
+      height: this.anchorElement.outerHeight(),
+    });
+  }
+}
+
+/**
+ * Represents a plain axis-aligned rectangle. 
+ * 
+ * @property {Number} top
+ * @property {Number} left
+ * @property {Number} right
+ * * read-only
+ * @property {Number} bottom
+ * * read-only
+ * @property {Number} width
+ * @property {Number} height
+ */
+class Rect {
+  get bottom() { return this.top + this.height; }
+
+  get right() { return this.left + this.width; }
+
+  /**
+   * @param {Object} args 
+   * @param {Number} args.x 
+   * @param {Number} args.y 
+   * @param {Number} args.width 
+   * @param {Number} args.height 
+   */
+  constructor(args = {}) {
+    this.left = args.x;
+    this.top = args.y;
+    this.width = args.width;
+    this.height = args.height;
   }
 }

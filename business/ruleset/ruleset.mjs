@@ -1,6 +1,3 @@
-import LevelAdvancement from "./level-advancement.mjs";
-import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
-import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
@@ -16,23 +13,6 @@ import { ValidationUtil } from "../util/validation-utility.mjs";
  */
 export default class Ruleset {
   /**
-   * Returns the tier of the given level of an attribute. 
-   * 
-   * @param {Number} level The level for which to get the attribute tier. 
-   * 
-   * @returns {AttributeTier}
-   */
-  getAttributeLevelTier(level = 0) {
-    if (level < 3) {
-      return ATTRIBUTE_TIERS.underdeveloped;
-    } else if (level < 5) {
-      return ATTRIBUTE_TIERS.average;
-    } else {
-      return ATTRIBUTE_TIERS.exceptional;
-    }
-  }
-
-  /**
    * Returns the advancement requirements for the given level of an attribute. 
    * 
    * @param {Number} level The level for which to get the advancement requirements. 
@@ -40,34 +20,8 @@ export default class Ruleset {
    * @returns {Number}
    */
   getAttributeAdvancementRequirements(level = 0) {
-    const tier = this.getAttributeLevelTier(level);
-
-    if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
-      return level * 10;
-    } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
-      return level * 7;
-    } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
-      return level * 8;
-    } else {
-      throw new Error(`Unrecognized attribute tier ${tier.name}`);
-    }
-  }
-    
-  /**
-   * Returns the tier of the given level of a skill. 
-   * 
-   * @param {Number} level The level for which to get the skill tier. 
-   * 
-   * @returns {SkillTier}
-   */
-  getSkillLevelTier(level = 0) {
-    if (level < 1) {
-      return SKILL_TIERS.dabbling;
-    } else if (level < 5) {
-      return SKILL_TIERS.apprentice;
-    } else {
-      return SKILL_TIERS.master;
-    }
+    const base = 10;
+    return base + (level * 5);
   }
 
   /**
@@ -75,32 +29,15 @@ export default class Ruleset {
    * 
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
-   * @returns {LevelAdvancement}
-   * 
-   * @throws When the given level does not result in a valid skill tier. 
+   * @returns {Number}
    */
   getSkillAdvancementRequirements(level = 0) {
-    const tier = this.getSkillLevelTier(level);
-    let successes = 0;
-    let failures = 0;
-
-    if (tier.name === SKILL_TIERS.dabbling.name) {
-      successes = 6;
-      failures = 9;
-    } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successes = level + 3;
-      failures = (level * 2) + 4;
-    } else if (tier.name === SKILL_TIERS.master.name) {
-      successes = level + 4;
-      failures = (level * 2) + 5;
+    if (level === 0) {
+      return 15;
     } else {
-      throw new Error(`Unrecognized skill tier ${tier.name}`);
+      const base = 8;
+      return base + (level * 3);
     }
-
-    return new LevelAdvancement({
-      successes: successes,
-      failures: failures
-    });
   }
 
   /**
@@ -138,17 +75,12 @@ export default class Ruleset {
   }
 
   /**
-   * Returns the maximum HP reduction per injury of the given actor. 
-   * 
-   * @param {Actor} actor 
+   * Returns the maximum HP reduction per injury. 
    * 
    * @returns {Number}
    */
-  getMaximumHpReductionPerInjury(actor) {
-    const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
-    const hpReductionPerInjury = 10 - Math.floor(toughnessLevel / 2);
-
-    return hpReductionPerInjury;
+  getMaximumHpReductionPerInjury() {
+    return 10;
   }
 
   /**
@@ -221,7 +153,7 @@ export default class Ruleset {
     const unmodifiedHp = this.getUnmodifiedMaximumHp(actor);
     const hpReduction = this.getCharacterMaximumHpReduction(actor);
 
-    return unmodifiedHp - hpReduction;
+    return Math.max(this.getCharacterBaseHp(), (unmodifiedHp - hpReduction));
   }
 
   /**
@@ -292,10 +224,6 @@ export default class Ruleset {
    * Returns the effective raw level of the given actor for the given 
    * attribute. 
    * 
-   * For NPCs, the effective level can be determined by a challenge 
-   * rating, if one is active. For PCs, the raw attribute level 
-   * is picked. 
-   * 
    * @param {Attribute} attribute The attribute whose effective level 
    * is to be returned. 
    * @param {Actor} actor The actor whose attribute it is. 
@@ -309,21 +237,13 @@ export default class Ruleset {
     }
 
     const transientActor = actor.getTransientObject();
-    
-    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
-      return transientActor.challengeRating.value;
-    } else {
-      const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-      return characterAttribute.level;
-    }
+    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+    return characterAttribute.level;
   }
   
   /**
    * Returns the effective modified level of the given actor for the 
    * given attribute. 
-   * 
-   * For NPCs, the effective level can be determined by a challenge 
-   * rating, if one is active. 
    * 
    * @param {Attribute} attribute The attribute whose effective level 
    * is to be returned. 
@@ -338,26 +258,17 @@ export default class Ruleset {
     }
 
     const transientActor = actor.getTransientObject();
-    
-    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
-      return transientActor.challengeRating.modified;
-    } else {
-      const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-      if (!ValidationUtil.isDefined(characterAttribute)) {
-        game.strive.logger.logError(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
-        return;
-      }
-      return characterAttribute.modifiedLevel;
+    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+    if (!ValidationUtil.isDefined(characterAttribute)) {
+      game.strive.logger.logError(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
+      return;
     }
+    return characterAttribute.modifiedLevel;
   }
 
   /**
    * Returns the effective modified level of the given actor for the 
    * given skill. 
-   * 
-   * For NPCs, the effective level can be determined by a challenge 
-   * rating, if one is active. For PCs, the raw skill level 
-   * is picked. 
    * 
    * @param {Item | TransientSkill} skill The skill whose effective level 
    * is to be returned. 
@@ -371,14 +282,8 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const transientActor = actor.getTransientObject();
-
-    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
-      return transientActor.challengeRating.modified;
-    } else {
-      const transientSkill = skill.getTransientObject();
-      return transientSkill.modifiedLevel;
-    }
+    const transientSkill = skill.getTransientObject();
+    return transientSkill.modifiedLevel;
   }
 
   /**

@@ -9,6 +9,9 @@ import { DICE_CONSTANTS } from "./dice-constants.mjs";
 import { ChatUtil } from "../../presentation/chat/chat-utility.mjs";
 import { ValidationUtil } from "../util/validation-utility.mjs";
 import { UuidUtil } from "../util/uuid-utility.mjs";
+import GameSystemUserSettings from "../setting/game-system-user-settings.mjs";
+import FoundryWrapper from "../../common/foundry-wrapper.mjs";
+import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 
 /**
  * Represents the input data of a dice (pool) roll. 
@@ -145,19 +148,22 @@ export class RollResult {
     const intermediateFacesForDisplay = this._getFacesForDisplay(this.intermediateResults);
     const resultFacesForDisplay = this._getFacesForDisplay(this.results);
 
+    const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
     let showReminder = false;
-    if (ValidationUtil.isDefined(args.actor) === true) {
-      const transientActor = args.actor.getTransientObject();
-      if (transientActor.type === ACTOR_TYPES.PC) {
-        showReminder = true;
-      } else if (transientActor.type === ACTOR_TYPES.NPC) {
-        showReminder = transientActor.progressionVisible;
+    if (showReminders) {
+      if (ValidationUtil.isDefined(args.actor) === true) {
+        const transientActor = args.actor.getTransientObject();
+        if (transientActor.type === ACTOR_TYPES.PC) {
+          showReminder = true;
+        } else if (transientActor.type === ACTOR_TYPES.NPC) {
+          showReminder = transientActor.advancement.advancementEnabled;
+        }
       }
     }
 
     // Render the results. 
     const isObstacleRolled = this.results.resolvedObstacle.isPlainNumber === false;
-    const renderedContent = await renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       id: UuidUtil.createUUID(),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,
@@ -186,6 +192,8 @@ export class RollResult {
 
       showReminder: showReminder,
       additionalContent: args.additionalContent,
+
+      diceFacesTemplate: TEMPLATES.DICE_FACES,
     });
 
     return ChatUtil.sendToChat({
@@ -296,12 +304,12 @@ export class RollResult {
       .concat([])
       .sort()
       .reverse()
-      .map(it => { return {cssClass: `roll die d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`, content: it}; });
+      .map(it => { return {cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`, content: it}; });
     const missesForRendering = rollStepData.misses
       .concat([])
       .sort()
       .reverse()
-      .map(it => { return {cssClass: `roll die d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`, content: it}; });
+      .map(it => { return {cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`, content: it}; });
 
     let combinedResultsForRendering = []
       .concat(hitsForRendering)
@@ -313,7 +321,7 @@ export class RollResult {
     if (obstacle >= rollStepData.faces.length) { // Obstacle greater than number of dice rolled. 
       const blanksForRendering = [];
       for (let i = 0; i < rollStepData.blankCount; i++) {
-        blanksForRendering.push({ cssClass: `roll die d6 ${DICE_CONSTANTS.CSS_CLASS_MISSING_DIE}`, content: "" });
+        blanksForRendering.push({ cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_MISSING_DIE}`, content: "" });
       }
       // Add blanks and then the obstacle to the end of the faces list. 
       combinedResultsForRendering = combinedResultsForRendering

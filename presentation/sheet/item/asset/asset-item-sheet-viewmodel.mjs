@@ -25,7 +25,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 1,
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.asset.quantity.label"),
+        localizedToolTip: game.i18n.localize("system.character.asset.quantity.label"),
         iconClass: "ico-quantity-solid",
       }),
       new DataFieldComponent({
@@ -39,7 +39,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 1,
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.asset.quantity.maximum"),
+        localizedToolTip: game.i18n.localize("system.character.asset.quantity.maximum"),
         iconClass: "ico-limit-solid",
       }),
       new DataFieldComponent({
@@ -53,7 +53,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 0,
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.asset.quality"),
+        localizedToolTip: game.i18n.localize("system.character.asset.quality"),
         iconClass: "ico-quality-solid",
       }),
       new DataFieldComponent({
@@ -67,7 +67,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 0,
         }),
-        localizedIconToolTip: game.i18n.localize("system.character.asset.bulk"),
+        localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
         iconClass: "ico-bulk-solid",
       }),
       new DataFieldComponent({
@@ -81,7 +81,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.tags = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.general.tag.plural"),
+        localizedToolTip: game.i18n.localize("system.general.tag.plural"),
         iconClass: "ico-tags-solid",
         cssClass: "grid-span-2",
       }),
@@ -89,8 +89,8 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    const inherited = super.getSecondaryHeaderButtons();
+  getHeaderButtons() {
+    const inherited = super.getHeaderButtons();
     return [
       new TemplatedComponent({
         template: ButtonTakeItemViewModel.TEMPLATE,

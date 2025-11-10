@@ -1,4 +1,4 @@
-import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-states/health-states-settings-dialog.mjs";
+import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-settings/health-settings-dialog.mjs";
 import GameSystemSetting from "./game-system-setting.mjs";
 import GameSystemSettings from "./game-system-settings.mjs";
 import { SettingScopes } from "./setting-scopes.mjs";
@@ -12,7 +12,7 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
    * @type {String}
    * @readonly
    */
-  static get KEY_CUSTOM_HEALTH_STATES() { return "customHealthStates"; }
+  static get KEY_HEALTH_SETTINGS() { return "healthSettings"; }
  
   /**
    * @static
@@ -27,20 +27,26 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
    * @readonly
    */
   static get KEY_AUTO_REMOVE_SAME_COMBATANTS() { return "autoRemoveSameCombatants"; }
+ 
+  /**
+   * @static
+   * @type {String}
+   * @readonly
+   */
+  static get KEY_ENABLE_MOMENTUM_BAR() { return "enableMomentumBar"; }
 
   constructor() {
     super();
 
     this._settings.push(
       new GameSystemSetting({
-        key: GameSystemWorldSettings.KEY_CUSTOM_HEALTH_STATES,
-        name: game.i18n.localize("system.settings.healthStates.label"),
-        hint: game.i18n.localize("system.settings.healthStates.hint"),
+        key: GameSystemWorldSettings.KEY_HEALTH_SETTINGS,
+        name: game.i18n.localize("system.settings.healthConditions.label"),
+        hint: game.i18n.localize("system.settings.healthConditions.hint"),
         scope: SettingScopes.WORLD,
         config: false,
         default: {
           hidden: [],
-          custom: [],
         },
         type: Object,
         menu: HealthStatesSettingsDialog,
@@ -59,6 +65,15 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
         key: GameSystemWorldSettings.KEY_AUTO_REMOVE_SAME_COMBATANTS,
         name: game.i18n.localize("system.settings.autoRemoveSameCombatants.label"),
         hint: game.i18n.localize("system.settings.autoRemoveSameCombatants.hint"),
+        scope: SettingScopes.WORLD,
+        config: true,
+        default: true,
+        type: Boolean,
+      }),
+      new GameSystemSetting({
+        key: GameSystemWorldSettings.KEY_ENABLE_MOMENTUM_BAR,
+        name: game.i18n.localize("system.settings.enableMomentumBar.label"),
+        hint: game.i18n.localize("system.settings.enableMomentumBar.hint"),
         scope: SettingScopes.WORLD,
         config: true,
         default: true,

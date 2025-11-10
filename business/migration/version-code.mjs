@@ -41,10 +41,36 @@ export default class VersionCode {
    * 
    * @returns `true`, if this version code is greater than the given version code. 
    */
-  greaterThan(otherVersion) {
-    return this.major > otherVersion.major
-      || this.minor > otherVersion.minor
-      || this.patch > otherVersion.patch;
+  greater(otherVersion) {
+    if (this.major < otherVersion.major) {
+      return false;
+    } else if (this.major > otherVersion.major) {
+      return true;
+    }
+    if (this.minor < otherVersion.minor) {
+      return false;
+    } else if (this.minor > otherVersion.minor) {
+      return true;
+    }
+    if (this.patch < otherVersion.patch) {
+      return false;
+    } else if (this.patch > otherVersion.patch) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true, if this version code is greater than or equal to the given version code. 
+   * 
+   * @param {VersionCode} otherVersion The version code to compare against. 
+   * 
+   * @returns `true`, if this version code is greater than or equal to the given version code. 
+   */
+  greaterOrEquals(otherVersion) {
+    const isEqual = this.equals(otherVersion);
+    const isGreater = this.greater(otherVersion);
+    return isEqual || isGreater;
   }
 
   /**
@@ -54,10 +80,36 @@ export default class VersionCode {
    * 
    * @returns `true`, if this version code is lesser than the given version code. 
    */
-  lesserThan(otherVersion) {
-    return this.major < otherVersion.major
-      || this.minor < otherVersion.minor
-      || this.patch < otherVersion.patch;
+  lesser(otherVersion) {
+    if (this.major > otherVersion.major) {
+      return false;
+    } else if (this.major < otherVersion.major) {
+      return true;
+    }
+    if (this.minor > otherVersion.minor) {
+      return false;
+    } else if (this.minor < otherVersion.minor) {
+      return true;
+    }
+    if (this.patch > otherVersion.patch) {
+      return false;
+    } else if (this.patch < otherVersion.patch) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true, if this version code is lesser than or equal to the given version code. 
+   * 
+   * @param {VersionCode} otherVersion The version code to compare against. 
+   * 
+   * @returns `true`, if this version code is lesser than or equal to the given version code. 
+   */
+  lesserOrEquals(otherVersion) {
+    const isEqual = this.equals(otherVersion);
+    const isLesser = this.lesser(otherVersion);
+    return isEqual || isLesser;
   }
 
   /**

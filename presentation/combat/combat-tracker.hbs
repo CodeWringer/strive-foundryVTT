@@ -45,6 +45,10 @@
       <h3 class="encounter-title noborder">{{localize "COMBAT.None"}}</h3>
       {{/if}}
 
+      {{!-- Button to send general combat action reminders to chat --}}
+      <a id="vmSendToChatGeneralActions" class="combat-button combat-control" data-tooltip="COMBAT.SendGeneralActionsToChat">
+        <i class="fas fa-question-circle"></i>
+      </a>
       {{#if user.isGM}}
       <a class="combat-button combat-control" data-tooltip="COMBAT.InitiativeReset" data-control="resetAll" {{#unless
         hasCombat}}disabled{{/unless}}>
@@ -59,6 +63,13 @@
       </a>
       {{/if}}
     </div>
+    
+    {{!-- Momentum --}}
+    {{#if vmMomentum}}
+    {{#with momentumTemplate as |template|}}
+      {{> (template) viewModel=../vmMomentum}}
+    {{/with}}
+    {{/if}}
   </header>
 
   <ol id="combat-tracker" class="directory-list">
@@ -76,7 +87,7 @@
         {{!-- Grit Points --}}
         {{#if this.renderGritPoints}}
         {{#with this.gritPointsTemplate as |template|}}
-          {{> (template) viewModel=../this.gritPointsViewModel cssClass="margin-b-md combat-tracker-grit-points" }}
+          {{> (template) viewModel=../this.gritPointsViewModel cssClass="margin-b-md combat-tracker-grit-points dark" }}
         {{/with}}
         {{/if}}
         <div class="combatant-controls flexrow">

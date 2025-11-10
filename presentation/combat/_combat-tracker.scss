@@ -3,6 +3,7 @@
   height: 21px;
   position: relative;
   text-align: center;
+  display: inline-block;
 }
 
 .combatant-action-point-image {
@@ -15,4 +16,10 @@
   left: 50%;
   line-height: 21px;
   transform: translate(-50%, -50%);
+  font-family: var(--font-primary);
+  color: $c-text-disabled;
+
+  &.active {
+    color: $c-text-light;
+  }
 }

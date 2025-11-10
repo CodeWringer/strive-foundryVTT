@@ -3,15 +3,8 @@ import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
 
 /**
  * Represents a clickable sprite, with hover state. 
- * 
- * @property {PIXI.Container} wrapped A wrapped `PIXI.Container` that contains both sprites. 
- * This object needs to be added to the stage to make the button visible. 
- * @property {Number} x 
- * @property {Number} y 
- * @property {Number} width 
- * @property {Number} height 
  */
-export class PixiButton {
+export default class PixiButton {
   /**
    * A blurred version of the icon sprite displayed beneath the icon sprite. 
    * 
@@ -21,35 +14,60 @@ export class PixiButton {
   _spriteHover = undefined;
 
   /**
-   * Icon sprite. 
+   * The actual icon sprite. 
    * 
    * @type {PIXI.Sprite}
-   * @private
    */
-  _spriteIcon = undefined;
+  _sprite = undefined;
 
   /**
-   * A wrapped container that contains both sprites. 
+   * Contains both sprites and is the central element to add as a child to make 
+   * the button visible. 
    * 
    * @type {PIXI.Container}
-   * @private
    */
-  _wrapped = undefined;
-  get wrapped() { return this._wrapped; }
+  container = undefined;
 
-  get x() { return this._wrapped.x; }
-  set x(value) { this._wrapped.x = value; }
+  get _hoverSpriteScale() { return 1.4; }
 
-  get y() { return this._wrapped.y; }
-  set y(value) { this._wrapped.y = value; }
+  get x() { return this._sprite.x; }
+  set x(value) {
+    this._sprite.x = value;
+    this._spriteHover.x = (this._sprite.width - this._spriteHover.width) / 2;
+  }
 
-  get width() { return this._wrapped.width; }
-  set width(value) { this._wrapped.width = value; }
+  get y() { return this._sprite.y; }
+  set y(value) {
+    this._sprite.y = value;
+    this._spriteHover.y = (this._sprite.height - this._spriteHover.height) / 2;
+  }
 
-  get height() { return this._wrapped.height; }
-  set height(value) { this._wrapped.height = value; }
+  get width() { return this._sprite.width; }
+  set width(value) {
+    this._sprite.width = value;
+    this._spriteHover.width = value * this._hoverSpriteScale;
+    this._updateSpriteHoverPosition();
+  }
 
-  get position() { return this._wrapped.position; }
+  get height() { return this._sprite.height; }
+  set height(value) {
+    this._sprite.height = value;
+    this._spriteHover.height = value * this._hoverSpriteScale;
+    this._updateSpriteHoverPosition();
+  }
+
+  get position() {
+    const thiz = this;
+    return {
+      x: thiz.x,
+      y: thiz.y,
+      set: function (x, y) {
+        thiz._sprite.x = x;
+        thiz._sprite.y = y;
+        thiz._updateSpriteHoverPosition();
+      },
+    };
+  }
 
   /**
    * @param {Object} args
@@ -59,36 +77,39 @@ export class PixiButton {
   constructor(args = {}) {
     ValidationUtil.validateOrThrow(args, ["texture"]);
 
-    this.onClick = args.onClick ?? (() => {});
+    this.onClick = args.onClick ?? (() => { });
 
-    this._wrapped = new PIXI.Container();
-    
+    this.container = new PIXI.Container();
+
     // Actual sprite. 
-    this._spriteIcon = new PIXI.Sprite(args.texture);
+    this._sprite = new PIXI.Sprite(args.texture);
 
-    if (PIXI_VERSION.greaterThan(FOUNDRY_10_PIXI_VERSION)) {
-      this._spriteIcon.eventMode = "static";
+    if (PIXI_VERSION.greater(FOUNDRY_10_PIXI_VERSION)) {
+      this._sprite.eventMode = "static";
     } else {
-      this._spriteIcon.interactive = true;
+      this._sprite.interactive = true;
     }
-    this._spriteIcon.cursor = "pointer";
-    
+    this._sprite.cursor = "pointer";
+
     // Hover sprite. 
     this._spriteHover = new PIXI.Sprite(args.texture);
-    this._spriteHover.anchor.set(0.5, 0.5);
-    this._spriteHover.position.set(this._spriteIcon.width / 2, this._spriteIcon.height / 2);
-    this._spriteHover.scale.set(1.4, 1.4);
+    this._updateSpriteHoverSize();
+    this._spriteHover.position.set(
+      (this._sprite.width - this._spriteHover.width) / 2,
+      (this._sprite.height - this._spriteHover.height) / 2
+    );
     this._spriteHover.tint = 0xd23d3d;
     this._spriteHover.alpha = 0.0;
     const blurStrength = 4;
     const blurQuality = 4;
     this._spriteHover.filters = [
-      new PIXI.filters.BlurFilter(blurStrength, blurQuality)
+      new PIXI.BlurFilter(blurStrength, blurQuality)
     ];
-    this._wrapped.addChild(this._spriteHover);
-    this._wrapped.addChild(this._spriteIcon);
 
-    this._spriteIcon.on("click", (event) => {
+    this.container.addChild(this._spriteHover);
+    this.container.addChild(this._sprite);
+
+    this._sprite.on("click", (event) => {
       this.onClick();
     })
     .on("pointerover", (event) => {
@@ -98,4 +119,27 @@ export class PixiButton {
       this._spriteHover.alpha = 0.0;
     });
   }
+  
+  /**
+   * Updates the hover sprite's position to be centered on the sprite. 
+   * 
+   * @private
+   */
+  _updateSpriteHoverPosition() {
+    this._spriteHover.position.set(
+      this._sprite.x + ((this._sprite.width - this._spriteHover.width) / 2),
+      this._sprite.y + ((this._sprite.height - this._spriteHover.height) / 2)
+    );
+  }
+  
+  /**
+   * Updates the hover sprite's size, relative to the actual sprite's size. 
+   * 
+   * @private
+   */
+  _updateSpriteHoverSize() {
+    this._spriteHover.width = this._sprite.width * this._hoverSpriteScale;
+    this._spriteHover.height = this._sprite.height * this._hoverSpriteScale;
+  }
+
 }

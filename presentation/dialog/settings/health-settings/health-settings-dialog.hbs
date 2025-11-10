@@ -1,0 +1,10 @@
+{{!-- 
+viewModel: HealthStatesSettingsDialogViewModel
+--}}
+<section id="{{viewModel.id}}">
+  <div class="sheet-block flex flex-column">
+    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "system.settings.healthConditions.configureSystemDefaults"}}{{/header2}}
+    {{> visibilityToggleList viewModel=viewModel.vmVisibilityList}}
+  </div>
+  {{> button viewModel=viewModel.vmBtnSave }}
+</section>

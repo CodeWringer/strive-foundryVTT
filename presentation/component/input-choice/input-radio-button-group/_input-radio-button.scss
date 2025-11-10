@@ -6,13 +6,13 @@
 .radio-button-container {
   background: $c-bg-lighter;
 
-  > input {
+  input.radio-button {
     display: none;
   }
 
   > label {
     cursor: pointer;
-    padding: 4px;
+    padding: $padding-sm;
     border-right: 1px solid $c-border-input;
     color: $c-text-disabled;
     background: $c-bg-light;
@@ -37,6 +37,10 @@
 
     i.ico {
       filter: drop-shadow(0 0 4px $c-button-highlight);
+
+      &.dark {
+        filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+      }
     }
   }
 

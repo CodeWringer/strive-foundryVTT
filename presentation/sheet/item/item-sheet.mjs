@@ -1,52 +1,78 @@
 import { SYSTEM_ID } from "../../../system-id.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import AssetItemSheet from "./asset/asset-item-sheet.mjs";
 import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
 import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
 import InjuryItemSheet from "./injury/injury-item-sheet.mjs";
+import MomentumActionItemSheet from "./momentum-action/momentum-action-item-sheet.mjs";
 import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
 import ScarItemSheet from "./scar/scar-item-sheet.mjs";
 import SkillItemSheet from "./skill/skill-item-sheet.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import HealthConditionItemSheet from "./health-condition/health-condition-item-sheet.mjs";
+import ItemSheetSubType from "./item-sheet-subtype.mjs";
+import TraitItemSheet from "./trait/trait-item-sheet.mjs";
+import ProjectItemSheet from "./project/project-item-sheet.mjs";
 
+/**
+ * Global definition of an Item sheet. This is what FoundryVTT instantiates to render 
+ * an Item sheet. 
+ * 
+ * Unfortunately, FoundryVTT only allows registering a single ItemSheet class definition. 
+ * This prevents OOP, as it is not possible to register specific ItemSheet derivatives 
+ * for each Item document type. To circumvent this limitation and enable OOP after all, 
+ * STRIVE introduces so-called sub-types. 
+ * 
+ * There is one sub-type for each Item document type. ALL of these sub-types MUST be 
+ * registered in the static `SUB_TYPES` property! 
+ * 
+ * @extends ItemSheet
+ * @see https://foundryvtt.com/api/v12/classes/client.ItemSheet.html
+ * 
+ * @property {ViewModel} viewModel
+ */
 export class GameSystemItemSheet extends ItemSheet {
   /**
    * Returns a map of `ItemSheet` sub-types and their factory functions. 
    * 
-   * @type {Map<String, Function<TransientBaseActor>>}
+   * @type {Map<String, ItemSheetSubType>}
    * @static
    * @readonly
    * @private
    */
-    static get SUB_TYPES() {
-      return new Map([
-        [ITEM_TYPES.ASSET, new AssetItemSheet()],
-        [ITEM_TYPES.SKILL, new SkillItemSheet()],
-        [ITEM_TYPES.SCAR, new ScarItemSheet()],
-        [ITEM_TYPES.MUTATION, new MutationItemSheet()],
-        [ITEM_TYPES.INJURY, new InjuryItemSheet()],
-        [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
-        [ITEM_TYPES.FATE_CARD, new FateItemSheet()],
-      ]);
-    }
+  static get SUB_TYPES() {
+    return new Map([
+      [ITEM_TYPES.ASSET, new AssetItemSheet()],
+      [ITEM_TYPES.SKILL, new SkillItemSheet()],
+      [ITEM_TYPES.SCAR, new ScarItemSheet()],
+      [ITEM_TYPES.MOMENTUM_ACTION, new MomentumActionItemSheet()],
+      [ITEM_TYPES.MUTATION, new MutationItemSheet()],
+      [ITEM_TYPES.PROJECT, new ProjectItemSheet()],
+      [ITEM_TYPES.INJURY, new InjuryItemSheet()],
+      [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
+      [ITEM_TYPES.FATE_CARD, new FateItemSheet()],
+      [ITEM_TYPES.HEALTH_CONDITION, new HealthConditionItemSheet()],
+      [ITEM_TYPES.TRAIT, new TraitItemSheet()],
+    ]);
+  }
 
   /**
-   * Type-dependent object which pseudo-extends the logic of this object. 
-   * @type {GameSystemBaseItemSheet}
+   * Returns the sub-type. 
+   * 
+   * @type {ItemSheetSubType}
    * @readonly
    */
   get subType() {
     const type = this.item.type;
-    const enhancer = GameSystemItemSheet.SUB_TYPES.get(type);
-    
-    if (enhancer === undefined) {
+    const _subType = GameSystemItemSheet.SUB_TYPES.get(type);
+
+    if (_subType === undefined) {
       throw new Error(`InvalidTypeException: Item sheet subtype ${type} is unrecognized!`);
     }
 
-    return enhancer;
+    return _subType;
   }
 
   /**
@@ -98,7 +124,8 @@ export class GameSystemItemSheet extends ItemSheet {
 
   /**
    * Returns the template path. 
-   * @returns {String} Path to the template. 
+   * 
+   * @type {String}
    * @virtual
    * @override
    * @readonly
@@ -107,22 +134,18 @@ export class GameSystemItemSheet extends ItemSheet {
 
   /**
    * Returns the localized title of this sheet. 
-   * @override
+   * 
    * @type {String}
+   * @override
    * @readonly
    */
   get title() { return this.subType.getTitle(this.item); }
 
   /**
-   * @type {ViewModel}
-   * @private
-   */
-  _viewModel = undefined;
-  /**
-   * @type {ViewModel}
+   * @type {Boolean}
    * @readonly
    */
-  get viewModel() { return this._viewModel; }
+  get isOwner() { return ((this.actor ?? this.item) ?? {}).isOwner ?? false; }
 
   /** 
    * Returns an object that represents sheet and enriched item data. 
@@ -137,15 +160,11 @@ export class GameSystemItemSheet extends ItemSheet {
     const context = super.getData();
     SheetUtil.enrichData(context);
 
-    // Prepare a new view model instance. 
-    game.strive.logger.logPerf(this, "item.getData (getViewModel)", () => {
-      this._viewModel = this.subType.getViewModel(context, context.item, this);
-    });
-    game.strive.logger.logPerf(this, "item.getData (readAllViewState)", () => {
-      this._viewModel.readAllViewState();
-    });
-    context.viewModel = this._viewModel;
-    
+    // Ensure view model. 
+    this.viewModel = this.subType.getViewModel(context, context.item, this);
+    this.viewModel.readAllViewState();
+    context.viewModel = this.viewModel;
+
     return context;
   }
 
@@ -153,24 +172,8 @@ export class GameSystemItemSheet extends ItemSheet {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    const isOwner = (this.actor ?? this.item).isOwner;
-    
-    await game.strive.logger.logPerfAsync(this, "item.activateListeners (subType)", async () => {
-      await this.subType.activateListeners(html);
-    });
-    await game.strive.logger.logPerfAsync(this, "item.activateListeners (viewModel)", async () => {
-      await this.viewModel.activateListeners(html);
-    });
-
-    if (!isOwner) return;
-
-    // Drag events for macros.
-    const handler = ev => this._onDragStart(ev);
-    html.find('li.item').each((i, li) => {
-      if (li.classList.contains("inventory-header")) return;
-      li.setAttribute("draggable", true);
-      li.addEventListener("dragstart", handler, false);
-    });
+    await this.subType.activateListeners(html);
+    await this.viewModel.activateListeners(html);
   }
 
   /**
@@ -182,7 +185,18 @@ export class GameSystemItemSheet extends ItemSheet {
       this.viewModel.writeViewState();
       this.viewModel.dispose();
     }
-    
+
     return super.close();
+  }
+
+  /** @override */
+  async _onDropItem(event, data) {
+    await this.subType.onDropItem(event, data, this.item);
+  }
+
+  /** @override */
+  _getHeaderButtons() {
+    const baseButtons = super._getHeaderButtons();
+    return this.subType.getHeaderButtons(this).concat(baseButtons);
   }
 }
