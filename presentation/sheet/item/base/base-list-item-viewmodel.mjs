@@ -184,8 +184,16 @@ export default class BaseListItemViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    * @virtual
-   */
-  get maxDescriptionHeight() { return 48; }
+  */
+ get maxDescriptionHeight() { return 48; }
+ 
+ /**
+  * Returns true, if this list item should be draggable. 
+  * 
+  * @type {Boolean}
+  * @readonly
+  */
+  get enableDragging() { return this.isEditable; }
 
   /**
    * @param {Object} args 
@@ -281,19 +289,21 @@ export default class BaseListItemViewModel extends ViewModel {
     await super.activateListeners(html);
 
     if (this.isEditable === true) {
-      this.dragHandler = new DragDropHandler({
-        elementId: `${this.id}-name-area`,
-        dragData: new ItemDropData({
-          id: this.document.id,
-          contentType: this.document.type,
-          owningDocument: { 
-            id: this.document.owningDocument.id,
-            contentType: this.document.owningDocument.type,
-          },
-        }),
-        enableDragging: true,
-      });
-      this.dragHandler.activateListeners(html);
+      if (this.enableDragging) {
+        this.dragHandler = new DragDropHandler({
+          elementId: `${this.id}-name-area`,
+          dragData: new ItemDropData({
+            id: this.document.id,
+            contentType: this.document.type,
+            owningDocument: { 
+              id: this.document.owningDocument.id,
+              contentType: this.document.owningDocument.type,
+            },
+          }),
+          enableDragging: true,
+        });
+        this.dragHandler.activateListeners(html);
+      }
 
       new ContextMenu(html, `#${this.id}-name-area`, [
         {

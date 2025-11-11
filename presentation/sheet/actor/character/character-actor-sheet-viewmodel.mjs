@@ -132,6 +132,9 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
     // Don't react to owned items dropped onto self. 
     if (data.owningDocument.id === this.id) return;
 
+    // Expertises aren't really Item document instances and thus cannot be handled the same way. 
+    if (data.contentType === ITEM_TYPES.EXPERTISE) return;
+
     const docFetcher = new DocumentFetcher();
 
     // Fetch source Item document instance. 
