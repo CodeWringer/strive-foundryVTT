@@ -251,7 +251,8 @@ export default class DocumentFetcher {
         const id = index._id;
 
         // Skip, if the entry is of the wrong content type. 
-        if (filter.contentType !== undefined 
+        if (ValidationUtil.isDefined(filter.contentType)
+          && ValidationUtil.isDefined(index.type)
           && index.type.toLowerCase() !== filter.contentType) {
           continue;
         }
@@ -677,6 +678,7 @@ export default class DocumentFetcher {
       || sourceId == DOCUMENT_COLLECTION_SOURCES.moduleCompendia.name
       || sourceId == DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name
       || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.name
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.worldAndWorldCompendia.name
       ) {
       return true;
     }
@@ -739,7 +741,8 @@ export default class DocumentFetcher {
       && (type === "module")) {
       return true;
     } else if ((filterId === DOCUMENT_COLLECTION_SOURCES.worldCompendia.name
-      || filterId === DOCUMENT_COLLECTION_SOURCES.world.name) 
+      || filterId === DOCUMENT_COLLECTION_SOURCES.world.name
+      || filterId === DOCUMENT_COLLECTION_SOURCES.worldAndWorldCompendia) 
       && (type === "world")) {
       return true;
     }

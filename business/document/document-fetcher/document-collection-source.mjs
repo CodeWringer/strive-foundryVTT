@@ -33,6 +33,8 @@ export class DocumentCollectionSource {
  * compendium packs.
  * @property {DocumentCollectionSource} systemAndModuleCompendia Search in system and module 
  * compendium packs.
+ * @property {DocumentCollectionSource} worldAndWorldCompendia Search in world and in 
+ * world compendium packs. 
  * @property {DocumentCollectionSource} worldCompendia Search only in world 
  * compendium packs.
  * @property {DocumentCollectionSource} world Search only in the world.
@@ -59,6 +61,10 @@ export const DOCUMENT_COLLECTION_SOURCES = {
   systemAndModuleCompendia: new DocumentCollectionSource({
     name: "systemAndModuleCompendia",
     localizableName: "system.general.collectionSources.systemAndModuleCompendia"
+  }),
+  worldAndWorldCompendia: new DocumentCollectionSource({
+    name: "worldAndWorldCompendia",
+    localizableName: "system.general.collectionSources.worldAndWorldCompendia"
   }),
   worldCompendia: new DocumentCollectionSource({
     name: "worldCompendia",

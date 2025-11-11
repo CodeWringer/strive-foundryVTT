@@ -12,7 +12,6 @@ import BaseSheetSubType from "../base-sheet-subtype.mjs";
  * * `getTitle`
  * * `activateListeners`
  * * `getHeaderButtons`
- * * `onDropItem`
  * 
  * @extends BaseSheetSubType
  */

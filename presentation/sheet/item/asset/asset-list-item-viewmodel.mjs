@@ -40,6 +40,9 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
    */
   get quantityAndMaxTemplate() { return CompositeCurrentAndMaximumNumbersViewModel.TEMPLATE; }
 
+  /** @override */
+  get enableDragging() { return this.isEditable && !this.isEquipped; }
+
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

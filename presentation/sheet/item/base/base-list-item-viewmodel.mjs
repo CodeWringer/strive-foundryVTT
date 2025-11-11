@@ -4,8 +4,6 @@ import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
@@ -20,6 +18,9 @@ import InputTextFieldViewModel from "../../../component/input-textfield/input-te
 import ConfirmablePlainDialog from "../../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
 import SendToChatHandler from "../../../utility/send-to-chat-handler.mjs";
 import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
+import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
+import ItemDropData from "./item-drop-data.mjs";
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 
@@ -183,8 +184,16 @@ export default class BaseListItemViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    * @virtual
-   */
-  get maxDescriptionHeight() { return 48; }
+  */
+ get maxDescriptionHeight() { return 48; }
+ 
+ /**
+  * Returns true, if this list item should be draggable. 
+  * 
+  * @type {Boolean}
+  * @readonly
+  */
+  get enableDragging() { return this.isEditable; }
 
   /**
    * @param {Object} args 
@@ -280,6 +289,22 @@ export default class BaseListItemViewModel extends ViewModel {
     await super.activateListeners(html);
 
     if (this.isEditable === true) {
+      if (this.enableDragging) {
+        this.dragHandler = new DragDropHandler({
+          elementId: `${this.id}-name-area`,
+          dragData: new ItemDropData({
+            id: this.document.id,
+            contentType: this.document.type,
+            owningDocument: { 
+              id: this.document.owningDocument.id,
+              contentType: this.document.owningDocument.type,
+            },
+          }),
+          enableDragging: true,
+        });
+        this.dragHandler.activateListeners(html);
+      }
+
       new ContextMenu(html, `#${this.id}-name-area`, [
         {
           name: game.i18n.localize("system.general.name.edit"),
