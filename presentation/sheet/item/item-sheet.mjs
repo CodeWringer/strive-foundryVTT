@@ -191,7 +191,7 @@ export class GameSystemItemSheet extends ItemSheet {
 
   /** @override */
   async _onDropItem(event, data) {
-    await this.subType.onDropItem(event, data, this.item);
+    // Item sheets do not currently support drag and drop operations from compendium packs or the world collection. 
   }
 
   /** @override */

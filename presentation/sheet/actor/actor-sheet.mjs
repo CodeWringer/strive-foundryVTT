@@ -7,6 +7,10 @@ import PlainActorSheet from "./plain/plain-actor-sheet.mjs";
 import ActorSheetSubType from "./actor-sheet-subtype.mjs";
 import NpcActorSheet from "./npc/npc-actor-sheet.mjs";
 import PcActorSheet from "./pc/pc-actor-sheet.mjs";
+import ItemDropData from "../item/base/item-drop-data.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
+import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
+import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document-fetcher/document-collection-source.mjs";
 
 /**
  * Global definition of an Actor sheet. This is what FoundryVTT instantiates to render 
@@ -171,7 +175,36 @@ export class GameSystemActorSheet extends ActorSheet {
 
   /** @override */
   async _onDropItem(event, data) {
-    await this.subType.onDropItem(event, data, this.actor);
+    const itemId = data.uuid.substring(data.uuid.lastIndexOf(".") + 1);
+    let itemDocument = await new DocumentFetcher().find({
+      id: itemId,
+      documentType: GENERAL_DOCUMENT_TYPES.ITEM,
+      includeLocked: true,
+      source: DOCUMENT_COLLECTION_SOURCES.all,
+    });
+
+    if (!ValidationUtil.isDefined(itemDocument)) {
+      game.strive.logger.logWarn(`Failed to find Item document with ID '${itemId}}'`)
+      return;
+    }
+
+    itemDocument = itemDocument.getTransientObject();
+
+    let owningDocument;
+    if (ValidationUtil.isDefined(itemDocument.owningDocument)) {
+      owningDocument = {
+        id: itemDocument.owningDocument.id,
+        contentType: itemDocument.owningDocument.type,
+      };
+    }
+
+    this.viewModel.onReceiveDroppedItem(
+      new ItemDropData({
+        id: itemId,
+        contentType: itemDocument.type,
+        owningDocument: owningDocument,
+      })
+    );
   }
 
   /** @override */

@@ -12,7 +12,6 @@ import SendToChatHandler from "../utility/send-to-chat-handler.mjs";
  * * `getTitle`
  * * `activateListeners`
  * * `getHeaderButtons`
- * * `onDropItem`
  */
 export default class BaseSheetSubType {
   /**
@@ -127,15 +126,4 @@ export default class BaseSheetSubType {
     }
     return buttons;
   }
-
-  /**
-   * Invoked when data is dropped onto the sheet. 
-   * 
-   * @param {Object} event 
-   * @param {Object} data 
-   * @param {GameSystemActor|GameSystemItem} document 
-   * 
-   * @async
-   */
-  async onDropItem(event, data, document) { /** Do nothing. */ }
 }

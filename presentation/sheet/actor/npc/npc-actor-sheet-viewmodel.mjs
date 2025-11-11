@@ -1,42 +1,25 @@
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
 import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
 import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-notes-viewmodel.mjs";
-import Tooltip from "../../../component/tooltip/tooltip.mjs";
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import ActorAbilitiesViewModel from "../part/abilities/actor-abilities-viewmodel.mjs";
-import ActorActionPointsViewModel from "../part/action-points/actor-action-points-viewmodel.mjs";
 import ActorBiographyViewModel from "../part/biography/actor-biography-viewmodel.mjs";
-import ActorPersonalsViewModel from "../part/personals/actor-personals-viewmodel.mjs";
 import ActorAssetsViewModel from "../part/assets/actor-assets-viewmodel.mjs";
 import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import SyntheticRollStrategy from "./synthetic-roll-strategy.mjs";
+import CharacterActorSheetViewModel from "../character/character-actor-sheet-viewmodel.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 
-export default class NpcActorSheetViewModel extends BaseSheetViewModel {
+export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_NPC_SHEET; }
-
-  /**
-   * Returns the template path of the "personals" partial. 
-   * 
-   * @type {String}
-   * @readonly
-   */
-  get templatePersonals() { return ActorPersonalsViewModel.TEMPLATE; }
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get templateActionPoints() { return ActorActionPointsViewModel.TEMPLATE; }
 
   /**
    * Returns `true`, if the personality tab is to be shown. 
@@ -71,38 +54,6 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
   constructor(args = {}) {
     super(args);
 
-    // Aggressively clear out any lingering ToolTips. 
-    Tooltip.removeAllToolTipElements();
-
-    this.vmName = new InputTextFieldViewModel({
-      parent: this,
-      id: "vmName",
-      value: this.document.name,
-      onChange: (_, newValue) => {
-        this.document.name = newValue;
-      },
-      placeholder: game.i18n.localize("system.general.name.label"),
-    });
-    this.vmImg = new InputImageViewModel({
-      parent: this,
-      id: "vmImg",
-      value: this.document.img,
-      onChange: (_, newValue) => {
-        this.document.img = newValue;
-      },
-    });
-    this.vmActionPoints = new ActorActionPointsViewModel({
-      id: "vmActionPoints",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
-      document: this.document,
-    });
-
-    this.personalsViewModel = new ActorPersonalsViewModel({
-      ...args,
-      id: "personals",
-      parent: this,
-    });
     this.abilitiesViewModel = new LazyLoadViewModel({
       id: "lazyAbilities",
       parent: this,
@@ -174,52 +125,6 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
   }
 
   /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    const thiz = this;
-    const tabs = html.find("nav.sheet-tabs > a");
-    tabs.on("click", function (e) {
-      const tab = $(e.currentTarget).data("tab");
-      thiz._renderLazyTab(tab);
-    });
-
-    await this._renderActiveTab(html);
-  }
-
-  /** @override */
-  dispose() {
-    super.dispose();
-
-    // An extremely aggressive band-aid solution. But, this ensures lingering tool tip elements 
-    // with (at least partially) dynamic IDs are always cleared properly. 
-    Tooltip.removeAllToolTipElements();
-  }
-
-  /**
-   * Renders the contents of the active tab. 
-   * 
-   * @param {JQuery} html 
-   * 
-   * @private
-   * @async
-   */
-  async _renderActiveTab(html) {
-    const activeTab = html.find("nav.sheet-tabs > a.active");
-    const tab = activeTab.data("tab");
-    await this._renderLazyTab(tab);
-    this.restoreScrollPosition();
-  }
-
-  /**
-   * Renders the contents of the tab with the given "tab" dataset attribute. 
-   * 
-   * @param {String} tab The value of the "tab" dataset attribute 
-   * of the tab to render. E. g. `"skills"`. 
-   * 
-   * @private
-   * @async
-   */
   async _renderLazyTab(tab) {
     if (tab === "abilities") {
       await this.abilitiesViewModel.render();
@@ -236,11 +141,7 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
     }
   }
 
-  /**
-   * Opens the dialog to configure the meta data of the character. 
-   * 
-   * @async
-   */
+  /** @override */
   async promptConfigure() {
     const inputMaxActionPoints = "inputMaxActionPoints";
     const inputRefillActionPoints = "inputRefillActionPoints";
@@ -367,6 +268,23 @@ export default class NpcActorSheetViewModel extends BaseSheetViewModel {
     new SyntheticRollStrategy({
       target: this.document,
     }).prompt();
+  }
+
+  /** @override */
+  async onReceiveDroppedItem(data, overrides) {
+    // No data - no reaction. This case can occur when an Item is dropped onto the actor sheet 
+    // from any non-actor source, such as a compendium pack or the world collection. 
+    if (!ValidationUtil.isDefined(data)) return;
+
+    if (data.contentType === ITEM_TYPES.SKILL) {
+      // For NPCs, ensure skills are always at least at level one. 
+      overrides = {
+        system: {
+          level: 1,
+        },
+      };
+    }
+    await super.onReceiveDroppedItem(data, overrides);
   }
 
   /** @override */

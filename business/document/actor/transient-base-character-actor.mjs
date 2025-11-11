@@ -152,6 +152,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Number} stability
  * * Read-only. 
+ * @property {Array<TransientBaseItem>} items
+ * * Read-only. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
