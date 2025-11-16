@@ -46,7 +46,7 @@ cssClass: {undefined | String}
     <div class="flex flex-column flex-middle sheet-block" style="width: 90px; height: 90px;">
       {{!-- Symbol --}}
       <div class="flex flex-row flex-center" style="min-height: 48px;">
-        <span id="{{viewModel.vmExperiencePointsSymbol.id}}" class="fancy-font font-size-lg">{{localize "system.character.advancement.experiencePoint.abbreviation"}}</span>
+        <i id="{{viewModel.vmExperiencePointsSymbol.id}}" class="ico dark ico-experience-points-solid" style="width: 32px; height: 32px; margin: 8px;"></i>
       </div>
       <div class="flex flex-row flex-middle">
         {{> inputNumberSpinner viewModel=viewModel.vmExperiencePoints cssClass="width-md" }}
