@@ -199,7 +199,8 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
         for (const propName in existingItem.document.system.abilities) {
           if (!Object.hasOwn(existingItem.document.system.abilities, propName)) continue;
 
-          if (!ValidationUtil.isDefined(templateItem.system.abilities[propName])) {
+          const templateExpertise = templateItem.expertises.find(it => it.id === propName);
+          if (!ValidationUtil.isDefined(templateExpertise)) {
             updateData.system.abilities[`-=${[propName]}`] = null;
           }
         }
