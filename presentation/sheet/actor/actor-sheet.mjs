@@ -46,6 +46,15 @@ export class GameSystemActorSheet extends foundry.applications.sheets.ActorSheet
     ]);
   }
 
+  /** @override */
+  static DEFAULT_OPTIONS = {
+    ...super.DEFAULT_OPTIONS,
+    position: {
+      width: 650,
+      height: 800,
+    },
+  };
+
   /**
    * Returns the sub-type. 
    * 
@@ -94,21 +103,6 @@ export class GameSystemActorSheet extends foundry.applications.sheets.ActorSheet
     if (ValidationUtil.isDefined(this.contentElement) !== true) return;
 
     this.contentElement[0].scrollTop = value;
-  }
-
-  /**
-   * @returns {Object}
-   * @override
-   * @virtual
-   * @see https://foundryvtt.com/api/ActorSheet.html#.defaultOptions
-   */
-  static get defaultOptions() {
-    return new FoundryWrapper().mergeObject(super.defaultOptions, {
-      classes: [SYSTEM_ID, "sheet", "actor"],
-      width: 650,
-      height: 800,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
-    });
   }
 
   /**
@@ -171,6 +165,16 @@ export class GameSystemActorSheet extends foundry.applications.sheets.ActorSheet
     }
     
     return super.close();
+  }
+
+  /** @override */
+  async _renderHTML(context, options) {
+    // 
+  }
+  
+  /** @override */
+  async _replaceHTML(result, content, options) {
+    // 
   }
 
   /** @override */
