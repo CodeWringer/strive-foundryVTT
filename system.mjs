@@ -400,11 +400,11 @@ Hooks.once('init', function() {
   CONFIG.Token.hudClass = GameSystemTokenHud;
 
   // Register sheet application classes. 
-  Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet(SYSTEM_ID, GameSystemActorSheet, { makeDefault: true });
+  foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2);
+  foundry.documents.collections.Actors.registerSheet(SYSTEM_ID, GameSystemActorSheet, { makeDefault: true });
   
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
+  foundry.documents.collections.Items.unregisterSheet("core", foundry.applications.sheets.ItemSheetV2);
+  foundry.documents.collections.Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
 
   // Preload PixiJs assets. 
   PixiLoader.preloadTextures();
@@ -483,7 +483,8 @@ Hooks.once("ready", function() {
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
-Hooks.on("renderChatMessage", function(message, html, data) {
+// @see https://foundryvtt.com/api/functions/hookEvents.renderChatMessageHTML.html
+Hooks.on("renderChatMessageHTML", function(message, html, data) {
   ChatUtil.handleRenderedChatMessage({
     message: message,
     html: html,

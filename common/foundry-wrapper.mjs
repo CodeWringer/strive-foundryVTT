@@ -77,7 +77,7 @@ export default class FoundryWrapper {
    * @async
    */
   async renderTemplate(templatePath, args = {}) {
-    return await renderTemplate(templatePath, args);
+    return await foundry.applications.handlebars.renderTemplate(templatePath, args);
   }
 
   /**
@@ -89,6 +89,19 @@ export default class FoundryWrapper {
    * @async
    */
   async loadTemplates(templateArray) {
-    return await loadTemplates(templateArray);
+    return await foundry.applications.handlebars.loadTemplates(templateArray);
+  }
+
+  /**
+   * Renders the given rich-text to HTML. 
+   * 
+   * @param {String} renderableContent The raw content to render. 
+   * @param {Boolean} includeSecrets If true, will include sections marked as "GM secret". 
+   * @returns {Promise<String>}
+   * 
+   * @async
+   */
+  async enrichHtml(renderableContent, includeSecrets) {
+    return await foundry.applications.ux.TextEditor.implementation.enrichHTML(renderableContent, { async: true, secrets: includeSecrets });
   }
 }

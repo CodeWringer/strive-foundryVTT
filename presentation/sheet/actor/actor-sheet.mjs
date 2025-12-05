@@ -24,12 +24,12 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document
  * There is one sub-type for each Actor document type. ALL of these sub-types MUST be 
  * registered in the static `SUB_TYPES` property! 
  * 
- * @extends ActorSheet
- * @see https://foundryvtt.com/api/v12/classes/client.ActorSheet.html
+ * @extends foundry.applications.sheets.ActorSheetV2
+ * @see https://foundryvtt.com/api/classes/foundry.applications.sheets.ActorSheetV2.html
  * 
  * @property {ViewModel} viewModel
  */
-export class GameSystemActorSheet extends ActorSheet {
+export class GameSystemActorSheet extends foundry.applications.sheets.ActorSheetV2 {
   /**
    * Returns a map of `ActorSheet` sub-types and their factory functions. 
    * 

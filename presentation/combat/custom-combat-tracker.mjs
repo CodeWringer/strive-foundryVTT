@@ -15,10 +15,10 @@ import MomentumBarViewModel from "./momentum/momentum-bar-viewmodel.mjs";
  * @property {Array<CombatTrackerActionPointsViewModel>} actionPointsViewModels
  * @property {Array<GritPointsCombatTrackerViewModel>} gritPointsViewModels
  * 
- * @extends CombatTracker
- * @see https://foundryvtt.com/api/v10/classes/client.CombatTracker.html
+ * @extends foundry.applications.sidebar.tabs.CombatTracker
+ * @see https://foundryvtt.com/api/classes/foundry.applications.sidebar.tabs.CombatTracker.html
  */
-export default class CustomCombatTracker extends CombatTracker {
+export default class CustomCombatTracker extends foundry.applications.sidebar.tabs.CombatTracker {
   /** @override */
   static get defaultOptions() {
     return {

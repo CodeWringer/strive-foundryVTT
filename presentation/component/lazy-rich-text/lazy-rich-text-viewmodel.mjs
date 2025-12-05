@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -61,7 +62,7 @@ export default class LazyRichTextViewModel extends ViewModel {
 
     if (this._renderedContent === undefined || this._invalidated === true) {
       this.readAllViewState();
-      this._renderedContent = await TextEditor.enrichHTML(this.renderableContent, { async: true, secrets: this.isEditable });
+      this._renderedContent = await new FoundryWrapper().enrichHtml(this.renderableContent, this.isEditable);
 
       element.empty();
       element.append(this._renderedContent);

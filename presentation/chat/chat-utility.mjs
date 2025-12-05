@@ -113,7 +113,8 @@ export const ChatUtil = {
    * @param {Object} args.data 
    */
   handleRenderedChatMessage: async function (args = {}) {
-    const element = args.html.find(`.${ChatUtil.SELECTOR_CHAT_MESSAGE}`)[0];
+    const jHtml = $(args.html);
+    const element = jHtml.find(`.${ChatUtil.SELECTOR_CHAT_MESSAGE}`)[0];
 
     // The chat message may just be a normal chat message, without any associated document. 
     // In such a case it is safe to skip any further operations, here. 
@@ -177,7 +178,7 @@ export const ChatUtil = {
       game.strive.viewModels.set(vmId, viewModel);
     }
     
-    await viewModel.activateListeners(args.html);
+    await viewModel.activateListeners(jHtml);
   },
 
   /**

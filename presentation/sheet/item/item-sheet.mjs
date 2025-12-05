@@ -28,12 +28,12 @@ import ProjectItemSheet from "./project/project-item-sheet.mjs";
  * There is one sub-type for each Item document type. ALL of these sub-types MUST be 
  * registered in the static `SUB_TYPES` property! 
  * 
- * @extends ItemSheet
- * @see https://foundryvtt.com/api/v12/classes/client.ItemSheet.html
+ * @extends foundry.applications.sheets.ItemSheetV2
+ * @see https://foundryvtt.com/api/classes/foundry.applications.sheets.ItemSheetV2.html
  * 
  * @property {ViewModel} viewModel
  */
-export class GameSystemItemSheet extends ItemSheet {
+export class GameSystemItemSheet extends foundry.applications.sheets.ItemSheetV2 {
   /**
    * Returns a map of `ItemSheet` sub-types and their factory functions. 
    * 
