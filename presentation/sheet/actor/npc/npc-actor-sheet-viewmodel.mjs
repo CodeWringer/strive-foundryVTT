@@ -185,6 +185,8 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
   async promptConfigure() {
     const dialog = await super.promptConfigure();
 
+    if (!ValidationUtil.isDefined(dialog)) return;
+
     this.document.personalityVisible = dialog["inputEnablePersonality"] == true;
     this.document.advancement.advancementEnabled = dialog["inputEnableProgression"] == true;
     this.document.gritPoints.enable = dialog["inputEnableGritPoints"] == true;
