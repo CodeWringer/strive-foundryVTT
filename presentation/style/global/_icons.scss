@@ -50,19 +50,6 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
   }
 }
 
-i.stackable {
-  position: relative;
-}
-
-i.stacked {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  font-size: 0.5rem;
-  padding: 1px;
-  border-radius: 4px;
-}
-
 .icon-with-centered-label {
   position: relative;
   text-align: center;
@@ -666,5 +653,25 @@ a:hover {
 
 .ico-experience-points-solid {
   background: url("/systems/strive/presentation/image/experience-points-solid.svg");
+  background-size: cover;
+}
+
+.ico-buff-solid {
+  background: url("/systems/strive/presentation/image/buff-solid.svg");
+  background-size: cover;
+}
+
+.ico-debuff-solid {
+  background: url("/systems/strive/presentation/image/debuff-solid.svg");
+  background-size: cover;
+}
+
+.ico-buff-themed {
+  background: url("/systems/strive/presentation/image/buff-themed.svg");
+  background-size: cover;
+}
+
+.ico-debuff-themed {
+  background: url("/systems/strive/presentation/image/debuff-themed.svg");
   background-size: cover;
 }

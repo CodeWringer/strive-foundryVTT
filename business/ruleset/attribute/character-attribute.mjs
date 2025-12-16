@@ -1,7 +1,7 @@
 import { GameSystemActor } from "../../document/actor/actor.mjs";
 import TransientBaseCharacterActor from "../../document/actor/transient-base-character-actor.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
-import { ATTRIBUTE_TYPES } from "./attribute-types.mjs";
+import { ATTRIBUTE_TYPES, AttributeType } from "./attribute-types.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
 /**
@@ -18,7 +18,7 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * * Read-only. 
  * @property {Number} owningActor The owning character actor. 
  * * Read-only. 
- * @property {ATTRIBUTE_TYPES} type Advancement classification.
+ * @property {AttributeType} type Advancement classification.
  */
 export default class CharacterAttribute {
   /**
@@ -74,15 +74,18 @@ export default class CharacterAttribute {
   get owningActor() { return this._actor.getTransientObject(); }
 
   /**
-   * @type {ATTRIBUTE_TYPES}
+   * @type {AttributeType}
    */
-  get type() { return ((this._actor.system.attributes[this.name] ?? {}).type ?? ATTRIBUTE_TYPES.SECONDARY); }
+  get type() {
+    const attributeName = ((this._actor.system.attributes[this.name] ?? {}).type ?? ATTRIBUTE_TYPES.SECONDARY.name);
+    return ATTRIBUTE_TYPES.asArray().find(it => it.name === attributeName);
+  }
   set type(value) {
     this._actor.update({
       system: {
         attributes: {
           [this.name]: {
-            type: value
+            type: value.name
           }
         }
       }

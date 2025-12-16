@@ -92,7 +92,7 @@ export default class RulesetExplainer {
   getExplanationForAttributeAdvancement(attribute) {
     return StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
       xp: new Ruleset().getAttributeAdvancementRequirements(attribute),
-      type: game.i18n.localize(`system.character.attribute.type.${attribute.type}`),
+      type: game.i18n.localize(`system.character.attribute.type.${attribute.type.name}`),
     });
   }
 

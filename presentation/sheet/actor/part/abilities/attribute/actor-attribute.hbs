@@ -1,0 +1,29 @@
+{{!-- Parameters:
+viewModel: ActorAttributeViewModel
+--}}
+<div id="{{viewModel.id}}" class="flex flex-column flex-middle sheet-block" style="width: 90px;">
+  {{!-- Icon --}}
+  <div class="flex flex-row flex-middle">
+    <div class="stackable">
+      <i id="{{viewModel.vmIcon.id}}" class="ico dark {{viewModel.icon}}" style="width: 48px; height: 48px;"></i>
+      {{#if viewModel.hasClassificationIcon}}
+      <span class="stacked" style="width: 20px; height: 20px; box-sizing: content-box;">
+        <i id="{{viewModel.vmSubIcon.id}}" class="ico dark {{viewModel.classificationIcon}}" style="width: 20px; height: 20px; filter: unset;"></i>
+      </span>
+      {{/if}}
+    </div>
+    {{> buttonRoll viewModel=viewModel.vmRoll }}
+  </div>
+  {{!-- Level --}}
+  <div class="flex flex-row flex-middle">
+    {{> inputNumberSpinner viewModel=viewModel.vmLevel cssClass="width-sm" }}
+  </div>
+  {{!-- Divider --}}
+  <span class="margin-t-md margin-b-md"
+    style="height: 1px; width: 100%; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 90%);"></span>
+  {{!-- Modified --}}
+  <div class="flex flex-row flex-middle">
+    {{> inputNumberSpinner viewModel=viewModel.vmModified cssClass="width-md" }}
+    <span style="width: 26px;">{{viewModel.modifier}}</span>
+  </div>
+</div>

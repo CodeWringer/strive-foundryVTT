@@ -121,7 +121,8 @@ import SortControlsViewModel from "./presentation/component/sort-controls/sort-c
 import VisibilityToggleListItemViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-item-viewmodel.mjs";
 import VisibilityToggleListViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 // View models - Actor
-import ActorAttributesViewModel from "./presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs";
+import ActorAttributesViewModel from "./presentation/sheet/actor/part/abilities/attribute/actor-attributes-viewmodel.mjs";
+import ActorAttributeViewModel from "./presentation/sheet/actor/part/abilities/attribute/actor-attribute-viewmodel.mjs";
 import ActorHealthViewModel from './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import ActorSkillsViewModel from "./presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs";
 import ActorAssetsViewModel from "./presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs";
@@ -323,6 +324,7 @@ Hooks.once('init', function() {
           PcActorSheetViewModel: PcActorSheetViewModel,
           PlainActorSheetViewModel: PlainActorSheetViewModel,
           ActorAttributesViewModel: ActorAttributesViewModel,
+          ActorAttributeViewModel: ActorAttributeViewModel,
           ActorSkillsViewModel: ActorSkillsViewModel,
           ActorAssetsViewModel: ActorAssetsViewModel,
           ActorHealthViewModel: ActorHealthViewModel,

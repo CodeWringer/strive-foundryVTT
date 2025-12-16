@@ -442,10 +442,13 @@
           "label": "Sprinting Speed"
         },
         "type": {
+          "classification": "Classification",
+          "setClassification": "Set Classification",
           "secondary": "Secondary",
           "core": "Core",
           "favored": "Favored",
-          "penalized": "Penalized"
+          "penalized": "Penalized",
+          "explanation": "This is a %{type} Attribute"
         }
       },
       "biography": {

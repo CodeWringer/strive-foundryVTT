@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../business/util/validation-utility.mjs";
+import { ContextMenuItem } from "../presentation/component/button-context-menu/button-context-menu-viewmodel.mjs";
 
 /**
  * Serves as an integration limiter to FoundryVTTs functions. 
@@ -90,5 +91,18 @@ export default class FoundryWrapper {
    */
   async loadTemplates(templateArray) {
     return await loadTemplates(templateArray);
+  }
+
+  /**
+   * Creates a new instance of a FoundryVTT ContextMenu and returns it. 
+   * 
+   * @param {JQuery} html 
+   * @param {String} id 
+   * @param {Array<ContextMenuItem>} items 
+   * 
+   * @returns {ContextMenu}
+   */
+  createContextMenu(html, id, items) {
+    return new ContextMenu(html, id, items);
   }
 }

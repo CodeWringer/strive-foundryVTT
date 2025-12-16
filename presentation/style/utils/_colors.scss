@@ -51,15 +51,15 @@ $c-themed-header-error: rgb(255 197 197);
 $c-themed-header-info: rgb(197, 197, 255);
 
 // Content
-$c-themed-success: rgb(16 80 16);
-$c-themed-warn: rgb(82, 77, 59);
-$c-themed-error: rgb(84 23 23);
-$c-themed-info: rgb(37 56 100);
+$c-themed-success: #105010;
+$c-themed-warn: #524d3b;
+$c-themed-error: #541717;
+$c-themed-info: #253864;
 
-$c-themed-bg-success: rgb(153 189 157);
-$c-themed-bg-warn: rgb(241, 227, 182);
-$c-themed-bg-error: rgb(233 185 185);
-$c-themed-bg-info: rgb(164 180 209);
+$c-themed-bg-success: #99bd9d;
+$c-themed-bg-warn: #f1e3b6;
+$c-themed-bg-error: #e9b9b9;
+$c-themed-bg-info: #a3b3d1;
 
 $c-themed-border-success: rgb(75 137 74);
 $c-themed-border-warn: rgb(181, 167, 83);

@@ -3,7 +3,6 @@ import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
 import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
-import { RollSchema } from "../dice/roll-schema.mjs";
 import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
 import { ValidationUtil } from "../util/validation-utility.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
@@ -23,10 +22,10 @@ export default class Ruleset {
   getAttributeAdvancementRequirements(attribute) {
     const base = 20;
 
-    if (attribute.type === ATTRIBUTE_TYPES.CORE || attribute.type === ATTRIBUTE_TYPES.FAVORED) {
+    if (attribute.type.name === ATTRIBUTE_TYPES.CORE.name || attribute.type.name === ATTRIBUTE_TYPES.FAVORED.name) {
       const level = Math.max(1, attribute.level - 1);
       return base + (level * level);
-    } else if (attribute.type === ATTRIBUTE_TYPES.PENALIZED) {
+    } else if (attribute.type.name === ATTRIBUTE_TYPES.PENALIZED.name) {
       return Math.round((base + (attribute.level * attribute.level)) * 1.5);
     } else {
       return base + (attribute.level * attribute.level);
