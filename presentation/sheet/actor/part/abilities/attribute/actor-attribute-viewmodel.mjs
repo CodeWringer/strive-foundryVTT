@@ -130,9 +130,12 @@ export default class ActorAttributeViewModel extends ViewModel {
       new ContextMenuItem({
         name: game.i18n.localize("system.character.attribute.type.setClassification"),
         callback: async () => {
+          const attributeChoices = ATTRIBUTE_TYPES.asChoices();
           const dialog = await new DynamicInputDialog({
             id: "setClassification",
-            localizedTitle: game.i18n.localize("system.character.attribute.type.setClassification"),
+            localizedTitle: StringUtil.format2(game.i18n.localize("system.character.attribute.type.setClassificationOf"), {
+              attribute: game.i18n.localize(this.attribute.localizableName),
+            }),
             inputDefinitions: [
               new DynamicInputDefinition({
                 name: "classification",
@@ -140,7 +143,8 @@ export default class ActorAttributeViewModel extends ViewModel {
                 viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
                   id: id,
                   parent: parent,
-                  options: ATTRIBUTE_TYPES.asChoices(),
+                  options: attributeChoices,
+                  value: attributeChoices.find(it => it.value === this.characterAttribute.type.name),
                   ...overrides,
                 }),
                 localizedLabel: game.i18n.localize("system.character.attribute.type.classification"),

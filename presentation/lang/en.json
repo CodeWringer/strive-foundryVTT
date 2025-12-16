@@ -444,6 +444,7 @@
         "type": {
           "classification": "Classification",
           "setClassification": "Set Classification",
+          "setClassificationOf": "Set Classification of %{attribute}",
           "secondary": "Secondary",
           "core": "Core",
           "favored": "Favored",
