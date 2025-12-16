@@ -1,16 +1,12 @@
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
 import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
 import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-notes-viewmodel.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import ActorAbilitiesViewModel from "../part/abilities/actor-abilities-viewmodel.mjs";
 import ActorBiographyViewModel from "../part/biography/actor-biography-viewmodel.mjs";
 import ActorAssetsViewModel from "../part/assets/actor-assets-viewmodel.mjs";
 import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import ActorProjectsViewModel from "../part/projects/actor-projects-viewmodel.mjs";
 import CharacterActorSheetViewModel from "../character/character-actor-sheet-viewmodel.mjs";
 
@@ -126,77 +122,6 @@ export default class PcActorSheetViewModel extends CharacterActorSheetViewModel 
     } else if (tab === "projects") {
       await this.projectsViewModel.render();
     }
-  }
-
-  /** @override */
-  async promptConfigure() {
-    const inputMaxActionPoints = "inputMaxActionPoints";
-    const inputRefillActionPoints = "inputRefillActionPoints";
-    const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
-    const inputInitiatives = "inputInitiatives";
-
-    const inputDefinitions = [
-      new DynamicInputDefinition({
-        name: inputMaxActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.max"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 0,
-          value: this.document.actionPoints.maximum,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputRefillActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.refill"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 0,
-          value: this.document.actionPoints.refill.amount,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputAllowRefillActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-        template: InputToggleViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
-          id: id,
-          parent: parent,
-          value: this.document.actionPoints.refill.enable,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputInitiatives,
-        localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 1,
-          value: this.document.initiative.perTurn,
-          ...overrides,
-        }),
-      }),
-    ];
-
-    const dialog = await new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("system.character.edit"),
-      inputDefinitions: inputDefinitions,
-    }).renderAndAwait(true);
-
-    if (dialog.confirmed !== true) return;
-
-    this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
-    this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
-    this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
-
-    this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
   }
 
   /** @override */

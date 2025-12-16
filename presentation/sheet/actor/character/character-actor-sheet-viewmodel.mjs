@@ -6,8 +6,12 @@ import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -19,6 +23,9 @@ import ActorPersonalsViewModel from "../part/personals/actor-personals-viewmodel
  * @abstract Inheritors **must** override:
  * * `TEMPLATE`
  * * `_renderLazyTab`
+ * 
+ * And *may* override:
+ * * `_getConfigurationInputs`
  * * `promptConfigure`
  */
 export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
@@ -263,11 +270,104 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
   /**
    * Opens the dialog to configure the meta data of the character. 
    * 
-   * @abstract
+   * You need only override this if you have also overriden `_getConfigurationInputs`. 
+   * 
+   * @example
+   * ```JS
+   * _getConfigurationInputs() {
+   *   const inherited = super._getConfigurationInputs();
+   *   return inherited.concat([
+   *     ... // Add additional `DynamicInputDefinition`s here.
+   *   ]);
+   * }
+   * 
+   * async promptConfigure() {
+   *   const dialog = await super.promptConfigure();
+   *   const myInputValue = dialog["myInputValue"];
+   *   ... // Do further processing.
+   * }
+   * ```
+   * 
+   * @returns {Promise<DynamicInputDialog>} The dialog, so that inheritors may fetch additional 
+   * data from it. 
+   * 
+   * @virtual
    * @async
    */
   async promptConfigure() {
-    throw new Error("Not implemented");
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: game.i18n.localize("system.character.edit"),
+      inputDefinitions: this._getConfigurationInputs(),
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    this.document.actionPoints.maximum = parseInt(dialog["inputMaxActionPoints"]);
+    this.document.actionPoints.refill.amount = parseInt(dialog["inputRefillActionPoints"]);
+    this.document.actionPoints.refill.enable = dialog["inputAllowRefillActionPoints"] == true;
+
+    this.document.initiative.perTurn = Math.max(1, parseInt(dialog["inputInitiatives"]));
+
+    return dialog;
+  }
+
+  /**
+   * Returns the input definitions for use in the dialog invoked through `promptConfigure`. 
+   * 
+   * @returns {Array<DynamicInputDefinition>}
+   * 
+   * @protected
+   */
+  _getConfigurationInputs() {
+    return [
+      new DynamicInputDefinition({
+        name: "inputMaxActionPoints",
+        localizedLabel: game.i18n.localize("system.actionPoint.max"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.maximum,
+          ...overrides,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: "inputRefillActionPoints",
+        localizedLabel: game.i18n.localize("system.actionPoint.refill"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.refill.amount,
+          ...overrides,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: "inputAllowRefillActionPoints",
+        localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: this.document.actionPoints.refill.enable,
+          ...overrides,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: "inputInitiatives",
+        localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 1,
+          value: this.document.initiative.perTurn,
+          ...overrides,
+        }),
+      }),
+    ];
   }
 
   /** @override */

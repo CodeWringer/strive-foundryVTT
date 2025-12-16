@@ -142,68 +142,11 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
   }
 
   /** @override */
-  async promptConfigure() {
-    const inputMaxActionPoints = "inputMaxActionPoints";
-    const inputRefillActionPoints = "inputRefillActionPoints";
-    const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
-    const inputInitiatives = "inputInitiatives";
-    const inputEnablePersonality = "inputEnablePersonality";
-    const inputEnableProgression = "inputEnableProgression";
-    const inputEnableGritPoints = "inputEnableGritPoints";
-
-    const inputDefinitions = [
+  _getConfigurationInputs() {
+    const inherited = super._getConfigurationInputs();
+    return inherited.concat([
       new DynamicInputDefinition({
-        name: inputMaxActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.max"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 0,
-          value: this.document.actionPoints.maximum,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputRefillActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.refill"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 0,
-          value: this.document.actionPoints.refill.amount,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputAllowRefillActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-        template: InputToggleViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
-          id: id,
-          parent: parent,
-          value: this.document.actionPoints.refill.enable,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputInitiatives,
-        localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 1,
-          value: this.document.initiative.perTurn,
-          ...overrides,
-        }),
-      }),
-    ];
-
-    inputDefinitions.push(
-      new DynamicInputDefinition({
-        name: inputEnablePersonality,
+        name: "inputEnablePersonality",
         localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
         template: InputToggleViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
@@ -212,11 +155,9 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
           value: this.document.personalityVisible,
           ...overrides,
         }),
-      })
-    );
-    inputDefinitions.push(
+      }),
       new DynamicInputDefinition({
-        name: inputEnableProgression,
+        name: "inputEnableProgression",
         localizedLabel: game.i18n.localize("system.character.advancement.label"),
         template: InputToggleViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
@@ -225,11 +166,9 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
           value: this.document.advancement.advancementEnabled,
           ...overrides,
         }),
-      })
-    );
-    inputDefinitions.push(
+      }),
       new DynamicInputDefinition({
-        name: inputEnableGritPoints,
+        name: "inputEnableGritPoints",
         localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
         template: InputToggleViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
@@ -238,24 +177,17 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
           value: this.document.gritPoints.enable,
           ...overrides,
         }),
-      })
-    );
-    const dialog = await new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("system.character.edit"),
-      inputDefinitions: inputDefinitions,
-    }).renderAndAwait(true);
+      }),
+    ]);
+  }
 
-    if (dialog.confirmed !== true) return;
+  /** @override */
+  async promptConfigure() {
+    const dialog = await super.promptConfigure();
 
-    this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
-    this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
-    this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
-
-    this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
-
-    this.document.personalityVisible = dialog[inputEnablePersonality] == true;
-    this.document.advancement.advancementEnabled = dialog[inputEnableProgression] == true;
-    this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
+    this.document.personalityVisible = dialog["inputEnablePersonality"] == true;
+    this.document.advancement.advancementEnabled = dialog["inputEnableProgression"] == true;
+    this.document.gritPoints.enable = dialog["inputEnableGritPoints"] == true;
   }
 
   /**
