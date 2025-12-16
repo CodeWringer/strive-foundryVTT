@@ -248,7 +248,7 @@
         "experiencePoint": {
           "experiencePoints": "Experience Points",
           "abbreviation": "XP",
-          "requiredForAdvancement": "Required Experience Points for Advancement: %{xp}"
+          "requiredForAdvancement": "Required Experience Points for Advancement: %{xp} from %{type} Attribute"
         },
         "requirement": {
           "requirements": "Advancement Requirements",
@@ -440,6 +440,12 @@
         },
         "sprintingSpeed": {
           "label": "Sprinting Speed"
+        },
+        "type": {
+          "secondary": "Secondary",
+          "core": "Core",
+          "favored": "Favored",
+          "penalized": "Penalized"
         }
       },
       "biography": {
@@ -865,7 +871,6 @@
         "rollForPlaceholder": "3 / 3D / 2d + 1 / 2D6 - 1D3"
       },
       "availableDice": "Available Dice",
-      "availableDiceWithAttribute": "%{skillLevel} (%{skillName}) + %{attributeLevel} (%{attributeName}) = <b>%{total}</b>",
       "backFire": {
         "label": "Backfire"
       },

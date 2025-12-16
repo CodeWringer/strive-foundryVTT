@@ -5,8 +5,9 @@ import { ITEM_TYPES } from "../document/item/item-types.mjs";
 import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
 import { RollSchema } from "../dice/roll-schema.mjs";
 import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
-import { AttributeAndSkillRollSchema } from "../dice/ability-roll/attribute-and-skill-roll-schema/attribute-and-skill-roll-schema.mjs";
 import { ValidationUtil } from "../util/validation-utility.mjs";
+import CharacterAttribute from "./attribute/character-attribute.mjs";
+import { ATTRIBUTE_TYPES } from "./attribute/attribute-types.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -15,13 +16,21 @@ export default class Ruleset {
   /**
    * Returns the advancement requirements for the given level of an attribute. 
    * 
-   * @param {Number} level The level for which to get the advancement requirements. 
+   * @param {CharacterAttribute} attribute
    * 
    * @returns {Number}
    */
-  getAttributeAdvancementRequirements(level = 0) {
-    const base = 10;
-    return base + (level * 5);
+  getAttributeAdvancementRequirements(attribute) {
+    const base = 20;
+
+    if (attribute.type === ATTRIBUTE_TYPES.CORE || attribute.type === ATTRIBUTE_TYPES.FAVORED) {
+      const level = Math.max(1, attribute.level - 1);
+      return base + (level * level);
+    } else if (attribute.type === ATTRIBUTE_TYPES.PENALIZED) {
+      return Math.round((base + (attribute.level * attribute.level)) * 1.5);
+    } else {
+      return base + (attribute.level * attribute.level);
+    }
   }
 
   /**
@@ -289,18 +298,22 @@ export default class Ruleset {
   /**
    * Returns the default skill roll schema. 
    * 
+   * @param {Object | undefined} overrides Constructor overrides of the `SkillRollSchema` to return. 
+   * 
    * @returns {SkillRollSchema}
    */
-  getSkillRollSchema() {
-    return new AttributeAndSkillRollSchema(); 
+  getSkillRollSchema(overrides = {}) {
+    return new SkillRollSchema(overrides);
   }
 
   /**
    * Returns the default skill roll schema. 
    * 
-   * @returns {RollSchema}
+   * @param {Object | undefined} overrides Constructor overrides of the `AttributeRollSchema` to return. 
+   * 
+   * @returns {AttributeRollSchema}
    */
-  getAttributeRollSchema() {
-    return new AttributeRollSchema();
+  getAttributeRollSchema(overrides = {}) {
+    return new AttributeRollSchema(overrides);
   }
 }

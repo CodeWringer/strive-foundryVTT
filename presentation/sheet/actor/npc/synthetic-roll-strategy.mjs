@@ -1,9 +1,9 @@
-import { AttributeAndSkillRollSchema } from "../../../../business/dice/ability-roll/attribute-and-skill-roll-schema/attribute-and-skill-roll-schema.mjs";
 import TransientBaseActor from "../../../../business/document/actor/transient-base-actor.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
+import Ruleset from "../../../../business/ruleset/ruleset.mjs";
 import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
 import { ArrayUtil } from "../../../../business/util/array-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
@@ -119,7 +119,7 @@ export default class SyntheticRollStrategy {
 
     const transientSkill = skill.getTransientObject();
 
-    const rollSchema = new AttributeAndSkillRollSchema({
+    const rollSchema = new Ruleset().getSkillRollSchema({
       owningDocumentOverride: this.target,
     });
     const queriedRollData = await rollSchema.queryRollData(transientSkill);
