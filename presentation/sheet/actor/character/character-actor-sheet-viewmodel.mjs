@@ -3,8 +3,11 @@ import TransientBaseCharacterActor from "../../../../business/document/actor/tra
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
+import { ATTRIBUTE_TYPES } from "../../../../business/ruleset/attribute/attribute-types.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -307,6 +310,11 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
     this.document.actionPoints.refill.enable = dialog["inputAllowRefillActionPoints"] == true;
 
     this.document.initiative.perTurn = Math.max(1, parseInt(dialog["inputInitiatives"]));
+    
+    this.document.attributes.forEach(attribute => {
+      const classification = ATTRIBUTE_TYPES.asArray().find(it => it.name === dialog[attribute.name].value);
+      attribute.type = classification;
+    });
 
     return dialog;
   }
@@ -319,7 +327,7 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
    * @protected
    */
   _getConfigurationInputs() {
-    return [
+    const defs = [
       new DynamicInputDefinition({
         name: "inputMaxActionPoints",
         localizedLabel: game.i18n.localize("system.actionPoint.max"),
@@ -368,6 +376,27 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
         }),
       }),
     ];
+
+    const attributeTypeChoices = ATTRIBUTE_TYPES.asChoices();
+    this.document.attributes.forEach(attribute => {
+      defs.push(new DynamicInputDefinition({
+        name: attribute.name,
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
+          id: id,
+          parent: parent,
+          options: attributeTypeChoices,
+          value: attributeTypeChoices.find(it => it.value === attribute.type.name),
+          ...overrides,
+        }),
+        localizedLabel: StringUtil.format2(game.i18n.localize("system.character.attribute.type.setClassificationOf"), {
+          attribute: game.i18n.localize(attribute.localizableName),
+        }),
+        iconHtml: `<i class="ico dark ${attribute.icon}"></i>`,
+      }));
+    });
+
+    return defs;
   }
 
   /** @override */

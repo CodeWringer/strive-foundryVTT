@@ -93,6 +93,12 @@ export default class CharacterAttribute {
   }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get icon() { return ATTRIBUTES[this.name].icon; }
+
+  /**
    * @param {GameSystemActor} actor The actor for which to gather 
    * attribute data. 
    * @param {String} name Internal name of the attribute. 
