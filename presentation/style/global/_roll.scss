@@ -52,11 +52,15 @@ $font-size-md: 1.3em;
   line-height: $die-size-md;
   font-size: $font-size-md;
 
-  &.failure {
+  &.miss {
     color: $c-miss;
   }
 
-  &.success {
+  &.uncounted-hit {
+    color: $c-hit-muted;
+  }
+
+  &.hit {
     color: $c-hit;
   }
 
@@ -97,11 +101,11 @@ $font-size-md: 1.3em;
     line-height: $die-size-sm;
     color: $c-neutral-muted;
 
-    &.success {
+    &.hit {
       color: $c-hit-muted;
     }
 
-    &.failure {
+    &.miss {
       color: $c-miss-muted;
     }
 

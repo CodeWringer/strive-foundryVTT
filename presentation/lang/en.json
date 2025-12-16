@@ -878,7 +878,8 @@
       "compensationPoints": "Compensation Point(s)",
       "doRoll": "Roll Dice",
       "hitModifier": "Hit Modifier",
-      "query": "Prepare Dice Roll"
+      "query": "Prepare Dice Roll",
+      "hitLimit": "Hit Limit"
     },
     "rollTable": {
       "weight": "Weight",

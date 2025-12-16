@@ -23,6 +23,7 @@ import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
  * @property {Number} compensationPoints Modifies the faces of misses, 
  * to potentially turn them into hits. 
  * @property {Number} hitModifier Number of automatic hits/misses. 
+ * @property {Number} hitLimit Maximum number of hits that may count towards the overall result. 
  * @property {RollDiceModifierType} rollModifier Modifies the number of 
  * dice to actually roll. 
  */
@@ -35,7 +36,8 @@ export class RollInputData {
    * were rolled and unaffected by the roll modifier. 
    * @param {Number} args.compensationPoints Modifies the faces of misses, 
    * to potentially turn them into hits. 
-   * @param {Number} args.hitModifier Number of automatic hits/misses. 
+   * @param {Number | undefined} args.hitModifier Number of automatic hits/misses. 
+   * @param {Number | undefined} args.hitLimit Maximum number of hits that may count towards the overall result. 
    * @param {RollDiceModifierType} args.rollModifier Modifies the number of 
    * dice to actually roll. 
    */
@@ -44,14 +46,14 @@ export class RollInputData {
       "dice",
       "bonusDice",
       "compensationPoints",
-      "hitModifier",
       "rollModifier",
     ]);
 
     this.dice = args.dice;
     this.bonusDice = args.bonusDice;
     this.compensationPoints = args.compensationPoints;
-    this.hitModifier = args.hitModifier;
+    this.hitModifier = args.hitModifier ?? 0;
+    this.hitLimit = args.hitLimit ?? 0;
     this.rollModifier = args.rollModifier;
   }
 }
@@ -66,6 +68,7 @@ export class RollInputData {
  * @property {Array<Number>} misses 
  * @property {Number} blankCount 
  * @property {Number} degree 
+ * @property {Number} hitLimit 
  * @property {DicePoolRollResultType} outcomeType 
 */
 export class RollStepData {
@@ -77,6 +80,7 @@ export class RollStepData {
    * @param {Array<Number>} args.misses 
    * @param {Number} args.blankCount 
    * @param {Number} args.degree 
+   * @param {Number | undefined} args.hitLimit 
    * @param {DicePoolRollResultType} args.outcomeType 
    */
   constructor(args = {}) {
@@ -97,6 +101,7 @@ export class RollStepData {
     this.blankCount = args.blankCount;
     this.degree = args.degree;
     this.outcomeType = args.outcomeType;
+    this.hitLimit = args.hitLimit ?? 0;
   }
 }
 
@@ -180,6 +185,7 @@ export class RollResult {
 
       diceCount: this.getTotalNumberOfDiceString(),
       hitCount: this.results.hits.length,
+      hitLimit: this.results.hitLimit > 0 ? this.results.hitLimit : undefined,
       missCount: this.results.misses.length,
       blankCount: this.results.blankCount,
 
@@ -300,19 +306,45 @@ export class RollResult {
    * @private
    */
   _getFacesForDisplay(rollStepData) {
-    const hitsForRendering = rollStepData.hits
+    const sortedHits = rollStepData.hits
       .concat([])
       .sort()
-      .reverse()
-      .map(it => { return {cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`, content: it}; });
-    const missesForRendering = rollStepData.misses
+      .reverse();
+
+    const sortedMisses = rollStepData.misses
       .concat([])
       .sort()
-      .reverse()
-      .map(it => { return {cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`, content: it}; });
+      .reverse();
+
+    const hasHitLimit = rollStepData.hitLimit > 0 ? true : false;
+    const maxCountedHits = hasHitLimit ? Math.min(rollStepData.hitLimit, sortedHits.length) : sortedHits.length;
+
+    const countedHits = [];
+    for (let i = 0; i < maxCountedHits; i++) {
+      countedHits.push({
+        cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`,
+        content: sortedHits[i],
+      });
+    }
+
+    const uncountedHits = [];
+    for (let i = maxCountedHits; i < sortedHits.length; i++) {
+      uncountedHits.push({
+        cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_UNCOUNTED_HIT}`,
+        content: sortedHits[i],
+      });
+    }
+
+    const missesForRendering = sortedMisses.map(it => {
+      return {
+        cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}`,
+        content: it,
+      };
+    });
 
     let combinedResultsForRendering = []
-      .concat(hitsForRendering)
+      .concat(countedHits)
+      .concat(uncountedHits)
       .concat(missesForRendering);
 
     const obstacle = rollStepData.resolvedObstacle.ob;
@@ -330,6 +362,18 @@ export class RollResult {
     } else { // Obstacle less than or equal to number of dice rolled. 
       // Insert the obstacle in-between hits and misses. 
       combinedResultsForRendering.splice(obstacle, 0, obstacleForRendering);
+    }
+
+    if (hasHitLimit) {
+      let index = rollStepData.hitLimit;
+      if (obstacle < rollStepData.hitLimit) {
+        index++;
+      }
+      index = Math.min(index, combinedResultsForRendering.length)
+      combinedResultsForRendering.splice(index, 0, {
+        cssClass: DICE_CONSTANTS.CSS_CLASS_OBSTACLE,
+        content: `<span class="flex flex-row flex-middle"><i class="ico dark ico-limit-solid"></i>${rollStepData.hitLimit}</span>`,
+      });
     }
 
     return combinedResultsForRendering;

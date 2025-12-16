@@ -22,6 +22,7 @@ degree: String | Number
 
 diceCount: String | Number
 hitCount: String | Number
+hitLimit: Number | undefined
 missCount: String | Number
 blankCount: String | Number
 
@@ -91,6 +92,22 @@ diceFacesTemplate: String
         </span>
       </div>
     </div>
+    {{!-- Hit Limit --}}
+    {{#if hitLimit}}
+    <div class="flex flex-center pad-sm">
+      <div class="flex flex-center">
+        <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.hitLimit"}}">
+          <div class="flex flex-center">
+            <i class="ico dark ico-limit-solid" style="height: 20px;"></i>
+          </div>
+          <div class="flex flex-center margin-l-md margin-r-md">
+            {{> verticalLine}}
+          </div>
+          <span class="flex flex-center font-bold">{{hitLimit}}</span>
+        </span>
+      </div>
+    </div>
+    {{/if}}
   </div>
   <div id="{{id}}-details" class="sheet-block hidden" style="height: 0%;">
     {{!-- Dice composition --}}
