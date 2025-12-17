@@ -38,7 +38,11 @@ import RollQueryData from "./roll-query-data.mjs";
  * @property {Number} hitThreshold Sets the lower bound of faces that are considered 
  * hits. Any face turning up this number and numbers above, are considered hits. 
  * 
- * @abstract
+ * @abstract Inheritors **must** implement:
+ * * `getRollData()`
+ * * `getAvailableDiceComponents()`
+ * * `getAvailableDiceComponentExplanation()`
+ * * `_queryRollData()`
  */
 export class RollSchema {
   /**

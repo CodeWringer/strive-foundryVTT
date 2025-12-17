@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -158,7 +159,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     await super.activateListeners(html);
 
     this.html = html;
-    this._contextMenu = new ContextMenu(html, this.id, this.menuItems);
+    this._contextMenu = new FoundryWrapper().createContextMenu(html, this.id, this.menuItems);
   }
 
   /**
@@ -237,7 +238,7 @@ export class ContextMenuItem {
     ValidationUtil.validateOrThrow(args, ["name"]);
 
     this.name = args.name;
-    this.icon = args.icon;
+    this.icon = args.icon ?? "";
     this.condition = args.condition;
     this.callback = args.callback;
   }

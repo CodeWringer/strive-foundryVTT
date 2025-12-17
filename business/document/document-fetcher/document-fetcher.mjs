@@ -41,6 +41,7 @@ export default class DocumentFetcher {
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
    * * Default `DOCUMENT_COLLECTION_SOURCES.all`.
+   * @param {String | undefined} filter.sourcePackId ID of a specific compendium pack to search in. 
    * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
    * documents. 
    * * Default `false`. 
@@ -50,7 +51,7 @@ export default class DocumentFetcher {
    * * Only relevant, if compendium packs are searched. 
    * * Default `true`.
    * 
-   * @returns {Document | undefined} 
+   * @returns {Promise<Document | undefined>} 
    * 
    * @throws {Error} Thrown, if neither `id`, nor `name` are defined. 
    * 
@@ -102,6 +103,7 @@ export default class DocumentFetcher {
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
    * * Default `DOCUMENT_COLLECTION_SOURCES.all`.
+   * @param {String | undefined} filter.sourcePackId ID of a specific compendium pack to search in. 
    * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
    * documents. 
    * * Default `false`. 
@@ -111,7 +113,7 @@ export default class DocumentFetcher {
    * * Only relevant, if compendium packs are searched. 
    * * Default `true`.
    * 
-   * @returns {Array<Document>} 
+   * @returns {Promise<Array<Document>>} 
    * 
    * @async
    */
@@ -198,12 +200,13 @@ export default class DocumentFetcher {
    * * Note, that this setting may slow searches down, **significantly**. 
    * @param {DocumentCollectionSource} filter.source A document source to 
    * filter by. 
+   * @param {String | undefined} filter.sourcePackId ID of a specific compendium pack to search in. 
    * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
    * copendium packs. 
    * * Only relevant, if compendium packs are searched. 
    * * Default `true`.
    * 
-   * @returns {Document | undefined} 
+   * @returns {Promise<Document | undefined>} 
    * 
    * @private
    * @async
@@ -355,12 +358,13 @@ export default class DocumentFetcher {
    * * Note, that this setting may slow searches down, **significantly**. 
    * @param {DocumentCollectionSource} filter.source A document source to 
    * filter by. 
+   * @param {String | undefined} filter.sourcePackId ID of a specific compendium pack to search in. 
    * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
    * copendium packs. 
    * * Only relevant, if compendium packs are searched. 
    * * Default `true`.
    * 
-   * @returns {Array<Document> | undefined} 
+   * @returns {Promise<Array<Document> | undefined>} 
    * 
    * @private
    * @async
@@ -507,6 +511,7 @@ export default class DocumentFetcher {
    * * If undefined, `documentType` **must** be defined. 
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
+   * @param {String | undefined} filter.sourcePackId ID of a specific compendium pack to search in. 
    * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
    * copendium packs. 
    * * Only relevant, if compendium packs are searched. 
@@ -664,6 +669,7 @@ export default class DocumentFetcher {
    * @param {Object} filter 
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
+   * @param {String | undefined} filter.sourcePackId ID of a specific compendium pack to search in. 
    * 
    * @returns {Boolean} True, if the given filter indicates that compendium packs 
    * should be searched. 
@@ -679,6 +685,7 @@ export default class DocumentFetcher {
       || sourceId == DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name
       || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.name
       || sourceId == DOCUMENT_COLLECTION_SOURCES.worldAndWorldCompendia.name
+      || ValidationUtil.isDefined(filter.sourcePackId)
       ) {
       return true;
     }
@@ -714,6 +721,7 @@ export default class DocumentFetcher {
    * @param {Object} filter 
    * @param {DocumentCollectionSource} filter.source A document source to 
    * filter by. 
+   * @param {String | undefined} filter.sourcePackId ID of a specific compendium pack to search in. 
    * @param {Object} pack A compendium pack to test. 
    * 
    * @returns {Boolean} True, if the given pack matches the source in the given filter. 
@@ -726,6 +734,11 @@ export default class DocumentFetcher {
 
     // Locked filter precludes all others. 
     if (filter.includeLocked !== true && pack.locked === true) {
+      return false;
+    }
+
+    // Check by specific ID, if desired.
+    if (ValidationUtil.isDefined(filter.sourcePackId) && pack.collection !== filter.sourcePackId) {
       return false;
     }
 

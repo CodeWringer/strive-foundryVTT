@@ -8,8 +8,6 @@ import HealthConditionChatMessageViewModel from "../../../presentation/sheet/ite
 /**
  * @property {Number} current
  * @property {Number} limit
- * @property {String | undefined} internalName Is only defined for system-defined 
- * Health Conditions. This is the internal name. 
  * 
  * @extends TransientBaseItem
  */
@@ -41,12 +39,6 @@ export default class TransientHealthCondition extends TransientBaseItem {
     this.document.system.limit = value;
     this.updateByPath("system.limit", value);
   }
-
-  /**
-   * @type {String | undefined}
-   * @readonly
-   */
-  get internalName() { return this.document.system.internalName; }
 
   /**
    * @param {GameSystemItem} document An encapsulated document instance. 

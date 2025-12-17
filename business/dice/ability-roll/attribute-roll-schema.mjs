@@ -35,7 +35,6 @@ export class AttributeRollSchema extends RollSchema {
       obFormula: rollQueryData.ob,
       diceComponents: new Sum(diceComponents),
       bonusDiceComponent: new SumComponent(RollSchema.BONUS_DICE_COMPONENT, "system.roll.bonusDice", rollQueryData.bonusDice),
-      hitModifier: 0,
       compensationPoints: rollQueryData.compensationPoints,
       rollModifier: rollQueryData.rollModifier,
     });

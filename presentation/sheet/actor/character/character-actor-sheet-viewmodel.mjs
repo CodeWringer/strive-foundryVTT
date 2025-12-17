@@ -3,11 +3,18 @@ import TransientBaseCharacterActor from "../../../../business/document/actor/tra
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
+import { ATTRIBUTE_TYPES } from "../../../../business/ruleset/attribute/attribute-types.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -19,6 +26,9 @@ import ActorPersonalsViewModel from "../part/personals/actor-personals-viewmodel
  * @abstract Inheritors **must** override:
  * * `TEMPLATE`
  * * `_renderLazyTab`
+ * 
+ * And *may* override:
+ * * `_getConfigurationInputs`
  * * `promptConfigure`
  */
 export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
@@ -263,11 +273,130 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
   /**
    * Opens the dialog to configure the meta data of the character. 
    * 
-   * @abstract
+   * You need only override this if you have also overriden `_getConfigurationInputs`. 
+   * 
+   * @example
+   * ```JS
+   * _getConfigurationInputs() {
+   *   const inherited = super._getConfigurationInputs();
+   *   return inherited.concat([
+   *     ... // Add additional `DynamicInputDefinition`s here.
+   *   ]);
+   * }
+   * 
+   * async promptConfigure() {
+   *   const dialog = await super.promptConfigure();
+   *   const myInputValue = dialog["myInputValue"];
+   *   ... // Do further processing.
+   * }
+   * ```
+   * 
+   * @returns {Promise<DynamicInputDialog>} The dialog, so that inheritors may fetch additional 
+   * data from it. 
+   * 
+   * @virtual
    * @async
    */
   async promptConfigure() {
-    throw new Error("Not implemented");
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: game.i18n.localize("system.character.edit"),
+      inputDefinitions: this._getConfigurationInputs(),
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    this.document.actionPoints.maximum = parseInt(dialog["inputMaxActionPoints"]);
+    this.document.actionPoints.refill.amount = parseInt(dialog["inputRefillActionPoints"]);
+    this.document.actionPoints.refill.enable = dialog["inputAllowRefillActionPoints"] == true;
+
+    this.document.initiative.perTurn = Math.max(1, parseInt(dialog["inputInitiatives"]));
+    
+    this.document.attributes.forEach(attribute => {
+      const classification = ATTRIBUTE_TYPES.asArray().find(it => it.name === dialog[attribute.name].value);
+      attribute.type = classification;
+    });
+
+    return dialog;
+  }
+
+  /**
+   * Returns the input definitions for use in the dialog invoked through `promptConfigure`. 
+   * 
+   * @returns {Array<DynamicInputDefinition>}
+   * 
+   * @protected
+   */
+  _getConfigurationInputs() {
+    const defs = [
+      new DynamicInputDefinition({
+        name: "inputMaxActionPoints",
+        localizedLabel: game.i18n.localize("system.actionPoint.max"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.maximum,
+          ...overrides,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: "inputRefillActionPoints",
+        localizedLabel: game.i18n.localize("system.actionPoint.refill"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.refill.amount,
+          ...overrides,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: "inputAllowRefillActionPoints",
+        localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: this.document.actionPoints.refill.enable,
+          ...overrides,
+        }),
+      }),
+      new DynamicInputDefinition({
+        name: "inputInitiatives",
+        localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 1,
+          value: this.document.initiative.perTurn,
+          ...overrides,
+        }),
+      }),
+    ];
+
+    const attributeTypeChoices = ATTRIBUTE_TYPES.asChoices();
+    this.document.attributes.forEach(attribute => {
+      defs.push(new DynamicInputDefinition({
+        name: attribute.name,
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
+          id: id,
+          parent: parent,
+          options: attributeTypeChoices,
+          value: attributeTypeChoices.find(it => it.value === attribute.type.name),
+          ...overrides,
+        }),
+        localizedLabel: StringUtil.format2(game.i18n.localize("system.character.attribute.type.setClassificationOf"), {
+          attribute: game.i18n.localize(attribute.localizableName),
+        }),
+        iconHtml: `<i class="ico dark ${attribute.icon}"></i>`,
+      }));
+    });
+
+    return defs;
   }
 
   /** @override */

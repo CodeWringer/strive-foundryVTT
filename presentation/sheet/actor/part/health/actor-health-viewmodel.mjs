@@ -376,8 +376,6 @@ export default class ActorHealthViewModel extends ViewModel {
             new SumComponent(ATTRIBUTES.toughness.name, ATTRIBUTES.toughness.localizableName, toughnessAttribute.modifiedLevel),
           ]),
           bonusDiceComponent: new SumComponent("bonus", "", 0),
-          hitModifier: 0,
-          compensationPoints: 0,
           rollModifier: ROLL_DICE_MODIFIER_TYPES.NONE,
         }),
       }),

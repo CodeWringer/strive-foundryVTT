@@ -53,6 +53,8 @@ import { ValidationUtil } from '../util/validation-utility.mjs';
  * @property {String} description
  * @property {String | null} gmNotes
  * @property {Boolean} isCustom
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
  */
 export default class TransientDocument {
   /**
@@ -203,6 +205,12 @@ export default class TransientDocument {
     this.updateByPath("system.gmNotes", value);
   }
   
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get system() { return this.document.system; }
+
   /**
    * @param {Actor | Item} document An encapsulated document instance. 
    * 

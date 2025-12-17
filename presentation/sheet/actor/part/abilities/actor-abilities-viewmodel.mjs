@@ -7,7 +7,7 @@ import ButtonRollViewModel from "../../../../component/button-roll/button-roll-v
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
-import ActorAttributesViewModel from "./actor-attributes-viewmodel.mjs"
+import ActorAttributesViewModel from "./attribute/actor-attributes-viewmodel.mjs"
 import ActorSkillsViewModel from "./actor-skills-viewmodel.mjs"
 import ActorTraitsViewModel from "./actor-traits-viewmodel.mjs"
 import ActorMomentumViewModel from "./momentum/actor-momentum-viewmodel.mjs"

@@ -21,6 +21,7 @@ import InputToggleViewModel from "../../../component/input-toggle/input-toggle-v
 import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
 import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
 import ItemDropData from "./item-drop-data.mjs";
+import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 
@@ -305,7 +306,7 @@ export default class BaseListItemViewModel extends ViewModel {
         this.dragHandler.activateListeners(html);
       }
 
-      new ContextMenu(html, `#${this.id}-name-area`, [
+      new FoundryWrapper().createContextMenu(html, `#${this.id}-name-area`, [
         {
           name: game.i18n.localize("system.general.name.edit"),
           icon: '<i class="fas fa-edit"></i>',

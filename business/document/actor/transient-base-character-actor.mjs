@@ -409,7 +409,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get actionPoints() {
     const thiz = this;
     return {
-      get current() { return PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).current ?? 3; },
+      get current() { return PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).current ?? 0; },
       set current(value) { thiz.updateByPath("system.actionPoints.current", value); },
       
       get maximum() { return PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).maximum ?? 5; },
@@ -426,7 +426,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
       get refill() {
         return {
-          get amount() { return PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).refill).amount ?? 3; },
+          get amount() { return PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).refill).amount ?? 4; },
           set amount(value) { thiz.updateByPath("system.actionPoints.refill.amount", value); },
 
           get enable() { return PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).refill).enable ?? true; },

@@ -1,5 +1,4 @@
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
 import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
 import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-notes-viewmodel.mjs";
@@ -10,12 +9,13 @@ import ActorBiographyViewModel from "../part/biography/actor-biography-viewmodel
 import ActorAssetsViewModel from "../part/assets/actor-assets-viewmodel.mjs";
 import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import SyntheticRollStrategy from "./synthetic-roll-strategy.mjs";
 import CharacterActorSheetViewModel from "../character/character-actor-sheet-viewmodel.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
 
 export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel {
   /** @override */
@@ -39,6 +39,24 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
    */
   get showBiography() { return !this.document.personalityVisible; }
 
+  get showCrippledWarning() {
+    const toughnessLevel = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name).modifiedLevel;
+    const injuryCount = this.document.health.injuries.length;
+
+    return injuryCount > (toughnessLevel + 1);
+  }
+
+  get localizedCrippledWarning() {
+    const injuryCount = this.document.health.injuries.length;
+    const toughnessLevel = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name).modifiedLevel;
+    const obPenalty = injuryCount - (toughnessLevel + 1);
+    return StringUtil.format2(game.i18n.localize("system.character.health.crippledWarning"), {
+      injuryCount: injuryCount,
+      obstacle: obPenalty,
+      toughness: toughnessLevel,
+    });
+  }
+
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -48,11 +66,26 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {TransientBaseActor} args.document The represented transient document instance. 
+   * @param {TransientBaseCharacterActor} args.document The represented transient document instance. 
    * @param {GameSystemActorSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
     super(args);
+
+    if (this.showCrippledWarning) {
+      const injuryCount = this.document.health.injuries.length;
+      const toughnessLevel = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name).modifiedLevel;
+      const obPenalty = injuryCount - (toughnessLevel + 1);
+      this.vmCrippledWarning = new ViewModel({
+        id: "crippled-warning",
+        parent: this,
+        localizedToolTip: StringUtil.format2(game.i18n.localize("system.character.health.crippledWarningExplanation"), {
+          injuryCount: injuryCount,
+          obstacle: obPenalty,
+          toughness: toughnessLevel,
+        }),
+      });
+    }
 
     this.abilitiesViewModel = new LazyLoadViewModel({
       id: "lazyAbilities",
@@ -142,68 +175,11 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
   }
 
   /** @override */
-  async promptConfigure() {
-    const inputMaxActionPoints = "inputMaxActionPoints";
-    const inputRefillActionPoints = "inputRefillActionPoints";
-    const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
-    const inputInitiatives = "inputInitiatives";
-    const inputEnablePersonality = "inputEnablePersonality";
-    const inputEnableProgression = "inputEnableProgression";
-    const inputEnableGritPoints = "inputEnableGritPoints";
-
-    const inputDefinitions = [
+  _getConfigurationInputs() {
+    const inherited = super._getConfigurationInputs();
+    return inherited.concat([
       new DynamicInputDefinition({
-        name: inputMaxActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.max"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 0,
-          value: this.document.actionPoints.maximum,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputRefillActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.refill"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 0,
-          value: this.document.actionPoints.refill.amount,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputAllowRefillActionPoints,
-        localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-        template: InputToggleViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
-          id: id,
-          parent: parent,
-          value: this.document.actionPoints.refill.enable,
-          ...overrides,
-        }),
-      }),
-      new DynamicInputDefinition({
-        name: inputInitiatives,
-        localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
-          parent: parent,
-          min: 1,
-          value: this.document.initiative.perTurn,
-          ...overrides,
-        }),
-      }),
-    ];
-
-    inputDefinitions.push(
-      new DynamicInputDefinition({
-        name: inputEnablePersonality,
+        name: "inputEnablePersonality",
         localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
         template: InputToggleViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
@@ -212,11 +188,9 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
           value: this.document.personalityVisible,
           ...overrides,
         }),
-      })
-    );
-    inputDefinitions.push(
+      }),
       new DynamicInputDefinition({
-        name: inputEnableProgression,
+        name: "inputEnableProgression",
         localizedLabel: game.i18n.localize("system.character.advancement.label"),
         template: InputToggleViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
@@ -225,11 +199,9 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
           value: this.document.advancement.advancementEnabled,
           ...overrides,
         }),
-      })
-    );
-    inputDefinitions.push(
+      }),
       new DynamicInputDefinition({
-        name: inputEnableGritPoints,
+        name: "inputEnableGritPoints",
         localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
         template: InputToggleViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
@@ -238,24 +210,19 @@ export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel
           value: this.document.gritPoints.enable,
           ...overrides,
         }),
-      })
-    );
-    const dialog = await new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("system.character.edit"),
-      inputDefinitions: inputDefinitions,
-    }).renderAndAwait(true);
+      }),
+    ]);
+  }
 
-    if (dialog.confirmed !== true) return;
+  /** @override */
+  async promptConfigure() {
+    const dialog = await super.promptConfigure();
 
-    this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
-    this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
-    this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
+    if (!ValidationUtil.isDefined(dialog)) return;
 
-    this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
-
-    this.document.personalityVisible = dialog[inputEnablePersonality] == true;
-    this.document.advancement.advancementEnabled = dialog[inputEnableProgression] == true;
-    this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
+    this.document.personalityVisible = dialog["inputEnablePersonality"] == true;
+    this.document.advancement.advancementEnabled = dialog["inputEnableProgression"] == true;
+    this.document.gritPoints.enable = dialog["inputEnableGritPoints"] == true;
   }
 
   /**

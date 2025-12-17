@@ -1,10 +1,11 @@
 import { GameSystemActor } from "../../document/actor/actor.mjs";
 import TransientBaseCharacterActor from "../../document/actor/transient-base-character-actor.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
+import { ATTRIBUTE_TYPES, AttributeType } from "./attribute-types.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
 /**
- * Represents a specific character's specific attribute. 
+ * Represents a specific Attribute of a character. 
  * 
  * @property {GameSystemActor} _actor Private actor reference. 
  * * Private
@@ -17,6 +18,7 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * * Read-only. 
  * @property {Number} owningActor The owning character actor. 
  * * Read-only. 
+ * @property {AttributeType} type Advancement classification.
  */
 export default class CharacterAttribute {
   /**
@@ -70,6 +72,31 @@ export default class CharacterAttribute {
    * @readonly
    */
   get owningActor() { return this._actor.getTransientObject(); }
+
+  /**
+   * @type {AttributeType}
+   */
+  get type() {
+    const attributeName = ((this._actor.system.attributes[this.name] ?? {}).type ?? ATTRIBUTE_TYPES.SECONDARY.name);
+    return ATTRIBUTE_TYPES.asArray().find(it => it.name === attributeName);
+  }
+  set type(value) {
+    this._actor.update({
+      system: {
+        attributes: {
+          [this.name]: {
+            type: value.name
+          }
+        }
+      }
+    }); 
+  }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get icon() { return ATTRIBUTES[this.name].icon; }
 
   /**
    * @param {GameSystemActor} actor The actor for which to gather 

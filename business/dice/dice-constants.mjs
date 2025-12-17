@@ -9,7 +9,15 @@ export const DICE_CONSTANTS = {
    * @type {String}
    * @constant
    */
-  CSS_CLASS_HIT: "success",
+  CSS_CLASS_HIT: "hit",
+
+  /**
+   * CSS class of a hit die result. 
+   * 
+   * @type {String}
+   * @constant
+   */
+  CSS_CLASS_UNCOUNTED_HIT: "uncounted-hit",
 
   /**
    * CSS class of a miss die result. 
@@ -17,7 +25,7 @@ export const DICE_CONSTANTS = {
    * @type {String}
    * @constant
    */
-  CSS_CLASS_MISS: "failure",
+  CSS_CLASS_MISS: "miss",
 
   /**
    * CSS class of the obstacle value. 

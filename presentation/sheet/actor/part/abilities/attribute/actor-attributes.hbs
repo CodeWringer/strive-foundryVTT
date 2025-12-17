@@ -1,0 +1,16 @@
+{{!-- Parameters:
+viewModel: ActorAttributesViewModel
+cssClass: undefined | String
+--}}
+<section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
+  <h1 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
+    <span class="flex-grow">{{localize "system.character.characteristic.baseCharacteristics"}}</span>
+  </h1>
+  <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg">
+    {{#each viewModel.attributes as |attributeViewModel|}}
+    {{#with ../viewModel.attributeTemplate as |template|}}
+      {{> (template) viewModel=attributeViewModel }}
+    {{/with}}
+    {{/each}}
+  </div>
+</section>

@@ -32,8 +32,6 @@ export default class HealthConditionListItemViewModel extends ViewModel {
    * @param {Number | undefined} args.current
    * @param {Number | undefined} args.limit
    * @param {String | undefined} args.img
-   * @param {String | undefined} args.internalName If it is a system-defined Condition, this field is to be defined as 
-   * the internal name. 
    * @param {String | undefined} args.localizedName
    * @param {String | undefined} args.localizedToolTip
    * @param {Function | undefined} args.onChange Invoked when the current value changes. Arguments:
@@ -49,7 +47,6 @@ export default class HealthConditionListItemViewModel extends ViewModel {
     this.current = args.current ?? 0;
     this.limit = args.limit ?? 0;
     this.img = args.img;
-    this.internalName = args.internalName;
     this.localizedName = args.localizedName;
     this.onChange = args.onChange ?? (() => {});
 

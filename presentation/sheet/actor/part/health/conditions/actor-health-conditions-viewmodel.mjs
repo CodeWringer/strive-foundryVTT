@@ -1,5 +1,5 @@
 import { ITEM_TYPES } from "../../../../../../business/document/item/item-types.mjs";
-import { HEALTH_CONDITIONS } from "../../../../../../business/ruleset/health/health-conditions.mjs";
+import SystemHealthConditionBroker from "../../../../../../business/ruleset/health/system-health-condition-broker.mjs";
 import GameSystemWorldSettings from "../../../../../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
@@ -77,7 +77,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     this.registerViewStateProperty("_isExpanded");
     this.readViewState();
 
-    const systemHealthConditions = HEALTH_CONDITIONS.asArray();
+    const systemHealthConditions = SystemHealthConditionBroker.conditions;
     const characterHealthConditions = this.document.health.conditions;
     this.conditionViewModels = [];
 
@@ -85,20 +85,17 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     for (const condition of systemHealthConditions) {
       if (this._isHiddenBySettings(condition.name)) continue;
 
-      const characterHealthCondition = characterHealthConditions.find(it => it.internalName === condition.name);
+      const characterHealthCondition = characterHealthConditions.find(it => it.name === condition.name);
       const isOnCharacter = ValidationUtil.isDefined(characterHealthCondition);
       const hasIntensity = isOnCharacter ? characterHealthCondition.current > 0 : false;
 
-      const localizedName = game.i18n.localize(condition.localizableName);
-      const localizedToolTip = game.i18n.localize(condition.localizableToolTip);
       const vm = new HealthConditionListItemViewModel({
         id: condition.name,
-        internalName: condition.name,
         parent: this,
         current: isOnCharacter ? characterHealthCondition.current : 0,
         limit: condition.limit,
-        localizedName: localizedName,
-        localizedToolTip: localizedToolTip,
+        localizedName: condition.name,
+        localizedToolTip: condition.description,
         img: condition.img,
         visible: hasIntensity || this.isExpanded,
         onChange: async (_, newValue) => {
@@ -110,14 +107,13 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
             } else {
               // Create
               await Item.create({
-                name: localizedName,
+                name: condition.name,
                 img: condition.img,
                 type: ITEM_TYPES.HEALTH_CONDITION,
                 system: {
-                  internalName: condition.name,
                   current: 1,
                   limit: condition.limit,
-                  description: localizedToolTip,
+                  description: condition.description,
                 }
               }, { parent: this.document.document });
             }
@@ -136,9 +132,8 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     // **and** custom Health Conditions (but actually, only custom ones will be worked with here).
     for (const condition of characterHealthConditions) {
       if (this._isHiddenBySettings(condition.name)) continue;
-      // If the internalName is defined, the condition comes from the system. These have already 
-      // been handled by the previous iteration and mustn't be considered, again. 
-      if (ValidationUtil.isDefined(condition.internalName)) continue;
+      // Exclude system-defined Conditions.
+      if (ValidationUtil.isDefined((systemHealthConditions.find(it => it.name === condition.name)))) continue;
 
       const localizedName = condition.name;
       const hasDescription = ValidationUtil.isDefined(condition.description) && condition.description.length > 0;

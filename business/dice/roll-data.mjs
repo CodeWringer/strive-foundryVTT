@@ -14,6 +14,7 @@ import { RollInputData, RollResult, RollStepData } from "./roll-result.mjs";
  * @property {Sum} diceComponents The number of dice to roll. 
  * @property {SumComponent} bonusDiceComponent
  * @property {Number} hitModifier Number of automatic hits/misses. 
+ * @property {Number} hitLimit Maximum number of hits that may count towards the overall result. 
  * @property {Number} compensationPoints The number of miss-faces that can be turned 
  * to the next higher face, until they score a hit. 
  * @property {RollDiceModifierType} rollModifier The selected roll modifier. 
@@ -27,8 +28,9 @@ export default class RollData {
    * @param {String} args.obFormula The obstacle formula to roll against. 
    * @param {Sum} args.diceComponents The number of dice to roll. 
    * @param {SumComponent} args.bonusDiceComponent 
-   * @param {Number} args.hitModifier Number of automatic hits/misses. 
-   * @param {Number} args.compensationPoints The number of miss-faces that can be turned 
+   * @param {Number | undefined} args.hitModifier Number of automatic hits/misses. 
+   * @param {Number | undefined} args.hitLimit Maximum number of hits that may count towards the overall result. 
+   * @param {Number | undefined} args.compensationPoints The number of miss-faces that can be turned 
    * to the next higher face, until they score a hit. 
    * @param {RollDiceModifierType} args.rollModifier The selected roll modifier. 
    */
@@ -39,8 +41,6 @@ export default class RollData {
       "obFormula", 
       "diceComponents", 
       "bonusDiceComponent", 
-      "hitModifier", 
-      "compensationPoints",
       "rollModifier",
     ]);
 
@@ -49,8 +49,9 @@ export default class RollData {
     this.obFormula = args.obFormula;
     this.diceComponents = args.diceComponents;
     this.bonusDiceComponent = args.bonusDiceComponent;
-    this.hitModifier = args.hitModifier;
-    this.compensationPoints = args.compensationPoints;
+    this.hitModifier = args.hitModifier ?? 0;
+    this.hitLimit = args.hitLimit ?? 0;
+    this.compensationPoints = args.compensationPoints ?? 0;
     this.rollModifier = args.rollModifier;
   }
 
@@ -73,6 +74,7 @@ export default class RollData {
         bonusDice: this.bonusDiceComponent.value,
         compensationPoints: this.compensationPoints,
         hitModifier: this.hitModifier,
+        hitLimit: this.hitLimit,
         rollModifier: this.rollModifier,
       }),
       intermediateResults: intermediateResults,
@@ -106,7 +108,11 @@ export default class RollData {
     
     // Analyze results. 
     const faceResults = this._evaluateFaces(rolledFaces, resolvedObstacle.ob);
-    const degreeAndOutcome = this._evaluateDegreeAndOutcome(faceResults.hits.length, resolvedObstacle.ob);
+    const degreeAndOutcome = this._evaluateDegreeAndOutcome({
+      hitCount: faceResults.hits.length, 
+      hitLimit: this.hitLimit,
+      obstacle: resolvedObstacle.ob,
+    });
 
     return new RollStepData({
       faces: rolledFaces,
@@ -116,6 +122,7 @@ export default class RollData {
       blankCount: faceResults.blankCount,
       degree: degreeAndOutcome.degree,
       outcomeType: degreeAndOutcome.outcomeType,
+      hitLimit: this.hitLimit,
     });
   }
 
@@ -174,8 +181,13 @@ export default class RollData {
     }
 
     // Analyze results. 
+    const hitLimit = this.hitLimit + this.compensationPoints;
     const faceResults = this._evaluateFaces(modifiedFaces, resolvedObstacle.ob);
-    const degreeAndOutcome = this._evaluateDegreeAndOutcome(faceResults.hits.length, resolvedObstacle.ob);
+    const degreeAndOutcome = this._evaluateDegreeAndOutcome({
+      hitCount: faceResults.hits.length, 
+      hitLimit: hitLimit,
+      obstacle: resolvedObstacle.ob,
+    });
 
     return new RollStepData({
       faces: modifiedFaces,
@@ -185,6 +197,7 @@ export default class RollData {
       blankCount: faceResults.blankCount,
       degree: degreeAndOutcome.degree,
       outcomeType: degreeAndOutcome.outcomeType,
+      hitLimit: hitLimit,
     });
   }
 
@@ -243,8 +256,10 @@ export default class RollData {
   /**
    * Returns the degree and outcome type, based on the given hits and obstacle. 
    * 
-   * @param {Number} hitCount The number of hits that were scored. 
-   * @param {Number} obstacle The resolved obstacle number. 
+   * @param {Object} args
+   * @param {Number} args.hitCount The number of hits that were scored. 
+   * @param {Number} args.hitLimit 
+   * @param {Number} args.obstacle The resolved obstacle number. 
    * 
    * @returns {Object} An object with the fields: 
    * * `degree: Number`
@@ -252,14 +267,17 @@ export default class RollData {
    * 
    * @private
    */
-  _evaluateDegreeAndOutcome(hitCount, obstacle) {
+  _evaluateDegreeAndOutcome(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["hitCount", "hitLimit", "obstacle"]);
     let degree = 0;
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
 
-    if (obstacle > 0) {
-      if (hitCount >= obstacle) { // Complete success
+    let hitCount = Math.min(args.hitCount, args.hitLimit);
+
+    if (args.obstacle > 0) {
+      if (hitCount >= args.obstacle) { // Complete success
         outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
-        degree = hitCount - obstacle;
+        degree = hitCount - args.obstacle;
       } else if (hitCount > 0) { // Partial failure
         outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
         degree = hitCount;
