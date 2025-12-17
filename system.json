@@ -32,6 +32,12 @@
       "type": "Item"
     },
     {
+      "name": "health-conditions",
+      "label": "Health Conditions",
+      "path": "packs/health-conditions",
+      "type": "Item"
+    },
+    {
       "name": "illnesses",
       "label": "Illnesses",
       "path": "packs/illnesses",
@@ -69,11 +75,12 @@
       "packs": [
         "assets",
         "fatecards",
+        "health-conditions",
         "illnesses",
-        "skills",
         "momentum-actions",
         "mutations",
-        "rolltables"
+        "rolltables",
+        "skills"
       ]
     }
   ],
