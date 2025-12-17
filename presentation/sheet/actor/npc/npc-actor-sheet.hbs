@@ -23,6 +23,14 @@ cssClass: {undefined | String}
     </div>
   </header>
 
+  {{#if viewModel.showCrippledWarning}}
+  <div id="{{viewModel.id}}-crippled-warning" class="hint-card warn flex flex-row flex-middle auto-margin-h-md">
+    <i class="fas fa-exclamation-triangle"></i>
+    <h3 style="margin-bottom: 0;">{{localize "system.character.health.crippled"}}!</h3>
+    <span>{{{viewModel.localizedCrippledWarning}}}</span>
+  </div>
+  {{/if}}
+
   {{!-- Sheet Tab Navigation --}}
   <nav id="nav-sheet-tabs" class="sheet-tabs tabs flex flex-justify font-size-default" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}

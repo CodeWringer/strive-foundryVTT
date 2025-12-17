@@ -9,10 +9,31 @@ import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
 import ActorProjectsViewModel from "../part/projects/actor-projects-viewmodel.mjs";
 import CharacterActorSheetViewModel from "../character/character-actor-sheet-viewmodel.mjs";
+import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
 
 export default class PcActorSheetViewModel extends CharacterActorSheetViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_PC_SHEET; }
+
+  get showCrippledWarning() {
+    const toughnessLevel = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name).modifiedLevel;
+    const injuryCount = this.document.health.injuries.length;
+
+    return injuryCount > (toughnessLevel + 1);
+  }
+
+  get localizedCrippledWarning() {
+    const injuryCount = this.document.health.injuries.length;
+    const toughnessLevel = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name).modifiedLevel;
+    const obPenalty = injuryCount - (toughnessLevel + 1);
+    return StringUtil.format2(game.i18n.localize("system.character.health.crippledWarning"), {
+      injuryCount: injuryCount,
+      obstacle: obPenalty,
+      toughness: toughnessLevel,
+    });
+  }
 
   /**
    * @param {Object} args
@@ -23,11 +44,26 @@ export default class PcActorSheetViewModel extends CharacterActorSheetViewModel 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {TransientBaseActor} args.document The represented transient document instance. 
+   * @param {TransientBaseCharacterActor} args.document The represented transient document instance. 
    * @param {GameSystemActorSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
     super(args);
+
+    if (this.showCrippledWarning) {
+      const injuryCount = this.document.health.injuries.length;
+      const toughnessLevel = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name).modifiedLevel;
+      const obPenalty = injuryCount - (toughnessLevel + 1);
+      this.vmCrippledWarning = new ViewModel({
+        id: "crippled-warning",
+        parent: this,
+        localizedToolTip: StringUtil.format2(game.i18n.localize("system.character.health.crippledWarningExplanation"), {
+          injuryCount: injuryCount,
+          obstacle: obPenalty,
+          toughness: toughnessLevel,
+        }),
+      });
+    }
 
     this.abilitiesViewModel = new LazyLoadViewModel({
       id: "lazyAbilities",

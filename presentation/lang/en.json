@@ -705,7 +705,10 @@
             "name": "Unconscious",
             "tooltip": "An <strong>unconscious</strong> character is unable to act and is unaware of their surroundings.<ul><li>Difficult repeats: Whenever shrugging off this Condition, you become guarded against it until the start of your next turn, making any attack or effect enacted against you that would cause you to suffer it again <code>+1</code> Ob harder for your foes.</li></ul>"
           }
-        }
+        },
+        "crippled": "Crippled",
+        "crippledWarning": "Due to your very high number of Injuries (%{injuryCount}), you now suffer <code>+%{obstacle}</code> <b>Ob</b> to <b>ALL</b> tests!",
+        "crippledWarningExplanation": "%{injuryCount} (Injury count) - (%{toughness} (toughness) + 1) = %{obstacle} Ob"
       },
       "personals": {
         "species": "Species",
