@@ -14,7 +14,6 @@ import { ARMOR_TYPES } from "./business/ruleset/asset/armor-types.mjs";
 import { WEAPON_TYPES } from "./business/ruleset/asset/weapon-types.mjs";
 import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
 import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
-import { HEALTH_CONDITIONS } from "./business/ruleset/health/health-conditions.mjs";
 import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-types.mjs";
 import { ASSET_TAGS, SKILL_TAGS } from "./business/tags/system-tags.mjs";
 import { ACTOR_TYPES } from "./business/document/actor/actor-types.mjs";
@@ -78,11 +77,9 @@ import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strat
 // Import settings classes
 import GameSystemUserSettings from "./business/setting/game-system-user-settings.mjs";
 import GameSystemWorldSettings from "./business/setting/game-system-world-settings.mjs";
-// Import view models
-import './presentation/view-model/view-model.mjs';
-import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 // View models
 import ViewModel from "./presentation/view-model/view-model.mjs";
+import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 import GeneralCombatAbilitiesViewModel from "./presentation/combat/general-combat-actions/general-combat-abilities-viewmodel.mjs";
 // View models - Components
 import ButtonAddViewModel from "./presentation/component/button-add/button-add-viewmodel.mjs";
@@ -164,6 +161,8 @@ import { PixiLoader } from "./presentation/pixi/pixi-preloader.mjs";
 import PlainActorSheetViewModel from "./presentation/sheet/actor/plain/plain-actor-sheet-viewmodel.mjs";
 import NpcActorSheetViewModel from "./presentation/sheet/actor/npc/npc-actor-sheet-viewmodel.mjs";
 import PcActorSheetViewModel from "./presentation/sheet/actor/pc/pc-actor-sheet-viewmodel.mjs";
+// Brokers
+import SystemHealthConditionBroker from "./business/ruleset/health/system-health-condition-broker.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -241,7 +240,6 @@ Hooks.once('init', function() {
       WEAPON_TYPES: WEAPON_TYPES,
       INJURY_STATES: INJURY_STATES,
       ILLNESS_STATES: ILLNESS_STATES,
-      HEALTH_CONDITIONS: HEALTH_CONDITIONS,
       CHARACTER_TEST_TYPES: CHARACTER_TEST_TYPES,
       VISIBILITY_MODES: VISIBILITY_MODES,
     },
@@ -258,6 +256,7 @@ Hooks.once('init', function() {
       Ruleset: Ruleset,
       Tag: Tag,
       FoundryWrapper: FoundryWrapper,
+      SystemHealthConditionBroker: SystemHealthConditionBroker,
       document: {
         TransientBaseActor: TransientBaseActor,
         TransientBaseCharacterActor: TransientBaseCharacterActor,
@@ -430,6 +429,9 @@ Hooks.once('setup', function() {
   initHandlebarsPartials();
   // Initialize component Handlebars partials. 
   initHandlebarsComponents();
+
+  // Broker preloading.
+  SystemHealthConditionBroker.preload();
 });
 
 Hooks.once("ready", function() {

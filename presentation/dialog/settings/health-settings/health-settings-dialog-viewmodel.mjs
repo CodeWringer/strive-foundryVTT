@@ -1,4 +1,4 @@
-import { HEALTH_CONDITIONS } from "../../../../business/ruleset/health/health-conditions.mjs";
+import SystemHealthConditionBroker from "../../../../business/ruleset/health/system-health-condition-broker.mjs";
 import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
@@ -99,10 +99,10 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * @private
    */
   _getHealthStateVisibilityViewModels() {
-    const states = HEALTH_CONDITIONS.asArray();
-    const result = states.map(healthState => new HealthConditionVisibilityItem({
+    const conditions = SystemHealthConditionBroker.conditions;
+    const result = conditions.map(healthState => new HealthConditionVisibilityItem({
       id: healthState.name,
-      localizedName: game.i18n.localize(healthState.localizableName),
+      localizedName: healthState.name,
       value: this.stateSettings.hidden.find(stateName => stateName === healthState.name) === undefined,
     }));
     return result;

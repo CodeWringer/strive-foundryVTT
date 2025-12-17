@@ -3,9 +3,9 @@ import AbstractMigrator from "../abstract-migrator.mjs";
 import VersionCode from "../version-code.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
-import { HEALTH_CONDITIONS } from "../../ruleset/health/health-conditions.mjs";
 import { PropertyUtil } from "../../util/property-utility.mjs";
 import { ArrayUtil } from "../../util/array-utility.mjs";
+import SystemHealthConditionBroker from "../../ruleset/health/system-health-condition-broker.mjs";
 
 export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
   /** @override */
@@ -106,13 +106,15 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
       // Collect health state updates. 
       const priorHealthStateName = "dazed";
 
+      const exhaustedCondition = SystemHealthConditionBroker.conditions.find(it => it.name === "Exhausted");
+
       if (ArrayUtil.arrayContains(actorData.health.states, priorHealthStateName) === true) {
         updateDelta.health = {
           states: ArrayUtil.arrayTakeUnless(actorData.health.states, (it) => {
             return it === priorHealthStateName;
           }),
         }
-        updateDelta.health.states.push(HEALTH_CONDITIONS.exhausted.name);
+        updateDelta.health.states.push(exhaustedCondition.name);
       }
 
       if (migratable === true) {
