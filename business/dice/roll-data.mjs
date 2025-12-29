@@ -258,7 +258,7 @@ export default class RollData {
    * 
    * @param {Object} args
    * @param {Number} args.hitCount The number of hits that were scored. 
-   * @param {Number} args.hitLimit 
+   * @param {Number} args.hitLimit The maximum number of hits that may be counted. 
    * @param {Number} args.obstacle The resolved obstacle number. 
    * 
    * @returns {Object} An object with the fields: 
@@ -272,7 +272,7 @@ export default class RollData {
     let degree = 0;
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
 
-    let hitCount = Math.min(args.hitCount, args.hitLimit);
+    const hitCount = args.hitLimit > 0 ? Math.min(args.hitCount, args.hitLimit) : args.hitCount;
 
     if (args.obstacle > 0) {
       if (hitCount >= args.obstacle) { // Complete success
