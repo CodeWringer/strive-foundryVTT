@@ -198,15 +198,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
     });
     // Promoted content
-    const advancementRequirements = StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
-      xp: new Ruleset().getSkillAdvancementRequirements(this.document.level),
-    });
     this.vmRawLevel = new InputNumberSpinnerViewModel({
       id: "vmRawLevel",
       parent: this,
       value: level,
       min: 0,
-      localizedToolTip: `${game.i18n.localize("system.character.advancement.level")}<br>${advancementRequirements}`,
+      localizedToolTip: game.i18n.localize("system.character.advancement.level"),
       onChange: (_, newValue) => {
         this.document.level = newValue;
       },
