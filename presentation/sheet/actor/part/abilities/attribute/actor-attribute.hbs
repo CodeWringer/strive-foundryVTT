@@ -4,10 +4,10 @@ viewModel: ActorAttributeViewModel
 <div id="{{viewModel.id}}" class="flex flex-column flex-middle sheet-block" style="width: 90px;">
   {{!-- Icon --}}
   <div class="flex flex-row flex-middle">
-    <div class="stackable">
+    <div class="strive-stackable">
       <i id="{{viewModel.vmIcon.id}}" class="ico dark {{viewModel.icon}}" style="width: 48px; height: 48px;"></i>
       {{#if viewModel.hasClassificationIcon}}
-      <span class="stacked" style="width: 20px; height: 20px; box-sizing: content-box;">
+      <span class="strive-stacked" style="width: 20px; height: 20px; box-sizing: content-box;">
         <i id="{{viewModel.vmSubIcon.id}}" class="ico dark {{viewModel.classificationIcon}}" style="width: 20px; height: 20px; filter: unset;"></i>
       </span>
       {{/if}}
