@@ -5,9 +5,13 @@ viewModel: {SkillListItemViewModel}
   {{!-- Level Block --}}
   <div class="flex flex-row flex-middle auto-margin-h-sm sheet-block">
     {{!-- Level --}}
-    {{> inputNumberSpinner viewModel=viewModel.vmRawLevel cssClass="width-sm" }}
+    <span class="width-sm">
+      {{> inputNumberSpinner viewModel=viewModel.vmRawLevel cssClass="" }}
+    </span>
     <i class="fa-solid fa-shuffle"></i>
-    {{> inputNumberSpinner viewModel=viewModel.vmLevel cssClass="width-sm" }}
+    <span class="width-md">
+      {{> inputNumberSpinner viewModel=viewModel.vmLevel cssClass="" }}
+    </span>
     <span style="min-width: 26px;">{{viewModel.maxHpModifierString}}</span>
   </div>
   {{!-- Spacer --}}
