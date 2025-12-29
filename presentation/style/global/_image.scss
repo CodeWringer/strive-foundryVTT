@@ -1,3 +1,8 @@
+$size-sm: $line-height;
+$size-md: 48px;
+$size-lg: 64px;
+$size-xl: 100px;
+
 img {
   &.custom-icon {
     &-chat {
@@ -9,21 +14,25 @@ img {
       border: $c-border-input 1px solid;
       flex: none;
       height: $line-height;
+      min-width: 10px;
     }
     &-md {
       border: $c-border-input 1px solid;
       flex: none;
-      height: 48px;
+      height: $size-md;
+      min-width: 10px;
     }
     &-lg {
       border: $c-border-input 1px solid;
       flex: none;
-      height: 64px;
+      height: $size-lg;
+      min-width: 10px;
     }
     &-xl {
       border: $c-border-input 1px solid;
       flex: none;
-      height: 100px;
+      height: $size-xl;
+      min-width: 10px;
     }
   }
 
