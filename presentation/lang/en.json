@@ -629,7 +629,7 @@
         },
         "crippled": "Crippled",
         "crippledWarning": "Due to your very high number of Injuries (%{injuryCount}), you now suffer <code>+%{obstacle}</code> <b>Ob</b> to <b>ALL</b> tests!",
-        "crippledWarningExplanation": "%{injuryCount} (Injury count) - (%{toughness} (toughness) + 1) = %{obstacle} Ob"
+        "crippledWarningExplanation": "%{injuryCount} (Injury count) - %{toughness} (Toughness) - 1 (always) = %{obstacle} Ob"
       },
       "personals": {
         "species": "Species",
