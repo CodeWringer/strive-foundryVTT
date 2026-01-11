@@ -314,7 +314,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
         name: transientSkillDocument.name
       });
 
-      if (transientSkillDocument.damage.length) {
+      if (ValidationUtil.isDefined(transientSkillDocument.damage) && ValidationUtil.isDefined(transientSkillDocument.damage.length)) {
         const skillDamageFinding = new DamageFinding({
           name: transientSkillDocument.name,
           id: transientSkillDocument.id,
@@ -335,25 +335,27 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       }
 
       transientSkillDocument.expertises.forEach(expertise => {
-        if (expertise.damage.length > 0) {
-          const expertiseDamageFinding = new DamageFinding({
-            name: expertise.name,
-            id: expertise.id,
-            damage: expertise.damage.concat([]), // Safe-copy
-            document: expertise,
-          });
-
-          flat.push(expertiseDamageFinding);
-          skillHierarchy.addFinding(expertiseDamageFinding);
-
-          if (ValidationUtil.isDefined(actorHierarchy)) {
-            actorHierarchy.addSubHierarchy(skillHierarchy);
-            collectionHierarchy.addSubHierarchy(actorHierarchy);
-          } else {
-            collectionHierarchy.addSubHierarchy(skillHierarchy);
+        if (ValidationUtil.isDefined(expertise.damage) && ValidationUtil.isDefined(expertise.damage.length)) {
+          if (expertise.damage.length > 0) {
+            const expertiseDamageFinding = new DamageFinding({
+              name: expertise.name,
+              id: expertise.id,
+              damage: expertise.damage.concat([]), // Safe-copy
+              document: expertise,
+            });
+  
+            flat.push(expertiseDamageFinding);
+            skillHierarchy.addFinding(expertiseDamageFinding);
+  
+            if (ValidationUtil.isDefined(actorHierarchy)) {
+              actorHierarchy.addSubHierarchy(skillHierarchy);
+              collectionHierarchy.addSubHierarchy(actorHierarchy);
+            } else {
+              collectionHierarchy.addSubHierarchy(skillHierarchy);
+            }
+  
+            rootHierarchy.addSubHierarchy(collectionHierarchy);
           }
-
-          rootHierarchy.addSubHierarchy(collectionHierarchy);
         }
       });
     });

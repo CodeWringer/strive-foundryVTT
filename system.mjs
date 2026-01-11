@@ -445,11 +445,6 @@ Hooks.once("ready", function() {
   // Global event handling setup.
   KEYBOARD.init();
 
-  // Register dev dialogs, if necessary.
-  if (game.strive.debug) {
-    window.BulkUpdateDialog = BulkUpdateDialog;
-  }
-
   // Migration check. 
   const migrator = new MigratorInitiator();
   
@@ -469,6 +464,7 @@ Hooks.once("ready", function() {
     WorldSystemVersion.set(migrator.finalMigrationVersion);
   }
 
+  // Register dev dialogs, if necessary.
   if (game.strive.debug) {
     window.runMigration = async function(fromVersion) {
       // Fake world system version. Without this, migrators might not run. 
@@ -478,6 +474,7 @@ Hooks.once("ready", function() {
       new MigratorDialog().render(true);
     };
 
+    window.BulkUpdateDialog = BulkUpdateDialog;
     window.DicePoolDesignerDialog = DicePoolDesignerDialog;
     window.DamageDesignerDialog = DamageDesignerDialog;
   }
