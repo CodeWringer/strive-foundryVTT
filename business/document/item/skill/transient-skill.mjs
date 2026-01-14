@@ -425,14 +425,25 @@ export default class TransientSkill extends TransientBaseItem {
    */
   _getExpertises() {
     const expertisesOnDocument = this.document.system.abilities;
-      
     const result = [];
+    const malformedExpertises = [];
     for (const expertiseId in expertisesOnDocument) {
       if (expertisesOnDocument.hasOwnProperty(expertiseId) !== true) continue;
 
       const dto = expertisesOnDocument[expertiseId];
-      result.push(Expertise.fromDto(dto, this));
+      // Catches an edge-case wherein deleted Expertises might linger on the abilities property. 
+      if (ValidationUtil.isDefined(dto)) {
+        result.push(Expertise.fromDto(dto, this));
+      } else {
+        malformedExpertises.push(expertiseId);
+      }
     }
+
+    // Clean up lingering IDs. 
+    for (const id of malformedExpertises) {
+      this.document.system.abilities[id] = undefined;
+    }
+
     return result;
   }
   
