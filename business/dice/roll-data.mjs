@@ -1,4 +1,4 @@
-import FoundryWrapper from "../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
 import { ValidationUtil } from "../util/validation-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "./dice-pool.mjs";

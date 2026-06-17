@@ -2,7 +2,7 @@ import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs"
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import MomentumActionChatMessageViewModel from "../../../presentation/sheet/item/momentum-action/momentum-action-chat-message-viewmodel.mjs";
 
 /**

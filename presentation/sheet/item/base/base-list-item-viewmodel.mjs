@@ -21,7 +21,7 @@ import InputToggleViewModel from "../../../component/input-toggle/input-toggle-v
 import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
 import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
 import ItemDropData from "./item-drop-data.mjs";
-import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 

@@ -1,6 +1,6 @@
 import { SYSTEM_ID } from "../../../../system-id.mjs";
 import HealthStatesSettingsDialogViewModel from "./health-settings-dialog-viewmodel.mjs";
-import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
 
 /**

@@ -4,7 +4,7 @@ import { KEYBOARD } from "../../keyboard/keyboard.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
 import ConfirmableModalDialog from "../confirmable-modal-dialog/confirmable-modal-dialog.mjs";
 import DynamicInputDefinition from "./dynamic-input-definition.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 

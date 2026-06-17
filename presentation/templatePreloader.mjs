@@ -1,4 +1,4 @@
-import FoundryWrapper from "../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * String partial `"systems/strive"`. 

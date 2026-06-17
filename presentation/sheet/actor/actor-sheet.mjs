@@ -1,6 +1,6 @@
 import { SYSTEM_ID } from "../../../system-id.mjs";
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import PlainActorSheet from "./plain/plain-actor-sheet.mjs";

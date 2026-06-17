@@ -10,7 +10,7 @@ import { ChatUtil } from "../../presentation/chat/chat-utility.mjs";
 import { ValidationUtil } from "../util/validation-utility.mjs";
 import { UuidUtil } from "../util/uuid-utility.mjs";
 import GameSystemUserSettings from "../setting/game-system-user-settings.mjs";
-import FoundryWrapper from "../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 
 /**

@@ -6,7 +6,7 @@ import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
 import { ASSET_TAGS } from "../../tags/system-tags.mjs";
 import { ArrayUtil } from "../../util/array-utility.mjs";
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * Represents the full transient data of an asset. 

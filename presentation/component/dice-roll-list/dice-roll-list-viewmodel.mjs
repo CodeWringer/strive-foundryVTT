@@ -1,6 +1,6 @@
 import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import { ChatUtil } from "../../chat/chat-utility.mjs";
 import RollFormulaResolver from "../../dice/roll-formula-resolver.mjs";

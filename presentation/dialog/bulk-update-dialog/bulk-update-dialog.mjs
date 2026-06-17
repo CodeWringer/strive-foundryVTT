@@ -1,5 +1,5 @@
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import ModalDialog from "../modal-dialog/modal-dialog.mjs";
 import BulkUpdateDialogViewModel from "./bulk-update-dialog-viewmodel.mjs";
 

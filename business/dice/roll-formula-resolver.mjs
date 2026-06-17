@@ -1,4 +1,4 @@
-import FoundryWrapper from "../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 import AtReferencer from "../referencing/at-referencer.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";

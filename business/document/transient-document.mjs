@@ -6,7 +6,7 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
 import AtReferencer from "../referencing/at-referencer.mjs";
 import { ChatUtil } from '../../presentation/chat/chat-utility.mjs';
 import { PropertyUtil } from '../util/property-utility.mjs';
-import FoundryWrapper from '../../common/foundry-wrapper.mjs';
+import FoundryWrapper from '../../foundry-interop/foundry-wrapper.mjs';
 import { ValidationUtil } from '../util/validation-utility.mjs';
 
 /**

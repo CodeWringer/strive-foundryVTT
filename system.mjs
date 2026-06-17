@@ -156,7 +156,7 @@ import { ExtenderUtil } from "./common/extender-util.mjs";
 import { PropertyUtil } from "./business/util/property-utility.mjs";
 import { StringUtil } from "./business/util/string-utility.mjs";
 import { UuidUtil } from "./business/util/uuid-utility.mjs";
-import FoundryWrapper from "./common/foundry-wrapper.mjs";
+import FoundryWrapper from "./foundry-interop/foundry-wrapper.mjs";
 import { PixiLoader } from "./presentation/pixi/pixi-preloader.mjs";
 import PlainActorSheetViewModel from "./presentation/sheet/actor/plain/plain-actor-sheet-viewmodel.mjs";
 import NpcActorSheetViewModel from "./presentation/sheet/actor/npc/npc-actor-sheet-viewmodel.mjs";

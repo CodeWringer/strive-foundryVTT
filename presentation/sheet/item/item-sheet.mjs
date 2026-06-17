@@ -8,7 +8,7 @@ import MomentumActionItemSheet from "./momentum-action/momentum-action-item-shee
 import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
 import ScarItemSheet from "./scar/scar-item-sheet.mjs";
 import SkillItemSheet from "./skill/skill-item-sheet.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import HealthConditionItemSheet from "./health-condition/health-condition-item-sheet.mjs";

@@ -1,6 +1,6 @@
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs";

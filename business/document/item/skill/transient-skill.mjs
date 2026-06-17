@@ -12,7 +12,7 @@ import AtReferencer from "../../../referencing/at-referencer.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import { ValidationUtil } from "../../../util/validation-utility.mjs";
 import { UuidUtil } from "../../../util/uuid-utility.mjs";
-import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * Represents the full transient data of a skill. 

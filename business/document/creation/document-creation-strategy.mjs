@@ -2,7 +2,7 @@ import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs";
 import TransientBaseActor from "../actor/transient-base-actor.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
 import { ACTOR_TYPES } from "../actor/actor-types.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * Represents a means of determining the creation data for a new 

@@ -4,7 +4,7 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
 
 /**

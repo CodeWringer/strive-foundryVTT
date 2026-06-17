@@ -1,6 +1,6 @@
 import ViewModel from "../../view-model/view-model.mjs";
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { ChatUtil } from "../../chat/chat-utility.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "../../chat/visibility-modes.mjs";
 

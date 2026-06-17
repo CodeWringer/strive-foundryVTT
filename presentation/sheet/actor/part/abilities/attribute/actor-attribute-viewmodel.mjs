@@ -9,7 +9,7 @@ import ButtonRollViewModel from "../../../../../component/button-roll/button-rol
 import Ruleset from "../../../../../../business/ruleset/ruleset.mjs";
 import { StringUtil } from "../../../../../../business/util/string-utility.mjs";
 import RulesetExplainer from "../../../../../../business/ruleset/ruleset-explainer.mjs";
-import FoundryWrapper from "../../../../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../../../../foundry-interop/foundry-wrapper.mjs";
 import { ContextMenuItem } from "../../../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";

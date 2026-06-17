@@ -1,5 +1,5 @@
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import ProjectChatMessageViewModel from "../../../presentation/sheet/item/project/project-chat-message-viewmodel.mjs";
