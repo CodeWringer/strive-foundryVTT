@@ -33,7 +33,7 @@ import ProjectItemSheet from "./project/project-item-sheet.mjs";
  * 
  * @property {ViewModel} viewModel
  */
-export class GameSystemItemSheet extends ItemSheet {
+export class GameSystemItemSheet extends foundry.appv1.sheets.ItemSheet {
   /**
    * Returns a map of `ItemSheet` sub-types and their factory functions. 
    * 

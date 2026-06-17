@@ -6,9 +6,8 @@
  * does change, this is also the place to do any mapping necessary. 
  * 
  * @see https://foundryvtt.com/api/modules/foundry.data.fields.html
- * I bet this link won't be obsolete in a couple of months. mhm.
  */
-export default FoundrySchemaFields = {
+export const FoundrySchemaFields = {
   AlphaField: foundry.data.fields.AlphaField,
   AngleField: foundry.data.fields.AngleField,
   AnyField: foundry.data.fields.AnyField,
@@ -49,3 +48,10 @@ export default FoundrySchemaFields = {
   TypedObjectField: foundry.data.fields.TypedObjectField,
   TypedSchemaField: foundry.data.fields.TypedSchemaField,
 }
+
+/**
+ * Wraps the TypeDataModel type, which *all* data models must inherit from. Probably. 
+ * 
+ * @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html
+ */
+export const TypeDataModel = foundry.abstract.TypeDataModel;

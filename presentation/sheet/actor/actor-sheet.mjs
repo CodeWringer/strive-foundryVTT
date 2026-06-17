@@ -29,7 +29,7 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document
  * 
  * @property {ViewModel} viewModel
  */
-export class GameSystemActorSheet extends ActorSheet {
+export class GameSystemActorSheet extends foundry.appv1.sheets.ActorSheet {
   /**
    * Returns a map of `ActorSheet` sub-types and their factory functions. 
    * 

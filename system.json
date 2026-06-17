@@ -145,7 +145,7 @@
           "img": ["IMAGE"]
         }
       },
-      "fate-card": {
+      "fateCard": {
         "htmlFields": ["description", "gmNotes"],
         "filePathFields": {
           "img": ["IMAGE"]
@@ -169,7 +169,7 @@
           "img": ["IMAGE"]
         }
       },
-      "health-condition": {
+      "healthCondition": {
         "htmlFields": ["description", "gmNotes"],
         "filePathFields": {
           "img": ["IMAGE"]

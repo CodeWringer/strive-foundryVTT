@@ -8,6 +8,56 @@ import { ContextMenuItem } from "../presentation/component/button-context-menu/b
  * from time to time), only one place in the project has to be adjusted, accordingly. 
  */
 export default class FoundryWrapper {
+  // Class wraps.
+  static ApplicationV2 = foundry.applications.api.ApplicationV2;
+
+  /** @see https://foundryvtt.com/api/classes/foundry.applications.api.DocumentSheetV2.html */
+  static DocumentSheetV2 = foundry.applications.sheets.DocumentSheetV2;
+  static ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
+  static ItemSheetV2 = foundry.applications.sheets.ItemSheetV2;
+  static DialogV2 = foundry.applications.api.DialogV2;
+  static HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
+  static CombatTracker = foundry.applications.sidebar.tabs.CombatTracker;
+  static TokenHUD = foundry.applications.hud.TokenHUD;
+
+  static deepClone = foundry.utils.deepClone;
+
+  /**
+   * 
+   * @param {Object} args
+   * @param {Collection} args.registry A foundry Actors or Items collection.
+   * @param {String} args.type Must correspond to one of the Actor or Item declarations 
+   * @param {DocumentSheetV2} args.sheet 
+   * as found in the system.json `documentTypes.Actor` or `documentTypes.Item` fields. 
+   * 
+   * @example
+   * ```Js
+   * FoundryWrapper.registerSheet({
+   *   registry: FoundryWrapper.collections.documents.actors,
+   *   type: "plain",
+   *   sheet: PlainActorSheet,
+   * });
+   * ```
+   */
+  static registerSheet(args = {}) {
+    args.registry.registerSheet(`strive.${args.type}`, args.sheet, {
+      types: [args.type],
+      makeDefault: true,
+    });
+  }
+
+  /**
+   * @static
+   * @constant
+   * @type {Object}
+   */
+  static collections = {
+    documents: {
+      actors: foundry.documents.collections.Actors,
+      items: foundry.documents.collections.Items,
+    },
+  }
+
   /**
    * Merges `defaultOptions` with `overrides`. Properties with the same name found in `overrides` 
    * take precedence. 
@@ -90,7 +140,7 @@ export default class FoundryWrapper {
    * @async
    */
   async loadTemplates(templateArray) {
-    return await loadTemplates(templateArray);
+    return await foundry.applications.handlebars.loadTemplates(templateArray);
   }
 
   /**

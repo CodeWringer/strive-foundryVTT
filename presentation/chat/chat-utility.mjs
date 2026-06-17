@@ -113,7 +113,8 @@ export const ChatUtil = {
    * @param {Object} args.data 
    */
   handleRenderedChatMessage: async function (args = {}) {
-    const element = args.html.find(`.${ChatUtil.SELECTOR_CHAT_MESSAGE}`)[0];
+    const jquery = $(args.html);
+    const element = jquery.find(`.${ChatUtil.SELECTOR_CHAT_MESSAGE}`)[0];
 
     // The chat message may just be a normal chat message, without any associated document. 
     // In such a case it is safe to skip any further operations, here. 

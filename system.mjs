@@ -163,6 +163,9 @@ import NpcActorSheetViewModel from "./presentation/sheet/actor/npc/npc-actor-she
 import PcActorSheetViewModel from "./presentation/sheet/actor/pc/pc-actor-sheet-viewmodel.mjs";
 // Brokers
 import SystemHealthConditionBroker from "./business/ruleset/health/system-health-condition-broker.mjs";
+import DocumentInitializer from "./business/document/document-init.mjs";
+import SheetInitializer from "./presentation/sheet/sheet-init.mjs";
+import DataModelInit from "./business/data-model/data-model-init.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -382,30 +385,24 @@ Hooks.once('init', function() {
     extenders: new Map(),
   };
 
+  // Ensure data model classes are registered.
+  DataModelInit.register();
+  // Ensure document classes are registered. 
+  DocumentInitializer.register();
+  // Ensure sheets are registered.
+  SheetInitializer.register();
+
   // Set initiative formula on global CONFIG variable provided by FoundryVTT.
   CONFIG.Combat.initiative = {
     formula: "1D20 + @baseInitiative",
     decimals: 0
   };
 
-  // Override document classes. 
-  CONFIG.Actor.documentClass = GameSystemActor;
-  CONFIG.Item.documentClass = GameSystemItem;
-  CONFIG.Combat.documentClass = GameSystemCombat;
-  CONFIG.Combatant.documentClass = GameSystemCombatant;
-
   // Override combat tracker. 
   CONFIG.ui.combat = CustomCombatTracker;
 
   // Override token hud.
   CONFIG.Token.hudClass = GameSystemTokenHud;
-
-  // Register sheet application classes. 
-  Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet(SYSTEM_ID, GameSystemActorSheet, { makeDefault: true });
-  
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
 
   // Preload PixiJs assets. 
   PixiLoader.preloadTextures();
@@ -417,10 +414,10 @@ Hooks.once('init', function() {
 
 Hooks.once('setup', function() {
   // Register custom fonts.
-  CONFIG.fontDefinitions["BlackChancery"] = {
+  CONFIG.fontDefinitions["StriveRegular"] = {
     editor: true,
     fonts: [
-      { urls: ["systems/strive/presentation/font/BLKCHCRY.TTF"] },
+      { urls: ["systems/strive/presentation/font/STRIVE-Regular.ttf"] },
     ]
   };
 
@@ -484,7 +481,7 @@ Hooks.once("ready", function() {
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
-Hooks.on("renderChatMessage", function(message, html, data) {
+Hooks.on("renderChatMessageHTML", function(message, html, data) {
   ChatUtil.handleRenderedChatMessage({
     message: message,
     html: html,

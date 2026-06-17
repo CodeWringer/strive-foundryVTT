@@ -1,6 +1,7 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
 import ButtonViewModel from "../component/button/button-viewmodel.mjs";
 import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -14,11 +15,8 @@ import MomentumBarViewModel from "./momentum/momentum-bar-viewmodel.mjs";
 /**
  * @property {Array<CombatTrackerActionPointsViewModel>} actionPointsViewModels
  * @property {Array<GritPointsCombatTrackerViewModel>} gritPointsViewModels
- * 
- * @extends CombatTracker
- * @see https://foundryvtt.com/api/v10/classes/client.CombatTracker.html
  */
-export default class CustomCombatTracker extends CombatTracker {
+export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
   /** @override */
   static get defaultOptions() {
     return {
