@@ -4,6 +4,7 @@ import CharacterAssetSlot from "./asset/character-asset-slot.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
 import SystemHealthConditionBroker from "./health/system-health-condition-broker.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
+import Tag from "./tag/tag.mjs";
 
 export {
   AssetSlot,
@@ -12,6 +13,7 @@ export {
   CharacterAttribute,
   SystemHealthConditionBroker,
   DamageAndType,
+  Tag,
 };
 
 /**
@@ -33,6 +35,9 @@ export const domain = {
   },
   skill: {
     DamageAndType: DamageAndType,
+  },
+  tag: {
+    Tag: Tag,
   },
   init: () => {
     SystemHealthConditionBroker.preload();

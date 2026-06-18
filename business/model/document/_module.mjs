@@ -7,8 +7,6 @@ import TransientPc from "./actor/transient-pc.mjs";
 import TransientPlainActor from "./actor/transient-plain-actor.mjs";
 import { GameSystemActor } from "./actor/actor.mjs";
 import { GameSystemItem } from "./item/item.mjs";
-import GameSystemCombat from "../../../presentation/combat/game-system-combat.mjs";
-import GameSystemCombatant from "../../../presentation/combat/game-system-combatant.mjs";
 import { DOCUMENT_COLLECTION_SOURCES, DocumentCollectionSource } from "./document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "./document-fetcher/document-fetcher.mjs";
 import { DocumentIndex } from "./document-fetcher/document-index.mjs";
@@ -30,6 +28,8 @@ import TransientMomentumAction from "./item/transient-momentum-action.mjs";
 import TransientMutation from "./item/transient-mutation.mjs";
 import TransientProject from "./item/transient-project.mjs";
 import TransientTrait from "./item/transient-trait.mjs";
+import GameSystemCombat from "../combat/game-system-combat.mjs";
+import GameSystemCombatant from "../combat/game-system-combatant.mjs";
 
 export {
   TransientDocument,
@@ -63,6 +63,8 @@ export {
   TransientPc,
   TransientPlainActor,
   GameSystemActor,
+  GameSystemCombat,
+  GameSystemCombatant,
 };
 
 /**

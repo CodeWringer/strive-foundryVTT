@@ -8,7 +8,6 @@ import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input
 import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import GritPointsCombatTrackerViewModel from "../sheet/actor/part/health/grit-points/grit-points-combat-tracker-viewmodel.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
-import GeneralCombatAbilitiesViewModel from "./general-combat-actions/general-combat-abilities-viewmodel.mjs";
 import MomentumBarViewModel from "./momentum/momentum-bar-viewmodel.mjs";
 import { business } from "../../business/_module.mjs";
 
@@ -125,10 +124,6 @@ export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
           }).renderAndAwait(true);
 
           if (!dialog.confirmed) return;
-
-          GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.asArray().find(it => it.name === dialog[inputVisibility].value));
-        } else {
-          GeneralCombatAbilitiesViewModel.sendToChat(VISIBILITY_MODES.self);
         }
       },
     });

@@ -1,10 +1,7 @@
-import DocumentFetcher from "../../business/model/document/document-fetcher/document-fetcher.mjs"
-import DocumentUpdater from "../../business/model/document/document-updater/document-updater.mjs"
-import { GENERAL_DOCUMENT_TYPES } from "../../business/model/document/general-document-types.mjs"
-import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs"
-import { ArrayUtil } from "../../common/util/array-utility.mjs"
-import { ValidationUtil } from "../../common/util/validation-utility.mjs"
-import GeneralCombatAbilitiesViewModel from "./general-combat-actions/general-combat-abilities-viewmodel.mjs"
+import { ArrayUtil, ValidationUtil } from "../../../common/_module.mjs"
+import { GameSystemWorldSettings } from "../../setting/game-system-world-settings.mjs"
+import { DocumentFetcher, DocumentUpdater } from "../document/_module.mjs"
+import { GENERAL_DOCUMENT_TYPES } from "../document/general-document-types.mjs"
 
 /**
  * This class extends FoundryVTT's `Combat` document type. 
@@ -141,9 +138,6 @@ export default class GameSystemCombat extends Combat {
    * @override
    */
   async startCombat() {
-    // Create reminder chat message for general combat actions. 
-    GeneralCombatAbilitiesViewModel.sendToChat();
-
     return await super.startCombat();
   }
 
