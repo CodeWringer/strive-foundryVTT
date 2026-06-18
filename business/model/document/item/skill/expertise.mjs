@@ -5,7 +5,7 @@ import PreparedChatData from "../../../../../presentation/chat/prepared-chat-dat
 import { VISIBILITY_MODES } from "../../../const/visibility-modes.mjs"
 import ExpertiseChatMessageViewModel from "../../../../../presentation/sheet/item/expertise/expertise-chat-message-viewmodel.mjs"
 import ViewModel from "../../../../../presentation/view-model/view-model.mjs"
-import AtReferencer from "../../../../referencing/at-referencer.mjs"
+import AtReferencer from "../../../../search/at-referencer.mjs"
 import { ATTACK_TYPES, AttackType } from "../../../const/attack-types.mjs"
 import DamageAndType from "../../../../ruleset/skill/damage-and-type.mjs"
 import { ITEM_TYPES } from "../../../const/item-types.mjs"

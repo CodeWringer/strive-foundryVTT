@@ -2,6 +2,8 @@ import AssetSlot from "./asset/asset-slot.mjs";
 import CharacterAssetSlotGroup from "./asset/character-asset-slot-group.mjs";
 import CharacterAssetSlot from "./asset/character-asset-slot.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
+import { combat } from "./combat/_module.mjs";
+import { dice } from "./dice/_module.mjs";
 import SystemHealthConditionBroker from "./health/system-health-condition-broker.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
 import Tag from "./tag/tag.mjs";
@@ -14,6 +16,8 @@ export {
   SystemHealthConditionBroker,
   DamageAndType,
   Tag,
+  combat,
+  dice,
 };
 
 /**
@@ -39,7 +43,10 @@ export const domain = {
   tag: {
     Tag: Tag,
   },
+  combat: combat,
+  dice: dice,
   init: () => {
     SystemHealthConditionBroker.preload();
+    combat.init();
   },
 };

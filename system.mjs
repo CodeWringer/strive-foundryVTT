@@ -3,22 +3,13 @@ import { WorldSystemVersion } from "./business/migration/world-system-version.mj
 import { common } from "./common/_module.mjs";
 import { business } from "./business/_module.mjs";
 import { presentation } from "./presentation/_module.mjs";
-// Handlebars
-import { HANDLEBARS_GLOBALS } from "./presentation/utility/handlebars-globals.mjs";
+import { setting } from "./business/setting/_module.mjs";
 // Utility
-import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
-import DamageDesignerDialog from "./presentation/dialog/damage-designer-dialog/damage-designer-dialog.mjs";
-import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
-import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
-// Dialogs
-import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
-import BulkUpdateDialog from "./presentation/dialog/bulk-update-dialog/bulk-update-dialog.mjs";
 // View models
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
-import { setting } from "./business/setting/_module.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -93,9 +84,8 @@ Hooks.once('init', function() {
 });
 
 Hooks.once('setup', function() {
-  // Initialize global Handlebars helpers and partials.
-  HANDLEBARS_GLOBALS.initHandlebarsHelpers();
-  HANDLEBARS_GLOBALS.initHandlebarsPartials();
+  business.setup();
+  presentation.setup();
 });
 
 Hooks.once("ready", function() {
@@ -105,21 +95,20 @@ Hooks.once("ready", function() {
   // Debug mode setting. 
   game.strive.debug = setting.GameSystemUserSettings.get(setting.GameSystemUserSettings.KEY_TOGGLE_DEBUG);
 
-  // Global event handling setup.
-  KEYBOARD.init();
-
   // Migration check. 
   const migrator = new MigratorInitiator();
   
   if (migrator.isApplicable() === true) {
     if (game.user.isGM === true) {
-      new MigratorDialog().render(true);
+      // TODO
+      // new MigratorDialog().render(true);
     } else {
       // Display warning to non-GM. 
-      new PlainDialog({
-        localizedTitle: game.i18n.localize("system.migration.titleMigrationRequired"),
-        localizedContent: game.i18n.localize("system.migration.migrationRequiredUserWarning"),
-      }).render(true);
+      // TODO
+      // new PlainDialog({
+      //   localizedTitle: game.i18n.localize("system.migration.titleMigrationRequired"),
+      //   localizedContent: game.i18n.localize("system.migration.migrationRequiredUserWarning"),
+      // }).render(true);
     }
   } else {
     game.strive.logger.logVerbose("Version up to date - skipping migrations");
@@ -134,12 +123,9 @@ Hooks.once("ready", function() {
       const fakeVersion = VersionCode.fromString(fromVersion);
       await WorldSystemVersion.set(fakeVersion);
       
-      new MigratorDialog().render(true);
+      // TODO
+      // new MigratorDialog().render(true);
     };
-
-    window.BulkUpdateDialog = BulkUpdateDialog;
-    window.DicePoolDesignerDialog = DicePoolDesignerDialog;
-    window.DamageDesignerDialog = DamageDesignerDialog;
   }
 });
 

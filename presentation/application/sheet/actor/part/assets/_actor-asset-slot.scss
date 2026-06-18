@@ -1,0 +1,13 @@
+.strive-asset-slot {
+  border-bottom: $c-text-underline 1px solid;
+  margin-bottom: $padding-lg;
+  padding-bottom: $padding-md;
+  &:last-of-type {
+    border-bottom: unset;
+    margin-bottom: unset;
+  }
+}
+
+.asset-slot-header {
+  background-color: #7d7d7d3d;
+}

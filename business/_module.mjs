@@ -1,15 +1,13 @@
-import { dice } from "./dice/_module.mjs";
 import { migration } from "./migration/_module.mjs";
 import { model } from "./model/_module.mjs"
-import { combat } from "./model/combat/_module.mjs";
+import { search } from "./search/_module.mjs";
 import { setting } from "./setting/_module.mjs";
 
 export {
   model,
-  dice,
   migration,
-  combat,
   setting,
+  search,
 };
 
 /**
@@ -19,10 +17,9 @@ export {
  */
 export const business = {
   model: model,
-  dice: dice,
   migration: migration,
-  combat: combat,
   setting: setting,
+  search: search,
   /**
    * Initialization, which MUST be called during system setup!
    * 
@@ -30,8 +27,13 @@ export const business = {
    */
   init: () => {
     model.init();
-    combat.init();
     setting.init();
+  },
+  /**
+   * Initialization to be called during the system's "setup" hook. 
+   */
+  setup: () => {
+    // Nothing, yet.
   },
   /**
    * Initialization to be called during the system's "ready" hook. 

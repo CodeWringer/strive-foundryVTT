@@ -5,9 +5,12 @@ export {
   LanguageItemSheet,
 };
 
+/**
+ * Wraps the `presentation.application` module, which contains all dedicated windows, 
+ * dialogs and sheets. 
+ */
 export const application = {
   dialog: {
-
   },
   sheet: {
     LanguageItemSheet: LanguageItemSheet,
@@ -22,7 +25,7 @@ export const application = {
       sheet: LanguageItemSheet,
     });
 
-    // TODO #739 remove
+    // TODO #739
     // // Register sheet application classes. 
     // Actors.unregisterSheet("core", ActorSheet);
     // Actors.registerSheet(SYSTEM_ID, GameSystemActorSheet, { makeDefault: true });

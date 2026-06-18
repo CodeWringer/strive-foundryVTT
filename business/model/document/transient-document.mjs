@@ -4,7 +4,7 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs"
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs"
 import { VISIBILITY_MODES } from "../const/visibility-modes.mjs"
 import ViewModel from "../../../presentation/view-model/view-model.mjs"
-import AtReferencer from "../../referencing/at-referencer.mjs"
+import AtReferencer from "../../search/at-referencer.mjs"
 import DocumentUpdater from "./document-updater/document-updater.mjs"
 
 /**

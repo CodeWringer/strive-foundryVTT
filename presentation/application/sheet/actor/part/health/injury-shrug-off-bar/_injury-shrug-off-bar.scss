@@ -1,0 +1,21 @@
+a.shrug-off-full {
+  span {
+    width: 70%;
+    height: 70%;
+    background-color: rgb(249 0 0 / 13%);
+  }
+  i.ico {
+    filter: brightness(0.4);
+  }
+}
+
+a.shrug-off-void {
+  span {
+    width: 70%;
+    height: 70%;
+    color: $c-text-disabled;
+  }
+  i.ico {
+    filter: brightness(0.3);
+  }
+}

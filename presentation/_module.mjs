@@ -2,8 +2,10 @@ import FoundryWrapper from "../foundry-interop/foundry-wrapper.mjs";
 import { application } from "./application/_module.mjs";
 import { canvas } from "./canvas/_module.mjs";
 import { font } from "./font/_module.mjs";
-import { sidebar } from "./sidebar/_module.mjs";
+import RulesetExplainer from "./ruleset/ruleset-explainer.mjs";
+import { sidebar } from "./application/sidebar/_module.mjs";
 import { TEMPLATES } from "./templates.mjs";
+import { util } from "./util/_module.mjs";
 
 export {
   application,
@@ -11,6 +13,8 @@ export {
   canvas,
   sidebar,
   font,
+  util,
+  RulesetExplainer,
 };
 
 /**
@@ -24,6 +28,8 @@ export const presentation = {
   canvas: canvas,
   sidebar: sidebar,
   font: font,
+  util: util,
+  RulesetExplainer: RulesetExplainer,
   /**
    * Initialization, which MUST be called during system setup!
    * 
@@ -35,9 +41,19 @@ export const presentation = {
     canvas.init();
     sidebar.init();
     font.init();
-    await preloadHandlebarsTemplates();
+    await _preloadHandlebarsTemplates();
   },
+  /**
+   * Initialization to be called during the system's "setup" hook. 
+   */
+  setup: () => {
+    util.setup();
+  },
+  /**
+   * Initialization to be called during the system's "ready" hook. 
+   */
   ready: () => {
+    util.ready();
   },
 };
 
@@ -47,8 +63,9 @@ export const presentation = {
  * @return {Promise<Any>}
  * 
  * @async
+ * @private
  */
- export async function preloadHandlebarsTemplates() {
+ export async function _preloadHandlebarsTemplates() {
   const templateArr = [];
   for (const propertyName in TEMPLATES) {
     templateArr.push(TEMPLATES[propertyName]);
