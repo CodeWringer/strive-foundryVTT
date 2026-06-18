@@ -265,7 +265,7 @@ export default class ViewModel {
    */
   get showFancyFont() {
     if (this._showFancyFont === undefined) {
-      return new GameSystemUserSettings().get(GameSystemUserSettings.KEY_SHOW_FANCY_FONT);
+      return GameSystemUserSettings.get(GameSystemUserSettings.KEY_SHOW_FANCY_FONT);
     } else {
       return this._showFancyFont;
     }
@@ -325,7 +325,7 @@ export default class ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showReminders() { return new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
+  get showReminders() { return GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
 
   /**
    * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 

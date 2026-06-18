@@ -7,10 +7,9 @@ import PreparedChatData from "../../../../../presentation/chat/prepared-chat-dat
 import SkillChatMessageViewModel from "../../../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs"
 import AtReferencer from "../../../../referencing/at-referencer.mjs"
 import { Attribute, ATTRIBUTES } from "../../../const/attributes.mjs"
-import { ATTACK_TYPES } from "../../../../ruleset/skill/attack-types.mjs"
+import { ATTACK_TYPES } from "../../../const/attack-types.mjs"
 import DamageAndType from "../../../../ruleset/skill/damage-and-type.mjs"
-import SkillPrerequisite from "../../../../ruleset/skill/skill-prerequisite.mjs"
-import { SKILL_TAGS } from "../../../../tags/system-tags.mjs"
+import { SKILL_TAGS } from "../../../const/system-tags.mjs"
 import TransientBaseItem from "../transient-base-item.mjs"
 import Expertise from "./expertise.mjs"
 
@@ -134,29 +133,6 @@ export default class TransientSkill extends TransientBaseItem {
     this.persistExpertises();
   }
   
-  /**
-   * Returns the list of prerequisite skills. 
-   * 
-   * @type {Array<SkillPrerequisite>}
-   */
-  get prerequisites() {
-    if (this.document.system.prerequisites === undefined) {
-      return [];
-    } else {
-      return this.document.system.prerequisites.map(dto => 
-        SkillPrerequisite.fromDto(dto)
-      ); 
-    }
-  }
-  /**
-   * Sets the list of prerequisite skills. 
-   * 
-   * @param {Array<SkillPrerequisite>} value
-   */
-  set prerequisites(value) {
-    this.updateByPath("system.prerequisites", value.map(it => it.toDto()));
-  }
-
   get apCost() {
     const value = this.document.system.apCost;
     if (ValidationUtil.isDefined(value)) {

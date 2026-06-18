@@ -1,9 +1,9 @@
-import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs";
+import { VISIBILITY_MODES } from "../../model/const/visibility-modes.mjs";
 import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
+import { Sum, SumComponent } from "../../model/summed-data.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import RollData from "../roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";

@@ -5,7 +5,7 @@ import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
 import AssetChatMessageViewModel from "../../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs"
 import CharacterAssetSlot from "../../../ruleset/asset/character-asset-slot.mjs"
-import { ASSET_TAGS } from "../../../tags/system-tags.mjs"
+import { ASSET_TAGS } from "../../const/system-tags.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**

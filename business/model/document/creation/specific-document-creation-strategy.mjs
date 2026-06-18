@@ -5,7 +5,6 @@ import InputDropDownViewModel from "../../../../presentation/component/input-cho
 import DynamicLabelViewModel from "../../../../presentation/component/label/dynamic-label.mjs"
 import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import { ACTOR_TYPES } from "../actor/actor-types.mjs"
 import TransientBaseActor from "../actor/transient-base-actor.mjs"
 import { DOCUMENT_COLLECTION_SOURCES } from "../document-fetcher/document-collection-source.mjs"
 import DocumentFetcher from "../document-fetcher/document-fetcher.mjs"

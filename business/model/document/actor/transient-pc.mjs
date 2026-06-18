@@ -47,7 +47,7 @@ export default class TransientPc extends TransientBaseCharacterActor {
     const thiz = this;
     
     return {
-      get fateCards() { return thiz.items.filter(it => it.type === ITEM_TYPES.FATE_CARD); },
+      get fateCards() { return thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.FATE_CARD); },
       get maxFateCards() { return new Ruleset().getMaximumFateCards(); },
       get remainingFateCards() { return this.maxFateCards - this.fateCards.length; },
 

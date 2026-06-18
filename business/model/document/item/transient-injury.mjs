@@ -4,7 +4,7 @@ import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
 import InjuryChatMessageViewModel from "../../../../presentation/sheet/item/injury/injury-chat-message-viewmodel.mjs"
-import { INJURY_STATES } from "../../../ruleset/health/injury-states.mjs"
+import { INJURY_STATES } from "../../const/injury-states.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**

@@ -1,0 +1,184 @@
+/**
+ * String partial `"systems/strive"`. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const basePath = "systems/strive";
+
+/**
+ * String partial `"systems/strive/presentation"`. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const basePathPresentation = `${basePath}/presentation`;
+
+/**
+ * String partial `"systems/strive/presentation/component"`. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const basePathComponent = `${basePathPresentation}/component`;
+
+export const TEMPLATES = {
+  // --- Components
+  COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
+  COMPONENT_HORIZONTAL_DIVIDER: `${basePathComponent}/divider/h-divider.hbs`,
+  // Labels
+  COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
+  COMPONENT_DYNAMIC_LABEL: `${basePathComponent}/label/dynamic-label.hbs`,
+  COMPONENT_READ_ONLY_VALUE: `${basePathComponent}/read-only-value/read-only-value.hbs`,
+  COMPONENT_HEADER_PRIMARY: `${basePathComponent}/label/header/primary-header-label.hbs`,
+  COMPONENT_HEADER_SECONDARY: `${basePathComponent}/label/header/secondary-header-label.hbs`,
+  COMPONENT_HEADER_TERTIARY: `${basePathComponent}/label/header/tertiary-header-label.hbs`,
+  // Inputs
+  COMPONENT_INPUT_TEXTFIELD: `${basePathComponent}/input-textfield/input-textfield.hbs`,
+  COMPONENT_INPUT_DROPDOWN: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
+  COMPONENT_INPUT_RADIO_BUTTON_GROUP: `${basePathComponent}/input-choice/input-radio-button-group/input-radio-button-group.hbs`,
+  COMPONENT_INPUT_NUMBER_SPINNER: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
+  COMPONENT_INPUT_TEXTAREA: `${basePathComponent}/input-textarea/input-textarea.hbs`,
+  COMPONENT_INPUT_IMAGE: `${basePathComponent}/input-image/input-image.hbs`,
+  COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
+  COMPONENT_INPUT_SEARCH: `${basePathComponent}/input-search/input-search.hbs`,
+  COMPONENT_INPUT_SLIDER: `${basePathComponent}/input-slider/input-slider.hbs`,
+  COMPONENT_INPUT_TAGS: `${basePathComponent}/input-tags/input-tags.hbs`,
+  COMPONENT_INPUT_TAGS_AUTOCOMPLETE: `${basePathComponent}/input-tags/input-tags-autocomplete.hbs`,
+  COMPONENT_INPUT_TAG: `${basePathComponent}/input-tags/input-tag-pill.hbs`,
+  COMPONENT_INPUT_TOGGLE: `${basePathComponent}/input-toggle/input-toggle.hbs`,
+  // Buttons
+  COMPONENT_BUTTON: `${basePathComponent}/button/button.hbs`,
+  COMPONENT_BUTTON_CHECKBOX: `${basePathComponent}/button-checkbox/button-checkbox.hbs`,
+  // Composite
+  COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
+  COMPONENT_SORT_CONTROLS: `${basePathComponent}/sort-controls/sort-controls.hbs`,
+  COMPONENT_LIST: `${basePathComponent}/list/list.hbs`,
+  COMPONENT_LIST_ITEM: `${basePathComponent}/list/list-item.hbs`,
+  DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
+  COMPONENT_DAMAGE_DEFINITION_LIST_ITEM: `${basePathComponent}/damage-definition-list/damage-definition-list-item.hbs`,
+  COMPONENT_DAMAGE_DEFINITION_LIST: `${basePathComponent}/damage-definition-list/damage-definition-list.hbs`,
+  DICE_ROLL_DAMAGE_CHAT_MESSAGE: `${basePathComponent}/damage-definition-list/damage-roll-chat-message.hbs`,
+  COMPONENT_LAZY_LOAD: `${basePathComponent}/lazy-load/lazy-load.hbs`,
+  COMPONENT_LAZY_LOAD_RICH_TEXT: `${basePathComponent}/lazy-rich-text/lazy-rich-text.hbs`,
+  COMPONENT_VISIBILITY_TOGGLE_LIST: `${basePathComponent}/visibility-toggle-list/visibility-toggle-list.hbs`,
+  COMPONENT_VISIBILITY_TOGGLE_LIST_ITEM: `${basePathComponent}/visibility-toggle-list/visibility-toggle-list-item.hbs`,
+  COMPONENT_HINT_CARD: `${basePathComponent}/hint-card/hint-card.hbs`,
+  COMPONENT_LIST_FOOTER: `${basePathComponent}/sortable-list/list-footer.hbs`,
+  COMPOSITE_CURRENT_AND_MAXIMUM_NUMBERS: `${basePathComponent}/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers.hbs`,
+  COMPOSITE_SORTABLE_LIST: `${basePathComponent}/composite-sortable-list/composite-sortable-list.hbs`,
+  // GM
+  COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
+  // Dice
+  DICE_ROLL_CHAT_MESSAGE: `${basePathPresentation}/dice/roll.hbs`,
+  DICE_FACES: `${basePathPresentation}/dice/roll-faces.hbs`,
+  // --- Dialogs
+  DIALOG_MODAL: `${basePathPresentation}/dialog/modal-dialog/modal-dialog.hbs`,
+  DIALOG_PLAIN: `${basePathPresentation}/dialog/plain-dialog/plain-dialog.hbs`,
+  DIALOG_PLAIN_CONFIRMABLE: `${basePathPresentation}/dialog/plain-confirmable-dialog/plain-confirmable-dialog.hbs`,
+  DIALOG_MIGRATOR: `${basePathPresentation}/dialog/migrator-dialog/migrator-dialog.hbs`,
+  DIALOG_DYNAMIC_INPUT: `${basePathPresentation}/dialog/dynamic-input-dialog/dynamic-input-dialog.hbs`,
+  DIALOG_DICE_POOL_DESIGNER: `${basePathPresentation}/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.hbs`,
+  DIALOG_DAMAGE_DESIGNER: `${basePathPresentation}/dialog/damage-designer-dialog/damage-designer-dialog.hbs`,
+  DIALOG_DAMAGE_FINDING_LIST_ITEM: `${basePathPresentation}/dialog/damage-designer-dialog/damage-finding-list-item.hbs`,
+  DIALOG_DAMAGE_HIERARCHY_LIST_ITEM: `${basePathPresentation}/dialog/damage-designer-dialog/damage-hierarchy-list-item.hbs`,
+  DIALOG_ROLLABLE_SELECTION: `${basePathPresentation}/dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.hbs`,
+  DIALOG_BULK_UPDATER: `${basePathPresentation}/dialog/bulk-update-dialog/bulk-update-dialog.hbs`,
+  // --- Settings Dialogs
+  DIALOG_SETTINGS_HEALTH_CONDITIONS: `${basePathPresentation}/dialog/settings/health-settings/health-settings-dialog.hbs`,
+  // --- Actor
+  // Plain
+  ACTOR_PLAIN_SHEET: `${basePathPresentation}/sheet/actor/plain/plain-actor-sheet.hbs`,
+  ACTOR_PLAIN_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/plain/plain-actor-chat-message.hbs`,
+  // PC
+  ACTOR_PC_SHEET: `${basePathPresentation}/sheet/actor/pc/pc-actor-sheet.hbs`,
+  ACTOR_PC_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/pc/pc-actor-chat-message.hbs`,
+  // NPC
+  ACTOR_NPC_SHEET: `${basePathPresentation}/sheet/actor/npc/npc-actor-sheet.hbs`,
+  ACTOR_NPC_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/npc/npc-actor-chat-message.hbs`,
+  // Parts
+  ACTOR_ACTION_POINTS: `${basePathPresentation}/sheet/actor/part/action-points/actor-action-points.hbs`,
+  ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/personals/actor-personals.hbs`,
+  ACTOR_PERSONALITY_TRAITS: `${basePathPresentation}/sheet/actor/part/personality/personality-traits/personality-traits.hbs`,
+  ACTOR_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-abilities.hbs`,
+  ACTOR_ATTRIBUTES: `${basePathPresentation}/sheet/actor/part/abilities/attribute/actor-attributes.hbs`,
+  ACTOR_ATTRIBUTE: `${basePathPresentation}/sheet/actor/part/abilities/attribute/actor-attribute.hbs`,
+  ACTOR_MOMENTUM: `${basePathPresentation}/sheet/actor/part/abilities/momentum/actor-momentum.hbs`,
+  ACTOR_SKILLS: `${basePathPresentation}/sheet/actor/part/abilities/actor-skills.hbs`,
+  ACTOR_DRIVERS: `${basePathPresentation}/sheet/actor/part/personality/actor-drivers.hbs`,
+  ACTOR_FATE: `${basePathPresentation}/sheet/actor/part/personality/actor-fate.hbs`,
+  ACTOR_PERSONALITY: `${basePathPresentation}/sheet/actor/part/personality/actor-personality.hbs`,
+  ACTOR_PROJECTS: `${basePathPresentation}/sheet/actor/part/projects/actor-projects.hbs`,
+  // Health
+  ACTOR_HEALTH: `${basePathPresentation}/sheet/actor/part/health/actor-health.hbs`,
+  ACTOR_HEALTH_CONDITIONS: `${basePathPresentation}/sheet/actor/part/health/conditions/actor-health-conditions.hbs`,
+  ACTOR_HEALTH_DEATH_SAVES: `${basePathPresentation}/sheet/actor/part/health/deaths-door/deaths-door.hbs`,
+  ACTOR_HEALTH_GENERAL_STATS: `${basePathPresentation}/sheet/actor/part/health/part/actor-general-health-stats.hbs`,
+  ACTOR_HEALTH_INJURIES_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-injuries-extra-header.hbs`,
+  ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-illnesses-extra-header.hbs`,
+  ACTOR_HEALTH_MUTATIONS_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-mutations-extra-header.hbs`,
+  ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
+  // Grit Points
+  ACTOR_GRIT_POINTS: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points.hbs`,
+  ACTOR_GRIT_POINTS_COMBAT_TRACKER: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points-combat-tracker.hbs`,
+  // Assets
+  ACTOR_ASSETS: `${basePathPresentation}/sheet/actor/part/assets/actor-assets.hbs`,
+  ACTOR_ASSETS_EQUIPPED: `${basePathPresentation}/sheet/actor/part/assets/actor-assets-equipped.hbs`,
+  ACTOR_ASSET_SLOT_GROUP: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot-group.hbs`,
+  ACTOR_ASSET_SLOT: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot.hbs`,
+  ACTOR_ASSET_LUGGAGE_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/assets/part/actor-asset-luggage-extra-header.hbs`,
+  // Biography
+  ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/biography/actor-biography.hbs`,
+  // Traits
+  ACTOR_TRAITS: `${basePathPresentation}/sheet/actor/part/abilities/actor-traits.hbs`,
+  // --- Item
+  // Base
+  BASE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/base/base-chat-message.hbs`,
+  BASE_LIST_ITEM: `${basePathPresentation}/sheet/item/base/base-list-item.hbs`,
+  BASE_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/base/base-list-item-header.hbs`,
+  BASE_ITEM_SHEET: `${basePathPresentation}/sheet/item/base/base-item-sheet.hbs`,
+  // Asset
+  ASSET_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/asset/asset-item-chat-message.hbs`,
+  ASSET_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/asset/asset-list-item-promoted-content.hbs`,
+  // Skill
+  SKILL_ITEM_SHEET_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-item-sheet-extra-content.hbs`,
+  SKILL_ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill/skill-chat-message.hbs`,
+  SKILL_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/skill/skill-list-item-header.hbs`,
+  SKILL_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-content.hbs`,
+  SKILL_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-promoted-content.hbs`,
+  SKILL_PREREQUISITE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-prerequisite-list-item.hbs`,
+  SKILL_BASE_ATTRIBUTE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/base-attribute/base-attribute-list-item.hbs`,
+  // Expertise
+  EXPERTISE_TABLE: `${basePathPresentation}/sheet/item/expertise/expertise-table.hbs`,
+  EXPERTISE_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-header.hbs`,
+  EXPERTISE_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-extra-content.hbs`,
+  EXPERTISE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/expertise/expertise-chat-message.hbs`,
+  // Fate
+  FATE_CARD: `${basePathPresentation}/sheet/item/fate-card/fate-card.hbs`,
+  FATE_CARD_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/fate-card/fate-card-chat-message.hbs`,
+  // Injury
+  INJURY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/injury/injury-chat-message.hbs`,
+  // Illness
+  ILLNESS_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/illness/illness-chat-message.hbs`,
+  ILLNESS_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/illness/illness-list-item-promoted-content.hbs`,
+  // Momentum
+  MOMENTUM_ACTION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-chat-message.hbs`,
+  MOMENTUM_ACTION_ITEM_SHEET_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-item-sheet-extra-content.hbs`,
+  MOMENTUM_ACTION_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/momentum-action/momentum-action-list-item-extra-content.hbs`,
+  MOMENTUM_BAR: `${basePathPresentation}/combat/momentum/momentum-bar.hbs`,
+  // Mutation
+  MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
+  // Project
+  PROJECT_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/project/project-chat-message.hbs`,
+  PROJECT_ITEM_SHEET_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/project/project-item-sheet-promoted-content.hbs`,
+  PROJECT_ITEM_SHEET_ADDITIONAL_CONTENT: `${basePathPresentation}/sheet/item/project/project-item-sheet-additional-content.hbs`,
+  PROJECT_COMPLICATION_LIST_ITEM: `${basePathPresentation}/sheet/item/project/complication/project-complication-list-item.hbs`,
+  // Health Condition
+  HEALTH_CONDITION_LIST_ITEM: `${basePathPresentation}/sheet/item/health-condition/health-condition-list-item.hbs`,
+  // Combat
+  GENERAL_COMBAT_ABILITIES_CHAT_MESSAGE: `${basePathPresentation}/combat/general-combat-actions/general-combat-abilities-chat-message.hbs`,
+  COMBAT_TRACKER: `${basePathPresentation}/combat/combat-tracker.hbs`,
+  COMBAT_TRACKER_ACTION_POINTS: `${basePathPresentation}/combat/combat-tracker-action-points.hbs`,
+  // Token HUD
+  TOKEN_HUD: `${basePathPresentation}/token/token-hud.hbs`,
+}

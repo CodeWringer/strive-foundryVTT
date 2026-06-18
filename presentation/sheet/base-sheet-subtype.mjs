@@ -47,8 +47,6 @@ export default class BaseSheetSubType {
   /**
    * Returns a view model for the given document. 
    * 
-   * Supports caching the view model instance, based on the `game.strive.enableViewModelCaching` value. 
-   * 
    * @param {Object} context A context object provided by FoundryVTT. 
    * @param {Object} document A document instance. 
    * @param {Object} sheet The sheet instance to return a view model instance for. 
@@ -61,9 +59,6 @@ export default class BaseSheetSubType {
     let viewModel = game.strive.viewModels.get(document.id);
     if (viewModel === undefined) {
       viewModel = this.createViewModel(context, document.getTransientObject(), sheet);
-      if (game.strive.enableViewModelCaching === true) {
-        game.strive.viewModels.set(document.id, viewModel);
-      }
     } else {
       viewModel.update({
         isEditable: context.isEditable,

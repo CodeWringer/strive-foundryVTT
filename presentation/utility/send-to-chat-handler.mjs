@@ -1,7 +1,7 @@
 import { GameSystemActor } from "../../business/model/document/actor/actor.mjs"
 import TransientDocument from "../../business/model/document/transient-document.mjs"
 import { common } from "../../common/_module.mjs"
-import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs"
+import { VISIBILITY_MODES } from "../../business/model/const/visibility-modes.mjs"
 import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"

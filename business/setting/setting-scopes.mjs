@@ -1,13 +1,13 @@
 /**
  * Defines the setting scopes available. 
  */
-export const SettingScopes = {
+export const SETTING_SCOPES = {
   /**
-   * A setting to be registered on the world itself. 
+   * A global setting. 
    */
   WORLD: "world",
   /**
-   * A user-specific setting to be registered in user-specific data. 
+   * A user-specific setting. 
    */
   USER: "user"
-}
+};

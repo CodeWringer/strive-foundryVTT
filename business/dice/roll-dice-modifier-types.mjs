@@ -40,4 +40,4 @@ export const ROLL_DICE_MODIFIER_TYPES = {
     localizableName: "system.roll.diceModifiers.halfRoundedUp"
   }),
 }
-ConstantsUtil.enrichConstant(ROLL_DICE_MODIFIER_TYPES);
+common.util.constants(ROLL_DICE_MODIFIER_TYPES);

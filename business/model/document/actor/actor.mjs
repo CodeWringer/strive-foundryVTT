@@ -1,4 +1,4 @@
-import { ACTOR_TYPES } from "./actor-types.mjs";
+import { business } from "../../../_module.mjs";
 import TransientBaseActor from "./transient-base-actor.mjs";
 import TransientNpc from "./transient-npc.mjs";
 import TransientPc from "./transient-pc.mjs";
@@ -26,9 +26,9 @@ export class GameSystemActor extends Actor {
    */
   static get SUB_TYPES() {
     return new Map([
-      [ACTOR_TYPES.NPC, (document) => { return new TransientNpc(document) }],
-      [ACTOR_TYPES.PC, (document) => { return new TransientPc(document) }],
-      [ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) }],
+      [business.model.const.ACTOR_TYPES.NPC, (document) => { return new TransientNpc(document) }],
+      [business.model.const.ACTOR_TYPES.PC, (document) => { return new TransientPc(document) }],
+      [business.model.const.ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) }],
     ]);
   }
 

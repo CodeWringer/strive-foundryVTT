@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { common } from "../../../../common/_module.mjs";
 import { DOCUMENT_COLLECTION_SOURCES, DocumentCollectionSource } from "./document-collection-source.mjs";
 import { DocumentIndex } from "./document-index.mjs";
 
@@ -58,7 +58,7 @@ export default class DocumentFetcher {
    * @async
    */
   async find(filter = {}) {
-    if (!ValidationUtil.isDefined(filter.id) && !ValidationUtil.isDefined(filter.name)) {
+    if (!common.util.validation.isDefined(filter.id) && !common.util.validation.isDefined(filter.name)) {
       throw new Error("InvalidArgumentException: Either `id` or `name` must be defined");
     }
 
@@ -158,7 +158,7 @@ export default class DocumentFetcher {
    * @throws {Error} Thrown, if neither `documentType`, nor `contentType` are defined. 
    */
   getIndices(filter = {}) {
-    if (!ValidationUtil.isDefined(filter.documentType) && !ValidationUtil.isDefined(filter.contentType)) {
+    if (!common.util.validation.isDefined(filter.documentType) && !common.util.validation.isDefined(filter.contentType)) {
       throw new Error("InvalidArgumentException: Either `documentType` or `contentType` must be defined");
     }
 
@@ -212,7 +212,7 @@ export default class DocumentFetcher {
    * @async
    */
   async _findInCompendia(filter = {}) {
-    ValidationUtil.validateOrThrow(filter, ["source"]);
+    common.util.validation.validateOrThrow(filter, ["source"]);
 
     for (const pack of game.packs) {
       // Skip empty packs. 
@@ -254,8 +254,8 @@ export default class DocumentFetcher {
         const id = index._id;
 
         // Skip, if the entry is of the wrong content type. 
-        if (ValidationUtil.isDefined(filter.contentType)
-          && ValidationUtil.isDefined(index.type)
+        if (common.util.validation.isDefined(filter.contentType)
+          && common.util.validation.isDefined(index.type)
           && index.type.toLowerCase() !== filter.contentType) {
           continue;
         }
@@ -370,7 +370,7 @@ export default class DocumentFetcher {
    * @async
    */
   async _findAllInCompendia(filter = {}) {
-    ValidationUtil.validateOrThrow(filter, ["source"]);
+    common.util.validation.validateOrThrow(filter, ["source"]);
 
     let result = [];
 
@@ -549,7 +549,7 @@ export default class DocumentFetcher {
 
       for (const index of pack.index) {
         // Skip, if the entry is of the wrong content type. 
-        if (ValidationUtil.isDefined(filter.contentType) 
+        if (common.util.validation.isDefined(filter.contentType) 
           && index.type.toLowerCase() != filter.contentType) {
           continue;
         }
@@ -685,7 +685,7 @@ export default class DocumentFetcher {
       || sourceId == DOCUMENT_COLLECTION_SOURCES.systemAndModuleCompendia.name
       || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.name
       || sourceId == DOCUMENT_COLLECTION_SOURCES.worldAndWorldCompendia.name
-      || ValidationUtil.isDefined(filter.sourcePackId)
+      || common.util.validation.isDefined(filter.sourcePackId)
       ) {
       return true;
     }
@@ -738,7 +738,7 @@ export default class DocumentFetcher {
     }
 
     // Check by specific ID, if desired.
-    if (ValidationUtil.isDefined(filter.sourcePackId) && pack.collection !== filter.sourcePackId) {
+    if (common.util.validation.isDefined(filter.sourcePackId) && pack.collection !== filter.sourcePackId) {
       return false;
     }
 

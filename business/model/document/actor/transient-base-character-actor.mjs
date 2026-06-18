@@ -5,12 +5,13 @@ import AtReferencer from "../../../referencing/at-referencer.mjs"
 import CharacterAssetSlotGroup from "../../../ruleset/asset/character-asset-slot-group.mjs"
 import { ATTRIBUTES } from "../../const/attributes.mjs"
 import Ruleset from "../../../ruleset/ruleset.mjs"
-import { SKILL_TAGS } from "../../../tags/system-tags.mjs"
-import { ITEM_TYPES } from "../item/item-types.mjs"
+import { SKILL_TAGS } from "../../const/system-tags.mjs"
+import { ITEM_TYPES } from "../../const/item-types.mjs"
 import TransientMomentumAction from "../item/transient-momentum-action.mjs"
 import TransientTrait from "../item/transient-trait.mjs"
 import TransientBaseActor from "./transient-base-actor.mjs"
 import { CharacterAttribute } from "../../_module.mjs"
+import { business } from "../../../_module.mjs"
 
 /**
  * Represents the base contract for a "specific" actor "sub-type" that 
@@ -292,19 +293,19 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get skills() {
     const thiz = this;
     return {
-      get all() { return thiz.items.filter(it => it.type === ITEM_TYPES.SKILL); },
+      get all() { return thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.SKILL); },
       get learning() { return thiz.items.filter(it => 
-        it.type === ITEM_TYPES.SKILL && it.level < 1
+        it.type === business.model.const.ITEM_TYPES.SKILL && it.level < 1
           && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
         ); 
       },
       get known() { return thiz.items.filter(it => 
-        it.type === ITEM_TYPES.SKILL && it.level > 0
+        it.type === business.model.const.ITEM_TYPES.SKILL && it.level > 0
           && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
         ); 
       },
       get innate() { return thiz.items.filter(it => 
-        it.type === ITEM_TYPES.SKILL 
+        it.type === business.model.const.ITEM_TYPES.SKILL 
         && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
         ); 
       },
@@ -318,10 +319,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get health() {
     const thiz = this;
     return {
-      get injuries() { return thiz.items.filter(it => it.type === ITEM_TYPES.INJURY); },
-      get illnesses() { return thiz.items.filter(it => it.type === ITEM_TYPES.ILLNESS); },
-      get mutations() { return thiz.items.filter(it => it.type === ITEM_TYPES.MUTATION); },
-      get scars() { return thiz.items.filter(it => it.type === ITEM_TYPES.SCAR); },
+      get injuries() { return thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.INJURY); },
+      get illnesses() { return thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.ILLNESS); },
+      get mutations() { return thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.MUTATION); },
+      get scars() { return thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.SCAR); },
 
       // HP
       get maxHP() { return new Ruleset().getCharacterMaximumHp(thiz.document) },
@@ -354,7 +355,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
       // Conditions
       get conditions() {
-        return thiz.items.filter(it => it.type === ITEM_TYPES.HEALTH_CONDITION);
+        return thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.HEALTH_CONDITION);
       },
 
       // Death saves
@@ -476,9 +477,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   get baseInitiative() {
     const attributesToSum = [
-      this.attributes.find(it => it.name === ATTRIBUTES.agility.name),
-      this.attributes.find(it => it.name === ATTRIBUTES.awareness.name),
-      this.attributes.find(it => it.name === ATTRIBUTES.wit.name),
+      this.attributes.find(it => it.name === business.model.const.ATTRIBUTES.agility.name),
+      this.attributes.find(it => it.name === business.model.const.ATTRIBUTES.awareness.name),
+      this.attributes.find(it => it.name === business.model.const.ATTRIBUTES.wit.name),
     ];
 
     let result = 0;
@@ -495,8 +496,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   get sprintingSpeed() {
     const attributesToSum = [
-      this.attributes.find(it => it.name === ATTRIBUTES.agility.name),
-      this.attributes.find(it => it.name === ATTRIBUTES.toughness.name),
+      this.attributes.find(it => it.name === business.model.const.ATTRIBUTES.agility.name),
+      this.attributes.find(it => it.name === business.model.const.ATTRIBUTES.toughness.name),
     ];
 
     let result = 0;
@@ -549,7 +550,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
        * @readonly
        */
       get actions() {
-        return (thiz.items.filter(it => it.type === ITEM_TYPES.MOMENTUM_ACTION) ?? [])
+        return (thiz.items.filter(it => it.type === business.model.const.ITEM_TYPES.MOMENTUM_ACTION) ?? [])
           .map(it => it.getTransientObject());
         },
     };
@@ -559,13 +560,13 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @type {Array<TransientTrait>}
    * @readonly
    */
-  get traits() { return this.items.filter(it => it.type === ITEM_TYPES.TRAIT); }
+  get traits() { return this.items.filter(it => it.type === business.model.const.ITEM_TYPES.TRAIT); }
 
   /**
    * @type {Array<TransientTrait>}
    * @readonly
    */
-  get projects() { return this.items.filter(it => it.type === ITEM_TYPES.PROJECT); }
+  get projects() { return this.items.filter(it => it.type === business.model.const.ITEM_TYPES.PROJECT); }
 
   /**
    * @type {Array<TransientTrait>}
@@ -573,8 +574,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   get stability() {
     const attributesToSum = [
-      this.attributes.find(it => it.name === ATTRIBUTES.strength.name),
-      this.attributes.find(it => it.name === ATTRIBUTES.toughness.name),
+      this.attributes.find(it => it.name === business.model.const.ATTRIBUTES.strength.name),
+      this.attributes.find(it => it.name === business.model.const.ATTRIBUTES.toughness.name),
     ];
 
     let result = 0;
@@ -600,7 +601,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @private
    */
   _prepareAssetsData() {
-    this._allAssets = this.items.filter(it => it.type === ITEM_TYPES.ASSET);
+    this._allAssets = this.items.filter(it => it.type === business.model.const.ITEM_TYPES.ASSET);
     this._equipmentSlotGroups = this._getEquipmentSlotGroups();
 
     // Worn & Equipped

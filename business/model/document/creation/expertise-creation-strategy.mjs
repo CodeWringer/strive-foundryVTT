@@ -2,7 +2,7 @@ import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import InputTextFieldViewModel from "../../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
 import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import { ITEM_TYPES } from "../item/item-types.mjs"
+import { ITEM_TYPES } from "../../const/item-types.mjs"
 import TransientSkill from "../item/skill/transient-skill.mjs"
 import DocumentCreationStrategy from "./document-creation-strategy.mjs"
 
@@ -35,7 +35,7 @@ export default class ExpertiseCreationStrategy extends DocumentCreationStrategy 
 
   /** @override */
   async selectAndCreate() {
-    if (this.target.type !== ITEM_TYPES.SKILL) {
+    if (this.target.type !== business.model.const.ITEM_TYPES.SKILL) {
       throw new Error("InvalidArgumentException: Cannot add item of type 'expertise' to non-'skill'-type item!");
     }
 

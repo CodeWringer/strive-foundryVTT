@@ -1,15 +1,15 @@
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs"
-import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs"
-import { TEMPLATES } from "../../presentation/templatePreloader.mjs"
-import { ACTOR_TYPES } from "../model/document/actor/actor-types.mjs"
-import { Sum } from "../ruleset/summed-data.mjs"
+import { VISIBILITY_MODES } from "../model/const/visibility-modes.mjs"
+import { TEMPLATES } from "../../presentation/templates.mjs"
+import { Sum } from "../model/summed-data.mjs"
 import GameSystemUserSettings from "../setting/game-system-user-settings.mjs"
 import { DICE_CONSTANTS } from "./dice-constants.mjs"
 import { DicePoolRollResultType } from "./dice-pool.mjs"
 import { ResolvedObstacle } from "./roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "./roll-dice-modifier-types.mjs"
 import { common } from "../../common/_module.mjs"
+import { business } from "../_module.mjs"
 
 /**
  * Represents the input data of a dice (pool) roll. 
@@ -151,14 +151,14 @@ export class RollResult {
     const intermediateFacesForDisplay = this._getFacesForDisplay(this.intermediateResults);
     const resultFacesForDisplay = this._getFacesForDisplay(this.results);
 
-    const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
+    const showReminders = GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
     let showReminder = false;
     if (showReminders) {
       if (common.util.validation.isDefined(args.actor) === true) {
         const transientActor = args.actor.getTransientObject();
-        if (transientActor.type === ACTOR_TYPES.PC) {
+        if (transientActor.type === business.model.const.ACTOR_TYPES.PC) {
           showReminder = true;
-        } else if (transientActor.type === ACTOR_TYPES.NPC) {
+        } else if (transientActor.type === business.model.const.ACTOR_TYPES.NPC) {
           showReminder = transientActor.advancement.advancementEnabled;
         }
       }

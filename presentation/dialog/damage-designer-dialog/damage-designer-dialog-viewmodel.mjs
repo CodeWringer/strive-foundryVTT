@@ -283,7 +283,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
   async _getDamageFindings() {
     const skillDocuments = await new DocumentFetcher().findAll({
       documentType: "Item",
-      contentType: ITEM_TYPES.SKILL,
+      contentType: business.model.const.ITEM_TYPES.SKILL,
       source: DOCUMENT_COLLECTION_SOURCES.all,
       searchEmbedded: true,
       includeLocked: true,

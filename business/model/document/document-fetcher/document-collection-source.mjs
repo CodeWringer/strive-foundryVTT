@@ -75,4 +75,4 @@ export const DOCUMENT_COLLECTION_SOURCES = {
     localizableName: "system.general.collectionSources.world"
   }),
 }
-ConstantsUtil.enrichConstant(DOCUMENT_COLLECTION_SOURCES);
+common.util.constants(DOCUMENT_COLLECTION_SOURCES);

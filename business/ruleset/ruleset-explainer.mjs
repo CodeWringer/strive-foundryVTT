@@ -124,7 +124,7 @@ export default class RulesetExplainer {
     const toughnessLevel = parseInt(this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, transientActor));
     const hpReductionPerInjury = this._ruleset.getMaximumHpReductionPerInjury(actor);
     const unmodifiedHp = this._ruleset.getUnmodifiedMaximumHp(actor);
-    const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
+    const injuryCount = (actor.items.filter(it => it.type === business.model.const.ITEM_TYPES.INJURY)).length;
     return StringUtil.format2(
       game.i18n.localize("system.character.health.hp.maxExplanation"),
       {

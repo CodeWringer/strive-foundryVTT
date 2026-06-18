@@ -1,18 +1,18 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
-import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs"
+import { VISIBILITY_MODES } from "../../model/const/visibility-modes.mjs"
 import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
 import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { CharacterAttribute } from "../../model/_module.mjs"
-import { ACTOR_TYPES } from "../../model/document/actor/actor-types.mjs"
 import TransientSkill from "../../model/document/item/skill/transient-skill.mjs"
-import { Sum } from "../../ruleset/summed-data.mjs"
+import { Sum } from "../../model/summed-data.mjs"
 import GameSystemUserSettings from "../../setting/game-system-user-settings.mjs"
 import RollData from "../roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs"
 import RollQueryData from "../roll-query-data.mjs"
 import { RollSchema } from "../roll-schema.mjs"
+import { business } from "../../_module.mjs"
 
 /**
  * Defines a schema for rolling dice to test a skill. 
@@ -163,8 +163,8 @@ export class SkillRollSchema extends RollSchema {
       }),
     );
 
-    const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
-    const isPC = owningDocument.type === ACTOR_TYPES.PC;
+    const showReminders = GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
+    const isPC = owningDocument.type === business.model.const.ACTOR_TYPES.PC;
     if (showReminders && isPC) {
       dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
         new DynamicInputDefinition({

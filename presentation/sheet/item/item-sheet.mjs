@@ -43,16 +43,16 @@ export class GameSystemItemSheet extends foundry.appv1.sheets.ItemSheet {
    */
   static get SUB_TYPES() {
     return new Map([
-      [ITEM_TYPES.ASSET, new AssetItemSheet()],
-      [ITEM_TYPES.SKILL, new SkillItemSheet()],
-      [ITEM_TYPES.MOMENTUM_ACTION, new MomentumActionItemSheet()],
-      [ITEM_TYPES.MUTATION, new MutationItemSheet()],
-      [ITEM_TYPES.PROJECT, new ProjectItemSheet()],
-      [ITEM_TYPES.INJURY, new InjuryItemSheet()],
-      [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
-      [ITEM_TYPES.FATE_CARD, new FateItemSheet()],
-      [ITEM_TYPES.HEALTH_CONDITION, new HealthConditionItemSheet()],
-      [ITEM_TYPES.TRAIT, new TraitItemSheet()],
+      [business.model.const.ITEM_TYPES.ASSET, new AssetItemSheet()],
+      [business.model.const.ITEM_TYPES.SKILL, new SkillItemSheet()],
+      [business.model.const.ITEM_TYPES.MOMENTUM_ACTION, new MomentumActionItemSheet()],
+      [business.model.const.ITEM_TYPES.MUTATION, new MutationItemSheet()],
+      [business.model.const.ITEM_TYPES.PROJECT, new ProjectItemSheet()],
+      [business.model.const.ITEM_TYPES.INJURY, new InjuryItemSheet()],
+      [business.model.const.ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
+      [business.model.const.ITEM_TYPES.FATE_CARD, new FateItemSheet()],
+      [business.model.const.ITEM_TYPES.HEALTH_CONDITION, new HealthConditionItemSheet()],
+      [business.model.const.ITEM_TYPES.TRAIT, new TraitItemSheet()],
     ]);
   }
 

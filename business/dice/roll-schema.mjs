@@ -1,4 +1,4 @@
-import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs";
+import { VISIBILITY_MODES } from "../model/const/visibility-modes.mjs";
 import InputDropDownViewModel from "../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import DynamicInputDefinition from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";

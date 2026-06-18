@@ -1,5 +1,4 @@
 import { SYSTEM_ID } from "../../../system-id.mjs";
-import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
@@ -11,6 +10,7 @@ import ItemDropData from "../item/base/item-drop-data.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document-fetcher/document-collection-source.mjs";
+import { business } from "../../../business/_module.mjs";
 
 /**
  * Global definition of an Actor sheet. This is what FoundryVTT instantiates to render 
@@ -40,9 +40,9 @@ export class GameSystemActorSheet extends foundry.appv1.sheets.ActorSheet {
    */
   static get SUB_TYPES() {
     return new Map([
-      [ACTOR_TYPES.PLAIN, new PlainActorSheet()],
-      [ACTOR_TYPES.NPC, new NpcActorSheet()],
-      [ACTOR_TYPES.PC, new PcActorSheet()],
+      [business.model.const.ACTOR_TYPES.PLAIN, new PlainActorSheet()],
+      [business.model.const.ACTOR_TYPES.NPC, new NpcActorSheet()],
+      [business.model.const.ACTOR_TYPES.PC, new PcActorSheet()],
     ]);
   }
 

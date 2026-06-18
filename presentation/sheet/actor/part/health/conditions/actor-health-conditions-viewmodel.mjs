@@ -183,7 +183,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
    * @returns {Boolean}
    */
   _isHiddenBySettings(name) {
-    const hiddenHealthConditions = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_HEALTH_SETTINGS).hidden;
+    const hiddenHealthConditions = GameSystemWorldSettings.get(GameSystemWorldSettings.KEY_HEALTH_SETTINGS).hidden;
     return ValidationUtil.isDefined(hiddenHealthConditions.find(it => it === name));
   }
 }

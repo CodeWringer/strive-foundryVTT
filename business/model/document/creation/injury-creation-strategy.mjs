@@ -3,9 +3,9 @@ import InputDropDownViewModel from "../../../../presentation/component/input-cho
 import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { ATTRIBUTES } from "../../const/attributes.mjs"
-import { DAMAGE_TYPES } from "../../../ruleset/damage-types.mjs"
-import { INJURY_STATES } from "../../../ruleset/health/injury-states.mjs"
-import { ITEM_TYPES } from "../item/item-types.mjs"
+import { DAMAGE_TYPES } from "../../const/damage-types.mjs"
+import { INJURY_STATES } from "../../const/injury-states.mjs"
+import { ITEM_TYPES } from "../../const/item-types.mjs"
 import DocumentCreationStrategy from "./document-creation-strategy.mjs"
 
 /**
@@ -39,8 +39,8 @@ export default class InjuryCreationStrategy extends DocumentCreationStrategy {
 
     if (!dialog.confirmed) return;
 
-    const attributes = ATTRIBUTES.asArray();
-    const attributeRoll = await new Roll(`1D${attributes.length}`).evaluate();
+    const attributes = business.model.const.ATTRIBUTES.asArray();
+    const attributeRoll = await new Roll(`1D${business.model.const.ATTRIBUTES.length}`).evaluate();
     const attribute = attributes[attributeRoll.total];
 
     let treatmentSkill = undefined;
@@ -73,7 +73,7 @@ export default class InjuryCreationStrategy extends DocumentCreationStrategy {
 
     return {
       name: `${game.i18n.localize(damageType.localizableName)} ${game.i18n.localize("system.character.health.injury.singular")}`,
-      type: ITEM_TYPES.INJURY,
+      type: business.model.const.ITEM_TYPES.INJURY,
       img: "icons/svg/bones.svg",
       system: {
         description: StringUtil.format2(game.i18n.localize("system.character.health.injury.automaticDescription"), {

@@ -1,10 +1,10 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import SystemHealthConditionBroker from "../../../../business/ruleset/health/system-health-condition-broker.mjs";
 import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { HealthConditionVisibilityItem } from "./health-settings-visibility-item.mjs";
+import { SystemHealthConditionBroker } from "../../../../business/model/domain/_module.mjs";
 
 /**
  * @extends ViewModel
@@ -57,7 +57,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     this.registerViewStateProperty("stateSettings");
     
     // Load state. 
-    this.stateSettings = new GameSystemWorldSettings().get(GameSystemWorldSettings.KEY_HEALTH_SETTINGS);
+    this.stateSettings = GameSystemWorldSettings.get(GameSystemWorldSettings.KEY_HEALTH_SETTINGS);
     this.readAllViewState();
 
     // Prepare data for system default health state visibilities. 

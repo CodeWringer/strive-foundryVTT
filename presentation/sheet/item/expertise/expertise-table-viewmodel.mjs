@@ -213,7 +213,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
     const sortedUnlockedExpertises = unlockedExpertises.sort(expertiseSortFunc);
     this.unlockedExpertises = this._getExpertiseViewModels(sortedUnlockedExpertises, true);
 
-    const showLockedExpertises = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY);
+    const showLockedExpertises = GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY);
     if (showLockedExpertises === true) {
       const lockedExpertises = this.document.expertises.filter(it => parseInt(it.requiredLevel) > level)
       const sortedLockedExpertises = lockedExpertises.sort(expertiseSortFunc);

@@ -3,7 +3,7 @@ import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
 import IllnessChatMessageViewModel from "../../../../presentation/sheet/item/illness/illness-chat-message-viewmodel.mjs"
-import { ILLNESS_STATES } from "../../../ruleset/health/illness-states.mjs"
+import { ILLNESS_STATES } from "../../const/illness-states.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**

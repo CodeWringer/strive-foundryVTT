@@ -1,7 +1,7 @@
-import { ITEM_TYPES } from "../../business/model/document/item/item-types.mjs"
+import { ITEM_TYPES } from "../../business/model/const/item-types.mjs"
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs"
 import { activateRollChatMessageListeners } from "../../presentation/dice/roll-chat-message.mjs"
-import { VISIBILITY_MODES, VisibilityMode } from "../../presentation/chat/visibility-modes.mjs"
+import { VISIBILITY_MODES, VisibilityMode } from "../../business/model/const/visibility-modes.mjs"
 import { common } from "../_module.mjs"
 
 /**
@@ -88,7 +88,7 @@ export const ChatUtil = {
 
     const prop = common.util.property.getNestedPropertyValue(args.obj, args.propertyPath);
     if (prop.type !== undefined) {
-      if (prop.type === ITEM_TYPES.EXPERTISE) {
+      if (prop.type === business.model.const.ITEM_TYPES.EXPERTISE) {
         await prop.sendToChat({
           visibilityMode: visibilityMode,
         });
@@ -169,11 +169,6 @@ export const ChatUtil = {
     if (viewModel === undefined) {
       game.strive.logger.logWarn(`renderChatMessage: Failed to create view model for chat message`);
       return;
-    }
-
-    // Ensure the view model is stored in the global collection. 
-    if (game.strive.enableViewModelCaching === true) {
-      game.strive.viewModels.set(vmId, viewModel);
     }
     
     await viewModel.activateListeners(args.html);

@@ -83,6 +83,6 @@ export default class HealthStatesSettingsDialog extends FormApplication {
    * @protected
    */
   _saveSettings(settings) {
-    new GameSystemWorldSettings().set(GameSystemWorldSettings.KEY_HEALTH_SETTINGS, settings);
+    GameSystemWorldSettings.set(GameSystemWorldSettings.KEY_HEALTH_SETTINGS, settings);
   }
 }

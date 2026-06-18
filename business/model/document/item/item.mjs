@@ -1,4 +1,4 @@
-import { ITEM_TYPES } from "./item-types.mjs";
+import { ITEM_TYPES } from "../../const/item-types.mjs";
 import TransientSkill from "./skill/transient-skill.mjs";
 import TransientAsset from "./transient-asset.mjs";
 import TransientFateCard from "./transient-fate-card.mjs";
@@ -32,16 +32,16 @@ export class GameSystemItem extends Item {
    */
   static get SUB_TYPES() {
     return new Map([
-      [ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) }],
-      [ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
-      [ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
-      [ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
-      [ITEM_TYPES.MOMENTUM_ACTION, (document) => { return new TransientMomentumAction(document) }],
-      [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
-      [ITEM_TYPES.PROJECT, (document) => { return new TransientProject(document) }],
-      [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
-      [ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
-      [ITEM_TYPES.TRAIT, (document) => { return new TransientTrait(document) }],
+      [business.model.const.ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) }],
+      [business.model.const.ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
+      [business.model.const.ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
+      [business.model.const.ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
+      [business.model.const.ITEM_TYPES.MOMENTUM_ACTION, (document) => { return new TransientMomentumAction(document) }],
+      [business.model.const.ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
+      [business.model.const.ITEM_TYPES.PROJECT, (document) => { return new TransientProject(document) }],
+      [business.model.const.ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
+      [business.model.const.ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
+      [business.model.const.ITEM_TYPES.TRAIT, (document) => { return new TransientTrait(document) }],
     ]);
   }
 

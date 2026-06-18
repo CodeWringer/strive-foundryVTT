@@ -1,4 +1,4 @@
-import { VISIBILITY_MODES, VisibilityMode } from "../../presentation/chat/visibility-modes.mjs";
+import { VISIBILITY_MODES, VisibilityMode } from "../model/const/visibility-modes.mjs";
 import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 
