@@ -1,41 +1,36 @@
-import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import AttributeField from "../../data-field/attribute-field.mjs";
-import ExpertiseField from "../../data-field/expertise-field.mjs";
-import GradedEffectField from "../../data-field/graded-effect-field.mjs";
+import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
+import GradedEffectField from "./graded-effect-field.mjs";
 
-export default class SkillItemData extends TypeDataModel {
-  /** @override @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html#defineschema */
-  static defineSchema() {
-    return {
+/**
+ * Declares an asset slot (on a Character). 
+ * 
+ * @param {String} name Internal name of the asset slot, e.g. "clothing".
+ * @param {String | null} containedAssetId ID of the Asset currently alotted to this slot. 
+ * @param {String | null} group If not null, the name of an asset slot group. All asset 
+ * slots in the same group may share the same asset, if its bulk is too much for just 
+ * one slot to hold. 
+ * @param {Array<String>} acceptedTypes An array of accepted type names. E. g. 
+ * `["clothing", "armor"]`
+ * @param {Number} maximumBulk The maximum bulk this asset slot is allowed to hold. 
+ * 
+ * @param {Object} offset Center-relative offsets, in pixels. 
+ * @param {Number} offset.x Center-relative horizontal offset, in pixels. 
+ * @param {Number} offset.y Center-relative vertical offset, in pixels. 
+ */
+export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
+  constructor(fields = {}, { initialValue = null, ...options } = {}) {
+    fields = {
       description: new FoundrySchemaFields.HTMLField({
         blank: true,
         nullable: false,
         initial: "",
       }),
-      gmNotes: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
-      baseAttributes: new FoundrySchemaFields.ArrayField(new AttributeField(), {
-        nullable: false,
-        initial: [],
-      }),
-      level: new FoundrySchemaFields.NumberField({
-        nullable: false,
+      gmNotes: new FoundrySchemaFields.HTMLField(),
+      requiredLevel: new FoundrySchemaFields.NumberField({
         required: true,
-        integer: true,
-        positive: true,
+        nullable: false,
         initial: 0,
         min: 0,
-      }),
-      expertises: new FoundrySchemaFields.ArrayField(new ExpertiseField(), {
-        nullable: false,
-        initial: [],
-      }),
-      expertisesOrder: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-        nullable: false,
-        initial: [],
       }),
       tags: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
         nullable: false,
@@ -79,6 +74,9 @@ export default class SkillItemData extends TypeDataModel {
         enabled: new FoundrySchemaFields.BooleanField(),
         entries: new FoundrySchemaFields.ArrayField(new GradedEffectField()),
       }),
+      ...fields
     };
+    Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);
+    super(fields, options);
   }
 }
