@@ -1,5 +1,5 @@
 import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs";
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import { ATTRIBUTES } from "../../../../business/model/const/attributes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";

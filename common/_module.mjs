@@ -8,30 +8,33 @@ import ObservableCollection, { COLLECTION_CHANGE_TYPES } from "./observables/obs
 import ObservableField from "./observables/observable-field.mjs"
 import { EventEmitter } from "./event-emitter.mjs"
 import { ExtenderUtil } from "./util/extender-util.mjs"
+import { ChatUtil } from "./util/chat-utility.mjs"
 
 export {
   ArrayUtil,
+  ChatUtil,
+  COLLECTION_CHANGE_TYPES,
   ConstantsUtil,
+  EventEmitter,
+  ExtenderUtil,
+  ObservableCollection,
+  ObservableField,
   PropertyUtil,
   StringUtil,
   UuidUtil,
   ValidationUtil,
-  ExtenderUtil,
-  COLLECTION_CHANGE_TYPES,
-  ObservableCollection,
-  ObservableField,
-  EventEmitter,
 }
 
 export const common = {
   util: {
     array: ArrayUtil,
+    chat: ChatUtil,
     constants: ConstantsUtil,
+    extender: ExtenderUtil,
     property: PropertyUtil,
     string: StringUtil,
     uuid: UuidUtil,
     validation: ValidationUtil,
-    extender: ExtenderUtil,
   },
   observables: {
     COLLECTION_CHANGE_TYPES: COLLECTION_CHANGE_TYPES,

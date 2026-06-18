@@ -1,7 +1,6 @@
 import { GameSystemActor } from "../../business/model/document/actor/actor.mjs"
 import TransientDocument from "../../business/model/document/transient-document.mjs"
-import { ValidationUtil } from "../../common/util/validation-utility.mjs"
-import { ChatUtil } from "../chat/chat-utility.mjs"
+import { common } from "../../common/_module.mjs"
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs"
 import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
@@ -22,7 +21,7 @@ export default class SendToChatHandler {
    * @override
    */
   async prompt(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["target"]);
+    common.util.validation.validateOrThrow(args, ["target"]);
 
     const nameInputVisibility = "nameInputVisibility";
 
@@ -52,7 +51,7 @@ export default class SendToChatHandler {
       if (args.target.sendPropertyToChat !== undefined) {
         args.target.sendPropertyToChat(args.propertyPath, visibilityMode);
       } else {
-        ChatUtil.sendPropertyToChat({
+        common.util.chat.sendPropertyToChat({
           obj: args.target,
           propertyPath: args.propertyPath,
           parent: args.target,
@@ -64,7 +63,7 @@ export default class SendToChatHandler {
       if (args.target.sendToChat !== undefined) {
         args.target.sendToChat(visibilityMode);
       } else {
-        ChatUtil.sendPropertyToChat({
+        common.util.chat.sendPropertyToChat({
           obj: args.target,
           propertyPath: args.propertyPath,
           parent: args.target,

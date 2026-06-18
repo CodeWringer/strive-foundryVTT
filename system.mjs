@@ -1,13 +1,14 @@
 // Root Globals
-import { SYSTEM_ID } from "./system-id.mjs";
 import { WorldSystemVersion } from "./business/migration/world-system-version.mjs";
 import { common } from "./common/_module.mjs";
+import { business } from "./business/_module.mjs";
+import { presentation } from "./presentation/_module.mjs";
 // Handlebars
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
 import { initHandlebarsHelpers, initHandlebarsPartials } from "./presentation/handlebars-globals/handlebars-globals.mjs";
 import { initHandlebarsComponents } from "./presentation/handlebars-globals/handlebars-components.mjs";
 // Constants
-import { Attribute, ATTRIBUTES } from "./business/ruleset/attribute/attributes.mjs";
+import { ATTRIBUTES } from "./business/model/const/attributes.mjs";
 import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
@@ -19,52 +20,22 @@ import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-typ
 import { ASSET_TAGS, SKILL_TAGS } from "./business/tags/system-tags.mjs";
 import { ACTOR_TYPES } from "./business/model/document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "./business/model/document/item/item-types.mjs";
-// Ruleset
-import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
-import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import DocumentFetcher from "./business/model/document/document-fetcher/document-fetcher.mjs";
 import TokenExtensions from "./presentation/token/token-extensions.mjs";
-import { ValidationUtil } from "./common/util/validation-utility.mjs";
-import { ArrayUtil } from "./common/util/array-utility.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
 import DamageDesignerDialog from "./presentation/dialog/damage-designer-dialog/damage-designer-dialog.mjs";
 import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
-import { Sum, SumComponent } from "./business/ruleset/summed-data.mjs";
-import Tag from "./business/tags/tag.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
 // Dialogs
-import DynamicInputDefinition from "./presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
 import BulkUpdateDialog from "./presentation/dialog/bulk-update-dialog/bulk-update-dialog.mjs";
-// Initializers
-import DataModelInit from "./business/model/data-model/data-model-init.mjs";
-import DocumentInitializer from "./business/model/document/document-init.mjs";
-import SheetInitializer from "./presentation/sheet/sheet-init.mjs";
-// Document classes
-import TransientBaseItem from "./business/model/document/item/transient-base-item.mjs";
-import TransientBaseCharacterActor from "./business/model/document/actor/transient-base-character-actor.mjs";
-import TransientBaseActor from "./business/model/document/actor/transient-base-actor.mjs";
-import TransientNpc from "./business/model/document/actor/transient-npc.mjs";
-import TransientPc from "./business/model/document/actor/transient-pc.mjs";
-import TransientPlainActor from "./business/model/document/actor/transient-plain-actor.mjs";
-import TransientSkill from "./business/model/document/item/skill/transient-skill.mjs";
-import TransientAsset from "./business/model/document/item/transient-asset.mjs";
-import TransientFateCard from "./business/model/document/item/transient-fate-card.mjs";
-import TransientIllness from "./business/model/document/item/transient-illness.mjs";
-import TransientInjury from "./business/model/document/item/transient-injury.mjs";
-import TransientMomentumAction from "./business/model/document/item/transient-momentum-action.mjs";
-import TransientMutation from "./business/model/document/item/transient-mutation.mjs";
-import TransientProject from "./business/model/document/item/transient-project.mjs";
-import TransientHealthCondition from "./business/model/document/item/transient-health-condition.mjs";
-import TransientTrait from "./business/model/document/item/transient-trait.mjs";
 // HUD
 import GameSystemTokenHud from "./presentation/token/game-system-token-hud.mjs";
 // Import logging classes
@@ -74,87 +45,9 @@ import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strat
 import GameSystemUserSettings from "./business/setting/game-system-user-settings.mjs";
 import GameSystemWorldSettings from "./business/setting/game-system-world-settings.mjs";
 // View models
-import ViewModel from "./presentation/view-model/view-model.mjs";
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
-import GeneralCombatAbilitiesViewModel from "./presentation/combat/general-combat-actions/general-combat-abilities-viewmodel.mjs";
-// View models - Components
-import ButtonAddViewModel from "./presentation/component/button-add/button-add-viewmodel.mjs";
-import ButtonCheckBoxViewModel from "./presentation/component/button-checkbox/button-checkbox-viewmodel.mjs";
-import ButtonContextMenuViewModel from "./presentation/component/button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonDeleteViewModel from "./presentation/component/button-delete/button-delete-viewmodel.mjs";
-import ButtonOpenSheetViewModel from "./presentation/component/button-open-sheet/button-open-sheet-viewmodel.mjs";
-import ButtonRollViewModel from "./presentation/component/button-roll/button-roll-viewmodel.mjs";
-import ButtonSendToChatViewModel from "./presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import ButtonTakeItemViewModel from "./presentation/component/button-take-item/button-take-item-viewmodel.mjs";
-import ButtonToggleIconViewModel from "./presentation/component/button-toggle-icon/button-toggle-icon-viewmodel.mjs";
-import ButtonToggleVisibilityViewModel from "./presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
-import ButtonViewModel from "./presentation/component/button/button-viewmodel.mjs";
-import CompositeCurrentAndMaximumNumbersViewModel from "./presentation/component/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers-viewmodel.mjs";
-import DamageDefinitionListItemViewModel from "./presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs";
-import DamageDefinitionListViewModel from "./presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs";
-import DiceRollListViewModel from "./presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs";
-import GmNotesViewModel from "./presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs";
-import InputChoiceViewModel from "./presentation/component/input-choice/input-choice-viewmodel.mjs";
-import InputImageViewModel from "./presentation/component/input-image/input-image-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "./presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputRichTextViewModel from "./presentation/component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputSearchTextViewModel from "./presentation/component/input-search/input-search-viewmodel.mjs";
-import InputSliderViewModel from "./presentation/component/input-slider/input-slider-viewmodel.mjs";
-import InputTagPillViewModel from "./presentation/component/input-tags/input-tag-pill-viewmodel.mjs";
-import InputTagsViewModel from "./presentation/component/input-tags/input-tags-viewmodel.mjs";
-import InputTextareaViewModel from "./presentation/component/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "./presentation/component/input-textfield/input-textfield-viewmodel.mjs";
-import InputToggleViewModel from "./presentation/component/input-toggle/input-toggle-viewmodel.mjs";
-import LazyLoadViewModel from "./presentation/component/lazy-load/lazy-load-viewmodel.mjs";
-import LazyRichTextViewModel from "./presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
-import ListItemViewModel from "./presentation/component/list/list-item-viewmodel.mjs";
-import ListViewModel from "./presentation/component/list/list-viewmodel.mjs";
-import SortableListViewModel from "./presentation/component/sortable-list/sortable-list-viewmodel.mjs";
-import SortControlsViewModel from "./presentation/component/sort-controls/sort-controls-viewmodel.mjs";
-import VisibilityToggleListItemViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-item-viewmodel.mjs";
-import VisibilityToggleListViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
-// View models - Actor
-import ActorAttributesViewModel from "./presentation/sheet/actor/part/abilities/attribute/actor-attributes-viewmodel.mjs";
-import ActorAttributeViewModel from "./presentation/sheet/actor/part/abilities/attribute/actor-attribute-viewmodel.mjs";
-import ActorHealthViewModel from './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
-import ActorSkillsViewModel from "./presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs";
-import ActorAssetsViewModel from "./presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs";
-import ActorPersonalityViewModel from "./presentation/sheet/actor/part/personality/actor-personality-viewmodel.mjs";
-import ActorFateViewModel from "./presentation/sheet/actor/part/personality/actor-fate-viewmodel.mjs";
-import ActorPersonalsViewModel from "./presentation/sheet/actor/part/personals/actor-personals-viewmodel.mjs";
-// View models - Item
-import AssetListItemViewModel from "./presentation/sheet/item/asset/asset-list-item-viewmodel.mjs";
-import AssetItemSheetViewModel from "./presentation/sheet/item/asset/asset-item-sheet-viewmodel.mjs";
-import BaseChatMessageViewModel from "./presentation/sheet/item/base/base-chat-message-viewmodel.mjs";
-import BaseItemSheetViewModel from "./presentation/sheet/item/base/base-item-sheet-viewmodel.mjs";
-import BaseListItemViewModel from "./presentation/sheet/item/base/base-list-item-viewmodel.mjs";
-import ExpertiseListItemViewModel from "./presentation/sheet/item/expertise/expertise-list-item-viewmodel.mjs";
-import FateCardViewModel from "./presentation/sheet/item/fate-card/fate-card-viewmodel.mjs";
-import FateCardItemSheetViewModel from "./presentation/sheet/item/fate-card/fate-card-item-sheet-viewmodel.mjs";
-import IllnessItemSheetViewModel from "./presentation/sheet/item/illness/illness-item-sheet-viewmodel.mjs";
-import IllnessListItemViewModel from "./presentation/sheet/item/illness/illness-list-item-viewmodel.mjs";
-import InjuryItemSheetViewModel from "./presentation/sheet/item/injury/injury-item-sheet-viewmodel.mjs";
-import InjuryListItemViewModel from "./presentation/sheet/item/injury/injury-list-item-viewmodel.mjs";
-import MomentumActionItemSheetViewModel from "./presentation/sheet/item/momentum-action/momentum-action-item-sheet-viewmodel.mjs";
-import MomentumActionListItemViewModel from "./presentation/sheet/item/momentum-action/momentum-action-list-item-viewmodel.mjs";
-import MutationItemSheetViewModel from "./presentation/sheet/item/mutation/mutation-item-sheet-viewmodel.mjs";
-import MutationListItemViewModel from "./presentation/sheet/item/mutation/mutation-list-item-viewmodel.mjs";
-import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
-import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
-import HealthConditionItemSheet from "./presentation/sheet/item/health-condition/health-condition-item-sheet.mjs";
-import ReadOnlyValueViewModel from "./presentation/component/read-only-value/read-only-value.mjs";
 // Utilities
-import { ChatUtil } from "./presentation/chat/chat-utility.mjs";
-import { ConstantsUtil } from "./common/util/constants-utility.mjs";
-import { ExtenderUtil } from "./common/util/extender-util.mjs";
-import { PropertyUtil } from "./common/util/property-utility.mjs";
-import { StringUtil } from "./common/util/string-utility.mjs";
-import { UuidUtil } from "./common/util/uuid-utility.mjs";
-import FoundryWrapper from "./foundry-interop/foundry-wrapper.mjs";
 import { PixiLoader } from "./presentation/pixi/pixi-preloader.mjs";
-import PlainActorSheetViewModel from "./presentation/sheet/actor/plain/plain-actor-sheet-viewmodel.mjs";
-import NpcActorSheetViewModel from "./presentation/sheet/actor/npc/npc-actor-sheet-viewmodel.mjs";
-import PcActorSheetViewModel from "./presentation/sheet/actor/pc/pc-actor-sheet-viewmodel.mjs";
 // Brokers
 import SystemHealthConditionBroker from "./business/ruleset/health/system-health-condition-broker.mjs";
 
@@ -215,6 +108,7 @@ Hooks.once('init', function() {
      * @type {Map<String, Object>}
      */
     viewStates: new Map(),
+    // TODO #739 remove const field
     /**
      * Contains const definitions for use in modules that wish to extend the strive system. 
      * 
@@ -238,120 +132,8 @@ Hooks.once('init', function() {
       VISIBILITY_MODES: VISIBILITY_MODES,
     },
     // Module namespaces. 
+    business: business,
     common: common,
-    /**
-     * Contains class definitions for use in modules that wish to extend the strive system. 
-     * 
-     * @type {Object}
-     */
-    classDef: {
-      Attribute: Attribute,
-      ChoiceOption: ChoiceOption,
-      SumComponent: SumComponent,
-      Sum: Sum,
-      Ruleset: Ruleset,
-      Tag: Tag,
-      FoundryWrapper: FoundryWrapper,
-      SystemHealthConditionBroker: SystemHealthConditionBroker,
-      document: {
-        TransientBaseActor: TransientBaseActor,
-        TransientBaseCharacterActor: TransientBaseCharacterActor,
-        TransientNpc: TransientNpc,
-        TransientPc: TransientPc,
-        TransientPlainActor: TransientPlainActor,
-        TransientBaseItem: TransientBaseItem,
-        TransientSkill: TransientSkill,
-        TransientAsset: TransientAsset,
-        TransientFateCard: TransientFateCard,
-        TransientIllness: TransientIllness,
-        TransientInjury: TransientInjury,
-        TransientMomentumAction: TransientMomentumAction,
-        TransientMutation: TransientMutation,
-        TransientProject: TransientProject,
-        TransientHealthCondition: TransientHealthCondition,
-        TransientTrait: TransientTrait,
-      },
-      dialog: {
-        DynamicInputDialog: DynamicInputDialog,
-        DynamicInputDefinition: DynamicInputDefinition,
-      },
-      viewModel: {
-        ViewModel: ViewModel,
-        ButtonViewModel: ButtonViewModel,
-        ButtonAddViewModel: ButtonAddViewModel,
-        ButtonCheckBoxViewModel: ButtonCheckBoxViewModel,
-        ButtonContextMenuViewModel: ButtonContextMenuViewModel,
-        ButtonDeleteViewModel: ButtonDeleteViewModel,
-        ButtonOpenSheetViewModel: ButtonOpenSheetViewModel,
-        ButtonRollViewModel: ButtonRollViewModel,
-        ButtonSendToChatViewModel: ButtonSendToChatViewModel,
-        ButtonTakeItemViewModel: ButtonTakeItemViewModel,
-        ButtonToggleIconViewModel: ButtonToggleIconViewModel,
-        ButtonToggleVisibilityViewModel: ButtonToggleVisibilityViewModel,
-        DamageDefinitionListViewModel: DamageDefinitionListViewModel,
-        DamageDefinitionListItemViewModel: DamageDefinitionListItemViewModel,
-        DiceRollListViewModel: DiceRollListViewModel,
-        InputChoiceViewModel: InputChoiceViewModel,
-        InputImageViewModel: InputImageViewModel,
-        InputRichTextViewModel: InputRichTextViewModel,
-        InputSearchTextViewModel: InputSearchTextViewModel,
-        InputSliderViewModel: InputSliderViewModel,
-        InputTagsViewModel: InputTagsViewModel,
-        InputTagPillViewModel: InputTagPillViewModel,
-        InputTextareaViewModel: InputTextareaViewModel,
-        InputTextFieldViewModel: InputTextFieldViewModel,
-        InputToggleViewModel: InputToggleViewModel,
-        LazyLoadViewModel: LazyLoadViewModel,
-        LazyRichTextViewModel: LazyRichTextViewModel,
-        GmNotesViewModel: GmNotesViewModel,
-        ListViewModel: ListViewModel,
-        ListItemViewModel: ListItemViewModel,
-        SortControlsViewModel: SortControlsViewModel,
-        SortableListViewModel: SortableListViewModel,
-        VisibilityToggleListViewModel: VisibilityToggleListViewModel,
-        VisibilityToggleListItemViewModel: VisibilityToggleListItemViewModel,
-        InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
-        ReadOnlyValueViewModel: ReadOnlyValueViewModel,
-        CompositeCurrentAndMaximumNumbersViewModel: CompositeCurrentAndMaximumNumbersViewModel,
-        actor: {
-          NpcActorSheetViewModel: NpcActorSheetViewModel,
-          PcActorSheetViewModel: PcActorSheetViewModel,
-          PlainActorSheetViewModel: PlainActorSheetViewModel,
-          ActorAttributesViewModel: ActorAttributesViewModel,
-          ActorAttributeViewModel: ActorAttributeViewModel,
-          ActorSkillsViewModel: ActorSkillsViewModel,
-          ActorAssetsViewModel: ActorAssetsViewModel,
-          ActorHealthViewModel: ActorHealthViewModel,
-          ActorPersonalityViewModel: ActorPersonalityViewModel,
-          ActorFateViewModel: ActorFateViewModel,
-          ActorPersonalsViewModel: ActorPersonalsViewModel,
-        },
-        item: {
-          AssetListItemViewModel: AssetListItemViewModel,
-          AssetItemSheetViewModel: AssetItemSheetViewModel,
-          BaseChatMessageViewModel: BaseChatMessageViewModel,
-          BaseItemSheetViewModel: BaseItemSheetViewModel,
-          BaseListItemViewModel: BaseListItemViewModel,
-          ExpertiseListItemViewModel: ExpertiseListItemViewModel,
-          FateCardViewModel: FateCardViewModel,
-          FateCardItemSheetViewModel: FateCardItemSheetViewModel,
-          IllnessItemSheetViewModel: IllnessItemSheetViewModel,
-          IllnessListItemViewModel: IllnessListItemViewModel,
-          InjuryItemSheetViewModel: InjuryItemSheetViewModel,
-          InjuryListItemViewModel: InjuryListItemViewModel,
-          MomentumActionItemSheetViewModel: MomentumActionItemSheetViewModel,
-          MomentumActionListItemViewModel: MomentumActionListItemViewModel,
-          MutationItemSheetViewModel: MutationItemSheetViewModel,
-          MutationListItemViewModel: MutationListItemViewModel,
-          SkillItemSheetViewModel: SkillItemSheetViewModel,
-          SkillListItemViewModel: SkillListItemViewModel,
-          HealthConditionItemSheet: HealthConditionItemSheet,
-        },
-        chat: {
-          GeneralCombatAbilitiesViewModel: GeneralCombatAbilitiesViewModel,
-        },
-      },
-    },
     /**
      * Registered extenders. A class may have any number of extenders applied to it, 
      * which is why the Map's value is an array of extenders. 
@@ -363,12 +145,9 @@ Hooks.once('init', function() {
     extenders: new Map(),
   };
 
-  // Ensure data model classes are registered.
-  DataModelInit.register();
-  // Ensure document classes are registered. 
-  DocumentInitializer.register();
-  // Ensure sheets are registered.
-  SheetInitializer.register();
+  // Module setup. 
+  business.init();
+  presentation.init();
 
   // Set initiative formula on global CONFIG variable provided by FoundryVTT.
   CONFIG.Combat.initiative = {
@@ -460,7 +239,7 @@ Hooks.once("ready", function() {
 /* -------------------------------------------- */
 
 Hooks.on("renderChatMessageHTML", function(message, html, data) {
-  ChatUtil.handleRenderedChatMessage({
+  common.util.chat.handleRenderedChatMessage({
     message: message,
     html: html,
     data: data,
@@ -468,7 +247,7 @@ Hooks.on("renderChatMessageHTML", function(message, html, data) {
 });
 
 Hooks.on("deleteChatMessage", function(args) {
-  ChatUtil.handleDeletionOfChatMessage(args);
+  common.util.chat.handleDeletionOfChatMessage(args);
 });
 
 Hooks.on("hoverToken", function(token) {

@@ -3,7 +3,6 @@ import DocumentUpdater from "../../business/model/document/document-updater/docu
 import { GENERAL_DOCUMENT_TYPES } from "../../business/model/document/general-document-types.mjs"
 import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs"
 import { ArrayUtil } from "../../common/util/array-utility.mjs"
-import { PropertyUtil } from "../../common/util/property-utility.mjs"
 import { ValidationUtil } from "../../common/util/validation-utility.mjs"
 import GeneralCombatAbilitiesViewModel from "./general-combat-actions/general-combat-abilities-viewmodel.mjs"
 
@@ -19,7 +18,6 @@ export default class GameSystemCombat extends Combat {
   get momentum() { return this.system.momentum ?? 0; }
   set momentum(value) {
     new DocumentUpdater({
-      propertyUtility: PropertyUtil,
       logger: game.strive.logger,
     }).updateByPath(this, "system.momentum", value);
   }

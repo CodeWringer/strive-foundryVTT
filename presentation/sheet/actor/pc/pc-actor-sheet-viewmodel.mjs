@@ -1,4 +1,4 @@
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import { ATTRIBUTES } from "../../../../business/model/const/attributes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";

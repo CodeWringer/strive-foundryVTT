@@ -1,16 +1,21 @@
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
-import { LanguageItemSheet } from "./item/language/language-item-sheet.mjs";
+import { LanguageItemSheet } from "./sheet/language/language-item-sheet.mjs";
 
-/**
- * @abstract
- */
-export default class SheetInitializer {
+export {
+  LanguageItemSheet,
+};
+
+export const application = {
+  dialog: {
+
+  },
+  sheet: {
+    LanguageItemSheet: LanguageItemSheet,
+  },
   /**
-   * Ensures the global config contains the sheet declarations. 
-   * 
-   * @static
+   * Ensures sheets are registered.
    */
-  static register() {
+  init: () => {
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,
       type: "language",
@@ -24,6 +29,5 @@ export default class SheetInitializer {
 
     // Items.unregisterSheet("core", ItemSheet);
     // Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
-
-  }
-}
+  },
+};

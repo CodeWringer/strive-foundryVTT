@@ -2,9 +2,8 @@ import ViewModel from "../../../../../view-model/view-model.mjs";
 import { ExtenderUtil } from "../../../../../../common/util/extender-util.mjs";
 import { StringUtil } from "../../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs";
-import { Attribute, ATTRIBUTES } from "../../../../../../business/ruleset/attribute/attributes.mjs";
+import { Attribute } from "../../../../../../business/model/const/attributes.mjs";
 import InputNumberSpinnerViewModel from "../../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import CharacterAttribute from "../../../../../../business/ruleset/attribute/character-attribute.mjs";
 import ButtonRollViewModel from "../../../../../component/button-roll/button-roll-viewmodel.mjs";
 import Ruleset from "../../../../../../business/ruleset/ruleset.mjs";
 import RulesetExplainer from "../../../../../../business/ruleset/ruleset-explainer.mjs";
@@ -13,8 +12,9 @@ import { ContextMenuItem } from "../../../../../component/button-context-menu/bu
 import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import InputDropDownViewModel from "../../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import { ATTRIBUTE_TYPES } from "../../../../../../business/ruleset/attribute/attribute-types.mjs";
+import { ATTRIBUTE_TYPES } from "../../../../../../business/model/const/attribute-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/model/document/actor/transient-base-character-actor.mjs";
+import { CharacterAttribute } from "../../../../../../business/model/_module.mjs";
 
 export default class ActorAttributeViewModel extends ViewModel {
   /** @override */

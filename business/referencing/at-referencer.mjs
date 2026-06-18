@@ -1,6 +1,4 @@
-import { PropertyUtil } from "../../common/util/property-utility.mjs";
-import Expertise from "../model/document/item/skill/expertise.mjs";
-import TransientDocument from "../model/document/transient-document.mjs";
+import { common } from "../../common/_module.mjs";
 
 /**
  * Provides a means of resolving "@"-references, using a given document. 
@@ -145,7 +143,7 @@ export default class AtReferencer {
     // Look in properties. 
     try {
       if (propertyPath !== undefined) {
-        return PropertyUtil.getNestedPropertyValue(document, propertyPath);
+        return common.util.property.getNestedPropertyValue(document, propertyPath);
       }
     } catch (error) {
       if (error.message.startsWith("Failed to get nested property value")) {

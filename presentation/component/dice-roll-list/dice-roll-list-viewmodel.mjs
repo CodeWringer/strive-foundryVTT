@@ -1,9 +1,7 @@
 import RollFormulaResolver from "../../../business/dice/roll-formula-resolver.mjs"
-import { UuidUtil } from "../../../common/util/uuid-utility.mjs"
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import { common } from "../../../common/_module.mjs"
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs"
-import { ChatUtil } from "../../chat/chat-utility.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import ButtonViewModel from "../button/button-viewmodel.mjs"
 
@@ -53,7 +51,7 @@ export default class DiceRollListViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["formulaViewModels", "formulaListItemTemplate", "chatMessageTemplate", "chatMessageDataProvider"]);
+    common.util.validation.validateOrThrow(args, ["formulaViewModels", "formulaListItemTemplate", "chatMessageTemplate", "chatMessageDataProvider"]);
 
     this.formulaViewModels = args.formulaViewModels;
     this.formulaListItemTemplate = args.formulaListItemTemplate;
@@ -74,12 +72,12 @@ export default class DiceRollListViewModel extends ViewModel {
         // Render the results. 
         const providedData = await this.chatMessageDataProvider(evaluatedFormulae.rolls);
         const renderData = {
-          id: UuidUtil.createUUID(),
+          id: common.util.uuid.createUUID(),
           ...providedData,
         };
         const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, renderData);
 
-        return ChatUtil.sendToChat({
+        return common.util.chat.sendToChat({
           renderedContent: renderedContent,
           sound: SOUNDS_CONSTANTS.DICE_ROLL,
           visibilityMode: evaluatedFormulae.visibilityMode,

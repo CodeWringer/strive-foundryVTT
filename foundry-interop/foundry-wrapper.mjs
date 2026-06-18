@@ -124,7 +124,7 @@ export default class FoundryWrapper {
    * @param {Object | undefined} args Optional arguments to pass to the template while 
    * it is being rendered. 
    * 
-   * @returns {String} The rendered HTML. 
+   * @returns {Promise<String>} The rendered HTML. 
    * 
    * @async
    */

@@ -1,8 +1,5 @@
-import { UuidUtil } from "../../common/util/uuid-utility.mjs"
-import { ValidationUtil } from "../../common/util/validation-utility.mjs"
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs"
-import { ChatUtil } from "../../presentation/chat/chat-utility.mjs"
 import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs"
 import { TEMPLATES } from "../../presentation/templatePreloader.mjs"
 import { ACTOR_TYPES } from "../model/document/actor/actor-types.mjs"
@@ -12,6 +9,7 @@ import { DICE_CONSTANTS } from "./dice-constants.mjs"
 import { DicePoolRollResultType } from "./dice-pool.mjs"
 import { ResolvedObstacle } from "./roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "./roll-dice-modifier-types.mjs"
+import { common } from "../../common/_module.mjs"
 
 /**
  * Represents the input data of a dice (pool) roll. 
@@ -42,7 +40,7 @@ export class RollInputData {
    * dice to actually roll. 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, [
+    common.util.validation.validateOrThrow(args, [
       "dice",
       "bonusDice",
       "compensationPoints",
@@ -84,7 +82,7 @@ export class RollStepData {
    * @param {DicePoolRollResultType} args.outcomeType 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, [
+    common.util.validation.validateOrThrow(args, [
       "faces",
       "resolvedObstacle",
       "hits",
@@ -120,7 +118,7 @@ export class RollResult {
    * @param {RollStepData} args.results
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, [
+    common.util.validation.validateOrThrow(args, [
       "inputData",
       "intermediateResults",
       "results",
@@ -156,7 +154,7 @@ export class RollResult {
     const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
     let showReminder = false;
     if (showReminders) {
-      if (ValidationUtil.isDefined(args.actor) === true) {
+      if (common.util.validation.isDefined(args.actor) === true) {
         const transientActor = args.actor.getTransientObject();
         if (transientActor.type === ACTOR_TYPES.PC) {
           showReminder = true;
@@ -169,7 +167,7 @@ export class RollResult {
     // Render the results. 
     const isObstacleRolled = this.results.resolvedObstacle.isPlainNumber === false;
     const renderedContent = await new FoundryWrapper().renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
-      id: UuidUtil.createUUID(),
+      id: common.util.uuid.createUUID(),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,
       secondaryTitle: args.secondaryTitle,
@@ -202,7 +200,7 @@ export class RollResult {
       diceFacesTemplate: TEMPLATES.DICE_FACES,
     });
 
-    return ChatUtil.sendToChat({
+    return common.util.chat.sendToChat({
       renderedContent: renderedContent,
       flavor: args.flavor,
       actor: args.actor,

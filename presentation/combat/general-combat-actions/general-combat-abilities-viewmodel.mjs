@@ -1,8 +1,8 @@
 import ViewModel from "../../view-model/view-model.mjs";
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
-import { ChatUtil } from "../../chat/chat-utility.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "../../chat/visibility-modes.mjs";
+import { common } from "../../../common/_module.mjs";
 
 /**
  * @property {ViewModel} vmChild
@@ -25,7 +25,7 @@ export default class GeneralCombatAbilitiesViewModel extends ViewModel {
     const rendered = await new FoundryWrapper().renderTemplate(GeneralCombatAbilitiesViewModel.TEMPLATE, {
       viewModel: viewModel,
     });
-    await ChatUtil.sendToChat({
+    await common.util.chat.sendToChat({
       renderedContent: rendered,
       visibilityMode: visibilityMode ?? VISIBILITY_MODES.public,
     });

@@ -1,4 +1,4 @@
-import { BaseItemSheet } from "../base/base-item-sheet.mjs";
+import { BaseItemSheet } from "../../../sheet/item/base/base-item-sheet.mjs";
 
 /**
  * Global definition of an Item sheet. This is what FoundryVTT instantiates to render 

@@ -3,14 +3,14 @@ import { PropertyUtil } from "../../../../common/util/property-utility.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import AtReferencer from "../../../referencing/at-referencer.mjs"
 import CharacterAssetSlotGroup from "../../../ruleset/asset/character-asset-slot-group.mjs"
-import { ATTRIBUTES } from "../../../ruleset/attribute/attributes.mjs"
-import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs"
+import { ATTRIBUTES } from "../../const/attributes.mjs"
 import Ruleset from "../../../ruleset/ruleset.mjs"
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs"
 import { ITEM_TYPES } from "../item/item-types.mjs"
 import TransientMomentumAction from "../item/transient-momentum-action.mjs"
 import TransientTrait from "../item/transient-trait.mjs"
 import TransientBaseActor from "./transient-base-actor.mjs"
+import { CharacterAttribute } from "../../_module.mjs"
 
 /**
  * Represents the base contract for a "specific" actor "sub-type" that 

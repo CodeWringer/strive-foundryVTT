@@ -1,7 +1,7 @@
 import { SpecificRollDataRollSchema } from "../../../../../business/dice/ability-roll/specific-roll-data-roll-schema.mjs"
 import RollData from "../../../../../business/dice/roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../../../business/dice/roll-dice-modifier-types.mjs"
-import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
+import { ATTRIBUTES } from "../../../../../business/model/const/attributes.mjs"
 import { ACTOR_TYPES } from "../../../../../business/model/document/actor/actor-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"

@@ -1,4 +1,4 @@
-import { ATTRIBUTES, Attribute } from "../../../../../business/ruleset/attribute/attributes.mjs";
+import { ATTRIBUTES, Attribute } from "../../../../../business/model/const/attributes.mjs";
 import InputDropDownViewModel from "../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 

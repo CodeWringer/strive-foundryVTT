@@ -3,7 +3,7 @@ import TransientBaseCharacterActor from "../../../../business/model/document/act
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/model/document/document-fetcher/document-collection-source.mjs"
 import DocumentFetcher from "../../../../business/model/document/document-fetcher/document-fetcher.mjs"
 import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs"
-import { ATTRIBUTE_TYPES } from "../../../../business/ruleset/attribute/attribute-types.mjs"
+import { ATTRIBUTE_TYPES } from "../../../../business/model/const/attribute-types.mjs"
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"

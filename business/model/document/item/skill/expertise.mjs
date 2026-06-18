@@ -1,14 +1,12 @@
-import { UuidUtil } from "../../../../../common/util/uuid-utility.mjs"
-import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
+import { common } from "../../../../../common/_module.mjs"
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../../../../presentation/audio/sounds.mjs"
-import { ChatUtil } from "../../../../../presentation/chat/chat-utility.mjs"
 import PreparedChatData from "../../../../../presentation/chat/prepared-chat-data.mjs"
 import { VISIBILITY_MODES } from "../../../../../presentation/chat/visibility-modes.mjs"
 import ExpertiseChatMessageViewModel from "../../../../../presentation/sheet/item/expertise/expertise-chat-message-viewmodel.mjs"
 import ViewModel from "../../../../../presentation/view-model/view-model.mjs"
 import AtReferencer from "../../../../referencing/at-referencer.mjs"
-import { ATTACK_TYPES } from "../../../../ruleset/skill/attack-types.mjs"
+import { ATTACK_TYPES, AttackType } from "../../../../ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../ruleset/skill/damage-and-type.mjs"
 import { ITEM_TYPES } from "../item-types.mjs"
 import TransientSkill from "./transient-skill.mjs"
@@ -62,7 +60,7 @@ export default class Expertise {
       description: dto.description,
       requiredLevel: dto.requiredLevel,
       apCost: dto.apCost,
-      damage: ValidationUtil.isDefined(dto.damage) ? dto.damage.map(it => DamageAndType.fromDto(it)) : undefined,
+      damage: common.util.validation.isDefined(dto.damage) ? dto.damage.map(it => DamageAndType.fromDto(it)) : undefined,
       condition: dto.condition,
       distance: dto.distance,
       obstacle: dto.obstacle,
@@ -148,7 +146,7 @@ export default class Expertise {
    */
   get damage() {
     const value = this._damage;
-    if (ValidationUtil.isDefined(value)) {
+    if (common.util.validation.isDefined(value)) {
       if (value.length > 0) {
         return value;
       } else {
@@ -159,7 +157,7 @@ export default class Expertise {
     }
   }
   set damage(value) {
-    if (ValidationUtil.isDefined(value)) {
+    if (common.util.validation.isDefined(value)) {
       this._damage = value;
       this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
     } else {
@@ -210,7 +208,7 @@ export default class Expertise {
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, ValidationUtil.isDefined(value) ? value.name : null);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, common.util.validation.isDefined(value) ? value.name : null);
   }
   
   
@@ -220,7 +218,7 @@ export default class Expertise {
   get gmNotes() { return this._gmNotes; }
   set gmNotes(value) {
     this._gmNotes = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.gmNotes`, ValidationUtil.isDefined(value) ? value.name : null);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.gmNotes`, common.util.validation.isDefined(value) ? value.name : null);
   }
   
   /**
@@ -244,12 +242,12 @@ export default class Expertise {
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["owningDocument"]);
+    common.util.validation.validateOrThrow(args, ["owningDocument"]);
     
     this.owningDocument = args.owningDocument;
     this.owningDocumentId = args.owningDocument.id;
     
-    this.id = args.id ?? UuidUtil.createUUID();
+    this.id = args.id ?? common.util.uuid.createUUID();
 
     this._isCustom = args.isCustom ?? false;
     this._name = args.name ?? game.i18n.localize("system.character.skill.expertise.newDefaultName");
@@ -275,7 +273,7 @@ export default class Expertise {
   
   /**
    * Base implementation of returning data for a chat message, based on this item. 
-   * @returns {PreparedChatData}
+   * @returns {Promise<PreparedChatData>}
    * @virtual
    * @async
    */
@@ -342,7 +340,7 @@ export default class Expertise {
    */
   async sendToChat(visibilityMode = VISIBILITY_MODES.public) {
     const chatData = await this.getChatData();
-    ChatUtil.sendToChat({
+    common.util.chat.sendToChat({
       visibilityMode: visibilityMode,
       ...chatData
     });
@@ -450,7 +448,7 @@ export default class Expertise {
       description: this.description,
       requiredLevel: this.requiredLevel,
       apCost: this.apCost,
-      damage: ValidationUtil.isDefined(this.damage) ? this.damage.map(it => it.toDto()) : null,
+      damage: common.util.validation.isDefined(this.damage) ? this.damage.map(it => it.toDto()) : null,
       condition: this.condition,
       distance: this.distance,
       obstacle: this.obstacle,

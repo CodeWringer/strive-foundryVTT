@@ -1,8 +1,6 @@
-import { PropertyUtil } from "../../../common/util/property-utility.mjs"
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import { common } from "../../../common/_module.mjs"
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs"
-import { ChatUtil } from "../../../presentation/chat/chat-utility.mjs"
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs"
 import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs"
 import ViewModel from "../../../presentation/view-model/view-model.mjs"
@@ -198,7 +196,7 @@ export default class TransientDocument {
     // Check for length > 0, because the field wasn't always nullable and all existing 
     // documents will have an empty string defined, by default. But that doesn't mean 
     // they actually have GM notes defined...
-    return (ValidationUtil.isDefined(value) && value.length > 0) ? value : null; 
+    return (common.util.validation.isDefined(value) && value.length > 0) ? value : null; 
   }
   set gmNotes(value) {
     this.document.system.gmNotes = value;
@@ -222,7 +220,6 @@ export default class TransientDocument {
     }
 
     this._updater = new DocumentUpdater({
-      propertyUtility: PropertyUtil,
       logger: game.strive.logger,
     });
 
@@ -312,7 +309,7 @@ export default class TransientDocument {
       const propertyName = propertyNames[i];
       let current = previousProperty[propertyName];
 
-      if (ValidationUtil.isDefined(current)) {
+      if (common.util.validation.isDefined(current)) {
         previousProperty = current;
       } else {
         previousProperty = {};
@@ -339,7 +336,7 @@ export default class TransientDocument {
   /**
    * Base implementation of returning data for a chat message, based on this document. 
    * 
-   * @returns {PreparedChatData}
+   * @returns {Promise<PreparedChatData>}
    * 
    * @virtual
    * @async
@@ -399,7 +396,7 @@ export default class TransientDocument {
    */
   async sendToChat(visibilityMode = VISIBILITY_MODES.public) {
     const chatData = await this.getChatData();
-    ChatUtil.sendToChat({
+    common.util.chat.sendToChat({
       ...chatData,
       visibilityMode: visibilityMode,
     });
@@ -415,7 +412,7 @@ export default class TransientDocument {
    * @async
    */
   async sendPropertyToChat(propertyPath, visibilityMode = VISIBILITY_MODES.public) {
-    await ChatUtil.sendPropertyToChat({
+    await common.util.chat.sendPropertyToChat({
       obj: this.document,
       propertyPath: propertyPath,
       parent: this,

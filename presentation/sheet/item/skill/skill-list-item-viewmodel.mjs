@@ -1,5 +1,5 @@
 import TransientSkill from "../../../../business/model/document/item/skill/transient-skill.mjs"
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { ATTRIBUTES } from "../../../../business/model/const/attributes.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
 import Ruleset from "../../../../business/ruleset/ruleset.mjs"

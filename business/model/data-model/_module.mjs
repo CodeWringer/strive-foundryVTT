@@ -11,20 +11,52 @@ import RecipeItemData from "./item/recipe-item-data.mjs";
 import SkillItemData from "./item/skill-item-data.mjs";
 import TraitItemData from "./item/trait-item-data.mjs";
 
+export {
+  PlainActorData,
+  CharacterActorData,
+  AssetItemData,
+  LanguageItemData,
+  SkillItemData,
+  FateCardItemData,
+  IllnessItemData,
+  MutationItemData,
+  HealthConditionItemData,
+  TraitItemData,
+  ProjectItemData,
+  RecipeItemData,
+};
+
 /**
- * Wraps the initialization logic of the data model classes. 
+ * Wraps the data-model module. 
  * 
- * `register` **MUST** be executed during initialization of the system!
- * 
- * @abstract
+ * IMPORTANT the `init` function MUST be called during the system's setup!
  */
-export default class DataModelInit {
+export const dataModel = {
+  actor: {
+    PlainActorData: PlainActorData,
+    CharacterActorData: CharacterActorData,
+  },
+  item: {
+    AssetItemData: AssetItemData,
+    LanguageItemData: LanguageItemData,
+    SkillItemData: SkillItemData,
+    FateCardItemData: FateCardItemData,
+    IllnessItemData: IllnessItemData,
+    MutationItemData: MutationItemData,
+    HealthConditionItemData: HealthConditionItemData,
+    TraitItemData: TraitItemData,
+    ProjectItemData: ProjectItemData,
+    RecipeItemData: RecipeItemData,
+  },
   /**
-   * Ensures the global config contains the data model declarations. 
+   * Wraps the initialization logic of the data model classes. 
    * 
-   * @static
+   * `register` **MUST** be executed during initialization of the system!
+   * 
+   * @abstract
+   * @constant
    */
-  static register() {
+  init: () => {
     CONFIG.Actor.dataModels = {
       plain: PlainActorData,
       character: CharacterActorData,
@@ -41,5 +73,5 @@ export default class DataModelInit {
       project: ProjectItemData,
       recipe: RecipeItemData,
     };
-  }
-}
+  },
+};

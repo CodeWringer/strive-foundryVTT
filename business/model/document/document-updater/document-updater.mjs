@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { common } from "../../../../common/_module.mjs";
 
 /**
  * Allows updating a document's data. 
@@ -13,25 +13,11 @@ export default class DocumentUpdater {
   _logger;
 
   /**
-   * Property utility. 
-   * 
-   * @type {Object | Any}
-   * @private
-   */
-  _propertyUtility;
-
-  /**
    * @param {Object} args 
-   * @param {Object} args.propertyUtility A named import "instance" of the `property-utility.mjs`. 
    * @param {BaseLoggingStrategy | undefined} args.logger A logger instance. 
    * * Default `game.strive.logger`. 
-   * 
-   * @throws If `args.propertyUtility` is undefined. 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["propertyUtility"]);
-
-    this._propertyUtility = args.propertyUtility;
     this._logger = args.logger ?? game.strive.logger;
   }
 
@@ -71,7 +57,7 @@ export default class DocumentUpdater {
       const indexLastBracket = propertyPath.length - 1;
       const arrayPropertyPath = propertyPath.substring(0, indexBracket);
       
-      let array = this._propertyUtility.getNestedPropertyValue(document, arrayPropertyPath);
+      let array = common.util.property.getNestedPropertyValue(document, arrayPropertyPath);
       const index = parseInt(propertyPath.substring(indexBracket + 1, indexLastBracket));
       array = array.slice(0, index).concat(array.slice(index + 1));
 
@@ -115,15 +101,15 @@ export default class DocumentUpdater {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
     
-    const propertyNames = this._propertyUtility.splitPropertyPath(propertyPath);
+    const propertyNames = common.util.property.splitPropertyPath(propertyPath);
     
     if (propertyNames.length < 1) {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
 
-    if (ValidationUtil.isArray(newValue) === true) {
+    if (common.util.validation.isArray(newValue) === true) {
       this._logger.logWarn(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
-    } else if (ValidationUtil.isFunction(newValue) === true) {
+    } else if (common.util.validation.isFunction(newValue) === true) {
       throw new Error("Detected a function as the value to set - functions cannot be persisted!");
     }
 
@@ -151,16 +137,16 @@ export default class DocumentUpdater {
     for (let i = 0; i < propertyNames.length; i++) {
       const propertyName = propertyNames[i];
 
-      if (ValidationUtil.isDefined(previousDocumentProperty[propertyName])) {
+      if (common.util.validation.isDefined(previousDocumentProperty[propertyName])) {
         const currentDocumentProperty = previousDocumentProperty[propertyName];
   
-        if (ValidationUtil.isFunction(currentDocumentProperty) === true) {
+        if (common.util.validation.isFunction(currentDocumentProperty) === true) {
           throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
-        } else if (ValidationUtil.isArray(currentDocumentProperty) === true) {
+        } else if (common.util.validation.isArray(currentDocumentProperty) === true) {
           arrayIsPartOfPath = true;
           this._logger.logWarn(`Detected array as part by name '${propertyName}' of given property path '${propertyPath}' - consider converting the array to an object, instead, as arrays are slow to process`);
           previousDtoProperty[propertyName] = currentDocumentProperty;
-        } else if (ValidationUtil.isObject(currentDocumentProperty) === true) {
+        } else if (common.util.validation.isObject(currentDocumentProperty) === true) {
           if (arrayIsPartOfPath === true) {
             // Because differential updates to array elements are not possible, 
             // we must get the whole object from the document. 
