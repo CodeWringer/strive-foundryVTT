@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import PlainActorChatMessageViewModel from "../../../../presentation/sheet/actor/plain/plain-actor-chat-message-viewmodel.mjs";
 import TransientBaseActor from "./transient-base-actor.mjs";
 

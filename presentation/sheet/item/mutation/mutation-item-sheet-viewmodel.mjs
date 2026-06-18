@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
 
 /**

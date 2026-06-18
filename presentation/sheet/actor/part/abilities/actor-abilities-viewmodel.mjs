@@ -1,5 +1,5 @@
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import TransientBaseCharacterActor from "../../../../../business/model/document/actor/transient-base-character-actor.mjs"

@@ -4,7 +4,7 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/model/document
 import DocumentFetcher from "../../../../business/model/document/document-fetcher/document-fetcher.mjs"
 import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs"
 import { ATTRIBUTE_TYPES } from "../../../../business/ruleset/attribute/attribute-types.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"

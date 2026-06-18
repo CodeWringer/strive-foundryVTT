@@ -1,6 +1,6 @@
 import SpecificDocumentCreationStrategy from "../../../../../business/model/document/creation/specific-document-creation-strategy.mjs"
 import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"

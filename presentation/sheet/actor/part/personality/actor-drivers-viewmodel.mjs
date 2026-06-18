@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import InputTextFieldViewModel from "../../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";

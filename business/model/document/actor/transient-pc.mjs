@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { PropertyUtil } from "../../../../common/util/property-utility.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import PcActorChatMessageViewModel from "../../../../presentation/sheet/actor/pc/pc-actor-chat-message-viewmodel.mjs"

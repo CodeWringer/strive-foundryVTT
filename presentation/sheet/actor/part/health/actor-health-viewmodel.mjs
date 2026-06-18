@@ -8,7 +8,7 @@ import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.
 import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs"
 import { StringUtil } from "../../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import TransientBaseCharacterActor from "../../../../../business/model/document/actor/transient-base-character-actor.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"

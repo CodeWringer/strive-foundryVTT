@@ -5,7 +5,7 @@ import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mj
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs"
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"

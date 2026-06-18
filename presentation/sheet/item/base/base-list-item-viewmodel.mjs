@@ -1,6 +1,6 @@
 import TransientDocument from "../../../../business/model/document/transient-document.mjs"
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"

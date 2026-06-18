@@ -1,5 +1,5 @@
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"

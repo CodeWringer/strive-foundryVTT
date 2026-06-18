@@ -1,6 +1,6 @@
 import TransientBaseCharacterActor from "../../../../../../business/model/document/actor/transient-base-character-actor.mjs";
 import { ATTRIBUTES } from "../../../../../../business/ruleset/attribute/attributes.mjs";
-import { ExtenderUtil } from "../../../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../../../common/util/extender-util.mjs";
 import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 import ActorAttributeViewModel from "./actor-attribute-viewmodel.mjs";

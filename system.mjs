@@ -1,6 +1,7 @@
 // Root Globals
 import { SYSTEM_ID } from "./system-id.mjs";
 import { WorldSystemVersion } from "./business/migration/world-system-version.mjs";
+import { common } from "./common/_module.mjs";
 // Handlebars
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
 import { initHandlebarsHelpers, initHandlebarsPartials } from "./presentation/handlebars-globals/handlebars-globals.mjs";
@@ -145,7 +146,7 @@ import ReadOnlyValueViewModel from "./presentation/component/read-only-value/rea
 // Utilities
 import { ChatUtil } from "./presentation/chat/chat-utility.mjs";
 import { ConstantsUtil } from "./common/util/constants-utility.mjs";
-import { ExtenderUtil } from "./common/extender-util.mjs";
+import { ExtenderUtil } from "./common/util/extender-util.mjs";
 import { PropertyUtil } from "./common/util/property-utility.mjs";
 import { StringUtil } from "./common/util/string-utility.mjs";
 import { UuidUtil } from "./common/util/uuid-utility.mjs";
@@ -236,6 +237,8 @@ Hooks.once('init', function() {
       CHARACTER_TEST_TYPES: CHARACTER_TEST_TYPES,
       VISIBILITY_MODES: VISIBILITY_MODES,
     },
+    // Module namespaces. 
+    common: common,
     /**
      * Contains class definitions for use in modules that wish to extend the strive system. 
      * 
@@ -348,18 +351,6 @@ Hooks.once('init', function() {
           GeneralCombatAbilitiesViewModel: GeneralCombatAbilitiesViewModel,
         },
       },
-    },
-    /**
-     * Namespace for global utility functions. 
-     */
-    util: {
-      array: ArrayUtil,
-      constants: ConstantsUtil,
-      extender: ExtenderUtil,
-      property: PropertyUtil,
-      string: StringUtil,
-      uuid: UuidUtil,
-      validation: ValidationUtil,
     },
     /**
      * Registered extenders. A class may have any number of extenders applied to it, 

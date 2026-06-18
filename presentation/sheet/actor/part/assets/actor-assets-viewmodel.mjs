@@ -3,7 +3,7 @@ import SpecificDocumentCreationStrategy from "../../../../../business/model/docu
 import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
 import TransientAsset from "../../../../../business/model/document/item/transient-asset.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import CompositeSortableListViewModel from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"

@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../common/util/string-utility.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputSliderViewModel from "../../../component/input-slider/input-slider-viewmodel.mjs"

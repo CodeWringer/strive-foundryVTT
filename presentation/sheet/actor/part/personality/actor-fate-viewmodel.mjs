@@ -2,7 +2,7 @@ import SpecificDocumentCreationStrategy from "../../../../../business/model/docu
 import DocumentFetcher from "../../../../../business/model/document/document-fetcher/document-fetcher.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/model/document/general-document-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"

@@ -1,6 +1,6 @@
 import { ACTOR_TYPES } from "../../../../../business/model/document/actor/actor-types.mjs"
 import TransientBaseCharacterActor from "../../../../../business/model/document/actor/transient-base-character-actor.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorBiographyViewModel from "../biography/actor-biography-viewmodel.mjs"

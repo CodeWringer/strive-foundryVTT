@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"

@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**

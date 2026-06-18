@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";

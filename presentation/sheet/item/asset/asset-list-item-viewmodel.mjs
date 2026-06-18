@@ -1,6 +1,6 @@
 import TransientAsset from "../../../../business/model/document/item/transient-asset.mjs"
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import CompositeCurrentAndMaximumNumbersViewModel from "../../../component/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers-viewmodel.mjs"

@@ -1,6 +1,6 @@
 import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs"
 import TransientFateCard from "../../../../business/model/document/item/transient-fate-card.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"

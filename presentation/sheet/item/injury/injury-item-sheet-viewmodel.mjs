@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import CompositeCurrentAndMaximumNumbersViewModel from "../../../component/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";

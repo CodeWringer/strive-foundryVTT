@@ -1,5 +1,5 @@
 import TransientMomentumAction from "../../../../business/model/document/item/transient-momentum-action.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"

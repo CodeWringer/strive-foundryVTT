@@ -12,7 +12,7 @@ import { EventEmitter } from "../event-emitter.mjs";
  * 
  * @constant
  */
-export const CollectionChangeTypes = {
+export const COLLECTION_CHANGE_TYPES = {
   ADD: 0,
   REMOVE: 1,
   MOVE: 2,
@@ -178,7 +178,7 @@ export default class ObservableCollection {
   add(element) {
     const index = this._array.length;
     this._array.push(element);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element], index);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.ADD, [element], index);
 
     this._setOnChangeOnElementIfPossible(element);
   }
@@ -196,7 +196,7 @@ export default class ObservableCollection {
    */
   addAt(index, element) {
     this._array.splice(index, 0, element);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element], index);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.ADD, [element], index);
 
     this._setOnChangeOnElementIfPossible(element);
   }
@@ -214,7 +214,7 @@ export default class ObservableCollection {
   addAll(elements) {
     const index = this._array.length;
     this._array = this._array.concat(elements);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, elements, index);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.ADD, elements, index);
 
     for (const element of elements) {
       this._setOnChangeOnElementIfPossible(element);
@@ -234,7 +234,7 @@ export default class ObservableCollection {
   remove(element) {
     const index = this._array.indexOf(element);
     this._array.splice(index, 1);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, [element], index);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.REMOVE, [element], index);
    
     this._unsetOnChangeOnElementIfPossible(element);
   }
@@ -253,7 +253,7 @@ export default class ObservableCollection {
    */
   removeAt(index) {
     const elements = this._array.splice(index, 1);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, elements, index);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.REMOVE, elements, index);
    
     this._unsetOnChangeOnElementIfPossible(elements[0]);
   }
@@ -268,7 +268,7 @@ export default class ObservableCollection {
   clear() {
     const elements = this._array.concat([]);
     this._array = [];
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, elements);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.REMOVE, elements);
     
     for (const element of elements) {
       this._unsetOnChangeOnElementIfPossible(element);
@@ -300,7 +300,7 @@ export default class ObservableCollection {
     const element = this._array.splice(fromIndex, 1)[0];
     this._array.splice(newIndex, 0, element);
 
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.MOVE, fromIndex, newIndex);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.MOVE, fromIndex, newIndex);
   }
 
   /**
@@ -324,7 +324,7 @@ export default class ObservableCollection {
     this._array.sort(sortFunc);
     const newElements = this._array.concat([]);
 
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.MOVE, oldElements, newElements);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.MOVE, oldElements, newElements);
   }
 
   /**
@@ -350,7 +350,7 @@ export default class ObservableCollection {
     this._array.splice(index, 1);
     this._array.splice(index, 0, element);
 
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, elementToReplace, element);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.REPLACE, elementToReplace, element);
     this._unsetOnChangeOnElementIfPossible(elementToReplace);
     this._setOnChangeOnElementIfPossible(element);
   }
@@ -377,7 +377,7 @@ export default class ObservableCollection {
     const replaced = this._array.splice(index, 1)[0];
     this._array.splice(index, 0, element);
 
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, replaced, element);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.REPLACE, replaced, element);
     this._unsetOnChangeOnElementIfPossible(replaced);
     this._setOnChangeOnElementIfPossible(element);
   }
@@ -397,7 +397,7 @@ export default class ObservableCollection {
     const replacedWith = elements.concat([]); // This ensures an array. 
     this._array = replacedWith;
 
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, replaced, replacedWith);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.REPLACE, replaced, replacedWith);
 
     for (const element of replaced) {
       this._unsetOnChangeOnElementIfPossible(element);
@@ -431,7 +431,7 @@ export default class ObservableCollection {
 
     const thiz = this;
     const callbackId = element.onChange((field, oldValue, newValue) => {
-      thiz._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ELEMENT, field, oldValue, newValue);
+      thiz._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, COLLECTION_CHANGE_TYPES.ELEMENT, field, oldValue, newValue);
     });
     this._elementCallbackIds.set(element, callbackId);
   }

@@ -1,6 +1,6 @@
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
 import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-notes-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";

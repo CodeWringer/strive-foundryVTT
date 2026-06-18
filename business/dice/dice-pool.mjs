@@ -1,5 +1,4 @@
-import { ConstantsUtil } from "../../common/util/constants-utility.mjs";
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+import { common } from "../../common/_module.mjs";
 
 /**
  * Represents the total outcome of a dice pool roll. 
@@ -9,7 +8,7 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
  */
 export class DicePoolRollResultType {
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["name", "localizableName"]);
+    common.util.validation.validateOrThrow(args, ["name", "localizableName"]);
     
     this.name = args.name;
     this.localizableName = args.localizableName;
@@ -45,4 +44,4 @@ export const DICE_POOL_RESULT_TYPES = {
     localizableName: "system.roll.absoluteFailure",
   }),
 }
-ConstantsUtil.enrichConstant(DICE_POOL_RESULT_TYPES);
+common.util.constants.enrichConstant(DICE_POOL_RESULT_TYPES);

@@ -4,7 +4,7 @@ import SpecificDocumentCreationStrategy from "../../../../../business/model/docu
 import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
 import { SearchItem } from "../../../../../business/search/search.mjs"
 import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import { ContextMenuItem } from "../../../../component/button-context-menu/button-context-menu-viewmodel.mjs"

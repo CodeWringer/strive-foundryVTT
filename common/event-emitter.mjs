@@ -1,30 +1,6 @@
 import { UuidUtil } from "./util/uuid-utility.mjs";
 
 /**
- * Internal listener representing object. 
- * 
- * @property {String} id ID of this listener. 
- * * Used for removing this listener. 
- * @property {Boolean} isOnce If true, will only ever be called once and then removed. 
- * @property {Function} callback The function to call when the associated event is emitted. 
- * 
- * @private
- */
-class Listener {
-  /**
-  * @param {String} id ID of this listener. 
-  * * Used for removing this listener. 
-  * @param {Boolean} isOnce If true, will only ever be called once and then removed. 
-  * @param {Function} callback The function to call when the associated event is emitted. 
-   */
-  constructor(id, isOnce, callback) {
-    this.id = id;
-    this.isOnce = isOnce;
-    this.callback = callback;
-  }
-}
-
-/**
  * A simple event emitter system, based on an event bus system. 
  */
 export class EventEmitter {
@@ -160,5 +136,29 @@ export class EventEmitter {
     this._events.set(event, listeners);
 
     return uuid;
+  }
+}
+
+/**
+ * Internal listener representing object. 
+ * 
+ * @property {String} id ID of this listener. 
+ * * Used for removing this listener. 
+ * @property {Boolean} isOnce If true, will only ever be called once and then removed. 
+ * @property {Function} callback The function to call when the associated event is emitted. 
+ * 
+ * @private
+ */
+class Listener {
+  /**
+  * @param {String} id ID of this listener. 
+  * * Used for removing this listener. 
+  * @param {Boolean} isOnce If true, will only ever be called once and then removed. 
+  * @param {Function} callback The function to call when the associated event is emitted. 
+   */
+  constructor(id, isOnce, callback) {
+    this.id = id;
+    this.isOnce = isOnce;
+    this.callback = callback;
   }
 }

@@ -5,7 +5,7 @@ import InputTextFieldViewModel from "../../../component/input-textfield/input-te
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
-import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import CompositeCurrentAndMaximumNumbersViewModel from "../../../component/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers-viewmodel.mjs"
 
 /**

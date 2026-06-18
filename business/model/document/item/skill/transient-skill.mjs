@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { UuidUtil } from "../../../../../common/util/uuid-utility.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs"

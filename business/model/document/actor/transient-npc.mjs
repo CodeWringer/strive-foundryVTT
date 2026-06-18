@@ -1,4 +1,4 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import { PropertyUtil } from "../../../../common/util/property-utility.mjs";
 import NpcActorChatMessageViewModel from "../../../../presentation/sheet/actor/npc/npc-actor-chat-message-viewmodel.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
