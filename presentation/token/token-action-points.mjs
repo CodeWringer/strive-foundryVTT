@@ -1,8 +1,8 @@
-import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
-import { ValidationUtil } from "../../business/util/validation-utility.mjs";
-import PixiButton from "../pixi/pixi-button.mjs";
-import { PixiLoader } from "../pixi/pixi-preloader.mjs";
-import TokenExtender from "./token-extender.mjs";
+import { ACTOR_TYPES } from "../../business/model/document/actor/actor-types.mjs"
+import { ValidationUtil } from "../../common/util/validation-utility.mjs"
+import PixiButton from "../pixi/pixi-button.mjs"
+import { PixiLoader } from "../pixi/pixi-preloader.mjs"
+import TokenExtender from "./token-extender.mjs"
 
 /**
  * Provides token utilities to render and update action points on a token. 

@@ -1,10 +1,10 @@
-import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
-import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
-import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../document/general-document-types.mjs";
-import { ValidationUtil } from "../../util/validation-utility.mjs";
-import AbstractMigrator from "../abstract-migrator.mjs";
-import VersionCode from "../version-code.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import { ACTOR_TYPES } from "../../model/document/actor/actor-types.mjs"
+import { DOCUMENT_COLLECTION_SOURCES } from "../../model/document/document-fetcher/document-collection-source.mjs"
+import DocumentFetcher from "../../model/document/document-fetcher/document-fetcher.mjs"
+import { GENERAL_DOCUMENT_TYPES } from "../../model/document/general-document-types.mjs"
+import AbstractMigrator from "../abstract-migrator.mjs"
+import VersionCode from "../version-code.mjs"
 
 export default class Migrator_1_16_1__1_16_2 extends AbstractMigrator {
   /** @override */

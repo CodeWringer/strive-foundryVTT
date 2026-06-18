@@ -1,7 +1,7 @@
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs";
-import { StringUtil } from "../../../business/util/string-utility.mjs";
+import { StringUtil } from "../../../common/util/string-utility.mjs";
 
 export default class MomentumBarViewModel extends ViewModel {
   /** @override */

@@ -1,8 +1,8 @@
-import Expertise from "../../../business/document/item/skill/expertise.mjs";
-import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
-import AtReferencer from "../../../business/referencing/at-referencer.mjs";
-import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import Expertise from "../../../business/model/document/item/skill/expertise.mjs"
+import TransientSkill from "../../../business/model/document/item/skill/transient-skill.mjs"
+import AtReferencer from "../../../business/referencing/at-referencer.mjs"
+import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs"
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
 
 /**
  * Represents a skill or Expertise which has at least one damage formula defined. 

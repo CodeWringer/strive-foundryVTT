@@ -1,13 +1,13 @@
-import DocumentFetcher from "../../../../../business/document/document-fetcher/document-fetcher.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/document/general-document-types.mjs";
-import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs";
-import { StringUtil } from "../../../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
-import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs";
-import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs";
-import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
+import SpecificDocumentCreationStrategy from "../../../../../business/model/document/creation/specific-document-creation-strategy.mjs"
+import DocumentFetcher from "../../../../../business/model/document/document-fetcher/document-fetcher.mjs"
+import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/model/document/general-document-types.mjs"
+import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../../common/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
+import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import FateCardViewModel from "../../../item/fate-card/fate-card-viewmodel.mjs"
 

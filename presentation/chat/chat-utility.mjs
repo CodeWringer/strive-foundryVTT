@@ -1,10 +1,9 @@
-import { ITEM_TYPES } from "../../business/document/item/item-types.mjs";
-import { PropertyUtil } from "../../business/util/property-utility.mjs";
-import { ValidationUtil } from "../../business/util/validation-utility.mjs";
-import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs";
-import { activateRollChatMessageListeners } from "../dice/roll-chat-message.mjs";
-import TokenExtensions from "../token/token-extensions.mjs";
-import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
+import { ITEM_TYPES } from "../../business/model/document/item/item-types.mjs"
+import { PropertyUtil } from "../../common/util/property-utility.mjs"
+import { ValidationUtil } from "../../common/util/validation-utility.mjs"
+import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs"
+import { activateRollChatMessageListeners } from "../dice/roll-chat-message.mjs"
+import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs"
 
 /**
  * Provides global utility functions for creating and handling chat messages. 

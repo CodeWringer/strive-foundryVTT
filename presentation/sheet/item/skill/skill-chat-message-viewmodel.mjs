@@ -1,5 +1,5 @@
-import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
+import TransientSkill from "../../../../business/model/document/item/skill/transient-skill.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"

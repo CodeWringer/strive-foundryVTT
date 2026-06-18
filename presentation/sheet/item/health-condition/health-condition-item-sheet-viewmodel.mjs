@@ -1,8 +1,8 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import TransientHealthCondition from "../../../../business/document/item/transient-health-condition.mjs";
+import TransientHealthCondition from "../../../../business/model/document/item/transient-health-condition.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
 
 /**
  * @property {TransientHealthCondition} document

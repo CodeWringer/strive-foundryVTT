@@ -1,12 +1,12 @@
+import { ACTOR_TYPES } from "../../../../../business/model/document/actor/actor-types.mjs"
+import TransientBaseCharacterActor from "../../../../../business/model/document/actor/transient-base-character-actor.mjs"
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
+import ActorBiographyViewModel from "../biography/actor-biography-viewmodel.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
 import ActorFateViewModel from "./actor-fate-viewmodel.mjs"
 import PersonalityTraitsViewModel from "./personality-traits/personality-traits-viewmodel.mjs"
-import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
-import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
-import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
-import ActorBiographyViewModel from "../biography/actor-biography-viewmodel.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */

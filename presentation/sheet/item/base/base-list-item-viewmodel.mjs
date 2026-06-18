@@ -1,27 +1,26 @@
-import TransientDocument from "../../../../business/document/transient-document.mjs";
-import { ASSET_TAGS, SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import { CONTEXT_TYPES } from "../../context-types.mjs";
-import { DataFieldComponent } from "./datafield-component.mjs";
-import { TemplatedComponent } from "./templated-component.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import ConfirmablePlainDialog from "../../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
-import SendToChatHandler from "../../../utility/send-to-chat-handler.mjs";
-import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
-import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
-import ItemDropData from "./item-drop-data.mjs";
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import TransientDocument from "../../../../business/model/document/transient-document.mjs"
+import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../common/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
+import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import ConfirmablePlainDialog from "../../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs"
+import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs"
+import SendToChatHandler from "../../../utility/send-to-chat-handler.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import { CONTEXT_TYPES } from "../../context-types.mjs"
+import { DataFieldComponent } from "./datafield-component.mjs"
+import ItemDropData from "./item-drop-data.mjs"
+import { TemplatedComponent } from "./templated-component.mjs"
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 

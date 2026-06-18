@@ -1,5 +1,5 @@
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { KEYBOARD } from "../../keyboard/keyboard.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
 import ConfirmableModalDialog from "../confirmable-modal-dialog/confirmable-modal-dialog.mjs";

@@ -1,3 +1,7 @@
+import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
 import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
@@ -11,11 +15,7 @@ import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
 import SyntheticRollStrategy from "./synthetic-roll-strategy.mjs";
 import CharacterActorSheetViewModel from "../character/character-actor-sheet-viewmodel.mjs";
-import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
-import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
+import TransientBaseCharacterActor from "../../../../business/model/document/actor/transient-base-character-actor.mjs";
 
 export default class NpcActorSheetViewModel extends CharacterActorSheetViewModel {
   /** @override */

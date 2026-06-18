@@ -1,13 +1,12 @@
 import ViewModel from "../../../../../view-model/view-model.mjs";
-import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
 import { ExtenderUtil } from "../../../../../../common/extender-util.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
+import { StringUtil } from "../../../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs";
 import { Attribute, ATTRIBUTES } from "../../../../../../business/ruleset/attribute/attributes.mjs";
 import InputNumberSpinnerViewModel from "../../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import CharacterAttribute from "../../../../../../business/ruleset/attribute/character-attribute.mjs";
 import ButtonRollViewModel from "../../../../../component/button-roll/button-roll-viewmodel.mjs";
 import Ruleset from "../../../../../../business/ruleset/ruleset.mjs";
-import { StringUtil } from "../../../../../../business/util/string-utility.mjs";
 import RulesetExplainer from "../../../../../../business/ruleset/ruleset-explainer.mjs";
 import FoundryWrapper from "../../../../../../foundry-interop/foundry-wrapper.mjs";
 import { ContextMenuItem } from "../../../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
@@ -15,6 +14,7 @@ import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynam
 import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import InputDropDownViewModel from "../../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import { ATTRIBUTE_TYPES } from "../../../../../../business/ruleset/attribute/attribute-types.mjs";
+import TransientBaseCharacterActor from "../../../../../../business/model/document/actor/transient-base-character-actor.mjs";
 
 export default class ActorAttributeViewModel extends ViewModel {
   /** @override */

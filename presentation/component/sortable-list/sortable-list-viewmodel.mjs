@@ -1,5 +1,5 @@
-import { ArrayUtil } from "../../../business/util/array-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { ArrayUtil } from "../../../common/util/array-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SortControlsViewModel from "../sort-controls/sort-controls-viewmodel.mjs";

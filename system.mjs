@@ -16,18 +16,18 @@ import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
 import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
 import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-types.mjs";
 import { ASSET_TAGS, SKILL_TAGS } from "./business/tags/system-tags.mjs";
-import { ACTOR_TYPES } from "./business/document/actor/actor-types.mjs";
-import { ITEM_TYPES } from "./business/document/item/item-types.mjs";
+import { ACTOR_TYPES } from "./business/model/document/actor/actor-types.mjs";
+import { ITEM_TYPES } from "./business/model/document/item/item-types.mjs";
 // Ruleset
 import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
-import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
+import DocumentFetcher from "./business/model/document/document-fetcher/document-fetcher.mjs";
 import TokenExtensions from "./presentation/token/token-extensions.mjs";
-import { ValidationUtil } from "./business/util/validation-utility.mjs";
-import { ArrayUtil } from "./business/util/array-utility.mjs";
+import { ValidationUtil } from "./common/util/validation-utility.mjs";
+import { ArrayUtil } from "./common/util/array-utility.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
@@ -38,39 +38,34 @@ import Tag from "./business/tags/tag.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
-import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-case.mjs";
 // Dialogs
 import DynamicInputDefinition from "./presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
 import BulkUpdateDialog from "./presentation/dialog/bulk-update-dialog/bulk-update-dialog.mjs";
+// Initializers
+import DataModelInit from "./business/model/data-model/data-model-init.mjs";
+import DocumentInitializer from "./business/model/document/document-init.mjs";
+import SheetInitializer from "./presentation/sheet/sheet-init.mjs";
 // Document classes
-import { GameSystemActor } from "./business/document/actor/actor.mjs";
-import { GameSystemItem } from "./business/document/item/item.mjs";
-import GameSystemCombat from "./presentation/combat/game-system-combat.mjs";
-import GameSystemCombatant from "./presentation/combat/game-system-combatant.mjs";
-import TransientBaseItem from "./business/document/item/transient-base-item.mjs";
-import TransientBaseCharacterActor from "./business/document/actor/transient-base-character-actor.mjs";
-import TransientBaseActor from "./business/document/actor/transient-base-actor.mjs";
-import TransientNpc from "./business/document/actor/transient-npc.mjs";
-import TransientPc from "./business/document/actor/transient-pc.mjs";
-import TransientPlainActor from "./business/document/actor/transient-plain-actor.mjs";
-import TransientSkill from "./business/document/item/skill/transient-skill.mjs";
-import TransientAsset from "./business/document/item/transient-asset.mjs";
-import TransientFateCard from "./business/document/item/transient-fate-card.mjs";
-import TransientIllness from "./business/document/item/transient-illness.mjs";
-import TransientInjury from "./business/document/item/transient-injury.mjs";
-import TransientMomentumAction from "./business/document/item/transient-momentum-action.mjs";
-import TransientMutation from "./business/document/item/transient-mutation.mjs";
-import TransientProject from "./business/document/item/transient-project.mjs";
-import TransientScar from "./business/document/item/transient-scar.mjs";
-import TransientHealthCondition from "./business/document/item/transient-health-condition.mjs";
-import TransientTrait from "./business/document/item/transient-trait.mjs";
+import TransientBaseItem from "./business/model/document/item/transient-base-item.mjs";
+import TransientBaseCharacterActor from "./business/model/document/actor/transient-base-character-actor.mjs";
+import TransientBaseActor from "./business/model/document/actor/transient-base-actor.mjs";
+import TransientNpc from "./business/model/document/actor/transient-npc.mjs";
+import TransientPc from "./business/model/document/actor/transient-pc.mjs";
+import TransientPlainActor from "./business/model/document/actor/transient-plain-actor.mjs";
+import TransientSkill from "./business/model/document/item/skill/transient-skill.mjs";
+import TransientAsset from "./business/model/document/item/transient-asset.mjs";
+import TransientFateCard from "./business/model/document/item/transient-fate-card.mjs";
+import TransientIllness from "./business/model/document/item/transient-illness.mjs";
+import TransientInjury from "./business/model/document/item/transient-injury.mjs";
+import TransientMomentumAction from "./business/model/document/item/transient-momentum-action.mjs";
+import TransientMutation from "./business/model/document/item/transient-mutation.mjs";
+import TransientProject from "./business/model/document/item/transient-project.mjs";
+import TransientHealthCondition from "./business/model/document/item/transient-health-condition.mjs";
+import TransientTrait from "./business/model/document/item/transient-trait.mjs";
 // HUD
 import GameSystemTokenHud from "./presentation/token/game-system-token-hud.mjs";
-// Sheet classes
-import { GameSystemActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
-import { GameSystemItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
 // Import logging classes
 import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
@@ -143,19 +138,17 @@ import MomentumActionItemSheetViewModel from "./presentation/sheet/item/momentum
 import MomentumActionListItemViewModel from "./presentation/sheet/item/momentum-action/momentum-action-list-item-viewmodel.mjs";
 import MutationItemSheetViewModel from "./presentation/sheet/item/mutation/mutation-item-sheet-viewmodel.mjs";
 import MutationListItemViewModel from "./presentation/sheet/item/mutation/mutation-list-item-viewmodel.mjs";
-import ScarItemSheetViewModel from "./presentation/sheet/item/scar/scar-item-sheet-viewmodel.mjs";
-import ScarListItemViewModel from "./presentation/sheet/item/scar/scar-list-item-viewmodel.mjs";
 import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
 import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
 import HealthConditionItemSheet from "./presentation/sheet/item/health-condition/health-condition-item-sheet.mjs";
 import ReadOnlyValueViewModel from "./presentation/component/read-only-value/read-only-value.mjs";
 // Utilities
 import { ChatUtil } from "./presentation/chat/chat-utility.mjs";
-import { ConstantsUtil } from "./business/util/constants-utility.mjs";
+import { ConstantsUtil } from "./common/util/constants-utility.mjs";
 import { ExtenderUtil } from "./common/extender-util.mjs";
-import { PropertyUtil } from "./business/util/property-utility.mjs";
-import { StringUtil } from "./business/util/string-utility.mjs";
-import { UuidUtil } from "./business/util/uuid-utility.mjs";
+import { PropertyUtil } from "./common/util/property-utility.mjs";
+import { StringUtil } from "./common/util/string-utility.mjs";
+import { UuidUtil } from "./common/util/uuid-utility.mjs";
 import FoundryWrapper from "./foundry-interop/foundry-wrapper.mjs";
 import { PixiLoader } from "./presentation/pixi/pixi-preloader.mjs";
 import PlainActorSheetViewModel from "./presentation/sheet/actor/plain/plain-actor-sheet-viewmodel.mjs";
@@ -163,9 +156,6 @@ import NpcActorSheetViewModel from "./presentation/sheet/actor/npc/npc-actor-she
 import PcActorSheetViewModel from "./presentation/sheet/actor/pc/pc-actor-sheet-viewmodel.mjs";
 // Brokers
 import SystemHealthConditionBroker from "./business/ruleset/health/system-health-condition-broker.mjs";
-import DocumentInitializer from "./business/document/document-init.mjs";
-import SheetInitializer from "./presentation/sheet/sheet-init.mjs";
-import DataModelInit from "./business/data-model/data-model-init.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -275,7 +265,6 @@ Hooks.once('init', function() {
         TransientMomentumAction: TransientMomentumAction,
         TransientMutation: TransientMutation,
         TransientProject: TransientProject,
-        TransientScar: TransientScar,
         TransientHealthCondition: TransientHealthCondition,
         TransientTrait: TransientTrait,
       },
@@ -351,8 +340,6 @@ Hooks.once('init', function() {
           MomentumActionListItemViewModel: MomentumActionListItemViewModel,
           MutationItemSheetViewModel: MutationItemSheetViewModel,
           MutationListItemViewModel: MutationListItemViewModel,
-          ScarItemSheetViewModel: ScarItemSheetViewModel,
-          ScarListItemViewModel: ScarListItemViewModel,
           SkillItemSheetViewModel: SkillItemSheetViewModel,
           SkillListItemViewModel: SkillListItemViewModel,
           HealthConditionItemSheet: HealthConditionItemSheet,
@@ -437,7 +424,7 @@ Hooks.once("ready", function() {
   new GameSystemWorldSettings().ensureAllSettings();
 
   // Debug mode setting. 
-  game.strive.debug = new LoadDebugSettingUseCase().invoke();
+  game.strive.debug = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_DEBUG);
 
   // Global event handling setup.
   KEYBOARD.init();

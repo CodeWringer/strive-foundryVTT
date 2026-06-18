@@ -1,5 +1,5 @@
-import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 
 /**
  * Displays informative content when users hover over a specified element. 

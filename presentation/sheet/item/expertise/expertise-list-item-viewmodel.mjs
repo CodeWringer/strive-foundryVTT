@@ -1,22 +1,22 @@
-import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
-import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
-import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
-import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import Expertise from "../../../../business/document/item/skill/expertise.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
-import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
-import { TemplatedComponent } from "../base/templated-component.mjs";
-import Ruleset from "../../../../business/ruleset/ruleset.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import Expertise from "../../../../business/model/document/item/skill/expertise.mjs"
+import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
+import Ruleset from "../../../../business/ruleset/ruleset.mjs"
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
+import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
+import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
+import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { TemplatedComponent } from "../base/templated-component.mjs"
 
 /**
  * @property {Expertise} document 

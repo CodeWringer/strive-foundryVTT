@@ -1,5 +1,5 @@
-import { ConstantsUtil } from "../util/constants-utility.mjs";
-import { ValidationUtil } from "../util/validation-utility.mjs";
+import { ConstantsUtil } from "../../common/util/constants-utility.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 
 /**
  * Represents a roll dice modifying type. 

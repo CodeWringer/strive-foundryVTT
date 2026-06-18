@@ -1,12 +1,12 @@
 import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
-import InputViewModel from "../../view-model/input-view-model.mjs";
-import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
-import { StringUtil } from "../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
+import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs"
+import { StringUtil } from "../../../common/util/string-utility.mjs"
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import InputViewModel from "../../view-model/input-view-model.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
+import ButtonViewModel from "../button/button-viewmodel.mjs"
+import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs"
 
 /**
  * Represents the definition of a damage roll formula. 

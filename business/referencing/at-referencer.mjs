@@ -1,6 +1,6 @@
-import TransientDocument from "../document/transient-document.mjs";
-import Expertise from "../document/item/skill/expertise.mjs";
-import { PropertyUtil } from "../util/property-utility.mjs";
+import { PropertyUtil } from "../../common/util/property-utility.mjs";
+import Expertise from "../model/document/item/skill/expertise.mjs";
+import TransientDocument from "../model/document/transient-document.mjs";
 
 /**
  * Provides a means of resolving "@"-references, using a given document. 

@@ -1,4 +1,4 @@
-import { UuidUtil } from "../../business/util/uuid-utility.mjs";
+import { UuidUtil } from "../../common/util/uuid-utility.mjs";
 
 /**
  * Represents the definition of a button on a modal dialog. 

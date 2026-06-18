@@ -1,6 +1,6 @@
 import MigratorInitiator from "../../../business/migration/migrator-initiator.mjs";
 import { WorldSystemVersion } from "../../../business/migration/world-system-version.mjs";
-import { StringUtil } from "../../../business/util/string-utility.mjs";
+import { StringUtil } from "../../../common/util/string-utility.mjs";
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 

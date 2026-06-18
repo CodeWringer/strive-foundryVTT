@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import RollData from "../roll-data.mjs";
 import RollQueryData from "../roll-query-data.mjs";
 import { RollSchema } from "../roll-schema.mjs";

@@ -1,31 +1,31 @@
-import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
-import ListViewModel from "../../../component/list/list-viewmodel.mjs";
+import TransientSkill from "../../../../business/model/document/item/skill/transient-skill.mjs"
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
+import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
+import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs"
+import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../common/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
+import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
+import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs"
+import ListViewModel from "../../../component/list/list-viewmodel.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { TemplatedComponent } from "../base/templated-component.mjs"
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
-import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
-import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
-import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
-import { TemplatedComponent } from "../base/templated-component.mjs";
-import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs";
-import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs";
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
-import { ASSET_TAGS, SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
+import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
+import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document

@@ -1,6 +1,6 @@
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
-import { ValidationUtil } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "./dice-pool.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 import RollFormulaResolver from "./roll-formula-resolver.mjs";

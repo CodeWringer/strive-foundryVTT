@@ -1,11 +1,11 @@
-import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
-import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
-import { ChatUtil } from "../../chat/chat-utility.mjs";
-import RollFormulaResolver from "../../dice/roll-formula-resolver.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
+import RollFormulaResolver from "../../../business/dice/roll-formula-resolver.mjs"
+import { UuidUtil } from "../../../common/util/uuid-utility.mjs"
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs"
+import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs"
+import { ChatUtil } from "../../chat/chat-utility.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
+import ButtonViewModel from "../button/button-viewmodel.mjs"
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 

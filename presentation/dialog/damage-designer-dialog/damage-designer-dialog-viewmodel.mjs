@@ -1,19 +1,19 @@
-import TransientBaseCharacterActor from "../../../business/document/actor/transient-base-character-actor.mjs";
-import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document-fetcher/document-collection-source.mjs";
-import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import ObservableField from "../../../common/observables/observable-field.mjs";
-import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
-import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
-import StatefulChoiceOption from "../../component/input-choice/stateful-choice-option.mjs";
-import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import SortControlsViewModel, { SortingOption } from "../../component/sort-controls/sort-controls-viewmodel.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
-import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs";
-import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel.mjs";
-import { DamageFinding } from "./damage-finding.mjs";
-import DamageHierarchyListItemViewModel from "./damage-hierarchy-list-item-viewmodel.mjs";
+import TransientBaseCharacterActor from "../../../business/model/document/actor/transient-base-character-actor.mjs"
+import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/model/document/document-fetcher/document-collection-source.mjs"
+import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs"
+import { ITEM_TYPES } from "../../../business/model/document/item/item-types.mjs"
+import ObservableField from "../../../common/observables/observable-field.mjs"
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
+import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
+import StatefulChoiceOption from "../../component/input-choice/stateful-choice-option.mjs"
+import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import SortControlsViewModel from "../../component/sort-controls/sort-controls-viewmodel.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
+import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs"
+import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel.mjs"
+import { DamageFinding } from "./damage-finding.mjs"
+import DamageHierarchyListItemViewModel from "./damage-hierarchy-list-item-viewmodel.mjs"
 
 /**
  * @property {Array<DamageFindingHierarchy>} hierarchyViewModels

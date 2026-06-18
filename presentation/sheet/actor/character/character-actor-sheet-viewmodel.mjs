@@ -1,26 +1,26 @@
-import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs";
-import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
-import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/document/document-fetcher/document-collection-source.mjs";
-import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
-import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
-import { ATTRIBUTE_TYPES } from "../../../../business/ruleset/attribute/attribute-types.mjs";
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs";
-import Tooltip from "../../../component/tooltip/tooltip.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
-import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import ItemDropData from "../../item/base/item-drop-data.mjs";
-import ActorActionPointsViewModel from "../part/action-points/actor-action-points-viewmodel.mjs";
-import ActorPersonalsViewModel from "../part/personals/actor-personals-viewmodel.mjs";
+import { ACTOR_TYPES } from "../../../../business/model/document/actor/actor-types.mjs"
+import TransientBaseCharacterActor from "../../../../business/model/document/actor/transient-base-character-actor.mjs"
+import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/model/document/document-fetcher/document-collection-source.mjs"
+import DocumentFetcher from "../../../../business/model/document/document-fetcher/document-fetcher.mjs"
+import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs"
+import { ATTRIBUTE_TYPES } from "../../../../business/ruleset/attribute/attribute-types.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../common/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import InputToggleViewModel from "../../../component/input-toggle/input-toggle-viewmodel.mjs"
+import Tooltip from "../../../component/tooltip/tooltip.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs"
+import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import ItemDropData from "../../item/base/item-drop-data.mjs"
+import ActorActionPointsViewModel from "../part/action-points/actor-action-points-viewmodel.mjs"
+import ActorPersonalsViewModel from "../part/personals/actor-personals-viewmodel.mjs"
 
 /**
  * @abstract Inheritors **must** override:

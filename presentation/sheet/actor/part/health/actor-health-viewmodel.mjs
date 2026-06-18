@@ -1,17 +1,15 @@
 import { SpecificRollDataRollSchema } from "../../../../../business/dice/ability-roll/specific-roll-data-roll-schema.mjs"
 import RollData from "../../../../../business/dice/roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../../../business/dice/roll-dice-modifier-types.mjs"
-import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
-import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
-import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
+import { ACTOR_TYPES } from "../../../../../business/model/document/actor/actor-types.mjs"
+import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs"
-import { StringUtil } from "../../../../../business/util/string-utility.mjs"
-import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
+import { StringUtil } from "../../../../../common/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import RollableSpecificDocumentCreationStrategy from "../../../../../business/document/creation/rollable-specific-document-creation-strategy.mjs"
-import SpecificDocumentCreationStrategy from "../../../../../business/document/creation/specific-document-creation-strategy.mjs"
+import TransientBaseCharacterActor from "../../../../../business/model/document/actor/transient-base-character-actor.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
 import CompositeSortableListViewModel, { SortableListAddItemParams } from "../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
@@ -27,12 +25,12 @@ import { TemplatedComponent } from "../../../item/base/templated-component.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
-import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.mjs"
 import ActorHealthConditionsViewModel from "./conditions/actor-health-conditions-viewmodel.mjs"
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
 import InjuryShrugOffBarViewModel from "./injury-shrug-off-bar/injury-shrug-off-bar-viewmodel.mjs"
-import InjuryCreationStrategy from "../../../../../business/document/creation/injury-creation-strategy.mjs"
+import RollableSpecificDocumentCreationStrategy from "../../../../../business/model/document/creation/rollable-specific-document-creation-strategy.mjs"
+import InjuryCreationStrategy from "../../../../../business/model/document/creation/injury-creation-strategy.mjs"
 
 /**
  * @extends ViewModel
@@ -133,12 +131,6 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   mutations = [];
-
-  /**
-   * @type {Array<ScarListItemViewModel>}
-   * @readonly
-   */
-  scars = [];
 
   /**
    * @type {String}
@@ -524,49 +516,6 @@ export default class ActorHealthViewModel extends ViewModel {
       value: this.mutationCount,
     });
 
-    // Scars
-    this.scars = this._getScarViewModels();
-    this.vmScars = new CompositeSortableListViewModel({
-      id: "vmScars",
-      parent: this,
-      listItemTemplate: ScarListItemViewModel.TEMPLATE,
-      listItemViewModels: this.scars,
-      indexDataSource: new DocumentListItemOrderDataSource({
-        document: this.document,
-        listName: "scars",
-      }),
-      localizedTitle: game.i18n.localize("system.character.health.scar.plural"),
-      addItemParams: [
-        new SortableListAddItemParams({
-          creationStrategy: new SpecificDocumentCreationStrategy({
-            documentType: ITEM_TYPES.SCAR,
-            target: this.document,
-          }),
-          localizedLabel: StringUtil.format(
-            game.i18n.localize("system.general.add.addType"),
-            game.i18n.localize("system.character.health.scar.singular"),
-          ),
-          localizedToolTip: StringUtil.format(
-            game.i18n.localize("system.general.add.addType"),
-            game.i18n.localize("system.character.health.scar.singular"),
-          ),
-        })
-      ],
-      headerExtraContent: new TemplatedComponent({
-        template: game.strive.const.TEMPLATES.ACTOR_HEALTH_SCARS_EXTRA_HEADER,
-        viewModel: this,
-      }),
-      sortingOptions: this._getNameSortingOptions(),
-      isCollapsible: false,
-      enableFooter: true,
-      isSearchable: false,
-    });
-    this.vmScarCount = new ReadOnlyValueViewModel({
-      id: "vmScarCount",
-      parent: this,
-      value: this.scarCount,
-    });
-
     if (this.showGritPoints) {
       this.vmGritPoints = new GritPointsViewModel({
         id: "vmGritPoints",
@@ -687,19 +636,6 @@ export default class ActorHealthViewModel extends ViewModel {
       this.document.health.mutations,
       this.mutations,
       (args) => { return new MutationListItemViewModel(args); }
-    );
-  }
-
-  /**
-   * @returns {Array<ScarListItemViewModel>}
-   * 
-   * @private
-   */
-  _getScarViewModels() {
-    return this._getViewModels(
-      this.document.health.scars,
-      this.scars,
-      (args) => { return new ScarListItemViewModel(args); }
     );
   }
 

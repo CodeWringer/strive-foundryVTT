@@ -1,5 +1,5 @@
-import TransientProject from "../../../../business/document/item/transient-project.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import TransientProject from "../../../../business/model/document/item/transient-project.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 

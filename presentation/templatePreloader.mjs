@@ -119,7 +119,6 @@ export const TEMPLATES = {
   ACTOR_HEALTH_INJURIES_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-injuries-extra-header.hbs`,
   ACTOR_HEALTH_ILLNESSES_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-illnesses-extra-header.hbs`,
   ACTOR_HEALTH_MUTATIONS_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-mutations-extra-header.hbs`,
-  ACTOR_HEALTH_SCARS_EXTRA_HEADER: `${basePathPresentation}/sheet/actor/part/health/part/actor-scars-extra-header.hbs`,
   ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
   // Grit Points
   ACTOR_GRIT_POINTS: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points.hbs`,
@@ -176,8 +175,6 @@ export const TEMPLATES = {
   PROJECT_ITEM_SHEET_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/project/project-item-sheet-promoted-content.hbs`,
   PROJECT_ITEM_SHEET_ADDITIONAL_CONTENT: `${basePathPresentation}/sheet/item/project/project-item-sheet-additional-content.hbs`,
   PROJECT_COMPLICATION_LIST_ITEM: `${basePathPresentation}/sheet/item/project/complication/project-complication-list-item.hbs`,
-  // Scar
-  SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
   // Health Condition
   HEALTH_CONDITION_LIST_ITEM: `${basePathPresentation}/sheet/item/health-condition/health-condition-list-item.hbs`,
   // Combat

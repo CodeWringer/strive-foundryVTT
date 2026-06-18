@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 
 /**
  * Represents the data of an Item document that was drag and dropped onto a sheet. 

@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonToggleIconViewModel from "../button-toggle-icon/button-toggle-icon-viewmodel.mjs";
 

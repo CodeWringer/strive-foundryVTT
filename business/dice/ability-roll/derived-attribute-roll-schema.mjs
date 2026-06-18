@@ -4,7 +4,7 @@ import InputNumberSpinnerViewModel from "../../../presentation/component/input-n
 import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
-import { ValidationUtil } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import RollData from "../roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
 import RollQueryData from "../roll-query-data.mjs";

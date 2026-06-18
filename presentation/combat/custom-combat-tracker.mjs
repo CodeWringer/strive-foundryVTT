@@ -1,6 +1,6 @@
-import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
+import { ACTOR_TYPES } from "../../business/model/document/actor/actor-types.mjs";
 import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs";
-import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
 import ButtonViewModel from "../component/button/button-viewmodel.mjs";

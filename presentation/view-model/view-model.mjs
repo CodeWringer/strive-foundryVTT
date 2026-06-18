@@ -1,8 +1,7 @@
 import GameSystemUserSettings from "../../business/setting/game-system-user-settings.mjs";
-import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs";
-import { PropertyUtil } from "../../business/util/property-utility.mjs";
-import { UuidUtil } from "../../business/util/uuid-utility.mjs";
-import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import { PropertyUtil } from "../../common/util/property-utility.mjs";
+import { UuidUtil } from "../../common/util/uuid-utility.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
@@ -266,7 +265,7 @@ export default class ViewModel {
    */
   get showFancyFont() {
     if (this._showFancyFont === undefined) {
-      return new GetShowFancyFontUseCase().invoke();
+      return new GameSystemUserSettings().get(GameSystemUserSettings.KEY_SHOW_FANCY_FONT);
     } else {
       return this._showFancyFont;
     }

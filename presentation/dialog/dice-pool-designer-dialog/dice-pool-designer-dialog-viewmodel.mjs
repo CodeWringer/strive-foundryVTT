@@ -1,9 +1,9 @@
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { SheetUtil } from "../../sheet/sheet-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import ObservableField from "../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputSliderViewModel from "../../component/input-slider/input-slider-viewmodel.mjs";
-import { SheetUtil } from "../../sheet/sheet-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 export default class DicePoolDesignerDialogViewModel extends ViewModel {

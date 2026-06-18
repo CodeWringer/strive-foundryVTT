@@ -1,10 +1,10 @@
-import { ITEM_TYPES } from "../../../../../../business/document/item/item-types.mjs";
-import SystemHealthConditionBroker from "../../../../../../business/ruleset/health/system-health-condition-broker.mjs";
-import GameSystemWorldSettings from "../../../../../../business/setting/game-system-world-settings.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
-import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
-import ViewModel from "../../../../../view-model/view-model.mjs";
-import HealthConditionListItemViewModel from "../../../../item/health-condition/health-condition-list-item-viewmodel.mjs";
+import { ITEM_TYPES } from "../../../../../../business/model/document/item/item-types.mjs"
+import SystemHealthConditionBroker from "../../../../../../business/ruleset/health/system-health-condition-broker.mjs"
+import GameSystemWorldSettings from "../../../../../../business/setting/game-system-world-settings.mjs"
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs"
+import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs"
+import ViewModel from "../../../../../view-model/view-model.mjs"
+import HealthConditionListItemViewModel from "../../../../item/health-condition/health-condition-list-item-viewmodel.mjs"
 
 /**
  * @property {TransientBaseCharacterActor} document An actor document on which to set the states. 

@@ -1,15 +1,13 @@
-import { Search, SEARCH_MODES, SearchItem, SearchResult } from "../../../business/search/search.mjs";
+import { Search, SEARCH_MODES, SearchItem } from "../../../business/search/search.mjs";
 import Tag from "../../../business/tags/tag.mjs";
-import { ArrayUtil } from "../../../business/util/array-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
-import { TemplatedComponent } from "../../sheet/item/base/templated-component.mjs";
-import { SheetUtil } from "../../sheet/sheet-utility.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
-import Tooltip from "../tooltip/tooltip.mjs";
-import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
+import { ArrayUtil } from "../../../common/util/array-utility.mjs"
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs"
+import { SheetUtil } from "../../sheet/sheet-utility.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs"
+import Tooltip from "../tooltip/tooltip.mjs"
+import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs"
 
 /**
  * Represents an input field for a dynamic number of tags. 

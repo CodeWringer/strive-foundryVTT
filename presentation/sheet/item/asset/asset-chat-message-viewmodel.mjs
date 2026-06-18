@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"

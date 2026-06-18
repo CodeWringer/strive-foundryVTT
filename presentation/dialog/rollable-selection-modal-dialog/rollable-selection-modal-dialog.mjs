@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import ConfirmableModalDialog from "../confirmable-modal-dialog/confirmable-modal-dialog.mjs";
 import ModalDialog from "../modal-dialog/modal-dialog.mjs";

@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs";
 
 /**
  * @property {String} id Internal id of this grit point. 

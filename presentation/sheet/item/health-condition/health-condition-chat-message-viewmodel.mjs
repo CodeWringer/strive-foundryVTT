@@ -1,4 +1,4 @@
-import TransientHealthCondition from "../../../../business/document/item/transient-health-condition.mjs";
+import TransientHealthCondition from "../../../../business/model/document/item/transient-health-condition.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import BaseChatMessageViewModel from "../base/base-chat-message-viewmodel.mjs";
 

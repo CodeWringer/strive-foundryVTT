@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../common/util/validation-utility.mjs";
 import { ContextMenuItem } from "../presentation/component/button-context-menu/button-context-menu-viewmodel.mjs";
 
 /**
@@ -26,6 +26,7 @@ export default class FoundryWrapper {
    * 
    * @param {Object} args
    * @param {Collection} args.registry A foundry Actors or Items collection.
+   * See `FoundryWrapper.collections.documents`
    * @param {String} args.type Must correspond to one of the Actor or Item declarations 
    * @param {DocumentSheetV2} args.sheet 
    * as found in the system.json `documentTypes.Actor` or `documentTypes.Item` fields. 
@@ -128,7 +129,7 @@ export default class FoundryWrapper {
    * @async
    */
   async renderTemplate(templatePath, args = {}) {
-    return await renderTemplate(templatePath, args);
+    return await foundry.applications.handlebars.renderTemplate(templatePath, args);
   }
 
   /**

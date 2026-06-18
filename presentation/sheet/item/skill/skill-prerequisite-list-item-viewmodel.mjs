@@ -1,8 +1,8 @@
-import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
-import ObservableField from "../../../../common/observables/observable-field.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
+import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs"
+import ObservableField from "../../../../common/observables/observable-field.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
 
 // TODO: The observables in here should be unnecessary wiht the new input API.
 /**

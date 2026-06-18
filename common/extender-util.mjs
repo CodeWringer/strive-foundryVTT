@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../business/util/validation-utility.mjs";
+import { ValidationUtil } from "./util/validation-utility.mjs";
 
 /**
  * Provides global functions to register and fetch class extenders. 

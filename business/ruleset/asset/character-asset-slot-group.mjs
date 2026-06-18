@@ -1,5 +1,5 @@
-import { UuidUtil } from "../../util/uuid-utility.mjs";
-import { ValidationUtil } from "../../util/validation-utility.mjs";
+import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import CharacterAssetSlot from "./character-asset-slot.mjs";
 
 /**

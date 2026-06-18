@@ -1,9 +1,8 @@
-import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
-import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
-import GameSystemUserSettings from "../../../../../../business/setting/game-system-user-settings.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
-import ViewModel from "../../../../../view-model/view-model.mjs";
-import GritPoint from "./grit-point.mjs";
+import { ACTOR_TYPES } from "../../../../../../business/model/document/actor/actor-types.mjs"
+import TransientBaseCharacterActor from "../../../../../../business/model/document/actor/transient-base-character-actor.mjs"
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs"
+import ViewModel from "../../../../../view-model/view-model.mjs"
+import GritPoint from "./grit-point.mjs"
 
 /**
  * Represents the grit points bar of a character in the combat tracker. 

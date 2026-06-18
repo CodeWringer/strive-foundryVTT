@@ -1,5 +1,5 @@
-import TransientMomentumAction from "../../../../business/document/item/transient-momentum-action.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import TransientMomentumAction from "../../../../business/model/document/item/transient-momentum-action.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 

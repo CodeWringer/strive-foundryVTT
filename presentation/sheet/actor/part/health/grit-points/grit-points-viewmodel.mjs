@@ -1,12 +1,12 @@
-import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
-import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
-import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import ViewModel from "../../../../../view-model/view-model.mjs";
-import GritPoint from "./grit-point.mjs";
+import { ACTOR_TYPES } from "../../../../../../business/model/document/actor/actor-types.mjs"
+import TransientBaseCharacterActor from "../../../../../../business/model/document/actor/transient-base-character-actor.mjs"
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs"
+import ButtonViewModel from "../../../../../component/button/button-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import ViewModel from "../../../../../view-model/view-model.mjs"
+import GritPoint from "./grit-point.mjs"
 
 /**
  * Represents the grit points bar on a character sheet. 

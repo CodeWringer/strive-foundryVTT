@@ -1,7 +1,7 @@
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs";
 import InputRadioButtonGroupViewModel from "../../../../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 import StatefulChoiceOption from "../../../../../component/input-choice/stateful-choice-option.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 
 /**
  * @property {Array<Object>} personalityTraits An array of personality traits for display. 

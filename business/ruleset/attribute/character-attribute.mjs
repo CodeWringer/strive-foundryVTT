@@ -1,8 +1,8 @@
-import { GameSystemActor } from "../../document/actor/actor.mjs";
-import TransientBaseCharacterActor from "../../document/actor/transient-base-character-actor.mjs";
-import { ValidationUtil } from "../../util/validation-utility.mjs";
-import { ATTRIBUTE_TYPES, AttributeType } from "./attribute-types.mjs";
-import { ATTRIBUTES } from "./attributes.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import { GameSystemActor } from "../../model/document/actor/actor.mjs"
+import TransientBaseCharacterActor from "../../model/document/actor/transient-base-character-actor.mjs"
+import { ATTRIBUTE_TYPES } from "./attribute-types.mjs"
+import { ATTRIBUTES } from "./attributes.mjs"
 
 /**
  * Represents a specific Attribute of a character. 

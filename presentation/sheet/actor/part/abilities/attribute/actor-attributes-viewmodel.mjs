@@ -1,8 +1,8 @@
-import ViewModel from "../../../../../view-model/view-model.mjs";
-import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
-import { ExtenderUtil } from "../../../../../../common/extender-util.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
+import TransientBaseCharacterActor from "../../../../../../business/model/document/actor/transient-base-character-actor.mjs";
 import { ATTRIBUTES } from "../../../../../../business/ruleset/attribute/attributes.mjs";
+import { ExtenderUtil } from "../../../../../../common/extender-util.mjs";
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs";
+import ViewModel from "../../../../../view-model/view-model.mjs";
 import ActorAttributeViewModel from "./actor-attribute-viewmodel.mjs";
 
 export default class ActorAttributesViewModel extends ViewModel {

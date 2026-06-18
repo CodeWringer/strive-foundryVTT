@@ -1,12 +1,12 @@
-import { ITEM_TYPES } from "../../../../../../business/document/item/item-types.mjs";
-import { StringUtil } from "../../../../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
-import SpecificDocumentCreationStrategy from "../../../../../../business/document/creation/specific-document-creation-strategy.mjs";
-import CompositeSortableListViewModel, { SortableListAddItemParams } from "../../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs";
-import { SortingOption } from "../../../../../component/sort-controls/sort-controls-viewmodel.mjs";
-import DocumentListItemOrderDataSource from "../../../../../component/sortable-list/document-list-item-order-datasource.mjs";
-import ViewModel from "../../../../../view-model/view-model.mjs";
-import MomentumActionListItemViewModel from "../../../../item/momentum-action/momentum-action-list-item-viewmodel.mjs";
+import SpecificDocumentCreationStrategy from "../../../../../../business/model/document/creation/specific-document-creation-strategy.mjs"
+import { ITEM_TYPES } from "../../../../../../business/model/document/item/item-types.mjs"
+import { StringUtil } from "../../../../../../common/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs"
+import CompositeSortableListViewModel from "../../../../../component/composite-sortable-list/composite-sortable-list-viewmodel.mjs"
+import { SortingOption } from "../../../../../component/sort-controls/sort-controls-viewmodel.mjs"
+import DocumentListItemOrderDataSource from "../../../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import ViewModel from "../../../../../view-model/view-model.mjs"
+import MomentumActionListItemViewModel from "../../../../item/momentum-action/momentum-action-list-item-viewmodel.mjs"
 
 export default class ActorMomentumViewModel extends ViewModel {
   /** @override */

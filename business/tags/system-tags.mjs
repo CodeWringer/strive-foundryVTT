@@ -1,4 +1,4 @@
-import { ConstantsUtil } from "../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../common/util/constants-utility.mjs";
 import Tag from "./tag.mjs";
 
 /**
@@ -6,9 +6,6 @@ import Tag from "./tag.mjs";
  * 
  * @constant
  * 
- * @property {Tag} AMBERSTEEL_FORGED
- * @property {Tag} AMBERSTEEL_LINED
- * @property {Tag} AMBERSTEEL_PLATED
  * @property {Tag} ARMOR
  * @property {Tag} CLOTHING
  * @property {Tag} COUNTER_ATTACK
@@ -56,18 +53,6 @@ export const ASSET_TAGS = {
   PREFER_MELEE: new Tag({
     id: "PREFER_MELEE",
     localizableName: "system.character.asset.properties.preferMelee"
-  }),
-  AMBERSTEEL_LINED: new Tag({
-    id: "AMBERSTEEL_LINED",
-    localizableName: "system.character.asset.properties.ambersteelLined"
-  }),
-  AMBERSTEEL_PLATED: new Tag({
-    id: "AMBERSTEEL_PLATED",
-    localizableName: "system.character.asset.properties.ambersteelPlated"
-  }),
-  AMBERSTEEL_FORGED: new Tag({
-    id: "AMBERSTEEL_FORGED",
-    localizableName: "system.character.asset.properties.ambersteelForged"
   }),
   EXHAUSTING_TO_WIELD: new Tag({
     id: "EXHAUSTING_TO_WIELD",

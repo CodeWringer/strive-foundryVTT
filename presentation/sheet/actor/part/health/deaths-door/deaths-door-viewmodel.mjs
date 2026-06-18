@@ -1,5 +1,5 @@
-import TransientPc from "../../../../../../business/document/actor/transient-pc.mjs";
-import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
+import TransientPc from "../../../../../../business/model/document/actor/transient-pc.mjs";
+import { ValidationUtil } from "../../../../../../common/util/validation-utility.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 
 /**

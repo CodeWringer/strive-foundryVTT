@@ -1,4 +1,4 @@
-import { ConstantsUtil } from "../../business/util/constants-utility.mjs";
+import { ConstantsUtil } from "../../common/util/constants-utility.mjs";
 
 /**
  * Represents a chat message visibility mode. 

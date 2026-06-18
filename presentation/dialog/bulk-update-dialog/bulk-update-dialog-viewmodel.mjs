@@ -1,8 +1,8 @@
-import BulkDevDocumentUpdater from "../../../business/document/document-updater/bulk-dev-document-updater.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
-import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
+import BulkDevDocumentUpdater from "../../../business/model/document/document-updater/bulk-dev-document-updater.mjs"
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
+import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
 
 /**
  * View model for the bulk updater dialog. 

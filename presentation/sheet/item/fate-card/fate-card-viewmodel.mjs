@@ -1,13 +1,13 @@
-import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
-import TransientFateCard from "../../../../business/document/item/transient-fate-card.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
+import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs"
+import TransientFateCard from "../../../../business/model/document/item/transient-fate-card.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
 
 export default class FateCardViewModel extends ViewModel {
   /** @override */

@@ -1,8 +1,8 @@
-import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
-import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../document/general-document-types.mjs";
-import { ITEM_TYPES } from "../../document/item/item-types.mjs";
-import TransientHealthCondition from "../../document/item/transient-health-condition.mjs";
+import { DOCUMENT_COLLECTION_SOURCES } from "../../model/document/document-fetcher/document-collection-source.mjs"
+import DocumentFetcher from "../../model/document/document-fetcher/document-fetcher.mjs"
+import { GENERAL_DOCUMENT_TYPES } from "../../model/document/general-document-types.mjs"
+import { ITEM_TYPES } from "../../model/document/item/item-types.mjs"
+import TransientHealthCondition from "../../model/document/item/transient-health-condition.mjs"
 
 /**
  * Provides synchronous access to the system-defined Health Conditions, 

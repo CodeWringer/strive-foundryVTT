@@ -6,11 +6,10 @@ import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
 import InjuryItemSheet from "./injury/injury-item-sheet.mjs";
 import MomentumActionItemSheet from "./momentum-action/momentum-action-item-sheet.mjs";
 import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
-import ScarItemSheet from "./scar/scar-item-sheet.mjs";
 import SkillItemSheet from "./skill/skill-item-sheet.mjs";
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import HealthConditionItemSheet from "./health-condition/health-condition-item-sheet.mjs";
 import ItemSheetSubType from "./item-sheet-subtype.mjs";
 import TraitItemSheet from "./trait/trait-item-sheet.mjs";
@@ -46,7 +45,6 @@ export class GameSystemItemSheet extends foundry.appv1.sheets.ItemSheet {
     return new Map([
       [ITEM_TYPES.ASSET, new AssetItemSheet()],
       [ITEM_TYPES.SKILL, new SkillItemSheet()],
-      [ITEM_TYPES.SCAR, new ScarItemSheet()],
       [ITEM_TYPES.MOMENTUM_ACTION, new MomentumActionItemSheet()],
       [ITEM_TYPES.MUTATION, new MutationItemSheet()],
       [ITEM_TYPES.PROJECT, new ProjectItemSheet()],

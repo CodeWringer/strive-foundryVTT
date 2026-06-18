@@ -1,18 +1,18 @@
-import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs";
-import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
-import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
-import TransientSkill from "../../document/item/skill/transient-skill.mjs";
-import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
-import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
-import GameSystemUserSettings from "../../setting/game-system-user-settings.mjs";
-import { ValidationUtil } from "../../util/validation-utility.mjs";
-import RollData from "../roll-data.mjs";
-import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
-import RollQueryData from "../roll-query-data.mjs";
-import { RollSchema } from "../roll-schema.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs"
+import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
+import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import { ACTOR_TYPES } from "../../model/document/actor/actor-types.mjs"
+import TransientSkill from "../../model/document/item/skill/transient-skill.mjs"
+import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs"
+import { Sum } from "../../ruleset/summed-data.mjs"
+import GameSystemUserSettings from "../../setting/game-system-user-settings.mjs"
+import RollData from "../roll-data.mjs"
+import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs"
+import RollQueryData from "../roll-query-data.mjs"
+import { RollSchema } from "../roll-schema.mjs"
 
 /**
  * Defines a schema for rolling dice to test a skill. 

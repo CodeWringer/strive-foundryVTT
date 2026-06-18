@@ -1,12 +1,12 @@
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import { TemplatedComponent } from "../base/templated-component.mjs";
-import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
-import TransientMomentumAction from "../../../../business/document/item/transient-momentum-action.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import TransientMomentumAction from "../../../../business/model/document/item/transient-momentum-action.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { TemplatedComponent } from "../base/templated-component.mjs"
 
 /**
  * @property {TransientMomentumAction} document

@@ -1,13 +1,13 @@
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputSliderViewModel from "../../../component/input-slider/input-slider-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import ListViewModel from "../../../component/list/list-viewmodel.mjs";
-import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
-import { TemplatedComponent } from "../base/templated-component.mjs";
-import ProjectComplicationListItemViewModel from "./complication/project-complication-list-item-viewmodel.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../common/util/string-utility.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputSliderViewModel from "../../../component/input-slider/input-slider-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import ListViewModel from "../../../component/list/list-viewmodel.mjs"
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { TemplatedComponent } from "../base/templated-component.mjs"
+import ProjectComplicationListItemViewModel from "./complication/project-complication-list-item-viewmodel.mjs"
 
 /**
  * @property {TransientProject} document

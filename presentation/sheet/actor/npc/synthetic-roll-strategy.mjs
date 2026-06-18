@@ -1,17 +1,17 @@
-import TransientBaseActor from "../../../../business/document/actor/transient-base-actor.mjs";
-import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/document/document-fetcher/document-collection-source.mjs";
-import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
-import { GENERAL_DOCUMENT_TYPES } from "../../../../business/document/general-document-types.mjs";
-import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
+import { ArrayUtil } from "../../../../common/util/array-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../../../../business/model/document/general-document-types.mjs";
+import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs";
 import Ruleset from "../../../../business/ruleset/ruleset.mjs";
 import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
-import { ArrayUtil } from "../../../../business/util/array-utility.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs";
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputSearchTextViewModel from "../../../component/input-search/input-search-viewmodel.mjs";
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/model/document/document-fetcher/document-collection-source.mjs";
+import TransientBaseActor from "../../../../business/model/document/actor/transient-base-actor.mjs";
+import DocumentFetcher from "../../../../business/model/document/document-fetcher/document-fetcher.mjs";
 
 /**
  * Lets the user select a specific Skill document, which will then be rolled, but without it being 

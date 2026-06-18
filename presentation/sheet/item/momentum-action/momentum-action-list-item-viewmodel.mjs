@@ -1,13 +1,13 @@
-import TransientMomentumAction from "../../../../business/document/item/transient-momentum-action.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
-import { TemplatedComponent } from "../base/templated-component.mjs";
+import TransientMomentumAction from "../../../../business/model/document/item/transient-momentum-action.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { TemplatedComponent } from "../base/templated-component.mjs"
 
 /**
  * @property {TransientMomentumAction} document

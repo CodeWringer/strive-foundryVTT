@@ -1,4 +1,4 @@
-import { ConstantsUtil } from "../../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../../common/util/constants-utility.mjs";
 
 /**
  * Represents an illness state. 

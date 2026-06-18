@@ -1,4 +1,4 @@
-import { UuidUtil } from "../../util/uuid-utility.mjs";
+import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 
 /**
  * Represents an asset slot. 

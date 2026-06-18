@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 
 /**
  * Enables drag and drop operations on arbitrary HTML elements. 

@@ -1,12 +1,12 @@
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
-import TransientSkill from "../document/item/skill/transient-skill.mjs";
-import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
-import { ITEM_TYPES } from "../document/item/item-types.mjs";
+import { ACTOR_TYPES } from "../model/document/actor/actor-types.mjs";
+import { ITEM_TYPES } from "../model/document/item/item-types.mjs";
 import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
 import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
-import { ValidationUtil } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
 import { ATTRIBUTE_TYPES } from "./attribute/attribute-types.mjs";
+import TransientSkill from "../model/document/item/skill/transient-skill.mjs";
 
 /**
  * Provides all the ruleset-specifics. 

@@ -1,6 +1,6 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import SystemHealthConditionBroker from "../../../../business/ruleset/health/system-health-condition-broker.mjs";
 import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";

@@ -1,17 +1,17 @@
-import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
-import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
-import { DicePoolRollResultType } from "./dice-pool.mjs";
-import { ResolvedObstacle } from "./roll-data.mjs";
-import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
-import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs";
-import { VISIBILITY_MODES, VisibilityMode } from "../../presentation/chat/visibility-modes.mjs";
-import { DICE_CONSTANTS } from "./dice-constants.mjs";
-import { ChatUtil } from "../../presentation/chat/chat-utility.mjs";
-import { ValidationUtil } from "../util/validation-utility.mjs";
-import { UuidUtil } from "../util/uuid-utility.mjs";
-import GameSystemUserSettings from "../setting/game-system-user-settings.mjs";
-import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
-import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
+import { UuidUtil } from "../../common/util/uuid-utility.mjs"
+import { ValidationUtil } from "../../common/util/validation-utility.mjs"
+import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs"
+import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs"
+import { ChatUtil } from "../../presentation/chat/chat-utility.mjs"
+import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs"
+import { TEMPLATES } from "../../presentation/templatePreloader.mjs"
+import { ACTOR_TYPES } from "../model/document/actor/actor-types.mjs"
+import { Sum } from "../ruleset/summed-data.mjs"
+import GameSystemUserSettings from "../setting/game-system-user-settings.mjs"
+import { DICE_CONSTANTS } from "./dice-constants.mjs"
+import { DicePoolRollResultType } from "./dice-pool.mjs"
+import { ResolvedObstacle } from "./roll-data.mjs"
+import { ROLL_DICE_MODIFIER_TYPES } from "./roll-dice-modifier-types.mjs"
 
 /**
  * Represents the input data of a dice (pool) roll. 

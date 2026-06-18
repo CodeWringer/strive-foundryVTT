@@ -1,3 +1,5 @@
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
 import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-notes-viewmodel.mjs";
@@ -9,9 +11,7 @@ import ActorHealthViewModel from "../part/health/actor-health-viewmodel.mjs";
 import ActorPersonalityViewModel from "../part/personality/actor-personality-viewmodel.mjs";
 import ActorProjectsViewModel from "../part/projects/actor-projects-viewmodel.mjs";
 import CharacterActorSheetViewModel from "../character/character-actor-sheet-viewmodel.mjs";
-import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
+import TransientBaseCharacterActor from "../../../../business/model/document/actor/transient-base-character-actor.mjs";
 
 export default class PcActorSheetViewModel extends CharacterActorSheetViewModel {
   /** @override */
