@@ -3,6 +3,7 @@ import { DragDropHandler } from "./drag-drop-handler.mjs";
 import { HANDLEBARS_GLOBALS } from "./handlebars-globals.mjs";
 import { KEY_CODES } from "./keyboard/key-codes.mjs";
 import { KEYBOARD } from "./keyboard/keyboard.mjs";
+import { SheetUtil } from "./sheet-utility.mjs";
 import SendToChatHandler from "./send-to-chat-handler.mjs";
 
 export {
@@ -12,6 +13,7 @@ export {
   DragDropHandler,
   HANDLEBARS_GLOBALS,
   SendToChatHandler,
+  SheetUtil,
 };
 
 /**
@@ -26,6 +28,7 @@ export const util = {
   DragDropHandler: DragDropHandler,
   HANDLEBARS_GLOBALS: HANDLEBARS_GLOBALS,
   SendToChatHandler: SendToChatHandler,
+  sheet: SheetUtil,
   /**
    * Initialization to be called during the system's "ready" hook. 
    */

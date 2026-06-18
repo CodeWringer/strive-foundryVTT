@@ -20,5 +20,7 @@ export const combat = {
       formula: "1D20 + @baseInitiative",
       decimals: 0
     };
+    CONFIG.Combat.documentClass = GameSystemCombat;
+    CONFIG.Combatant.documentClass = GameSystemCombatant;
   },
 };

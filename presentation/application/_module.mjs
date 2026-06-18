@@ -1,5 +1,5 @@
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
-import { LanguageItemSheet } from "./domain/language/language-item-sheet.mjs";
+import { LanguageItemSheet } from "./domain/item/language/language-item-sheet.mjs";
 
 export {
   LanguageItemSheet,

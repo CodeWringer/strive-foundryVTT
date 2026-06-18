@@ -28,8 +28,6 @@ import TransientMomentumAction from "./item/transient-momentum-action.mjs";
 import TransientMutation from "./item/transient-mutation.mjs";
 import TransientProject from "./item/transient-project.mjs";
 import TransientTrait from "./item/transient-trait.mjs";
-import GameSystemCombat from "../combat/game-system-combat.mjs";
-import GameSystemCombatant from "../combat/game-system-combatant.mjs";
 
 export {
   TransientDocument,
@@ -63,8 +61,6 @@ export {
   TransientPc,
   TransientPlainActor,
   GameSystemActor,
-  GameSystemCombat,
-  GameSystemCombatant,
 };
 
 /**
@@ -119,7 +115,5 @@ export const document = {
   init() {
     CONFIG.Actor.documentClass = GameSystemActor;
     CONFIG.Item.documentClass = GameSystemItem;
-    CONFIG.Combat.documentClass = GameSystemCombat;
-    CONFIG.Combatant.documentClass = GameSystemCombatant;
   },
 };

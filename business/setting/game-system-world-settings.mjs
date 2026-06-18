@@ -1,4 +1,4 @@
-import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-settings/health-settings-dialog.mjs";
+import HealthStatesSettingsDialog from "../../presentation/application/dialog/settings/health-settings/health-settings-dialog.mjs";
 import GameSystemSetting from "./game-system-setting.mjs";
 import GameSystemSettings from "./game-system-settings.mjs";
 import { SETTING_SCOPES } from "./setting-scopes.mjs";
