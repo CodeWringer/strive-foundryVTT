@@ -219,10 +219,7 @@ export default class TransientDocument {
       throw new Error("A document instance must be provided");
     }
 
-    this._updater = new DocumentUpdater({
-      logger: game.strive.logger,
-    });
-
+    this._updater = new DocumentUpdater();
     this.document = document;
     this.localizableName = this.name;
     this.localizableAbbreviation = this.name;

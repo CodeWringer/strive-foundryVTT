@@ -38,9 +38,6 @@ import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
 import BulkUpdateDialog from "./presentation/dialog/bulk-update-dialog/bulk-update-dialog.mjs";
 // HUD
 import GameSystemTokenHud from "./presentation/token/game-system-token-hud.mjs";
-// Import logging classes
-import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-strategy.mjs";
-import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
 // Import settings classes
 import GameSystemUserSettings from "./business/setting/game-system-user-settings.mjs";
 import GameSystemWorldSettings from "./business/setting/game-system-world-settings.mjs";
@@ -62,10 +59,10 @@ Hooks.once('init', function() {
   // Add system specific logic to global namespace. 
   game.strive = {
     /**
-     * 
-     * @type {BaseLoggingStrategy}
+     * Used to log system specific notifications. 
+     * @type {ConsoleLogger}
      */
-    logger: new ConsoleLoggingStrategy(LogLevels.ERROR),
+    logger: new common.logging.ConsoleLogger(common.logging.LOG_LEVELS.ERROR),
     /**
      * @type {Boolean}
      * @private
@@ -81,7 +78,9 @@ Hooks.once('init', function() {
     set debug(value) {
       this._debug = value;
       if (value === true) {
-        this.logger = new ConsoleLoggingStrategy(LogLevels.VERBOSE);
+        this.logger = new common.logging.ConsoleLogger(common.logging.LOG_LEVELS.VERBOSE);
+      } else {
+        this.logger = new common.logging.ConsoleLogger(common.logging.LOG_LEVELS.ERROR);
       }
     },
     /**

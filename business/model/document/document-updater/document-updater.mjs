@@ -4,22 +4,7 @@ import { common } from "../../../../common/_module.mjs";
  * Allows updating a document's data. 
  */
 export default class DocumentUpdater {
-  /**
-   * A logger instance. 
-   * 
-   * @type {BaseLoggingStrategy}
-   * @private
-   */
-  _logger;
-
-  /**
-   * @param {Object} args 
-   * @param {BaseLoggingStrategy | undefined} args.logger A logger instance. 
-   * * Default `game.strive.logger`. 
-   */
-  constructor(args = {}) {
-    this._logger = args.logger ?? game.strive.logger;
-  }
+  get _logger() { return game.strive.logger; }
 
   /**
    * Updates a property on the given document entity, identified via the given path. 

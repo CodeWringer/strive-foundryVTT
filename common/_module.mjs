@@ -9,6 +9,8 @@ import ObservableField from "./observables/observable-field.mjs"
 import { EventEmitter } from "./event-emitter.mjs"
 import { ExtenderUtil } from "./util/extender-util.mjs"
 import { ChatUtil } from "./util/chat-utility.mjs"
+import { LOG_LEVELS } from "./logging/log-levels.mjs"
+import { ConsoleLogger } from "./logging/console-logger.mjs"
 
 export {
   ArrayUtil,
@@ -23,6 +25,8 @@ export {
   StringUtil,
   UuidUtil,
   ValidationUtil,
+  LOG_LEVELS,
+  ConsoleLogger,
 }
 
 export const common = {
@@ -40,6 +44,10 @@ export const common = {
     COLLECTION_CHANGE_TYPES: COLLECTION_CHANGE_TYPES,
     ObservableCollection: ObservableCollection,
     ObservableField: ObservableField
+  },
+  logging: {
+    ConsoleLogger: ConsoleLogger,
+    LOG_LEVELS: LOG_LEVELS,
   },
   EventEmitter: EventEmitter,
 };

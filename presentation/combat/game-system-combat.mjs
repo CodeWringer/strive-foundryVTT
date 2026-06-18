@@ -17,9 +17,7 @@ export default class GameSystemCombat extends Combat {
    */
   get momentum() { return this.system.momentum ?? 0; }
   set momentum(value) {
-    new DocumentUpdater({
-      logger: game.strive.logger,
-    }).updateByPath(this, "system.momentum", value);
+    new DocumentUpdater().updateByPath(this, "system.momentum", value);
   }
 
   /**
