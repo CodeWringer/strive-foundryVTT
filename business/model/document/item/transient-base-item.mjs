@@ -28,6 +28,8 @@ import TransientDocument from "../transient-document.mjs";
  * * Read-only. 
  * * virtual. 
  * * Default `[]`.
+ * @property {String} description Html content 
+ * @property {String} gmNotes Html content 
  */
 export default class TransientBaseItem extends TransientDocument {
   /** @override */
@@ -35,7 +37,29 @@ export default class TransientBaseItem extends TransientDocument {
   
   /** @override */
   get chatMessageTemplate() { return game.strive.const.TEMPLATES.ASSET_CHAT_MESSAGE; }
-
+  
+  /**
+   * @type {String}
+   */
+  get description() {
+    return this.document.system.description;
+  }
+  set description(value) {
+    this.document.system.description = value;
+    this.updateByPath("system.description", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get gmNotes() {
+    return this.document.system.gmNotes;
+  }
+  set gmNotes(value) {
+    this.document.system.gmNotes = value;
+    this.updateByPath("system.gmNotes", value);
+  }
+  
   /**
    * An array of the current tags of this document. 
    * 

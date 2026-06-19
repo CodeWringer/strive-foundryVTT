@@ -13,8 +13,17 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * 
  * @extends TransientBaseItem
  * 
- * @property {String} description
- * @property {String} gmNotes
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * @property {Array<Tag>} tags An array of the current 
+ * tags of this document. 
+ * @property {Array<Tag>} acceptedTags Returns an array of accepted 
+ * tags. 
+ * * Read-only. 
+ * * virtual. 
+ * * Default `[]`.
+ * @property {String} description Html content 
+ * @property {String} gmNotes Html content 
  * 
  * @property {Number} bulk
  * @property {Number} quantity
@@ -41,7 +50,7 @@ export default class TransientAsset extends TransientBaseItem {
   
   /** @override */
   get chatMessageTemplate() { return game.strive.const.TEMPLATES.ASSET_CHAT_MESSAGE; }
-  
+
   /**
    * @type {Number}
    */

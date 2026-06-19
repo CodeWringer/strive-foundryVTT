@@ -1,5 +1,5 @@
 import { common } from "../../../common/_module.mjs";
-import Tag from "../../tags/tag.mjs";
+import { Tag } from "../domain/_module.mjs";
 
 /**
  * Property constants of "item/asset" type documents. 
@@ -9,7 +9,6 @@ import Tag from "../../tags/tag.mjs";
  * @property {Tag} ARMOR
  * @property {Tag} CLOTHING
  * @property {Tag} COUNTER_ATTACK
- * @property {Tag} EXHAUSTING_TO_WIELD
  * @property {Tag} HOLDABLE
  * @property {Tag} LONG_REACH
  * @property {Tag} MELEE
@@ -53,10 +52,6 @@ export const ASSET_TAGS = {
   PREFER_MELEE: new Tag({
     id: "PREFER_MELEE",
     localizableName: "system.character.asset.properties.preferMelee"
-  }),
-  EXHAUSTING_TO_WIELD: new Tag({
-    id: "EXHAUSTING_TO_WIELD",
-    localizableName: "system.character.asset.properties.exhaustingToWield"
   }),
   HOLDABLE: new Tag({
     id: "HOLDABLE",
