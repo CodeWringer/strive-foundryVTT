@@ -1,87 +1,166 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
+import { TIME_UNITS } from "../../const/time-units.mjs";
 import { Complication, Reference, TimeIncrement } from "../../domain/_module.mjs";
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
  * @extends TransientBaseItem
  * 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
  * @property {TransientBaseActor | undefined} owningDocument Another 
  * document that this document is embedded in. 
- * @property {Array<Tag>} tags An array of the current 
- * tags of this document. 
- * @property {Array<Tag>} acceptedTags Returns an array of accepted 
- * tags. 
- * * Read-only. 
- * * virtual. 
- * * Default `[]`.
- * @property {String} description Html content 
- * @property {String} gmNotes Html content 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
  * 
  * @property {Array<Complication>} complications
  * @property {Number} requiredProgress
  * @property {Reference} projectSkill
  * @property {Number} quality
- * @property {TimeIncrement} timeIncrement
+ * @property {Object} timeIncrement
+ * * Read-only
+ * @property {Number} timeIncrement.value
+ * @property {TimeUnit} timeIncrement.unit
  * @property {Reference} product
  */
 export default class TransientRecipe extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/book.svg"; }
-  
-  get complications() {
-    return (this.document.system.complications ?? []).map(dto => Complication.fromDto(dto));
-  }
-  set complications(value) {
-    const mapped = value.map(it => it.toDto());
-    this.document.system.complications = mapped;
-    this.updateByPath("system.complications", mapped);
-  }
-  
-  get requiredProgress() {
-    return parseInt(this.document.system.requiredProgress ?? 0);
-  }
-  set requiredProgress(value) {
-    this.document.system.requiredProgress = value;
-    this.updateByPath("system.requiredProgress", value);
-  }
-  
-  get projectSkill() {
-    return this.document.system.projectSkill.map(dto => Reference.fromDto(dto));
-  }
-  set projectSkill(value) {
-    const mapped = value.toDto();
-    this.document.system.projectSkill = mapped;
-    this.updateByPath("system.projectSkill", mapped);
-  }
-  
-  get quality() {
-    return parseInt(this.document.system.quality ?? 0);
-  }
-  set quality(value) {
-    this.document.system.quality = value;
-    this.updateByPath("system.quality", value);
-  }
-  
-  get timeIncrement() {
-    return this.document.system.timeIncrement.map(dto => TimeIncrement.fromDto(dto));
-  }
-  set timeIncrement(value) {
-    const mapped = value.toDto();
-    this.document.system.timeIncrement = mapped;
-    this.updateByPath("system.timeIncrement", mapped);
-  }
-  
-  get product() {
-    return this.document.system.product.map(dto => Reference.fromDto(dto));
-  }
-  set product(value) {
-    const mapped = value.toDto();
-    this.document.system.product = mapped;
-    this.updateByPath("system.product", mapped);
-  }
-  
+
   /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientTrait));
+  get clazz() { return TransientRecipe; }
+
+  /**
+   * @type {Array<Complication>}
+   */
+  get complications() { return this._complications.value; }
+  set complications(value) { this._complications.value = value; }
+
+  /**
+   * @type {Number}
+   */
+  get requiredProgress() { return this._requiredProgress.value; }
+  set requiredProgress(value) { this._requiredProgress.value = value; }
+  
+  /**
+   * @type {Reference}
+   */
+  get projectSkill() { return this._projectSkill.value; }
+  set projectSkill(value) { this._projectSkill.value = value; }
+  
+  /**
+   * @type {Number}
+  */
+ get quality() { return this._quality.value; }
+ set quality(value) { this._quality.value = value; }
+ 
+ get timeIncrement() {
+   const thiz = this;
+   return {
+     /**
+      * @type {Number}
+     */
+    get value() { return thiz._timeIncrementValue.value; },
+    set value(value) { thiz._timeIncrementValue.value = value; },
+    
+    /**
+     * @type {TimeUnit}
+       */
+      get unit() { return thiz._timeIncrementUnit.value; },
+      set unit(value) { thiz._timeIncrementUnit.value = value; },
+    };
+  }
+  
+  /**
+   * @type {Reference}
+   */
+  get product() { return this._product.value; }
+  set product(value) { this._product.value = value; }
+
+  constructor(args = {}) {
+    this._complications = new DataFieldBridge({
+      document: this,
+      dataPath: "system.complications",
+      default: [],
+      fromDto: (dto) => {
+        return dto.map(it => Complication.fromDto(it));
+      },
+      toDto: (value) => {
+        return value.map(it => it.toDto());
+      },
+    });
+    this._requiredProgress = new DataFieldBridge({
+      document: this,
+      dataPath: "system.requiredProgress",
+      default: 0,
+    });
+    this._projectSkill = new DataFieldBridge({
+      document: this,
+      dataPath: "system.projectSkill",
+      default: null,
+      fromDto: (dto) => {
+        return Reference.fromDto(dto);
+      },
+      toDto: (value) => {
+        return value.toDto();
+      },
+    });
+    this._quality = new DataFieldBridge({
+      document: this,
+      dataPath: "system.quality",
+      default: 1,
+    });
+    this._timeIncrementValue = new DataFieldBridge({
+      document: this,
+      dataPath: "timeIncrement.value",
+      default: 0,
+    });
+    this._timeIncrementUnit = new DataFieldBridge({
+      document: this,
+      dataPath: "timeIncrement.unit",
+      default: TIME_UNITS.none,
+      fromDto: (dto) => {
+        return TIME_UNITS[dto];
+      },
+      toDto: (value) => {
+        return value.name;
+      },
+    });
+    this._product = new DataFieldBridge({
+      document: this,
+      dataPath: "system.product",
+      default: null,
+      fromDto: (dto) => {
+        return Reference.fromDto(dto);
+      },
+      toDto: (value) => {
+        return value.toDto();
+      },
+    });
   }
 }

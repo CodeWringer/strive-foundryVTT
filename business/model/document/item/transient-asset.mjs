@@ -1,4 +1,3 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
 import { TIME_UNITS, TimeUnit } from "../../const/time-units.mjs"
 import CharacterAssetSlot from "../../../ruleset/asset/character-asset-slot.mjs"
@@ -49,9 +48,11 @@ import DataFieldBridge from "../data-field-bridge.mjs"
  * @property {Number} quantity.maximum
  * @property {Number} quality
  * @property {Object} crafting
+ * * Read-only
  * @property {Number} crafting.progressIncrement
  * @property {Number} crafting.amount
  * @property {Object} crafting.timeIncrement
+ * * Read-only
  * @property {Number} crafting.timeIncrement.value
  * @property {TimeUnit} crafting.timeIncrement.unit 
  * 
@@ -71,6 +72,9 @@ import DataFieldBridge from "../data-field-bridge.mjs"
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
+
+  /** @override */
+  get clazz() { return TransientAsset; }
 
   /**
    * @type {Number}
@@ -224,6 +228,12 @@ export default class TransientAsset extends TransientBaseItem {
       document: this,
       dataPath: "system.crafting.timeIncrement.unit",
       default: TIME_UNITS.none,
+      fromDto: (dto) => {
+        return TIME_UNITS[dto];
+      },
+      toDto: (value) => {
+        return value.name;
+      },
     });
   }
 
@@ -306,11 +316,6 @@ export default class TransientAsset extends TransientBaseItem {
     } else {
       return 0;
     }
-  }
-
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientAsset));
   }
 
   /**
