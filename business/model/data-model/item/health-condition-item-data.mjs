@@ -22,11 +22,10 @@ export default class HealthConditionItemData extends TypeDataModel {
         min: 1,
       }),
       maximum: new FoundrySchemaFields.NumberField({
-        nullable: false,
+        nullable: true,
         integer: true,
         positive: true,
-        initial: 1,
-        min: 1,
+        initial: null,
       }),
     }
   }

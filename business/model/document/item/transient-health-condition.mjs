@@ -1,11 +1,39 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import HealthConditionChatMessageViewModel from "../../../../presentation/sheet/item/health-condition/health-condition-chat-message-viewmodel.mjs"
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
+ * 
  * @property {Number} current
  * @property {Number} limit
  * 
@@ -16,29 +44,19 @@ export default class TransientHealthCondition extends TransientBaseItem {
   get defaultImg() { return "systems/strive/presentation/image/health-condition.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return HealthConditionChatMessageViewModel.TEMPLATE; }
+  get clazz() { return TransientHealthCondition; }
 
   /**
    * @type {Number}
    */
-  get current() {
-    return this.document.system.current;
-  }
-  set current(value) {
-    this.document.system.current = value;
-    this.updateByPath("system.current", value);
-  }
+  get current() { return this._current.value; }
+  set current(value) { this._current.value = value; }
   
   /**
    * @type {Number}
    */
-  get limit() {
-    return this.document.system.limit;
-  }
-  set limit(value) {
-    this.document.system.limit = value;
-    this.updateByPath("system.limit", value);
-  }
+  get maximum() { return this._maximum.value; }
+  set maximum(value) { this._maximum.value = value; }
 
   /**
    * @param {GameSystemItem} document An encapsulated document instance. 
@@ -47,58 +65,16 @@ export default class TransientHealthCondition extends TransientBaseItem {
    */
   constructor(document) {
     super(document);
-    this.document.system.current = Math.max(1, this.document.system.current);
-  }
-  
-  /** @override */
-  async getChatData() {
-    const vm = this.getChatViewModel();
-
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-      flavor: game.i18n.localize("system.character.health.condition.condition"),
-    });
-  }
-
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {HealthConditionChatMessageViewModel}
-   * 
-   * @override
-   */
-  getChatViewModel(overrides = {}) {
-    return new HealthConditionChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
+    
+    this._current = new DataFieldBridge({
       document: this,
+      dataPath: "system.current",
+      default: 0,
     });
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientHealthCondition));
+    this._maximum = new DataFieldBridge({
+      document: this,
+      dataPath: "system.maximum",
+      default: null,
+    });
   }
 }

@@ -1,8 +1,4 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import FateCardChatMessageViewModel from "../../../../presentation/sheet/item/fate-card/fate-card-chat-message-viewmodel.mjs"
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
@@ -10,7 +6,40 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * 
  * @extends TransientBaseItem
  * 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
+ * 
  * @property {Object} cost
+ * * Read-only
  * @property {Number} cost.miFP
  * @property {Number} cost.maFP
  * @property {Number} cost.AFP
@@ -18,78 +47,53 @@ import TransientBaseItem from "./transient-base-item.mjs"
 export default class TransientFateCard extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/wing.svg"; }
-  
+
   /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
- 
+  get clazz() { return TransientFateCard; }
+
   /**
    * @type {Object}
    */
   get cost() {
     const thiz = this;
     return {
-      get miFP() { return parseInt(thiz.document.system.cost.miFP); },
-      set miFP(value) { thiz.updateByPath("system.cost.miFP", value); },
-      get maFP() { return parseInt(thiz.document.system.cost.maFP); },
-      set maFP(value) { thiz.updateByPath("system.cost.maFP", value); },
-      get AFP() { return parseInt(thiz.document.system.cost.AFP); },
-      set AFP(value) { thiz.updateByPath("system.cost.AFP", value); },
+      /**
+       * @type {Number}
+       */
+      get miFP() { return thiz._costMifp.value; },
+      set miFP(value) { thiz._costMifp.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get maFP() { return thiz._costMafp.value; },
+      set maFP(value) { thiz._costMafp.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get AFP() { return thiz._costAfp.value; },
+      set AFP(value) { thiz._costAfp.value = value; },
     };
   }
-  set cost(value) {
-    this.document.system.cost = value;
-    this.updateByPath("system.cost", value);
-  }
-  
-  /** @override */
-  async getChatData() {
-    const vm = this.getChatViewModel();
 
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-      flavor: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
-    });
-  }
-
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {FateCardChatMessageViewModel}
-   * 
-   * @override
-   */
-  getChatViewModel(overrides = {}) {
-    return new FateCardChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
+  constructor(args = {}) {
+    super(document);
+    
+    this._costMifp = new DataFieldBridge({
       document: this,
+      dataPath: "system.cost.miFP",
+      default: 0,
     });
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientFateCard));
+    this._costMafp = new DataFieldBridge({
+      document: this,
+      dataPath: "system.cost.maFP",
+      default: 0,
+    });
+    this._costAfp = new DataFieldBridge({
+      document: this,
+      dataPath: "system.cost.AFP",
+      default: 0,
+    });
   }
 }

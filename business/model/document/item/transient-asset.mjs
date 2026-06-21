@@ -189,6 +189,8 @@ export default class TransientAsset extends TransientBaseItem {
   }
 
   constructor(args = {}) {
+    super(document);
+
     this._bulk = new DataFieldBridge({
       document: this,
       dataPath: "system.bulk",
