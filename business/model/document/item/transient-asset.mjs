@@ -1,16 +1,13 @@
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import AssetChatMessageViewModel from "../../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs"
-import CharacterAssetSlot from "../../../ruleset/asset/character-asset-slot.mjs"
 import { ASSET_TAGS } from "../../const/system-tags.mjs"
+import CharacterAssetSlot from "../../../ruleset/asset/character-asset-slot.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
  * Represents the full transient data of an asset. 
  * 
+ * @see `AssetItemData` Must contain all the fields defined in this data model. 
  * @extends TransientBaseItem
  * 
  * @property {TransientBaseActor | undefined} owningDocument Another 
@@ -26,10 +23,17 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {String} gmNotes Html content 
  * 
  * @property {Number} bulk
- * @property {Number} quantity
- * @property {Number} maxQuantity
+ * @property {Object} quantity
+ * @property {Number} quantity.current
+ * @property {Number} quantity.maximum
  * @property {Number} quality
- * @property {String} location
+ * @property {Object} crafting
+ * @property {Number} crafting.progressIncrement
+ * @property {Number} crafting.amount
+ * @property {Object} crafting.timeIncrement
+ * @property {Number} crafting.timeIncrement.value
+ * @property {String} crafting.timeIncrement.unit Must correspond to one 
+ * of the `name` fields of the `TIME_UNITS` constants. 
  * 
  * @property {Boolean} isProperty Returns `true`, if the asset is in the 
  * "property" section on a character sheet. 
@@ -47,9 +51,6 @@ import TransientBaseItem from "./transient-base-item.mjs"
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
-  
-  /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ASSET_CHAT_MESSAGE; }
 
   /**
    * @type {Number}
@@ -61,18 +62,24 @@ export default class TransientAsset extends TransientBaseItem {
     this.document.system.quantity = value;
     this.updateByPath("system.quantity", value);
   }
-  
-  /**
-   * @type {Number}
-   */
-  get maxQuantity() {
-    return parseInt(this.document.system.maxQuantity);
+
+  get quantity() {
+    const thiz = this;
+    return {
+      get current() { return parseInt(thiz.document.system.quantity.current); },
+      set current(value) {
+        thiz.document.system.quantity.current = value;
+        this.updateByPath("system.quantity.current", value);
+      },
+
+      get maximum() { return parseInt(thiz.document.system.quantity.maximum); },
+      set maximum(value) {
+        thiz.document.system.quantity.maximum = value;
+        this.updateByPath("system.quantity.maximum", value);
+      },
+    };
   }
-  set maxQuantity(value) {
-    this.document.system.maxQuantity = value;
-    this.updateByPath("system.maxQuantity", value);
-  }
-  
+
   /**
    * @type {Number}
    */
@@ -89,15 +96,6 @@ export default class TransientAsset extends TransientBaseItem {
   set bulk(value) {
     this.document.system.bulk = value;
     this.updateByPath("system.bulk", value);
-  }
-
-  /**
-   * @type {String}
-   */
-  get location() { return this.document.system.location; }
-  set location(value) {
-    this.document.system.location = value;
-    this.updateByPath("system.location", value);
   }
 
   /** @override */
@@ -162,71 +160,11 @@ export default class TransientAsset extends TransientBaseItem {
   }
 
   /**
-   * @param {Item} document An encapsulated item instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
-   */
-  constructor(document) {
-    super(document);
-  }
-
-  /** @override */
-  async getChatData() {
-    const vm = this.getChatViewModel();
-
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-      flavor: game.i18n.localize("system.character.asset.singular"),
-    });
-  }
-
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {AssetChatMessageViewModel}
-   * 
-   * @override
-   */
-  getChatViewModel(overrides = {}) {
-    return new AssetChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
-      document: this,
-      sourceType: undefined,
-      sourceId: undefined,
-      allowPickup: false, // TODO #53: The user must be able to select who gets to pick this item up. 
-      allowPickupBy: [], // TODO #53: The user must be able to select who gets to pick this item up. 
-    });
-  }
-
-  /**
    * Moves the asset to the owning document's property list, 
    * if possible. 
    */
   moveToProperty() {
-    if (this.owningDocument === undefined 
+    if (this.owningDocument === undefined
       || this.isProperty === true) {
       return;
     }
@@ -245,7 +183,7 @@ export default class TransientAsset extends TransientBaseItem {
    * if possible.
    */
   moveToLuggage() {
-    if (this.owningDocument === undefined 
+    if (this.owningDocument === undefined
       || this.isLuggage === true) {
       return;
     }

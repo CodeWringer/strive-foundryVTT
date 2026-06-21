@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents a character attribute classification (whether it is core, favored, secondary or penalized). 
  * 
@@ -56,4 +54,3 @@ export const COMPARISON_TYPES = {
     icon: "TODO",
   }),
 };
-common.util.constants.enrichConstant(COMPARISON_TYPES);

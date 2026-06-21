@@ -1,7 +1,7 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
 
 export default class TraitItemData extends TypeDataModel {
-  /** @override @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html#defineschema */
+  /** @override */
   static defineSchema() {
     return {
       description: new FoundrySchemaFields.HTMLField({

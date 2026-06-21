@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents a shield type. 
  * 
@@ -41,4 +39,3 @@ export const SHIELD_TYPES = {
     localizableName: "system.character.asset.type.shield.kiteShield"
   }),
 };
-common.util.constants(SHIELD_TYPES);

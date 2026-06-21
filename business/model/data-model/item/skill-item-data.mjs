@@ -4,7 +4,7 @@ import ExpertiseField from "../../data-field/expertise-field.mjs";
 import GradedEffectField from "../../data-field/graded-effect-field.mjs";
 
 export default class SkillItemData extends TypeDataModel {
-  /** @override @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html#defineschema */
+  /** @override */
   static defineSchema() {
     return {
       description: new FoundrySchemaFields.HTMLField({

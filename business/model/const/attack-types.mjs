@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents an attack type. 
  * 
@@ -60,4 +58,3 @@ export const ATTACK_TYPES = {
     icon: "ico-attack-type-multi-solid",
   }),
 };
-common.util.constants.enrichConstant(ATTACK_TYPES);

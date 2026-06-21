@@ -3,12 +3,17 @@ import CharacterAssetSlotGroup from "./asset/character-asset-slot-group.mjs";
 import CharacterAssetSlot from "./asset/character-asset-slot.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
 import { combat } from "./combat/_module.mjs";
+import Complication from "./complication/complication.mjs";
 import { dice } from "./dice/_module.mjs";
+import DomainDataField from "./domain-data-field.mjs";
 import SystemHealthConditionBroker from "./health/system-health-condition-broker.mjs";
+import Reference from "./reference.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
 import Tag from "./tag/tag.mjs";
+import TimeIncrement from "./time-increment.mjs";
 
 export {
+  DomainDataField,
   AssetSlot,
   CharacterAssetSlotGroup,
   CharacterAssetSlot,
@@ -18,6 +23,9 @@ export {
   Tag,
   combat,
   dice,
+  Complication,
+  Reference,
+  TimeIncrement,
 };
 
 /**
@@ -26,6 +34,7 @@ export {
  * categorized as anything else. 
  */
 export const domain = {
+  DomainDataField: DomainDataField,
   asset: {
     AssetSlot: AssetSlot,
     CharacterAssetSlotGroup: CharacterAssetSlotGroup,
@@ -45,6 +54,9 @@ export const domain = {
   },
   combat: combat,
   dice: dice,
+  Complication: Complication,
+  Reference: Reference,
+  TimeIncrement: TimeIncrement,
   init: () => {
     SystemHealthConditionBroker.preload();
     combat.init();

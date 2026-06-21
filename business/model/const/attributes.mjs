@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents a character attribute. 
  * 
@@ -67,4 +65,3 @@ export const ATTRIBUTES = {
     icon: "ico-wit-solid",
   }),
 };
-common.util.constants.enrichConstant(ATTRIBUTES);

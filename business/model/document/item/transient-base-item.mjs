@@ -35,9 +35,6 @@ export default class TransientBaseItem extends TransientDocument {
   /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
-  /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ASSET_CHAT_MESSAGE; }
-  
   /**
    * @type {String}
    */

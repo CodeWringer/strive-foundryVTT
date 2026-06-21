@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents a character attribute classification (whether it is core, favored, secondary or penalized). 
  * 
@@ -51,4 +49,3 @@ export const ATTRIBUTE_TYPES = {
     icon: "ico ico-debuff-themed",
   }),
 };
-common.util.constants.enrichConstant(ATTRIBUTE_TYPES);

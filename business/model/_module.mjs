@@ -41,6 +41,7 @@ export const model = {
    * Ensures data models and documents are registered.
    */
   init: () => {
+    constants.init();
     dataModel.init();
     document.init();
     domain.init();

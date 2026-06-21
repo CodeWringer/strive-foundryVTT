@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents a chat message visibility mode. 
  * 
@@ -37,4 +35,3 @@ export const VISIBILITY_MODES = {
     localizableName: "system.general.messageVisibility.gm.label"
   }),
 };
-common.util.constants(VISIBILITY_MODES);

@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents a damage type. 
  * 
@@ -95,4 +93,3 @@ export const DAMAGE_TYPES = {
     iconClass: "ico-damage-type-slash-solid"
   }),
 };
-common.util.constants(DAMAGE_TYPES);

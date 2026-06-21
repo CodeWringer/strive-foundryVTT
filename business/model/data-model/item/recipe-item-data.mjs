@@ -1,4 +1,7 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import ComplicationField from "../../data-field/complication-field.mjs";
+import ReferenceField from "../../data-field/reference-field.mjs";
+import TimeIncrementField from "../../data-field/time-increment-field.mjs";
 
 export default class RecipeItemData extends TypeDataModel {
 static defineSchema() {
@@ -13,7 +16,7 @@ static defineSchema() {
         nullable: false,
         initial: "",
       }),
-      complications: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+      complications: new FoundrySchemaFields.ArrayField(new ComplicationField(), {
         nullable: false,
         initial: [],
       }),
@@ -24,12 +27,7 @@ static defineSchema() {
         initial: 0,
         min: 0,
       }),
-      projectSkill: new FoundrySchemaFields.StringField({
-        nullable: false,
-        required: true,
-        initial: "",
-        trim: true,
-      }),
+      projectSkill: new ReferenceField(),
       quality: new FoundrySchemaFields.NumberField({
         nullable: false,
         integer: true,
@@ -37,12 +35,8 @@ static defineSchema() {
         initial: 1,
         min: 1,
       }),
-      timeIncrement: new FoundrySchemaFields.StringField({
-        nullable: false,
-        required: true,
-        initial: "",
-        trim: true,
-      }),
+      timeIncrement: new TimeIncrementField(),
+      product: new ReferenceField(),
     }
   }
 }

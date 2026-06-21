@@ -1,4 +1,3 @@
-import { common } from "../../../common/_module.mjs";
 import { Tag } from "../domain/_module.mjs";
 
 /**
@@ -74,7 +73,6 @@ export const ASSET_TAGS = {
     localizableName: "system.character.asset.properties.weapon"
   }),
 }
-common.util.constants(ASSET_TAGS);
 
 /**
  * Property constants of "skill" type documents. 
@@ -89,4 +87,3 @@ export const SKILL_TAGS = {
     localizableName: "system.character.skill.properties.innate"
   }),
 }
-common.util.constants(SKILL_TAGS);

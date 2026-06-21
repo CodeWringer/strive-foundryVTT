@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents a weapon type. 
  * 
@@ -106,4 +104,3 @@ export const WEAPON_TYPES = {
     localizableName: "system.character.asset.type.weapon.firearm"
   }),
 };
-common.util.constants.enrichConstant(WEAPON_TYPES);

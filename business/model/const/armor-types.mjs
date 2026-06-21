@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents an armor type. 
  * 
@@ -36,4 +34,3 @@ export const ARMOR_TYPES = {
     localizableName: "system.character.asset.type.armor.heavy"
   }),
 };
-common.util.constants.enrichConstant(ARMOR_TYPES);

@@ -50,8 +50,12 @@ export const FoundrySchemaFields = {
 }
 
 /**
- * Wraps the TypeDataModel type, which *all* data models must inherit from. Probably. 
+ * Wraps the TypeDataModel type, which *all* data models must inherit from. 
+ * 
+ * @abstract Inheritors MUST implement:
+ * * `static defineschema()`
  * 
  * @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html
+ * @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html#defineschema
  */
 export const TypeDataModel = foundry.abstract.TypeDataModel;

@@ -1,5 +1,3 @@
-import { common } from "../../../common/_module.mjs";
-
 /**
  * Represents an injury state. 
  * 
@@ -36,4 +34,3 @@ export const INJURY_STATES = {
     icon: "fas fa-mortar-pestle"
   }),
 };
-common.util.constants(INJURY_STATES);

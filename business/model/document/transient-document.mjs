@@ -1,9 +1,4 @@
 import { common } from "../../../common/_module.mjs"
-import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs"
-import { VISIBILITY_MODES } from "../const/visibility-modes.mjs"
-import ViewModel from "../../../presentation/view-model/view-model.mjs"
 import AtReferencer from "../../search/at-referencer.mjs"
 import DocumentUpdater from "./document-updater/document-updater.mjs"
 
@@ -23,12 +18,8 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * 
  * @abstract Inheritors MUST implement
  * * `defaultImg`
- * * `chatMessageTemplate`
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
- * * Read-only.
- * * Abstract. 
- * @property {String} chatMessageTemplate Returns the Chat message template path. 
  * * Read-only.
  * * Abstract. 
  * @property {String} documentName Returns the document type name. E. g. `"Actor"`
@@ -48,9 +39,8 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
  * * Read-only.
  * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
- * @property {String} description
- * @property {String | null} gmNotes
- * @property {Boolean} isCustom
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  */
@@ -71,15 +61,6 @@ export default class TransientDocument {
    * @readonly
    */
   get defaultImg() { throw Error("NotImplementedException"); }
-
-  /**
-   * Returns the Chat message template path. 
-   * 
-   * @type {String}
-   * @abstract
-   * @readonly
-   */
-  get chatMessageTemplate() { throw Error("NotImplementedException"); }
 
   /**
    * Returns the document type name. E. g. `"Actor"`
@@ -160,17 +141,6 @@ export default class TransientDocument {
   set description(value) {
     this.document.system.description = value;
     this.updateByPath("system.description", value);
-  }
-  
-  /**
-   * @type {Boolean}
-   */
-  get isCustom() {
-    return this.document.system.isCustom;
-  }
-  set isCustom(value) {
-    this.document.system.isCustom = value;
-    this.updateByPath("system.isCustom", value);
   }
   
   /**
@@ -328,94 +298,6 @@ export default class TransientDocument {
    */
   async update(delta, render = true) {
     await this.document.update(delta, { render: render });
-  }
-
-  /**
-   * Base implementation of returning data for a chat message, based on this document. 
-   * 
-   * @returns {Promise<PreparedChatData>}
-   * 
-   * @virtual
-   * @async
-   */
-  async getChatData() {
-    const vm = this.getChatViewModel();
-
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: this.document.parent ?? this.document, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-    });
-  }
-
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {ViewModel}
-   * 
-   * @virtual
-   */
-  getChatViewModel(overrides = {}) {
-    return new ViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
-    });
-  }
-
-  /**
-   * Base implementation of sending this document to the chat. 
-   * 
-   * @param {VisibilityMode | undefined} visibilityMode Determines the visibility of the chat message. 
-   * * Default `VISIBILITY_MODES.public`
-   * 
-   * @async
-   * @virtual
-   */
-  async sendToChat(visibilityMode = VISIBILITY_MODES.public) {
-    const chatData = await this.getChatData();
-    common.util.chat.sendToChat({
-      ...chatData,
-      visibilityMode: visibilityMode,
-    });
-  }
-
-  /**
-   * Sends a property of this document to chat, based on the given property path. 
-   * 
-   * @param {String} propertyPath 
-   * @param {VisibilityMode | undefined} visibilityMode Determines the visibility of the chat message. 
-   * * Default `VISIBILITY_MODES.public`
-   * 
-   * @async
-   */
-  async sendPropertyToChat(propertyPath, visibilityMode = VISIBILITY_MODES.public) {
-    await common.util.chat.sendPropertyToChat({
-      obj: this.document,
-      propertyPath: propertyPath,
-      parent: this,
-      actor: this.document.parent ?? this.document,
-      visibilityMode: visibilityMode
-    });
   }
 
   /**

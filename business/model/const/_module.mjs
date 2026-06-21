@@ -77,4 +77,24 @@ export const constants = {
   VISIBILITY_MODES: VISIBILITY_MODES,
   WeaponType: WeaponType,
   WEAPON_TYPES: WEAPON_TYPES,
+  init: () => {
+    common.util.constants.enrichConstant(ACTOR_TYPES);
+    common.util.constants.enrichConstant(ITEM_TYPES);
+    common.util.constants.enrichConstant(ARMOR_TYPES);
+    common.util.constants.enrichConstant(TIME_UNITS);
+    common.util.constants.enrichConstant(ATTACK_TYPES);
+    common.util.constants.enrichConstant(ATTRIBUTE_TYPES);
+    common.util.constants.enrichConstant(COMPARISON_TYPES);
+    common.util.constants.enrichConstant(ATTRIBUTES);
+    common.util.constants.enrichConstant(CHARACTER_TEST_TYPES);
+    common.util.constants.enrichConstant(DAMAGE_TYPES);
+    common.util.constants.enrichConstant(ILLNESS_STATES);
+    common.util.constants.enrichConstant(INJURY_SHRUG_OFF_STATES);
+    common.util.constants.enrichConstant(INJURY_STATES);
+    common.util.constants.enrichConstant(SHIELD_TYPES);
+    common.util.constants.enrichConstant(ASSET_TAGS);
+    common.util.constants.enrichConstant(SKILL_TAGS);
+    common.util.constants.enrichConstant(VISIBILITY_MODES);
+    common.util.constants.enrichConstant(WEAPON_TYPES);
+  },
 };
