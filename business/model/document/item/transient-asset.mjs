@@ -40,6 +40,8 @@ import DataFieldBridge from "../data-field-bridge.mjs"
  * @property {TransientBaseActor | undefined} owningDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
  * 
  * @property {Number} bulk
  * @property {Object} quantity
@@ -62,7 +64,7 @@ import DataFieldBridge from "../data-field-bridge.mjs"
  * @property {Boolean} isEquipped Returns `true`, if the asset is in the 
  * "equipment slots" section on a character sheet. 
  * * Read-only
- * @property {CharacterAssetSlot | undefined} assetSlot The current asset slot 
+ * @property {CharacterAssetSlot | null} assetSlot The current asset slot 
  * that holds this asset. 
  * * Read-only
  */
@@ -132,10 +134,10 @@ export default class TransientAsset extends TransientBaseItem {
    * @readonly
    */
   get isProperty() {
-    if (this.owningDocument === undefined) {
-      return false;
-    } else {
+    if (this.hasParent) {
       return this.owningDocument.assets.property.find(it => it.id === this.id) !== undefined;
+    } else {
+      return false;
     }
   }
 
@@ -144,10 +146,10 @@ export default class TransientAsset extends TransientBaseItem {
    * @readonly
    */
   get isLuggage() {
-    if (this.owningDocument === undefined) {
-      return false;
-    } else {
+    if (this.hasParent) {
       return this.owningDocument.assets.luggage.find(it => it.id === this.id) !== undefined;
+    } else {
+      return false;
     }
   }
 
@@ -156,21 +158,21 @@ export default class TransientAsset extends TransientBaseItem {
    * @readonly
    */
   get isEquipped() {
-    if (this.owningDocument === undefined) {
-      return false;
-    } else {
+    if (this.hasParent) {
       return this.owningDocument.assets.equipment.find(it => it.id === this.id) !== undefined;
+    } else {
+      return false;
     }
   }
 
   /**
    * Returns the asset slot the asset is currently assigned to. 
    * 
-   * @type {CharacterAssetSlot | undefined}
+   * @type {CharacterAssetSlot | null}
    * @readonly
    */
   get assetSlot() {
-    if (this.owningDocument === undefined) return undefined;
+    if (!this.hasParent) return null;
 
     for (const group of this.owningDocument.assets.equipmentSlotGroups) {
       for (const slot of group.slots) {
@@ -179,7 +181,7 @@ export default class TransientAsset extends TransientBaseItem {
         }
       }
     }
-    return undefined;
+    return null;
   }
 
   constructor(args = {}) {

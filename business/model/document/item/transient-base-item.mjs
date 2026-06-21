@@ -47,6 +47,8 @@ import TransientDocument from "../transient-document.mjs";
  * @property {TransientBaseActor | undefined} owningDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
  */
 export default class TransientBaseItem extends TransientDocument {
   /** @override */
@@ -66,5 +68,14 @@ export default class TransientBaseItem extends TransientDocument {
     } else {
       return null;
     }
+  }
+  
+  /**
+   * Returns true, if there is an owning document. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasParent() {
+    return common.util.validation.isDefined(this.owningDocument);
   }
 }
