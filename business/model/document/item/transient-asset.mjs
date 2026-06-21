@@ -1,8 +1,9 @@
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
-import { ASSET_TAGS } from "../../const/system-tags.mjs"
+import { TIME_UNITS, TimeUnit } from "../../const/time-units.mjs"
 import CharacterAssetSlot from "../../../ruleset/asset/character-asset-slot.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
+import DataFieldBridge from "../data-field-bridge.mjs"
 
 /**
  * Represents the full transient data of an asset. 
@@ -10,17 +11,35 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @see `AssetItemData` Must contain all the fields defined in this data model. 
  * @extends TransientBaseItem
  * 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
  * @property {TransientBaseActor | undefined} owningDocument Another 
  * document that this document is embedded in. 
- * @property {Array<Tag>} tags An array of the current 
- * tags of this document. 
- * @property {Array<Tag>} acceptedTags Returns an array of accepted 
- * tags. 
- * * Read-only. 
- * * virtual. 
- * * Default `[]`.
- * @property {String} description Html content 
- * @property {String} gmNotes Html content 
+ * * Read-only.
  * 
  * @property {Number} bulk
  * @property {Object} quantity
@@ -32,8 +51,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Number} crafting.amount
  * @property {Object} crafting.timeIncrement
  * @property {Number} crafting.timeIncrement.value
- * @property {String} crafting.timeIncrement.unit Must correspond to one 
- * of the `name` fields of the `TIME_UNITS` constants. 
+ * @property {TimeUnit} crafting.timeIncrement.unit 
  * 
  * @property {Boolean} isProperty Returns `true`, if the asset is in the 
  * "property" section on a character sheet. 
@@ -55,51 +73,56 @@ export default class TransientAsset extends TransientBaseItem {
   /**
    * @type {Number}
    */
-  get quantity() {
-    return parseInt(this.document.system.quantity);
-  }
-  set quantity(value) {
-    this.document.system.quantity = value;
-    this.updateByPath("system.quantity", value);
-  }
+  get bulk() { return this._bulk.value; }
+  set bulk(value) { this._bulk.value = value; }
 
   get quantity() {
     const thiz = this;
     return {
-      get current() { return parseInt(thiz.document.system.quantity.current); },
-      set current(value) {
-        thiz.document.system.quantity.current = value;
-        this.updateByPath("system.quantity.current", value);
-      },
+      get current() { return thiz._quantityCurrent.value; },
+      set current(value) { thiz._quantityCurrent.value = value; },
 
-      get maximum() { return parseInt(thiz.document.system.quantity.maximum); },
-      set maximum(value) {
-        thiz.document.system.quantity.maximum = value;
-        this.updateByPath("system.quantity.maximum", value);
-      },
+      get maximum() { return thiz._quantityMaximum.value; },
+      set maximum(value) { thiz._quantityMaximum.value = value; },
     };
   }
 
   /**
    * @type {Number}
    */
-  get quality() { return parseInt(this.document.system.quality ?? 0); }
-  set quality(value) {
-    this.document.system.quality = value;
-    this.updateByPath("system.quality", value);
-  }
+  get quality() { return this._quality.value; }
+  set quality(value) { this._quality.value = value; }
 
-  /**
-   * @type {Number}
-   */
-  get bulk() { return parseInt(this.document.system.bulk); }
-  set bulk(value) {
-    this.document.system.bulk = value;
-    this.updateByPath("system.bulk", value);
+  get crafting() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get progressIncrement() { return thiz._craftingProgressIncrement.value; },
+      set progressIncrement(value) { thiz._craftingProgressIncrement.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get amount() { return thiz._craftingAmount.value; },
+      set amount(value) { thiz._craftingAmount.value = value; },
+      
+      timeIncrement: {
+        /**
+         * @type {Number}
+         */
+        get value() { return thiz._craftingTimeIncrementValue.value; },
+        set value(value) { thiz._craftingTimeIncrementValue.value = value; },
+        
+        /**
+         * @type {TimeUnit}
+         */
+        get unit() { return thiz._craftingTimeIncrementUnit.value; },
+        set unit(value) { thiz._craftingTimeIncrementUnit.value = value; },
+      },
+    };
   }
-
-  /** @override */
-  get acceptedTags() { return ASSET_TAGS.asArray(); }
 
   /**
    * Returns `true`, if the asset is in the "property" section on a 
@@ -157,6 +180,49 @@ export default class TransientAsset extends TransientBaseItem {
       }
     }
     return undefined;
+  }
+
+  constructor(args = {}) {
+    this._bulk = new DataFieldBridge({
+      document: this,
+      dataPath: "system.bulk",
+      default: 0,
+    });
+    this._quantityCurrent = new DataFieldBridge({
+      document: this,
+      dataPath: "system.quantity.current",
+      default: 1,
+    });
+    this._quantityMaximum = new DataFieldBridge({
+      document: this,
+      dataPath: "system.quantity.maximum",
+      default: null,
+    });
+    this._quality = new DataFieldBridge({
+      document: this,
+      dataPath: "system.quality",
+      default: 1,
+    });
+    this._craftingProgressIncrement = new DataFieldBridge({
+      document: this,
+      dataPath: "system.crafting.progressIncrement",
+      default: 0,
+    });
+    this._craftingAmount = new DataFieldBridge({
+      document: this,
+      dataPath: "system.crafting.amount",
+      default: 1,
+    });
+    this._craftingTimeIncrementValue = new DataFieldBridge({
+      document: this,
+      dataPath: "system.crafting.timeIncrement.value",
+      default: 0,
+    });
+    this._craftingTimeIncrementUnit = new DataFieldBridge({
+      document: this,
+      dataPath: "system.crafting.timeIncrement.unit",
+      default: TIME_UNITS.none,
+    });
   }
 
   /**

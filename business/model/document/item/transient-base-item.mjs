@@ -1,5 +1,4 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
-import Tag from "../../../tags/tag.mjs";
+import { common } from "../../../../common/_module.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**
@@ -19,98 +18,53 @@ import TransientDocument from "../transient-document.mjs";
  * @abstract
  * @extends TransientDocument
  * 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
  * @property {TransientBaseActor | undefined} owningDocument Another 
  * document that this document is embedded in. 
- * @property {Array<Tag>} tags An array of the current 
- * tags of this document. 
- * @property {Array<Tag>} acceptedTags Returns an array of accepted 
- * tags. 
- * * Read-only. 
- * * virtual. 
- * * Default `[]`.
- * @property {String} description Html content 
- * @property {String} gmNotes Html content 
+ * * Read-only.
  */
 export default class TransientBaseItem extends TransientDocument {
   /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
-  /**
-   * @type {String}
-   */
-  get description() {
-    return this.document.system.description;
-  }
-  set description(value) {
-    this.document.system.description = value;
-    this.updateByPath("system.description", value);
-  }
-  
-  /**
-   * @type {String}
-   */
-  get gmNotes() {
-    return this.document.system.gmNotes;
-  }
-  set gmNotes(value) {
-    this.document.system.gmNotes = value;
-    this.updateByPath("system.gmNotes", value);
-  }
-  
-  /**
-   * An array of the current tags of this document. 
-   * 
-   * @type {Array<Tag>}
-   */
-  get tags() {
-    const ids = (this.document.system.tags ?? this.document.system.properties) ?? [];
-    const result = [];
-
-    for (const id of ids) {
-      let tag = this.acceptedTags.find(it => it.id === id);
-      if (tag === undefined) {
-        tag = new Tag({
-          id: id,
-          localizableName: id,
-        });
-      }
-      result.push(tag);
-    }
-
-    return result;
-  }
-  set tags(value) {
-    const ids = value.map(it => it.id);
-
-    this.document.system.tags = ids;
-    this.updateByPath("system.tags", ids);
-  }
-  
-  /**
-   * Returns an array of accepted tags. 
-   * 
-   * @type {Array<Tag>}
-   * @readonly
-   * @virtual
-   * @default []
-   */
-  get acceptedTags() { return []; }
+  /** @override */
+  get clazz() { return TransientBaseItem; }
 
   /**
    * Another document that this document is embedded in. 
    * 
-   * @type {TransientBaseActor | undefined}
+   * @type {TransientBaseActor | null}
    */
   get owningDocument() {
-    if (this.document.parent !== undefined && this.document.parent !== null) {
+    if (common.util.validation.isDefined(this.document.parent)) {
       return this.document.parent.getTransientObject();
     } else {
-      return undefined;
+      return null;
     }
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientBaseItem));
   }
 }

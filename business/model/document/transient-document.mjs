@@ -1,5 +1,6 @@
 import { common } from "../../../common/_module.mjs"
 import AtReferencer from "../../search/at-referencer.mjs"
+import DataFieldBridge from "./data-field-bridge.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs"
 
 /**
@@ -16,31 +17,37 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * So, if some other code wants to access an document's derived data, they will need 
  * to first fetch an instance of an inheriting type of this class. 
  * 
- * @abstract Inheritors MUST implement
- * * `defaultImg`
+ * @abstract Inheritors MUST implement: 
+ * * `get defaultImg()`
+ * * `get clazz()`
  * 
+ * Inheritors _should_ implement:
+ * * `prepareData()`
+ * * `resolveReference()`
+ *
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
  * * Abstract. 
- * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
  * * Read-only.
+ * * Abstract. 
  * @property {String} id Returns the id of the document. 
  * * Read-only.
  * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
  * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
  * * Read-only.
  * @property {Item | Actor} document Returns the encapsulated document instance. 
  * * Read-only.
- * @property {String} name Internal name. 
- * @property {String} localizableName Localization key for the full name. 
- * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {String} type Internal type name. E. g. `"skill"`
  * * Read-only.
  * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
  * * Read-only.
- * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
- * @property {String} description Html content.
- * @property {String | null} gmNotes Html content.
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  */
@@ -60,7 +67,54 @@ export default class TransientDocument {
    * @abstract
    * @readonly
    */
-  get defaultImg() { throw Error("NotImplementedException"); }
+  get defaultImg() { throw Error("Not implemented"); }
+
+  /**
+   * Returns the class reference of this document. 
+   * 
+   * Required for use in the `getExtenders` method. 
+   * 
+   * @type {TransientDocument}
+   * @abstract
+   * @readonly
+   */
+  get clazz() { throw Error("Not implemented"); }
+
+  /**
+   * The icon/image path of the document. 
+   * 
+   * @type {String}
+   */
+  get img() { return this.document.img; }
+  set img(value) {
+    this.document.img = value;
+    this.updateByPath("img", value);
+  }
+
+  /**
+   * The internal name of the document. 
+   * 
+   * @type {String}
+   */
+  get name() { return this.document.name; }
+  set name(value) {
+    this.document.name = value;
+    this.updateByPath("name", value);
+  }
+
+  /**
+   * @type {String}
+   */
+  get description() { return this._description.value; }
+  set description(value) { this._description.value = value; }
+
+  /**
+   * Arbitrary notes only visible to game-masters. 
+   * 
+   * @type {String | null}
+   */
+  get gmNotes() { return this._gmNotes.value; }
+  set gmNotes(value) { this._gmNotes.value = value; }
 
   /**
    * Returns the document type name. E. g. `"Actor"`
@@ -77,44 +131,6 @@ export default class TransientDocument {
    * @readonly
    */
   get id() { return this.document.id; }
-  
-  /**
-   * The icon/image path of the document. 
-   * 
-   * @type {String}
-   */
-  get img() { return this.document.img; }
-  set img(value) {
-    this.document.img = value;
-    this.updateByPath("img", value);
-  }
-  
-  /**
-   * Returns true, if the current user is the owner of the document. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isOwner() { return this.document.isOwner ?? this.document.owner ?? false; }
-
-  /**
-   * The internal name of the document. 
-   * 
-   * @type {String}
-   */
-  get name() { return this.document.name; }
-  set name(value) {
-    this.document.name = value;
-    this.updateByPath("name", value);
-  }
-
-  /**
-   * The localized name of the document, for display in the ui. 
-   * 
-   * @type {String}
-   * @virtual
-   */
-  get nameForDisplay() { return this.document.name; }
 
   /**
    * Returns the internal type name of the document. 
@@ -133,46 +149,13 @@ export default class TransientDocument {
   get pack() { return this.document.pack; }
 
   /**
-   * @type {String}
-   */
-  get description() {
-    return this.document.system.description;
-  }
-  set description(value) {
-    this.document.system.description = value;
-    this.updateByPath("system.description", value);
-  }
-  
-  /**
-   * An object on which sortable lists store their entry orders. 
+   * Returns true, if the current user is the owner of the document. 
    * 
-   * @type {Object}
+   * @type {Boolean}
+   * @readonly
    */
-  get displayOrders() {
-    return this.document.system.displayOrders;
-  }
-  set displayOrders(value) {
-    this.document.system.displayOrders = value;
-    this.updateByPath("system.displayOrders", value);
-  }
-  
-  /**
-   * Arbitrary notes only visible to game-masters. 
-   * 
-   * @type {String | null}
-   */
-  get gmNotes() {
-    const value = this.document.system.gmNotes;
-    // Check for length > 0, because the field wasn't always nullable and all existing 
-    // documents will have an empty string defined, by default. But that doesn't mean 
-    // they actually have GM notes defined...
-    return (common.util.validation.isDefined(value) && value.length > 0) ? value : null; 
-  }
-  set gmNotes(value) {
-    this.document.system.gmNotes = value;
-    this.updateByPath("system.gmNotes", value);
-  }
-  
+  get isOwner() { return this.document.isOwner ?? this.document.owner ?? false; }
+
   /**
    * @type {Object}
    * @readonly
@@ -191,8 +174,29 @@ export default class TransientDocument {
 
     this._updater = new DocumentUpdater();
     this.document = document;
-    this.localizableName = this.name;
-    this.localizableAbbreviation = this.name;
+
+    this._gmNotes = new DataFieldBridge({
+      document: this,
+      dataPath: "system.gmNotes",
+      fromDto: (dto) => {
+        if (common.util.validation.isBlankOrUndefined(dto)) {
+          return null;
+        } else {
+          return dto;
+        }
+      },
+      toDto: (value) => {
+        if (common.util.validation.isBlankOrUndefined(value)) {
+          return null;
+        } else {
+          return value;
+        }
+      },
+    });
+    this._description = new DataFieldBridge({
+      document: this,
+      dataPath: "system.description",
+    });
   }
 
   /**
@@ -207,7 +211,7 @@ export default class TransientDocument {
    * 
    * @virtual
    */
-  prepareData(context) { /** Actual implementation left to inheriting types. */}
+  prepareData(context) { /** Actual implementation left to inheriting types. */ }
 
   /**
    * Deletes a property on the given document, via the given path. 
@@ -223,7 +227,6 @@ export default class TransientDocument {
    * * Default 'true'. 
    * 
    * @async
-   * @protected
    */
   async deleteByPath(propertyPath, render = true) {
     await this._updater.deleteByPath(this.document, propertyPath, render);
@@ -241,7 +244,6 @@ export default class TransientDocument {
    * * Default 'true'. 
    * 
    * @async
-   * @protected
    */
   async updateByPath(propertyPath, newValue, render = true) {
     await this._updater.updateByPath(this.document, propertyPath, newValue, render);
@@ -264,9 +266,9 @@ export default class TransientDocument {
     if (propertyPath === undefined || propertyPath.trim().length < 1) {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
-    
+
     const propertyNames = game.strive.util.property.splitPropertyPath(propertyPath);
-    
+
     if (propertyNames.length < 1) {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
@@ -344,6 +346,7 @@ export default class TransientDocument {
    * if no match was found. 
    * 
    * @virtual
+   * @protected
    */
   resolveReference(comparableReference, propertyPath) { /** Implementation up to inheriting types. */ }
 
@@ -375,6 +378,6 @@ export default class TransientDocument {
    * @returns {Array<Object>}
    */
   getExtenders() {
-    return [];
+    return common.util.extender.getExtenders(this.clazz);
   }
 }
