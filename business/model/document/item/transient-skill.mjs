@@ -1,4 +1,6 @@
 import AtReferencer from "../../../../search/at-referencer.mjs"
+import { Expertise } from "../_module.mjs";
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "../transient-base-item.mjs"
 
 /**
@@ -32,21 +34,39 @@ import TransientBaseItem from "../transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {Number} level The current raw level. 
- * @property {Number} levelModifier The current level modifier. This number can be negative. 
- * @property {Number} modifiedLevel The current modified level. 
- * * Read-only. 
- * @property {Number} advancementProgress 
- * @property {Array<Attribute>} baseAttributes Base attributes of the skill. 
- * * Must always contain at least one entry. By default, this is the first attribute as per the `ATTRIBUTES` definiton. 
- * @property {Array<Expertise>} expertises The array of expertises of this skill. 
- * @property {Number | undefined} apCost 
- * @property {Array<DamageAndType> | undefined} damage
- * @property {String | undefined} condition 
- * @property {Number | undefined} distance 
- * @property {String | undefined} obstacle 
- * @property {String | undefined} opposedBy 
- * @property {AttackType | undefined} attackType 
+ * @property {Array<String>} baseAttributes
+ * @property {Number} level
+ * @property {Array<Expertise>} expertises
+ * @property {Object} itemOrders
+ * * Read-only.
+ * @property {Array<String>} itemOrders.expertises
+ * @property {Array<String>} itemOrders.momentumActions
+ * @property {Object} actionPoints
+ * * Read-only.
+ * @property {Boolean} actionPoints.enabled
+ * @property {Number} actionPoints.current
+ * @property {Object} distance
+ * * Read-only.
+ * @property {Boolean} distance.enabled
+ * @property {Number} distance.current
+ * @property {Object} targetingType
+ * * Read-only.
+ * @property {Boolean} targetingType.enabled
+ * @property {TargetingType} targetingType.current
+ * @property {Object} obstacle
+ * * Read-only.
+ * @property {Boolean} obstacle.enabled
+ * @property {String} obstacle.current
+ * @property {Object} opposedBy
+ * * Read-only.
+ * @property {Boolean} opposedBy.enabled
+ * @property {String} opposedBy.current
+ * @property {Object} advancement
+ * * Read-only.
+ * @property {Boolean} advancement.enabled
+ * @property {Number} advancement.progress
+ * @property {Array<GradedEffect>} gradedEffects
+ * @property {Array<MomentumAction>} momentumActions
  * 
  * @extends TransientBaseItem
  */
@@ -58,12 +78,49 @@ export default class TransientSkill extends TransientBaseItem {
   get clazz() { return TransientSkill; }
   
   /**
+   * @type {Array<String>}
+   */
+  get baseAttributes() { return this._baseAttributes.value; }
+  set baseAttributes(value) { this._baseAttributes.value = value; }
+  
+  /**
+   * @type {Number}
+   */
+  get level() { return this._level.value; }
+  set level(value) { this._level.value = value; }
+  
+  /**
+   * @type {Array<Expertise>}
+   */
+  get expertises() { return this._expertises.value; }
+  set expertises(value) { this._expertises.value = value; }
+
+  /**
    * @param {Item} document An encapsulated item instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
    */
   constructor(document) {
     super(document);
+
+    this._baseAttributes = new DataFieldBridge({
+      document: this,
+      dataPath: "system.baseAttributes",
+    });
+    this._level = new DataFieldBridge({
+      document: this,
+      dataPath: "system.level",
+    });
+    this._expertises = new DataFieldBridge({
+      document: this,
+      dataPath: "system.expertises",
+      fromDto: (dto) => {
+        return dto.map(it => Expertise.fromDto(dto));
+      },
+      toDto: (value) => {
+        return value.map(it => it.toDto());
+      },
+    });
   }
 
   /**

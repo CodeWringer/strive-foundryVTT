@@ -1,5 +1,4 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import AttributeField from "../../data-field/attribute-field.mjs";
 import ExpertiseField from "../../data-field/expertise-field.mjs";
 import GradedEffectField from "../../data-field/graded-effect-field.mjs";
 import MomentumActionField from "../../data-field/momentum-action-field.mjs";
@@ -18,7 +17,7 @@ export default class SkillItemData extends TypeDataModel {
         nullable: false,
         initial: "",
       }),
-      baseAttributes: new FoundrySchemaFields.ArrayField(new AttributeField(), {
+      baseAttributes: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
         nullable: false,
         initial: [],
       }),

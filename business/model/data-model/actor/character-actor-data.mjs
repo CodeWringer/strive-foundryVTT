@@ -1,6 +1,6 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs"
 import AssetSlotField from "../../data-field/asset-slot-field.mjs"
-import AttributeField from "../../data-field/attribute-field.mjs"
+import CharacterAttributeField from "../../data-field/character-attribute-field.mjs"
 import InjuryShrugOffField from "../../data-field/injury-shrug-off-field.mjs"
 
 export default class CharacterActorData extends TypeDataModel {
@@ -205,7 +205,7 @@ export default class CharacterActorData extends TypeDataModel {
           }),
         }),
       }),
-      attributes: new FoundrySchemaFields.ArrayField(new AttributeField(), {
+      attributes: new FoundrySchemaFields.ArrayField(new CharacterAttributeField(), {
         nullable: false,
         initial: [],
       }),
