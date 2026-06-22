@@ -2,6 +2,7 @@ import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/
 import AttributeField from "../../data-field/attribute-field.mjs";
 import ExpertiseField from "../../data-field/expertise-field.mjs";
 import GradedEffectField from "../../data-field/graded-effect-field.mjs";
+import MomentumActionField from "../../data-field/momentum-action-field.mjs";
 
 export default class SkillItemData extends TypeDataModel {
   /** @override */
@@ -33,13 +34,15 @@ export default class SkillItemData extends TypeDataModel {
         nullable: false,
         initial: [],
       }),
-      expertisesOrder: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-        nullable: false,
-        initial: [],
-      }),
-      tags: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-        nullable: false,
-        initial: [],
+      itemOrders: new FoundrySchemaFields.SchemaField({
+        expertises: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
+          nullable: false,
+          initial: [],
+        }),
+        momentumActions: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
+          nullable: false,
+          initial: [],
+        }),
       }),
       actionPoints: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
@@ -78,6 +81,10 @@ export default class SkillItemData extends TypeDataModel {
       gradedEffects: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
         entries: new FoundrySchemaFields.ArrayField(new GradedEffectField()),
+      }),
+      momentumActions: new FoundrySchemaFields.ArrayField(new MomentumActionField(), {
+        nullable: false,
+        initial: [],
       }),
     };
   }

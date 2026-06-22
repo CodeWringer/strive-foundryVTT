@@ -1,10 +1,12 @@
 import { TIME_UNITS } from "../../const/time-units.mjs";
-import { Complication, Reference, TimeIncrement } from "../../domain/_module.mjs";
+import { Complication, Reference } from "../../domain/_module.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
  * @extends TransientBaseItem
+ * 
+ * @see `RecipeItemData` - Must contain all the fields defined in this data model. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -66,43 +68,50 @@ export default class TransientRecipe extends TransientBaseItem {
    */
   get requiredProgress() { return this._requiredProgress.value; }
   set requiredProgress(value) { this._requiredProgress.value = value; }
-  
+
   /**
    * @type {Reference}
    */
   get projectSkill() { return this._projectSkill.value; }
   set projectSkill(value) { this._projectSkill.value = value; }
-  
+
   /**
    * @type {Number}
-  */
- get quality() { return this._quality.value; }
- set quality(value) { this._quality.value = value; }
- 
- get timeIncrement() {
-   const thiz = this;
-   return {
-     /**
-      * @type {Number}
-     */
-    get value() { return thiz._timeIncrementValue.value; },
-    set value(value) { thiz._timeIncrementValue.value = value; },
-    
-    /**
-     * @type {TimeUnit}
+   */
+  get quality() { return this._quality.value; }
+  set quality(value) { this._quality.value = value; }
+
+  get timeIncrement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
        */
-      get unit() { return thiz._timeIncrementUnit.value; },
-      set unit(value) { thiz._timeIncrementUnit.value = value; },
+      get value() { return thiz._timeIncrement.value.value; },
+      set value(value) { thiz._timeIncrement.value.value = value; },
+
+      /**
+       * @type {TimeUnit}
+       */
+      get unit() { return thiz._timeIncrement.unit.value; },
+      set unit(value) { thiz._timeIncrement.unit.value = value; },
     };
   }
-  
+
   /**
    * @type {Reference}
    */
   get product() { return this._product.value; }
   set product(value) { this._product.value = value; }
 
-  constructor(args = {}) {
+  /**
+   * @param {GameSystemItem} document An encapsulated document instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
+   */
+  constructor(document) {
+    super(document);
+
     this._complications = new DataFieldBridge({
       document: this,
       dataPath: "system.complications",
@@ -135,22 +144,26 @@ export default class TransientRecipe extends TransientBaseItem {
       dataPath: "system.quality",
       default: 1,
     });
-    this._timeIncrementValue = new DataFieldBridge({
-      document: this,
-      dataPath: "timeIncrement.value",
-      default: 0,
-    });
-    this._timeIncrementUnit = new DataFieldBridge({
-      document: this,
-      dataPath: "timeIncrement.unit",
-      default: TIME_UNITS.none,
-      fromDto: (dto) => {
-        return TIME_UNITS[dto];
-      },
-      toDto: (value) => {
-        return value.name;
-      },
-    });
+
+    this._timeIncrement = {
+      value: new DataFieldBridge({
+        document: this,
+        dataPath: "system.timeIncrement.value",
+        default: 0,
+      }),
+      unit: new DataFieldBridge({
+        document: this,
+        dataPath: "system.timeIncrement.unit",
+        default: TIME_UNITS.none,
+        fromDto: (dto) => {
+          return TIME_UNITS[dto];
+        },
+        toDto: (value) => {
+          return value.name;
+        },
+      }),
+    };
+
     this._product = new DataFieldBridge({
       document: this,
       dataPath: "system.product",

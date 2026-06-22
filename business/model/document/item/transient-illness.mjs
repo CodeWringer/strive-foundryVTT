@@ -1,119 +1,213 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import IllnessChatMessageViewModel from "../../../../presentation/sheet/item/illness/illness-chat-message-viewmodel.mjs"
-import { ILLNESS_STATES } from "../../const/illness-states.mjs"
+import { ILLNESS_STATES, IllnessState } from "../../const/illness-states.mjs"
+import Reference from "../../domain/reference.mjs";
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
  * Represents the full transient data of an illness. 
  * 
- * @extends TransientBaseItem
+ * @see `IllnessItemData` - Must contain all the fields defined in this data model. 
  * 
- * @property {String} state
- * @property {String} duration
- * @property {String} treatment
- * @property {String} treatmentSkill
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
+ * 
+ * @property {IllnessState} state
+ * @property {Object} treatment
+ * * Read-only.
+ * @property {String} treatment.lastTreatmentTime
+ * @property {String} treatment.obstacle
+ * @property {Reference} treatment.skill
+ * @property {Object} treatment.requiredSupplies
+ * * Read-only.
+ * @property {Number} treatment.requiredSupplies.amount
+ * @property {Reference} treatment.requiredSupplies.asset
+ * @property {Object} healProgress
+ * * Read-only.
+ * @property {Number} healProgress.current
+ * @property {Number} healProgress.required
+ * @property {Boolean} healProgress.untilCured
+ * 
+ * @extends TransientBaseItem
  */
 export default class TransientIllness extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/poison.svg"; }
 
   /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ILLNESS_CHAT_MESSAGE; }
+  get clazz() { return TransientIllness; }
 
   /**
-   * @type {String}
+   * @type {IllnessState}
    */
-  get state() {
-    return this.document.system.state;
-  }
-  set state(value) {
-    this.document.system.state = value;
-    this.updateByPath("system.state", value);
-  }
+  get state() { return this._state.value; }
+  set state(value) { this._state.value = value; }
   
-  /**
-   * @type {String}
-   */
-  get duration() {
-    return this.document.system.duration;
-  }
-  set duration(value) {
-    this.document.system.duration = value;
-    this.updateByPath("system.duration", value);
-  }
-  
-  /**
-   * @type {String}
-   */
   get treatment() {
-    return this.document.system.treatment;
-  }
-  set treatment(value) {
-    this.document.system.treatment = value;
-    this.updateByPath("system.treatment", value);
+    const thiz = this;
+    return {
+      /**
+       * @type {String}
+       */
+      get lastTreatmentTime() { return thiz._treatment.lastTreatmentTime.value; },
+      set lastTreatmentTime(value) { thiz._treatment.lastTreatmentTime.value = value; },
+      
+      /**
+       * @type {String}
+       */
+      get obstacle() { return thiz._treatment.obstacle.value; },
+      set obstacle(value) { thiz._treatment.obstacle.value = value; },
+
+      /**
+       * @type {Reference}
+       */
+      get skill() { return thiz._treatment.skill.value; },
+      set skill(value) { thiz._treatment.skill.value = value; },
+      
+      get requiredSupplies() {
+        return {
+          /**
+           * @type {Number}
+           */
+          get amount() { return thiz._treatment.requiredSupplies.amount.value; },
+          set amount(value) { thiz._treatment.requiredSupplies.amount.value = value; },
+    
+          /**
+           * @type {Reference}
+           */
+          get asset() { return thiz._treatment.requiredSupplies.asset.value; },
+          set asset(value) { thiz._treatment.requiredSupplies.asset.value = value; },
+        };
+      },
+    };
   }
   
-  /**
-   * @type {String}
-   */
-  get treatmentSkill() {
-    return this.document.system.treatmentSkill;
-  }
-  set treatmentSkill(value) {
-    this.document.system.treatmentSkill = value;
-    this.updateByPath("system.treatmentSkill", value);
-  }
   
-  /** @override */
-  async getChatData() {
-    const vm = this.getChatViewModel();
+  get healProgress() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._healProgress.current.value; },
+      set current(value) { thiz._healProgress.current.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get required() { return thiz._healProgress.required.value; },
+      set required(value) { thiz._healProgress.required.value = value; },
 
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-      flavor: game.i18n.localize("system.character.health.illness.singular"),
-    });
+      /**
+       * @type {Boolean}
+       */
+      get untilCured() { return thiz._healProgress.untilCured.value; },
+      set untilCured(value) { thiz._healProgress.untilCured.value = value; },
+    };
   }
 
   /**
-   * Returns an instance of a view model for use in a chat message. 
+   * @param {GameSystemItem} document An encapsulated document instance. 
    * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {IllnessChatMessageViewModel}
-   * 
-   * @override
+   * @throws {Error} Thrown, if `document` is `undefined`. 
    */
-  getChatViewModel(overrides = {}) {
-    return new IllnessChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
+  constructor(document) {
+    super(document);
+
+    this._state = new DataFieldBridge({
       document: this,
+      dataPath: "system.state",
+      default: ILLNESS_STATES.active,
+      fromDto: (dto) => {
+        return ILLNESS_STATES[dto];
+      },
+      toDto: (value) => {
+        return value.name;
+      },
     });
+
+    this._treatment = {
+      lastTreatmentTime: new DataFieldBridge({
+        document: this,
+        dataPath: "system.treatment.lastTreatmentTime",
+      }),
+      obstacle: new DataFieldBridge({
+        document: this,
+        dataPath: "system.treatment.obstacle",
+      }),
+      skill: new DataFieldBridge({
+        document: this,
+        dataPath: "system.treatment.skill",
+        fromDto: (dto) => {
+          return Reference.fromDto(dto);
+        },
+        toDto: (value) => {
+          return value.toDto();
+        },
+      }),
+
+      requiredSupplies: {
+        amount: new DataFieldBridge({
+          document: this,
+          dataPath: "system.treatment.requiredSupplies.amount",
+        }),
+        asset: new DataFieldBridge({
+          document: this,
+          dataPath: "system.treatment.requiredSupplies.asset",
+          fromDto: (dto) => {
+            return Reference.fromDto(dto);
+          },
+          toDto: (value) => {
+            return value.toDto();
+          },
+        }),
+      }
+    };
+
+    this._healProgress = {
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.healProgress.current",
+      }),
+      required: new DataFieldBridge({
+        document: this,
+        dataPath: "system.healProgress.required",
+      }),
+      untilCured: new DataFieldBridge({
+        document: this,
+        dataPath: "system.healProgress.untilCured",
+      }),
+    };
   }
-  
+
   /**
    * Compares the treatment state of this instance with a given instance and returns a numeric comparison result. 
    * 
@@ -125,17 +219,12 @@ export default class TransientIllness extends TransientBaseItem {
    * is more than / greater than `other`. 
    */
   compareTreatment(other) {
-    if (this.state === ILLNESS_STATES.active.name && other.state !== ILLNESS_STATES.active.name) {
+    if (this.state.name === ILLNESS_STATES.active.name && other.state.name !== ILLNESS_STATES.active.name) {
       return -1;
-    } else if (this.state === ILLNESS_STATES.treated.name && other.state !== ILLNESS_STATES.treated.name) {
+    } else if (this.state.name === ILLNESS_STATES.treated.name && other.state.name !== ILLNESS_STATES.treated.name) {
       return 1;
     } else {
       return 0;
     }
-  }
-
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientIllness));
   }
 }

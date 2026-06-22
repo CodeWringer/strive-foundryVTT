@@ -14,7 +14,7 @@ export default class ComplicationField extends FoundrySchemaFields.SchemaField {
         required: true,
         initial: "",
       }),
-      name: new FoundrySchemaFields.HTMLField({
+      description: new FoundrySchemaFields.HTMLField({
         nullable: false,
         required: true,
         initial: "",

@@ -1,169 +1,200 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import ProjectChatMessageViewModel from "../../../../presentation/sheet/item/project/project-chat-message-viewmodel.mjs"
+import { TIME_UNITS } from "../../const/time-units.mjs";
+import { Complication, Reference } from "../../domain/_module.mjs";
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
- * @property {Array<String> | null} complications
- * @property {Number} progress
- * @property {Number} progressIncrement
- * @property {String | null} projectSkill
+ * Represents the full transient data of a project. 
+ * 
+ * @see `ProjectItemData` - Must contain all the fields defined in this data model. 
+ * 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
+ * 
+ * @property {Array<Complication>} complications
+ * @property {Object} progress
+ * * Read-only.
+ * @property {Number} progress.current
+ * @property {Number} progress.increment
+ * @property {Number} progress.total
+ * @property {Reference} projectSkill
  * @property {Number} pushes
  * @property {Number} quality
- * @property {String} timeIncrement
- * @property {Number} totalProgress
+ * @property {Object} timeIncrement
+ * * Read-only.
+ * @property {Number} timeIncrement.value
+ * @property {TimeUnit} timeIncrement.unit
  * 
  * @extends TransientBaseItem
  */
 export default class TransientProject extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/book.svg"; }
-  
+
   /** @override */
-  get chatMessageTemplate() { return ProjectChatMessageViewModel.TEMPLATE; }
+  get clazz() { return TransientProject; }
 
   /**
-   * @type {Array<String> | null}
+   * @type {Array<Complication>}
    */
-  get complications() {
-    return this.document.system.complications;
-  }
-  set complications(value) {
-    const newValue = (ValidationUtil.isDefined(value) && value.length > 0) ? value : null;
-    this.document.system.complications = newValue;
-    this.updateByPath("system.complications", newValue);
-  }
+  get complications() { return this._complications.value; }
+  set complications(value) { this._complications.value = value; }
 
-  /**
-   * @type {Number}
-   */
   get progress() {
-    return parseInt(this.document.system.progress);
-  }
-  set progress(value) {
-    this.document.system.progress = value;
-    this.updateByPath("system.progress", value);
-  }
-  
-  /**
-   * @type {Number}
-   */
-  get progressIncrement() {
-    return parseInt(this.document.system.progressIncrement);
-  }
-  set progressIncrement(value) {
-    this.document.system.progressIncrement = value;
-    this.updateByPath("system.progressIncrement", value);
-  }
-  
-  /**
-   * @type {String | null}
-  */
- get projectSkill() {
-   return this.document.system.projectSkill;
-  }
-  set projectSkill(value) {
-    const newValue = (ValidationUtil.isDefined(value) && value.length > 0) ? value : null;
-    this.document.system.projectSkill = newValue;
-    this.updateByPath("system.projectSkill", newValue);
-  }
-  
-  /**
-   * @type {Number}
-   */
-  get pushes() {
-    return parseInt(this.document.system.pushes);
-  }
-  set pushes(value) {
-    this.document.system.pushes = value;
-    this.updateByPath("system.pushes", value);
-  }
-  
-  /**
-   * @type {Number}
-   */
-  get quality() {
-    return parseInt(this.document.system.quality);
-  }
-  set quality(value) {
-    this.document.system.quality = value;
-    this.updateByPath("system.quality", value);
-  }
-  
-  /**
-   * @type {String}
-  */
- get timeIncrement() {
-   return this.document.system.timeIncrement;
-  }
-  set timeIncrement(value) {
-    this.document.system.timeIncrement = value;
-    this.updateByPath("system.timeIncrement", value);
-  }
-  
-  /**
-   * @type {Number}
-   */
-  get totalProgress() {
-    return parseInt(this.document.system.totalProgress);
-  }
-  set totalProgress(value) {
-    this.document.system.totalProgress = value;
-    this.updateByPath("system.totalProgress", value);
-  }
-  
-  /** @override */
-  async getChatData() {
-    const vm = this.getChatViewModel();
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._progress.current.value; },
+      set current(value) { thiz._progress.current.value = value; },
 
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
+      /**
+       * @type {Number}
+       */
+      get increment() { return thiz._progress.increment.value; },
+      set increment(value) { thiz._progress.increment.value = value; },
 
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-      flavor: game.i18n.localize("system.project.project"),
-    });
+      /**
+       * @type {Number}
+       */
+      get total() { return thiz._progress.total.value; },
+      set total(value) { thiz._progress.total.value = value; },
+    };
+  }
+
+  get timeIncrement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get value() { return thiz._timeIncrement.value.value; },
+      set value(value) { thiz._timeIncrement.value.value = value; },
+
+      /**
+       * @type {TimeUnit}
+       */
+      get unit() { return thiz._timeIncrement.unit.value; },
+      set unit(value) { thiz._timeIncrement.unit.value = value; },
+    };
   }
 
   /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {ProjectChatMessageViewModel}
-   * 
-   * @override
+   * @type {Reference}
    */
-  getChatViewModel(overrides = {}) {
-    return new ProjectChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
+  get projectSkill() { return this._projectSkill.value; }
+  set projectSkill(value) { this._projectSkill.value = value; }
+
+  /**
+   * @type {Number}
+   */
+  get pushes() { return this._pushes.value; }
+  set pushes(value) { this._pushes.value = value; }
+
+  /**
+   * @type {Number}
+   */
+  get quality() { return this._quality.value; }
+  set quality(value) { this._quality.value = value; }
+
+  /**
+   * @param {GameSystemItem} document An encapsulated document instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
+   */
+  constructor(document) {
+    super(document);
+
+    this._complications = new DataFieldBridge({
       document: this,
+      dataPath: "system.complications",
+      fromDto: (dto) => {
+        return dto.map(it => Complication.fromDto(it));
+      },
+      toDto: (value) => {
+        return value.map(it => it.toDto());
+      },
     });
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientProject));
+
+    this._progress = {
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.progress.current",
+      }),
+      increment: new DataFieldBridge({
+        document: this,
+        dataPath: "system.progress.increment",
+      }),
+      total: new DataFieldBridge({
+        document: this,
+        dataPath: "system.progress.total",
+      }),
+    };
+
+    this._projectSkill = new DataFieldBridge({
+      document: this,
+      dataPath: "system.projectSkill",
+      fromDto: (dto) => {
+        return Reference.fromDto(dto);
+      },
+      toDto: (value) => {
+        return value.toDto();
+      },
+    });
+    this._pushes = new DataFieldBridge({
+      document: this,
+      dataPath: "system.pushes",
+    });
+    this._quality = new DataFieldBridge({
+      document: this,
+      dataPath: "system.quality",
+    });
+
+    this._timeIncrement = {
+      value: new DataFieldBridge({
+        document: this,
+        dataPath: "system.timeIncrement.value",
+      }),
+      unit: new DataFieldBridge({
+        document: this,
+        dataPath: "system.timeIncrement.unit",
+        fromDto: (dto) => {
+          return TIME_UNITS[dto];
+        },
+        toDto: (value) => {
+          return value.name;
+        },
+      }),
+    };
   }
 }

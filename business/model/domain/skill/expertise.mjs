@@ -1,15 +1,15 @@
-import { common } from "../../../../../common/_module.mjs"
-import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../../presentation/chat/prepared-chat-data.mjs"
-import { VISIBILITY_MODES } from "../../../const/visibility-modes.mjs"
+import { common } from "../../../../common/_module.mjs"
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
+import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
+import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
+import { VISIBILITY_MODES } from "../../const/visibility-modes.mjs"
 import ExpertiseChatMessageViewModel from "../../../../../presentation/sheet/item/expertise/expertise-chat-message-viewmodel.mjs"
-import ViewModel from "../../../../../presentation/view-model/view-model.mjs"
-import AtReferencer from "../../../../search/at-referencer.mjs"
-import { ATTACK_TYPES, AttackType } from "../../../const/attack-types.mjs"
+import ViewModel from "../../../../presentation/view-model/view-model.mjs"
+import AtReferencer from "../../../search/at-referencer.mjs"
+import { ATTACK_TYPES, AttackType } from "../../const/attack-types.mjs"
 import DamageAndType from "../../../../ruleset/skill/damage-and-type.mjs"
-import { ITEM_TYPES } from "../../../const/item-types.mjs"
 import TransientSkill from "./transient-skill.mjs"
+import DomainDataField from "../domain-data-field.mjs"
 
 /**
  * Represents an expertise. 
@@ -38,7 +38,7 @@ import TransientSkill from "./transient-skill.mjs"
  * @property {AttackType | null} attackType 
  * @property {String | null} gmNotes
  */
-export default class Expertise {
+export default class Expertise extends DomainDataField {
   /**
    * Converts the given `dto` to a `Expertise` instance and 
    * returns it. 

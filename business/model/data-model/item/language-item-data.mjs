@@ -1,4 +1,5 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { LANGUAGE_GRADES } from "../../const/language-grades.mjs";
 
 export default class LanguageItemData extends TypeDataModel {
   /** @override */
@@ -14,14 +15,15 @@ export default class LanguageItemData extends TypeDataModel {
         nullable: false,
         initial: "",
       }),
-      grade: new FoundrySchemaFields.NumberField({
+      grade: new FoundrySchemaFields.StringField({
         nullable: false,
         required: true,
-        initial: 0,
-        integer: true,
-        min: 0,
-        max: 2,
-        positive: true,
+        initial: LANGUAGE_GRADES.dabbling.name,
+      }),
+      readAndWrite: new FoundrySchemaFields.BooleanField({
+        nullable: false,
+        required: true,
+        initial: false,
       }),
     }
   }

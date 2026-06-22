@@ -1,4 +1,5 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import MomentumActionField from "../../data-field/momentum-action-field.mjs";
 
 export default class TraitItemData extends TypeDataModel {
   /** @override */
@@ -13,6 +14,10 @@ export default class TraitItemData extends TypeDataModel {
         blank: true,
         nullable: false,
         initial: "",
+      }),
+      momentumActions: new FoundrySchemaFields.ArrayField(new MomentumActionField(), {
+        nullable: false,
+        initial: [],
       }),
     }
   }

@@ -7,8 +7,13 @@ import Complication from "./complication/complication.mjs";
 import { dice } from "./dice/_module.mjs";
 import DomainDataField from "./domain-data-field.mjs";
 import SystemHealthConditionBroker from "./health/system-health-condition-broker.mjs";
+import Modifier from "./modifier.mjs";
+import MomentumAction from "./momentum-action.mjs";
 import Reference from "./reference.mjs";
+import Ruleset from "./ruleset.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
+import Expertise from "./skill/expertise.mjs";
+import { Sum, SumComponent } from "./summed-data.mjs";
 import Tag from "./tag/tag.mjs";
 import TimeIncrement from "./time-increment.mjs";
 
@@ -20,12 +25,18 @@ export {
   CharacterAttribute,
   SystemHealthConditionBroker,
   DamageAndType,
+  Expertise,
   Tag,
   combat,
   dice,
   Complication,
   Reference,
   TimeIncrement,
+  MomentumAction,
+  Ruleset,
+  Sum,
+  SumComponent,
+  Modifier,
 };
 
 /**
@@ -48,6 +59,7 @@ export const domain = {
   },
   skill: {
     DamageAndType: DamageAndType,
+    Expertise: Expertise,
   },
   tag: {
     Tag: Tag,
@@ -57,6 +69,11 @@ export const domain = {
   Complication: Complication,
   Reference: Reference,
   TimeIncrement: TimeIncrement,
+  MomentumAction: MomentumAction,
+  Ruleset: Ruleset,
+  Sum: Sum,
+  SumComponent: SumComponent,
+  Modifier: Modifier,
   init: () => {
     SystemHealthConditionBroker.preload();
     combat.init();

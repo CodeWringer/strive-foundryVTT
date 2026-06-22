@@ -18,13 +18,12 @@ import InjuryCreationStrategy from "./creation/injury-creation-strategy.mjs";
 import RollableSpecificDocumentCreationStrategy from "./creation/rollable-specific-document-creation-strategy.mjs";
 import SpecificDocumentCreationStrategy from "./creation/specific-document-creation-strategy.mjs";
 import TransientSkill from "./item/skill/transient-skill.mjs";
-import Expertise from "./item/skill/expertise.mjs";
+import Expertise from "../domain/skill/expertise.mjs";
 import TransientAsset from "./item/transient-asset.mjs";
 import TransientFateCard from "./item/transient-fate-card.mjs";
 import TransientHealthCondition from "./item/transient-health-condition.mjs";
 import TransientIllness from "./item/transient-illness.mjs";
 import TransientInjury from "./item/transient-injury.mjs";
-import TransientMomentumAction from "./item/transient-momentum-action.mjs";
 import TransientMutation from "./item/transient-mutation.mjs";
 import TransientProject from "./item/transient-project.mjs";
 import TransientTrait from "./item/transient-trait.mjs";
@@ -51,7 +50,6 @@ export {
   TransientHealthCondition,
   TransientIllness,
   TransientInjury,
-  TransientMomentumAction,
   TransientMutation,
   TransientProject,
   TransientTrait,
@@ -107,7 +105,6 @@ export const document = {
     TransientHealthCondition: TransientHealthCondition,
     TransientIllness: TransientIllness,
     TransientInjury: TransientInjury,
-    TransientMomentumAction: TransientMomentumAction,
     TransientMutation: TransientMutation,
     TransientProject: TransientProject,
     TransientTrait: TransientTrait,

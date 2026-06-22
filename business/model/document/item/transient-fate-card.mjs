@@ -4,7 +4,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
 /**
  * Represents the full transient data of a fate card. 
  * 
- * @extends TransientBaseItem
+ * @see `FateCardItemData` - Must contain all the fields defined in this data model. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -43,6 +43,8 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Number} cost.miFP
  * @property {Number} cost.maFP
  * @property {Number} cost.AFP
+ * 
+ * @extends TransientBaseItem
  */
 export default class TransientFateCard extends TransientBaseItem {
   /** @override */
@@ -77,7 +79,12 @@ export default class TransientFateCard extends TransientBaseItem {
     };
   }
 
-  constructor(args = {}) {
+  /**
+   * @param {GameSystemItem} document An encapsulated document instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
+   */
+  constructor(document) {
     super(document);
     
     this._costMifp = new DataFieldBridge({

@@ -3,12 +3,12 @@ import { TIME_UNITS, TimeUnit } from "../../const/time-units.mjs"
 import CharacterAssetSlot from "../../../ruleset/asset/character-asset-slot.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 import DataFieldBridge from "../data-field-bridge.mjs"
+import { common } from "../../../../common/_module.mjs"
 
 /**
  * Represents the full transient data of an asset. 
  * 
- * @see `AssetItemData` Must contain all the fields defined in this data model. 
- * @extends TransientBaseItem
+ * @see `AssetItemData` - Must contain all the fields defined in this data model. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -68,6 +68,8 @@ import DataFieldBridge from "../data-field-bridge.mjs"
  * @property {CharacterAssetSlot | null} assetSlot The current asset slot 
  * that holds this asset. 
  * * Read-only
+ * 
+ * @extends TransientBaseItem
  */
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
@@ -85,11 +87,11 @@ export default class TransientAsset extends TransientBaseItem {
   get quantity() {
     const thiz = this;
     return {
-      get current() { return thiz._quantityCurrent.value; },
-      set current(value) { thiz._quantityCurrent.value = value; },
+      get current() { return thiz._quantity.current.value; },
+      set current(value) { thiz._quantity.current.value = value; },
 
-      get maximum() { return thiz._quantityMaximum.value; },
-      set maximum(value) { thiz._quantityMaximum.value = value; },
+      get maximum() { return thiz._quantity.maximum.value; },
+      set maximum(value) { thiz._quantity.maximum.value = value; },
     };
   }
 
@@ -105,27 +107,27 @@ export default class TransientAsset extends TransientBaseItem {
       /**
        * @type {Number}
        */
-      get progressIncrement() { return thiz._craftingProgressIncrement.value; },
-      set progressIncrement(value) { thiz._craftingProgressIncrement.value = value; },
-      
+      get progressIncrement() { return thiz._crafting.progressIncrement.value; },
+      set progressIncrement(value) { thiz._crafting.progressIncrement.value = value; },
+
       /**
        * @type {Number}
        */
-      get amount() { return thiz._craftingAmount.value; },
-      set amount(value) { thiz._craftingAmount.value = value; },
-      
+      get amount() { return thiz._crafting.amount.value; },
+      set amount(value) { thiz._crafting.amount.value = value; },
+
       timeIncrement: {
         /**
          * @type {Number}
          */
-        get value() { return thiz._craftingTimeIncrementValue.value; },
-        set value(value) { thiz._craftingTimeIncrementValue.value = value; },
-        
+        get value() { return thiz._crafting.timeIncrement.value.value; },
+        set value(value) { thiz._crafting.timeIncrement.value.value = value; },
+
         /**
          * @type {TimeUnit}
          */
-        get unit() { return thiz._craftingTimeIncrementUnit.value; },
-        set unit(value) { thiz._craftingTimeIncrementUnit.value = value; },
+        get unit() { return thiz._crafting.timeIncrement.unit.value; },
+        set unit(value) { thiz._crafting.timeIncrement.unit.value = value; },
       },
     };
   }
@@ -188,7 +190,12 @@ export default class TransientAsset extends TransientBaseItem {
     return null;
   }
 
-  constructor(args = {}) {
+  /**
+   * @param {GameSystemItem} document An encapsulated document instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
+   */
+  constructor(document) {
     super(document);
 
     this._bulk = new DataFieldBridge({
@@ -196,47 +203,57 @@ export default class TransientAsset extends TransientBaseItem {
       dataPath: "system.bulk",
       default: 0,
     });
-    this._quantityCurrent = new DataFieldBridge({
-      document: this,
-      dataPath: "system.quantity.current",
-      default: 1,
-    });
-    this._quantityMaximum = new DataFieldBridge({
-      document: this,
-      dataPath: "system.quantity.maximum",
-      default: null,
-    });
+
+    this._quantity = {
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.quantity.current",
+        default: 1,
+      }),
+      maximum: new DataFieldBridge({
+        document: this,
+        dataPath: "system.quantity.maximum",
+        default: null,
+      }),
+    };
+
     this._quality = new DataFieldBridge({
       document: this,
       dataPath: "system.quality",
       default: 1,
     });
-    this._craftingProgressIncrement = new DataFieldBridge({
-      document: this,
-      dataPath: "system.crafting.progressIncrement",
-      default: 0,
-    });
-    this._craftingAmount = new DataFieldBridge({
-      document: this,
-      dataPath: "system.crafting.amount",
-      default: 1,
-    });
-    this._craftingTimeIncrementValue = new DataFieldBridge({
-      document: this,
-      dataPath: "system.crafting.timeIncrement.value",
-      default: 0,
-    });
-    this._craftingTimeIncrementUnit = new DataFieldBridge({
-      document: this,
-      dataPath: "system.crafting.timeIncrement.unit",
-      default: TIME_UNITS.none,
-      fromDto: (dto) => {
-        return TIME_UNITS[dto];
+
+    this._crafting = {
+      progressIncrement: new DataFieldBridge({
+        document: this,
+        dataPath: "system.crafting.progressIncrement",
+        default: 0,
+      }),
+      amount: new DataFieldBridge({
+        document: this,
+        dataPath: "system.crafting.amount",
+        default: 1,
+      }),
+
+      timeIncrement: {
+        value: new DataFieldBridge({
+          document: this,
+          dataPath: "system.crafting.timeIncrement.value",
+          default: 0,
+        }),
+        unit: new DataFieldBridge({
+          document: this,
+          dataPath: "system.crafting.timeIncrement.unit",
+          default: TIME_UNITS.none,
+          fromDto: (dto) => {
+            return TIME_UNITS[dto];
+          },
+          toDto: (value) => {
+            return value.name;
+          },
+        }),
       },
-      toDto: (value) => {
-        return value.name;
-      },
-    });
+    };
   }
 
   /**
@@ -311,13 +328,7 @@ export default class TransientAsset extends TransientBaseItem {
    * is more than / greater than `other`. 
    */
   compareBulk(other) {
-    if (this.bulk < other.bulk) {
-      return -1;
-    } else if (this.bulk > other.bulk) {
-      return 1;
-    } else {
-      return 0;
-    }
+    return common.util.compare.compareOrdinal(this.bulk, other.bulk);
   }
 
   /**

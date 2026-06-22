@@ -1,170 +1,210 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import InjuryChatMessageViewModel from "../../../../presentation/sheet/item/injury/injury-chat-message-viewmodel.mjs"
-import { INJURY_STATES } from "../../const/injury-states.mjs"
+import { INJURY_STATES, InjuryState } from "../../const/injury-states.mjs"
+import Reference from "../../domain/reference.mjs";
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
  * Represents the full transient data of an injury. 
  * 
- * @extends TransientBaseItem
+ * @see `InjuryItemData` - Must contain all the fields defined in this data model. 
  * 
- * @property {String} lastTreatmentTime 
- * @property {String} obstacleTreatment 
- * @property {String} requiredSupplies 
- * @property {String | null} scar 
- * @property {INJURY_STATES} state 
- * @property {Number} timeToHeal Total time to heal, in days. 
- * @property {Number} timeToHealElapsed Elapsed healing days. 
- * @property {String} treatmentSkill Name of the treatment Skill. 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
+ * 
+ * @property {InjuryState} state
+ * @property {Object} treatment
+ * * Read-only.
+ * @property {String} treatment.lastTreatmentTime
+ * @property {String} treatment.obstacle
+ * @property {Reference} treatment.skill
+ * @property {Object} treatment.requiredSupplies
+ * * Read-only.
+ * @property {Number} treatment.requiredSupplies.amount
+ * @property {Reference} treatment.requiredSupplies.asset
+ * @property {Object} healProgress
+ * * Read-only.
+ * @property {Number} healProgress.current
+ * @property {Number} healProgress.required
+ * @property {Boolean} healProgress.untilCured
+ * 
+ * @extends TransientBaseItem
  */
 export default class TransientInjury extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/bones.svg"; }
 
   /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.INJURY_CHAT_MESSAGE; }
+  get clazz() { return TransientInjury; }
 
   /**
-   * @type {String}
+   * @type {InjuryState}
    */
-  get lastTreatmentTime() {
-    return this.document.system.lastTreatmentTime;
+  get state() { return this._state.value; }
+  set state(value) { this._state.value = value; }
+  
+  get treatment() {
+    const thiz = this;
+    return {
+      /**
+       * @type {String}
+       */
+      get lastTreatmentTime() { return thiz._treatment.lastTreatmentTime.value; },
+      set lastTreatmentTime(value) { thiz._treatment.lastTreatmentTime.value = value; },
+      
+      /**
+       * @type {String}
+       */
+      get obstacle() { return thiz._treatment.obstacle.value; },
+      set obstacle(value) { thiz._treatment.obstacle.value = value; },
+
+      /**
+       * @type {Reference}
+       */
+      get skill() { return thiz._treatment.skill.value; },
+      set skill(value) { thiz._treatment.skill.value = value; },
+      
+      get requiredSupplies() {
+        return {
+          /**
+           * @type {Number}
+           */
+          get amount() { return thiz._treatment.requiredSupplies.amount.value; },
+          set amount(value) { thiz._treatment.requiredSupplies.amount.value = value; },
+    
+          /**
+           * @type {Reference}
+           */
+          get asset() { return thiz._treatment.requiredSupplies.asset.value; },
+          set asset(value) { thiz._treatment.requiredSupplies.asset.value = value; },
+        };
+      },
+    };
   }
-  set lastTreatmentTime(value) {
-    this.document.system.lastTreatmentTime = value;
-    this.updateByPath("system.lastTreatmentTime", value);
+  
+  get healProgress() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._healProgress.current.value; },
+      set current(value) { thiz._healProgress.current.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get required() { return thiz._healProgress.required.value; },
+      set required(value) { thiz._healProgress.required.value = value; },
+
+      /**
+       * @type {Boolean}
+       */
+      get untilCured() { return thiz._healProgress.untilCured.value; },
+      set untilCured(value) { thiz._healProgress.untilCured.value = value; },
+    };
   }
 
   /**
-   * @type {String}
-   */
-  get requiredSupplies() {
-    return this.document.system.requiredSupplies;
-  }
-  set requiredSupplies(value) {
-    this.document.system.requiredSupplies = value;
-    this.updateByPath("system.requiredSupplies", value);
-  }
-
-  /**
-   * @type {String}
-   */
-  get obstacleTreatment() {
-    return this.document.system.obstacleTreatment;
-  }
-  set obstacleTreatment(value) {
-    this.document.system.obstacleTreatment = value;
-    this.updateByPath("system.obstacleTreatment", value);
-  }
-
-  /**
-   * @type {String | null}
-   */
-  get scar() {
-    const value = this.document.system.scar;
-    return ValidationUtil.isDefined(value) ? value : null;
-  }
-  set scar(value) {
-    this.document.system.scar = value;
-    this.updateByPath("system.scar", value);
-  }
-
-  /**
-   * @type {INJURY_STATES}
-   */
-  get state() {
-    return INJURY_STATES[this.document.system.state] ?? INJURY_STATES.active;
-  }
-  set state(value) {
-    this.document.system.state = value;
-    this.updateByPath("system.state", value.name);
-  }
-
-  /**
-   * @type {Number}
-   */
-  get timeToHeal() {
-    return parseInt(this.document.system.timeToHeal ?? 0);
-  }
-  set timeToHeal(value) {
-    this.document.system.timeToHeal = value;
-    this.updateByPath("system.timeToHeal", value);
-  }
-
-  /**
-   * @type {Number}
-   */
-  get timeToHealElapsed() {
-    return parseInt(this.document.system.timeToHealElapsed ?? 0);
-  }
-  set timeToHealElapsed(value) {
-    this.document.system.timeToHealElapsed = value;
-    this.updateByPath("system.timeToHealElapsed", value);
-  }
-
-  /**
-   * @type {String}
-   */
-  get treatmentSkill() {
-    return this.document.system.treatmentSkill;
-  }
-  /**
-   * @param {String} value
-   */
-  set treatmentSkill(value) {
-    this.document.system.treatmentSkill = value;
-    this.updateByPath("system.treatmentSkill", value);
-  }
-
-  /** @override */
-  async getChatData() {
-    const vm = this.getChatViewModel();
-
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document,
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-      flavor: game.i18n.localize("system.character.health.injury.singular"),
-    });
-  }
-
-  /**
-   * Returns an instance of a view model for use in a chat message. 
+   * @param {GameSystemItem} document An encapsulated document instance. 
    * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {InjuryChatMessageViewModel}
-   * 
-   * @override
+   * @throws {Error} Thrown, if `document` is `undefined`. 
    */
-  getChatViewModel(overrides = {}) {
-    return new InjuryChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
+  constructor(document) {
+    super(document);
+
+    this._state = new DataFieldBridge({
       document: this,
+      dataPath: "system.state",
+      default: INJURY_STATES.active,
+      fromDto: (dto) => {
+        return INJURY_STATES[dto];
+      },
+      toDto: (value) => {
+        return value.name;
+      },
     });
+
+    this._treatment = {
+      lastTreatmentTime: new DataFieldBridge({
+        document: this,
+        dataPath: "system.treatment.lastTreatmentTime",
+      }),
+      obstacle: new DataFieldBridge({
+        document: this,
+        dataPath: "system.treatment.obstacle",
+      }),
+      skill: new DataFieldBridge({
+        document: this,
+        dataPath: "system.treatment.skill",
+        fromDto: (dto) => {
+          return Reference.fromDto(dto);
+        },
+        toDto: (value) => {
+          return value.toDto();
+        },
+      }),
+
+      requiredSupplies: {
+        amount: new DataFieldBridge({
+          document: this,
+          dataPath: "system.treatment.requiredSupplies.amount",
+        }),
+        asset: new DataFieldBridge({
+          document: this,
+          dataPath: "system.treatment.requiredSupplies.asset",
+          fromDto: (dto) => {
+            return Reference.fromDto(dto);
+          },
+          toDto: (value) => {
+            return value.toDto();
+          },
+        }),
+      },
+    };
+
+    this._healProgress = {
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.healProgress.current",
+      }),
+      required: new DataFieldBridge({
+        document: this,
+        dataPath: "system.healProgress.required",
+      }),
+      untilCured: new DataFieldBridge({
+        document: this,
+        dataPath: "system.healProgress.untilCured",
+      }),
+    };
   }
 
   /**
@@ -178,17 +218,12 @@ export default class TransientInjury extends TransientBaseItem {
    * is more than / greater than `other`. 
    */
   compareTreatment(other) {
-    if (this.state == INJURY_STATES.active && other.state != INJURY_STATES.active) {
+    if (this.state.name == INJURY_STATES.active && other.state.name != INJURY_STATES.active) {
       return -1;
-    } else if (this.state == INJURY_STATES.treated && other.state != INJURY_STATES.treated) {
+    } else if (this.state.name == INJURY_STATES.treated && other.state.name != INJURY_STATES.treated) {
       return 1;
     } else {
       return 0;
     }
-  }
-
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientInjury));
   }
 }

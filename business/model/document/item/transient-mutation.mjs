@@ -1,12 +1,41 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import MutationChatMessageViewModel from "../../../../presentation/sheet/item/mutation/mutation-chat-message-viewmodel.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
  * Represents the full transient data of a mutation. 
+ * 
+ * @see `MutationItemData` - Must contain all the fields defined in this data model. 
+ * 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
  * 
  * @extends TransientBaseItem
  */
@@ -15,57 +44,5 @@ export default class TransientMutation extends TransientBaseItem {
   get defaultImg() { return "icons/svg/ice-aura.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.MUTATION_CHAT_MESSAGE; }
-
-  /** @override */
-  async getChatData() {
-    const vm = this.getChatViewModel();
-
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: (this.owningDocument ?? {}).document, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
-      flavor: game.i18n.localize("system.character.health.mutation.singular"),
-    });
-  }
-
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * 
-   * @returns {MutationChatMessageViewModel}
-   * 
-   * @override
-   */
-  getChatViewModel(overrides = {}) {
-    return new MutationChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      isOwner: this.isOwner,
-      isGM: game.user.isGM,
-      document: this,
-    });
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientMutation));
-  }
+  get clazz() { return TransientMutation; }
 }

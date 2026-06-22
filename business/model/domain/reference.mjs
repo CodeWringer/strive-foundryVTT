@@ -12,8 +12,8 @@ import DomainDataField from "./domain-data-field.mjs";
 export default class Reference extends DomainDataField {
   /**
    * @param {Object} dto 
-   * @param {String | undefined} args.uuid If undefined, `name` MUST be defined. 
-   * @param {String | undefined} args.name If undefined, `uuid` MUST be defined. 
+   * @param {String | undefined} dto.uuid If undefined, `name` MUST be defined. 
+   * @param {String | undefined} dto.name If undefined, `uuid` MUST be defined. 
    * 
    * @returns {Reference}
    * 

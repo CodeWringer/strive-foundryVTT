@@ -2,6 +2,8 @@ import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
+ * @see `HealthConditionItemData` - Must contain all the fields defined in this data model. 
+ * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
  * * Abstract. 

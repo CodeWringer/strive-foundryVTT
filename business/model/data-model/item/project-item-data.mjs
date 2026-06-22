@@ -1,4 +1,7 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import ComplicationField from "../../data-field/complication-field.mjs";
+import ReferenceField from "../../data-field/reference-field.mjs";
+import TimeIncrementField from "../../data-field/time-increment-field.mjs";
 
 export default class ProjectItemData extends TypeDataModel {
   /** @override */
@@ -14,7 +17,7 @@ export default class ProjectItemData extends TypeDataModel {
         nullable: false,
         initial: "",
       }),
-      complications: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+      complications: new FoundrySchemaFields.ArrayField(new ComplicationField(), {
         nullable: false,
         initial: [],
       }),
@@ -41,12 +44,7 @@ export default class ProjectItemData extends TypeDataModel {
           min: 0,
         }),
       }),
-      projectSkill: new FoundrySchemaFields.StringField({
-        nullable: false,
-        required: true,
-        initial: "",
-        trim: true,
-      }),
+      projectSkill: new ReferenceField(),
       pushes: new FoundrySchemaFields.NumberField({
         nullable: false,
         integer: true,
@@ -61,12 +59,7 @@ export default class ProjectItemData extends TypeDataModel {
         initial: 1,
         min: 1,
       }),
-      timeIncrement: new FoundrySchemaFields.StringField({
-        nullable: false,
-        required: true,
-        initial: "",
-        trim: true,
-      }),
+      timeIncrement: new TimeIncrementField(),
     }
   }
 }
