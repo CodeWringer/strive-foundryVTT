@@ -1,5 +1,5 @@
 import MomentumAction from "../../domain/momentum-action.mjs";
-import DataFieldBridge from "../data-field-bridge.mjs";
+import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
 /**
@@ -62,15 +62,10 @@ export default class TransientTrait extends TransientBaseItem {
   constructor(document) {
     super(document);
 
-    this._momentumActions = new DataFieldBridge({
+    this._momentumActions = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.momentumActions",
-      fromDto: (dto) => {
-        return dto.map(it => MomentumAction.fromDto(dto));
-      },
-      toDto: (value) => {
-        return value.map(it => it.toDto());
-      },
-    })
+      dataClass: MomentumAction,
+    });
   }
 }

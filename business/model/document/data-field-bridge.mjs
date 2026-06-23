@@ -12,7 +12,7 @@ import TransientDocument from "./transient-document.mjs";
  * * Read-only
  * * private
  * @property {Any | undefined} default A default value to 
-   * use in case the data base field's value is undefined.
+ * use in case the data base field's value is undefined.
  * 
  * @method fromDto Maps the data coming from the data base to a 
  * domain object. 

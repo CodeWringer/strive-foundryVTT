@@ -1,5 +1,5 @@
 import { common } from "../../../common/_module.mjs";
-import DomainDataField from "./domain-data-field.mjs";
+import Persistable from "./persistable.mjs";
 
 /**
  * Represents a document reference through a uuid or name. 
@@ -7,9 +7,9 @@ import DomainDataField from "./domain-data-field.mjs";
  * @property {String | null} uuid
  * @property {String | null} name
  * 
- * @extends DomainDataField
+ * @extends Persistable
  */
-export default class Reference extends DomainDataField {
+export default class Reference extends Persistable {
   /**
    * @param {Object} dto 
    * @param {String | undefined} dto.uuid If undefined, `name` MUST be defined. 

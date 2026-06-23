@@ -1,5 +1,6 @@
 import { TIME_UNITS } from "../../const/time-units.mjs";
 import { Complication, Reference } from "../../domain/_module.mjs";
+import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 
@@ -135,15 +136,10 @@ export default class TransientProject extends TransientBaseItem {
   constructor(document) {
     super(document);
 
-    this._complications = new DataFieldBridge({
+    this._complications = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.complications",
-      fromDto: (dto) => {
-        return dto.map(it => Complication.fromDto(it));
-      },
-      toDto: (value) => {
-        return value.map(it => it.toDto());
-      },
+      dataClass: Complication,
     });
 
     this._progress = {

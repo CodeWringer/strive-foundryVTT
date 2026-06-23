@@ -1,4 +1,4 @@
-import DomainDataField from "../domain-data-field.mjs";
+import Persistable from "../persistable.mjs";
 
 /**
  * Represents a specific Attribute of a character. 
@@ -6,7 +6,7 @@ import DomainDataField from "../domain-data-field.mjs";
  * @property {String} name Internal name of the attribute. 
  * @property {Number} level Raw level.
  */
-export default class CharacterAttribute extends DomainDataField {
+export default class CharacterAttribute extends Persistable {
   /**
    * @param {Object} args
    * @param {String} args.name

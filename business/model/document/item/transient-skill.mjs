@@ -1,6 +1,7 @@
 import AtReferencer from "../../../../search/at-referencer.mjs"
-import { Expertise } from "../_module.mjs";
-import DataFieldBridge from "../data-field-bridge.mjs";
+import GradedEffect from "../../domain/graded-effect.mjs";
+import MomentumAction from "../../domain/momentum-action.mjs";
+import { DataFieldBridge, ArrayDataFieldBridge, Expertise } from "../_module.mjs";
 import TransientBaseItem from "../transient-base-item.mjs"
 
 /**
@@ -94,7 +95,138 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get expertises() { return this._expertises.value; }
   set expertises(value) { this._expertises.value = value; }
+  
+  get itemOrders() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Array<String>}
+       */
+      get expertises() { return thiz._itemOrders.expertises.value; },
+      set expertises(value) { thiz._itemOrders.expertises.value = value; },
+      
+      /**
+       * @type {Array<String>}
+       */
+      get momentumActions() { return thiz._itemOrders.momentumActions.value; },
+      set momentumActions(value) { thiz._itemOrders.momentumActions.value = value; },
+    };
+  }
+  
+  get actionPoints() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._actionPoints.enabled.value; },
+      set enabled(value) { thiz._actionPoints.enabled.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._actionPoints.current.value; },
+      set current(value) { thiz._actionPoints.current.value = value; },
+    };
+  }
+  
+  get distance() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._distance.enabled.value; },
+      set enabled(value) { thiz._distance.enabled.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._distance.current.value; },
+      set current(value) { thiz._distance.current.value = value; },
+    };
+  }
+  
+  get targetingType() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._targetingType.enabled.value; },
+      set enabled(value) { thiz._targetingType.enabled.value = value; },
+      
+      /**
+       * @type {TargetingType}
+       */
+      get current() { return thiz._targetingType.current.value; },
+      set current(value) { thiz._targetingType.current.value = value; },
+    };
+  }
+  
+  get obstacle() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._obstacle.enabled.value; },
+      set enabled(value) { thiz._obstacle.enabled.value = value; },
+      
+      /**
+       * @type {String}
+       */
+      get current() { return thiz._obstacle.current.value; },
+      set current(value) { thiz._obstacle.current.value = value; },
+    };
+  }
+  
+  get opposedBy() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._opposedBy.enabled.value; },
+      set enabled(value) { thiz._opposedBy.enabled.value = value; },
+      
+      /**
+       * @type {String}
+       */
+      get current() { return thiz._opposedBy.current.value; },
+      set current(value) { thiz._opposedBy.current.value = value; },
+    };
+  }
+  
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._advancement.enabled.value; },
+      set enabled(value) { thiz._advancement.enabled.value = value; },
+      
+      /**
+       * @type {Number}
+       */
+      get progress() { return thiz._advancement.progress.value; },
+      set progress(value) { thiz._advancement.progress.value = value; },
+    };
+  }
 
+  /**
+   * @type {Array<GradedEffect>}
+   */
+  get gradedEffects() { return this._gradedEffects.value; }
+  set gradedEffects(value) { this._gradedEffects.value = value; }
+  
+  /**
+   * @type {Array<MomentumAction>}
+   */
+  get momentumActions() { return this._momentumActions.value; }
+  set momentumActions(value) { this._momentumActions.value = value; }
+  
   /**
    * @param {Item} document An encapsulated item instance. 
    * 
@@ -111,15 +243,98 @@ export default class TransientSkill extends TransientBaseItem {
       document: this,
       dataPath: "system.level",
     });
-    this._expertises = new DataFieldBridge({
+    this._expertises = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.expertises",
-      fromDto: (dto) => {
-        return dto.map(it => Expertise.fromDto(dto));
-      },
-      toDto: (value) => {
-        return value.map(it => it.toDto());
-      },
+      dataClass: Expertise,
+    });
+    this._itemOrders = {
+      expertises: new DataFieldBridge({
+        document: this,
+        dataPath: "system.itemOrders.expertises",
+      }),
+      momentumActions: new DataFieldBridge({
+        document: this,
+        dataPath: "system.itemOrders.momentumActions",
+      }),
+    };
+    this._actionPoints = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.actionPoints.enabled",
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.actionPoints.current",
+        default: 0,
+      }),
+    };
+    this._distance = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.distance.enabled",
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.distance.current",
+      }),
+    };
+    this._targetingType = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.targetingType.enabled",
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.targetingType.current",
+      }),
+    };
+    this._obstacle = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.obstacle.enabled",
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.obstacle.current",
+      }),
+    };
+    this._opposedBy = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.opposedBy.enabled",
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.opposedBy.current",
+      }),
+    };
+    this._advancement = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.advancement.enabled",
+      }),
+      progress: new DataFieldBridge({
+        document: this,
+        dataPath: "system.advancement.progress",
+        default: 0,
+      }),
+    };
+    this._gradedEffects = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.gradedEffects.enabled",
+      }),
+      entries: new ArrayDataFieldBridge({
+        document: this,
+        dataPath: "system.gradedEffects.entries",
+        dataClass: GradedEffect,
+      }),
+    };
+    this._momentumActions = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: "system.momentumActions",
+      dataClass: MomentumAction,
     });
   }
 

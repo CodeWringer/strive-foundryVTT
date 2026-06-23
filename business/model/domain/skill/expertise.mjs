@@ -9,7 +9,7 @@ import AtReferencer from "../../../search/at-referencer.mjs"
 import { ATTACK_TYPES, AttackType } from "../../const/attack-types.mjs"
 import DamageAndType from "../../../../ruleset/skill/damage-and-type.mjs"
 import TransientSkill from "./transient-skill.mjs"
-import DomainDataField from "../domain-data-field.mjs"
+import Persistable from "../persistable.mjs"
 
 /**
  * Represents an expertise. 
@@ -38,7 +38,7 @@ import DomainDataField from "../domain-data-field.mjs"
  * @property {AttackType | null} attackType 
  * @property {String | null} gmNotes
  */
-export default class Expertise extends DomainDataField {
+export default class Expertise extends Persistable {
   /**
    * Converts the given `dto` to a `Expertise` instance and 
    * returns it. 

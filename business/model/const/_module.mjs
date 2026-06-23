@@ -4,6 +4,7 @@ import { ATTACK_TYPES, AttackType } from "./attack-types.mjs";
 import { ATTRIBUTE_TYPES, AttributeType } from "./attribute-types.mjs";
 import { Attribute, ATTRIBUTES } from "./attributes.mjs";
 import { CHARACTER_TEST_TYPES, CharacterTestType } from "./character-test-types.mjs";
+import { ComparisonType } from "./comparison-types.mjs";
 import { DAMAGE_TYPES, DamageType } from "./damage-types.mjs";
 import { ILLNESS_STATES, IllnessState } from "./illness-states.mjs";
 import { INJURY_SHRUG_OFF_STATES } from "./injury-shrug-off-states.mjs";
@@ -43,6 +44,7 @@ export {
   VISIBILITY_MODES,
   WeaponType,
   WEAPON_TYPES,
+  ComparisonType,
 };
 
 /**
@@ -77,6 +79,7 @@ export const constants = {
   VISIBILITY_MODES: VISIBILITY_MODES,
   WeaponType: WeaponType,
   WEAPON_TYPES: WEAPON_TYPES,
+  ComparisonType: ComparisonType,
   init: () => {
     common.util.constants.enrichConstant(ACTOR_TYPES);
     common.util.constants.enrichConstant(ITEM_TYPES);

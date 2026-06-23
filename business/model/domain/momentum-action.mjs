@@ -1,4 +1,4 @@
-import DomainDataField from "./domain-data-field.mjs";
+import Persistable from "./persistable.mjs";
 
 /**
  * Represents a document reference through a uuid or name. 
@@ -12,9 +12,9 @@ import DomainDataField from "./domain-data-field.mjs";
  * @property {Number} heroic.cost
  * @property {String} heroic.description
  * 
- * @extends DomainDataField
+ * @extends Persistable
  */
-export default class MomentumAction extends DomainDataField {
+export default class MomentumAction extends Persistable {
   /**
    * @param {Object} dto 
    * @param {Object} dto.desperate

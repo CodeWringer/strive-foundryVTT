@@ -1,12 +1,15 @@
-import { DAMAGE_TYPES, DamageType } from "../../model/const/damage-types.mjs";
+import { DAMAGE_TYPES, DamageType } from "../../const/damage-types.mjs";
+import Persistable from "../persistable.mjs";
 
 /**
  * Represents the combination of damage and damage type. 
  * 
- * @property {String} args.damage
- * @property {DamageType} args.damageType
+ * @property {String} damage A damage formula. May contain at-references. 
+ * @property {DamageType} type
+ * 
+ * @extends Persistable
  */
-export default class DamageAndType {
+export default class DamageAndType extends Persistable {
   /**
    * Converts the given DTO to an instance of this type and returns it. 
    * 
@@ -15,33 +18,35 @@ export default class DamageAndType {
    * @returns {DamageAndType}
    * 
    * @static
+   * @override
    */
   static fromDto(dto) {
     return new DamageAndType({
       damage: dto.damage,
-      damageType: DAMAGE_TYPES[dto.damageType],
+      type: DAMAGE_TYPES[dto.type],
     });
   }
 
   /**
    * @param {Object} args 
-   * @param {String} args.damage
-   * @param {DamageType} args.damageType
+   * @param {String} args.damage A damage formula. May contain at-references. 
+   * @param {DamageType} args.type
    */
   constructor(args = {}) {
-    this.damage = args.damage ?? "";
-    this.damageType = args.damageType ?? DAMAGE_TYPES.pure;
+    this.damage = args.damage ?? "0";
+    this.type = args.type ?? DAMAGE_TYPES.pure;
   }
 
   /**
    * Converts this instance to a DTO and returns it. 
    * 
    * @returns {Object}
+   * @override
    */
   toDto() {
     return {
       damage: this.damage,
-      damageType: this.damageType.name,
-    }
+      type: this.type.name,
+    };
   }
 }

@@ -5,7 +5,8 @@ import CharacterAttribute from "./attribute/character-attribute.mjs";
 import { combat } from "./combat/_module.mjs";
 import Complication from "./complication/complication.mjs";
 import { dice } from "./dice/_module.mjs";
-import DomainDataField from "./domain-data-field.mjs";
+import Persistable from "./persistable.mjs";
+import GradedEffect from "./graded-effect.mjs";
 import SystemHealthConditionBroker from "./health/system-health-condition-broker.mjs";
 import Modifier from "./modifier.mjs";
 import MomentumAction from "./momentum-action.mjs";
@@ -16,9 +17,10 @@ import Expertise from "./skill/expertise.mjs";
 import { Sum, SumComponent } from "./summed-data.mjs";
 import Tag from "./tag/tag.mjs";
 import TimeIncrement from "./time-increment.mjs";
+import HealthConditionEffect from "./health-condition-effect.mjs";
 
 export {
-  DomainDataField,
+  Persistable as DomainDataField,
   AssetSlot,
   CharacterAssetSlotGroup,
   CharacterAssetSlot,
@@ -37,6 +39,8 @@ export {
   Sum,
   SumComponent,
   Modifier,
+  HealthConditionEffect,
+  GradedEffect,
 };
 
 /**
@@ -45,7 +49,7 @@ export {
  * categorized as anything else. 
  */
 export const domain = {
-  DomainDataField: DomainDataField,
+  DomainDataField: Persistable,
   asset: {
     AssetSlot: AssetSlot,
     CharacterAssetSlotGroup: CharacterAssetSlotGroup,
@@ -74,6 +78,8 @@ export const domain = {
   Sum: Sum,
   SumComponent: SumComponent,
   Modifier: Modifier,
+  HealthConditionEffect: HealthConditionEffect,
+  GradedEffect: GradedEffect,
   init: () => {
     SystemHealthConditionBroker.preload();
     combat.init();

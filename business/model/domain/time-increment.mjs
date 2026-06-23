@@ -1,21 +1,19 @@
 import { TIME_UNITS, TimeUnit } from "../const/time-units.mjs";
-import DomainDataField from "./domain-data-field.mjs";
+import Persistable from "./persistable.mjs";
 
 /**
  * Represents a Crafting Time Increment. 
  * 
  * @property {Number} value
- * @property {String} unit Must correspond to one of the `name` fields of the 
- * `TIME_UNITS` constants. 
+ * @property {TimeUnit} unit 
  * 
- * @extends DomainDataField
+ * @extends Persistable
 */
-export default class TimeIncrement extends DomainDataField {
+export default class TimeIncrement extends Persistable {
   /**
    * @param {Object} dto 
    * @param {Number} dto.value
-   * @param {String} dto.unit Must correspond to one of the `name` fields of the 
-   * `TIME_UNITS` constants. 
+   * @param {TimeUnit} dto.unit 
    * 
    * @returns {TimeIncrement}
    * 

@@ -30,27 +30,27 @@ export class ComparisonType {
 export const COMPARISON_TYPES = {
   LESS_THAN: new ComparisonType({
     name: "less-than",
-    localizableName: "system.TODO",
+    localizableName: "system.general.comparisonType.lessThan",
     icon: "TODO",
   }),
   LESS_EQUALS: new ComparisonType({
     name: "less-equals",
-    localizableName: "system.TODO",
+    localizableName: "system.general.comparisonType.lessEquals",
     icon: "TODO",
   }),
   EQUALS: new ComparisonType({
     name: "equals",
-    localizableName: "system.TODO",
+    localizableName: "system.general.comparisonType.equals",
     icon: "TODO",
   }),
   GREATER_THAN: new ComparisonType({
     name: "greater-than",
-    localizableName: "system.TODO",
+    localizableName: "system.general.comparisonType.greaterThan",
     icon: "TODO",
   }),
   GREATER_EQUALS: new ComparisonType({
     name: "greater-equals",
-    localizableName: "system.TODO",
+    localizableName: "system.general.comparisonType.greaterEquals",
     icon: "TODO",
   }),
 };

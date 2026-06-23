@@ -27,9 +27,13 @@ import TransientInjury from "./item/transient-injury.mjs";
 import TransientMutation from "./item/transient-mutation.mjs";
 import TransientProject from "./item/transient-project.mjs";
 import TransientTrait from "./item/transient-trait.mjs";
+import DataFieldBridge from "./data-field-bridge.mjs";
+import ArrayDataFieldBridge from "./array-data-field-bridge.mjs";
 
 export {
   TransientDocument,
+  DataFieldBridge,
+  ArrayDataFieldBridge,
   DOCUMENT_COLLECTION_SOURCES,
   DocumentCollectionSource,
   DocumentIndex,
@@ -70,6 +74,8 @@ export {
  */
 export const document = {
   TransientDocument: TransientDocument,
+  DataFieldBridge: DataFieldBridge,
+  ArrayDataFieldBridge: ArrayDataFieldBridge,
   fetcher: {
     DocumentCollectionSource: DocumentCollectionSource,
     DOCUMENT_COLLECTION_SOURCES: DOCUMENT_COLLECTION_SOURCES,
