@@ -1,3 +1,4 @@
+import { constants } from "./const/_module.mjs";
 import AssetSlot from "./asset/asset-slot.mjs";
 import CharacterAssetSlotGroup from "./asset/character-asset-slot-group.mjs";
 import CharacterAssetSlot from "./asset/character-asset-slot.mjs";
@@ -20,7 +21,8 @@ import TimeIncrement from "./time-increment.mjs";
 import HealthConditionEffect from "./health-condition-effect.mjs";
 
 export {
-  Persistable as DomainDataField,
+  const,
+  Persistable,
   AssetSlot,
   CharacterAssetSlotGroup,
   CharacterAssetSlot,
@@ -49,7 +51,8 @@ export {
  * categorized as anything else. 
  */
 export const domain = {
-  DomainDataField: Persistable,
+  const: constants,
+  Persistable: Persistable,
   asset: {
     AssetSlot: AssetSlot,
     CharacterAssetSlotGroup: CharacterAssetSlotGroup,
@@ -81,6 +84,7 @@ export const domain = {
   HealthConditionEffect: HealthConditionEffect,
   GradedEffect: GradedEffect,
   init: () => {
+    constants.init();
     SystemHealthConditionBroker.preload();
     combat.init();
   },

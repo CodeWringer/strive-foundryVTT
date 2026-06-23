@@ -1,11 +1,9 @@
-import { constants } from "./const/_module.mjs";
 import { dataField } from "./data-field/_module.mjs";
 import { dataModel } from "./data-model/_module.mjs";
 import { document } from "./document/_module.mjs";
 import { domain } from "./domain/_module.mjs";
 
 export {
-  constants,
   dataField,
   dataModel,
   document,
@@ -19,7 +17,6 @@ export {
  * Note the `init` function MUST be called during system setup!
  */
 export const model = {
-  const: constants,
   dataField: dataField,
   dataModel: dataModel,
   document: document,
@@ -30,7 +27,6 @@ export const model = {
    * Ensures data models and documents are registered.
    */
   init: () => {
-    constants.init();
     dataModel.init();
     document.init();
     domain.init();

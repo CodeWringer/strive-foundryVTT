@@ -1,3 +1,4 @@
+import { common } from "../../../../common/_module.mjs";
 import { ACTOR_TYPES } from "./actor-types.mjs";
 import { ARMOR_TYPES, ArmorType } from "./armor-types.mjs";
 import { ATTACK_TYPES, AttackType } from "./attack-types.mjs";
