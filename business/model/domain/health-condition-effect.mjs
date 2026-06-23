@@ -34,6 +34,7 @@ export default class HealthConditionEffect extends Persistable {
    * @param {Number | undefined} args.severity The degree of the Health Condition to apply. 
    */
   constructor(args = {}) {
+    super(args);
     common.util.validation.validateOrThrow(args, ["reference"]);
 
     this.reference = args.reference;

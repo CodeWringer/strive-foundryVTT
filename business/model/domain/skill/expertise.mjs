@@ -1,72 +1,86 @@
 import { common } from "../../../../common/_module.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs"
-import { VISIBILITY_MODES } from "../../const/visibility-modes.mjs"
-import ExpertiseChatMessageViewModel from "../../../../../presentation/sheet/item/expertise/expertise-chat-message-viewmodel.mjs"
-import ViewModel from "../../../../presentation/view-model/view-model.mjs"
-import AtReferencer from "../../../search/at-referencer.mjs"
-import { ATTACK_TYPES, AttackType } from "../../const/attack-types.mjs"
-import DamageAndType from "../../../../ruleset/skill/damage-and-type.mjs"
-import TransientSkill from "./transient-skill.mjs"
+import { business } from "../../../_module.mjs";
+import AtReferencer from "../../../search/at-referencer.mjs";
+import ArrayDataFieldBridge from "../../document/array-data-field-bridge.mjs";
+import DataFieldBridge from "../../document/data-field-bridge.mjs";
+import DataFieldBridge from "../../document/data-field-bridge.mjs";
+import TransientSkill from "../../document/item/transient-skill.mjs";
+import GradedEffect from "../graded-effect.mjs";
+import MomentumAction from "../momentum-action.mjs";
 import Persistable from "../persistable.mjs"
 
 /**
- * Represents an expertise. 
+ * Represents an Expertise (of a Skill). 
  * 
- * Is **always** a child object of a skill document. 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * Required for use in the `getExtenders` method. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {TransientDocument | null} owningDocument
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {String} type Internal type name: `"expertise"`
+ * * Read-only.
+ * @property {Number} requiredLevel
+ * @property {Object} itemOrders
+ * * Read-only.
+ * @property {Array<String>} itemOrders.momentumActions
+ * @property {Object} actionPoints
+ * * Read-only.
+ * @property {Boolean} actionPoints.enabled
+ * @property {Number} actionPoints.current
+ * @property {Object} distance
+ * * Read-only.
+ * @property {Boolean} distance.enabled
+ * @property {Number} distance.current
+ * @property {Object} targetingType
+ * * Read-only.
+ * @property {Boolean} targetingType.enabled
+ * @property {TargetingType} targetingType.current
+ * @property {Object} obstacle
+ * * Read-only.
+ * @property {Boolean} obstacle.enabled
+ * @property {String} obstacle.current
+ * @property {Object} opposedBy
+ * * Read-only.
+ * @property {Boolean} opposedBy.enabled
+ * @property {String} opposedBy.current
+ * @property {Object} advancement
+ * * Read-only.
+ * @property {Boolean} advancement.enabled
+ * @property {Number} advancement.progress
+ * @property {Object} gradedEffects
+ * * Read-only.
+ * @property {Boolean} gradedEffects.enabled
+ * @property {Array<GradedEffect>} gradedEffects.entries
+ * @property {Array<MomentumAction>} momentumActions
  * 
- * @property {TransientSkill} owningDocument The owning document. I. e. a `TransientSkill`. 
- * * Read-only. 
- * @property {String} owningDocumentId UUID of the owning document. 
- * * Read-only. 
- * @property {String} type Returns the content type of this "document". 
- * * Read-only. 
- * @property {String} id UUID of this instance of an expertise. 
- * * Read-only. 
- * @property {Boolean} isCustom If `true`, this expertise was added by a user. 
- * @property {String} name Name of the expertise. 
- * @property {String} img A relative url to an image resource on the server. 
- * @property {String} description 
- * @property {Number} requiredLevel 
- * @property {Number | null} apCost 
- * @property {Array<DamageAndType> | null} damage
- * @property {String | null} condition 
- * @property {Number | null} distance 
- * @property {String | null} obstacle 
- * @property {String | null} opposedBy 
- * @property {AttackType | null} attackType 
- * @property {String | null} gmNotes
+ * @extends Persistable
  */
 export default class Expertise extends Persistable {
   /**
-   * Converts the given `dto` to a `Expertise` instance and 
-   * returns it. 
-   * 
    * @param {Object} dto 
    * @param {TransientSkill} owningDocument 
    * 
    * @returns {Expertise}
    * 
    * @static
+   * @override
    */
   static fromDto(dto, owningDocument) {
     return new Expertise({
       owningDocument: owningDocument,
       id: dto.id,
-      isCustom: dto.isCustom,
-      name: dto.name,
-      img: dto.img,
-      description: dto.description,
-      requiredLevel: dto.requiredLevel,
-      apCost: dto.apCost,
-      damage: common.util.validation.isDefined(dto.damage) ? dto.damage.map(it => DamageAndType.fromDto(it)) : undefined,
-      condition: dto.condition,
-      distance: dto.distance,
-      obstacle: dto.obstacle,
-      opposedBy: dto.opposedBy,
-      attackType: dto.attackType === undefined ? undefined : ATTACK_TYPES[dto.attackType],
-      gmNotes: dto.gmNotes,
     });
   }
 
@@ -80,269 +94,312 @@ export default class Expertise extends Persistable {
   get _pathOnParent() { return `system.abilities.${this.id}`; }
 
   /**
+   * @type {String}
+   */
+  get description() { return this._description.value; }
+  set description(value) { this._description.value = value; }
+
+  /**
+   * Arbitrary notes only visible to game-masters. 
+   * 
+   * @type {String | null}
+   */
+  get gmNotes() { return this._gmNotes.value; }
+  set gmNotes(value) { this._gmNotes.value = value; }
+
+  /**
+   * Returns the default icon image path for this type of document. 
+   * 
+   * @type {String}
+   * @abstract
+   * @readonly
+   */
+  get defaultImg() { return "icons/svg/book.svg"; }
+
+  /**
+   * Returns the class reference of this document. 
+   * 
+   * Required for use in the `getExtenders` method. 
+   * 
+   * @type {Expertise}
+   * @abstract
+   * @readonly
+   */
+  get clazz() { return Expertise; }
+
+  /**
+   * Returns the class reference of this document. 
+   * 
+   * Required for use in the `getExtenders` method. 
+   * 
+   * @type {Expertise}
+   * @abstract
+   * @readonly
+   */
+  get id() { return this._id; }
+
+  /**
    * Returns the content type of this "document". 
    * 
    * @type {String}
    * @readonly
    */
-  get type() { return business.model.const.ITEM_TYPES.EXPERTISE; }
+  get type() { return business.model.domain.const.ITEM_TYPES.EXPERTISE; }
 
   /**
+   * Returns true, if there is an owning document. 
    * @type {Boolean}
+   * @readonly
    */
-  get isCustom() { return this._isCustom; }
-  set isCustom(value) { 
-    this._isCustom = value; 
-    this.owningDocument.updateByPath(`${this._pathOnParent}.isCustom`, value);
+  get hasParent() {
+    return common.util.validation.isDefined(this.owningDocument);
   }
 
   /**
-   * @type {String}
+   * Returns true, if the current user is the owner of the document. 
+   * 
+   * @type {Boolean}
+   * @readonly
    */
-  get name() { return this._name; }
-  set name(value) {
-    this._name = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.name`, value);
-  }
+  get isOwner() { return this.hasParent ? this.owningDocument.isOwner : false; }
 
-  /**
-   * @type {String}
-   */
-  get img() { return this._img; }
-  set img(value) {
-    this._img = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.img`, value);
-  }
-  
-  /**
-   * @type {String}
-   */
-  get description() { return this._description; }
-  set description(value) {
-    this._description = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.description`, value);
-  }
-  
   /**
    * @type {Number}
    */
-  get requiredLevel() { return this._requiredLevel; }
-  set requiredLevel(value) {
-    this._requiredLevel = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.requiredLevel`, value);
+  get requiredLevel() { return this._requiredLevel.value; }
+  set requiredLevel(value) { this._requiredLevel.value = value; }
+
+  get itemOrders() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Array<String>}
+       */
+      get momentumActions() { return thiz._itemOrders.momentumActions.value; },
+      set momentumActions(value) { thiz._itemOrders.momentumActions.value = value; },
+    };
   }
-  
+
+  get actionPoints() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._actionPoints.enabled.value; },
+      set enabled(value) { thiz._actionPoints.enabled.value = value; },
+
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._actionPoints.current.value; },
+      set current(value) { thiz._actionPoints.current.value = value; },
+    };
+  }
+
+  get distance() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._distance.enabled.value; },
+      set enabled(value) { thiz._distance.enabled.value = value; },
+
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._distance.current.value; },
+      set current(value) { thiz._distance.current.value = value; },
+    };
+  }
+
+  get targetingType() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._targetingType.enabled.value; },
+      set enabled(value) { thiz._targetingType.enabled.value = value; },
+
+      /**
+       * @type {TargetingType}
+       */
+      get current() { return thiz._targetingType.current.value; },
+      set current(value) { thiz._targetingType.current.value = value; },
+    };
+  }
+
+  get obstacle() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._obstacle.enabled.value; },
+      set enabled(value) { thiz._obstacle.enabled.value = value; },
+
+      /**
+       * @type {String}
+       */
+      get current() { return thiz._obstacle.current.value; },
+      set current(value) { thiz._obstacle.current.value = value; },
+    };
+  }
+
+  get opposedBy() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._opposedBy.enabled.value; },
+      set enabled(value) { thiz._opposedBy.enabled.value = value; },
+
+      /**
+       * @type {String}
+       */
+      get current() { return thiz._opposedBy.current.value; },
+      set current(value) { thiz._opposedBy.current.value = value; },
+    };
+  }
+
+  get gradedEffects() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._gradedEffects.enabled.value; },
+      set enabled(value) { thiz._gradedEffects.enabled.value = value; },
+
+      /**
+       * @type {Array<GradedEffect>}
+       */
+      get entries() { return thiz._gradedEffects.entries.value; },
+      set entries(value) { thiz._gradedEffects.entries.value = value; },
+    };
+  }
+
   /**
-   * @type {Number | null}
+   * @type {Array<MomentumAction>}
    */
-  get apCost() { return this._apCost; }
-  set apCost(value) {
-    this._apCost = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.apCost`, value);
-  }
-  
-  /**
-   * @type {Array<DamageAndType> | null} 
-   */
-  get damage() {
-    const value = this._damage;
-    if (common.util.validation.isDefined(value)) {
-      if (value.length > 0) {
-        return value;
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-  set damage(value) {
-    if (common.util.validation.isDefined(value)) {
-      this._damage = value;
-      this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
-    } else {
-      this._damage = null;
-      this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, null);
-    }
-  }
-  
-  /**
-   * @type {String | null}
-   */
-  get condition() { return this._condition; }
-  set condition(value) {
-    this._condition = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.condition`, value);
-  }
-  
-  /**
-   * @type {Number | null}
-   */
-  get distance() { return this._distance; }
-  set distance(value) {
-    this._distance = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.distance`, value);
-  }
-  
-  /**
-   * @type {String | null}
-   */
-  get obstacle() { return this._obstacle; }
-  set obstacle(value) {
-    this._obstacle = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.obstacle`, value);
-  }
-  
-  /**
-   * @type {String | null}
-   */
-  get opposedBy() { return this._opposedBy; }
-  set opposedBy(value) {
-    this._opposedBy = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.opposedBy`, value);
-  }
-  
-  /**
-   * @type {AttackType | null}
-   */
-  get attackType() { return this._attackType; }
-  set attackType(value) {
-    this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, common.util.validation.isDefined(value) ? value.name : null);
-  }
-  
-  
-  /**
-   * @type {String | null}
-   */
-  get gmNotes() { return this._gmNotes; }
-  set gmNotes(value) {
-    this._gmNotes = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.gmNotes`, common.util.validation.isDefined(value) ? value.name : null);
-  }
-  
+  get momentumActions() { return this._momentumActions.value; }
+  set momentumActions(value) { this._momentumActions.value = value; }
+
   /**
    * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
-   * @param {String | undefined} args.id UUID of this instance of an expertise. 
-   * @param {Boolean | undefined} args.isCustom 
-   * @param {String | undefined} args.name 
-   * @param {String | undefined} args.img 
-   * @param {String | undefined} args.description 
-   * @param {Number | undefined} args.requiredLevel 
-   * @param {Number | undefined} args.apCost 
-   * @param {Array<DamageAndType> | undefined} args.damage 
-   * @param {String | undefined} args.condition 
-   * @param {Number | undefined} args.distance 
-   * @param {String | undefined} args.obstacle 
-   * @param {String | undefined} args.opposedBy 
-   * @param {AttackType | undefined} args.attackType 
-   * @param {String | undefined} args.gmNotes 
+   * @param {String | undefined} args.id
    * 
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
   constructor(args = {}) {
+    super(args);
     common.util.validation.validateOrThrow(args, ["owningDocument"]);
-    
+
     this.owningDocument = args.owningDocument;
-    this.owningDocumentId = args.owningDocument.id;
-    
-    this.id = args.id ?? common.util.uuid.createUUID();
+    this._id = args.id ?? common.util.uuid.createUUID();
 
-    this._isCustom = args.isCustom ?? false;
-    this._name = args.name ?? game.i18n.localize("system.character.skill.expertise.newDefaultName");
-    this._img = args.img ?? "icons/svg/book.svg";
-    this._description = args.description ?? "";
-    this._requiredLevel = args.requiredLevel ?? 0;
-    this._apCost = args.apCost ?? null;
-    this._damage = args.damage ?? null;
-    this._condition = args.condition ?? null;
-    this._distance = args.distance ?? null;
-    this._obstacle = args.obstacle ?? null;
-    this._opposedBy = args.opposedBy ?? null;
-    this._attackType = args.attackType ?? null;
-    this._gmNotes = args.gmNotes ?? null;
-  }
-
-  /**
-   * Chat message template path. 
-   * @type {String}
-   * @readonly
-   */
-  get chatMessageTemplate() { return game.strive.const.TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
-  
-  /**
-   * Base implementation of returning data for a chat message, based on this item. 
-   * @returns {Promise<PreparedChatData>}
-   * @virtual
-   * @async
-   */
-  async getChatData() {
-    const actor = ((this.owningDocument ?? {}).owningDocument ?? {}).document;
-    const vm = this.getChatViewModel();
-
-    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
+    this._gmNotes = new DataFieldBridge({
+      document: this,
+      dataPath: `${this._pathOnParent}.gmNotes`,
+      fromDto: (dto) => {
+        if (common.util.validation.isBlankOrUndefined(dto)) {
+          return null;
+        } else {
+          return dto;
+        }
+      },
+      toDto: (value) => {
+        if (common.util.validation.isBlankOrUndefined(value)) {
+          return null;
+        } else {
+          return value;
+        }
+      },
     });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: actor, 
-      sound: SOUNDS_CONSTANTS.NOTIFY,
-      viewModel: vm,
+    this._description = new DataFieldBridge({
+      document: this,
+      dataPath: `${this._pathOnParent}.description`,
     });
-  }
-
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
-   * In case this is an embedded document, such as an expertise, this value must be supplied 
-   * for proper function. 
-   * @param {String | undefined} overrides.id
-   * * default is a new UUID.
-   * @param {Boolean | undefined} overrides.isEditable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.isSendable
-   * * default `false`
-   * @param {Boolean | undefined} overrides.showParentSkill Optional. If true, will show the parent skill name and icon, if possible. 
-   * * default `true`
-   * 
-   * @returns {ExpertiseChatMessageViewModel}
-   * 
-   * @override
-   */
-  getChatViewModel(overrides = {}) {
-    const actor = (this.owningDocument.owningDocument !== undefined) ? 
-      this.owningDocument.owningDocument.document : undefined;
-
-    return new ExpertiseChatMessageViewModel({
-      id: overrides.id,
-      parent: overrides.parent,
-      isEditable: overrides.isEditable ?? false,
-      isSendable: overrides.isSendable ?? false,
-      showParentSkill: overrides.showParentSkill ?? true,
-      isOwner: this.owningDocument.isOwner,
-      isGM: game.user.isGM,
-      expertise: this,
-      actor: actor,
+    this._requiredLevel = new DataFieldBridge({
+      document: this.owningDocument,
+      dataPath: `${this._pathOnParent}.requiredLevel`,
     });
-  }
-
-  /**
-   * Sends this `Expertise` to chat. 
-   * 
-   * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
-   * 
-   * @async
-   * @virtual
-   */
-  async sendToChat(visibilityMode = VISIBILITY_MODES.public) {
-    const chatData = await this.getChatData();
-    common.util.chat.sendToChat({
-      visibilityMode: visibilityMode,
-      ...chatData
+    this._itemOrders = {
+      momentumActions: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.itemOrders.momentumActions`,
+      }),
+    };
+    this._actionPoints = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.actionPoints.enabled`,
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.actionPoints.current`,
+        default: 0,
+      }),
+    };
+    this._distance = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.distance.enabled`,
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.distance.current`,
+      }),
+    };
+    this._targetingType = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.targetingType.enabled`,
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.targetingType.current`,
+      }),
+    };
+    this._obstacle = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.obstacle.enabled`,
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.obstacle.current`,
+      }),
+    };
+    this._opposedBy = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.opposedBy.enabled`,
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.opposedBy.current`,
+      }),
+    };
+    this._gradedEffects = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.gradedEffects.enabled`,
+      }),
+      entries: new ArrayDataFieldBridge({
+        document: this,
+        dataPath: `${this._pathOnParent}.gradedEffects.entries`,
+        dataClass: GradedEffect,
+      }),
+    };
+    this._momentumActions = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: `${this._pathOnParent}.momentumActions`,
+      dataClass: MomentumAction,
     });
   }
 
@@ -352,9 +409,20 @@ export default class Expertise extends Persistable {
    * @returns {Boolean} True, if the `Expertise` could be removed. 
    */
   delete() {
-    if (this.owningDocument === undefined) return false;
+    if (!this.hasParent) {
+      game.strive.logger.logWarn("No parent");
+      return false;
+    }
 
-    this.owningDocument.deleteExpertise(this.id);
+    const safecopy = this.owningDocument.expertises.concat([]);
+    const index = safecopy.findIndex(it => it.id === this.id);
+    if (index < 0) {
+      game.strive.logger.logWarn("Not part of parent Skill's Expertises");
+      return false;
+    }
+
+    safecopy.splice(index, 1);
+    this.owningDocument.expertises = safecopy;
 
     return true;
   }
@@ -369,21 +437,24 @@ export default class Expertise extends Persistable {
    * @async
    */
   async update(delta, render = true) {
-    const dto = {
-      system: {
-        abilities: {
-          [this.id]: {}
-        }
-      }
-    };
-
-    for (const propertyName in delta) {
-      if (delta.hasOwnProperty(propertyName) !== true) continue;
-
-      dto.system.abilities[this.id][propertyName] = delta[propertyName];
+    if (!this.hasParent) {
+      game.strive.logger.logWarn("No parent");
+      return;
     }
 
-    this.owningDocument.update(dto, render);
+    const safecopy = this.owningDocument.expertises.concat([]);
+    const index = safecopy.findIndex(it => it.id === this.id);
+    if (index < 0) {
+      game.strive.logger.logWarn("Not part of parent Skill's Expertises");
+      return false;
+    }
+
+    safecopy[index] = {
+      ...safecopy[index],
+      ...delta,
+    };
+    // This causes the actual update through the parent Skill. 
+    this.owningDocument.expertises = safecopy;
   }
 
   /**
@@ -391,7 +462,7 @@ export default class Expertise extends Persistable {
    * 
    * @param {String} propertyPath Path leading to the property to update, on the Expertise. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "system.attributes[0].level"
+   *        E.g.: "itemOrders.momentumActions[0]"
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
@@ -439,22 +510,37 @@ export default class Expertise extends Persistable {
    */
   toDto() {
     return {
-      id: this.id,
-      owningDocumentId: this.owningDocumentId,
-      index: this.index,
-      isCustom: this.isCustom,
-      name: this.name,
-      img: this.img,
       description: this.description,
-      requiredLevel: this.requiredLevel,
-      apCost: this.apCost,
-      damage: common.util.validation.isDefined(this.damage) ? this.damage.map(it => it.toDto()) : null,
-      condition: this.condition,
-      distance: this.distance,
-      obstacle: this.obstacle,
-      opposedBy: this.opposedBy,
-      attackType: (this.attackType ?? {}).name,
       gmNotes: this.gmNotes,
+      requiredLevel: this.requiredLevel,
+      itemOrders: {
+        momentumActions: this.itemOrders.momentumActions,
+      },
+      actionPoints: {
+        enabled: this.actionPoints.enabled,
+        current: this.actionPoints.current,
+      },
+      distance: {
+        enabled: this.distance.enabled,
+        current: this.distance.current,
+      },
+      targetingType: {
+        enabled: this.targetingType.enabled,
+        current: this.targetingType.current,
+      },
+      obstacle: {
+        enabled: this.obstacle.enabled,
+        current: this.obstacle.current,
+      },
+      opposedBy: {
+        enabled: this.opposedBy.enabled,
+        current: this.opposedBy.current,
+      },
+      gradedEffects: {
+        enabled: this.gradedEffects.enabled,
+        entries: this.gradedEffects.entries.map(it => it.toDto()),
+      },
+      momentumActions: this.momentumActions.map(it => it.toDto()),
     };
   }
 
@@ -475,11 +561,11 @@ export default class Expertise extends Persistable {
   resolveReferences(str) {
     return new AtReferencer().resolveReferences(str, this);
   }
-  
+
   /**
    * Compares the raw required level of this instance with a given instance and returns a numeric comparison result. 
    * 
-   * @param {TransientSkill} other Another instance to compare with. 
+   * @param {Expertise} other Another instance to compare with. 
    * 
    * @returns {Number} `-1` | `0` | `1`
    * 
@@ -487,12 +573,6 @@ export default class Expertise extends Persistable {
    * is more than / greater than `other`. 
    */
   compareRequiredLevel(other) {
-    if (this.requiredLevel < other.requiredLevel) {
-      return -1;
-    } else if (this.requiredLevel > other.requiredLevel) {
-      return 1;
-    } else {
-      return 0;
-    }
+    return common.util.compare.compareOrdinal(this.requiredLevel, other.requiredLevel)
   }
 }

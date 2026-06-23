@@ -69,6 +69,8 @@ export default class GradedEffect extends Persistable {
    * will be applied by this effect. 
    */
   constructor(args = {}) {
+    super(args);
+    
     this.comparison = args.comparison;
     this.threshold = args.threshold;
     this.comparisonTarget = args.comparisonTarget;

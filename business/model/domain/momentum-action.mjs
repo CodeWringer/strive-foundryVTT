@@ -50,6 +50,8 @@ export default class MomentumAction extends Persistable {
    * @param {String} args.heroic.description
    */
   constructor(args = {}) {
+    super(args);
+    
     this.desperate = args.desperate;
     this.heroic = args.heroic;
   }

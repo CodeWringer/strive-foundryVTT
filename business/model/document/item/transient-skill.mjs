@@ -1,8 +1,7 @@
-import AtReferencer from "../../../../search/at-referencer.mjs"
+import AtReferencer from "../../../search/at-referencer.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import MomentumAction from "../../domain/momentum-action.mjs";
-import { DataFieldBridge, ArrayDataFieldBridge, Expertise } from "../_module.mjs";
-import TransientBaseItem from "../transient-base-item.mjs"
+import { DataFieldBridge, ArrayDataFieldBridge, Expertise, TransientBaseItem } from "../_module.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -66,7 +65,10 @@ import TransientBaseItem from "../transient-base-item.mjs"
  * * Read-only.
  * @property {Boolean} advancement.enabled
  * @property {Number} advancement.progress
- * @property {Array<GradedEffect>} gradedEffects
+ * @property {Object} gradedEffects
+ * * Read-only.
+ * @property {Boolean} gradedEffects.enabled
+ * @property {Array<GradedEffect>} gradedEffects.entries
  * @property {Array<MomentumAction>} momentumActions
  * 
  * @extends TransientBaseItem
@@ -74,28 +76,28 @@ import TransientBaseItem from "../transient-base-item.mjs"
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/book.svg"; }
-  
+
   /** @override */
   get clazz() { return TransientSkill; }
-  
+
   /**
    * @type {Array<String>}
    */
   get baseAttributes() { return this._baseAttributes.value; }
   set baseAttributes(value) { this._baseAttributes.value = value; }
-  
+
   /**
    * @type {Number}
    */
   get level() { return this._level.value; }
   set level(value) { this._level.value = value; }
-  
+
   /**
    * @type {Array<Expertise>}
    */
   get expertises() { return this._expertises.value; }
   set expertises(value) { this._expertises.value = value; }
-  
+
   get itemOrders() {
     const thiz = this;
     return {
@@ -104,7 +106,7 @@ export default class TransientSkill extends TransientBaseItem {
        */
       get expertises() { return thiz._itemOrders.expertises.value; },
       set expertises(value) { thiz._itemOrders.expertises.value = value; },
-      
+
       /**
        * @type {Array<String>}
        */
@@ -112,7 +114,7 @@ export default class TransientSkill extends TransientBaseItem {
       set momentumActions(value) { thiz._itemOrders.momentumActions.value = value; },
     };
   }
-  
+
   get actionPoints() {
     const thiz = this;
     return {
@@ -121,7 +123,7 @@ export default class TransientSkill extends TransientBaseItem {
        */
       get enabled() { return thiz._actionPoints.enabled.value; },
       set enabled(value) { thiz._actionPoints.enabled.value = value; },
-      
+
       /**
        * @type {Number}
        */
@@ -129,7 +131,7 @@ export default class TransientSkill extends TransientBaseItem {
       set current(value) { thiz._actionPoints.current.value = value; },
     };
   }
-  
+
   get distance() {
     const thiz = this;
     return {
@@ -138,7 +140,7 @@ export default class TransientSkill extends TransientBaseItem {
        */
       get enabled() { return thiz._distance.enabled.value; },
       set enabled(value) { thiz._distance.enabled.value = value; },
-      
+
       /**
        * @type {Number}
        */
@@ -146,7 +148,7 @@ export default class TransientSkill extends TransientBaseItem {
       set current(value) { thiz._distance.current.value = value; },
     };
   }
-  
+
   get targetingType() {
     const thiz = this;
     return {
@@ -155,7 +157,7 @@ export default class TransientSkill extends TransientBaseItem {
        */
       get enabled() { return thiz._targetingType.enabled.value; },
       set enabled(value) { thiz._targetingType.enabled.value = value; },
-      
+
       /**
        * @type {TargetingType}
        */
@@ -163,7 +165,7 @@ export default class TransientSkill extends TransientBaseItem {
       set current(value) { thiz._targetingType.current.value = value; },
     };
   }
-  
+
   get obstacle() {
     const thiz = this;
     return {
@@ -172,7 +174,7 @@ export default class TransientSkill extends TransientBaseItem {
        */
       get enabled() { return thiz._obstacle.enabled.value; },
       set enabled(value) { thiz._obstacle.enabled.value = value; },
-      
+
       /**
        * @type {String}
        */
@@ -180,7 +182,7 @@ export default class TransientSkill extends TransientBaseItem {
       set current(value) { thiz._obstacle.current.value = value; },
     };
   }
-  
+
   get opposedBy() {
     const thiz = this;
     return {
@@ -189,7 +191,7 @@ export default class TransientSkill extends TransientBaseItem {
        */
       get enabled() { return thiz._opposedBy.enabled.value; },
       set enabled(value) { thiz._opposedBy.enabled.value = value; },
-      
+
       /**
        * @type {String}
        */
@@ -197,7 +199,7 @@ export default class TransientSkill extends TransientBaseItem {
       set current(value) { thiz._opposedBy.current.value = value; },
     };
   }
-  
+
   get advancement() {
     const thiz = this;
     return {
@@ -206,7 +208,7 @@ export default class TransientSkill extends TransientBaseItem {
        */
       get enabled() { return thiz._advancement.enabled.value; },
       set enabled(value) { thiz._advancement.enabled.value = value; },
-      
+
       /**
        * @type {Number}
        */
@@ -215,18 +217,29 @@ export default class TransientSkill extends TransientBaseItem {
     };
   }
 
-  /**
-   * @type {Array<GradedEffect>}
-   */
-  get gradedEffects() { return this._gradedEffects.value; }
-  set gradedEffects(value) { this._gradedEffects.value = value; }
-  
+  get gradedEffects() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._gradedEffects.enabled.value; },
+      set enabled(value) { thiz._gradedEffects.enabled.value = value; },
+
+      /**
+       * @type {Array<GradedEffect>}
+       */
+      get entries() { return thiz._gradedEffects.entries.value; },
+      set entries(value) { thiz._gradedEffects.entries.value = value; },
+    };
+  }
+
   /**
    * @type {Array<MomentumAction>}
    */
   get momentumActions() { return this._momentumActions.value; }
   set momentumActions(value) { this._momentumActions.value = value; }
-  
+
   /**
    * @param {Item} document An encapsulated item instance. 
    * 
@@ -243,10 +256,15 @@ export default class TransientSkill extends TransientBaseItem {
       document: this,
       dataPath: "system.level",
     });
-    this._expertises = new ArrayDataFieldBridge({
+    this._expertises = new DataFieldBridge({
       document: this,
       dataPath: "system.expertises",
-      dataClass: Expertise,
+      fromDto: (dto) => {
+        return dto.map(it => Expertise.fromDto(it, this));
+      },
+      toDto: (value) => {
+        return value.map(it => it.toDto());
+      },
     });
     this._itemOrders = {
       expertises: new DataFieldBridge({

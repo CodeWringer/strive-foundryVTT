@@ -5,7 +5,10 @@ import TransientDocument from "./transient-document.mjs";
  * For use in `TransientDocument`s, provides access to a document's 
  * data, with regard for data mappings. 
  * 
- * @property {Any} value 
+ * @property {Any} value The current value. Note that this is only 
+ * a cached value - if you bypass this `DataFieldBridge` instance 
+ * and update the value directly in the document's system reference, 
+ * that change will not be reflected here!
  * @property {TransientDocument} document
  * @property {String} dataPath Identifies the data field on 
  * the document instance itself. E. g. `"system.bulk"`
@@ -23,16 +26,13 @@ import TransientDocument from "./transient-document.mjs";
  * * `value: Any`
  */
 export default class DataFieldBridge {
-  get value() {
-    const dto = common.util.property.getNestedPropertyValue(this.document, this._dataPath);
-    if (!common.util.validation.isDefined(dto) && common.util.validation.isDefined(this.default)) {
-      return this.default;
-    } else {
-      return this.fromDto(dto);
-    }
-  }
+  /**
+   * @type {Any}
+   */
+  get value() { return this._value; }
   set value(value) {
     const mapped = this.toDto(value);
+    this._value = mapped;
     common.util.property.setNestedPropertyValue(this.document, this._dataPath, mapped);
     this.document.updateByPath(this._dataPath, mapped);
   }
@@ -58,5 +58,13 @@ export default class DataFieldBridge {
     this.default = args.default;
     this.fromDto = args.fromDto ?? ((dto) => dto);
     this.toDto = args.toDto ?? ((value) => value);
+
+    // Fetch and transform value. 
+    const dto = common.util.property.getNestedPropertyValue(this.document, this._dataPath);
+    if (!common.util.validation.isDefined(dto) && common.util.validation.isDefined(this.default)) {
+      this._value = this.default;
+    } else {
+      this._value = this.fromDto(dto);
+    }
   }
 }

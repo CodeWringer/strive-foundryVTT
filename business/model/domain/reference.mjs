@@ -33,6 +33,7 @@ export default class Reference extends Persistable {
    * @param {String | undefined} args.name If undefined, `uuid` MUST be defined. 
    */
   constructor(args = {}) {
+    super(args);
     if (common.util.validation.isBlankOrUndefined(args.uuid) &&
       common.util.validation.isBlankOrUndefined(args.name)) {
       throw new Error("Must define either uuid or name");

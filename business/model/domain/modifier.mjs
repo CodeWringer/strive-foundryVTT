@@ -9,6 +9,8 @@ import Persistable from "./persistable.mjs";
  * @property {String | undefined} localizedName A short localized name that represents the Modifier. 
  * This could also be the name of a source document. 
  * @property {String | undefined} sourceId ID of the source. For example the ID of an embedded document. 
+ * 
+ * @extends Persistable
  */
 export default class Modifier extends Persistable {
   /**
@@ -39,6 +41,7 @@ export default class Modifier extends Persistable {
    * @param {String | undefined} args.sourceId ID of the source. For example the ID of an embedded document. 
    */
   constructor(args = {}) {
+    super(args);
     ValidationUtil.validateOrThrow(args, ["dataPath", "value"]);
 
     this.dataPath = args.dataPath;

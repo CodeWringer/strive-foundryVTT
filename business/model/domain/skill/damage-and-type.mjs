@@ -33,6 +33,8 @@ export default class DamageAndType extends Persistable {
    * @param {DamageType} args.type
    */
   constructor(args = {}) {
+    super(args);
+    
     this.damage = args.damage ?? "0";
     this.type = args.type ?? DAMAGE_TYPES.pure;
   }

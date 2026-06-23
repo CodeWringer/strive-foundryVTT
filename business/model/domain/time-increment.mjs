@@ -33,6 +33,8 @@ export default class TimeIncrement extends Persistable {
    * @param {TimeUnit | undefined} args.unit
    */
   constructor(args = {}) {
+    super(args);
+    
     this.value = args.value ?? 0;
     this.unit = args.unit ?? TIME_UNITS.none;
   }

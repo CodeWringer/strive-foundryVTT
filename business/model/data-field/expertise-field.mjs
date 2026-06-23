@@ -49,16 +49,6 @@ export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
         enabled: new FoundrySchemaFields.BooleanField(),
         current: new FoundrySchemaFields.StringField({}),
       }),
-      advancement: new FoundrySchemaFields.SchemaField({
-        enabled: new FoundrySchemaFields.BooleanField(),
-        progress: new FoundrySchemaFields.NumberField({
-          nullable: false,
-          integer: true,
-          positive: true,
-          initial: 0,
-          min: 0,
-        }),
-      }),
       gradedEffects: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
         entries: new FoundrySchemaFields.ArrayField(new GradedEffectField()),
