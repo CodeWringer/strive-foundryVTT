@@ -1,13 +1,14 @@
 import { common } from "../../../../common/_module.mjs"
-import { business } from "../../../_module.mjs";
 import AtReferencer from "../../../search/at-referencer.mjs";
 import ArrayDataFieldBridge from "../../document/array-data-field-bridge.mjs";
 import DataFieldBridge from "../../document/data-field-bridge.mjs";
 import DataFieldBridge from "../../document/data-field-bridge.mjs";
 import TransientSkill from "../../document/item/transient-skill.mjs";
+import { ITEM_TYPES } from "../const/item-types.mjs";
 import GradedEffect from "../graded-effect.mjs";
 import MomentumAction from "../momentum-action.mjs";
 import Persistable from "../persistable.mjs"
+import Reference from "../reference.mjs";
 
 /**
  * Represents an Expertise (of a Skill). 
@@ -34,7 +35,7 @@ import Persistable from "../persistable.mjs"
  * @property {Number} requiredLevel
  * @property {Object} itemOrders
  * * Read-only.
- * @property {Array<String>} itemOrders.momentumActions
+ * @property {Array<Reference>} itemOrders.momentumActions
  * @property {Object} actionPoints
  * * Read-only.
  * @property {Boolean} actionPoints.enabled
@@ -144,7 +145,7 @@ export default class Expertise extends Persistable {
    * @type {String}
    * @readonly
    */
-  get type() { return business.model.domain.const.ITEM_TYPES.EXPERTISE; }
+  get type() { return ITEM_TYPES.expertise; }
 
   /**
    * Returns true, if there is an owning document. 
@@ -173,7 +174,7 @@ export default class Expertise extends Persistable {
     const thiz = this;
     return {
       /**
-       * @type {Array<String>}
+       * @type {Array<Reference>}
        */
       get momentumActions() { return thiz._itemOrders.momentumActions.value; },
       set momentumActions(value) { thiz._itemOrders.momentumActions.value = value; },
@@ -329,9 +330,10 @@ export default class Expertise extends Persistable {
       dataPath: `${this._pathOnParent}.requiredLevel`,
     });
     this._itemOrders = {
-      momentumActions: new DataFieldBridge({
+      momentumActions: new ArrayDataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.itemOrders.momentumActions`,
+        dataClass: Reference,
       }),
     };
     this._actionPoints = {
@@ -514,7 +516,7 @@ export default class Expertise extends Persistable {
       gmNotes: this.gmNotes,
       requiredLevel: this.requiredLevel,
       itemOrders: {
-        momentumActions: this.itemOrders.momentumActions,
+        momentumActions: this.itemOrders.momentumActions.map(it => it.toDto()),
       },
       actionPoints: {
         enabled: this.actionPoints.enabled,

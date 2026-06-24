@@ -1,7 +1,12 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs"
+import AdvancementHistoryEntryField from "../../data-field/advancement-history-entry-field.mjs"
 import AssetSlotField from "../../data-field/asset-slot-field.mjs"
 import CharacterAttributeField from "../../data-field/character-attribute-field.mjs"
+import DriverHistoryEntryField from "../../data-field/driver-history-entry-field.mjs"
 import InjuryShrugOffField from "../../data-field/injury-shrug-off-field.mjs"
+import PropertyLocationField from "../../data-field/property-location-field.mjs"
+import ReferenceField from "../../data-field/reference-field.mjs"
+import { ATTRIBUTES } from "../../domain/const/attributes.mjs"
 
 export default class CharacterActorData extends TypeDataModel {
   /** @override @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html#defineschema */
@@ -19,7 +24,10 @@ export default class CharacterActorData extends TypeDataModel {
       }),
       attributes: new FoundrySchemaFields.ArrayField(new CharacterAttributeField(), {
         nullable: false,
-        initial: [],
+        initial: ATTRIBUTES.asArray().map(attribute => new CharacterAttributeField({
+          name: attribute.name,
+          level: 0,
+        })),
       }),
       actionPoints: new FoundrySchemaFields.SchemaField({
         current: new FoundrySchemaFields.NumberField({
@@ -38,30 +46,68 @@ export default class CharacterActorData extends TypeDataModel {
           initial: 5,
           min: 0,
         }),
-        refill: new FoundrySchemaFields.SchemaField({
-          amount: new FoundrySchemaFields.NumberField({
+      }),
+      meta: new FoundrySchemaFields.SchemaField({
+        actionPoints: new FoundrySchemaFields.SchemaField({
+          refill: new FoundrySchemaFields.SchemaField({
+            amount: new FoundrySchemaFields.NumberField({
+              nullable: false,
+              required: true,
+              integer: true,
+              positive: true,
+              initial: 4,
+              min: 0,
+            }),
+            enabled: new FoundrySchemaFields.BooleanField({
+              nullable: false,
+              required: true,
+              initial: true,
+            }),
+          }),
+        }),
+        initiative: new FoundrySchemaFields.SchemaField({
+          perTurn: new FoundrySchemaFields.NumberField({
             nullable: false,
             required: true,
             integer: true,
             positive: true,
-            initial: 4,
-            min: 0,
-          }),
-          enabled: new FoundrySchemaFields.BooleanField({
-            nullable: false,
-            required: true,
-            initial: true,
+            initial: 1,
+            min: 1,
           }),
         }),
-      }),
-      initiative: new FoundrySchemaFields.SchemaField({
-        perTurn: new FoundrySchemaFields.NumberField({
-          nullable: false,
-          required: true,
-          integer: true,
-          positive: true,
-          initial: 1,
-          min: 1,
+        itemOrders: new FoundrySchemaFields.SchemaField({
+          languages: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
+          skills: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
+          injuries: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
+          illnesses: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
+          mutations: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
+          luggage: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
+          projects: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
+          recipes: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+            nullable: false,
+            initial: [],
+          }),
         }),
       }),
       personals: new FoundrySchemaFields.SchemaField({
@@ -169,10 +215,16 @@ export default class CharacterActorData extends TypeDataModel {
           required: true,
           initial: true,
         }),
-        ambition: new FoundrySchemaFields.HTMLField({
-          blank: true,
-          nullable: false,
-          initial: "",
+        ambition: new FoundrySchemaFields.SchemaField({
+          current: new FoundrySchemaFields.HTMLField({
+            blank: true,
+            nullable: false,
+            initial: "",
+          }),
+          history: new FoundrySchemaFields.ArrayField(new DriverHistoryEntryField(), {
+            nullable: false,
+            initial: [],
+          }),
         }),
         aspirations: new FoundrySchemaFields.SchemaField({
           _0: new FoundrySchemaFields.HTMLField({
@@ -190,6 +242,10 @@ export default class CharacterActorData extends TypeDataModel {
             nullable: false,
             initial: "",
           }),
+          history: new FoundrySchemaFields.ArrayField(new DriverHistoryEntryField(), {
+            nullable: false,
+            initial: [],
+          }),
         }),
         reactions: new FoundrySchemaFields.SchemaField({
           _0: new FoundrySchemaFields.HTMLField({
@@ -206,6 +262,10 @@ export default class CharacterActorData extends TypeDataModel {
             blank: true,
             nullable: false,
             initial: "",
+          }),
+          history: new FoundrySchemaFields.ArrayField(new DriverHistoryEntryField(), {
+            nullable: false,
+            initial: [],
           }),
         }),
       }),
@@ -282,6 +342,17 @@ export default class CharacterActorData extends TypeDataModel {
           nullable: false,
           initial: [],
         }),
+        luggage: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField, {
+          nullable: false,
+          initial: [],
+        }),
+        property: new FoundrySchemaFields.SchemaField({
+          unknownLocation: new PropertyLocationField(),
+          locations: new FoundrySchemaFields.ArrayField(new PropertyLocationField(), {
+            nullable: false,
+            initial: [],
+          }),
+        }),
       }),
       advancement: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField({
@@ -297,37 +368,7 @@ export default class CharacterActorData extends TypeDataModel {
           initial: 0,
           min: 0,
         }),
-      }),
-      itemsOrder: new FoundrySchemaFields.SchemaField({
-        languages: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-          nullable: false,
-          initial: [],
-        }),
-        skills: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-          nullable: false,
-          initial: [],
-        }),
-        injuries: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-          nullable: false,
-          initial: [],
-        }),
-        illnesses: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-          nullable: false,
-          initial: [],
-        }),
-        mutations: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-          nullable: false,
-          initial: [],
-        }),
-        luggage: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-          nullable: false,
-          initial: [],
-        }),
-        projects: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
-          nullable: false,
-          initial: [],
-        }),
-        recipes: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
+        history: new FoundrySchemaFields.ArrayField(new AdvancementHistoryEntryField(), {
           nullable: false,
           initial: [],
         }),

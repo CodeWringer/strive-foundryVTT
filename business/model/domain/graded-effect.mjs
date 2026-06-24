@@ -13,7 +13,7 @@ import DamageAndType from "./skill/damage-and-type.mjs";
  * 
  * The combination of `comparison`, `threshold` and `comparisonTarget` 
  * results in the grading. For example "greater or equal to 3 Hits":
- * `comparison: COMPARISON_TYPES.GREATER_EQUALS`, `threshold: 3`, 
+ * `comparison: COMPARISON_TYPES.greater_equals`, `threshold: 3`, 
  * `comparisonTarget: hit`
  * 
  * @property {ComparisonType} comparison 
@@ -32,14 +32,7 @@ import DamageAndType from "./skill/damage-and-type.mjs";
  * @extends Persistable
  */
 export default class GradedEffect extends Persistable {
-  /**
-   * @param {Object} dto 
-   * 
-   * @returns {GradedEffect}
-   * 
-   * @static
-   * @override
-   */
+  /** @override */
   static fromDto(dto) {
     return new GradedEffect({
       comparison: COMPARISON_TYPES[dto.comparison],

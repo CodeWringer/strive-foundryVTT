@@ -1,5 +1,6 @@
 import TransientDocument from "../transient-document.mjs";
 import { TransientBaseItem } from "../_module.mjs";
+import { common } from "../../../../common/_module.mjs";
 
 /**
  * @summary
@@ -68,19 +69,9 @@ export default class TransientBaseActor extends TransientDocument {
    * @readonly
    */
   get items() { 
-    this._items = Array.from(this.document.items).map(it => it.getTransientObject()); 
+    if (!common.util.validation.isDefined(this._items)) {
+      this._items = Array.from(this.document.items).map(it => it.getTransientObject()); 
+    }
     return this._items;
-  }
-  
-  /**
-   * @param {Actor} document An encapsulated actor instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
-   */
-  constructor(document) {
-    super(document);
-
-    // Ensure transient objects are instantiated at least once. 
-    this._items = this.items;
   }
 }

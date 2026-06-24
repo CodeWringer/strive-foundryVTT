@@ -4,9 +4,11 @@ import { TIME_UNITS } from "../const/time-units.mjs";
 /**
  * Declares a Time Increment, composed of a number and time unit field. 
  * 
- * @param {Number} value
- * @param {String} unit Must correspond to one of the `name` fields of the 
+ * @param {FoundrySchemaFields.NumberField} value
+ * @param {FoundrySchemaFields.StringField} unit Must correspond to one of the `name` fields of the 
  * `TIME_UNITS` constants. 
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class TimeIncrementField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {

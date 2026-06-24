@@ -19,6 +19,10 @@ import { Sum, SumComponent } from "./summed-data.mjs";
 import Tag from "./tag/tag.mjs";
 import TimeIncrement from "./time-increment.mjs";
 import HealthConditionEffect from "./health-condition-effect.mjs";
+import InjuryShrugOff from "./health/injury-shrug-off.mjs";
+import PropertyLocation from "./asset/property-location.mjs";
+import AdvancementHistoryEntry from "./advancement-history-entry.mjs";
+import DriverHistoryEntry from "./driver-history-entry.mjs";
 
 export {
   const,
@@ -26,7 +30,9 @@ export {
   AssetSlot,
   CharacterAssetSlotGroup,
   CharacterAssetSlot,
+  PropertyLocation,
   CharacterAttribute,
+  InjuryShrugOff,
   SystemHealthConditionBroker,
   DamageAndType,
   Expertise,
@@ -43,6 +49,8 @@ export {
   Modifier,
   HealthConditionEffect,
   GradedEffect,
+  AdvancementHistoryEntry,
+  DriverHistoryEntry,
 };
 
 /**
@@ -57,12 +65,14 @@ export const domain = {
     AssetSlot: AssetSlot,
     CharacterAssetSlotGroup: CharacterAssetSlotGroup,
     CharacterAssetSlot: CharacterAssetSlot,
+    PropertyLocation: PropertyLocation,
   },
   attribute: {
     CharacterAttribute: CharacterAttribute,
   },
   health: {
     SystemHealthConditionBroker: SystemHealthConditionBroker,
+    InjuryShrugOff: InjuryShrugOff,
   },
   skill: {
     DamageAndType: DamageAndType,
@@ -83,6 +93,8 @@ export const domain = {
   Modifier: Modifier,
   HealthConditionEffect: HealthConditionEffect,
   GradedEffect: GradedEffect,
+  AdvancementHistoryEntry: AdvancementHistoryEntry,
+  DriverHistoryEntry: DriverHistoryEntry,
   init: () => {
     constants.init();
     SystemHealthConditionBroker.preload();

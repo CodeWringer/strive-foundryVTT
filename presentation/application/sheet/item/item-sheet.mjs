@@ -1,5 +1,4 @@
 import { SYSTEM_ID } from "../../../system-id.mjs";
-import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import AssetItemSheet from "./asset/asset-item-sheet.mjs";
 import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
 import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
@@ -14,6 +13,7 @@ import HealthConditionItemSheet from "./health-condition/health-condition-item-s
 import ItemSheetSubType from "./item-sheet-subtype.mjs";
 import TraitItemSheet from "./trait/trait-item-sheet.mjs";
 import ProjectItemSheet from "./project/project-item-sheet.mjs";
+import { ITEM_TYPES } from "../../../../business/model/domain/const/item-types.mjs";
 
 /**
  * Global definition of an Item sheet. This is what FoundryVTT instantiates to render 
@@ -43,16 +43,16 @@ export class GameSystemItemSheet extends foundry.appv1.sheets.ItemSheet {
    */
   static get SUB_TYPES() {
     return new Map([
-      [business.model.const.ITEM_TYPES.ASSET, new AssetItemSheet()],
-      [business.model.const.ITEM_TYPES.SKILL, new SkillItemSheet()],
-      [business.model.const.ITEM_TYPES.MOMENTUM_ACTION, new MomentumActionItemSheet()],
-      [business.model.const.ITEM_TYPES.MUTATION, new MutationItemSheet()],
-      [business.model.const.ITEM_TYPES.PROJECT, new ProjectItemSheet()],
-      [business.model.const.ITEM_TYPES.INJURY, new InjuryItemSheet()],
-      [business.model.const.ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
-      [business.model.const.ITEM_TYPES.FATE_CARD, new FateItemSheet()],
-      [business.model.const.ITEM_TYPES.HEALTH_CONDITION, new HealthConditionItemSheet()],
-      [business.model.const.ITEM_TYPES.TRAIT, new TraitItemSheet()],
+      [ITEM_TYPES.asset, new AssetItemSheet()],
+      [ITEM_TYPES.skill, new SkillItemSheet()],
+      [ITEM_TYPES.momentum_action, new MomentumActionItemSheet()],
+      [ITEM_TYPES.mutation, new MutationItemSheet()],
+      [ITEM_TYPES.project, new ProjectItemSheet()],
+      [ITEM_TYPES.injury, new InjuryItemSheet()],
+      [ITEM_TYPES.illness, new IllnessItemSheet()],
+      [ITEM_TYPES.fate_card, new FateItemSheet()],
+      [ITEM_TYPES.health_condition, new HealthConditionItemSheet()],
+      [ITEM_TYPES.trait, new TraitItemSheet()],
     ]);
   }
 

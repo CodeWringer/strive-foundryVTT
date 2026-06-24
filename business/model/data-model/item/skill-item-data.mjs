@@ -2,6 +2,7 @@ import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrap
 import ExpertiseField from "../../data-field/expertise-field.mjs";
 import GradedEffectField from "../../data-field/graded-effect-field.mjs";
 import MomentumActionField from "../../data-field/momentum-action-field.mjs";
+import ReferenceField from "../../data-field/reference-field.mjs";
 import BaseItemData from "./base-item-data.mjs";
 
 export default class SkillItemData extends BaseItemData {
@@ -26,11 +27,11 @@ export default class SkillItemData extends BaseItemData {
         initial: [],
       }),
       itemOrders: new FoundrySchemaFields.SchemaField({
-        expertises: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
+        expertises: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
           nullable: false,
           initial: [],
         }),
-        momentumActions: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
+        momentumActions: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
           nullable: false,
           initial: [],
         }),
@@ -76,6 +77,10 @@ export default class SkillItemData extends BaseItemData {
       momentumActions: new FoundrySchemaFields.ArrayField(new MomentumActionField(), {
         nullable: false,
         initial: [],
+      }),
+      innate: new FoundrySchemaFields.BooleanField({
+        nullable: false,
+        initial: false,
       }),
     };
   }

@@ -38,125 +38,158 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
  * * Read-only. 
+ * 
  * @property {Object} derivedAttributes
  * * Read-only. 
- * @property {Number} derivedAttributes.baseInitiative 
+ * @property {Number} derivedAttributes.baseInitiative Derived. 
  * * Read-only. 
- * @property {Number} derivedAttributes.sprintingSpeed 
+ * @property {Number} derivedAttributes.sprintingSpeed Derived. 
  * * Read-only. 
- * @property {Number} derivedAttributes.stability
+ * @property {Number} derivedAttributes.stability Derived. 
  * * Read-only. 
+ * 
  * @property {Object} actionPoints 
  * * Read-only. 
  * @property {Number} actionPoints.current The current number of action points of this character. 
  * @property {Number} actionPoints.maximum The maximum number of action points allowed for this character. 
- * @property {Object} actionPoints.refill 
- * * Read-only. 
- * @property {Number} actionPoints.refill.amount The number of action points regained each turn for this character. 
- * @property {Boolean} actionPoints.refill.enabled If `true`, automatic AP refilling is enabled for this character. 
- * @property {Object} initiative 
- * * Read-only. 
- * @property {Number} initiative.perTurn 
  * 
- * @property {Object} person
+ * @property {Object} meta
  * * Read-only. 
- * @property {Number} person.age
- * @property {String} person.species
- * @property {String} person.culture
- * @property {String} person.sex
- * @property {String} person.appearance
- * @property {String} person.biography
- * @property {Object} skills
+ * @property {Object} meta.actionPoints.refill 
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.all Returns **all** skills of the character. 
+ * @property {Number} meta.actionPoints.refill.amount The number of action points regained each turn for this character. 
+ * @property {Boolean} meta.actionPoints.refill.enabled If `true`, automatic AP refilling is enabled for this character. 
+ * @property {Object} meta.initiative 
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.learning Returns all learning skills of the character. 
+ * @property {Number} meta.initiative.perTurn 
+ * @property {Object} meta.itemOrders
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.known Returns all known skills of the character. 
+ * @property {Array<Reference>} meta.itemOrders.languages 
+ * @property {Array<Reference>} meta.itemOrders.skills 
+ * @property {Array<Reference>} meta.itemOrders.injuries 
+ * @property {Array<Reference>} meta.itemOrders.illnesses 
+ * @property {Array<Reference>} meta.itemOrders.mutations 
+ * @property {Array<Reference>} meta.itemOrders.luggage 
+ * @property {Array<Reference>} meta.itemOrders.projects 
+ * @property {Array<Reference>} meta.itemOrders.recipes 
+ * 
+ * @property {Object} personals
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.innate Returns all innate skills of the character. 
+ * @property {Number} personals.age
+ * @property {String} personals.ancestry
+ * @property {String} personals.genderOrPronouns
+ * 
+ * @property {Object} virtuesAndVices
  * * Read-only. 
+ * @property {Boolean} virtuesAndVices.enabled
+ * @property {Number} virtuesAndVices.arrogantOrHumble Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.cowardlyOrCourageous Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.cruelOrMerciful Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.deceitfulOrHonest Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.lazyOrEnergetic Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.paranoidOrNaive Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.recklessOrPrudent Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.selfishOrConsiderate Ranges from `-2` to `+2`.
+ * @property {Number} virtuesAndVices.vengefulOrForgiving Ranges from `-2` to `+2`.
+ * 
+ * @property {Object} drivers
+ * * Read-only. 
+ * @property {Boolean} drivers.enabled
+ * @property {Object} drivers.ambition
+ * * Read-only. 
+ * @property {String} drivers.ambition.current
+ * @property {Array<DriverHistoryEntry>} drivers.ambition.history
+ * @property {Object} drivers.aspirations Html content.
+ * * Read-only. 
+ * @property {String} drivers.aspirations._0 Html content.
+ * @property {String} drivers.aspirations._1 Html content.
+ * @property {String} drivers.aspirations._2 Html content.
+ * @property {Array<DriverHistoryEntry>} drivers.aspirations.history
+ * @property {Object} drivers.reactions
+ * * Read-only. 
+ * @property {String} drivers.reactions._0 Html content.
+ * @property {String} drivers.reactions._1 Html content.
+ * @property {String} drivers.reactions._2 Html content.
+ * @property {Array<DriverHistoryEntry>} drivers.reactions.history
+ * 
  * @property {Object} health
  * * Read-only. 
- * @property {Array<TransientInjury>} health.injuries 
+ * @property {Object} health.hp 
  * * Read-only. 
- * @property {Array<TransientIllness>} health.illnesss 
+ * @property {Number} health.hp.current
+ * @property {Number} health.hp.temporary
+ * @property {Number} health.hp.maximum Derived. 
  * * Read-only. 
- * @property {Array<TransientMutation>} health.mutations 
+ * @property {Object} health.stamina 
  * * Read-only. 
- * @property {Array<TransientHealthCondition>} health.conditions
+ * @property {Number} health.stamina.current 
+ * @property {Number} health.stamina.maximum Derived. 
  * * Read-only. 
- * @property {Number} health.HP 
- * @property {Number} health.maxHP 
+ * @property {Number} health.stamina.strain 
+ * @property {Object} health.gritPoints 
  * * Read-only. 
- * @property {Number} health.maxHpModifier 
- * @property {Number} health.modifiedMaxHp 
+ * @property {Boolean} health.gritPoints.enabled 
+ * @property {Number} health.gritPoints.current 
+ * @property {Array<InjuryShrugOff>} health.injuryShrugOffs 
+ * @property {Object} health.deathSaves 
  * * Read-only. 
- * @property {Number} health.injuryShrugOffs 
- * @property {Number} health.exhaustion 
- * @property {Number} health.maxExhaustion 
+ * @property {Boolean} health.deathSaves.enabled 
+ * @property {Number} health.deathSaves.current 
+ * @property {Number} health.deathSaves.maximum Derived. 
  * * Read-only. 
- * @property {Number} health.maxExhaustionModifier 
- * @property {Number} health.modifiedMaxExhaustion 
+ * @property {Array<TransientInjury>} health.injuries Derived. 
  * * Read-only. 
- * @property {Number} health.deathSaves
- * @property {Number} health.deathSaveLimit
+ * @property {Array<TransientIllness>} health.illnesss Derived. 
+ * * Read-only. 
+ * @property {Array<TransientMutation>} health.mutations Derived. 
+ * * Read-only. 
+ * @property {Array<TransientHealthCondition>} health.conditions Derived. 
+ * * Read-only. 
+ * 
  * @property {Object} assets
  * * Read-only. 
- * @property {Array<CharacterAssetSlotGroup>} assets.equipmentSlotGroups 
+ * @property {Array<AssetSlot>} assets.slots 
  * * Read-only. 
  * @property {Array<TransientAsset>} assets.all 
  * * Read-only. 
- * @property {Array<TransientAsset>} assets.equipment 
+ * @property {Array<TransientAsset>} assets.equipment Derived. All assets that are currently 
+ * assigned to a slot. 
  * * Read-only. 
- * @property {Array<TransientAsset>} assets.luggage 
- * @property {Array<TransientAsset>} assets.property 
+ * @property {Array<Reference>} assets._luggage Identifiers of all assets that should be in 
+ * luggage. 
+ * * Private. 
+ * @property {Array<TransientAsset>} assets.luggage Derived. All assets currently in luggage. 
+ * @property {Object} assets.property 
  * * Read-only. 
- * @property {Number} assets.currentBulk
+ * @property {PropertyLocation} assets.property.unknownLocation Catch-all for all assets 
+ * that are in no specific location. 
+ * @property {Array<PropertyLocation>} assets.property.locations User definable 
+ * property locations. 
+ * @property {Object} assets.bulk
  * * Read-only. 
- * @property {Number} assets.maxBulk
+ * @property {Number} assets.bulk.current Derived. 
  * * Read-only. 
- * @property {Object} personalityTraits
- * * Read-only
- * @property {Number} personalityTraits.arrogantOrHumble
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.cowardlyOrCourageous
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.cruelOrMerciful
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.deceitfulOrHonest
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.lazyOrEnergetic
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.paranoidOrNaive
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.recklessOrPrudent
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.selfishOrConsiderate
- * * Ranges from -3 to +3
- * @property {Number} personalityTraits.vengefulOrForgiving
- * * Ranges from -3 to +3
- * @property {Object} driverSystem
+ * @property {Number} assets.bulk.maximum Derived. 
  * * Read-only. 
- * @property {String} driverSystem.ambition
- * @property {Object} driverSystem.aspirations
- * @property {String} driverSystem.aspirations.0
- * @property {String} driverSystem.aspirations.1
- * @property {String} driverSystem.aspirations.2
- * @property {Object} driverSystem.reactions
- * @property {String} driverSystem.reactions.0
- * @property {String} driverSystem.reactions.1
- * @property {String} driverSystem.reactions.2
- * @property {Object} gritPoints
- * * Read-only. 
- * @property {Number} gritPoints.current The current number of grit points of this character. 
- * @property {Boolean} gritPoints.enabled If `true`, grit points are enabled character. 
-
+ * 
  * @property {Object} advancement The current experience points of this character.  
  * * Read-only. 
+ * @property {Boolean} advancement.enabled If `true`, then this character may advance their abilities. 
  * @property {Number} advancement.xp The current experience points of this character.  
- * @property {Boolean} advancement.advancementEnabled If `true`, then this character may advance their abilities. 
- * * Read-only
+ * @property {Array<AdvancementHistoryEntry>} advancement.history A log of when XP were gained and spent, 
+ * and for what reason. 
+ * 
+ * @property {Object} skills
+ * * Read-only. 
+ * @property {Array<TransientSkill>} skills.all Derived. Returns **all** skills of the character. 
+ * * Read-only. 
+ * @property {Array<TransientSkill>} skills.learning Derived. Returns all learning skills of the character. 
+ * * Read-only. 
+ * @property {Array<TransientSkill>} skills.known Derived. Returns all known skills of the character. 
+ * * Read-only. 
+ * @property {Array<TransientSkill>} skills.innate Derived. Returns all innate skills of the character. 
+ * * Read-only. 
+
  * @property {Array<TransientTrait>} traits A list of character traits. These are **not** the same as 
  * personality traits! 
  * * Read-only. 
@@ -177,6 +210,7 @@ export default class TransientCharacterActor extends TransientBaseActor {
    */
   constructor(document) {
     super(document);
+
   }
 
   /**

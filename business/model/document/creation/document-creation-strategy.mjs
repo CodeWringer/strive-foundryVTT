@@ -1,6 +1,6 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { business } from "../../../_module.mjs"
+import { ACTOR_TYPES } from "../../domain/const/actor-types.mjs"
 import TransientBaseActor from "../actor/transient-base-actor.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs"
 
@@ -121,8 +121,7 @@ export default class DocumentCreationStrategy {
    * @protected
    */
   _getIsTypeAnActor(type) {
-    return type === business.model.const.ACTOR_TYPES.NPC 
-      || type === business.model.const.ACTOR_TYPES.PC
-      || type === business.model.const.ACTOR_TYPES.PLAIN;
+    return type === ACTOR_TYPES.character 
+      || type === ACTOR_TYPES.plain;
   }
 }

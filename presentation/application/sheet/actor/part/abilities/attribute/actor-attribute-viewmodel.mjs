@@ -12,9 +12,9 @@ import { ContextMenuItem } from "../../../../../component/button-context-menu/bu
 import DynamicInputDialog from "../../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import DynamicInputDefinition from "../../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import InputDropDownViewModel from "../../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import { ATTRIBUTE_TYPES } from "../../../../../../business/model/const/attribute-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/model/document/actor/transient-base-character-actor.mjs";
 import { CharacterAttribute } from "../../../../../../business/model/_module.mjs";
+import { ATTRIBUTE_TYPES } from "../../../../../../../business/model/domain/const/attribute-types.mjs";
 
 export default class ActorAttributeViewModel extends ViewModel {
   /** @override */
@@ -30,7 +30,7 @@ export default class ActorAttributeViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hasClassificationIcon() { return this.characterAttribute.type.name !== ATTRIBUTE_TYPES.SECONDARY.name; }
+  get hasClassificationIcon() { return this.characterAttribute.type.name !== ATTRIBUTE_TYPES.secondary.name; }
   
   /**
    * Returns the current Attribute classification icon. 

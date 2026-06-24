@@ -4,8 +4,10 @@ import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper
  * Declares a reference to a document which may be identifiable by uuid 
  * and/or name. 
  * 
- * @param {String | null} uuid
- * @param {String | null} name
+ * @param {FoundrySchemaFields.DocumentUUIDField} uuid
+ * @param {FoundrySchemaFields.StringField} name
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class ReferenceField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {

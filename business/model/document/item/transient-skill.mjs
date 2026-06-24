@@ -1,6 +1,7 @@
 import AtReferencer from "../../../search/at-referencer.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import MomentumAction from "../../domain/momentum-action.mjs";
+import Reference from "../../domain/reference.mjs";
 import { DataFieldBridge, ArrayDataFieldBridge, Expertise, TransientBaseItem } from "../_module.mjs";
 
 /**
@@ -46,8 +47,8 @@ import { DataFieldBridge, ArrayDataFieldBridge, Expertise, TransientBaseItem } f
  * @property {Array<Expertise>} expertises
  * @property {Object} itemOrders
  * * Read-only.
- * @property {Array<String>} itemOrders.expertises
- * @property {Array<String>} itemOrders.momentumActions
+ * @property {Array<Reference>} itemOrders.expertises
+ * @property {Array<Reference>} itemOrders.momentumActions
  * @property {Object} actionPoints
  * * Read-only.
  * @property {Boolean} actionPoints.enabled
@@ -77,6 +78,7 @@ import { DataFieldBridge, ArrayDataFieldBridge, Expertise, TransientBaseItem } f
  * @property {Boolean} gradedEffects.enabled
  * @property {Array<GradedEffect>} gradedEffects.entries
  * @property {Array<MomentumAction>} momentumActions
+ * @property {Boolean} innate
  * 
  * @extends TransientBaseItem
  */
@@ -109,13 +111,13 @@ export default class TransientSkill extends TransientBaseItem {
     const thiz = this;
     return {
       /**
-       * @type {Array<String>}
+       * @type {Array<Reference>}
        */
       get expertises() { return thiz._itemOrders.expertises.value; },
       set expertises(value) { thiz._itemOrders.expertises.value = value; },
 
       /**
-       * @type {Array<String>}
+       * @type {Array<Reference>}
        */
       get momentumActions() { return thiz._itemOrders.momentumActions.value; },
       set momentumActions(value) { thiz._itemOrders.momentumActions.value = value; },
@@ -248,6 +250,12 @@ export default class TransientSkill extends TransientBaseItem {
   set momentumActions(value) { this._momentumActions.value = value; }
 
   /**
+   * @type {Boolean}
+   */
+  get innate() { return this._innate.value; }
+  set innate(value) { this._innate.value = value; }
+
+  /**
    * @param {Item} document An encapsulated item instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -274,13 +282,15 @@ export default class TransientSkill extends TransientBaseItem {
       },
     });
     this._itemOrders = {
-      expertises: new DataFieldBridge({
+      expertises: new ArrayDataFieldBridge({
         document: this,
         dataPath: "system.itemOrders.expertises",
+        dataClass: Reference,
       }),
-      momentumActions: new DataFieldBridge({
+      momentumActions: new ArrayDataFieldBridge({
         document: this,
         dataPath: "system.itemOrders.momentumActions",
+        dataClass: Reference,
       }),
     };
     this._actionPoints = {
@@ -360,6 +370,11 @@ export default class TransientSkill extends TransientBaseItem {
       document: this,
       dataPath: "system.momentumActions",
       dataClass: MomentumAction,
+    });
+    this._innate = new DataFieldBridge({
+      document: this,
+      dataPath: "system.innate",
+      default: false,
     });
   }
 

@@ -156,11 +156,12 @@ export class RollResult {
     if (showReminders) {
       if (common.util.validation.isDefined(args.actor) === true) {
         const transientActor = args.actor.getTransientObject();
-        if (transientActor.type === business.model.const.ACTOR_TYPES.PC) {
-          showReminder = true;
-        } else if (transientActor.type === business.model.const.ACTOR_TYPES.NPC) {
-          showReminder = transientActor.advancement.advancementEnabled;
-        }
+        // TODO: show reminder if advancement is enabled.
+        // if (transientActor.type === business.model.const.ACTOR_TYPES.PC) {
+        //   showReminder = true;
+        // } else if (transientActor.type === business.model.const.ACTOR_TYPES.NPC) {
+        //   showReminder = transientActor.advancement.advancementEnabled;
+        // }
       }
     }
 

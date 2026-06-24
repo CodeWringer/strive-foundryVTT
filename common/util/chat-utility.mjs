@@ -2,6 +2,7 @@ import { common } from "../_module.mjs"
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs"
 import { VISIBILITY_MODES, VisibilityMode } from "../../business/model/const/visibility-modes.mjs"
 import { activateRollChatMessageListeners } from "../../presentation/component/dice/roll-chat-message.mjs"
+import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs"
 
 /**
  * Provides global utility functions for creating and handling chat messages. 
@@ -87,7 +88,7 @@ export const ChatUtil = {
 
     const prop = common.util.property.getNestedPropertyValue(args.obj, args.propertyPath);
     if (prop.type !== undefined) {
-      if (prop.type === business.model.const.ITEM_TYPES.EXPERTISE) {
+      if (prop.type === ITEM_TYPES.expertise) {
         await prop.sendToChat({
           visibilityMode: visibilityMode,
         });

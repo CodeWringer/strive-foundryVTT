@@ -4,10 +4,10 @@ import ReferenceField from "./reference-field.mjs";
 /**
  * Declares a Health Condition effect. 
  * 
- * @property {Object} reference 
- * @property {String | null} reference.uuid 
- * @property {String | null} reference.name 
- * @property {Number} severity The degree of the Health Condition to apply. 
+ * @property {ReferenceField} reference 
+ * @property {FoundrySchemaFields.NumberField} severity The degree of the Health Condition to apply. 
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class HealthConditionEffectField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {

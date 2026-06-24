@@ -1,30 +1,31 @@
 import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
-import { DAMAGE_TYPES } from "../const/damage-types.mjs";
+import ReferenceField from "./reference-field.mjs";
 
 /**
  * Declares a modifier. 
  * 
- * @property {String} dataPath Property path on the target document which identifies the 
- * property to modify. 
- * @property {Number} value How much the value identified by `dataPath` is modified. Can be negative 
- * and positive.
- * @property {String | undefined} localizedName A short localized name that represents the Modifier. 
- * This could also be the name of a source document. 
- * @property {String | undefined} sourceId ID of the source. For example the ID of an embedded document. 
+ * @property {FoundrySchemaFields.StringField} dataPath Property path on the target 
+ * document which identifies the property to modify. 
+ * @property {FoundrySchemaFields.NumberField} value How much the value identified by 
+ * `dataPath` is modified. Can be negative and positive.
+ * @property {ReferenceField} source ID of the source. For example the ID of an embedded document. 
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class ModifierField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {
     fields = {
-      damage: new FoundrySchemaFields.StringField({
+      dataPath: new FoundrySchemaFields.StringField({
         nullable: false,
         required: true,
-        initial: "0",
+        initial: "",
       }),
-      type: new FoundrySchemaFields.StringField({
+      value: new FoundrySchemaFields.NumberField({
         nullable: false,
         required: true,
-        initial: DAMAGE_TYPES.pure.name,
+        initial: 0,
       }),
+      source: new ReferenceField(),
       ...fields
     };
     Object.entries(fields).forEach(([k, v]) => !v ? delete fields[k] : null);

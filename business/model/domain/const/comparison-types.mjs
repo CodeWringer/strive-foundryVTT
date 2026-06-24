@@ -21,34 +21,34 @@ export class ComparisonType {
 
 /**
  * @constant
- * @property {ComparisonType} LESS_THAN 
- * @property {ComparisonType} LESS_EQUALS 
- * @property {ComparisonType} EQUALS 
- * @property {ComparisonType} GREATER_THAN 
- * @property {ComparisonType} GREATER_EQUALS 
+ * @property {ComparisonType} less_than 
+ * @property {ComparisonType} less_equals 
+ * @property {ComparisonType} equals 
+ * @property {ComparisonType} greater_than 
+ * @property {ComparisonType} greater_equals 
  */
 export const COMPARISON_TYPES = {
-  LESS_THAN: new ComparisonType({
+  less_than: new ComparisonType({
     name: "less-than",
     localizableName: "system.general.comparisonType.lessThan",
     icon: "TODO",
   }),
-  LESS_EQUALS: new ComparisonType({
+  less_equals: new ComparisonType({
     name: "less-equals",
     localizableName: "system.general.comparisonType.lessEquals",
     icon: "TODO",
   }),
-  EQUALS: new ComparisonType({
+  equals: new ComparisonType({
     name: "equals",
     localizableName: "system.general.comparisonType.equals",
     icon: "TODO",
   }),
-  GREATER_THAN: new ComparisonType({
+  greater_than: new ComparisonType({
     name: "greater-than",
     localizableName: "system.general.comparisonType.greaterThan",
     icon: "TODO",
   }),
-  GREATER_EQUALS: new ComparisonType({
+  greater_equals: new ComparisonType({
     name: "greater-equals",
     localizableName: "system.general.comparisonType.greaterEquals",
     icon: "TODO",

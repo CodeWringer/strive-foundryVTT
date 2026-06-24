@@ -1,23 +1,25 @@
 import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
+import { INJURY_SHRUG_OFF_STATES } from "../domain/const/injury-shrug-off-states.mjs";
 
 /**
  * Declares an injury shrug-off slot (on a Character). 
  * 
- * @param {Number} state Current state. 
+ * @param {FoundrySchemaFields.StringField} state Current state. 
  * Corresponds to one of the enum values of `INJURY_SHRUG_OFF_STATES`
- * @param {Number} threshold The exact number, that once reached or undershot, means 
- * this shrug-off should be rolled for. Is more of informative character, but also 
- * serves to keep shrug-offs consistent. They act like a soft ID. 
+ * @param {FoundrySchemaFields.NumberField} threshold The exact number, that 
+ * once reached or undershot, means this shrug-off should be rolled for. 
+ * Is more of informative character, but also serves to keep shrug-offs 
+ * consistent. They act like a soft ID. 
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class InjuryShrugOffField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {
     fields = {
-      state: new FoundrySchemaFields.NumberField({
+      state: new FoundrySchemaFields.StringField({
         required: true,
         nullable: false,
-        initial: 0,
-        min: 0,
-        max: 2,
+        initial: INJURY_SHRUG_OFF_STATES.indeterminate.name,
       }),
       threshold: new FoundrySchemaFields.NumberField({
         required: true,

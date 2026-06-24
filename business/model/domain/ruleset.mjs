@@ -5,6 +5,9 @@ import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { CharacterAttribute } from "../_module.mjs";
 import { business } from "../../_module.mjs";
+import { ITEM_TYPES } from "./const/item-types.mjs";
+import { ATTRIBUTE_TYPES } from "./const/attribute-types.mjs";
+import { ACTOR_TYPES } from "./const/actor-types.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -20,10 +23,10 @@ export default class Ruleset {
   getAttributeAdvancementRequirements(attribute) {
     const base = 20;
 
-    if (attribute.type.name === business.model.const.ATTRIBUTE_TYPES.CORE.name || attribute.type.name === business.model.const.ATTRIBUTE_TYPES.FAVORED.name) {
+    if (attribute.type.name === ATTRIBUTE_TYPES.core.name || attribute.type.name === ATTRIBUTE_TYPES.favored.name) {
       const level = Math.max(1, attribute.level - 1);
       return base + (level * level);
-    } else if (attribute.type.name === business.model.const.ATTRIBUTE_TYPES.PENALIZED.name) {
+    } else if (attribute.type.name === ATTRIBUTE_TYPES.penalized.name) {
       return Math.round((base + (attribute.level * attribute.level)) * 1.5);
     } else {
       return base + (attribute.level * attribute.level);
@@ -131,11 +134,11 @@ export default class Ruleset {
    */
   getCharacterMaximumHpReduction(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) {
+    if (type !== ACTOR_TYPES.character) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const injuryCount = (actor.items.filter(it => it.type === business.model.const.ITEM_TYPES.INJURY)).length;
+    const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.injury)).length;
     const hpReductionPerInjury = this.getMaximumHpReductionPerInjury(actor);
 
     return injuryCount * hpReductionPerInjury;
@@ -152,7 +155,7 @@ export default class Ruleset {
    */
   getCharacterMaximumHp(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) {
+    if (type !== ACTOR_TYPES.character) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
@@ -173,7 +176,7 @@ export default class Ruleset {
    */
   getCharacterMaximumExhaustion(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) {
+    if (type !== ACTOR_TYPES.character) {
       throw new Error("Only PC and NPC type actors supported");
     }
     
@@ -194,7 +197,7 @@ export default class Ruleset {
    */
   getCharacterCarryingCapacity(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) throw new Error("Only PC and NPC type actors allowed");
+    if (type !== ACTOR_TYPES.character) throw new Error("Only PC and NPC type actors allowed");
 
     const level = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
 
@@ -210,7 +213,7 @@ export default class Ruleset {
    */
   getAssetSlotBonus(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) throw new Error("Only PC and NPC type actors allowed");
+    if (type !== ACTOR_TYPES.character) throw new Error("Only PC and NPC type actors allowed");
 
     const level = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
 
@@ -238,7 +241,7 @@ export default class Ruleset {
    */
   getEffectiveAttributeRawLevel(attribute, actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) {
+    if (type !== ACTOR_TYPES.character) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
@@ -259,7 +262,7 @@ export default class Ruleset {
    */
   getEffectiveAttributeModifiedLevel(attribute, actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) {
+    if (type !== ACTOR_TYPES.character) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
@@ -284,7 +287,7 @@ export default class Ruleset {
    */
   getEffectiveSkillModifiedLevel(skill, actor) {
     const type = actor.type.toLowerCase();
-    if (type !== business.model.const.ACTOR_TYPES.PC && type !== business.model.const.ACTOR_TYPES.NPC) {
+    if (type !== ACTOR_TYPES.character) {
       throw new Error("Only PC and NPC type actors supported");
     }
 

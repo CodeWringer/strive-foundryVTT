@@ -25,8 +25,8 @@ export class GameSystemActor extends Actor {
    */
   static get SUB_TYPES() {
     return new Map([
-      [ACTOR_TYPES.CHARACTER, (document) => { return new TransientCharacterActor(document) }],
-      [ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) }],
+      [ACTOR_TYPES.character, (document) => { return new TransientCharacterActor(document) }],
+      [ACTOR_TYPES.plain, (document) => { return new TransientPlainActor(document) }],
     ]);
   }
 

@@ -23,27 +23,27 @@ export class AttributeType {
  * A global constant for the Attribute classifications. 
  * 
  * @constant
- * @property {AttributeType} SECONDARY 
- * @property {AttributeType} CORE 
- * @property {AttributeType} FAVORED 
- * @property {AttributeType} PENALIZED 
+ * @property {AttributeType} secondary 
+ * @property {AttributeType} core 
+ * @property {AttributeType} favored 
+ * @property {AttributeType} penalized 
  */
 export const ATTRIBUTE_TYPES = {
-  SECONDARY: new AttributeType({
+  secondary: new AttributeType({
     name: "secondary",
     localizableName: "system.character.attribute.type.secondary",
   }),
-  CORE: new AttributeType({
+  core: new AttributeType({
     name: "core",
     localizableName: "system.character.attribute.type.core",
     icon: "ico ico-buff-themed",
   }),
-  FAVORED: new AttributeType({
+  favored: new AttributeType({
     name: "favored",
     localizableName: "system.character.attribute.type.favored",
     icon: "ico ico-buff-themed",
   }),
-  PENALIZED: new AttributeType({
+  penalized: new AttributeType({
     name: "penalized",
     localizableName: "system.character.attribute.type.penalized",
     icon: "ico ico-debuff-themed",

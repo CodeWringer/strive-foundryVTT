@@ -8,7 +8,7 @@ import { CHARACTER_TEST_TYPES, CharacterTestType } from "./character-test-types.
 import { ComparisonType } from "./comparison-types.mjs";
 import { DAMAGE_TYPES, DamageType } from "./damage-types.mjs";
 import { ILLNESS_STATES, IllnessState } from "./illness-states.mjs";
-import { INJURY_SHRUG_OFF_STATES } from "./injury-shrug-off-states.mjs";
+import { INJURY_SHRUG_OFF_STATES, InjuryShrugOffState } from "./injury-shrug-off-states.mjs";
 import { INJURY_STATES, InjuryState } from "./injury-states.mjs";
 import { ITEM_TYPES } from "./item-types.mjs";
 import { SHIELD_TYPES, ShieldType } from "./shield-types.mjs";
@@ -17,7 +17,6 @@ import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
 import { WEAPON_TYPES, WeaponType } from "./weapon-types.mjs";
 
 export {
-  INJURY_SHRUG_OFF_STATES,
   ITEM_TYPES,
   ACTOR_TYPES,
   ArmorType,
@@ -34,6 +33,7 @@ export {
   DAMAGE_TYPES,
   IllnessState,
   ILLNESS_STATES,
+  InjuryShrugOffState,
   INJURY_SHRUG_OFF_STATES,
   InjuryState,
   INJURY_STATES,
@@ -52,7 +52,6 @@ export {
  * Wraps the `business.model.const` module.
  */
 export const constants = {
-  INJURY_SHRUG_OFF_STATES: INJURY_SHRUG_OFF_STATES,
   ITEM_TYPES: ITEM_TYPES,
   ACTOR_TYPES: ACTOR_TYPES,
   ArmorType: ArmorType,
@@ -69,6 +68,7 @@ export const constants = {
   DAMAGE_TYPES: DAMAGE_TYPES,
   IllnessState: IllnessState,
   ILLNESS_STATES: ILLNESS_STATES,
+  InjuryShrugOffState: InjuryShrugOffState,
   INJURY_SHRUG_OFF_STATES: INJURY_SHRUG_OFF_STATES,
   InjuryState: InjuryState,
   INJURY_STATES: INJURY_STATES,

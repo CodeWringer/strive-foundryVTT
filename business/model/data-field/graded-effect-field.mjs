@@ -1,5 +1,5 @@
 import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
-import { COMPARISON_TYPES } from "../const/comparison-types.mjs";
+import { COMPARISON_TYPES } from "../domain/const/comparison-types.mjs";
 import DamageAndTypeField from "./damage-and-type-field.mjs";
 import HealthConditionEffectField from "./health-condition-effect-field.mjs";
 import ModifierField from "./modifier-field.mjs";
@@ -10,15 +10,17 @@ import ModifierField from "./modifier-field.mjs";
  * These are the less than, equal to and greater than a certain Hits amount or 
  * Attribute threshold bound effects of an ability. 
  * 
- * @property {String} comparison 
+ * @property {FoundrySchemaFields.StringField} comparison 
  * See `ComparisonType`
- * @property {Number} threshold 
- * @property {String} comparisonTarget 
+ * @property {FoundrySchemaFields.NumberField} threshold 
+ * @property {FoundrySchemaFields.StringField} comparisonTarget 
  * E. g. `"hit"` or `"agility"`
- * @property {String} unstructured 
- * @property {Array<HealthConditionEffectField>} conditions 
- * @property {Array<DamageAndTypeField>} damages 
- * @property {Array<ModifierField>} modifiers 
+ * @property {FoundrySchemaFields.StringField} unstructured 
+ * @property {FoundrySchemaFields.ArrayField<HealthConditionEffectField>} conditions 
+ * @property {FoundrySchemaFields.ArrayField<DamageAndTypeField>} damages 
+ * @property {FoundrySchemaFields.ArrayField<ModifierField>} modifiers 
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class GradedEffectField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {
@@ -26,7 +28,7 @@ export default class GradedEffectField extends FoundrySchemaFields.SchemaField {
       comparison: new FoundrySchemaFields.StringField({
         required: true,
         nullable: false,
-        initial: COMPARISON_TYPES.EQUALS.name,
+        initial: COMPARISON_TYPES.equals.name,
       }),
       threshold: new FoundrySchemaFields.NumberField({
         required: true,

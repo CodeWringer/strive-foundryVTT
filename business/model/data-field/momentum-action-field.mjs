@@ -3,14 +3,16 @@ import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper
 /**
  * Declares a Momentum Action. 
  * 
- * @property {Object} desperate
- * @property {String} desperate.name
- * @property {Number} desperate.cost
- * @property {String} desperate.description
- * @property {Object} heroic
- * @property {String} heroic.name
- * @property {Number} heroic.cost
- * @property {String} heroic.description
+ * @property {FoundrySchemaFields.SchemaField} desperate
+ * @property {FoundrySchemaFields.StringField} desperate.name
+ * @property {FoundrySchemaFields.NumberField} desperate.cost
+ * @property {FoundrySchemaFields.StringField} desperate.description
+ * @property {FoundrySchemaFields.SchemaField} heroic
+ * @property {FoundrySchemaFields.StringField} heroic.name
+ * @property {FoundrySchemaFields.NumberField} heroic.cost
+ * @property {FoundrySchemaFields.StringField} heroic.description
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class MomentumActionField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {
@@ -19,7 +21,7 @@ export default class MomentumActionField extends FoundrySchemaFields.SchemaField
         name: new FoundrySchemaFields.StringField({
           nullable: false,
           required: true,
-          initial: "New Desperate Measure", //TODO loca
+          initial: "New Desperate Measure", // TODO loca
         }),
         cost: new FoundrySchemaFields.NumberField({
           nullable: false,
@@ -37,7 +39,7 @@ export default class MomentumActionField extends FoundrySchemaFields.SchemaField
         name: new FoundrySchemaFields.StringField({
           nullable: false,
           required: true,
-          initial: "New Heroic Act", //TODO loca
+          initial: "New Heroic Act", // TODO loca
         }),
         cost: new FoundrySchemaFields.NumberField({
           nullable: false,

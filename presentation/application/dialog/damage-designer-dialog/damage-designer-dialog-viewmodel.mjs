@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../../business/model/domain/const/item-types.mjs"
 import TransientBaseCharacterActor from "../../../business/model/document/actor/transient-base-character-actor.mjs"
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/model/document/document-fetcher/document-collection-source.mjs"
 import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs"
@@ -282,7 +283,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
   async _getDamageFindings() {
     const skillDocuments = await new DocumentFetcher().findAll({
       documentType: "Item",
-      contentType: business.model.const.ITEM_TYPES.SKILL,
+      contentType: ITEM_TYPES.skill,
       source: DOCUMENT_COLLECTION_SOURCES.all,
       searchEmbedded: true,
       includeLocked: true,

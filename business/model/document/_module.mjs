@@ -31,11 +31,13 @@ import ArrayDataFieldBridge from "./array-data-field-bridge.mjs";
 import TransientLanguage from "./item/transient-language.mjs";
 import TransientSkill from "./item/transient-skill.mjs";
 import TransientRecipe from "./item/transient-recipe.mjs";
+import ModifiableDataFieldBridge from "./modifiable-data-field-bridge.mjs";
 
 export {
   TransientDocument,
   DataFieldBridge,
   ArrayDataFieldBridge,
+  ModifiableDataFieldBridge,
   DOCUMENT_COLLECTION_SOURCES,
   DocumentCollectionSource,
   DocumentIndex,
@@ -80,6 +82,7 @@ export const document = {
   TransientDocument: TransientDocument,
   DataFieldBridge: DataFieldBridge,
   ArrayDataFieldBridge: ArrayDataFieldBridge,
+  ModifiableDataFieldBridge: ModifiableDataFieldBridge,
   fetcher: {
     DocumentCollectionSource: DocumentCollectionSource,
     DOCUMENT_COLLECTION_SOURCES: DOCUMENT_COLLECTION_SOURCES,

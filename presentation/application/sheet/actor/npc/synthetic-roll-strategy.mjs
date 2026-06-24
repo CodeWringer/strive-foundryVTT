@@ -1,7 +1,6 @@
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../../../business/model/document/general-document-types.mjs";
-import { ITEM_TYPES } from "../../../../business/model/document/item/item-types.mjs";
 import Ruleset from "../../../../business/ruleset/ruleset.mjs";
 import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs";
@@ -12,6 +11,7 @@ import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-inp
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/model/document/document-fetcher/document-collection-source.mjs";
 import TransientBaseActor from "../../../../business/model/document/actor/transient-base-actor.mjs";
 import DocumentFetcher from "../../../../business/model/document/document-fetcher/document-fetcher.mjs";
+import { ITEM_TYPES } from "../../../../../business/model/domain/const/item-types.mjs";
 
 /**
  * Lets the user select a specific Skill document, which will then be rolled, but without it being 
@@ -156,7 +156,7 @@ export default class SyntheticRollStrategy {
 
       const documentIndices = new DocumentFetcher().getIndices({
         documentType: GENERAL_DOCUMENT_TYPES.ITEM,
-        contentType: ITEM_TYPES.SKILL,
+        contentType: ITEM_TYPES.skill,
         source: this._collectionSource,
       });
   

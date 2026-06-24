@@ -3,13 +3,15 @@ import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper
 /**
  * Declares a Complication of a Project or of an Asset. 
  * 
- * @param {String} name
- * @param {String} description
+ * @param {FoundrySchemaFields.StringField} name
+ * @param {FoundrySchemaFields.HTMLField} description
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class ComplicationField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {
     fields = {
-      name: new FoundrySchemaFields.String({
+      name: new FoundrySchemaFields.StringField({
         nullable: false,
         required: true,
         initial: "",

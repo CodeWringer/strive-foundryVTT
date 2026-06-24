@@ -73,7 +73,7 @@ export default class InjuryCreationStrategy extends DocumentCreationStrategy {
 
     return {
       name: `${game.i18n.localize(damageType.localizableName)} ${game.i18n.localize("system.character.health.injury.singular")}`,
-      type: business.model.const.ITEM_TYPES.INJURY,
+      type: business.model.const.ITEM_TYPES.injury,
       img: "icons/svg/bones.svg",
       system: {
         description: StringUtil.format2(game.i18n.localize("system.character.health.injury.automaticDescription"), {

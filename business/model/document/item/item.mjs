@@ -34,17 +34,17 @@ export class GameSystemItem extends Item {
    */
   static get SUB_TYPES() {
     return new Map([
-      [ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) }],
-      [ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
-      [ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
-      [ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
-      [ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
-      [ITEM_TYPES.LANGUAGE, (document) => { return new TransientLanguage(document) }],
-      [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
-      [ITEM_TYPES.PROJECT, (document) => { return new TransientProject(document) }],
-      [ITEM_TYPES.RECIPE, (document) => { return new TransientRecipe(document) }],
-      [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
-      [ITEM_TYPES.TRAIT, (document) => { return new TransientTrait(document) }],
+      [ITEM_TYPES.asset, (document) => { return new TransientAsset(document) }],
+      [ITEM_TYPES.fate_card, (document) => { return new TransientFateCard(document) }],
+      [ITEM_TYPES.health_condition, (document) => { return new TransientHealthCondition(document) }],
+      [ITEM_TYPES.illness, (document) => { return new TransientIllness(document) }],
+      [ITEM_TYPES.injury, (document) => { return new TransientInjury(document) }],
+      [ITEM_TYPES.language, (document) => { return new TransientLanguage(document) }],
+      [ITEM_TYPES.mutation, (document) => { return new TransientMutation(document) }],
+      [ITEM_TYPES.project, (document) => { return new TransientProject(document) }],
+      [ITEM_TYPES.recipe, (document) => { return new TransientRecipe(document) }],
+      [ITEM_TYPES.skill, (document) => { return new TransientSkill(document) }],
+      [ITEM_TYPES.trait, (document) => { return new TransientTrait(document) }],
     ]);
   }
 

@@ -3,8 +3,10 @@ import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper
 /**
  * Declares an attribute (on a Character). 
  * 
- * @param {String} name Internal name of the attribute, e.g. "agility".
- * @param {Number} level The current raw level of the attribute.
+ * @param {FoundrySchemaFields.StringField} name Internal name of the attribute, e.g. "agility".
+ * @param {FoundrySchemaFields.NumberField} level The current raw level of the attribute.
+ * 
+ * @extends FoundrySchemaFields.SchemaField
  */
 export default class CharacterAttributeField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {

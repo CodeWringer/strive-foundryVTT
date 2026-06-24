@@ -2,6 +2,7 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../model/document/document-fetch
 import DocumentFetcher from "../../model/document/document-fetcher/document-fetcher.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../../model/document/general-document-types.mjs"
 import TransientHealthCondition from "../../model/document/item/transient-health-condition.mjs"
+import { ITEM_TYPES } from "../const/item-types.mjs";
 
 /**
  * Provides synchronous access to the system-defined Health Conditions, 
@@ -26,7 +27,7 @@ export default class SystemHealthConditionBroker {
   static async preload() {
     const documents = await new DocumentFetcher().findAll({
       documentType: GENERAL_DOCUMENT_TYPES.ITEM,
-      contentType: business.model.const.ITEM_TYPES.HEALTH_CONDITION,
+      contentType: ITEM_TYPES.health_condition,
       source: DOCUMENT_COLLECTION_SOURCES.systemCompendia,
       sourcePackId: "strive.health-conditions",
       searchEmbedded: false,
