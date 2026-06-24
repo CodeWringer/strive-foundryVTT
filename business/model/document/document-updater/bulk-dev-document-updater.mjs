@@ -1,8 +1,6 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
-import { SKILL_TAGS } from "../../const/system-tags.mjs"
-import { ITEM_TYPES } from "../../domain/const/item-types.mjs"
-import { DOCUMENT_COLLECTION_SOURCES } from "../document-fetcher/document-collection-source.mjs"
-import DocumentFetcher from "../document-fetcher/document-fetcher.mjs"
+import { ValidationUtil } from "../../../../common/_module.mjs"
+import { ITEM_TYPES, SKILL_TAGS } from "../../domain/const/_module.mjs"
+import { DOCUMENT_COLLECTION_SOURCES, DocumentFetcher } from "../_module.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs"
 
 /**

@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { common } from "../../../../common/_module.mjs";
 
 /**
  * Represents an input control definition for a `DynamicInputDialog`. 
@@ -47,8 +47,8 @@ export default class DynamicInputDefinition {
    * @readonly
    */
   get isRenderable() {
-    return ValidationUtil.isDefined(this.viewModelFactory) 
-      && ValidationUtil.isNotBlankOrUndefined(this.template);
+    return common.util.validation.isDefined(this.viewModelFactory) 
+      && common.util.validation.isNotBlankOrUndefined(this.template);
   }
 
   /**
@@ -88,7 +88,7 @@ export default class DynamicInputDefinition {
    * * `dialogViewModel: {DynamicInputDialogViewModel}`
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["name"]);
+    common.util.validation.validateOrThrow(args, ["name"]);
 
     this.name = args.name;
     this.template = args.template;

@@ -1,5 +1,5 @@
 import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
-import { TIME_UNITS } from "../const/time-units.mjs";
+import { TIME_UNITS } from "../domain/const/time-units.mjs";
 
 /**
  * Declares a Time Increment, composed of a number and time unit field. 

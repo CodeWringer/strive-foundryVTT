@@ -1,4 +1,7 @@
 import AtReferencer from "../../../search/at-referencer.mjs"
+import { CharacterAttribute } from "../../domain/_module.mjs";
+import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
+import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseActor from "./transient-base-actor.mjs"
 
 /**
@@ -211,6 +214,11 @@ export default class TransientCharacterActor extends TransientBaseActor {
   constructor(document) {
     super(document);
 
+    this._attributes = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: "system.attributes",
+      dataClass: CharacterAttribute,
+    });
   }
 
   /**

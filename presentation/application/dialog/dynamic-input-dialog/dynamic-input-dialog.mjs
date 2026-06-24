@@ -1,4 +1,4 @@
-import { ValidationUtil } from '../../../common/util/validation-utility.mjs';
+import { ValidationUtil } from '../../../../common/_module.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
 import DynamicInputDefinition from './dynamic-input-definition.mjs';

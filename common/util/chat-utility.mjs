@@ -1,8 +1,8 @@
 import { common } from "../_module.mjs"
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs"
-import { VISIBILITY_MODES, VisibilityMode } from "../../business/model/const/visibility-modes.mjs"
 import { activateRollChatMessageListeners } from "../../presentation/component/dice/roll-chat-message.mjs"
 import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs"
+import { VISIBILITY_MODES, VisibilityMode } from "../../business/model/domain/const/visibility-modes.mjs"
 
 /**
  * Provides global utility functions for creating and handling chat messages. 

@@ -1,11 +1,11 @@
 import { StringUtil } from "../../common/util/string-utility.mjs"
 import { GameSystemActor } from "../../business/model/document/actor/actor.mjs"
 import TransientBaseCharacterActor from "../../business/model/document/actor/transient-character-actor.mjs"
-import TransientSkill from "../../business/model/document/item/skill/transient-skill.mjs"
-import { ATTRIBUTES } from "../../business/model/const/attributes.mjs"
 import Ruleset from "../../business/model/domain/ruleset.mjs"
 import { CharacterAttribute } from "../../business/model/_module.mjs"
 import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs"
+import { TransientSkill } from "../../business/model/document/_module.mjs"
+import { ATTRIBUTES } from "../../business/model/domain/const/attributes.mjs"
 
 /**
  * Provides strings that explain derived values, based on the ruleset. 

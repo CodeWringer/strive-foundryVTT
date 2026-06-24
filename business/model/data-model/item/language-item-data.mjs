@@ -1,6 +1,6 @@
-import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import { LANGUAGE_GRADES } from "../../const/language-grades.mjs";
-import BaseItemData from "./base-item-data.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs"
+import { LANGUAGE_GRADES } from "../../domain/const/language-grades.mjs"
+import BaseItemData from "./base-item-data.mjs"
 
 export default class LanguageItemData extends BaseItemData {
   /** @override */

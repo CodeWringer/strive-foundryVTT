@@ -1,5 +1,5 @@
 import { common } from "../../../../common/_module.mjs";
-import { LANGUAGE_GRADES, LanguageGrade } from "../../const/language-grades.mjs";
+import { LANGUAGE_GRADES, LanguageGrade } from "../../domain/const/language-grades.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
 

@@ -2,8 +2,6 @@ import TransientDocument from "./transient-document.mjs";
 import TransientBaseItem from "./item/transient-base-item.mjs";
 import TransientBaseActor from "./actor/transient-base-actor.mjs";
 import TransientBaseCharacterActor from "./actor/transient-character-actor.mjs";
-import TransientNpc from "./actor/transient-npc.mjs";
-import TransientPc from "./actor/transient-pc.mjs";
 import TransientPlainActor from "./actor/transient-plain-actor.mjs";
 import { GameSystemActor } from "./actor/actor.mjs";
 import { GameSystemItem } from "./item/item.mjs";
@@ -32,6 +30,7 @@ import TransientLanguage from "./item/transient-language.mjs";
 import TransientSkill from "./item/transient-skill.mjs";
 import TransientRecipe from "./item/transient-recipe.mjs";
 import ModifiableDataFieldBridge from "./modifiable-data-field-bridge.mjs";
+import TransientCharacterActor from "./actor/transient-character-actor.mjs";
 
 export {
   TransientDocument,
@@ -62,9 +61,8 @@ export {
   TransientInjury,
   TransientLanguage,
   TransientMutation,
-  TransientNpc,
-  TransientPc,
   TransientPlainActor,
+  TransientCharacterActor,
   TransientProject,
   TransientRecipe,
   TransientTrait,
@@ -103,9 +101,8 @@ export const document = {
   actor: {
     TransientBaseActor: TransientBaseActor,
     TransientBaseCharacterActor: TransientBaseCharacterActor,
-    TransientNpc: TransientNpc,
-    TransientPc: TransientPc,
     TransientPlainActor: TransientPlainActor,
+    TransientCharacterActor: TransientCharacterActor,
     GameSystemActor: GameSystemActor,
   },
   item: {

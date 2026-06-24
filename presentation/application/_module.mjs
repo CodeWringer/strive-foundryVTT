@@ -1,8 +1,14 @@
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
+import DynamicInputDefinition from "./dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialogViewModel from "./dialog/dynamic-input-dialog/dynamic-input-dialog-viewmodel.mjs";
+import DynamicInputDialog from "./dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { LanguageItemSheet } from "./domain/item/language/language-item-sheet.mjs";
 
 export {
   LanguageItemSheet,
+  DynamicInputDefinition,
+  DynamicInputDialogViewModel,
+  DynamicInputDialog,
 };
 
 /**
@@ -11,6 +17,11 @@ export {
  */
 export const application = {
   dialog: {
+    dynamic: {
+      DynamicInputDefinition: DynamicInputDefinition,
+      DynamicInputDialogViewModel: DynamicInputDialogViewModel,
+      DynamicInputDialog: DynamicInputDialog,
+    },
   },
   sheet: {
     LanguageItemSheet: LanguageItemSheet,

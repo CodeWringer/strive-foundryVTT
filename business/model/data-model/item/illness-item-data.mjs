@@ -1,7 +1,7 @@
-import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import { ILLNESS_STATES } from "../../const/illness-states.mjs";
-import ReferenceField from "../../data-field/reference-field.mjs";
-import BaseItemData from "./base-item-data.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs"
+import ReferenceField from "../../data-field/reference-field.mjs"
+import { ILLNESS_STATES } from "../../domain/const/illness-states.mjs"
+import BaseItemData from "./base-item-data.mjs"
 
 export default class IllnessItemData extends BaseItemData {
   /** @override */

@@ -1,9 +1,9 @@
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
-import { TIME_UNITS, TimeUnit } from "../../const/time-units.mjs"
-import CharacterAssetSlot from "../../../ruleset/asset/character-asset-slot.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 import DataFieldBridge from "../data-field-bridge.mjs"
 import { common } from "../../../../common/_module.mjs"
+import { CharacterAssetSlot } from "../../domain/_module.mjs"
+import { TIME_UNITS, TimeUnit } from "../../domain/const/time-units.mjs"
 
 /**
  * Represents the full transient data of an asset. 

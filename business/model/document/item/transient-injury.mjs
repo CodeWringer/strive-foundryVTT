@@ -1,4 +1,4 @@
-import { INJURY_STATES, InjuryState } from "../../const/injury-states.mjs"
+import { INJURY_STATES, InjuryState } from "../../domain/const/injury-states.mjs";
 import Reference from "../../domain/reference.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"

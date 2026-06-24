@@ -1,10 +1,9 @@
 import { GameSystemActor } from "../../business/model/document/actor/actor.mjs"
 import TransientDocument from "../../business/model/document/transient-document.mjs"
+import { VISIBILITY_MODES } from "../../business/model/domain/const/visibility-modes.mjs"
 import { common } from "../../common/_module.mjs"
-import { VISIBILITY_MODES } from "../../business/model/const/visibility-modes.mjs"
+import { DynamicInputDefinition, DynamicInputDialog } from "../application/_module.mjs"
 import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
-import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
-import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 
 export default class SendToChatHandler {
   /**

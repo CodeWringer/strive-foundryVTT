@@ -1,5 +1,5 @@
 import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
-import { DAMAGE_TYPES } from "../const/damage-types.mjs";
+import { DAMAGE_TYPES } from "../domain/const/damage-types.mjs";
 
 /**
  * Declares the combination of damage and damage type. 

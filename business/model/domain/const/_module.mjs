@@ -11,8 +11,10 @@ import { ILLNESS_STATES, IllnessState } from "./illness-states.mjs";
 import { INJURY_SHRUG_OFF_STATES, InjuryShrugOffState } from "./injury-shrug-off-states.mjs";
 import { INJURY_STATES, InjuryState } from "./injury-states.mjs";
 import { ITEM_TYPES } from "./item-types.mjs";
+import { LANGUAGE_GRADES, LanguageGrade } from "./language-grades.mjs";
 import { SHIELD_TYPES, ShieldType } from "./shield-types.mjs";
 import { ASSET_TAGS, SKILL_TAGS } from "./system-tags.mjs";
+import { TIME_UNITS, TimeUnit } from "./time-units.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
 import { WEAPON_TYPES, WeaponType } from "./weapon-types.mjs";
 
@@ -21,6 +23,8 @@ export {
   ACTOR_TYPES,
   ArmorType,
   ARMOR_TYPES,
+  TimeUnit,
+  TIME_UNITS,
   AttackType,
   ATTACK_TYPES,
   AttributeType,
@@ -45,6 +49,8 @@ export {
   VISIBILITY_MODES,
   WeaponType,
   WEAPON_TYPES,
+  LanguageGrade,
+  LANGUAGE_GRADES,
   ComparisonType,
 };
 
@@ -56,6 +62,8 @@ export const constants = {
   ACTOR_TYPES: ACTOR_TYPES,
   ArmorType: ArmorType,
   ARMOR_TYPES: ARMOR_TYPES,
+  TimeUnit: TimeUnit,
+  TIME_UNITS: TIME_UNITS,
   AttackType: AttackType,
   ATTACK_TYPES: ATTACK_TYPES,
   AttributeType: AttributeType,
@@ -80,6 +88,8 @@ export const constants = {
   VISIBILITY_MODES: VISIBILITY_MODES,
   WeaponType: WeaponType,
   WEAPON_TYPES: WEAPON_TYPES,
+  LanguageGrade: LanguageGrade,
+  LANGUAGE_GRADES: LANGUAGE_GRADES,
   ComparisonType: ComparisonType,
   init: () => {
     common.util.constants.enrichConstant(ACTOR_TYPES);
