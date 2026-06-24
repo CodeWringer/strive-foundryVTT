@@ -1,5 +1,5 @@
-import { ValidationUtil } from "../../../../common/_module.mjs"
-import { ITEM_TYPES, SKILL_TAGS } from "../../domain/const/_module.mjs"
+import { common } from "../../../../common/_module.mjs"
+import { ITEM_TYPES } from "../../domain/const/item-types.mjs"
 import { DOCUMENT_COLLECTION_SOURCES, DocumentFetcher } from "../_module.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs"
 
@@ -26,7 +26,7 @@ export default class BulkDevDocumentUpdater {
    * @async
    */
   async updateAllSkillsOfActorsOfPack(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["packName"]);
+    common.util.validation.validateOrThrow(args, ["packName"]);
 
     this.onBeginDocument = args.onBeginDocument ?? (() => {});
     this.onCompleteDocument = args.onCompleteDocument ?? (() => {});
@@ -58,11 +58,11 @@ export default class BulkDevDocumentUpdater {
 
       for await (const skill of skillsOfActor) {
         const transientSkill = skill.getTransientObject();
-        const isInnate = ValidationUtil.isDefined(transientSkill.tags.find(it => it.id === SKILL_TAGS.INNATE.id));
+        const isInnate = transientSkill.innate;
         if (isInnate || transientSkill.isCustom) continue;
 
         const templateSkill = templateSkills.find(it => it.id === skill.id || it.name === skill.name);
-        if (!ValidationUtil.isDefined(templateSkill)) {
+        if (!common.util.validation.isDefined(templateSkill)) {
           updateFailures.push(skill);
           continue;
         }

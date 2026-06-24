@@ -1,7 +1,5 @@
-import GameSystemUserSettings from "../../business/setting/game-system-user-settings.mjs";
-import { PropertyUtil } from "../../common/util/property-utility.mjs";
-import { UuidUtil } from "../../common/util/uuid-utility.mjs";
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+import { GameSystemUserSettings } from "../../business/setting/game-system-user-settings.mjs"
+import { common } from "../../common/_module.mjs"
 import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
@@ -177,14 +175,14 @@ export default class ViewModel {
     }
 
     // Remove from previous parent. 
-    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
+    if (common.util.validation.isDefined(this._parent) && common.util.validation.isDefined(this._parent.children)) {
       const index = this._parent.children.indexOf(this);
       this._parent.children.splice(index, 1);
     }
 
     // Add to new parent. 
     this._parent = value;
-    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
+    if (common.util.validation.isDefined(this._parent) && common.util.validation.isDefined(this._parent.children)) {
       this._parent.children.push(this);
     }
   }
@@ -293,14 +291,14 @@ export default class ViewModel {
 
     let toolTipVisible = false;
 
-    if (ValidationUtil.isDefined(this._toolTip)) {
+    if (common.util.validation.isDefined(this._toolTip)) {
       toolTipVisible = this._toolTip.visible;
       this._toolTip.deactivateListeners();
       this._toolTip.hide();
       this._toolTip = null;
     }
 
-    if (ValidationUtil.isDefined(value)) {
+    if (common.util.validation.isDefined(value)) {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
         content: this.localizedToolTip,
@@ -389,7 +387,7 @@ export default class ViewModel {
    * * default `true`
    */
   constructor(args = {}) {
-    this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
+    this._id = common.util.uuid.sanitizeId(args.id ?? common.util.uuid.createUUID());
     
     this.parent = args.parent;
     this.document = args.document;
@@ -412,7 +410,7 @@ export default class ViewModel {
       extender.extend(this);
     });
 
-    if (ValidationUtil.isDefined(this.localizedToolTip)) {
+    if (common.util.validation.isDefined(this.localizedToolTip)) {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
         content: this.localizedToolTip,
@@ -531,7 +529,7 @@ export default class ViewModel {
       this.element.addClass("hidden");
     }
 
-    if (ValidationUtil.isDefined(this._toolTip)) {
+    if (common.util.validation.isDefined(this._toolTip)) {
       this._toolTip.activateListeners(this._element);
     }
 
@@ -554,7 +552,7 @@ export default class ViewModel {
   dispose() {
     this.parent = undefined;
 
-    if (ValidationUtil.isDefined(this._toolTip)) {
+    if (common.util.validation.isDefined(this._toolTip)) {
       this._toolTip.deactivateListeners();
     }
 
@@ -649,7 +647,7 @@ export default class ViewModel {
 
     for (const propertyName of this.viewStateFields) {
       // Skip any potential "mistakes" - for example from old versions of the code. 
-      if (PropertyUtil.hasProperty(viewState, propertyName) !== true) continue;
+      if (common.util.property.hasProperty(viewState, propertyName) !== true) continue;
       // Override the matching property's value. 
       this[propertyName] = viewState[propertyName];
     }
@@ -688,7 +686,7 @@ export default class ViewModel {
    */
   writeViewState() {
     const viewState = this.getViewState()
-    if (ValidationUtil.isDefined(viewState) === true) {
+    if (common.util.validation.isDefined(viewState) === true) {
       this._viewStateSource.set(this.id, viewState);
     }
   }

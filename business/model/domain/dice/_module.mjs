@@ -1,3 +1,4 @@
+import { common } from "../../../../common/_module.mjs";
 import { DICE_CONSTANTS } from "./dice-constants.mjs";
 import { DICE_POOL_RESULT_TYPES, DicePoolRollResultType } from "./dice-pool.mjs";
 import RollData, { ResolvedObstacle } from "./roll-data.mjs";
@@ -44,4 +45,8 @@ export const dice = {
   RollStepData: RollStepData,
   RollResult: RollResult,
   RollSchema: RollSchema,
+  init: () => {
+    common.util.constants.enrichConstant(ROLL_DICE_MODIFIER_TYPES);
+    common.util.constants.enrichConstant(DICE_POOL_RESULT_TYPES);
+  },
 };

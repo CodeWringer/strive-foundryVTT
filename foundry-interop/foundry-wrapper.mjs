@@ -12,7 +12,7 @@ export default class FoundryWrapper {
   static ApplicationV2 = foundry.applications.api.ApplicationV2;
 
   /** @see https://foundryvtt.com/api/classes/foundry.applications.api.DocumentSheetV2.html */
-  static DocumentSheetV2 = foundry.applications.sheets.DocumentSheetV2;
+  static DocumentSheetV2 = foundry.applications.api.DocumentSheetV2;
   static ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
   static ItemSheetV2 = foundry.applications.sheets.ItemSheetV2;
   static DialogV2 = foundry.applications.api.DialogV2;

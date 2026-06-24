@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+import { common } from "../../common/_module.mjs";
 
 /**
  * Enables drag and drop operations on arbitrary HTML elements. 
@@ -65,9 +65,9 @@ export class DragDropHandler {
    * @param {JQuery} html 
    */
   activateListeners(html) {
-    const element = ValidationUtil.isDefined(this.elementId) ? html.find(`#${this.elementId}`) : html;
+    const element = common.util.validation.isDefined(this.elementId) ? html.find(`#${this.elementId}`) : html;
 
-    if (!ValidationUtil.isDefined(element) || element.length === 0) {
+    if (!common.util.validation.isDefined(element) || element.length === 0) {
       game.strive.logger.logWarn(`Failed to find drag drop element '${this.elementId}'`);
       return;
     }

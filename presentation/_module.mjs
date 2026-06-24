@@ -1,3 +1,4 @@
+import { util } from "./util/_module.mjs";
 import FoundryWrapper from "../foundry-interop/foundry-wrapper.mjs";
 import { application } from "./application/_module.mjs";
 import { canvas } from "./canvas/_module.mjs";
@@ -5,7 +6,10 @@ import { font } from "./font/_module.mjs";
 import RulesetExplainer from "./ruleset/ruleset-explainer.mjs";
 import { sidebar } from "./application/sidebar/_module.mjs";
 import { TEMPLATES } from "./templates.mjs";
-import { util } from "./util/_module.mjs";
+import ViewModel from "./view-model/view-model.mjs";
+import ViewModelCollection from "./view-model/view-model-collection.mjs";
+import InputViewModel from "./view-model/input-view-model.mjs";
+import { component } from "./component/_module.mjs";
 
 export {
   application,
@@ -15,6 +19,10 @@ export {
   font,
   util,
   RulesetExplainer,
+  ViewModel,
+  ViewModelCollection,
+  InputViewModel,
+  component,
 };
 
 /**
@@ -23,13 +31,19 @@ export {
  * IMPORTANT the `init` function MUST be called during the system's setup!
  */
 export const presentation = {
-  application: application,
   TEMPLATES: TEMPLATES,
+  util: util,
+  font: font,
+  viewModel: {
+    ViewModel: ViewModel,
+    ViewModelCollection: ViewModelCollection,
+    InputViewModel: InputViewModel,
+  },
+  application: application,
   canvas: canvas,
   sidebar: sidebar,
-  font: font,
-  util: util,
   RulesetExplainer: RulesetExplainer,
+  component: component,
   /**
    * Initialization, which MUST be called during system setup!
    * 

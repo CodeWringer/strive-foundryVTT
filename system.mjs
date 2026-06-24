@@ -1,7 +1,7 @@
 // Root Globals
-import { WorldSystemVersion } from "./business/migration/world-system-version.mjs";
 import { common } from "./common/_module.mjs";
 import { business } from "./business/_module.mjs";
+import { WorldSystemVersion } from "./business/migration/world-system-version.mjs";
 import { presentation } from "./presentation/_module.mjs";
 import { setting } from "./business/setting/_module.mjs";
 // Utility
@@ -15,10 +15,15 @@ import ViewModelCollection from './presentation/view-model/view-model-collection
 /*  Initialization                              */
 /* -------------------------------------------- */
 
-Hooks.once('init', function() {
+Hooks.once('init', function () {
   // Ensure the system's namespace exists. 
   // Adds system specific logic to the global namespace. 
   game.strive = {
+    // Module namespaces. 
+    common: common,
+    business: business,
+    presentation: presentation,
+
     /**
      * Used to log system specific notifications. 
      * @type {ConsoleLogger}
@@ -61,11 +66,6 @@ Hooks.once('init', function() {
      * @type {Map<String, Object>}
      */
     viewStates: new Map(),
-    
-    // Module namespaces. 
-    business: business,
-    common: common,
-    presentation: presentation,
 
     /**
      * Registered extenders. A class may have any number of extenders applied to it, 
@@ -83,21 +83,21 @@ Hooks.once('init', function() {
   presentation.init();
 });
 
-Hooks.once('setup', function() {
+Hooks.once('setup', function () {
   business.setup();
   presentation.setup();
 });
 
-Hooks.once("ready", function() {
+Hooks.once("ready", function () {
   business.ready();
   presentation.ready();
 
   // Debug mode setting. 
-  game.strive.debug = setting.GameSystemUserSettings.get(setting.GameSystemUserSettings.KEY_TOGGLE_DEBUG);
+  game.strive.debug = business.setting.GameSystemSettings.get(business.setting.GameSystemUserSettings.KEY_TOGGLE_DEBUG);
 
   // Migration check. 
   const migrator = new MigratorInitiator();
-  
+
   if (migrator.isApplicable() === true) {
     if (game.user.isGM === true) {
       // TODO
@@ -118,11 +118,11 @@ Hooks.once("ready", function() {
 
   // Register dev dialogs, if necessary.
   if (game.strive.debug) {
-    window.runMigration = async function(fromVersion) {
+    window.runMigration = async function (fromVersion) {
       // Fake world system version. Without this, migrators might not run. 
       const fakeVersion = VersionCode.fromString(fromVersion);
       await WorldSystemVersion.set(fakeVersion);
-      
+
       // TODO
       // new MigratorDialog().render(true);
     };
@@ -133,7 +133,7 @@ Hooks.once("ready", function() {
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
-Hooks.on("renderChatMessageHTML", function(message, html, data) {
+Hooks.on("renderChatMessageHTML", function (message, html, data) {
   common.util.chat.handleRenderedChatMessage({
     message: message,
     html: html,
@@ -141,36 +141,36 @@ Hooks.on("renderChatMessageHTML", function(message, html, data) {
   });
 });
 
-Hooks.on("deleteChatMessage", function(args) {
+Hooks.on("deleteChatMessage", function (args) {
   common.util.chat.handleDeletionOfChatMessage(args);
 });
 
-Hooks.on("hoverToken", function(token) {
-  presentation.canvas.token.TokenExtensions.updateTokenHover(token);
+Hooks.on("hoverToken", function (token) {
+  // presentation.canvas.token.TokenExtensions.updateTokenHover(token);
 });
 
-Hooks.on("drawToken", function(token) {
-  presentation.canvas.token.TokenExtensions.updateTokenCombatant(token);
+Hooks.on("drawToken", function (token) {
+  // presentation.canvas.token.TokenExtensions.updateTokenCombatant(token);
 });
 
-Hooks.on("refreshToken", function(token) {
-  presentation.canvas.token.TokenExtensions.updateTokenHover(token);
-  presentation.canvas.token.TokenExtensions.updateTokenCombatant(token);
+Hooks.on("refreshToken", function (token) {
+  // presentation.canvas.token.TokenExtensions.updateTokenHover(token);
+  // presentation.canvas.token.TokenExtensions.updateTokenCombatant(token);
 });
 
-Hooks.on("updateToken", function(document, change, options, userId) {
-  presentation.canvas.token.TokenExtensions.updateTokenHover(document.object);
-  presentation.canvas.token.TokenExtensions.updateTokenCombatant(document.object);
+Hooks.on("updateToken", function (document, change, options, userId) {
+  // presentation.canvas.token.TokenExtensions.updateTokenHover(document.object);
+  // presentation.canvas.token.TokenExtensions.updateTokenCombatant(document.object);
 });
 
-Hooks.on("updateActor", function(document, change, options, userId) {
+Hooks.on("updateActor", function (document, change, options, userId) {
   ui.combat?.render();
 });
 
-Hooks.on("createCombatant", function(document, options, userId) {
-  presentation.canvas.token.TokenExtensions.updateTokenCombatant(document.token.object);
+Hooks.on("createCombatant", function (document, options, userId) {
+  // presentation.canvas.token.TokenExtensions.updateTokenCombatant(document.token.object);
 });
 
-Hooks.on("renderCombatTracker", function(document, options, userId) {
-  presentation.canvas.token.TokenExtensions.updateTokenCombatants();
+Hooks.on("renderCombatTracker", function (document, options, userId) {
+  // presentation.canvas.token.TokenExtensions.updateTokenCombatants();
 });

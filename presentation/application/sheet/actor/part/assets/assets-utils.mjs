@@ -1,3 +1,4 @@
+import { AssetSlot } from "../../../../../../business/model/domain/_module.mjs";
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -9,7 +10,7 @@ import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-
  * Queries the user for input for a character asset slot and returns the 
  * inputs made. 
  * 
- * @param {CharacterAssetSlot | undefined} assetSlot
+ * @param {AssetSlot | undefined} assetSlot
  * 
  * @returns {Object} Returns an object with the input values. 
  * * Has the fields: 

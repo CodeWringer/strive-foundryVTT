@@ -1,18 +1,17 @@
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
-import { VISIBILITY_MODES } from "../../model/const/visibility-modes.mjs"
-import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
-import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
-import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
-import { CharacterAttribute } from "../../model/_module.mjs"
-import TransientSkill from "../../model/document/item/skill/transient-skill.mjs"
-import { Sum } from "../../model/summed-data.mjs"
-import GameSystemUserSettings from "../../setting/game-system-user-settings.mjs"
+import { common } from "../../../../../common/_module.mjs"
+import { DynamicInputDefinition } from "../../../../../presentation/application/_module.mjs"
+import InputDropDownViewModel from "../../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
+import { business } from "../../../../_module.mjs"
+import { GameSystemUserSettings } from "../../../../setting/game-system-user-settings.mjs"
+import { TransientSkill } from "../../../document/_module.mjs"
+import { CharacterAttribute, Sum } from "../../_module.mjs"
+import { VISIBILITY_MODES } from "../../const/visibility-modes.mjs"
 import RollData from "../roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs"
 import RollQueryData from "../roll-query-data.mjs"
 import { RollSchema } from "../roll-schema.mjs"
-import { business } from "../../_module.mjs"
 
 /**
  * Defines a schema for rolling dice to test a skill. 
@@ -45,7 +44,7 @@ export class SkillRollSchema extends RollSchema {
    */
   async getRollData(skillDocument, rollQueryData) {
     const owningDocument = this._owningDocumentOverride ?? skillDocument.owningDocument;
-    if (!ValidationUtil.isDefined(owningDocument)) return;
+    if (!common.util.validation.isDefined(owningDocument)) return;
 
     const diceComponents = skillDocument.baseAttributes
     .map(it => new CharacterAttribute(owningDocument, it.name))

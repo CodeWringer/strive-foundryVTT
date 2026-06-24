@@ -1,10 +1,9 @@
-import { VISIBILITY_MODES } from "../model/const/visibility-modes.mjs";
-import InputDropDownViewModel from "../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import DynamicInputDefinition from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import RollData from "./roll-data.mjs";
-import RollQueryData from "./roll-query-data.mjs";
-import TransientSkill from "../model/document/item/skill/transient-skill.mjs";
+import { DynamicInputDefinition, DynamicInputDialog } from "../../../../presentation/application/_module.mjs"
+import InputDropDownViewModel from "../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import { TransientSkill } from "../../document/_module.mjs"
+import { VISIBILITY_MODES } from "../const/visibility-modes.mjs"
+import RollData from "./roll-data.mjs"
+import RollQueryData from "./roll-query-data.mjs"
 
 /**
  * Defines a schema for rolling dice. 

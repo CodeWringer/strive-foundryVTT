@@ -1,4 +1,4 @@
-import { DAMAGE_TYPES, DamageType } from "../../const/damage-types.mjs";
+import { DAMAGE_TYPES, DamageType } from "../const/damage-types.mjs";
 import Persistable from "../persistable.mjs";
 
 /**

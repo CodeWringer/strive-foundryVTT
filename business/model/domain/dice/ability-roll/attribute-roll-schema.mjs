@@ -1,15 +1,15 @@
-import { VISIBILITY_MODES } from "../../model/const/visibility-modes.mjs";
-import InputDropDownViewModel from "../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
-import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { Sum, SumComponent } from "../../model/summed-data.mjs";
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import RollData from "../roll-data.mjs";
-import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
-import RollQueryData from "../roll-query-data.mjs";
-import { RollSchema } from "../roll-schema.mjs";
-import { CharacterAttribute } from "../../model/_module.mjs";
+import { ValidationUtil } from "../../../../../common/_module.mjs"
+import { DynamicInputDefinition } from "../../../../../presentation/application/_module.mjs"
+import InputDropDownViewModel from "../../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
+import { CharacterAttribute } from "../../_module.mjs"
+import { VISIBILITY_MODES } from "../../const/visibility-modes.mjs"
+import { Sum, SumComponent } from "../../summed-data.mjs"
+import RollData from "../roll-data.mjs"
+import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs"
+import RollQueryData from "../roll-query-data.mjs"
+import { RollSchema } from "../roll-schema.mjs"
 
 /**
  * Defines a schema for rolling dice to test an attribute. 

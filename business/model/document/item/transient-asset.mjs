@@ -2,8 +2,8 @@ import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 import DataFieldBridge from "../data-field-bridge.mjs"
 import { common } from "../../../../common/_module.mjs"
-import { CharacterAssetSlot } from "../../domain/_module.mjs"
 import { TIME_UNITS, TimeUnit } from "../../domain/const/time-units.mjs"
+import { AssetSlot } from "../../domain/_module.mjs"
 
 /**
  * Represents the full transient data of an asset. 
@@ -66,7 +66,7 @@ import { TIME_UNITS, TimeUnit } from "../../domain/const/time-units.mjs"
  * @property {Boolean} isEquipped Returns `true`, if the asset is in the 
  * "equipment slots" section on a character sheet. 
  * * Read-only
- * @property {CharacterAssetSlot | null} assetSlot The current asset slot 
+ * @property {AssetSlot | null} assetSlot The current asset slot 
  * that holds this asset. 
  * * Read-only
  * 
@@ -175,7 +175,7 @@ export default class TransientAsset extends TransientBaseItem {
   /**
    * Returns the asset slot the asset is currently assigned to. 
    * 
-   * @type {CharacterAssetSlot | null}
+   * @type {AssetSlot | null}
    * @readonly
    */
   get assetSlot() {
@@ -299,7 +299,7 @@ export default class TransientAsset extends TransientBaseItem {
    * Moves the asset to the owning document's equipped list, 
    * by assigning it to the given asset slot, if possible. 
    * 
-   * @param {CharacterAssetSlot} assetSlot The asset slot to 
+   * @param {AssetSlot} assetSlot The asset slot to 
    * assign the asset to. 
    */
   moveToAssetSlot(assetSlot) {

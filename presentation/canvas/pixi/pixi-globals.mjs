@@ -1,4 +1,4 @@
-import VersionCode from "../../business/migration/version-code.mjs";
+import VersionCode from "../../../business/migration/version-code.mjs"
 
 export const PIXI_GLOBALS = {
   /**

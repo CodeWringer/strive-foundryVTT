@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { common } from "../../../../../common/_module.mjs";
 
 /**
  * Represents a visibility list item. 
@@ -16,7 +16,7 @@ export class HealthConditionVisibilityItem {
    * * Default `false`
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["id", "localizedName"]);
+    common.util.validation.validateOrThrow(args, ["id", "localizedName"]);
 
     this.id = args.id;
     this.localizedName = args.localizedName;

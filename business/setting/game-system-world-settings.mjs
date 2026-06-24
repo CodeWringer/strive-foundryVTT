@@ -1,5 +1,5 @@
-import HealthStatesSettingsDialog from "../../presentation/application/dialog/settings/health-settings/health-settings-dialog.mjs";
-import GameSystemSetting from "./game-system-setting.mjs";
+// import HealthStatesSettingsDialog from "../../presentation/application/dialog/settings/health-settings/health-settings-dialog.mjs";
+import GameSystemSettingDeclaration from "./game-system-setting-declaration.mjs";
 import GameSystemSettings from "./game-system-settings.mjs";
 import { SETTING_SCOPES } from "./setting-scopes.mjs";
 
@@ -43,7 +43,7 @@ export const GameSystemWorldSettings = {
    */
   init() {
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemWorldSettings.KEY_HEALTH_SETTINGS,
         name: game.i18n.localize("system.settings.healthConditions.label"),
         hint: game.i18n.localize("system.settings.healthConditions.hint"),
@@ -53,12 +53,12 @@ export const GameSystemWorldSettings = {
           hidden: [],
         },
         type: Object,
-        menu: HealthStatesSettingsDialog,
+        // menu: HealthStatesSettingsDialog, TODO
         restricted: true,
       }),
     );
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemWorldSettings.KEY_AUTO_REFILL_ACTION_POINTS,
         name: game.i18n.localize("system.settings.autoActionPointRefill.label"),
         hint: game.i18n.localize("system.settings.autoActionPointRefill.hint"),
@@ -69,7 +69,7 @@ export const GameSystemWorldSettings = {
       }),
     );
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemWorldSettings.KEY_AUTO_REMOVE_SAME_COMBATANTS,
         name: game.i18n.localize("system.settings.autoRemoveSameCombatants.label"),
         hint: game.i18n.localize("system.settings.autoRemoveSameCombatants.hint"),
@@ -80,7 +80,7 @@ export const GameSystemWorldSettings = {
       }),
     );
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemWorldSettings.KEY_ENABLE_MOMENTUM_BAR,
         name: game.i18n.localize("system.settings.enableMomentumBar.label"),
         hint: game.i18n.localize("system.settings.enableMomentumBar.hint"),

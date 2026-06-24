@@ -1,4 +1,4 @@
-import { TIME_UNITS, TimeUnit } from "../const/time-units.mjs";
+import { TIME_UNITS, TimeUnit } from "./const/time-units.mjs";
 import Persistable from "./persistable.mjs";
 
 /**

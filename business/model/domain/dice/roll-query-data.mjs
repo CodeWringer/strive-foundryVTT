@@ -1,5 +1,5 @@
-import { VISIBILITY_MODES, VisibilityMode } from "../model/const/visibility-modes.mjs";
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+import { common } from "../../../../common/_module.mjs";
+import { VISIBILITY_MODES, VisibilityMode } from "../const/visibility-modes.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 
 /**
@@ -33,7 +33,7 @@ export default class RollQueryData {
    * * default `ROLL_DICE_MODIFIER_TYPES.NONE`
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["ob"]);
+    common.util.validation.validateOrThrow(args, ["ob"]);
 
     this.ob = args.ob;
     this.bonusDice = args.bonusDice ?? 0;

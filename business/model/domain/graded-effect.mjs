@@ -1,8 +1,8 @@
-import { COMPARISON_TYPES, ComparisonType } from "../const/comparison-types.mjs";
 import { HealthConditionEffect } from "./_module.mjs";
 import Persistable from "./persistable.mjs";
 import Modifier from "./modifier.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
+import { COMPARISON_TYPES, ComparisonType } from "./const/comparison-types.mjs";
 
 /**
  * Represents a graded effect, usually comprised of three sets of data, 

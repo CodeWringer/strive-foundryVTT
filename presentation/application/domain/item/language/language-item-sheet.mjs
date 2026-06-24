@@ -1,3 +1,5 @@
+import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
+
 /**
  * Global definition of an Item sheet. This is what FoundryVTT instantiates to render 
  * an Item sheet. 
@@ -12,6 +14,6 @@
  * 
  * @property {viewModel} viewModel
  */
-export class LanguageItemSheet {
+export class LanguageItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.DocumentSheetV2) {
 
 }

@@ -2,7 +2,6 @@ import { common } from "../../../../common/_module.mjs"
 import AtReferencer from "../../../search/at-referencer.mjs";
 import ArrayDataFieldBridge from "../../document/array-data-field-bridge.mjs";
 import DataFieldBridge from "../../document/data-field-bridge.mjs";
-import DataFieldBridge from "../../document/data-field-bridge.mjs";
 import TransientSkill from "../../document/item/transient-skill.mjs";
 import { ITEM_TYPES } from "../const/item-types.mjs";
 import GradedEffect from "../graded-effect.mjs";

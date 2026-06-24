@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+import { common } from "../../../common/_module.mjs";
 import Persistable from "./persistable.mjs";
 import Reference from "./reference.mjs";
 
@@ -38,7 +38,7 @@ export default class Modifier extends Persistable {
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["dataPath"]);
+    common.util.validation.validateOrThrow(args, ["dataPath"]);
 
     this.dataPath = args.dataPath;
     this.value = args.value ?? 0;

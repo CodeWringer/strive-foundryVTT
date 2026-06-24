@@ -6,7 +6,6 @@ import DriverHistoryEntryField from "../../data-field/driver-history-entry-field
 import InjuryShrugOffField from "../../data-field/injury-shrug-off-field.mjs"
 import PropertyLocationField from "../../data-field/property-location-field.mjs"
 import ReferenceField from "../../data-field/reference-field.mjs"
-import { ATTRIBUTES } from "../../domain/const/attributes.mjs"
 
 export default class CharacterActorData extends TypeDataModel {
   /** @override @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html#defineschema */
@@ -24,10 +23,7 @@ export default class CharacterActorData extends TypeDataModel {
       }),
       attributes: new FoundrySchemaFields.ArrayField(new CharacterAttributeField(), {
         nullable: false,
-        initial: ATTRIBUTES.asArray().map(attribute => new CharacterAttributeField({
-          name: attribute.name,
-          level: 0,
-        })),
+        initial: [],
       }),
       actionPoints: new FoundrySchemaFields.SchemaField({
         current: new FoundrySchemaFields.NumberField({

@@ -40,7 +40,7 @@ export default class GameSystemSetting {
    */
   _getKey() {
     if (this.scope === SETTING_SCOPES.USER) {
-      return `${game.user.id}-${this.key}`;
+      return `${game.userId}-${this.key}`;
     } else {
       return this.key;
     }

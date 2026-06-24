@@ -1,8 +1,8 @@
-import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
-import { Sum, SumComponent } from "../model/summed-data.mjs";
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+import { common } from "../../../../common/_module.mjs";
 import { DICE_POOL_RESULT_TYPES } from "./dice-pool.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import { Sum, SumComponent } from "../summed-data.mjs";
 import RollFormulaResolver from "./roll-formula-resolver.mjs";
 import { RollInputData, RollResult, RollStepData } from "./roll-result.mjs";
 
@@ -35,7 +35,7 @@ export default class RollData {
    * @param {RollDiceModifierType} args.rollModifier The selected roll modifier. 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, [
+    common.util.validation.validateOrThrow(args, [
       "dieFaces", 
       "hitThreshold", 
       "obFormula", 
@@ -230,7 +230,7 @@ export default class RollData {
    */
   async _resolveOb(obFormula) {
     const rgxIsPlainNumber = new RegExp("^\\d+$");
-    const isPlainNumber = ValidationUtil.isDefined(obFormula.match(rgxIsPlainNumber));
+    const isPlainNumber = common.util.validation.isDefined(obFormula.match(rgxIsPlainNumber));
 
     let resolvedObFormula = obFormula;
     let obstacle = 0;
@@ -268,7 +268,7 @@ export default class RollData {
    * @private
    */
   _evaluateDegreeAndOutcome(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["hitCount", "hitLimit", "obstacle"]);
+    common.util.validation.validateOrThrow(args, ["hitCount", "hitLimit", "obstacle"]);
     let degree = 0;
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
 
@@ -341,7 +341,7 @@ export class ResolvedObstacle {
    * @param {Boolean} args.isPlainNumber 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["obFormula", "resolvedObFormula", "ob", "isPlainNumber"]);
+    common.util.validation.validateOrThrow(args, ["obFormula", "resolvedObFormula", "ob", "isPlainNumber"]);
 
     this.obFormula = args.obFormula;
     this.resolvedObFormula = args.resolvedObFormula;

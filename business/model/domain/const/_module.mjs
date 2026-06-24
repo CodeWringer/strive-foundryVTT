@@ -5,7 +5,7 @@ import { ATTACK_TYPES, AttackType } from "./attack-types.mjs";
 import { ATTRIBUTE_TYPES, AttributeType } from "./attribute-types.mjs";
 import { Attribute, ATTRIBUTES } from "./attributes.mjs";
 import { CHARACTER_TEST_TYPES, CharacterTestType } from "./character-test-types.mjs";
-import { ComparisonType } from "./comparison-types.mjs";
+import { COMPARISON_TYPES, ComparisonType } from "./comparison-types.mjs";
 import { DAMAGE_TYPES, DamageType } from "./damage-types.mjs";
 import { ILLNESS_STATES, IllnessState } from "./illness-states.mjs";
 import { INJURY_SHRUG_OFF_STATES, InjuryShrugOffState } from "./injury-shrug-off-states.mjs";
@@ -13,10 +13,8 @@ import { INJURY_STATES, InjuryState } from "./injury-states.mjs";
 import { ITEM_TYPES } from "./item-types.mjs";
 import { LANGUAGE_GRADES, LanguageGrade } from "./language-grades.mjs";
 import { SHIELD_TYPES, ShieldType } from "./shield-types.mjs";
-import { ASSET_TAGS, SKILL_TAGS } from "./system-tags.mjs";
 import { TIME_UNITS, TimeUnit } from "./time-units.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
-import { WEAPON_TYPES, WeaponType } from "./weapon-types.mjs";
 
 export {
   ITEM_TYPES,
@@ -43,12 +41,8 @@ export {
   INJURY_STATES,
   ShieldType,
   SHIELD_TYPES,
-  ASSET_TAGS,
-  SKILL_TAGS,
   VisibilityMode,
   VISIBILITY_MODES,
-  WeaponType,
-  WEAPON_TYPES,
   LanguageGrade,
   LANGUAGE_GRADES,
   ComparisonType,
@@ -82,12 +76,8 @@ export const constants = {
   INJURY_STATES: INJURY_STATES,
   ShieldType: ShieldType,
   SHIELD_TYPES: SHIELD_TYPES,
-  ASSET_TAGS: ASSET_TAGS,
-  SKILL_TAGS: SKILL_TAGS,
   VisibilityMode: VisibilityMode,
   VISIBILITY_MODES: VISIBILITY_MODES,
-  WeaponType: WeaponType,
-  WEAPON_TYPES: WEAPON_TYPES,
   LanguageGrade: LanguageGrade,
   LANGUAGE_GRADES: LANGUAGE_GRADES,
   ComparisonType: ComparisonType,
@@ -106,9 +96,6 @@ export const constants = {
     common.util.constants.enrichConstant(INJURY_SHRUG_OFF_STATES);
     common.util.constants.enrichConstant(INJURY_STATES);
     common.util.constants.enrichConstant(SHIELD_TYPES);
-    common.util.constants.enrichConstant(ASSET_TAGS);
-    common.util.constants.enrichConstant(SKILL_TAGS);
     common.util.constants.enrichConstant(VISIBILITY_MODES);
-    common.util.constants.enrichConstant(WEAPON_TYPES);
   },
 };

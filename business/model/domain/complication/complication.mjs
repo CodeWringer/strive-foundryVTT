@@ -1,4 +1,5 @@
 import { common } from "../../../../common/_module.mjs";
+import Persistable from "../persistable.mjs";
 
 /**
  * Represents a Complication of a Project or of an Asset. 
@@ -8,7 +9,7 @@ import { common } from "../../../../common/_module.mjs";
  * 
  * @extends DomainDataField
  */
-export default class Complication extends DomainDataField {
+export default class Complication extends Persistable {
   /**
    * @param {Object} dto 
    * @param {String} dto.name 

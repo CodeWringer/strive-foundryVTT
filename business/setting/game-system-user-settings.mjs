@@ -1,4 +1,4 @@
-import GameSystemSetting from "./game-system-setting.mjs";
+import GameSystemSettingDeclaration from "./game-system-setting-declaration.mjs";
 import GameSystemSettings from "./game-system-settings.mjs";
 import { SETTING_SCOPES } from "./setting-scopes.mjs";
 
@@ -41,7 +41,7 @@ export const GameSystemUserSettings = {
    */
   init() {
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemUserSettings.KEY_SHOW_FANCY_FONT,
         name: game.i18n.localize("system.settings.fancyFont.label"),
         hint: game.i18n.localize("system.settings.fancyFont.hint"),
@@ -52,7 +52,7 @@ export const GameSystemUserSettings = {
       }),
     );
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemUserSettings.KEY_TOGGLE_DEBUG,
         name: game.i18n.localize("system.settings.toggleDebug.label"),
         hint: game.i18n.localize("system.settings.toggleDebug.hint"),
@@ -63,7 +63,7 @@ export const GameSystemUserSettings = {
       }),
     );
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemUserSettings.KEY_TOGGLE_REMINDERS,
         name: game.i18n.localize("system.settings.toggleReminders.label"),
         hint: game.i18n.localize("system.settings.toggleReminders.hint"),
@@ -74,7 +74,7 @@ export const GameSystemUserSettings = {
       }),
     );
     GameSystemSettings.addDeclaration(
-      new GameSystemSetting({
+      new GameSystemSettingDeclaration({
         key: GameSystemUserSettings.KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY,
         name: game.i18n.localize("system.settings.toggleExpertiseVisibility.label"),
         hint: game.i18n.localize("system.settings.toggleExpertiseVisibility.hint"),

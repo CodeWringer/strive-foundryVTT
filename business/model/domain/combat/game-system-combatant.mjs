@@ -1,4 +1,6 @@
-import { business } from "../../_module.mjs";
+import GameSystemSetting from "../../../setting/game-system-setting.mjs";
+import { GameSystemWorldSettings } from "../../../setting/game-system-world-settings.mjs";
+import { SETTING_SCOPES } from "../../../setting/setting-scopes.mjs";
 
 /**
  * This class extends FoundryVTT's `Combatant` document type. 
@@ -7,7 +9,7 @@ import { business } from "../../_module.mjs";
  */
 export default class GameSystemCombatant extends Combatant {
   async delete(operation) {
-    const autoRemoveOtherCombatants = new business.setting.GameSystemSetting({ key: business.setting.GameSystemWorldSettings.KEY_AUTO_REMOVE_SAME_COMBATANTS, scope: business.setting.SETTING_SCOPES.WORLD });
+    const autoRemoveOtherCombatants = new GameSystemSetting({ key: GameSystemWorldSettings.KEY_AUTO_REMOVE_SAME_COMBATANTS, scope: SETTING_SCOPES.WORLD });
     if (autoRemoveOtherCombatants === true) {
       const ids = [];
       for (const combatant of this.combat.combatants) {

@@ -1,7 +1,7 @@
-import { SYSTEM_ID } from "../../../../system-id.mjs";
 import HealthStatesSettingsDialogViewModel from "./health-settings-dialog-viewmodel.mjs";
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
-import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
+import { SYSTEM_ID } from "../../../../../system-id.mjs";
+import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
+import { GameSystemWorldSettings } from "../../../../../business/setting/game-system-world-settings.mjs";
 
 /**
  * Represents a dialog for customizing character health states globally. 

@@ -1,7 +1,5 @@
 import { constants } from "./const/_module.mjs";
 import AssetSlot from "./asset/asset-slot.mjs";
-import CharacterAssetSlotGroup from "./asset/character-asset-slot-group.mjs";
-import CharacterAssetSlot from "./asset/character-asset-slot.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
 import { combat } from "./combat/_module.mjs";
 import Complication from "./complication/complication.mjs";
@@ -25,11 +23,9 @@ import AdvancementHistoryEntry from "./advancement-history-entry.mjs";
 import DriverHistoryEntry from "./driver-history-entry.mjs";
 
 export {
-  const,
+  constants,
   Persistable,
   AssetSlot,
-  CharacterAssetSlotGroup,
-  CharacterAssetSlot,
   PropertyLocation,
   CharacterAttribute,
   InjuryShrugOff,
@@ -63,8 +59,6 @@ export const domain = {
   Persistable: Persistable,
   asset: {
     AssetSlot: AssetSlot,
-    CharacterAssetSlotGroup: CharacterAssetSlotGroup,
-    CharacterAssetSlot: CharacterAssetSlot,
     PropertyLocation: PropertyLocation,
   },
   attribute: {
@@ -99,5 +93,6 @@ export const domain = {
     constants.init();
     SystemHealthConditionBroker.preload();
     combat.init();
+    dice.init();
   },
 };

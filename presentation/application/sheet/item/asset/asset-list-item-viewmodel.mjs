@@ -1,5 +1,5 @@
+import { AssetSlot } from "../../../../../business/model/domain/_module.mjs"
 import TransientAsset from "../../../../business/model/document/item/transient-asset.mjs"
-import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
@@ -214,7 +214,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   }
 
   /**
-   * @returns {CharacterAssetSlot | undefined}
+   * @returns {AssetSlot | undefined}
    * 
    * @private
    * @async

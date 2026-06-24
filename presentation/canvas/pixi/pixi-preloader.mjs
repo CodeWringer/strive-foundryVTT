@@ -1,4 +1,4 @@
-import { FOUNDRY_10_PIXI_VERSION, FOUNDRY_11_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
+import { PIXI_GLOBALS } from "./pixi-globals.mjs";
 
 const BASE_PATH = "systems/strive/presentation/image";
 
@@ -65,7 +65,7 @@ export const PixiLoader = {
    * @async
    */
   preloadTextures: async function () {
-    if (PIXI_VERSION.greater(FOUNDRY_10_PIXI_VERSION)) {
+    if (PIXI_GLOBALS.PIXI_VERSION.greater(PIXI_GLOBALS.FOUNDRY_10_PIXI_VERSION)) {
       for (const propertyName in this.TEXTURES) {
         const url = this.TEXTURES[propertyName];
         const texture = await PIXI.Assets.load(url);
@@ -90,7 +90,7 @@ export const PixiLoader = {
     for (const propertyName in this.VECTOR_GRAPHICS) {
       const url = this.VECTOR_GRAPHICS[propertyName];
       let svg;
-      if (PIXI_VERSION.greater(FOUNDRY_11_PIXI_VERSION)) {
+      if (PIXI_GLOBALS.PIXI_VERSION.greater(PIXI_GLOBALS.FOUNDRY_11_PIXI_VERSION)) {
         svg = await PIXI.Assets.load(url, {
           parseAsGraphicsContext: true, // If false, it returns a texture instead.
         });
@@ -110,7 +110,7 @@ export const PixiLoader = {
    * @returns {PIXI.Texture}
    */
   getTexture: function (key) {
-    if (PIXI_VERSION.greater(FOUNDRY_10_PIXI_VERSION)) {
+    if (PIXI_GLOBALS.PIXI_VERSION.greater(PIXI_GLOBALS.FOUNDRY_10_PIXI_VERSION)) {
       return this._preloadedTextures.get(key);
     } else {
       return PIXI.Loader.shared.resources[key].texture;

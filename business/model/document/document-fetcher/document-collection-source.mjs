@@ -1,5 +1,4 @@
-import { ConstantsUtil } from "../../../../common/util/constants-utility.mjs";
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { common } from "../../../../common/_module.mjs";
 
 /**
  * Represents a document collection source. 
@@ -14,7 +13,7 @@ export class DocumentCollectionSource {
    * @property {String | undefined} args.localizableName Localization key. 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["name"]);
+    common.util.validation.validateOrThrow(args, ["name"]);
     this.name = args.name;
     this.localizableName = args.localizableName;
   }
@@ -75,4 +74,3 @@ export const DOCUMENT_COLLECTION_SOURCES = {
     localizableName: "system.general.collectionSources.world"
   }),
 }
-common.util.constants(DOCUMENT_COLLECTION_SOURCES);

@@ -1,4 +1,4 @@
-import { common } from "../../../common/_module.mjs";
+import { common } from "../../../../common/_module.mjs";
 
 /**
  * Represents a language grade. 

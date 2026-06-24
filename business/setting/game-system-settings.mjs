@@ -46,7 +46,6 @@ export default class GameSystemSettings {
    * @static
    */
   static set(key, value) {
-    GameSystemSettings._ensureSetting(key, value);
     game.settings.set(GameSystemSettings.SETTINGS_NAMESPACE, key, value); 
   }
   
@@ -58,7 +57,6 @@ export default class GameSystemSettings {
    * @static
    */
   static get(key) {
-    GameSystemSettings._ensureSetting(key);
     return game.settings.get(GameSystemSettings.SETTINGS_NAMESPACE, key); 
   }
 
@@ -68,7 +66,7 @@ export default class GameSystemSettings {
    * @static
    */
   static addDeclaration(settingDeclaration) {
-    const setting = GameSystemSettings._settings.find(it => it.key === key);
+    const setting = GameSystemSettings._settings.find(it => it.key === settingDeclaration.key);
     if (common.util.validation.isDefined(setting)) return;
 
     this._settings.push(settingDeclaration);

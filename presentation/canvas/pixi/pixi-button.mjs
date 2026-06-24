@@ -1,5 +1,5 @@
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
-import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
+import { common } from "../../../common/_module.mjs";
+import { PIXI_GLOBALS } from "./pixi-globals.mjs";
 
 /**
  * Represents a clickable sprite, with hover state. 
@@ -75,7 +75,7 @@ export default class PixiButton {
    * @param {Function | undefined} args.onClick Callback that is invoked upon click. 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["texture"]);
+    common.util.validation.validateOrThrow(args, ["texture"]);
 
     this.onClick = args.onClick ?? (() => { });
 
@@ -84,7 +84,7 @@ export default class PixiButton {
     // Actual sprite. 
     this._sprite = new PIXI.Sprite(args.texture);
 
-    if (PIXI_VERSION.greater(FOUNDRY_10_PIXI_VERSION)) {
+    if (PIXI_GLOBALS.PIXI_VERSION.greater(PIXI_GLOBALS.FOUNDRY_10_PIXI_VERSION)) {
       this._sprite.eventMode = "static";
     } else {
       this._sprite.interactive = true;

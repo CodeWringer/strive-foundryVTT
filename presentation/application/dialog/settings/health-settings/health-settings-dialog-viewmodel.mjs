@@ -1,10 +1,10 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import GameSystemWorldSettings from "../../../../business/setting/game-system-world-settings.mjs";
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
-import VisibilityToggleListViewModel from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import { HealthConditionVisibilityItem } from "./health-settings-visibility-item.mjs";
-import { SystemHealthConditionBroker } from "../../../../business/model/domain/_module.mjs";
+import { SystemHealthConditionBroker } from "../../../../../business/model/domain/_module.mjs"
+import { GameSystemWorldSettings } from "../../../../../business/setting/game-system-world-settings.mjs"
+import { ValidationUtil } from "../../../../../common/_module.mjs"
+import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
+import VisibilityToggleListViewModel from "../../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs"
+import ViewModel from "../../../../view-model/view-model.mjs"
+import { HealthConditionVisibilityItem } from "./health-settings-visibility-item.mjs"
 
 /**
  * @extends ViewModel

@@ -1,3 +1,4 @@
+import { common } from "../../../common/_module.mjs";
 import TransientDocument from "./transient-document.mjs";
 import TransientBaseItem from "./item/transient-base-item.mjs";
 import TransientBaseActor from "./actor/transient-base-actor.mjs";
@@ -10,11 +11,11 @@ import DocumentFetcher from "./document-fetcher/document-fetcher.mjs";
 import { DocumentIndex } from "./document-fetcher/document-index.mjs";
 import BulkDevDocumentUpdater from "./document-updater/bulk-dev-document-updater.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
-import DocumentCreationStrategy from "./creation/document-creation-strategy.mjs";
-import ExpertiseCreationStrategy from "./creation/expertise-creation-strategy.mjs";
-import InjuryCreationStrategy from "./creation/injury-creation-strategy.mjs";
-import RollableSpecificDocumentCreationStrategy from "./creation/rollable-specific-document-creation-strategy.mjs";
-import SpecificDocumentCreationStrategy from "./creation/specific-document-creation-strategy.mjs";
+// import DocumentCreationStrategy from "./creation/document-creation-strategy.mjs";
+// import ExpertiseCreationStrategy from "./creation/expertise-creation-strategy.mjs";
+// import InjuryCreationStrategy from "./creation/injury-creation-strategy.mjs";
+// import RollableSpecificDocumentCreationStrategy from "./creation/rollable-specific-document-creation-strategy.mjs";
+// import SpecificDocumentCreationStrategy from "./creation/specific-document-creation-strategy.mjs";
 import Expertise from "../domain/skill/expertise.mjs";
 import TransientAsset from "./item/transient-asset.mjs";
 import TransientFateCard from "./item/transient-fate-card.mjs";
@@ -42,11 +43,11 @@ export {
   DocumentIndex,
   DocumentFetcher,
   BulkDevDocumentUpdater,
-  DocumentCreationStrategy,
-  ExpertiseCreationStrategy,
-  InjuryCreationStrategy,
-  RollableSpecificDocumentCreationStrategy,
-  SpecificDocumentCreationStrategy,
+  // DocumentCreationStrategy,
+  // ExpertiseCreationStrategy,
+  // InjuryCreationStrategy,
+  // RollableSpecificDocumentCreationStrategy,
+  // SpecificDocumentCreationStrategy,
   DocumentUpdater,
   TransientBaseItem,
   TransientSkill,
@@ -92,11 +93,11 @@ export const document = {
     DocumentUpdater: DocumentUpdater,
   },
   creation: {
-    DocumentCreationStrategy: DocumentCreationStrategy,
-    ExpertiseCreationStrategy: ExpertiseCreationStrategy,
-    InjuryCreationStrategy: InjuryCreationStrategy,
-    RollableSpecificDocumentCreationStrategy: RollableSpecificDocumentCreationStrategy,
-    SpecificDocumentCreationStrategy: SpecificDocumentCreationStrategy,
+    // DocumentCreationStrategy: DocumentCreationStrategy,
+    // ExpertiseCreationStrategy: ExpertiseCreationStrategy,
+    // InjuryCreationStrategy: InjuryCreationStrategy,
+    // RollableSpecificDocumentCreationStrategy: RollableSpecificDocumentCreationStrategy,
+    // SpecificDocumentCreationStrategy: SpecificDocumentCreationStrategy,
   },
   actor: {
     TransientBaseActor: TransientBaseActor,
@@ -122,6 +123,7 @@ export const document = {
     TransientTrait: TransientTrait,
   },
   init() {
+    common.util.constants.enrichConstant(DOCUMENT_COLLECTION_SOURCES);
     CONFIG.Actor.documentClass = GameSystemActor;
     CONFIG.Item.documentClass = GameSystemItem;
   },

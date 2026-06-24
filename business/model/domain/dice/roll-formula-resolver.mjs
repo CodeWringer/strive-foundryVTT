@@ -1,9 +1,9 @@
-import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
-import { TEMPLATES } from "../../presentation/templates.mjs";
-import AtReferencer from "../search/at-referencer.mjs";
-import Ruleset from "../model/domain/ruleset.mjs";
-import { ValidationUtil } from "../../common/util/validation-utility.mjs";
-import { DICE_CONSTANTS } from "./dice-constants.mjs";
+import { common } from "../../../../common/_module.mjs"
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
+import { TEMPLATES } from "../../../../presentation/templates.mjs"
+import AtReferencer from "../../../search/at-referencer.mjs"
+import Ruleset from "../ruleset.mjs"
+import { DICE_CONSTANTS } from "./dice-constants.mjs"
 
 /**
  * Provides a means to fully resolve roll formulae. 
@@ -37,7 +37,7 @@ export default class RollFormulaResolver {
    * * E. g. `"5D5 + 2"` or `"@SI + 5D3"` or `"@SI D + 3"`
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["formula"]);
+    common.util.validation.validateOrThrow(args, ["formula"]);
 
     this.formula = args.formula + "";
   }
@@ -68,7 +68,7 @@ export default class RollFormulaResolver {
       const diceFaceCount = match.groups.face.length > 0 ? match.groups.face : "6";
       const composedDiceStatement = `${match.groups.dice}D${diceFaceCount}`;
 
-      if (ValidationUtil.isDefined(previousMatch)) {
+      if (common.util.validation.isDefined(previousMatch)) {
         const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.groups.match.length, match.index).trim();
         if (snippet.length > 0) {
           snippets.push(snippet);
@@ -83,7 +83,7 @@ export default class RollFormulaResolver {
 
       previousMatch = match;
     }
-    if (ValidationUtil.isDefined(previousMatch)) {
+    if (common.util.validation.isDefined(previousMatch)) {
       const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.groups.match.length).trim();
       if (snippet.length > 0) {
         snippets.push(snippet);
@@ -110,7 +110,7 @@ export default class RollFormulaResolver {
     const terms = [];
     const hitEvaluationTerms = [];
     for (const term of evaluated.terms) {
-      if (ValidationUtil.isDefined(term.faces) && term.faces == 6) {
+      if (common.util.validation.isDefined(term.faces) && term.faces == 6) {
         const d6Group = new D6Group({
           values: term.values,
           total: term.total,
@@ -191,7 +191,7 @@ export class EvaluatedRollFormula {
     const faces = [];
 
     for (const term of this.terms) {
-      if (ValidationUtil.isDefined(term.hits)) { // It's a d6 group. 
+      if (common.util.validation.isDefined(term.hits)) { // It's a d6 group. 
         for (const hit of term.hits) {
           faces.push({
             cssClass: `d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}`,

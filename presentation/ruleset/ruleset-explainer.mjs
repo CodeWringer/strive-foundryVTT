@@ -1,11 +1,9 @@
-import { StringUtil } from "../../common/util/string-utility.mjs"
-import { GameSystemActor } from "../../business/model/document/actor/actor.mjs"
-import TransientBaseCharacterActor from "../../business/model/document/actor/transient-character-actor.mjs"
-import Ruleset from "../../business/model/domain/ruleset.mjs"
-import { CharacterAttribute } from "../../business/model/_module.mjs"
-import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs"
-import { TransientSkill } from "../../business/model/document/_module.mjs"
+import { GameSystemActor, TransientBaseCharacterActor, TransientSkill } from "../../business/model/document/_module.mjs"
+import { CharacterAttribute } from "../../business/model/domain/_module.mjs"
 import { ATTRIBUTES } from "../../business/model/domain/const/attributes.mjs"
+import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs"
+import Ruleset from "../../business/model/domain/ruleset.mjs"
+import { common } from "../../common/_module.mjs"
 
 /**
  * Provides strings that explain derived values, based on the ruleset. 
@@ -28,7 +26,7 @@ export default class RulesetExplainer {
     const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
     const characterAwareness = transientActor.attributes.find(it => it.name === ATTRIBUTES.awareness.name);
     const characterWit = transientActor.attributes.find(it => it.name === ATTRIBUTES.wit.name);
-    return StringUtil.format2(
+    return common.util.string.format2(
       game.i18n.localize("system.rules.baseInitiative"),
       {
         localizedAgility: game.i18n.localize(ATTRIBUTES.agility.localizableName),
@@ -51,7 +49,7 @@ export default class RulesetExplainer {
     const transientActor = actor.getTransientObject();
     const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
     const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
-    return StringUtil.format2(
+    return common.util.string.format2(
       game.i18n.localize("system.rules.sprintingSpeed"),
       {
         localizedAgility: game.i18n.localize(ATTRIBUTES.agility.localizableName),
@@ -72,7 +70,7 @@ export default class RulesetExplainer {
     const transientActor = actor.getTransientObject();
     const characterStrength = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
     const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
-    return StringUtil.format2(
+    return common.util.string.format2(
       game.i18n.localize("system.rules.stability"),
       {
         localizedStrength: game.i18n.localize(ATTRIBUTES.strength.localizableName),
@@ -90,7 +88,7 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForAttributeAdvancement(attribute) {
-    return StringUtil.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
+    return common.util.string.format2(game.i18n.localize("system.character.advancement.experiencePoint.requiredForAdvancement"), {
       xp: new Ruleset().getAttributeAdvancementRequirements(attribute),
       type: game.i18n.localize(`system.character.attribute.type.${attribute.type.name}`),
     });
@@ -105,7 +103,7 @@ export default class RulesetExplainer {
     if (skill.level === 0) {
       return game.i18n.localize("system.character.advancement.requirement.explanation.learningSkill");
     } else {
-      return StringUtil.format2(game.i18n.localize("system.character.advancement.requirement.explanation.knownSkill"), {
+      return common.util.string.format2(game.i18n.localize("system.character.advancement.requirement.explanation.knownSkill"), {
         level: skill.level,
         result: new Ruleset().getSkillAdvancementRequirements(skill.level),
       });
@@ -125,7 +123,7 @@ export default class RulesetExplainer {
     const hpReductionPerInjury = this._ruleset.getMaximumHpReductionPerInjury(actor);
     const unmodifiedHp = this._ruleset.getUnmodifiedMaximumHp(actor);
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.injury)).length;
-    return StringUtil.format2(
+    return common.util.string.format2(
       game.i18n.localize("system.character.health.hp.maxExplanation"),
       {
         baseHp: baseHp,
@@ -150,7 +148,7 @@ export default class RulesetExplainer {
     const transientActor = actor.getTransientObject();
 
     const rawLevel = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
-    return StringUtil.format2(
+    return common.util.string.format2(
       game.i18n.localize("system.character.health.exhaustion.maxExplanation"),
       {
         baseExhaustionLimit: 1,
@@ -169,7 +167,7 @@ export default class RulesetExplainer {
    */
   getExplanationForMaxLuggage(actor) {
     const level = this._ruleset.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
-    return StringUtil.format2(
+    return common.util.string.format2(
       game.i18n.localize("system.rules.maxLuggage"),
       {
         localizedStrength: game.i18n.localize(ATTRIBUTES.strength.localizableName),

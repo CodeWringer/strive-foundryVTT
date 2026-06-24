@@ -1,5 +1,5 @@
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import { SheetUtil } from "../../sheet/sheet-utility.mjs";
+import { common } from "../../../common/_module.mjs";
+import { presentation } from "../../_module.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -56,7 +56,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
     // Update visuals. 
     this._suppressEvent = true;
-    SheetUtil.setElementValue(this.element, newValue);
+    presentation.util.sheet.setElementValue(this.element, newValue);
     this._suppressEvent = false;
 
     this.onChange(oldValue, this._value);
@@ -117,7 +117,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * @type {String}
    * @readonly
    */
-  get valueForDisplay() { return ValidationUtil.isDefined(this.displayValueMapper) ? this.displayValueMapper(this.value) : this.value; }
+  get valueForDisplay() { return common.util.validation.isDefined(this.displayValueMapper) ? this.displayValueMapper(this.value) : this.value; }
 
   /**
    * @param {Object} args

@@ -1,7 +1,7 @@
-import { ArrayUtil, ValidationUtil } from "../../../common/_module.mjs"
-import { GameSystemWorldSettings } from "../../setting/game-system-world-settings.mjs"
-import { DocumentFetcher, DocumentUpdater } from "../document/_module.mjs"
-import { GENERAL_DOCUMENT_TYPES } from "../document/general-document-types.mjs"
+import { common } from "../../../../common/_module.mjs"
+import { GameSystemWorldSettings } from "../../../setting/game-system-world-settings.mjs"
+import { DocumentFetcher, DocumentUpdater } from "../../document/_module.mjs"
+import { GENERAL_DOCUMENT_TYPES } from "../../document/general-document-types.mjs"
 
 /**
  * This class extends FoundryVTT's `Combat` document type. 
@@ -56,7 +56,7 @@ export default class GameSystemCombat extends Combat {
         searchEmbedded: false,
       });
       const transientDocument = document.getTransientObject();
-      if (ValidationUtil.isDefined(transientDocument.initiative)
+      if (common.util.validation.isDefined(transientDocument.initiative)
         && transientDocument.initiative.perTurn > 1) {
         // Insert additional combatants for this actor. 
         for (let i = 1; i < transientDocument.initiative.perTurn; i++) {
@@ -96,10 +96,10 @@ export default class GameSystemCombat extends Combat {
       let initiativeCount = 1;
       for (const combatantOfToken of combatantsOfToken) {
         // Avoid counting initiative of combatants that are about to be re-rolled. 
-        if (ArrayUtil.arrayContains(ids, combatantOfToken.id)) {
+        if (common.util.array.arrayContains(ids, combatantOfToken.id)) {
           continue;
         }
-        if (ValidationUtil.isDefined(combatantOfToken.initiative)) {
+        if (common.util.validation.isDefined(combatantOfToken.initiative)) {
           initiativeCount++;
         }
       }

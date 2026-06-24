@@ -1,5 +1,4 @@
-import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { common } from "../../../common/_module.mjs";
 
 /**
  * Displays informative content when users hover over a specified element. 
@@ -96,7 +95,7 @@ export default class Tooltip {
    * tooltip is hidden. 
    */
   constructor(args = {}) {
-    this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
+    this._id = common.util.uuid.sanitizeId(args.id ?? common.util.uuid.createUUID());
 
     this.anchorElement = args.anchorElement;
     this.content = args.content;
@@ -118,7 +117,7 @@ export default class Tooltip {
   activateListeners(anchorElement) {
     this.anchorElement = anchorElement;
 
-    if (this.showOnHover === true && ValidationUtil.isDefined(this.anchorElement)) {
+    if (this.showOnHover === true && common.util.validation.isDefined(this.anchorElement)) {
       this.anchorElement.on(`mouseenter.${Tooltip.EVENT_NAMESPACE}.${this._id}`, (event) => {
         this.show();
       });
@@ -132,7 +131,7 @@ export default class Tooltip {
    * Unregisters event handlers from the `anchorElement`. 
    */
   deactivateListeners() {
-    if (ValidationUtil.isDefined(this.anchorElement)) {
+    if (common.util.validation.isDefined(this.anchorElement)) {
       this.anchorElement.off(`mouseenter.${Tooltip.EVENT_NAMESPACE}.${this._id}`);
       this.anchorElement.off(`mouseleave.${Tooltip.EVENT_NAMESPACE}.${this._id}`);
     }
@@ -143,7 +142,7 @@ export default class Tooltip {
    * Makes the tooltip visible, by adding it to the DOM and positioning it accordingly. 
    */
   show() {
-    if (!ValidationUtil.isDefined(this.anchorElement)) return;
+    if (!common.util.validation.isDefined(this.anchorElement)) return;
 
     this._visible = true;
 
@@ -261,7 +260,7 @@ export default class Tooltip {
    */
   _ensureElement() {
     const elementInDom = this._getElementFromDom();
-    if (ValidationUtil.isDefined(elementInDom)) {
+    if (common.util.validation.isDefined(elementInDom)) {
       this._element = elementInDom;
     } else {
       const elementCreationString = `<div class="${Tooltip.CSS_CLASS}" id="${this._id}" style="max-width:${this.maxWidth}">${this.content}</div>`;
@@ -276,12 +275,12 @@ export default class Tooltip {
    * @private
    */
   _ensureElementRemoved() {
-    if (ValidationUtil.isDefined(this._element)) {
+    if (common.util.validation.isDefined(this._element)) {
       this._element.remove();
     }
 
     const elementInDom = this._getElementFromDom();
-    if (ValidationUtil.isDefined(elementInDom)) {
+    if (common.util.validation.isDefined(elementInDom)) {
       elementInDom.remove();
     }
 

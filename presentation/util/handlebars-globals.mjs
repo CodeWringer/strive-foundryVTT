@@ -19,13 +19,13 @@ export const HANDLEBARS_GLOBALS = {
    * * `ifThenElse(condition, thenValue, elseValue)`
    */
   initHandlebarsHelpers: () => {
-    Handlebars.registerHelper('times', times);
-    Handlebars.registerHelper('eq', eq);
-    Handlebars.registerHelper('neq', neq);
-    Handlebars.registerHelper('and', and);
-    Handlebars.registerHelper('or', or);
-    Handlebars.registerHelper('not', not);
-    Handlebars.registerHelper('ifThenElse', ifThenElse);
+    Handlebars.registerHelper('times', HANDLEBARS_GLOBALS.times);
+    Handlebars.registerHelper('eq', HANDLEBARS_GLOBALS.eq);
+    Handlebars.registerHelper('neq', HANDLEBARS_GLOBALS.neq);
+    Handlebars.registerHelper('and', HANDLEBARS_GLOBALS.and);
+    Handlebars.registerHelper('or', HANDLEBARS_GLOBALS.or);
+    Handlebars.registerHelper('not', HANDLEBARS_GLOBALS.not);
+    Handlebars.registerHelper('ifThenElse', HANDLEBARS_GLOBALS.ifThenElse);
   },
 
   /**

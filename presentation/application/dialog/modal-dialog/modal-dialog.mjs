@@ -1,6 +1,5 @@
-import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
+import { common } from "../../../../common/_module.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * @summary
@@ -146,7 +145,7 @@ export default class ModalDialog extends Application {
   constructor(options = {}) {
     super(options);
 
-    this._backdropElementId = UuidUtil.createUUID();
+    this._backdropElementId = common.util.uuid.createUUID();
 
     this.easyDismissal = options.easyDismissal ?? true;
     this.closeCallback = options.closeCallback;
@@ -184,7 +183,7 @@ export default class ModalDialog extends Application {
     super.close(options);
 
     this._removeModalBackdrop();
-    if (ValidationUtil.isFunction(this.closeCallback)) {
+    if (common.util.validation.isFunction(this.closeCallback)) {
       this.closeCallback(this);
     }
 
