@@ -1,21 +1,13 @@
-import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 import { ILLNESS_STATES } from "../../const/illness-states.mjs";
 import ReferenceField from "../../data-field/reference-field.mjs";
+import BaseItemData from "./base-item-data.mjs";
 
-export default class IllnessItemData extends TypeDataModel {
+export default class IllnessItemData extends BaseItemData {
   /** @override */
   static defineSchema() {
     return {
-      description: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
-      gmNotes: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
+      ...super.defineSchema(),
       state: new FoundrySchemaFields.StringField({
         nullable: false,
         required: true,

@@ -50,12 +50,6 @@
       "type": "Item"
     },
     {
-      "name": "momentum-actions",
-      "label": "Momentum Actions",
-      "path": "packs/momentum-actions",
-      "type": "Item"
-    },
-    {
       "name": "mutations",
       "label": "Mutations",
       "path": "packs/mutations",
@@ -77,7 +71,6 @@
         "fatecards",
         "health-conditions",
         "illnesses",
-        "momentum-actions",
         "mutations",
         "rolltables",
         "skills"
@@ -133,37 +126,7 @@
           "img": ["IMAGE"]
         }
       },
-      "language": {
-        "htmlFields": ["description", "gmNotes"],
-        "filePathFields": {
-          "img": ["IMAGE"]
-        }
-      },
-      "skill": {
-        "htmlFields": ["description", "gmNotes"],
-        "filePathFields": {
-          "img": ["IMAGE"]
-        }
-      },
       "fateCard": {
-        "htmlFields": ["description", "gmNotes"],
-        "filePathFields": {
-          "img": ["IMAGE"]
-        }
-      },
-      "injury": {
-        "htmlFields": ["description", "gmNotes"],
-        "filePathFields": {
-          "img": ["IMAGE"]
-        }
-      },
-      "illness": {
-        "htmlFields": ["description", "gmNotes"],
-        "filePathFields": {
-          "img": ["IMAGE"]
-        }
-      },
-      "mutation": {
         "htmlFields": ["description", "gmNotes"],
         "filePathFields": {
           "img": ["IMAGE"]
@@ -175,7 +138,25 @@
           "img": ["IMAGE"]
         }
       },
-      "trait": {
+      "illness": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "injury": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "language": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "mutation": {
         "htmlFields": ["description", "gmNotes"],
         "filePathFields": {
           "img": ["IMAGE"]
@@ -188,6 +169,18 @@
         }
       },
       "recipe": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "skill": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "trait": {
         "htmlFields": ["description", "gmNotes"],
         "filePathFields": {
           "img": ["IMAGE"]

@@ -1,19 +1,11 @@
-import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import BaseItemData from "./base-item-data.mjs";
 
-export default class FateCardItemData extends TypeDataModel {
+export default class FateCardItemData extends BaseItemData {
   /** @override */
   static defineSchema() {
     return {
-      description: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
-      gmNotes: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
+      ...super.defineSchema(),
       cost: new FoundrySchemaFields.SchemaField({
         miFP: new FoundrySchemaFields.NumberField({
           nullable: false,

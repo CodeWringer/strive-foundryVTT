@@ -34,6 +34,13 @@ import { DataFieldBridge, ArrayDataFieldBridge, Expertise, TransientBaseItem } f
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * 
  * @property {Array<String>} baseAttributes
  * @property {Number} level
  * @property {Array<Expertise>} expertises

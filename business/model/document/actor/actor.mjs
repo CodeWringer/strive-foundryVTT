@@ -1,7 +1,6 @@
-import { business } from "../../../_module.mjs";
-import TransientBaseActor from "./transient-base-actor.mjs";
-import TransientNpc from "./transient-npc.mjs";
-import TransientPc from "./transient-pc.mjs";
+import { common } from "../../../../common/_module.mjs";
+import { ACTOR_TYPES } from "../../domain/const/actor-types.mjs";
+import TransientCharacterActor from "./transient-character-actor.mjs";
 import TransientPlainActor from "./transient-plain-actor.mjs";
 
 /**
@@ -26,9 +25,8 @@ export class GameSystemActor extends Actor {
    */
   static get SUB_TYPES() {
     return new Map([
-      [business.model.const.ACTOR_TYPES.NPC, (document) => { return new TransientNpc(document) }],
-      [business.model.const.ACTOR_TYPES.PC, (document) => { return new TransientPc(document) }],
-      [business.model.const.ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) }],
+      [ACTOR_TYPES.CHARACTER, (document) => { return new TransientCharacterActor(document) }],
+      [ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) }],
     ]);
   }
 
@@ -61,7 +59,7 @@ export class GameSystemActor extends Actor {
    * @returns {TransientBaseActor}
    */
   getTransientObject() {
-    if (this._transientObject === undefined) {
+    if (!common.util.validation.isDefined(this._transientObject)) {
       const factoryFunction = GameSystemActor.SUB_TYPES.get(this.type);
       
       if (factoryFunction === undefined) {

@@ -1,22 +1,14 @@
-import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 import ExpertiseField from "../../data-field/expertise-field.mjs";
 import GradedEffectField from "../../data-field/graded-effect-field.mjs";
 import MomentumActionField from "../../data-field/momentum-action-field.mjs";
+import BaseItemData from "./base-item-data.mjs";
 
-export default class SkillItemData extends TypeDataModel {
+export default class SkillItemData extends BaseItemData {
   /** @override */
   static defineSchema() {
     return {
-      description: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
-      gmNotes: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
+      ...super.defineSchema(),
       baseAttributes: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
         nullable: false,
         initial: [],

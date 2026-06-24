@@ -1,20 +1,12 @@
-import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 import { LANGUAGE_GRADES } from "../../const/language-grades.mjs";
+import BaseItemData from "./base-item-data.mjs";
 
-export default class LanguageItemData extends TypeDataModel {
+export default class LanguageItemData extends BaseItemData {
   /** @override */
   static defineSchema() {
     return {
-      description: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
-      gmNotes: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
+      ...super.defineSchema(),
       grade: new FoundrySchemaFields.StringField({
         nullable: false,
         required: true,

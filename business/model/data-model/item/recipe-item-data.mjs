@@ -1,21 +1,13 @@
-import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 import ComplicationField from "../../data-field/complication-field.mjs";
 import ReferenceField from "../../data-field/reference-field.mjs";
 import TimeIncrementField from "../../data-field/time-increment-field.mjs";
+import BaseItemData from "./base-item-data.mjs";
 
-export default class RecipeItemData extends TypeDataModel {
+export default class RecipeItemData extends BaseItemData {
 static defineSchema() {
     return {
-      description: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
-      gmNotes: new FoundrySchemaFields.HTMLField({
-        blank: true,
-        nullable: false,
-        initial: "",
-      }),
+      ...super.defineSchema(),
       complications: new FoundrySchemaFields.ArrayField(new ComplicationField(), {
         nullable: false,
         initial: [],

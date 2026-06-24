@@ -17,6 +17,10 @@ export default class CharacterActorData extends TypeDataModel {
         nullable: false,
         initial: "",
       }),
+      attributes: new FoundrySchemaFields.ArrayField(new CharacterAttributeField(), {
+        nullable: false,
+        initial: [],
+      }),
       actionPoints: new FoundrySchemaFields.SchemaField({
         current: new FoundrySchemaFields.NumberField({
           nullable: false,
@@ -205,10 +209,6 @@ export default class CharacterActorData extends TypeDataModel {
           }),
         }),
       }),
-      attributes: new FoundrySchemaFields.ArrayField(new CharacterAttributeField(), {
-        nullable: false,
-        initial: [],
-      }),
       health: new FoundrySchemaFields.SchemaField({
         hp: new FoundrySchemaFields.SchemaField({
           current: new FoundrySchemaFields.NumberField({
@@ -299,35 +299,35 @@ export default class CharacterActorData extends TypeDataModel {
         }),
       }),
       itemsOrder: new FoundrySchemaFields.SchemaField({
-        languages: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        languages: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),
-        skills: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        skills: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),
-        injuries: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        injuries: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),
-        illnesses: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        illnesses: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),
-        mutations: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        mutations: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),
-        luggage: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        luggage: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),
-        projects: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        projects: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),
-        recipes: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.ObjectField(), {
+        recipes: new FoundrySchemaFields.ArrayField(new FoundrySchemaFields.StringField(), {
           nullable: false,
           initial: [],
         }),

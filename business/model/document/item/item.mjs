@@ -1,13 +1,15 @@
-import { ITEM_TYPES } from "../../const/item-types.mjs";
-import TransientSkill from "./skill/transient-skill.mjs";
+import { ITEM_TYPES } from "../../domain/const/item-types.mjs";
+import TransientBaseItem from "./transient-base-item.mjs";
 import TransientAsset from "./transient-asset.mjs";
 import TransientFateCard from "./transient-fate-card.mjs";
 import TransientHealthCondition from "./transient-health-condition.mjs";
 import TransientIllness from "./transient-illness.mjs";
 import TransientInjury from "./transient-injury.mjs";
-import TransientMomentumAction from "./transient-momentum-action.mjs";
+import TransientLanguage from "./transient-language.mjs";
 import TransientMutation from "./transient-mutation.mjs";
 import TransientProject from "./transient-project.mjs";
+import TransientRecipe from "./transient-recipe.mjs";
+import TransientSkill from "./transient-skill.mjs";
 import TransientTrait from "./transient-trait.mjs";
 
 /**
@@ -32,16 +34,17 @@ export class GameSystemItem extends Item {
    */
   static get SUB_TYPES() {
     return new Map([
-      [business.model.const.ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) }],
-      [business.model.const.ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
-      [business.model.const.ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
-      [business.model.const.ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
-      [business.model.const.ITEM_TYPES.MOMENTUM_ACTION, (document) => { return new TransientMomentumAction(document) }],
-      [business.model.const.ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
-      [business.model.const.ITEM_TYPES.PROJECT, (document) => { return new TransientProject(document) }],
-      [business.model.const.ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
-      [business.model.const.ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
-      [business.model.const.ITEM_TYPES.TRAIT, (document) => { return new TransientTrait(document) }],
+      [ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) }],
+      [ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
+      [ITEM_TYPES.HEALTH_CONDITION, (document) => { return new TransientHealthCondition(document) }],
+      [ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
+      [ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
+      [ITEM_TYPES.LANGUAGE, (document) => { return new TransientLanguage(document) }],
+      [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
+      [ITEM_TYPES.PROJECT, (document) => { return new TransientProject(document) }],
+      [ITEM_TYPES.RECIPE, (document) => { return new TransientRecipe(document) }],
+      [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
+      [ITEM_TYPES.TRAIT, (document) => { return new TransientTrait(document) }],
     ]);
   }
 
@@ -52,13 +55,6 @@ export class GameSystemItem extends Item {
    * @readonly
    */
   get defaultImg() { return this.getTransientObject().defaultImg; }
-
-  /**
-   * Chat message template path. 
-   * @type {String}
-   * @readonly
-   */
-  get chatMessageTemplate() { return this.getTransientObject().chatMessageTemplate; }
 
   /** @override */
   prepareData() {

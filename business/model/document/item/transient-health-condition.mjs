@@ -35,6 +35,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
  * 
  * @property {Number} current
  * @property {Number} limit

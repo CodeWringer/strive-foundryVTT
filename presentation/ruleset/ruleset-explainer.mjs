@@ -1,6 +1,6 @@
 import { StringUtil } from "../../common/util/string-utility.mjs"
 import { GameSystemActor } from "../../business/model/document/actor/actor.mjs"
-import TransientBaseCharacterActor from "../../business/model/document/actor/transient-base-character-actor.mjs"
+import TransientBaseCharacterActor from "../../business/model/document/actor/transient-character-actor.mjs"
 import TransientSkill from "../../business/model/document/item/skill/transient-skill.mjs"
 import { ATTRIBUTES } from "../../business/model/const/attributes.mjs"
 import Ruleset from "../../business/model/domain/ruleset.mjs"

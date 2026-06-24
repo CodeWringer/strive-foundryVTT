@@ -1,4 +1,6 @@
 import { common } from "../../../../common/_module.mjs";
+import Modifier from "../../domain/modifier.mjs";
+import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**
@@ -49,6 +51,7 @@ import TransientDocument from "../transient-document.mjs";
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
  */
 export default class TransientBaseItem extends TransientDocument {
   /** @override */
@@ -77,5 +80,15 @@ export default class TransientBaseItem extends TransientDocument {
    */
   get hasParent() {
     return common.util.validation.isDefined(this.owningDocument);
+  }
+
+  constructor(document) {
+    super(document);
+
+    this._modifiers = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: "system.modifiers",
+      dataClass: Modifier,
+    });
   }
 }

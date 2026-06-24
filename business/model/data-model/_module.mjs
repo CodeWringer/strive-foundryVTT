@@ -1,6 +1,7 @@
 import CharacterActorData from "./actor/character-actor-data.mjs";
 import PlainActorData from "./actor/plain-actor-data.mjs";
 import AssetItemData from "./item/asset-item-data.mjs";
+import BaseItemData from "./item/base-item-data.mjs";
 import FateCardItemData from "./item/fate-card-item-data.mjs";
 import HealthConditionItemData from "./item/health-condition-item-data.mjs";
 import IllnessItemData from "./item/illness-item-data.mjs";
@@ -14,6 +15,7 @@ import TraitItemData from "./item/trait-item-data.mjs";
 export {
   PlainActorData,
   CharacterActorData,
+  BaseItemData,
   AssetItemData,
   LanguageItemData,
   SkillItemData,
@@ -37,6 +39,7 @@ export const dataModel = {
     CharacterActorData: CharacterActorData,
   },
   item: {
+    BaseItemData: BaseItemData,
     AssetItemData: AssetItemData,
     LanguageItemData: LanguageItemData,
     SkillItemData: SkillItemData,

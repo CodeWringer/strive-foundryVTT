@@ -41,6 +41,7 @@ import { common } from "../../../../common/_module.mjs"
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
  * 
  * @property {Number} bulk
  * @property {Object} quantity

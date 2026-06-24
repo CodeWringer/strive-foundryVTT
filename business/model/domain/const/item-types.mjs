@@ -4,15 +4,20 @@
  * @constant
  */
 export const ITEM_TYPES = {
-  EXPERTISE: "expertise",
-  SKILL: "skill",
   ASSET: "item",
-  FATE_CARD: "fate-card",
+  /**
+   * Expertises are only pseudo-items. They don't actually have their own 
+   * Item document instances. 
+   */
+  EXPERTISE: "expertise",
+  FATE_CARD: "fateCard",
+  HEALTH_CONDITION: "healthCondition",
   ILLNESS: "illness",
   INJURY: "injury",
-  MOMENTUM_ACTION: "momentum-action",
-  HEALTH_CONDITION: "health-condition",
+  LANGUAGE: "language",
   MUTATION: "mutation",
-  TRAIT: "trait",
   PROJECT: "project",
+  RECIPE: "recipe",
+  SKILL: "skill",
+  TRAIT: "trait",
 };

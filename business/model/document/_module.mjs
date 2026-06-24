@@ -1,7 +1,7 @@
 import TransientDocument from "./transient-document.mjs";
 import TransientBaseItem from "./item/transient-base-item.mjs";
 import TransientBaseActor from "./actor/transient-base-actor.mjs";
-import TransientBaseCharacterActor from "./actor/transient-base-character-actor.mjs";
+import TransientBaseCharacterActor from "./actor/transient-character-actor.mjs";
 import TransientNpc from "./actor/transient-npc.mjs";
 import TransientPc from "./actor/transient-pc.mjs";
 import TransientPlainActor from "./actor/transient-plain-actor.mjs";
@@ -17,7 +17,6 @@ import ExpertiseCreationStrategy from "./creation/expertise-creation-strategy.mj
 import InjuryCreationStrategy from "./creation/injury-creation-strategy.mjs";
 import RollableSpecificDocumentCreationStrategy from "./creation/rollable-specific-document-creation-strategy.mjs";
 import SpecificDocumentCreationStrategy from "./creation/specific-document-creation-strategy.mjs";
-import TransientSkill from "./item/skill/transient-skill.mjs";
 import Expertise from "../domain/skill/expertise.mjs";
 import TransientAsset from "./item/transient-asset.mjs";
 import TransientFateCard from "./item/transient-fate-card.mjs";
@@ -29,6 +28,9 @@ import TransientProject from "./item/transient-project.mjs";
 import TransientTrait from "./item/transient-trait.mjs";
 import DataFieldBridge from "./data-field-bridge.mjs";
 import ArrayDataFieldBridge from "./array-data-field-bridge.mjs";
+import TransientLanguage from "./item/transient-language.mjs";
+import TransientSkill from "./item/transient-skill.mjs";
+import TransientRecipe from "./item/transient-recipe.mjs";
 
 export {
   TransientDocument,
@@ -50,18 +52,20 @@ export {
   Expertise,
   GameSystemItem,
   TransientAsset,
+  TransientBaseActor,
+  TransientBaseCharacterActor,
   TransientFateCard,
   TransientHealthCondition,
   TransientIllness,
   TransientInjury,
+  TransientLanguage,
   TransientMutation,
-  TransientProject,
-  TransientTrait,
-  TransientBaseActor,
-  TransientBaseCharacterActor,
   TransientNpc,
   TransientPc,
   TransientPlainActor,
+  TransientProject,
+  TransientRecipe,
+  TransientTrait,
   GameSystemActor,
 };
 
@@ -102,17 +106,19 @@ export const document = {
     GameSystemActor: GameSystemActor,
   },
   item: {
-    TransientBaseItem: TransientBaseItem,
-    TransientSkill: TransientSkill,
     Expertise: Expertise,
     GameSystemItem: GameSystemItem,
     TransientAsset: TransientAsset,
+    TransientBaseItem: TransientBaseItem,
     TransientFateCard: TransientFateCard,
     TransientHealthCondition: TransientHealthCondition,
     TransientIllness: TransientIllness,
     TransientInjury: TransientInjury,
+    TransientLanguage: TransientLanguage,
     TransientMutation: TransientMutation,
     TransientProject: TransientProject,
+    TransientRecipe: TransientRecipe,
+    TransientSkill: TransientSkill,
     TransientTrait: TransientTrait,
   },
   init() {

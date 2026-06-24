@@ -39,6 +39,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
  * 
  * @property {IllnessState} state
  * @property {Object} treatment
