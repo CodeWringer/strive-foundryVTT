@@ -1,9 +1,9 @@
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
+import ButtonViewModel from "../button/button-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs"
 
 /**
  * @extends ViewModel

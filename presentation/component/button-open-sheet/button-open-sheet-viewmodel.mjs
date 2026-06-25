@@ -1,5 +1,5 @@
-import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**

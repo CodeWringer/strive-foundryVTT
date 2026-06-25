@@ -1,5 +1,5 @@
-import { StringUtil } from "../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { StringUtil } from "../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../keyboard/keyboard.mjs";
 import ViewModel from "../../view-model/view-model.mjs";

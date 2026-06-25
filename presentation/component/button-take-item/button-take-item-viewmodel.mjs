@@ -1,13 +1,13 @@
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import ChoiceOption from "../input-choice/choice-option.mjs";
-import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import TransientAsset from "../../../business/document/item/transient-asset.mjs";
-import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
-import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputToggleViewModel from "../input-toggle/input-toggle-viewmodel.mjs";
+import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs"
+import { ITEM_TYPES } from "../../../business/model/document/item/item-types.mjs"
+import TransientAsset from "../../../business/model/document/item/transient-asset.mjs"
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import ButtonViewModel from "../button/button-viewmodel.mjs"
+import ChoiceOption from "../input-choice/choice-option.mjs"
+import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputToggleViewModel from "../input-toggle/input-toggle-viewmodel.mjs"
 
 /**
  * @property {String} chatMessage

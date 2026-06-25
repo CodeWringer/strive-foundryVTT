@@ -1,0 +1,19 @@
+{{!--
+viewModel: GritPointsCombatTrackerViewModel
+cssClass: String | undefined
+--}}
+<div 
+  id="{{viewModel.id}}" 
+  class="combat-tracker-grit-points flex flex-row flex-wrap flex-gap-sm flex-middle sheet-block{{#if viewModel.shouldBeVisible}}{{else}} hidden{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}"
+  data-tooltip="COMBAT.GritPoints"
+  >
+  <a id="{{viewModel.id}}-grit-point-0" class="icon-with-centered-label" style="width: 26px; height: 26px;">
+    <span class="icon-with-centered-label-label">0</span>
+  </a>
+  {{#each viewModel.gritPoints as |gritPoint|}}
+  <a id="{{gritPoint.id}}" class="icon-with-centered-label {{#if gritPoint.active}}grit-point-full{{else}}grit-point-void{{/if}}">
+    <i class="ico {{#if gritPoint.active}}ico-grit-point-line{{else}}ico-grit-point-void-line{{/if}} icon-with-centered-label-image"></i>
+    <span class="icon-with-centered-label-label">{{gritPoint.value}}</span>
+  </a>
+  {{/each}}
+</div>

@@ -1,6 +1,6 @@
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import SendToChatHandler from "../../utility/send-to-chat-handler.mjs";
+import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
  * A button that allows sending a document or one of its properties to the chat. 

@@ -2,11 +2,11 @@
   "id": "strive",
   "title": "STRIVE",
   "description": "The STRIVE system for FoundryVTT",
-  "version": "1.18.1",
+  "version": "2.0.0",
   "compatibility": {
-    "minimum": 11,
-    "maximum": 12,
-    "verified": 12.343
+    "minimum": 14,
+    "maximum": 14,
+    "verified": 14.364
   },
   "authors": [
 		{
@@ -50,12 +50,6 @@
       "type": "Item"
     },
     {
-      "name": "momentum-actions",
-      "label": "Momentum Actions",
-      "path": "packs/momentum-actions",
-      "type": "Item"
-    },
-    {
       "name": "mutations",
       "label": "Mutations",
       "path": "packs/mutations",
@@ -77,7 +71,6 @@
         "fatecards",
         "health-conditions",
         "illnesses",
-        "momentum-actions",
         "mutations",
         "rolltables",
         "skills"
@@ -92,13 +85,107 @@
     }
   ],
   "grid": {
-    "distance": 3,
-    "units": "ft"
+    "distance": 1,
+    "units": "m"
   },
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
   "url": "https://github.com/CodeWringer/strive-foundryVTT",
   "manifest": "https://github.com/CodeWringer/strive-foundryVTT/releases/latest/download/system.json",
   "download": "https://github.com/CodeWringer/strive-foundryVTT/releases/latest/download/system.zip",
-  "license": "LICENSE"
+  "license": "LICENSE",
+  "documentTypes": {
+    "Actor": {
+      "plain": {
+        "htmlFields": [
+          "description",
+          "gmNotes"
+        ]
+      },
+      "character": {
+        "htmlFields": [
+          "personal.biography", 
+          "drivers.ambition",
+          "drivers.aspirations._0",
+          "drivers.aspirations._1",
+          "drivers.aspirations._2",
+          "drivers.reactions._0",
+          "drivers.reactions._1",
+          "drivers.reactions._2",
+          "gmNotes"
+        ],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      }
+    },
+    "Item": {
+      "asset": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "fateCard": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "healthCondition": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "illness": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "injury": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "language": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "mutation": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "project": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "recipe": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "skill": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      },
+      "trait": {
+        "htmlFields": ["description", "gmNotes"],
+        "filePathFields": {
+          "img": ["IMAGE"]
+        }
+      }
+    }
+  }
 }

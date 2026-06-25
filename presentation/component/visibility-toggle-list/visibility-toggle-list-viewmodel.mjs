@@ -1,4 +1,4 @@
-import { HealthConditionVisibilityItem } from "../../dialog/settings/health-settings/health-settings-visibility-item.mjs";
+import { HealthConditionVisibilityItem } from "../../application/dialog/settings/health-settings/health-settings-visibility-item.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import VisibilityToggleListItemViewModel from "./visibility-toggle-list-item-viewmodel.mjs";
 

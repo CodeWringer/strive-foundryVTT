@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { AbstractListItemOrderDataSource } from "./abstract-list-item-order-datasource.mjs";
 
 /**

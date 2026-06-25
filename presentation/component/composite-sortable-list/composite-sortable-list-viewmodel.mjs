@@ -1,6 +1,6 @@
 import { Search, SEARCH_MODES } from "../../../business/search/search.mjs";
-import { StringUtil } from "../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { StringUtil } from "../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { TemplatedComponent } from "../../sheet/item/base/templated-component.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonContextMenuViewModel, { ContextMenuItem } from "../button-context-menu/button-context-menu-viewmodel.mjs";

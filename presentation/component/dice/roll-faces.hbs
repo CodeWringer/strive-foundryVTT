@@ -1,0 +1,11 @@
+{{!--
+faces: Array<Object>
+* cssClass: String
+* content: String
+cssClass: String | undefined
+--}}
+<div class="flex flex-row flex-wrap{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#each faces as | face |}}
+    <span class="{{face.cssClass}}">{{{face.content}}}</span>
+  {{/each}}
+</div>

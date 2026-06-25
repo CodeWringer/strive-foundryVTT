@@ -1,0 +1,14 @@
+import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
+
+/**
+ * @property {TransientMutation} document
+ */
+export default class MutationListItemViewModel extends BaseListItemViewModel {
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(MutationListItemViewModel));
+  }
+
+}
