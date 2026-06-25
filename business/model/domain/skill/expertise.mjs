@@ -415,15 +415,15 @@ export default class Expertise extends Persistable {
       return false;
     }
 
-    const safecopy = this.owningDocument.expertises.concat([]);
-    const index = safecopy.findIndex(it => it.id === this.id);
+    const safeParentExpertises = this.owningDocument.expertises.concat([]);
+    const index = safeParentExpertises.findIndex(it => it.id === this.id);
     if (index < 0) {
       game.strive.logger.logWarn("Not part of parent Skill's Expertises");
       return false;
     }
 
-    safecopy.splice(index, 1);
-    this.owningDocument.expertises = safecopy;
+    safeParentExpertises.splice(index, 1);
+    this.owningDocument.expertises = safeParentExpertises;
 
     return true;
   }
@@ -443,19 +443,19 @@ export default class Expertise extends Persistable {
       return;
     }
 
-    const safecopy = this.owningDocument.expertises.concat([]);
-    const index = safecopy.findIndex(it => it.id === this.id);
+    const safeParentExpertises = this.owningDocument.expertises.concat([]);
+    const index = safeParentExpertises.findIndex(it => it.id === this.id);
     if (index < 0) {
       game.strive.logger.logWarn("Not part of parent Skill's Expertises");
       return false;
     }
 
-    safecopy[index] = {
-      ...safecopy[index],
+    safeParentExpertises[index] = {
+      ...safeParentExpertises[index],
       ...delta,
     };
     // This causes the actual update through the parent Skill. 
-    this.owningDocument.expertises = safecopy;
+    this.owningDocument.expertises = safeParentExpertises;
   }
 
   /**

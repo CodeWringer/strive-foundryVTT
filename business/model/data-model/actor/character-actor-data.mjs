@@ -4,6 +4,7 @@ import AssetSlotField from "../../data-field/asset-slot-field.mjs"
 import CharacterAttributeField from "../../data-field/character-attribute-field.mjs"
 import DriverHistoryEntryField from "../../data-field/driver-history-entry-field.mjs"
 import InjuryShrugOffField from "../../data-field/injury-shrug-off-field.mjs"
+import ModifierField from "../../data-field/modifier-field.mjs"
 import PropertyLocationField from "../../data-field/property-location-field.mjs"
 import ReferenceField from "../../data-field/reference-field.mjs"
 
@@ -104,6 +105,10 @@ export default class CharacterActorData extends TypeDataModel {
             nullable: false,
             initial: [],
           }),
+        }),
+        isPlayerCharacter: new FoundrySchemaFields.BooleanField({
+          nullable: false,
+          initial: false,
         }),
       }),
       personals: new FoundrySchemaFields.SchemaField({
@@ -365,6 +370,12 @@ export default class CharacterActorData extends TypeDataModel {
           min: 0,
         }),
         history: new FoundrySchemaFields.ArrayField(new AdvancementHistoryEntryField(), {
+          nullable: false,
+          initial: [],
+        }),
+      }),
+      modifiers: new FoundrySchemaFields.SchemaField({
+        own: new FoundrySchemaFields.ArrayField(new ModifierField(), {
           nullable: false,
           initial: [],
         }),

@@ -82,6 +82,12 @@ export default class TransientBaseItem extends TransientDocument {
     return common.util.validation.isDefined(this.owningDocument);
   }
 
+  /**
+   * @type {Array<Modifier>}
+   */
+  get modifiers() { return this._modifiers.value; }
+  set modifiers(value) { this._modifiers.value = value; }
+
   constructor(document) {
     super(document);
 

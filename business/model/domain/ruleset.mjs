@@ -3,7 +3,7 @@ import { ITEM_TYPES } from "./const/item-types.mjs";
 import { ATTRIBUTE_TYPES } from "./const/attribute-types.mjs";
 import { ACTOR_TYPES } from "./const/actor-types.mjs";
 import { CharacterAttribute } from "./_module.mjs";
-import { TransientSkill } from "../document/_module.mjs";
+import { TransientBaseCharacterActor, TransientSkill } from "../document/_module.mjs";
 import { Attribute, ATTRIBUTES } from "./const/attributes.mjs";
 import { SkillRollSchema } from "./dice/ability-roll/skill-roll-schema.mjs";
 import { AttributeRollSchema } from "./dice/ability-roll/attribute-roll-schema.mjs";
@@ -12,6 +12,55 @@ import { AttributeRollSchema } from "./dice/ability-roll/attribute-roll-schema.m
  * Provides all the ruleset-specifics. 
  */
 export default class Ruleset {
+
+  /**
+   * Returns the *current* maximum HP of the given actor. 
+   * 
+   * @param {TransientBaseCharacterActor} character 
+   * @returns {Number}
+   * @static
+   */
+  static getCharacterMaximumHp(character) {
+    // TODO
+    // const unmodifiedHp = this.getUnmodifiedMaximumHp(actor);
+    // const hpReduction = this.getCharacterMaximumHpReduction(actor);
+
+    // return Math.max(this.getCharacterBaseHp(), (unmodifiedHp - hpReduction));
+  }
+
+  /**
+   * Returns the maximum stamina of the given actor. 
+   * 
+   * @param {TransientBaseCharacterActor} character 
+   * @returns {Number}
+   * @static
+   */
+  static getCharacterMaximumStamina(character) {
+    // TODO
+    // const base = 1;
+    // const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
+
+    // return base + parseInt(level);
+  }
+
+  /**
+   * @returns {Number}
+   * @static
+   */
+  static getCharacterMaximumDeathSaves() {
+    return 3;
+  }
+
+  /**
+   * @param {TransientBaseCharacterActor} character 
+   * @returns {Number}
+   * @static
+   */
+  static getCharacterMaximumBulk(character) {
+    const strAttr = character.attributes.find(it => it.name === ATTRIBUTES.strength.name);
+    return strAttr.level * 3;
+  }
+
   /**
    * Returns the advancement requirements for the given level of an attribute. 
    * 
@@ -144,48 +193,6 @@ export default class Ruleset {
   }
 
   /**
-   * Returns the *current* maximum HP of the given actor. 
-   * 
-   * @param {Actor} actor 
-   * 
-   * @returns {Number}
-   * 
-   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
-   */
-  getCharacterMaximumHp(actor) {
-    const type = actor.type.toLowerCase();
-    if (type !== ACTOR_TYPES.character) {
-      throw new Error("Only PC and NPC type actors supported");
-    }
-
-    const unmodifiedHp = this.getUnmodifiedMaximumHp(actor);
-    const hpReduction = this.getCharacterMaximumHpReduction(actor);
-
-    return Math.max(this.getCharacterBaseHp(), (unmodifiedHp - hpReduction));
-  }
-
-  /**
-   * Returns the exhaustion limit of the given actor. 
-   * 
-   * @param {Actor} actor 
-   * 
-   * @returns {Number}
-   * 
-   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
-   */
-  getCharacterMaximumExhaustion(actor) {
-    const type = actor.type.toLowerCase();
-    if (type !== ACTOR_TYPES.character) {
-      throw new Error("Only PC and NPC type actors supported");
-    }
-    
-    const base = 1;
-    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
-
-    return base + parseInt(level);
-  }
-  
-  /**
    * Returns the maximum inventory slot size of the given actor. 
    * 
    * @param {Actor} actor 
@@ -248,7 +255,7 @@ export default class Ruleset {
     const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
     return characterAttribute.level;
   }
-  
+
   /**
    * Returns the effective modified level of the given actor for the 
    * given attribute. 

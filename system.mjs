@@ -3,7 +3,6 @@ import { common } from "./common/_module.mjs";
 import { business } from "./business/_module.mjs";
 import { WorldSystemVersion } from "./business/migration/world-system-version.mjs";
 import { presentation } from "./presentation/_module.mjs";
-import { setting } from "./business/setting/_module.mjs";
 // Utility
 import VersionCode from "./business/migration/version-code.mjs";
 // Migration

@@ -78,7 +78,7 @@ export default class SkillItemData extends BaseItemData {
         nullable: false,
         initial: [],
       }),
-      innate: new FoundrySchemaFields.BooleanField({
+      isInnate: new FoundrySchemaFields.BooleanField({
         nullable: false,
         initial: false,
       }),

@@ -78,7 +78,7 @@ import { DataFieldBridge, ArrayDataFieldBridge, Expertise, TransientBaseItem } f
  * @property {Boolean} gradedEffects.enabled
  * @property {Array<GradedEffect>} gradedEffects.entries
  * @property {Array<MomentumAction>} momentumActions
- * @property {Boolean} innate
+ * @property {Boolean} isInnate
  * 
  * @extends TransientBaseItem
  */
@@ -252,8 +252,8 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * @type {Boolean}
    */
-  get innate() { return this._innate.value; }
-  set innate(value) { this._innate.value = value; }
+  get isInnate() { return this._isInnate.value; }
+  set isInnate(value) { this._isInnate.value = value; }
 
   /**
    * @param {Item} document An encapsulated item instance. 
@@ -371,9 +371,9 @@ export default class TransientSkill extends TransientBaseItem {
       dataPath: "system.momentumActions",
       dataClass: MomentumAction,
     });
-    this._innate = new DataFieldBridge({
+    this._isInnate = new DataFieldBridge({
       document: this,
-      dataPath: "system.innate",
+      dataPath: "system.isInnate",
       default: false,
     });
   }
