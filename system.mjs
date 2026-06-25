@@ -93,7 +93,10 @@ Hooks.once("ready", function () {
   presentation.ready();
 
   // Debug mode setting. 
-  game.strive.debug = business.setting.GameSystemSettings.get(business.setting.GameSystemUserSettings.KEY_TOGGLE_DEBUG);
+  game.strive.debug = new business.setting.GameSystemSetting({ 
+    key: business.setting.GameSystemUserSettings.KEY_TOGGLE_DEBUG, 
+    scope: business.setting.SETTING_SCOPES.USER, 
+  }).value;
 
   // Migration check. 
   const migrator = new MigratorInitiator();

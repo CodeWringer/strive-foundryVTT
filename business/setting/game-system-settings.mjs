@@ -2,6 +2,7 @@ import { common } from "../../common/_module.mjs";
 import { SYSTEM_ID } from "../../system-id.mjs";
 import GameSystemSettingDeclaration from "./game-system-setting-declaration.mjs";
 import GameSystemSetting from "./game-system-setting.mjs";
+import { SETTING_SCOPES } from "./setting-scopes.mjs";
 
 /**
  * Repository singleton through which game settings can be declared, 
@@ -30,13 +31,31 @@ export default class GameSystemSettings {
   static get SETTINGS_NAMESPACE() { return SYSTEM_ID; }
 
   /**
-   * A list of registered settings. 
+   * A list of registered world settings. 
    * 
-   * @type {Array<GameSystemSetting>}
+   * @type {Array<GameSystemSettingDeclaration>}
    * @protected
    * @static
    */
-  static _settings = [];
+  static _worldSettings = [];
+
+  /**
+   * A list of registered user settings. 
+   * 
+   * @type {Array<GameSystemSettingDeclaration>}
+   * @protected
+   * @static
+   */
+  static _userSettings = [];
+
+  /**
+   * A list of registered user setting templates. 
+   * 
+   * @type {Array<GameSystemSettingDeclaration>}
+   * @protected
+   * @static
+   */
+  static _userSettingTemplates = [];
 
   /**
    * Sets the value of the setting matching the given key. 
@@ -46,9 +65,10 @@ export default class GameSystemSettings {
    * @static
    */
   static set(key, value) {
-    game.settings.set(GameSystemSettings.SETTINGS_NAMESPACE, key, value); 
+    this._ensureSetting(key);
+    game.settings.set(GameSystemSettings.SETTINGS_NAMESPACE, key, value);
   }
-  
+
   /**
    * Returns the value of the setting matching the given key. 
    * 
@@ -57,21 +77,46 @@ export default class GameSystemSettings {
    * @static
    */
   static get(key) {
-    return game.settings.get(GameSystemSettings.SETTINGS_NAMESPACE, key); 
+    this._ensureSetting(key);
+    return game.settings.get(GameSystemSettings.SETTINGS_NAMESPACE, key);
   }
 
   /**
-   * Adds a new setting declaration, and silently fails, if it already exists. 
+   * Adds a new setting declaration, but ignores duplicates.
+   * 
    * @param {GameSystemSettingDeclaration} settingDeclaration 
+   * @returns {Boolean} `true`, if the setting declaration was added. 
    * @static
    */
   static addDeclaration(settingDeclaration) {
-    const setting = GameSystemSettings._settings.find(it => it.key === settingDeclaration.key);
-    if (common.util.validation.isDefined(setting)) return;
+    if (settingDeclaration.scope === SETTING_SCOPES.USER) {
+      const setting = GameSystemSettings._userSettingTemplates.find(it => it.key === settingDeclaration.key);
+      if (common.util.validation.isDefined(setting)) return false;
+      
+      GameSystemSettings._userSettingTemplates.push(settingDeclaration);
+    } else {
+      const setting = GameSystemSettings._worldSettings.find(it => it.key === settingDeclaration.key);
+      if (common.util.validation.isDefined(setting)) return false;
 
-    this._settings.push(settingDeclaration);
+      GameSystemSettings._worldSettings.push(settingDeclaration);
+    }
+    return true;
   }
-  
+
+  /**
+   * Returns the setting declaration by the given key. 
+   * 
+   * @param {String} key 
+   * @returns {GameSystemSettingDeclaration | undefined}
+   * @static
+   */
+  static getDeclaration(key) {
+    const allSettings = GameSystemSettings._worldSettings
+      .concat(GameSystemSettings._userSettingTemplates)
+      .concat(GameSystemSettings._userSettings);
+    return allSettings.find(it => it.key === key);
+  }
+
   /**
    * @summary
    * Ensures the setting whose key matches the given key, is registered. 
@@ -86,7 +131,10 @@ export default class GameSystemSettings {
    * @static
    */
   static _ensureSetting(key) {
-    const setting = GameSystemSettings._settings.find(it => it.key === key);
+    const allSettings = GameSystemSettings._worldSettings
+      .concat(GameSystemSettings._userSettingTemplates)
+      .concat(GameSystemSettings._userSettings);
+    const setting = allSettings.find(it => it.key === key);
 
     if (setting === undefined) {
       throw new Error(`Failed to get setting with key '${key}'`);
@@ -98,7 +146,7 @@ export default class GameSystemSettings {
       hint: setting.hint,
       scope: "world", // Hard-coded because all settings are to be persisted server-side.
       config: setting.config,
-      default: setting.default, 
+      default: setting.default,
       type: setting.type,
     });
 
@@ -122,7 +170,31 @@ export default class GameSystemSettings {
    * @static
    */
   static ready() {
-    for (const setting of GameSystemSettings._settings) {
+    // Ensure user specific setting declarations. 
+    // These are based on the template user setting declarations. 
+    // To avoid modifying the same collection we're reading from, 
+    // a cached version thereof is used. 
+    for (const setting of GameSystemSettings._userSettingTemplates) {
+      const newKey = `${game.userId}-${setting.key}`;
+      const newSettingDeclaration = new GameSystemSettingDeclaration({
+        key: newKey,
+        name: setting.name,
+        scope: setting.scope,
+        hint: setting.hint,
+        config: setting.config,
+        default: setting.default,
+        type: setting.type,
+        menu: setting.menu,
+        icon: setting.icon,
+        restricted: setting.restricted,
+      });
+      GameSystemSettings._userSettings.push(newSettingDeclaration);
+    }
+
+    for (const setting of GameSystemSettings._worldSettings) {
+      GameSystemSettings._ensureSetting(setting.key);
+    }
+    for (const setting of GameSystemSettings._userSettings) {
       GameSystemSettings._ensureSetting(setting.key);
     }
   }
