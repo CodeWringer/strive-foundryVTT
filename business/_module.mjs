@@ -28,6 +28,7 @@ export const business = {
   init: () => {
     model.init();
     setting.init();
+    migration.init();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 
