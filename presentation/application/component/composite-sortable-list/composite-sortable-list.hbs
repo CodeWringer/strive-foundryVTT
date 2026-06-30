@@ -1,0 +1,29 @@
+{{!-- Parameters:
+viewModel: {CompositeSortableListViewModel}
+cssClass: {undefined | String}
+--}}
+<section id="{{viewModel.id}}" class="auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Title --}}
+  <h1 class="strive-header flex flex-row flex-center {{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
+    <span class="flex-grow">{{viewModel.localizedTitle}}</span>
+    {{> buttonContextMenu viewModel=viewModel.vmContextMenu }}
+  </h1>
+  {{!-- Extra content --}}
+  {{#if viewModel.hasHeaderExtraContent}}
+  {{#with viewModel.headerExtraContent as |context|}}
+  {{#with context.template as |template|}}
+  {{> (template) viewModel=context.viewModel cssClass=context.cssClass }}
+  {{/with}}
+  {{/with}}
+  {{/if}}
+  {{!-- Search --}}
+  {{#if viewModel.isSearchable}}
+  {{> inputSearch viewModel=viewModel.vmSearch }}
+  {{/if}}
+  {{!-- Actual list --}}
+  {{> sortableList viewModel=viewModel.vmSortableList }}
+  {{!-- Footer --}}
+  {{#if viewModel.enableFooter}}
+  {{> listFooter viewModel=viewModel.vmFooter }}
+  {{/if}}
+</section>

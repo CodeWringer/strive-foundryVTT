@@ -6,10 +6,7 @@ import { font } from "./font/_module.mjs";
 import RulesetExplainer from "./ruleset/ruleset-explainer.mjs";
 import { sidebar } from "./application/sidebar/_module.mjs";
 import { TEMPLATES } from "./templates.mjs";
-import ViewModel from "./view-model/view-model.mjs";
-import ViewModelCollection from "./view-model/view-model-collection.mjs";
-import InputViewModel from "./view-model/input-view-model.mjs";
-import { component } from "./component/_module.mjs";
+import ChoiceOption from "./model/choice-option.mjs";
 
 export {
   application,
@@ -19,10 +16,7 @@ export {
   font,
   util,
   RulesetExplainer,
-  ViewModel,
-  ViewModelCollection,
-  InputViewModel,
-  component,
+  ChoiceOption,
 };
 
 /**
@@ -34,16 +28,13 @@ export const presentation = {
   TEMPLATES: TEMPLATES,
   util: util,
   font: font,
-  viewModel: {
-    ViewModel: ViewModel,
-    ViewModelCollection: ViewModelCollection,
-    InputViewModel: InputViewModel,
-  },
   application: application,
   canvas: canvas,
   sidebar: sidebar,
   RulesetExplainer: RulesetExplainer,
-  component: component,
+  model: {
+    ChoiceOption: ChoiceOption,
+  },
   /**
    * Initialization, which MUST be called during system setup!
    * 

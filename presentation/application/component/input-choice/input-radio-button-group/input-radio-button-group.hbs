@@ -1,0 +1,28 @@
+{{!-- Required context:
+viewModel: {InputRadioButtonGroupViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+<div 
+  type="hidden"
+  class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group{{#if cssClass}} {{cssClass}}{{/if}}" 
+  name="{{viewModel.id}}"
+  id="{{viewModel.id}}"
+  value="{{viewModel.value.value}}"
+>
+  {{#each viewModel._mappedOptions as |option|}}
+    <div class="radio-button-container flex flex-row flex-grow{{#if option.isActive}} active{{/if}}{{#if option.cssClass}} {{option.cssClass}}{{/if}}">
+      <label id="{{option.vm.id}}" class="flex flex-center flex-grow{{#if option.vm.isEditable}} interactible{{else}} custom-system-read-only disabled{{/if}}{{#if option.vm.showFancyFont}} fancy-font{{/if}}">
+      {{#if option.vm.isEditable}}
+        <input 
+          type="radio" 
+          class="radio-button" 
+          name="{{../viewModel.id}}-group" 
+          value="{{option.value}}"
+        />
+      {{/if}}
+      {{#if option.isActive}}{{{option.activeHtml}}}{{else}}{{{option.inactiveHtml}}}{{/if}}
+      </label>
+    </div>
+  {{/each}}
+</div>

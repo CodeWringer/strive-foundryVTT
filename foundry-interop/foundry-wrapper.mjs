@@ -1,5 +1,4 @@
 import { ValidationUtil } from "../common/util/validation-utility.mjs";
-import { ContextMenuItem } from "../presentation/component/button-context-menu/button-context-menu-viewmodel.mjs";
 
 /**
  * Serves as an integration limiter to FoundryVTTs functions. 

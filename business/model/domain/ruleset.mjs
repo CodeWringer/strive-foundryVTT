@@ -5,8 +5,6 @@ import { ACTOR_TYPES } from "./const/actor-types.mjs";
 import { CharacterAttribute } from "./_module.mjs";
 import { TransientBaseCharacterActor, TransientSkill } from "../document/_module.mjs";
 import { Attribute, ATTRIBUTES } from "./const/attributes.mjs";
-import { SkillRollSchema } from "./dice/ability-roll/skill-roll-schema.mjs";
-import { AttributeRollSchema } from "./dice/ability-roll/attribute-roll-schema.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -299,27 +297,5 @@ export default class Ruleset {
 
     const transientSkill = skill.getTransientObject();
     return transientSkill.modifiedLevel;
-  }
-
-  /**
-   * Returns the default skill roll schema. 
-   * 
-   * @param {Object | undefined} overrides Constructor overrides of the `SkillRollSchema` to return. 
-   * 
-   * @returns {SkillRollSchema}
-   */
-  getSkillRollSchema(overrides = {}) {
-    return new SkillRollSchema(overrides);
-  }
-
-  /**
-   * Returns the default skill roll schema. 
-   * 
-   * @param {Object | undefined} overrides Constructor overrides of the `AttributeRollSchema` to return. 
-   * 
-   * @returns {AttributeRollSchema}
-   */
-  getAttributeRollSchema(overrides = {}) {
-    return new AttributeRollSchema(overrides);
   }
 }

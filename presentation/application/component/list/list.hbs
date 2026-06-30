@@ -1,0 +1,19 @@
+{{!--
+viewModel: ListViewModel
+cssClass: String | undefined
+--}}
+<section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
+  <ul id="{{viewModel.id}}-ul" class="unstyled-list auto-margin-v">
+    {{#each viewModel.itemViewModels as |vm index|}}
+    {{#with ../viewModel.itemTemplate as |template|}}
+      {{> (template) viewModel=vm}}
+    {{/with}}
+    {{/each}}
+    {{#if viewModel.isItemAddable}}
+    {{/if}}
+  </ul>
+  {{!-- Add button --}}
+  <div class="fill flex flex-row flex-right{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
+    {{> button viewModel=viewModel.vmBtnAddItem }}
+  </div>
+</section>

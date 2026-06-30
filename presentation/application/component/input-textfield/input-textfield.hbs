@@ -1,0 +1,24 @@
+{{!-- Required context:
+viewModel: {InputTextFieldViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#if viewModel.isEditable}}
+  <input 
+    class="custom-system-edit input-width-override component-input-textfield {{cssClass}}"
+    type="text"
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+    placeholder="{{viewModel.placeholder}}"
+    value="{{viewModel.value}}"
+  />
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm border-solid-sm fill component-input-textfield {{readOnlyCssClass}}" 
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+  >
+    {{viewModel.localizedValue}}
+  </div>
+{{/if}}

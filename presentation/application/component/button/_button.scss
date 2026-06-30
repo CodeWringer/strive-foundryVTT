@@ -1,0 +1,49 @@
+.button {
+  padding: 0;
+  margin: 0;
+  min-height: $line-height;
+  min-width: $line-height;
+  border-radius: 3px;
+  border: 1px $c-border-medium solid;
+  background-color: $c-bg-medium;
+  display: flex;
+
+  &.light {
+    border-radius: unset;
+    border: unset;
+    background-color: unset;
+
+    &:hover {
+      border-color: unset;
+      background-color: unset;
+    }
+  }
+
+  &.disabled {
+    a.custom-system-button {
+      cursor: default;
+      background-color: unset;
+      color: black;
+      opacity: 50%;
+      text-shadow: unset;
+    }
+  }
+  
+  &.square {
+    aspect-ratio: 1/1;
+  }
+
+  &.fill {
+    display: block;
+  }
+
+  &.override {
+    min-width: unset;
+    min-height: unset;
+  }
+
+  &:hover {
+    border-color: $c-border-highlight-light;
+    background-color: $c-bg-lighter;
+  }
+}

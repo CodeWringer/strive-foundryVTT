@@ -1,0 +1,12 @@
+.component-input-textfield {
+  &.minimal-input {
+    border: none;
+    border-bottom: $border-size-sm solid;
+    border-radius: unset;
+    background-color: transparent;
+
+    &:focus, &:active {
+      box-shadow: unset;
+    }
+  }
+}

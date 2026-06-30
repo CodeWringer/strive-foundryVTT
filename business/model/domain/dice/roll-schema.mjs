@@ -1,5 +1,5 @@
 import { DynamicInputDefinition, DynamicInputDialog } from "../../../../presentation/application/_module.mjs"
-import InputDropDownViewModel from "../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputDropDownViewModel from "../../../../presentation/application/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import { TransientSkill } from "../../document/_module.mjs"
 import { VISIBILITY_MODES } from "../const/visibility-modes.mjs"
 import RollData from "./roll-data.mjs"

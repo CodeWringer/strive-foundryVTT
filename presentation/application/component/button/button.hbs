@@ -1,0 +1,15 @@
+{{!-- Required context:
+viewModel: {ButtonViewModel}
+cssClass: {String | undefined}
+square: {Boolean | undefined}
+fill: {Boolean | undefined}
+heavy: {Boolean | undefined}
+leftAlign: {Boolean | undefined}
+skipPadding: {Boolean | undefined}
+--}}
+<a class="custom-system-button auto-margin-h-sm button{{#if fill}} fill{{/if}}{{#if skipPadding}}{{else}} pad-sm{{/if}} flex flex-row{{#if leftAlign}} flex-middle{{else}} flex-center{{/if}}{{#if heavy}}{{else}} light{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}" 
+  id="{{viewModel.id}}"
+>
+  {{#if viewModel.content}}{{{viewModel.content}}}{{/if}}
+  {{#if @partial-block}}{{> @partial-block }}{{/if}}
+</a>

@@ -1,0 +1,5 @@
+{{!--
+viewModel: InputSliderViewModel
+cssClass: String | undefined
+--}}
+<input id="{{viewModel.id}}" type="range" min="{{viewModel.min}}" max="{{viewModel.max}}" step="{{viewModel.step}}" value="{{viewModel.value}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>

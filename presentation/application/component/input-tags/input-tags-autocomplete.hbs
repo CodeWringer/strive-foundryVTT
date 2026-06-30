@@ -1,0 +1,8 @@
+{{!--
+viewModel: ViewModel
+--}}
+<div class="flex flex-column">
+  {{#each viewModel.systemTagListItems as |systemTagListItem|}}
+  <span id="{{systemTagListItem.id}}" class="tag">{{systemTagListItem.localizedName}}</span>
+  {{/each}}
+</div>

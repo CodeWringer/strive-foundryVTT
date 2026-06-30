@@ -1,0 +1,25 @@
+{{!-- Required context:
+viewModel: SortableListViewModel
+cssClass: String | undefined
+--}}
+<ol id="{{viewModel.id}}" class="sortable-list unstyled-list auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
+  <li id="{{itemViewModelGroup.id}}" class="sortable-list-item flex flex-row shadow-sm">
+    {{!-- Sorting controls --}}
+    <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
+      {{> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false }}
+      {{!-- TODO #116: Implement the grab handle --}}
+      <div class="flex-grow"></div>
+      {{!-- <a 
+        class="grab-handle"
+        >
+        <i class="fas fa-grip-vertical"></i>
+      </a> --}}
+      {{> button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false }}
+    </div>
+    {{#with ../viewModel.listItemTemplate as | template |}}
+      {{> (template) viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
+    {{/with}}
+  </li>
+  {{/each}}
+</ol>

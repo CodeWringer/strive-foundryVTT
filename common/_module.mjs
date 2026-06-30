@@ -8,14 +8,12 @@ import ObservableCollection, { COLLECTION_CHANGE_TYPES } from "./observables/obs
 import ObservableField from "./observables/observable-field.mjs"
 import { EventEmitter } from "./event-emitter.mjs"
 import { ExtenderUtil } from "./util/extender-util.mjs"
-import { ChatUtil } from "./util/chat-utility.mjs"
 import { LOG_LEVELS } from "./logging/log-levels.mjs"
 import { ConsoleLogger } from "./logging/console-logger.mjs"
 import { CompareUtility } from "./util/compare-utility.mjs"
 
 export {
   ArrayUtil,
-  ChatUtil,
   COLLECTION_CHANGE_TYPES,
   ConstantsUtil,
   EventEmitter,
@@ -34,7 +32,6 @@ export {
 export const common = {
   util: {
     array: ArrayUtil,
-    chat: ChatUtil,
     constants: ConstantsUtil,
     extender: ExtenderUtil,
     property: PropertyUtil,

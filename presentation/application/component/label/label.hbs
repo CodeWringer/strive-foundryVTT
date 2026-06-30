@@ -1,0 +1,8 @@
+{{!-- Parameters:
+for: {String|undefined}
+cssClass: {undefined | String}
+showFancyFont: {Boolean | undefined}
+--}}
+<label class="flex flex-middle height-fill strive-label font-size-default{{#if showFancyFont}} fancy-font{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}"{{#if for}} for="{{for}}"{{/if}}>
+  <span class="width-fill">{{> @partial-block}}</span>
+</label>

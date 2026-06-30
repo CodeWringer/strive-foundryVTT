@@ -34,5 +34,5 @@ export const migration = {
   MIGRATORS: MIGRATORS,
   init: () => {
     MIGRATORS.init();
-  }
+  },
 };

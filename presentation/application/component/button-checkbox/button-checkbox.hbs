@@ -1,0 +1,18 @@
+{{!-- Required context:
+viewModel: {ButtonCheckBoxViewModel}
+cssClass: {String | undefined}
+--}}
+<label 
+  id="{{viewModel.id}}"
+  class="component-button-checkbox flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}"
+  >
+  <input 
+    class="custom-system-button" 
+    id="{{viewModel.id}}-button" 
+    type="checkbox" 
+    {{#if viewModel.value}}checked{{/if}}
+    >
+  <span class="flex flex-center{{#if viewModel.value}} checked{{/if}}" style="text-align: center;">
+    <i class="fas fa-check{{#if viewModel.value}}{{else}} hidden{{/if}}"></i>
+  </span>
+</label>

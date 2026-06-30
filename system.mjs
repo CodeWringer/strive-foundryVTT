@@ -7,8 +7,6 @@ import { presentation } from "./presentation/_module.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
-// View models
-import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -58,7 +56,7 @@ Hooks.once('init', function () {
      * An owner could be an {ActorSheet} or {ItemSheet}. 
      * @type {ViewModelCollection}
      */
-    viewModels: new ViewModelCollection(),
+    viewModels: new presentation.application.viewModel.ViewModelCollection(),
     /**
      * The global view states map. 
      * 
