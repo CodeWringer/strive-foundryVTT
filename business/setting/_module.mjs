@@ -6,14 +6,6 @@ import { GameSystemUserSettings } from "./game-system-user-settings.mjs";
 import { GameSystemWorldSettings } from "./game-system-world-settings.mjs";
 import { SETTING_SCOPES } from "./setting-scopes.mjs";
 
-export {
-  GameSystemSettingDeclaration,
-  GameSystemSettings,
-  GameSystemSetting,
-  GameSystemUserSettings,
-  GameSystemWorldSettings,
-};
-
 /**
  * Wraps the `business` module, which contains all the 
  * 

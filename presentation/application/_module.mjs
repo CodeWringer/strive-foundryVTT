@@ -10,19 +10,6 @@ import InputViewModel from "./view-model/input-view-model.mjs";
 import ViewModelCollection from "./view-model/view-model-collection.mjs";
 import ViewModel from "./view-model/view-model.mjs";
 
-export {
-  ViewModel,
-  ViewModelCollection,
-  InputViewModel,
-  component,
-  DynamicInputDefinition,
-  DynamicInputDialogViewModel,
-  DynamicInputDialog,
-  BaseSheetViewModel,
-  LanguageItemSheet,
-  Tooltip,
-};
-
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
  * dialogs and sheets. 

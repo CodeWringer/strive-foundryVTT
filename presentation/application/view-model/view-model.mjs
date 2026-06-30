@@ -1,6 +1,6 @@
 import { GameSystemUserSettings } from "../../../business/setting/game-system-user-settings.mjs";
 import { common } from "../../../common/_module.mjs";
-import { Tooltip } from "../_module.mjs";
+import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
  * @summary

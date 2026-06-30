@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../../common/_module.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**

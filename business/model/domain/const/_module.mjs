@@ -16,38 +16,6 @@ import { SHIELD_TYPES, ShieldType } from "./shield-types.mjs";
 import { TIME_UNITS, TimeUnit } from "./time-units.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
 
-export {
-  ITEM_TYPES,
-  ACTOR_TYPES,
-  ArmorType,
-  ARMOR_TYPES,
-  TimeUnit,
-  TIME_UNITS,
-  AttackType,
-  ATTACK_TYPES,
-  AttributeType,
-  ATTRIBUTE_TYPES,
-  Attribute,
-  ATTRIBUTES,
-  CharacterTestType,
-  CHARACTER_TEST_TYPES,
-  DamageType,
-  DAMAGE_TYPES,
-  IllnessState,
-  ILLNESS_STATES,
-  InjuryShrugOffState,
-  INJURY_SHRUG_OFF_STATES,
-  InjuryState,
-  INJURY_STATES,
-  ShieldType,
-  SHIELD_TYPES,
-  VisibilityMode,
-  VISIBILITY_MODES,
-  LanguageGrade,
-  LANGUAGE_GRADES,
-  ComparisonType,
-};
-
 /**
  * Wraps the `business.model.const` module.
  */

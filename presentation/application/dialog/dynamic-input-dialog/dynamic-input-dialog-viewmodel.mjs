@@ -1,7 +1,8 @@
-import { ValidationUtil } from "../../../../common/_module.mjs"
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { KEY_CODES, KEYBOARD } from "../../../util/_module.mjs"
-import { ViewModel } from "../../_module.mjs"
+import { KEY_CODES } from "../../../util/keyboard/key-codes.mjs"
+import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
 import ConfirmableModalDialog from "../confirmable-modal-dialog/confirmable-modal-dialog.mjs"
 import DynamicInputDefinition from "./dynamic-input-definition.mjs"
 

@@ -1,6 +1,7 @@
 import { common } from "../../../../common/_module.mjs"
 import { GameSystemWorldSettings } from "../../../setting/game-system-world-settings.mjs"
-import { DocumentFetcher, DocumentUpdater } from "../../document/_module.mjs"
+import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
+import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../document/general-document-types.mjs"
 
 /**

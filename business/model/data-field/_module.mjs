@@ -14,24 +14,6 @@ import PropertyLocationField from "./property-location-field.mjs";
 import ReferenceField from "./reference-field.mjs";
 import TimeIncrementField from "./time-increment-field.mjs";
 
-export {
-  AssetSlotField,
-  CharacterAttributeField,
-  ComplicationField,
-  DamageAndTypeField,
-  ExpertiseField,
-  GradedEffectField,
-  HealthConditionEffectField,
-  InjuryShrugOffField,
-  ModifierField,
-  MomentumActionField,
-  ReferenceField,
-  TimeIncrementField,
-  PropertyLocationField,
-  AdvancementHistoryEntryField,
-  DriverHistoryEntryField,
-};
-
 export const dataField = {
   AssetSlotField: AssetSlotField,
   CharacterAttributeField: CharacterAttributeField,

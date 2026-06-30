@@ -4,14 +4,6 @@
 // import TokenExtensions from "./token-extensions.mjs";
 // import TokenHealthConditions from "./token-health-conditions.mjs";
 
-export {
-  // GameSystemTokenHud,
-  // TokenActionPoints,
-  // TokenExtender,
-  // TokenExtensions,
-  // TokenHealthConditions,
-};
-
 /**
  * Wraps the `presentation.canvas.token` module. 
  */

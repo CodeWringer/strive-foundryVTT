@@ -12,22 +12,6 @@ import RecipeItemData from "./item/recipe-item-data.mjs";
 import SkillItemData from "./item/skill-item-data.mjs";
 import TraitItemData from "./item/trait-item-data.mjs";
 
-export {
-  PlainActorData,
-  CharacterActorData,
-  BaseItemData,
-  AssetItemData,
-  LanguageItemData,
-  SkillItemData,
-  FateCardItemData,
-  IllnessItemData,
-  MutationItemData,
-  HealthConditionItemData,
-  TraitItemData,
-  ProjectItemData,
-  RecipeItemData,
-};
-
 /**
  * Wraps the data-model module. 
  * 

@@ -1,9 +1,6 @@
-import { GameSystemActor, TransientBaseCharacterActor, TransientSkill } from "../../business/model/document/_module.mjs"
-import { CharacterAttribute } from "../../business/model/domain/_module.mjs"
-import { ATTRIBUTES } from "../../business/model/domain/const/attributes.mjs"
-import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs"
-import Ruleset from "../../business/model/domain/ruleset.mjs"
 import { common } from "../../common/_module.mjs"
+import { business } from "../../business/_module.mjs";
+import Ruleset from "../../business/model/domain/ruleset.mjs"
 
 /**
  * Provides strings that explain derived values, based on the ruleset. 
@@ -22,6 +19,7 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForBaseInitiative(actor) {
+    const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
     const transientActor = actor.getTransientObject();
     const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
     const characterAwareness = transientActor.attributes.find(it => it.name === ATTRIBUTES.awareness.name);
@@ -46,6 +44,7 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForSprintingSpeed(actor) {
+    const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
     const transientActor = actor.getTransientObject();
     const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
     const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
@@ -67,6 +66,7 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForStability(actor) {
+    const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
     const transientActor = actor.getTransientObject();
     const characterStrength = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
     const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
@@ -116,6 +116,8 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForMaxHp(actor) {
+    const ITEM_TYPES = business.model.domain.const.ITEM_TYPES;
+    const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
     const transientActor = actor.getTransientObject();
 
     const baseHp = this._ruleset.getCharacterBaseHp();
@@ -145,6 +147,7 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForMaxExhaustion(actor) {
+    const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
     const transientActor = actor.getTransientObject();
 
     const rawLevel = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
@@ -166,6 +169,7 @@ export default class RulesetExplainer {
    * @returns {String}
    */
   getExplanationForMaxLuggage(actor) {
+    const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
     const level = this._ruleset.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
     return common.util.string.format2(
       game.i18n.localize("system.rules.maxLuggage"),

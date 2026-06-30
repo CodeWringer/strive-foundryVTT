@@ -11,12 +11,6 @@ import DocumentFetcher from "./document-fetcher/document-fetcher.mjs";
 import { DocumentIndex } from "./document-fetcher/document-index.mjs";
 import BulkDevDocumentUpdater from "./document-updater/bulk-dev-document-updater.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
-// import DocumentCreationStrategy from "./creation/document-creation-strategy.mjs";
-// import ExpertiseCreationStrategy from "./creation/expertise-creation-strategy.mjs";
-// import InjuryCreationStrategy from "./creation/injury-creation-strategy.mjs";
-// import RollableSpecificDocumentCreationStrategy from "./creation/rollable-specific-document-creation-strategy.mjs";
-// import SpecificDocumentCreationStrategy from "./creation/specific-document-creation-strategy.mjs";
-import Expertise from "../domain/skill/expertise.mjs";
 import TransientAsset from "./item/transient-asset.mjs";
 import TransientFateCard from "./item/transient-fate-card.mjs";
 import TransientHealthCondition from "./item/transient-health-condition.mjs";
@@ -32,43 +26,6 @@ import TransientSkill from "./item/transient-skill.mjs";
 import TransientRecipe from "./item/transient-recipe.mjs";
 import ModifiableDataFieldBridge from "./modifiable-data-field-bridge.mjs";
 import TransientCharacterActor from "./actor/transient-character-actor.mjs";
-
-export {
-  TransientDocument,
-  DataFieldBridge,
-  ArrayDataFieldBridge,
-  ModifiableDataFieldBridge,
-  DOCUMENT_COLLECTION_SOURCES,
-  DocumentCollectionSource,
-  DocumentIndex,
-  DocumentFetcher,
-  BulkDevDocumentUpdater,
-  // DocumentCreationStrategy,
-  // ExpertiseCreationStrategy,
-  // InjuryCreationStrategy,
-  // RollableSpecificDocumentCreationStrategy,
-  // SpecificDocumentCreationStrategy,
-  DocumentUpdater,
-  TransientBaseItem,
-  TransientSkill,
-  Expertise,
-  GameSystemItem,
-  TransientAsset,
-  TransientBaseActor,
-  TransientBaseCharacterActor,
-  TransientFateCard,
-  TransientHealthCondition,
-  TransientIllness,
-  TransientInjury,
-  TransientLanguage,
-  TransientMutation,
-  TransientPlainActor,
-  TransientCharacterActor,
-  TransientProject,
-  TransientRecipe,
-  TransientTrait,
-  GameSystemActor,
-};
 
 /**
  * Wraps the `business.model.document` module, which contains all the transient 
@@ -92,13 +49,6 @@ export const document = {
     BulkDevDocumentUpdater: BulkDevDocumentUpdater,
     DocumentUpdater: DocumentUpdater,
   },
-  creation: {
-    // DocumentCreationStrategy: DocumentCreationStrategy,
-    // ExpertiseCreationStrategy: ExpertiseCreationStrategy,
-    // InjuryCreationStrategy: InjuryCreationStrategy,
-    // RollableSpecificDocumentCreationStrategy: RollableSpecificDocumentCreationStrategy,
-    // SpecificDocumentCreationStrategy: SpecificDocumentCreationStrategy,
-  },
   actor: {
     TransientBaseActor: TransientBaseActor,
     TransientBaseCharacterActor: TransientBaseCharacterActor,
@@ -107,7 +57,6 @@ export const document = {
     GameSystemActor: GameSystemActor,
   },
   item: {
-    Expertise: Expertise,
     GameSystemItem: GameSystemItem,
     TransientAsset: TransientAsset,
     TransientBaseItem: TransientBaseItem,

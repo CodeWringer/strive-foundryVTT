@@ -1,5 +1,6 @@
-import { Complication, Reference } from "../../domain/_module.mjs";
+import Complication from "../../domain/complication/complication.mjs";
 import { TIME_UNITS } from "../../domain/const/time-units.mjs";
+import Reference from "../../domain/reference.mjs";
 import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"

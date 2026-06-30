@@ -1,5 +1,5 @@
-import { ValidationUtil } from "../../../../common/_module.mjs";
-import { ViewModel } from "../../_module.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 
 /**
  * Constant that defines the css class to look for when identifying button elements. 

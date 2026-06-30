@@ -5,6 +5,7 @@ import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import { Sum, SumComponent } from "../summed-data.mjs";
 import RollFormulaResolver from "./roll-formula-resolver.mjs";
 import { RollInputData, RollResult, RollStepData } from "./roll-result.mjs";
+import ResolvedObstacle from "./resolved-obstacle.mjs";
 
 /**
  * @property {Number} dieFaces The number of faces on a die. 
@@ -321,31 +322,5 @@ export default class RollData {
       misses: misses.sort().reverse(),
       blankCount: blankCount,
     }
-  }
-}
-
-/**
- * Represents a resolved obstacle formula. 
- * 
- * @property {String} obFormula 
- * @property {String} resolvedObFormula 
- * @property {Number} ob 
- * @property {Boolean} isPlainNumber 
- */
-export class ResolvedObstacle {
-  /**
-   * @param {Object} args 
-   * @param {String} args.obFormula 
-   * @param {String} args.resolvedObFormula 
-   * @param {Number} args.ob 
-   * @param {Boolean} args.isPlainNumber 
-   */
-  constructor(args = {}) {
-    common.util.validation.validateOrThrow(args, ["obFormula", "resolvedObFormula", "ob", "isPlainNumber"]);
-
-    this.obFormula = args.obFormula;
-    this.resolvedObFormula = args.resolvedObFormula;
-    this.ob = args.ob;
-    this.isPlainNumber = args.isPlainNumber;
   }
 }

@@ -2,9 +2,9 @@ import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { ITEM_TYPES } from "./const/item-types.mjs";
 import { ATTRIBUTE_TYPES } from "./const/attribute-types.mjs";
 import { ACTOR_TYPES } from "./const/actor-types.mjs";
-import { CharacterAttribute } from "./_module.mjs";
-import { TransientBaseCharacterActor, TransientSkill } from "../document/_module.mjs";
 import { Attribute, ATTRIBUTES } from "./const/attributes.mjs";
+import CharacterAttribute from "./attribute/character-attribute.mjs";
+// Do not import TransientBaseCharacterActor, TransientSkill
 
 /**
  * Provides all the ruleset-specifics. 

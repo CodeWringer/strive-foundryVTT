@@ -1,5 +1,5 @@
 import { common } from "../../../common/_module.mjs";
-import TransientDocument from "./transient-document.mjs";
+// Do not import TransientDocument
 
 /**
  * For use in `TransientDocument`s, provides access to a document's 

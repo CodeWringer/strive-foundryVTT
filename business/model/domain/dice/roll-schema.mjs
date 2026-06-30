@@ -1,7 +1,4 @@
-import { DynamicInputDefinition, DynamicInputDialog } from "../../../../presentation/application/_module.mjs"
-import InputDropDownViewModel from "../../../../presentation/application/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
-import { TransientSkill } from "../../document/_module.mjs"
-import { VISIBILITY_MODES } from "../const/visibility-modes.mjs"
+import DynamicInputDialog from "../../../../presentation/application/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import RollData from "./roll-data.mjs"
 import RollQueryData from "./roll-query-data.mjs"
 
@@ -105,18 +102,18 @@ export class RollSchema {
     const dialog = new DynamicInputDialog({
       localizedTitle: game.i18n.localize("system.roll.query"),
       inputDefinitions: [
-        new DynamicInputDefinition({
-          name: this._nameInputVisibility,
-          template: InputDropDownViewModel.TEMPLATE,
-          viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
-            id: id,
-            parent: parent,
-            value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
-            options: VISIBILITY_MODES.asChoices(),
-            ...overrides,
-          }),
-          localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
-        }),
+        // new DynamicInputDefinition({
+        //   name: this._nameInputVisibility,
+        //   template: InputDropDownViewModel.TEMPLATE,
+        //   viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
+        //     id: id,
+        //     parent: parent,
+        //     value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+        //     options: VISIBILITY_MODES.asChoices(),
+        //     ...overrides,
+        //   }),
+        //   localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
+        // }),
       ],
     });
 
@@ -127,7 +124,7 @@ export class RollSchema {
    * Returns a sum of dice components representing all possible combinations 
    * a user may choose from when rolling. 
    * 
-   * @param {TransientSkill} document 
+   * @param {TransientDocument} document 
    * 
    * @returns {Array<Sum>}
    */
@@ -138,7 +135,7 @@ export class RollSchema {
   /**
    * Returns an explanation of how the dice availabilites came to be. 
    * 
-   * @param {TransientSkill} document 
+   * @param {TransientDocument} document 
    * 
    * @returns {String}
    */
@@ -152,7 +149,7 @@ export class RollSchema {
    * @param {Any} document 
    * @param {DynamicInputDialog} dialog The dialog to extend with required inputs. 
    * 
-   * @returns {RollQueryData | undefined} The queried roll data or undefined, 
+   * @returns {Promise<RollQueryData | undefined>} The queried roll data or undefined, 
    * if the user canceled. 
    * 
    * @protected

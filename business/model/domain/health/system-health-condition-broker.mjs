@@ -1,4 +1,5 @@
-import { DOCUMENT_COLLECTION_SOURCES, DocumentFetcher, TransientHealthCondition } from "../../document/_module.mjs"
+import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
+import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../document/general-document-types.mjs"
 import { ITEM_TYPES } from "../const/item-types.mjs"
 

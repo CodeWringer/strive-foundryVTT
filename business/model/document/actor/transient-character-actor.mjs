@@ -1,10 +1,25 @@
 import { common } from "../../../../common/_module.mjs";
 import AtReferencer from "../../../search/at-referencer.mjs"
-import { AdvancementHistoryEntry, AssetSlot, CharacterAttribute, DriverHistoryEntry, InjuryShrugOff, Modifier, PropertyLocation, Reference, Ruleset } from "../../domain/_module.mjs";
+import AdvancementHistoryEntry from "../../domain/advancement-history-entry.mjs";
+import AssetSlot from "../../domain/asset/asset-slot.mjs";
+import PropertyLocation from "../../domain/asset/property-location.mjs";
+import CharacterAttribute from "../../domain/attribute/character-attribute.mjs";
 import { ITEM_TYPES } from "../../domain/const/item-types.mjs";
-import { TransientAsset, TransientHealthCondition, TransientIllness, TransientInjury, TransientMutation, TransientRecipe, TransientSkill, TransientTrait } from "../_module.mjs";
+import DriverHistoryEntry from "../../domain/driver-history-entry.mjs";
+import InjuryShrugOff from "../../domain/health/injury-shrug-off.mjs";
+import Modifier from "../../domain/modifier.mjs";
+import Reference from "../../domain/reference.mjs";
+import Ruleset from "../../domain/ruleset.mjs";
 import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
+import TransientAsset from "../item/transient-asset.mjs";
+import TransientHealthCondition from "../item/transient-health-condition.mjs";
+import TransientIllness from "../item/transient-illness.mjs";
+import TransientInjury from "../item/transient-injury.mjs";
+import TransientMutation from "../item/transient-mutation.mjs";
+import TransientRecipe from "../item/transient-recipe.mjs";
+import TransientSkill from "../item/transient-skill.mjs";
+import TransientTrait from "../item/transient-trait.mjs";
 import TransientBaseActor from "./transient-base-actor.mjs"
 
 /**

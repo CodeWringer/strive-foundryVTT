@@ -2,12 +2,6 @@ import PixiButton from "./pixi-button.mjs";
 import { PIXI_GLOBALS } from "./pixi-globals.mjs";
 import { PixiLoader } from "./pixi-preloader.mjs";
 
-export {
-  PixiButton,
-  PIXI_GLOBALS,
-  PixiLoader,
-};
-
 /**
  * Wraps the `presentation.canvas.pixi`, which contains all pixi related classes. 
  */

@@ -1,9 +1,5 @@
 import { combat } from "./combat/_module.mjs";
 
-export {
-  combat,
-};
-
 /**
  * Wraps the `presentation.sidebar` module. 
  */

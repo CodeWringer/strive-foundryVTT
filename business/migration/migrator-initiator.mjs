@@ -104,7 +104,7 @@ export default class MigratorInitiator {
    * @private
    */
   _getMigrators() {
-    const migrators = MIGRATORS.list.sort((a, b) => {
+    const migrators = MIGRATORS.sort((a, b) => {
       // Compare target version. 
       // Smaller versions result in -1, meaning they appear earlier in the list. 
       // This way, lower "from" version numbers are preferred over higher ones. 

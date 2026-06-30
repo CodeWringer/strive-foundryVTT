@@ -1,6 +1,6 @@
 import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs"
 import { VISIBILITY_MODES, VisibilityMode } from "../../business/model/domain/const/visibility-modes.mjs"
-import { PropertyUtil, ValidationUtil } from "../../common/_module.mjs"
+import { common } from "../../common/_module.mjs"
 import { activateRollChatMessageListeners } from "../application/component/dice/roll-chat-message.mjs"
 import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs"
 
@@ -33,7 +33,7 @@ export const ChatUtil = {
    * @returns {Promise<any>}
    */
   sendToChat: async function (chatData = {}) {
-    ValidationUtil.validateOrThrow(chatData, ["renderedContent"])
+    common.util.validation.validateOrThrow(chatData, ["renderedContent"])
 
     const sound = chatData.sound ?? SOUNDS_CONSTANTS.NOTIFY;
     const visibilityMode = chatData.visibilityMode ?? VISIBILITY_MODES.public;
@@ -82,11 +82,11 @@ export const ChatUtil = {
    * @async
    */
   sendPropertyToChat: async function (args = {}) {
-    ValidationUtil.validateOrThrow(args, ["obj", "propertyPath", "parent"]);
+    common.util.validation.validateOrThrow(args, ["obj", "propertyPath", "parent"]);
 
     const visibilityMode = args.visibilityMode ?? VISIBILITY_MODES.public;
 
-    const prop = PropertyUtil.getNestedPropertyValue(args.obj, args.propertyPath);
+    const prop = common.util.property.getNestedPropertyValue(args.obj, args.propertyPath);
     if (prop.type !== undefined) {
       if (prop.type === ITEM_TYPES.expertise) {
         await prop.sendToChat({
@@ -130,7 +130,7 @@ export const ChatUtil = {
 
     let viewModel = game.strive.viewModels.get(vmId);
 
-    if (ValidationUtil.isDefined(documentId)) {
+    if (common.util.validation.isDefined(documentId)) {
       const document = await new DocumentFetcher().find({
         id: documentId,
         searchEmbedded: true,
@@ -154,7 +154,7 @@ export const ChatUtil = {
           viewModel = document.getTransientObject().getChatViewModel({ id: vmId });
         }
       }
-    } else if (ValidationUtil.isDefined(viewModelClass)) {
+    } else if (common.util.validation.isDefined(viewModelClass)) {
       if (viewModel === undefined) {
         // Create new instance of a view model to associate with the chat message. 
         viewModel = new game.strive.classDef.viewModel.chat[viewModelClass]({

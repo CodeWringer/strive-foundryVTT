@@ -7,7 +7,7 @@ import { VISIBILITY_MODES } from "../const/visibility-modes.mjs"
 import { Sum } from "../summed-data.mjs"
 import { DICE_CONSTANTS } from "./dice-constants.mjs"
 import { DicePoolRollResultType } from "./dice-pool.mjs"
-import { ResolvedObstacle } from "./roll-data.mjs"
+import ResolvedObstacle from "./resolved-obstacle.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "./roll-dice-modifier-types.mjs"
 
 /**

@@ -7,17 +7,6 @@ import VersionCode from "./version-code.mjs";
 import { WorldSystemVersion } from "./world-system-version.mjs";
 import { MIGRATORS } from "./migrators.mjs";
 
-export {
-  AbstractMigrator,
-  EmptyMigrator,
-  MigratorInitiator,
-  VersionCode,
-  WorldSystemVersion,
-  Migrator_1_16_1__1_16_2,
-  Migrator_1_16_2__2_0_0,
-  MIGRATORS,
-};
-
 /**
  * Wraps the `business.migration` module.
  */
@@ -33,6 +22,7 @@ export const migration = {
   },
   MIGRATORS: MIGRATORS,
   init: () => {
-    MIGRATORS.init();
+    MIGRATORS.push(new Migrator_1_16_1__1_16_2());
+    MIGRATORS.push(new Migrator_1_16_2__2_0_0());
   },
 };

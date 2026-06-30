@@ -1,9 +1,5 @@
 import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
 
-export {
-  InputNumberSpinnerViewModel,
-};
-
 /**
  * Wraps the `presentation` module. 
  * 

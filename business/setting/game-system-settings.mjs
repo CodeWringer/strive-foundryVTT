@@ -1,7 +1,6 @@
 import { common } from "../../common/_module.mjs";
 import { SYSTEM_ID } from "../../system-id.mjs";
 import GameSystemSettingDeclaration from "./game-system-setting-declaration.mjs";
-import GameSystemSetting from "./game-system-setting.mjs";
 import { SETTING_SCOPES } from "./setting-scopes.mjs";
 
 /**

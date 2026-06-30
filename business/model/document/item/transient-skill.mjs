@@ -2,7 +2,10 @@ import AtReferencer from "../../../search/at-referencer.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import MomentumAction from "../../domain/momentum-action.mjs";
 import Reference from "../../domain/reference.mjs";
-import { DataFieldBridge, ArrayDataFieldBridge, Expertise, TransientBaseItem } from "../_module.mjs";
+import Expertise from "../../domain/skill/expertise.mjs";
+import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
+import DataFieldBridge from "../data-field-bridge.mjs";
+import TransientBaseItem from "./transient-base-item.mjs";
 
 /**
  * Represents the full transient data of a skill. 

@@ -3,13 +3,6 @@ import { model } from "./model/_module.mjs"
 import { search } from "./search/_module.mjs";
 import { setting } from "./setting/_module.mjs";
 
-export {
-  model,
-  migration,
-  setting,
-  search,
-};
-
 /**
  * Wraps the `business` module, which contains all the 
  * 

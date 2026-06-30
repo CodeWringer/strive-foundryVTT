@@ -1,4 +1,4 @@
-import { ValidationUtil } from "../../common/_module.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 
 /**
  * Represents a choice option for drop-downs, radio-buttons or check-boxes. 

@@ -3,7 +3,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
 import DataFieldBridge from "../data-field-bridge.mjs"
 import { common } from "../../../../common/_module.mjs"
 import { TIME_UNITS, TimeUnit } from "../../domain/const/time-units.mjs"
-import { AssetSlot } from "../../domain/_module.mjs"
+import AssetSlot from "../../domain/asset/asset-slot.mjs"
 
 /**
  * Represents the full transient data of an asset. 

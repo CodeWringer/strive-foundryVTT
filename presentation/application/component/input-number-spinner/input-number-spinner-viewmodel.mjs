@@ -1,6 +1,6 @@
 import { common } from "../../../../common/_module.mjs";
-import { presentation } from "../../../_module.mjs";
-import { InputViewModel } from "../../_module.mjs";
+import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
  * Represents a number-spinner input. 
@@ -56,7 +56,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
     // Update visuals. 
     this._suppressEvent = true;
-    presentation.util.sheet.setElementValue(this.element, newValue);
+    SheetUtil.setElementValue(this.element, newValue);
     this._suppressEvent = false;
 
     this.onChange(oldValue, this._value);

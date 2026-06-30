@@ -1,6 +1,6 @@
 import TransientDocument from "../transient-document.mjs";
-import { TransientBaseItem } from "../_module.mjs";
 import { common } from "../../../../common/_module.mjs";
+import TransientBaseItem from "../item/transient-base-item.mjs";
 
 /**
  * @summary

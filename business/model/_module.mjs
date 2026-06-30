@@ -3,13 +3,6 @@ import { dataModel } from "./data-model/_module.mjs";
 import { document } from "./document/_module.mjs";
 import { domain } from "./domain/_module.mjs";
 
-export {
-  dataField,
-  dataModel,
-  document,
-  domain,
-};
-
 /**
  * Wraps the `business.model` module, which contains all data models, both for the 
  * backend and for use in the frontend. 

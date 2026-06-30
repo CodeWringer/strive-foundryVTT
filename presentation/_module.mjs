@@ -8,17 +8,6 @@ import { sidebar } from "./application/sidebar/_module.mjs";
 import { TEMPLATES } from "./templates.mjs";
 import ChoiceOption from "./model/choice-option.mjs";
 
-export {
-  application,
-  TEMPLATES,
-  canvas,
-  sidebar,
-  font,
-  util,
-  RulesetExplainer,
-  ChoiceOption,
-};
-
 /**
  * Wraps the `presentation` module. 
  * 

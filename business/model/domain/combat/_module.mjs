@@ -1,11 +1,6 @@
 import GameSystemCombat from "./game-system-combat.mjs";
 import GameSystemCombatant from "./game-system-combatant.mjs";
 
-export {
-  GameSystemCombat,
-  GameSystemCombatant,
-};
-
 /**
  * Wraps the `business.model.domain.combat` module, for all combat model classes. 
  * 

@@ -1,6 +1,6 @@
-import { ValidationUtil } from "../../../../common/_module.mjs";
-import { ChoiceOption } from "../../../_module.mjs";
-import { InputViewModel } from "../../_module.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import ChoiceOption from "../../../model/choice-option.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
  * Represents the base type of choice inputs, such as a drop-down or radio-button-group. 

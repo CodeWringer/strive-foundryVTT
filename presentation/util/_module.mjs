@@ -7,17 +7,6 @@ import { KEYBOARD } from "./keyboard/keyboard.mjs";
 import { SheetUtil } from "./sheet-utility.mjs";
 // import SendToChatHandler from "./send-to-chat-handler.mjs";
 
-export {
-  KEY_CODES,
-  KEYBOARD,
-  ClipboardHandler,
-  DragDropHandler,
-  HANDLEBARS_GLOBALS,
-  SheetUtil,
-  ChatUtil,
-  // SendToChatHandler,
-};
-
 /**
  * Wraps the `presentation.util` module. 
  */
