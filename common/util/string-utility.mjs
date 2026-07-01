@@ -160,5 +160,14 @@ export const StringUtil = {
     return String(string).replace(/[&<>"'`=\/]/g, function (s) {
       return thiz._htmlSpecialCharactersEscapeMap[s];
     });
+  },
+
+  /**
+   * Returns the localized string identified by the given key. 
+   * @param {String} key Localization key.
+   * @returns {String} Localized string.
+   */
+  getLoca(key) {
+    return game.i18n.localize(key);
   }
 }

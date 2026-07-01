@@ -1,14 +1,30 @@
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { TEMPLATES } from "../../templates.mjs";
 import { BaseItemSheet } from "../base/sheet/base-item-sheet.mjs";
 import LanguageItemSheetViewModel from "./language-item-sheet-viewmodel.mjs";
 
 /**
- * @property {viewModel} viewModel
+ * @property {ViewModel} viewModel
+ * @property {HTMLElement} html The form element of the sheet. 
+ * * Read-only
+ * @property {HTMLElement} content The content element of the sheet. 
+ * * Read-only
+ * @property {Boolean} isEditMode
  * 
  * @extends BaseItemSheet
  */
 export class LanguageItemSheet extends BaseItemSheet {
   /** @override */
-  get title() { return "Language"; } // TODO #761 loca
+  get localizedDocumentType() {
+    return StringUtil.getLoca("system.item.language.language");
+  }
+
+  /** @override */
+  static PARTS = {
+    form: {
+      template: TEMPLATES.application.item.language.sheet,
+    },
+  }
 
   /** @override */
   createViewModel(document) {

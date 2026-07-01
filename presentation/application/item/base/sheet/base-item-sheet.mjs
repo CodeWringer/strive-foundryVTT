@@ -1,7 +1,7 @@
+import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
 import { SheetUtil } from "../../../../util/sheet-utility.mjs";
-import { TEMPLATES } from "../../../templates.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 
 /**
@@ -11,16 +11,22 @@ import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
  * * `static TABS`
  * * `static PARTS`
  * * `getViewModel()`
- * * `get title`
+ * * `get localizedDocumentType`
  * 
  * Inheritors MAY override:
  * * `_getTabsConfig()`
+ * * `get title`
  * 
- * @property {viewModel} viewModel
+ * @property {ViewModel} viewModel
  * @property {HTMLElement} html The form element of the sheet. 
  * * Read-only
  * @property {HTMLElement} content The content element of the sheet. 
  * * Read-only
+ * @property {String} title
+ * * Read-only
+ * @property {String} localizedDocumentType
+ * * Read-only
+ * @property {Boolean} isEditMode
  */
 export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
   /** @override */
@@ -36,7 +42,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   /** @override */
   static PARTS = {
     form: {
-      template: TEMPLATES.application.item.language.sheet,
+      template: undefined,
     },
   }
 
@@ -76,20 +82,36 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     this.contentElement[0].scrollTop = value;
   }
 
+  /** @override */
+  get title() {
+    let loca = this.localizedDocumentType;
+    if (this.isEditMode) {
+      loca = StringUtil.format(
+        StringUtil.getLoca("system.general.editingSheet"), 
+        loca,
+      );
+    }
+    return loca.toUpperCase();
+  }
+
   /**
-   * Returns the localized title of this sheet. 
-   * 
    * @type {String}
    * @override
    * @readonly
+   * @abstract
    */
-  get title() { throw new Error("Not implemented"); }
+  get localizedDocumentType() { throw new Error("Not implemented"); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
   get isOwner() { return ((this.actor ?? this.item) ?? {}).isOwner ?? false; }
+
+  constructor(document) {
+    super(document);
+    this.isEditMode = false;
+  }
 
   /**
    * @param {TransientDocument} document 
