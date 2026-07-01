@@ -83,7 +83,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    * @override
    * @readonly
    */
-  get title() { return "UNDEFINED"; }
+  get title() { throw new Error("Not implemented"); }
 
   /**
    * @type {Boolean}
@@ -99,6 +99,15 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    */
   createViewModel(document) {
     throw new Error("Not implemented");
+  }
+
+  /** @override */
+  async close() {
+    if (ValidationUtil.isDefined(this.viewModel)) {
+      this.viewModel.writeViewState();
+      this.viewModel.dispose();
+    }
+    return super.close();
   }
 
   /** 
@@ -120,15 +129,6 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     context.viewModel = this.viewModel;
 
     return context;
-  }
-
-  /** @override */
-  async close() {
-    if (ValidationUtil.isDefined(this.viewModel)) {
-      this.viewModel.writeViewState();
-      this.viewModel.dispose();
-    }
-    return super.close();
   }
 
   /** @override */

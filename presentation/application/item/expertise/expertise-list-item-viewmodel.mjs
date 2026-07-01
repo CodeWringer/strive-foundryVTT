@@ -15,8 +15,8 @@ import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
-import { DataFieldComponent } from "../base/datafield-component.mjs"
-import { TemplatedComponent } from "../base/templated-component.mjs"
+import { DataFieldComponent } from "../../datafield-component.mjs"
+import { TemplatedComponent } from "../../templated-component.mjs"
 
 /**
  * @property {Expertise} document 

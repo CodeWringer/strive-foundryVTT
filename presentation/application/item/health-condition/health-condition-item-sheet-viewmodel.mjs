@@ -2,7 +2,7 @@ import TransientHealthCondition from "../../../../business/model/document/item/t
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs"
-import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { DataFieldComponent } from "../../datafield-component.mjs"
 
 /**
  * @property {TransientHealthCondition} document

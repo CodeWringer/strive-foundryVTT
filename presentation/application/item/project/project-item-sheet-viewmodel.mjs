@@ -6,8 +6,8 @@ import InputTextFieldViewModel from "../../../component/input-textfield/input-te
 import ListViewModel from "../../../component/list/list-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
-import { TemplatedComponent } from "../base/templated-component.mjs";
+import { DataFieldComponent } from "../../datafield-component.mjs";
+import { TemplatedComponent } from "../../templated-component.mjs";
 import ProjectComplicationListItemViewModel from "./complication/project-complication-list-item-viewmodel.mjs";
 
 /**

@@ -1,7 +1,7 @@
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
-import { DataFieldComponent } from "../base/datafield-component.mjs";
+import { DataFieldComponent } from "../../datafield-component.mjs";
 
 /**
  * @property {TransientIllness} document 

@@ -1,15 +1,20 @@
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import { TEMPLATES } from "../../templates.mjs";
 import CharacterActorSheetViewModel from "./character-actor-sheet-viewmodel.mjs";
 
 /**
  * @property {viewModel} viewModel
+ * @property {HTMLElement} html The form element of the sheet. 
+ * * Read-only
+ * @property {HTMLElement} content The content element of the sheet. 
+ * * Read-only
  */
 export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ActorSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
     position: { width: 650, height: 720, },
-    classes: ["strive", "sheet", "item"],
+    classes: ["strive", "sheet", "actor"],
     tag: "form",
     window: {
       resizable: true,
@@ -25,7 +30,7 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
         { id: "health" },
         { id: "assets" },
         { id: "projects" },
-        { id: "gm"  }
+        { id: "gm" }
       ],
       initial: "abilities",
       labelPrefix: "SCENE.TABS.SHEET"
@@ -35,43 +40,46 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
   /** @override */
   static PARTS = {
     form: {
-      template: undefined,
-      gmNotes: {
-        template: TEMPLATES.COMPONENT_GM_NOTES,
+      template: TEMPLATES.application.actor.character,
+      abilities: {
+        template: TEMPLATES.application.actor.abilities,
       }
     },
   }
 
   /**
-   * Returns the content container. 
-   * 
-   * @type {JQuery | undefined}
+   * @type {HTMLElement}
+   * @private
+   */
+  #content = undefined
+  /**
+   * @type {HTMLElement}
    * @readonly
    */
-  get contentElement() {
-    if (ValidationUtil.isDefined(this._element) !== true) return undefined;
-
-    return this._element.find("section.window-content");
-  }
+  get content() { return this.#content; }
 
   /**
-   * Returns the content container's current scroll value. 
+   * @type {HTMLElement}
+   * @private
+   */
+  #html = undefined
+  /**
+   * @type {HTMLElement}
+   * @readonly
+   */
+  get html() { return this.#html; }
+
+  /**
+   * The content container's current scroll value. 
    * 
    * @type {Number | undefined}
    */
   get scrollValue() {
     if (ValidationUtil.isDefined(this.contentElement) !== true) return undefined;
-
     return this.contentElement[0].scrollTop;
   }
-  /**
-   * Sets the content container's current scroll value. 
-   * 
-   * @param {Number} value
-   */
   set scrollValue(value) {
     if (ValidationUtil.isDefined(this.contentElement) !== true) return;
-
     this.contentElement[0].scrollTop = value;
   }
 
@@ -82,13 +90,37 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
    * @override
    * @readonly
    */
-  get title() { return "UNDEFINED"; }
+  get title() { throw new Error("Not implemented"); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
   get isOwner() { return ((this.actor ?? this.item) ?? {}).isOwner ?? false; }
+
+  /**
+   * @param {TransientCharacterDocument} document 
+   * @returns {CharacterActorSheetViewModel}
+   */
+  createViewModel(document) {
+    return new CharacterActorSheetViewModel({
+      id: this.id,
+      document: document,
+      sheet: sheet,
+      isOwner: this.isOwner,
+      isEditable: this.isOwner,
+      isSendable: this.isOwner,
+    });
+  }
+
+  /** @override */
+  async close() {
+    if (ValidationUtil.isDefined(this.viewModel)) {
+      this.viewModel.writeViewState();
+      this.viewModel.dispose();
+    }
+    return super.close();
+  }
 
   /** 
    * Returns an object that represents sheet and enriched item data. 
@@ -104,7 +136,7 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
     SheetUtil.enrichData(context);
 
     // Ensure view model. 
-    this.viewModel = this.getViewModel(context, context.item, this);
+    this.viewModel = this.createViewModel(context, context.item, this);
     this.viewModel.readAllViewState();
     context.viewModel = this.viewModel;
 
@@ -112,46 +144,20 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
   }
 
   /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-    await this.viewModel.activateListeners(html);
-  }
-
-  /**
-   * @override
-   * @see https://foundryvtt.com/api/FormApplication.html#close
-   */
-  async close() {
-    if (this.viewModel !== undefined && this.viewModel !== null) {
-      this.viewModel.writeViewState();
-      this.viewModel.dispose();
-    }
-
-    return super.close();
+  _getHeaderControls() {
+    return super._getHeaderControls();
   }
 
   /** @override */
-  async _onDropItem(event, data) {
-    // Item sheets do not currently support drag and drop operations from compendium packs or the world collection. 
-  }
+  async _postRender(context, options) {
+    this.#html = context.viewModel.sheet.form;
+    this.#content = $(this.html).find("section.window-content");
 
-  /**
-   * @param {TransientDocument} document 
-   * @param {BaseItemSheet} sheet 
-   * @returns {BaseSheetViewModel}
-   * @protected
-   */
-  getViewModel(document, sheet) {
-    return new CharacterActorSheetViewModel({
-      id: this.id,
-      document: document,
-      sheet: sheet,
-      isOwner: this.isOwner,
-      isEditable: this.isOwner,
-      isSendable: this.isOwner,
-    });
-  }
+    await this.viewModel.activateListeners(this.#html);
 
+    return await super._postRender(context, options);
+  }
+  
   /** @override */
   _getTabsConfig(group) {
     let tabConfig = super._getTabsConfig();
@@ -162,10 +168,5 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
       label: "GM", // TODO #739 loca
     });
     return tabConfig;
-  }
-
-  /** @override */
-  _getHeaderButtons() {
-    return super._getHeaderButtons();
   }
 }

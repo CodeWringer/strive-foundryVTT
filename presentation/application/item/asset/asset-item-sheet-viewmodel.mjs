@@ -4,8 +4,8 @@ import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../compo
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs"
-import { DataFieldComponent } from "../base/datafield-component.mjs"
-import { TemplatedComponent } from "../base/templated-component.mjs"
+import { DataFieldComponent } from "../../datafield-component.mjs"
+import { TemplatedComponent } from "../../templated-component.mjs"
 
 /**
  * @property {TransientAsset} document 
