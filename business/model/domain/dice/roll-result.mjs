@@ -1,7 +1,7 @@
 import { common } from "../../../../common/_module.mjs"
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs"
-import { TEMPLATES } from "../../../../presentation/templates.mjs"
+import { TEMPLATES } from "../../../../presentation/application/templates.mjs"
 import { GameSystemUserSettings } from "../../../setting/game-system-user-settings.mjs"
 import { VISIBILITY_MODES } from "../const/visibility-modes.mjs"
 import { Sum } from "../summed-data.mjs"

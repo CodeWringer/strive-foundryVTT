@@ -380,6 +380,10 @@ export default class CharacterActorData extends TypeDataModel {
           initial: [],
         }),
       }),
+      isNpc: new FoundrySchemaFields.BooleanField({
+        nullable: false,
+        initial: false,
+      }),
     }
   }
 }

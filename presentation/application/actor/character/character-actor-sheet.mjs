@@ -1,56 +1,45 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import CharacterActorSheetViewModel from "./character-actor-sheet-viewmodel.mjs";
 
 /**
- * Abstract base Item sheet class. 
- * 
- * @abstract Inheritors MUST override:
- * * `static TABS`
- * * `static PARTS`
- * 
- * Inheritors MAY override:
- * * `_getTabsConfig()`
- * 
  * @property {viewModel} viewModel
  */
-export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
+export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ActorSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
-    position: { width: 420, height: 520, },
+    position: { width: 650, height: 720, },
     classes: ["strive", "sheet", "item"],
     tag: "form",
-    window: { 
-      resizable: true, 
+    window: {
+      resizable: true,
     },
   }
 
   /** @override */
   static TABS = {
     sheet: {
-      tabs: ["gmNotes"],
-      initial: "gmNotes",
-    },
-  }
+      tabs: [
+        { id: "abilities" },
+        { id: "personality" },
+        { id: "health" },
+        { id: "assets" },
+        { id: "projects" },
+        { id: "gm"  }
+      ],
+      initial: "abilities",
+      labelPrefix: "SCENE.TABS.SHEET"
+    }
+  };
 
   /** @override */
   static PARTS = {
     form: {
-      template: undefined, // TODO #739
+      template: undefined,
       gmNotes: {
-        template: undefined, // TODO #739
+        template: TEMPLATES.COMPONENT_GM_NOTES,
       }
     },
-  }
-
-  /** @override */
-  _getTabsConfig(group) {
-    const tabConfig = FoundryWrapper.deepClone(super._getTabsConfig());
-    tabConfig.tabs.push ({ 
-      id: "gmNotes",
-      group: "sheet",
-      label: "GM", // TODO #739 loca
-    });
-    return tabConfig;
   }
 
   /**
@@ -93,7 +82,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    * @override
    * @readonly
    */
-  get title() { return this.subType.getTitle(this.item); }
+  get title() { return "UNDEFINED"; }
 
   /**
    * @type {Boolean}
@@ -110,12 +99,12 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    * @returns {Object} The enriched context object. 
    * @override 
    */
-  getData() {
-    const context = super.getData();
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options)
     SheetUtil.enrichData(context);
 
     // Ensure view model. 
-    this.viewModel = this.subType.getViewModel(context, context.item, this);
+    this.viewModel = this.getViewModel(context, context.item, this);
     this.viewModel.readAllViewState();
     context.viewModel = this.viewModel;
 
@@ -125,8 +114,6 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
-
-    await this.subType.activateListeners(html);
     await this.viewModel.activateListeners(html);
   }
 
@@ -148,9 +135,37 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     // Item sheets do not currently support drag and drop operations from compendium packs or the world collection. 
   }
 
+  /**
+   * @param {TransientDocument} document 
+   * @param {BaseItemSheet} sheet 
+   * @returns {BaseSheetViewModel}
+   * @protected
+   */
+  getViewModel(document, sheet) {
+    return new CharacterActorSheetViewModel({
+      id: this.id,
+      document: document,
+      sheet: sheet,
+      isOwner: this.isOwner,
+      isEditable: this.isOwner,
+      isSendable: this.isOwner,
+    });
+  }
+
+  /** @override */
+  _getTabsConfig(group) {
+    let tabConfig = super._getTabsConfig();
+    tabConfig = FoundryWrapper.deepClone(tabConfig);
+    tabConfig.tabs.push({
+      id: "gmNotes",
+      group: "sheet",
+      label: "GM", // TODO #739 loca
+    });
+    return tabConfig;
+  }
+
   /** @override */
   _getHeaderButtons() {
-    const baseButtons = super._getHeaderButtons();
-    return this.subType.getHeaderButtons(this).concat(baseButtons);
+    return super._getHeaderButtons();
   }
 }

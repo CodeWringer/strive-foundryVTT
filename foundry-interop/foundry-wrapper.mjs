@@ -137,9 +137,10 @@ export default class FoundryWrapper {
    * @param {Array<String>} templateArray 
    * @returns {Promise<Any>}
    * 
+   * @static
    * @async
    */
-  async loadTemplates(templateArray) {
+  static async loadTemplates(templateArray) {
     return await foundry.applications.handlebars.loadTemplates(templateArray);
   }
 

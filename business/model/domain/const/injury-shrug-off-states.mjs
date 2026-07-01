@@ -1,4 +1,3 @@
-
 /**
  * Represents an injury shrug off state. 
  * 

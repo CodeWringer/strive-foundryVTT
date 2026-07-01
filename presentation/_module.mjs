@@ -5,7 +5,7 @@ import { canvas } from "./canvas/_module.mjs";
 import { font } from "./font/_module.mjs";
 import RulesetExplainer from "./ruleset/ruleset-explainer.mjs";
 import { sidebar } from "./application/sidebar/_module.mjs";
-import { TEMPLATES } from "./templates.mjs";
+import { TEMPLATES } from "./application/templates.mjs";
 import ChoiceOption from "./model/choice-option.mjs";
 
 /**
@@ -35,7 +35,6 @@ export const presentation = {
     canvas.init();
     sidebar.init();
     font.init();
-    await _preloadHandlebarsTemplates();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 
@@ -49,20 +48,4 @@ export const presentation = {
   ready: () => {
     util.ready();
   },
-};
-
-/**
- * Returns the pre-loaded Handlebars templates, for fast access when rendering. 
- * 
- * @return {Promise<Any>}
- * 
- * @async
- * @private
- */
- export async function _preloadHandlebarsTemplates() {
-  const templateArr = [];
-  for (const propertyName in TEMPLATES) {
-    templateArr.push(TEMPLATES[propertyName]);
-  }
-  return await new FoundryWrapper().loadTemplates(templateArr);
 };

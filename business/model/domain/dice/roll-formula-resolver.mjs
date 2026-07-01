@@ -1,6 +1,6 @@
 import { common } from "../../../../common/_module.mjs"
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
-import { TEMPLATES } from "../../../../presentation/templates.mjs"
+import { TEMPLATES } from "../../../../presentation/application/templates.mjs"
 import AtReferencer from "../../../search/at-referencer.mjs"
 import Ruleset from "../ruleset.mjs"
 import { DICE_CONSTANTS } from "./dice-constants.mjs"

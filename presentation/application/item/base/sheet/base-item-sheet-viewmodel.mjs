@@ -1,5 +1,5 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs";
+import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -8,9 +8,9 @@ import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-not
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
-import { CONTEXT_TYPES } from "../../context-types.mjs";
-import { DataFieldComponent } from "./datafield-component.mjs";
-import { TemplatedComponent } from "./templated-component.mjs";
+import { CONTEXT_TYPES } from "../../../context-types.mjs";
+import { DataFieldComponent } from "../datafield-component.mjs";
+import { TemplatedComponent } from "../templated-component.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 

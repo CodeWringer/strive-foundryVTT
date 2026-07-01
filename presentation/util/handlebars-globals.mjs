@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../templates.mjs";
+import { TEMPLATES } from "../application/templates.mjs";
 
 /**
  * Utility for registering Handlebars global helpers. 

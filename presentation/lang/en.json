@@ -16,6 +16,14 @@
   "COMBAT.ActionPoints": "Set Action Points",
   "COMBAT.GritPoints": "Set Grit Points",
   "COMBAT.SendGeneralActionsToChat": "Print general combat actions to chat",
+  "SCENE.TABS.SHEET": {
+    "abilities": "Abilities",
+    "personality": "Personality",
+    "health": "Health",
+    "assets": "Assets",
+    "projects": "Projects",
+    "gm": "GM"
+  },
   "system": {
     "migration": {
       "title": "Data Migration",
