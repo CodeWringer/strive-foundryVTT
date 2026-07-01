@@ -11,7 +11,7 @@ export class LanguageItemSheet extends BaseItemSheet {
   get title() { return "Language"; } // TODO #761 loca
 
   /** @override */
-  getViewModel(document) {
+  createViewModel(document) {
     return new LanguageItemSheetViewModel({
       id: this.id,
       document: document,

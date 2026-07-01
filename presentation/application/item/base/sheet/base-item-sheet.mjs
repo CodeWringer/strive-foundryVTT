@@ -17,6 +17,10 @@ import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
  * * `_getTabsConfig()`
  * 
  * @property {viewModel} viewModel
+ * @property {HTMLElement} html The form element of the sheet. 
+ * * Read-only
+ * @property {HTMLElement} content The content element of the sheet. 
+ * * Read-only
  */
 export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
   /** @override */
@@ -37,35 +41,38 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   }
 
   /**
-   * Returns the content container. 
-   * 
-   * @type {JQuery | undefined}
+   * @type {HTMLElement}
+   * @private
+   */
+  #content = undefined
+  /**
+   * @type {HTMLElement}
    * @readonly
    */
-  get contentElement() {
-    if (ValidationUtil.isDefined(this._element) !== true) return undefined;
-
-    return this._element.find("section.window-content");
-  }
+  get content() { return this.#content; }
 
   /**
-   * Returns the content container's current scroll value. 
+   * @type {HTMLElement}
+   * @private
+   */
+  #html = undefined
+  /**
+   * @type {HTMLElement}
+   * @readonly
+   */
+  get html() { return this.#html; }
+
+  /**
+   * The content container's current scroll value. 
    * 
    * @type {Number | undefined}
    */
   get scrollValue() {
     if (ValidationUtil.isDefined(this.contentElement) !== true) return undefined;
-
     return this.contentElement[0].scrollTop;
   }
-  /**
-   * Sets the content container's current scroll value. 
-   * 
-   * @param {Number} value
-   */
   set scrollValue(value) {
     if (ValidationUtil.isDefined(this.contentElement) !== true) return;
-
     this.contentElement[0].scrollTop = value;
   }
 
@@ -84,6 +91,16 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    */
   get isOwner() { return ((this.actor ?? this.item) ?? {}).isOwner ?? false; }
 
+  /**
+   * @param {TransientDocument} document 
+   * @returns {BaseSheetViewModel}
+   * 
+   * @abstract
+   */
+  createViewModel(document) {
+    throw new Error("Not implemented");
+  }
+
   /** 
    * Returns an object that represents sheet and enriched item data. 
    * 
@@ -98,7 +115,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     SheetUtil.enrichData(context);
 
     // Ensure view model. 
-    this.viewModel = this.getViewModel(context, context.item, this);
+    this.viewModel = this.createViewModel(context, context.item, this);
     this.viewModel.readAllViewState();
     context.viewModel = this.viewModel;
 
@@ -106,53 +123,26 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   }
 
   /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-    await this.viewModel.activateListeners(html);
-  }
-
-  /**
-   * @override
-   * @see https://foundryvtt.com/api/FormApplication.html#close
-   */
   async close() {
-    if (this.viewModel !== undefined && this.viewModel !== null) {
+    if (ValidationUtil.isDefined(this.viewModel)) {
       this.viewModel.writeViewState();
       this.viewModel.dispose();
     }
-
     return super.close();
   }
 
   /** @override */
-  async _onDropItem(event, data) {
-    // Item sheets do not currently support drag and drop operations from compendium packs or the world collection. 
-  }
-
-  /**
-   * @param {TransientDocument} document 
-   * @returns {BaseSheetViewModel}
-   * 
-   * @abstract
-   */
-  getViewModel(document) {
-    throw new Error("Not implemented");
+  _getHeaderControls() {
+    return super._getHeaderControls();
   }
 
   /** @override */
-  _getTabsConfig(group) {
-    let tabConfig = super._getTabsConfig();
-    tabConfig = FoundryWrapper.deepClone(tabConfig);
-    tabConfig.tabs.push({
-      id: "gmNotes",
-      group: "sheet",
-      label: "GM", // TODO #739 loca
-    });
-    return tabConfig;
-  }
+  async _postRender(context, options) {
+    this.#html = context.viewModel.sheet.form;
+    this.#content = $(this.html).find("section.window-content");
 
-  /** @override */
-  _getHeaderButtons() {
-    return super._getHeaderButtons();
+    await this.viewModel.activateListeners(this.#html);
+
+    return await super._postRender(context, options);
   }
 }
