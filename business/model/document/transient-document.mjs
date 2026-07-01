@@ -1,4 +1,5 @@
 import { common } from "../../../common/_module.mjs"
+import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import AtReferencer from "../../search/at-referencer.mjs"
 import DataFieldBridge from "./data-field-bridge.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs"
@@ -29,7 +30,7 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * * Read-only.
  * * Abstract. 
  * @property {String} clazz Returns the class reference of this document. 
- * Required for use in the `getExtenders` method. 
+ * Required for extending this instance. 
  * * Read-only.
  * * Abstract. 
  * @property {String} id Returns the id of the document. 
@@ -72,7 +73,7 @@ export default class TransientDocument {
   /**
    * Returns the class reference of this document. 
    * 
-   * Required for use in the `getExtenders` method. 
+   * Required for extending this instance. 
    * 
    * @type {TransientDocument}
    * @abstract
@@ -197,6 +198,7 @@ export default class TransientDocument {
       document: this,
       dataPath: "system.description",
     });
+    ExtenderUtil.extend(this, this.clazz);
   }
 
   /**
@@ -365,19 +367,6 @@ export default class TransientDocument {
    * @returns {TransientDocument} 
    */
   getTransientObject() {
-    const extenders = this.getExtenders();
-    extenders.forEach(extender => {
-      extender.extend(this);
-    });
     return this;
-  }
-
-  /**
-   * Returns extenders. 
-   * 
-   * @returns {Array<Object>}
-   */
-  getExtenders() {
-    return common.util.extender.getExtenders(this.clazz);
   }
 }

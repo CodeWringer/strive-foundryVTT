@@ -6,6 +6,9 @@
   }
 }
 
+$c-tox-button-override-bg: #000;
+$c-tox-button-hover-override-bg: #000;
+
 div.tox-tiered-menu {
   > div.tox-menu.tox-collection.tox-collection--list.tox-selected-menu {
     background-color: $c-tox-button-override-bg;

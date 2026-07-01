@@ -1,16 +1,7 @@
-import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
-import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-notes-viewmodel.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
-import { CONTEXT_TYPES } from "../../../context-types.mjs";
-import { DataFieldComponent } from "../datafield-component.mjs";
-import { TemplatedComponent } from "../templated-component.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 
@@ -18,65 +9,14 @@ import { TemplatedComponent } from "../templated-component.mjs";
  * 
  * @extends BaseSheetViewModel
  * 
- * @abstract Inheriting types *may* override: 
- * * `getDataFields`
- * * `getHeaderButtons`
- * * `getAdditionalContent`
- * * `getPromotedContent`
- * 
- * @property {Array<TemplatedComponent>} headerButtons An array of the header buttons. 
- * * Note that each of the provided view model instances will be available for access on 
- * this view model instance, as a property whose name is the id of the provided 
- * view model instance. 
- * * private
- * @property {Array<TemplatedComponent>} dataFields 
- * * Note that each of the provided view model instances will be available for access on 
- * this view model instance, as a property whose name is the id of the provided 
- * view model instance. 
- * * private
- * @property {TemplatedComponent | undefined} additionalContent
- * * private
- * @property {TemplatedComponent | undefined} promotedContent
- * * private
+ * @abstract 
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_ITEM_SHEET; }
   
   /** @override */
-  get entityId() { return this.document.id; }
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get context() { return CONTEXT_TYPES.SHEET; }
-
-  /**
-   * Returns true, if the navigation is to be shown. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get showNavigation() { return this.isGM === true }
-
-  /**
-   * Returns true, if the description is to be shown. 
-   * 
-   * @type
-   * @protected
-   * @readonly
-   */
-  get showDescription() { return true; }
-
-  /**
-   * Returns true, if the promoted content is to be shown. 
-   * 
-   * @type
-   * @protected
-   * @readonly
-   */
-  get showPromotedContent() { return ValidationUtil.isDefined(this.promotedContent); }
+  get clazz() { return BaseItemSheetViewModel; }
 
   /**
    * @param {Object} args 
@@ -95,117 +35,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-
-    // Aggressively clear out any lingering ToolTips. 
-    Tooltip.removeAllToolTipElements();
-
-    this.dataFields = this.getDataFields();
-    this._ensureViewModelsAsProperties(this.dataFields);
-
-    this.headerButtons = this.getHeaderButtons();
-    this._ensureViewModelsAsProperties(this.headerButtons);
-    
-    this.additionalContent = this.getAdditionalContent();
-    if (ValidationUtil.isDefined(this.additionalContent)) {
-      this._ensureViewModelsAsProperties([this.additionalContent]);
-    }
-
-    this.promotedContent = this.getPromotedContent();
-    if (ValidationUtil.isDefined(this.promotedContent)) {
-      this._ensureViewModelsAsProperties([this.promotedContent]);
-    }
-
-    this.vmImg = new InputImageViewModel({
-      parent: this,
-      id: "vmImg",
-      value: this.document.img,
-      onChange: (_, newValue) => {
-        this.document.img = newValue;
-      },
-    });
-    this.vmTfName = new InputTextFieldViewModel({
-      parent: this,
-      id: "vmTfName",
-      value: this.document.name,
-      onChange: (_, newValue) => {
-        this.document.name = newValue;
-      },
-      placeholder: game.i18n.localize("system.general.name.label"),
-    });
-
-    if (this.showDescription) {
-      this.vmRtDescription = new InputRichTextViewModel({
-        parent: this,
-        id: "vmRtDescription",
-        value: this.document.description,
-        onChange: (_, newValue) => {
-          this.document.description = newValue;
-        },
-      });
-    }
-
-    if (this.isGM === true) {
-      this.gmNotesViewModel = new LazyLoadViewModel({
-        id: "lazyGmNotes",
-        parent: this,
-        template: game.strive.const.TEMPLATES.COMPONENT_GM_NOTES,
-        viewModelFactoryFunction: (args) => { return new GmNotesViewModel(args); },
-        viewModelArgs: {
-          ...args, 
-          id: "gmNotes", 
-          document: this.document, 
-        },
-      });
-    }
-  }
-
-  /**
-   * Returns the data field definitions that will be rendered as two fields 
-   * per row, in the collapsible content area. 
-   * 
-   * @returns {Array<DataFieldComponent>}
-   * 
-   * @virtual
-   * @protected
-   */
-  getDataFields() {
-    return [];
-  }
-
-  /**
-   * Returns the definitions of the header buttons. 
-   * 
-   * @returns {Array<TemplatedComponent>}
-   * 
-   * @virtual
-   * @protected
-   */
-  getHeaderButtons() {
-    return []; 
-  }
-  
-  /**
-   * Returns the definition of the additional content, if there is one. 
-   * 
-   * @returns {TemplatedComponent | undefined}
-   * 
-   * @virtual
-   * @protected
-   */
-  getAdditionalContent() {
-    return undefined;
-  }
-  
-  /**
-   * Returns the definition of the promoted content, if there is one. 
-   * 
-   * @returns {TemplatedComponent | undefined}
-   * 
-   * @virtual
-   * @protected
-   */
-  getPromotedContent() {
-    return undefined;
   }
 
   /**
@@ -227,15 +56,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
-
-    const thiz = this;
-    const tabs = html.find("nav.sheet-tabs > a");
-    tabs.on("click", function(e) {
-      const tab = $(e.currentTarget).data("tab");
-      thiz._renderLazyTab(tab);
-    });
-
-    await this._renderActiveTab(html);
   }
 
   /** @override */
@@ -246,61 +66,4 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     // with (at least partially) dynamic IDs are always cleared properly. 
     Tooltip.removeAllToolTipElements();
   }
-
-  /**
-   * Adds the given definitions' view models as accessible properties on *this* view 
-   * model instance. 
-   * 
-   * @param {Array<TemplatedComponent> | undefined} definitions The definitions whose view models 
-   * are to be added as properties. 
-   * 
-   * @private
-   */
-  _ensureViewModelsAsProperties(definitions = []) {
-    for (const definition of definitions) {
-      // Check to prevent recursive self-adding. 
-      // This is a risk for additional content, which may 
-      // reference *this* view model instance. 
-      if (definition.viewModel == this) continue;
-
-      // Add the property to *this* view model instance. 
-      this[definition.viewModel._id] = definition.viewModel;
-    }
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(BaseItemSheetViewModel));
-  }
-
-  /**
-   * Renders the contents of the active tab. 
-   * 
-   * @param {JQuery} html 
-   * 
-   * @private
-   * @async
-   */
-  async _renderActiveTab(html) {
-    const activeTab = html.find("nav.sheet-tabs > a.active");
-    const tab = activeTab.data("tab");
-    await this._renderLazyTab(tab);
-    this.restoreScrollPosition();
-  }
-
-  /**
-   * Renders the contents of the tab with the given "tab" dataset attribute. 
-   * 
-   * @param {String} tab The value of the "tab" dataset attribute 
-   * of the tab to render. E. g. `"skills"`. 
-   * 
-   * @private
-   * @async
-   */
-  async _renderLazyTab(tab) {
-    if (tab === "gm-notes") {
-      await this.gmNotesViewModel.render();
-    }
-  }
-  
 }

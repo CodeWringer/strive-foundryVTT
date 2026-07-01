@@ -1,5 +1,6 @@
 import { GameSystemUserSettings } from "../../../business/setting/game-system-user-settings.mjs";
 import { common } from "../../../common/_module.mjs";
+import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
@@ -142,7 +143,15 @@ export default class ViewModel {
    * @readonly
    */
   get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}-${this._id}`; }
-  
+
+  /**
+   * Returns the class reference of this instance. Required for extending this object. 
+   * 
+   * @abstract
+   * @readonly
+   */
+  get clazz() { throw Error("Not implemented"); }
+
   /**
    * @type {ViewModel | undefined}
    * @private
@@ -203,16 +212,6 @@ export default class ViewModel {
    * @protected
    */
   viewStateFields = [];
-
-  /**
-   * Returns the id of the associated entity (e. g. an actor document), or undefined, 
-   * if this view model is not associated with any identifiable entity. 
-   * 
-   * @type {String | undefined}
-   * @readonly
-   * @virtual
-   */
-  get entityId() { return undefined; }
 
   /**
    * If true, the view model data is editable. 
@@ -405,11 +404,6 @@ export default class ViewModel {
     this.isSendable = args.isSendable ?? (args.parent !== undefined ? args.parent.isSendable : false);
     this.isOwner = args.isOwner ?? (args.parent !== undefined ? args.parent.isOwner : false);
 
-    const extenders = this.getExtenders();
-    extenders.forEach(extender => {
-      extender.extend(this);
-    });
-
     if (common.util.validation.isDefined(this.localizedToolTip)) {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
@@ -423,6 +417,8 @@ export default class ViewModel {
         },
       });
     }
+
+    ExtenderUtil.extend(this, this.clazz);
   }
 
   /**
@@ -724,17 +720,6 @@ export default class ViewModel {
     }
   }
 
-  /**
-   * Returns extenders. 
-   * 
-   * @returns {Array<Object>}
-   * 
-   * @protected
-   */
-  getExtenders() {
-    return [];
-  }
-  
   /**
    * Returns an array of view model instances that have either been fetched 
    * from the `currentList` or newly instantiated, using the `factoryFunc`. 

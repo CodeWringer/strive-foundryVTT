@@ -12,15 +12,10 @@ import ViewModel from "./view-model.mjs";
  * * Private
  * 
  * @abstract Inheritors MUST override: 
- * * `TEMPLATE`
+ * * `static get TEMPLATE`
+ * * `get clazz`
 */
 export default class BaseSheetViewModel extends ViewModel {
-  /** @override */
-  static get TEMPLATE() { throw new Error("NotImplementedException"); }
-
-  /** @override */
-  get entityId() { return this.document.id; }
-
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -64,13 +59,13 @@ export default class BaseSheetViewModel extends ViewModel {
     this._scrollValue = this.sheet.scrollValue ?? 0;
     this.writeViewState();
   }
-  
+
   /**
    * Restores the cached scroll value. 
    * 
    * @protected
   */
- restoreScrollPosition() {
+  restoreScrollPosition() {
     this.sheet.scrollValue = this._scrollValue;
   }
 }

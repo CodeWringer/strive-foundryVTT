@@ -14,7 +14,7 @@ export const ExtenderUtil = {
    * 
    * @returns {Array<Object>} The list of extenders. 
    */
-  getExtenders: function(clazz) {
+  getExtenders: (clazz) => {
     const extenders = game.strive.extenders.get(clazz);
     if (ValidationUtil.isDefined(extenders)) {
       return extenders
@@ -33,8 +33,23 @@ export const ExtenderUtil = {
    * exposes a `extend` method, which takes the following arguments:
    * * `obj: Object` - an instance of the `clazz` to extend. 
    */
-  addExtender: function(clazz, extender) {
+  addExtender: (clazz, extender) => {
     const extenderList = game.strive.extenders.get(clazz) ?? [];
     game.strive.extenders.set(clazz, extenderList.concat([extender]));
-  }
+  },
+
+  /**
+   * Applies all extenders to the given `obj` that apply to the given 
+   * `clazz`. 
+   * @param {Object} obj Object instance to extend. 
+   * @param {Any} clazz Type definitions of the object instance to extend. 
+   */
+  extend: (obj, clazz) => {
+    const extenders = ExtenderUtil.getExtenders(clazz);
+    for (const extender of extenders) {
+      if (ValidationUtil.isDefined(extender.extend)) {
+        extender.extend(obj);
+      }
+    }
+  },
 }
