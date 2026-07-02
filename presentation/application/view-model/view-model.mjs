@@ -245,38 +245,6 @@ export default class ViewModel {
   get isGM() { return game.user.isGM; }
   
   /**
-   * An internal override of the `showFancyFont` field. 
-   * 
-   * If undefined, `showFancyFont` will return the global setting, otherwise, 
-   * returns this value. 
-   * 
-   * @type {Boolean | undefined}
-   * @private
-   */
-  _showFancyFont = undefined;
-  /**
-   * If true, use the 'fancy' font. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get showFancyFont() {
-    if (this._showFancyFont === undefined) {
-      return GameSystemUserSettings.get(GameSystemUserSettings.KEY_SHOW_FANCY_FONT);
-    } else {
-      return this._showFancyFont;
-    }
-  };
-  /**
-   * Sets or unsets the `fancy font` override. 
-   * 
-   * @param {Boolean | undefined}
-   */
-  set showFancyFont(value) {
-    this._showFancyFont = value;
-  }
-
-  /**
    * @type {String | undefined}
    */
   get localizedToolTip() {
@@ -375,8 +343,6 @@ export default class ViewModel {
    * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
    * * Default `game.strive.viewStates`. 
    * @param {Object | undefined} args.document An associated data document. 
-   * @param {Boolean | undefined} args.showFancyFont If `true`, will render any text, where 
-   * appropriate, with the "fancy" font. 
    * * Default is the globally configured setting. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
@@ -390,7 +356,6 @@ export default class ViewModel {
     
     this.parent = args.parent;
     this.document = args.document;
-    this._showFancyFont = args.showFancyFont;
     this._localizedToolTip = args.localizedToolTip;
     this.toolTipStyle = args.toolTipStyle;
     this._visible = args.visible ?? true;
@@ -514,7 +479,7 @@ export default class ViewModel {
     if ($(html).attr("id") == this.id) {
       this._element = $(html);
     } else {
-      this._element = html.find(`#${this.id}`);
+      this._element = $(html).find(`#${this.id}`);
     }
 
     if (this._element === undefined || this._element === null || this._element.length === 0) {

@@ -38,13 +38,12 @@ export const TEMPLATES = {
     actor: {
     },
     item: {
-      language: {
-        sheet: `${basePathApplication}/item/language/language-item-sheet.hbs`,
-        listItem: `${basePathApplication}/item/language/language-list-item.hbs`,
-        chat: `${basePathApplication}/item/language/language-chat.hbs`,
-      },
+      baseSheet: `${basePathApplication}/item/base/sheet/base-item-sheet.hbs`,
+      language: `${basePathApplication}/item/language/language-content.hbs`,
     },
     component: {
+      textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
+      numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
     },
   },
   /**

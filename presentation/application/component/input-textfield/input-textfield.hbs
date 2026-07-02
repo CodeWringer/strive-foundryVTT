@@ -1,11 +1,11 @@
 {{!-- Required context:
-viewModel: {InputTextFieldViewModel}
-cssClass: {String | undefined}
-readOnlyCssClass: {String | undefined}
+viewModel: InputTextFieldViewModel
+cssClass: String | undefined
+readOnlyCssClass: String | undefined
 --}}
 {{#if viewModel.isEditable}}
   <input 
-    class="custom-system-edit input-width-override component-input-textfield {{cssClass}}"
+    class="custom-system-edit input-width-override textfield {{cssClass}}"
     type="text"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
@@ -15,7 +15,7 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm border-solid-sm fill component-input-textfield {{readOnlyCssClass}}" 
+    class="custom-system-read-only pad-sm border-solid-sm fill textfield {{readOnlyCssClass}}" 
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
   >

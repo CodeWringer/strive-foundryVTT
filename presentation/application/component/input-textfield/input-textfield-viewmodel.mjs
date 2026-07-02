@@ -1,3 +1,4 @@
+import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -15,7 +16,10 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  */
 export default class InputTextFieldViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
+  static get TEMPLATE() { return TEMPLATES.application.component.textField; }
+
+  /** @override */
+  get clazz() { return InputTextFieldViewModel; }
 
   /**
    * Registers the Handlebars partial for this component. 

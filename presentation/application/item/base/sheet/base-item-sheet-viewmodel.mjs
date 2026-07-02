@@ -7,6 +7,10 @@ import ViewModel from "../../../view-model/view-model.mjs";
  * Represents the abstract base class for all view models that represent 
  * an item sheet. 
  * 
+ * @property {String} contentTemplate Returns the relative url of the content template. 
+ * E. g. `TEMPLATES.application.item.language`
+ * * Read-only
+ * 
  * @extends BaseSheetViewModel
  * 
  * @abstract 
@@ -17,6 +21,15 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   
   /** @override */
   get clazz() { return BaseItemSheetViewModel; }
+
+  /**
+   * Returns the relative url of the content template. 
+   * E. g. `TEMPLATES.application.item.language`
+   * @type {String}
+   * @readonly
+   * @abstract
+   */
+  get contentTemplate() { throw new Error("Not implemented"); }
 
   /**
    * @param {Object} args 

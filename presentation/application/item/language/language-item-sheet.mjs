@@ -22,7 +22,7 @@ export class LanguageItemSheet extends BaseItemSheet {
   /** @override */
   static PARTS = {
     form: {
-      template: TEMPLATES.application.item.language.sheet,
+      template: TEMPLATES.application.item.language,
     },
   }
 

@@ -1,11 +1,5 @@
-$font-primary: 'Roboto', sans-serif;
-$font-secondary: 'Roboto', sans-serif;
-$font-fancy: 'STRIVE-Regular';
+$strive-regular-font: 'STRIVE-Regular';
 
-.fancy-font {
-  font-family: $font-fancy;
-}
-
-.font-primary {
-  font-family: $font-primary;
+body.strive-regular-font .strive-regular-font {
+  font-family: $strive-regular-font;
 }
