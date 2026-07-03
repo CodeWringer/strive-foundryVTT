@@ -20,9 +20,17 @@
   background-color: $c-bg-input-dark;
   border-bottom-color: $c-border-dark;
   color: $c-text-dark;
+  option {
+    background-color: $c-bg-input-dark;
+    color: $c-text-dark;
+  }
 }
 .theme-light .strive.dropdown {
   background-color: $c-bg-input-light;
   border-bottom-color: $c-border-light;
   color: $c-text-light;
+  option {
+    background-color: $c-bg-input-light;
+    border-bottom-color: $c-border-light;
+  }
 }
