@@ -55,8 +55,8 @@
         "hint": "If checked, will add the Momentum tracker Bar to the combat tracker."
       },
       "fancyFont": {
-        "label": "Fancy Font",
-        "hint": "Toggles the 'fancy' font off or on."
+        "label": "STRIVE Regular Font",
+        "hint": "Toggles the 'STRIVE Regular' font off or on."
       },
       "toggleDebug": {
         "label": "Debug Mode",
@@ -243,7 +243,16 @@
     },
     "item": {
       "language": {
-        "language": "Language"
+        "language": "Language",
+        "grade": {
+          "dabbling": "Dabbling",
+          "proficient": "Proficient",
+          "native": "Native"
+        },
+        "readAndWrite": {
+          "canReadAndWrite": "Can Read/Write",
+          "cannotReadAndWrite": "Can not Read/Write"
+        }
       }
     }
   }

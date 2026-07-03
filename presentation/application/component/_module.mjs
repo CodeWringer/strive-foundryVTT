@@ -1,23 +1,21 @@
+import InputDropDownViewModel from "./input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
 
 /**
- * Wraps the `presentation` module. 
- * 
- * IMPORTANT the `init` function MUST be called during the system's setup!
+ * Wraps the `presentation.application.component` module. 
  */
 export const component = {
   InputTextFieldViewModel: InputTextFieldViewModel,
   InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
+  InputDropDownViewModel: InputDropDownViewModel,
   /**
    * Initialization, which MUST be called during system setup!
-   * 
-   * Ensures sheets are registered and preloads Handlebars templates.
-   * 
    */
   init: async () => {
     InputTextFieldViewModel.registerHandlebarsPartial();
     InputNumberSpinnerViewModel.registerHandlebarsPartial();
+    InputDropDownViewModel.registerHandlebarsPartial();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 

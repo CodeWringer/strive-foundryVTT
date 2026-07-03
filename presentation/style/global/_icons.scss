@@ -24,7 +24,7 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
       filter: brightness($brightness-disabled-dark);
     }
     &.active {
-      filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+      // filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
     }
   }
   &.disabled {
@@ -32,13 +32,13 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
   }
 
   &.active {
-    filter: drop-shadow(0 0 4px $c-button-highlight);
+    // filter: drop-shadow(0 0 4px $c-button-highlight);
   }
   
   &.interactible {
     &:hover {
       &.dark {
-        filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+        // filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
       }
     }
   }
@@ -46,7 +46,7 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
 
 .interactible {
   &:hover {
-    filter: drop-shadow(0 0 4px $c-button-highlight);
+    // filter: drop-shadow(0 0 4px $c-button-highlight);
   }
 }
 
@@ -68,10 +68,10 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
 
 a:hover {
   .ico.interactible {
-    filter: drop-shadow(0 0 4px $c-button-highlight);
+    // filter: drop-shadow(0 0 4px $c-button-highlight);
     
     &.dark {
-      filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+      // filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
     }
   }
 }

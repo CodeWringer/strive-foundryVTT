@@ -40,19 +40,19 @@ export class LanguageGrade {
 export const LANGUAGE_GRADES = {
   dabbling: new LanguageGrade({
     name: "dabbling",
-    localizableName: "system.character.ability.language.dabbling",
+    localizableName: "system.item.language.grade.dabbling",
     icon: "fas fa-bone",
     ordinal: 0,
   }),
   proficient: new LanguageGrade({
     name: "proficient",
-    localizableName: "system.character.ability.language.proficient",
+    localizableName: "system.item.language.grade.proficient",
     icon: "fas fa-bone",
     ordinal: 1,
   }),
   native: new LanguageGrade({
     name: "native",
-    localizableName: "system.character.ability.language.native",
+    localizableName: "system.item.language.grade.native",
     icon: "fas fa-bone",
     ordinal: 2,
   }),

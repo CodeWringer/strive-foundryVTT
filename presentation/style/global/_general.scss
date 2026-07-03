@@ -6,14 +6,17 @@
   word-wrap: break-word;
 }
 
-.secret {
-  background: $c-bg-secret;
+.v-divider {
+  width: 1px;
+  margin: 0 5px;
 }
 
-.line-height {
-  height: $line-height;
-  line-height: 1;
-  font-size: $font-size-default;
+.dark_mode .v-divider {
+  background-color: $c-border-dark;
+}
+
+.light_mode .v-divider {
+  background-color: $c-border-light;
 }
 
 // Padding styles

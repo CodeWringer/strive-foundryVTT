@@ -3,67 +3,71 @@
 $c-header-bg: #d4cec3;
 $c-active-tab-bg: #e0dbd1;
 
-input[type="text"].document-title {
-  height: 3rem;
-  font-size: 2rem;
-}
-
-// Tab styles
-nav#nav-sheet-tabs.sheet-tabs {
-  background-color: $c-header-bg;
-  border: unset;
-  height: 32px;
-  line-height: unset;
-  margin: 0;
-  min-height: 32px;
+.application.sheet.strive section.window-content {
   padding: 0;
-  position: sticky;
-  top: -8px;
-  z-index: 1;
+}
 
-  > a.item {
-    margin: 0;
-    padding: 0;
+// input[type="text"].document-title {
+//   height: 3rem;
+//   font-size: 2rem;
+// }
+
+// // Tab styles
+// nav#nav-sheet-tabs.sheet-tabs {
+//   background-color: $c-header-bg;
+//   border: unset;
+//   height: 32px;
+//   line-height: unset;
+//   margin: 0;
+//   min-height: 32px;
+//   padding: 0;
+//   position: sticky;
+//   top: -8px;
+//   z-index: 1;
+
+//   > a.item {
+//     margin: 0;
+//     padding: 0;
     
-    &.active {
-      background-color: $c-active-tab-bg;
-      border-bottom: unset !important;
-      border-left: $border-size-sm solid $c-text-underline;
-      border-radius: 10px 10px 0 0;
-      border-right: $border-size-sm solid $c-text-underline;
-      border-top: $border-size-sm solid $c-text-underline;
-      padding: 0;
-      &.border-solid-b-md {
-        border-bottom: unset !important;
-      }
-    }
-  }
-}
+//     &.active {
+//       background-color: $c-active-tab-bg;
+//       border-bottom: unset !important;
+//       border-left: $border-size-sm solid $c-text-underline;
+//       border-radius: 10px 10px 0 0;
+//       border-right: $border-size-sm solid $c-text-underline;
+//       border-top: $border-size-sm solid $c-text-underline;
+//       padding: 0;
+//       &.border-solid-b-md {
+//         border-bottom: unset !important;
+//       }
+//     }
+//   }
+// }
 
-header.system-sheet-header {
-  background-color: $c-header-bg;
-}
+// header.system-sheet-header {
+//   background-color: $c-header-bg;
+// }
 
-.sheet-body,
-.sheet-body .tab,
-.sheet-body .tab .editor {
-  height: 100%;
-}
+// .sheet-body,
+// .sheet-body .tab,
+// .sheet-body .tab .editor {
+//   height: 100%;
+// }
 
-// Grouping styles. 
+// // Grouping styles. 
 
-.sheet-block {
-  padding: $padding-sm;
-  border-radius: $border-radius-md;
-  border: 1px $c-border-light solid;
-  background-color: $c-bg-light;
+// .sheet-block {
+//   padding: $padding-sm;
+//   border-radius: $border-radius-md;
+//   border: 1px $c-border-light solid;
+//   background-color: $c-bg-light;
 
-  &-sidebar {
-    border-right: $c-border-medium 3px solid;
-  }
+//   &-sidebar {
+//     border-right: $c-border-medium 3px solid;
+//   }
 
-  &.secret {
-    background-color: $c-bg-secret;
-  }
-  @include border-colorations();
-}
+//   &.secret {
+//     background-color: $c-bg-secret;
+//   }
+//   @include border-colorations();
+// }

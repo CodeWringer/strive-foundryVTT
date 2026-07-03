@@ -1,5 +1,4 @@
 import { util } from "./util/_module.mjs";
-import FoundryWrapper from "../foundry-interop/foundry-wrapper.mjs";
 import { application } from "./application/_module.mjs";
 import { canvas } from "./canvas/_module.mjs";
 import { font } from "./font/_module.mjs";
@@ -7,6 +6,9 @@ import RulesetExplainer from "./ruleset/ruleset-explainer.mjs";
 import { sidebar } from "./application/sidebar/_module.mjs";
 import { TEMPLATES } from "./application/templates.mjs";
 import ChoiceOption from "./model/choice-option.mjs";
+import { GameSystemUserSettings } from "../business/setting/game-system-user-settings.mjs";
+import GameSystemSetting from "../business/setting/game-system-setting.mjs";
+import { SETTING_SCOPES } from "../business/setting/setting-scopes.mjs";
 
 /**
  * Wraps the `presentation` module. 
@@ -47,5 +49,14 @@ export const presentation = {
    */
   ready: () => {
     util.ready();
+    
+    // Enable STRIVE's custom font, based on user setting. 
+    const isUsingStriveFont = new GameSystemSetting({
+      key: GameSystemUserSettings.KEY_USE_STRIVE_FONT,
+      scope: SETTING_SCOPES.USER,
+    }).value;
+    if (isUsingStriveFont) {
+      $("body").addClass("strive-regular-font");
+    }
   },
 };

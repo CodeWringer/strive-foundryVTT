@@ -1,8 +1,8 @@
 {{!-- context:
 viewModel: ViewModel
 --}}
-<section id="{{viewModel.id}}">
-  {{#with ../viewModel.contentTemplate as | template |}}
+<section id="{{viewModel.id}}" class="{{viewModel.cssClass}}">
+  {{#with viewModel.contentTemplate as | template |}}
   {{> (template) viewModel=../viewModel }}
   {{/with}}
 </section>

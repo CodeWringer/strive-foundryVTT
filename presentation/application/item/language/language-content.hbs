@@ -1,12 +1,13 @@
 {{!-- context:
 viewModel: LanguageItemSheetViewModel
 --}}
-<div>
-  <div class="flex flex-row">
-    {{> inputTextField viewModel=viewModel.vmName }}
-  </div>
+<div class="flex flex-row pad-lg border-b-md">
+  {{> inputTextField viewModel=viewModel.vmName }}
   <span class="v-divider"></span>
-  <div class="flex flex-column">
+  {{> inputDropDown viewModel=viewModel.vmGrade }}
+  <span class="v-divider"></span>
+  {{> inputDropDown viewModel=viewModel.vmReadAndWrite }}
+</div>
+<div class="flex flex-column">
 
-  </div>
 </div>

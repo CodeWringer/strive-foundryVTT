@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -32,6 +33,18 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get contentTemplate() { throw new Error("Not implemented"); }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get cssClass() {
+    if (FoundryWrapper.isApplicationDarkMode) {
+      return "dark_mode";
+    } else {
+      return "light_mode";
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -46,8 +59,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   constructor(args = {}) {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document"]);
-
-    this.document = args.document;
   }
 
   /**

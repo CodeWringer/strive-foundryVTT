@@ -44,6 +44,7 @@ export const TEMPLATES = {
     component: {
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
+      dropDown: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
     },
   },
   /**

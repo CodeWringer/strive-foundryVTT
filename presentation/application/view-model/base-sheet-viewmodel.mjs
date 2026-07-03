@@ -33,7 +33,6 @@ export default class BaseSheetViewModel extends ViewModel {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
-    this.document = args.document;
     this.sheet = args.sheet;
 
     // Register view state properties. 

@@ -2,6 +2,7 @@ import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
 import { SheetUtil } from "../../../../util/sheet-utility.mjs";
+import { TEMPLATES } from "../../../templates.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 
 /**
@@ -42,7 +43,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   /** @override */
   static PARTS = {
     form: {
-      template: undefined,
+      template: TEMPLATES.application.item.baseSheet,
     },
   }
 

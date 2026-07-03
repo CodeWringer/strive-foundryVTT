@@ -1,4 +1,5 @@
 import { ChatUtil } from "./chat-utility.mjs";
+import { ChoicesUtil } from "./choices-utility.mjs";
 import ClipboardHandler from "./clipboard-handler.mjs";
 import { DragDropHandler } from "./drag-drop-handler.mjs";
 import { HANDLEBARS_GLOBALS } from "./handlebars-globals.mjs";
@@ -21,6 +22,7 @@ export const util = {
   // SendToChatHandler: SendToChatHandler,
   sheet: SheetUtil,
   chat: ChatUtil,
+  choices: ChoicesUtil,
   /**
    * Initialization to be called during the system's "ready" hook. 
    */

@@ -8,42 +8,41 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
  * @property {String | undefined} icon A (relative) icon file path or a FontAwwesome icon class. 
  * * E.g. `"systems/strive/presentation/image/texture.svg"`
  * * E.g. `"fas fa-plus"`
- * @property {Boolean} shouldDisplayValue Gets or sets whether the value should be displayed. 
- * @property {Boolean} shouldDisplayIcon Gets or sets whether the icon should be displayed. 
- * @property {String | undefined} displayHtmlOverride Gets or sets the raw HTML to display as the content. 
- * * If not undefined, this value should take precedence over both localizedValue and icon, 
- * and be used instead!
+ * @property {Boolean} hasIcon Returns `true`, if an icon is defined. 
+ * * Read-only
+ * @property {Boolean} hasIconClass Returns true, if the icon string represents a FontAwesome or custom icon CSS class. 
+ * * Read-only
  */
 export default class ChoiceOption {
   /**
    * @type {String}
    * @private
    */
-  _value = undefined;
+  #value = undefined;
   /**
    * The actual value. 
    * @type {String}
    * @readonly
    */
-  get value() { return this._value; }
+  get value() { return this.#value; }
 
   /**
    * @type {String | undefined}
    * @private
    */
-  _localizedValue = undefined;
+  #localizedValue = undefined;
   /**
    * The text that represents the value, to display to the user. 
    * @type {String | undefined}
    * @readonly
    */
-  get localizedValue() { return this._localizedValue; }
+  get localizedValue() { return this.#localizedValue; }
 
   /**
    * @type {String | undefined}
    * @private
    */
-  _icon = undefined;
+  #icon = undefined;
   /**
    * A (relative) icon file path or a FontAwwesome icon class. 
    * 
@@ -52,11 +51,19 @@ export default class ChoiceOption {
    * @type {String | undefined}
    * @readonly
    */
-  get icon() { return this._icon; }
+  get icon() { return this.#icon; }
+
+  /**
+   * Returns `true`, if an icon is defined. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasIcon() { return ValidationUtil.isDefined(this.icon); }
 
   /**
    * Returns true, if the icon string represents a FontAwesome or custom icon CSS class. 
    * @returns {Boolean}
+   * @readonly
    */
   get hasIconClass() {
     if (ValidationUtil.isDefined(this.icon) && (this.icon.startsWith("fas fa-") || this.icon.startsWith("ico"))) {
@@ -67,48 +74,17 @@ export default class ChoiceOption {
   }
 
   /**
-   * Gets or sets whether the value should be displayed. 
-   * @type {Boolean}
-   * @default true
-   */
-  shouldDisplayValue = true;
-  
-  /**
-   * Gets or sets whether the icon should be displayed. 
-   * @type {Boolean}
-   * @default true
-   */
-  shouldDisplayIcon = true;
-
-  /**
-   * Gets or sets the raw HTML to display as the content. 
-   * 
-   * If not undefined, this value should take precedence over both localizedValue and icon, 
-   * and be used instead!
-   * @type {String | undefined}
-   */
-  displayHtmlOverride = undefined;
-
-  /**
    * @param {Object} args
    * @param {String} args.value The actual value. 
-   * @param {String | undefined} args.localizedValue Optional. The text that represents the value, 
+   * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
-   * @param {String | undefined} args.icon Optional. A (relative) icon file path or a FontAwwesome icon class. 
+   * @param {String | undefined} args.icon A (relative) icon file path or a FontAwesome icon class. 
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
-   * @param {Boolean | undefined} args.shouldDisplayValue Optional. Sets whether the value should be displayed. Default true. 
-   * * default `true`
-   * @param {Boolean | undefined} args.shouldDisplayIcon Optional. Sets whether the icon should be displayed. Default true. 
-   * * default `true`
-   * @param {Boolean | undefined} args.displayHtmlOverride Optional. Sets the raw HTML to display as the content. 
    */
   constructor(args = {}) {
-    this._value = args.value;
-    this._localizedValue = args.localizedValue;
-    this._icon = args.icon;
-    this.shouldDisplayValue = args.shouldDisplayValue ?? true;
-    this.shouldDisplayIcon = args.shouldDisplayIcon ?? true;
-    this.displayHtmlOverride = args.displayHtmlOverride;
+    this.#value = args.value;
+    this.#localizedValue = args.localizedValue;
+    this.#icon = args.icon;
   }
 }

@@ -156,4 +156,26 @@ export default class FoundryWrapper {
   createContextMenu(html, id, items) {
     return new ContextMenu(html, id, items);
   }
+
+  /**
+   * Returns `true`, if the user configured the use of the dark theme for 
+   * applications. 
+   * @returns {Boolean}
+   * @static
+   */
+  static isApplicationDarkMode() {
+    const uiConfig = game.settings.get("core", "uiConfig");
+    return uiConfig.colorScheme.applications === "dark";
+  }
+
+  /**
+   * Returns `true`, if the user configured the use of the dark theme for 
+   * the non-applications interfaces. 
+   * @returns {Boolean}
+   * @static
+   */
+  static isInterfaceDarkMode() {
+    const uiConfig = game.settings.get("core", "uiConfig");
+    return uiConfig.colorScheme.interface === "dark";
+  }
 }

@@ -65,5 +65,6 @@ export const constants = {
     common.util.constants.enrichConstant(INJURY_STATES);
     common.util.constants.enrichConstant(SHIELD_TYPES);
     common.util.constants.enrichConstant(VISIBILITY_MODES);
+    common.util.constants.enrichConstant(LANGUAGE_GRADES);
   },
 };

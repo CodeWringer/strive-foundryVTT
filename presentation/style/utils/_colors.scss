@@ -1,37 +1,18 @@
 $c-black: #000;
 $c-dark: #191813;
 
-$c-bg-lightest: rgba(0, 0, 0, 0.01);
-$c-bg-lighter: rgba(0, 0, 0, 0.025);
-$c-bg-light: rgba(0, 0, 0, 0.05);
-$c-bg-medium: rgba(0, 0, 0, 0.08);
-$c-bg-dark: rgba(0, 0, 0, 0.12);
+$c-bg-light: #e2dfd6ff;
+$c-bg-dark: #18171fff;
 
-$c-bg-secret: #e8e8ef59;
+$c-border-light: #232323ff;
+$c-border-dark: #cfcabaff;
+$c-border-highlight-light: #616161ff;
+$c-border-highlight-dark: #fffbedff;
 
-$c-border-light: rgb(160, 160, 160);
-$c-border-medium: rgb(90, 90, 90);
-$c-border-dark: rgb(50, 50, 50);
-$c-border-beige-light: #b5b3a4;
-$c-border-input: #7a7971;
-$c-border-highlight-light: #f78d317d;
-$c-border-highlight: #d76e147d;
-$c-border-highlight-dark: #be6c247d;
-
-$c-row-even: rgba(255, 255, 255, 0.2);
-$c-row-odd: rgba(0, 0, 0, 0.08);
-
-$c-text-normal: #191813;
-$c-text-light: #f0f0e0;
-$c-text-lighter: #46453f;
-$c-text-disabled: #676662;
-$c-text-highlight: #d23d3d;
-$c-text-underline: #782e22;
-$c-text-read-only: #525252;
-
-$c-button-highlight: #FF0000;
-
-$c-neutral-bg-medium: #b9b9b9;
+$c-text-light: #232323ff;
+$c-text-light-disabled: #464646;
+$c-text-dark: #cfcabaff;
+$c-text-dark-disabled: #969592;
 
 $c-themed-bg-disabled: #676662;
 $c-themed-bg-lighter: #ec81237d;

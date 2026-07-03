@@ -1,6 +1,7 @@
 import { GameSystemUserSettings } from "../../../business/setting/game-system-user-settings.mjs";
 import { common } from "../../../common/_module.mjs";
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
@@ -86,9 +87,6 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * @property {Boolean} isEditable If true, the view model data is editable.
  * @property {Boolean} isSendable If true, the document represented by the sheet can be sent to chat.
  * @property {Boolean} isOwner If true, the current user is the owner of the represented document.
- * @property {String | undefined} contextTemplate Name or path of a contextual template, 
- * which will be displayed in exception log entries, to aid debugging.
- * * Read-only. 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
  */
@@ -293,14 +291,6 @@ export default class ViewModel {
   get showReminders() { return GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
 
   /**
-   * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 
-   * 
-   * @type {String | undefined}
-   * @readonly
-   */
-  contextTemplate = undefined;
-
-  /**
    * Returns the element. 
    * 
    * Note: Only available **after** the *first* call to `activateListeners`! 
@@ -338,12 +328,9 @@ export default class ViewModel {
    * * Default `false`. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
    * * Default `false`. 
-   * @param {String | undefined} args.contextTemplate Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging.
    * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
    * * Default `game.strive.viewStates`. 
    * @param {Object | undefined} args.document An associated data document. 
-   * * Default is the globally configured setting. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
    * @param {String | undefined} args.toolTipStyle A style override to attach to the tool tip's DOM element. 
@@ -355,13 +342,13 @@ export default class ViewModel {
     this._id = common.util.uuid.sanitizeId(args.id ?? common.util.uuid.createUUID());
     
     this.parent = args.parent;
-    this.document = args.document;
     this._localizedToolTip = args.localizedToolTip;
     this.toolTipStyle = args.toolTipStyle;
     this._visible = args.visible ?? true;
-
-    this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
+    if (ValidationUtil.isDefined(args.document) && ValidationUtil.isDefined(args.document.document)) {
+      this.document = args.document.document.getTransientObject();
+    }
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 

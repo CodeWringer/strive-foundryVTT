@@ -1,5 +1,4 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { TEMPLATES } from "../../templates.mjs";
 import { BaseItemSheet } from "../base/sheet/base-item-sheet.mjs";
 import LanguageItemSheetViewModel from "./language-item-sheet-viewmodel.mjs";
 
@@ -17,13 +16,6 @@ export class LanguageItemSheet extends BaseItemSheet {
   /** @override */
   get localizedDocumentType() {
     return StringUtil.getLoca("system.item.language.language");
-  }
-
-  /** @override */
-  static PARTS = {
-    form: {
-      template: TEMPLATES.application.item.language,
-    },
   }
 
   /** @override */
