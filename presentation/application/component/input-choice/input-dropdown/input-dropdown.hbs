@@ -1,11 +1,10 @@
 {{!-- Required context:
-viewModel: {InputDropDownViewModel}
-cssClass: {String | undefined}
-readOnlyCssClass: {String | undefined}
+viewModel: InputDropDownViewModel
 --}}
 {{#if viewModel.isEditable}}
+  {{!-- Edit mode --}}
   <select 
-    class="custom-system-edit drop-down width-fill component-input-dropdown {{cssClass}}"
+    class="strive dropdown strive-regular-font"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
     value="{{viewModel.value.value}}"
@@ -14,9 +13,7 @@ readOnlyCssClass: {String | undefined}
       <option class="flex flex-middle" value="{{option.value}}" title="{{option.localizedValue}}">
         {{#if option.hasIcon}}
           {{#if option.hasIconClass}}
-            <i class="ico dark {{option.icon}}"></i>
-          {{else}}
-            <img class="radio-button-icon" src="{{option.icon}}" />
+            <i class="ico {{option.icon}}"></i>
           {{/if}}
         {{/if}}
         <span>{{option.localizedValue}}</span>
@@ -24,9 +21,9 @@ readOnlyCssClass: {String | undefined}
     {{/each}}
   </select>
 {{else}}
-  {{!-- Display read-only value --}}
+  {{!-- Read-only --}}
   <div 
-    class="custom-system-read-only pad-sm border-solid-sm fill component-input-dropdown {{readOnlyCssClass}}" 
+    class="strive dropdown strive-regular-font readonly" 
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
   >{{viewModel.localizedValue}}</div>

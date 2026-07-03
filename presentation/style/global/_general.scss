@@ -11,11 +11,11 @@
   margin: 0 5px;
 }
 
-.dark_mode .v-divider {
+.theme-dark .v-divider {
   background-color: $c-border-dark;
 }
 
-.light_mode .v-divider {
+.theme-light .v-divider {
   background-color: $c-border-light;
 }
 

@@ -32,7 +32,7 @@ import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
-    position: { width: 420, height: 520, },
+    position: { width: 500, height: 520, },
     classes: ["strive", "sheet", "item"],
     tag: "form",
     window: {

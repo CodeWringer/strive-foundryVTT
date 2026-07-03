@@ -1,11 +1,10 @@
 {{!-- Required context:
 viewModel: InputTextFieldViewModel
-cssClass: String | undefined
-readOnlyCssClass: String | undefined
 --}}
 {{#if viewModel.isEditable}}
+  {{!-- Edit mode --}}
   <input 
-    class="custom-system-edit input-width-override textfield {{cssClass}}"
+    class="strive textfield strive-regular-font"
     type="text"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
@@ -13,12 +12,10 @@ readOnlyCssClass: String | undefined
     value="{{viewModel.value}}"
   />
 {{else}}
-  {{!-- Display read-only value --}}
+  {{!-- Read-only --}}
   <div 
-    class="custom-system-read-only pad-sm border-solid-sm fill textfield {{readOnlyCssClass}}" 
+    class="strive textfield strive-regular-font readonly" 
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
-  >
-    {{viewModel.localizedValue}}
-  </div>
+  >{{viewModel.localizedValue}}</div>
 {{/if}}

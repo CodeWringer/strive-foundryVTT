@@ -44,7 +44,7 @@ $border-size-md: 2px;
   }
 }
 
-.light_mode {
+.theme-light {
   .border-t-sm, .border-t-md {
     border-top-color: $c-border-light;
   }
@@ -58,7 +58,7 @@ $border-size-md: 2px;
     border-left-color: $c-border-light;
   }
 }
-.dark_mode {
+.theme-dark {
   .border-t-sm, .border-t-md {
     border-top-color: $c-border-dark;
   }

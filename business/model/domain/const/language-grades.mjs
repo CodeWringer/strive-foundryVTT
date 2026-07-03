@@ -23,8 +23,8 @@ export class LanguageGrade {
 
     this.name = args.name;
     this.localizableName = args.localizableName;
-    this.icon = args.icon;
     this.ordinal = args.ordinal;
+    this.icon = args.icon;
   }
 }
 
@@ -41,19 +41,16 @@ export const LANGUAGE_GRADES = {
   dabbling: new LanguageGrade({
     name: "dabbling",
     localizableName: "system.item.language.grade.dabbling",
-    icon: "fas fa-bone",
     ordinal: 0,
   }),
   proficient: new LanguageGrade({
     name: "proficient",
     localizableName: "system.item.language.grade.proficient",
-    icon: "fas fa-bone",
     ordinal: 1,
   }),
   native: new LanguageGrade({
     name: "native",
     localizableName: "system.item.language.grade.native",
-    icon: "fas fa-bone",
     ordinal: 2,
   }),
 };

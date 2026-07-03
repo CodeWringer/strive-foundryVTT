@@ -158,24 +158,11 @@ export default class FoundryWrapper {
   }
 
   /**
-   * Returns `true`, if the user configured the use of the dark theme for 
-   * applications. 
-   * @returns {Boolean}
+   * Calls the specified FoundryVTT Hook, with optional arguments. 
+   * @param {String} hook Hook name to call. 
    * @static
    */
-  static isApplicationDarkMode() {
-    const uiConfig = game.settings.get("core", "uiConfig");
-    return uiConfig.colorScheme.applications === "dark";
-  }
-
-  /**
-   * Returns `true`, if the user configured the use of the dark theme for 
-   * the non-applications interfaces. 
-   * @returns {Boolean}
-   * @static
-   */
-  static isInterfaceDarkMode() {
-    const uiConfig = game.settings.get("core", "uiConfig");
-    return uiConfig.colorScheme.interface === "dark";
+  static callHook(hook) {
+    Hooks.call(hook, arguments);
   }
 }

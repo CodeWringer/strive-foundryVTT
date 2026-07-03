@@ -7,6 +7,7 @@ import { presentation } from "./presentation/_module.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
+import { GameSystemUserSettings } from "./business/setting/game-system-user-settings.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -173,4 +174,29 @@ Hooks.on("createCombatant", function (document, options, userId) {
 
 Hooks.on("renderCombatTracker", function (document, options, userId) {
   // presentation.canvas.token.TokenExtensions.updateTokenCombatants();
+});
+
+// Handle STRIVE setting change. 
+Hooks.on("striveSettingChanged", (args) => {
+  const key = args[1];
+  const newValue = args[2];
+  if (key.includes(GameSystemUserSettings.KEY_USE_STRIVE_FONT)) {
+    if (newValue) {
+      $("body").addClass("strive-regular-font");
+    } else {
+      $("body").removeClass("strive-regular-font");
+    }
+  }
+  
+  if (key.includes(GameSystemUserSettings.KEY_TOGGLE_DEBUG)) {
+    game.strive.debug = newValue;
+  }
+
+  if (key.includes(GameSystemUserSettings.KEY_TOGGLE_REMINDERS)) {
+    // TODO
+  }
+
+  if (key.includes(GameSystemUserSettings.KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY)) {
+    // TODO
+  }
 });

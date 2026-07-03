@@ -1,4 +1,5 @@
 import { common } from "../../common/_module.mjs";
+import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { SYSTEM_ID } from "../../system-id.mjs";
 import GameSystemSettingDeclaration from "./game-system-setting-declaration.mjs";
 import { SETTING_SCOPES } from "./setting-scopes.mjs";
@@ -147,6 +148,9 @@ export default class GameSystemSettings {
       config: setting.config,
       default: setting.default,
       type: setting.type,
+      onChange: (value) => {
+        FoundryWrapper.callHook("striveSettingChanged", key, value);
+      },
     });
 
     // If the setting requires a menu, ensure it is registered. 
