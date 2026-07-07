@@ -201,6 +201,8 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
 
     this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`)
     this.#menuElement.removeClass("hidden");
+
+    this.#buttonElement.attr("aria-expanded", true);
     this.#isMenuOpen = true;
   }
 
@@ -213,7 +215,8 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     this.#menuElement.addClass("hidden");
     this.#menuElement.detach();
     this.element.append(this.#menuElement);
-
+    
+    this.#buttonElement.attr("aria-expanded", false);
     this.#buttonElement.focus();
     this.#isMenuOpen = false;
   }
