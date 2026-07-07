@@ -120,8 +120,6 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
     this.#buttonElement = $(this.element).find(`button#${this.id}-button`);
 
-    if (this.isEditable !== true) return;
-
     this.#buttonElement.click((event) => {
       event.preventDefault(); // Prevents side-effects from event-bubbling. 
 
