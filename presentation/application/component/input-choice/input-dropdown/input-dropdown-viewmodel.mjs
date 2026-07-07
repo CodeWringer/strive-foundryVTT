@@ -9,6 +9,7 @@ import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
  * 
  * @property {ChoiceOption} value The currently selected option. 
  * @property {Array<ChoiceOption>} options Gets the options available to the drop-down. 
+ * @property {Boolean} displayValue
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
@@ -20,9 +21,6 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
   static get TEMPLATE() { return TEMPLATES.application.component.dropDown; }
   /** @override */
 
-  /** @override */
-  get clazz() { return InputDropDownViewModel; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -30,6 +28,20 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
    */
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('inputDropDown', `{{> "${InputDropDownViewModel.TEMPLATE}"}}`);
+  }
+
+  /** @override */
+  get clazz() { return InputDropDownViewModel; }
+
+  /**
+   * @param {Object} args 
+   * @param {Boolean | undefined} args.displayValue 
+   * * default `true`
+   */
+  constructor(args = {}) {
+    super(args);
+    
+    this.displayValue = args.displayValue ?? true;
   }
 
   /**

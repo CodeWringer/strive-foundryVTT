@@ -39,12 +39,14 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       new ChoiceOption({
         value: true,
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.canReadAndWrite"),
-        icon: "systems/strive/presentation/image/can-read-write-d.svg", // TODO: #761 Respect dark/light mode
+        iconLightMode: "systems/strive/presentation/image/can-read-write-32x27-dark.svg",
+        iconDarkMode: "systems/strive/presentation/image/can-read-write-32x27-light.svg",
       }),
       new ChoiceOption({
         value: false,
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.cannotReadAndWrite"),
-        icon: "systems/strive/presentation/image/cannot-read-write-d.svg", // TODO: #761 Respect dark/light mode
+        iconLightMode: "systems/strive/presentation/image/cannot-read-write-24x32-dark.svg",
+        iconDarkMode: "systems/strive/presentation/image/cannot-read-write-24x32-light.svg",
       }),
     ];
     this.vmReadAndWrite = new InputDropDownViewModel({
@@ -52,6 +54,7 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       parent: this,
       value: readAndWriteOptions.find(it => it.value === this.document.readAndWrite),
       options: readAndWriteOptions,
+      displayValue: false,
     });
   }
 }

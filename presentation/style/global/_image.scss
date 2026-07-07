@@ -38,3 +38,18 @@ img.inline-img {
   border: none;
   display: inline-block;
 }
+
+// The following ensures theming is always applied without any extra code required to make it work. 
+body {
+  &.theme-dark {
+    img.light-mode, i.light-mode {
+      display: none;
+    }
+  }
+
+  &.theme-light {
+    img.dark-mode, i.dark-mode {
+      display: none;
+    }
+  }
+}

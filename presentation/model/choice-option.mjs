@@ -5,13 +5,12 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
  * 
  * @property {String} value The actual value. 
  * @property {String | undefined} localizedValue The text that represents the value, to display to the user. 
- * @property {String | undefined} icon A (relative) icon file path or a FontAwwesome icon class. 
+ * @property {String | undefined} iconLightMode A (relative) icon file path or a FontAwesome icon class. 
  * * E.g. `"systems/strive/presentation/image/texture.svg"`
  * * E.g. `"fas fa-plus"`
- * @property {Boolean} hasIcon Returns `true`, if an icon is defined. 
- * * Read-only
- * @property {Boolean} hasIconClass Returns true, if the icon string represents a FontAwesome or custom icon CSS class. 
- * * Read-only
+ * @property {String | undefined} iconDarkMode A (relative) icon file path or a FontAwesome icon class. 
+ * * E.g. `"systems/strive/presentation/image/texture.svg"`
+ * * E.g. `"fas fa-plus"`
  */
 export default class ChoiceOption {
   /**
@@ -42,7 +41,7 @@ export default class ChoiceOption {
    * @type {String | undefined}
    * @private
    */
-  #icon = undefined;
+  #iconLightMode = undefined;
   /**
    * A (relative) icon file path or a FontAwwesome icon class. 
    * 
@@ -51,25 +50,52 @@ export default class ChoiceOption {
    * @type {String | undefined}
    * @readonly
    */
-  get icon() { return this.#icon; }
+  get iconLightMode() { return this.#iconLightMode; }
 
   /**
-   * Returns `true`, if an icon is defined. 
-   * @type {Boolean}
+   * @type {String | undefined}
+   * @private
+   */
+  #iconDarkMode = undefined;
+  /**
+   * A (relative) icon file path or a FontAwwesome icon class. 
+   * 
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
+   * @type {String | undefined}
    * @readonly
    */
-  get hasIcon() { return ValidationUtil.isDefined(this.icon); }
+  get iconDarkMode() { return this.#iconDarkMode; }
 
   /**
-   * Returns true, if the icon string represents a FontAwesome or custom icon CSS class. 
-   * @returns {Boolean}
+   * Returns an HTML representing string containing the light and dark mode icons, 
+   * neatly wrapped in a div to be easily inserted into the DOM. 
+   * @type {String}
    * @readonly
    */
-  get hasIconClass() {
-    if (ValidationUtil.isDefined(this.icon) && (this.icon.startsWith("fas fa-") || this.icon.startsWith("ico"))) {
-      return true;
+  get iconHtml() {
+    let iconLightMode = "";
+    if (ValidationUtil.isDefined(this.iconLightMode)) {
+      if ((this.iconLightMode.startsWith("fas fa-") || this.iconLightMode.startsWith("ico"))) {
+        iconLightMode = `<i class="${this.iconLightMode} light-mode"></i>`;
+      } else {
+        iconLightMode = `<img src="${this.iconLightMode}" class="light-mode">`;
+      }
+    }
+
+    let iconDarkMode = "";
+    if (ValidationUtil.isDefined(this.iconDarkMode)) {
+      if ((this.iconDarkMode.startsWith("fas fa-") || this.iconDarkMode.startsWith("ico"))) {
+        iconDarkMode = `<i class="${this.iconDarkMode} dark-mode"></i>`;
+      } else {
+        iconDarkMode = `<img src="${this.iconDarkMode}" class="dark-mode">`;
+      }
+    }
+
+    if (iconLightMode.length > 0 || iconDarkMode.length > 0) {
+      return `<div>${iconLightMode}${iconDarkMode}</div>`
     } else {
-      return false;
+      return "";
     }
   }
 
@@ -78,13 +104,17 @@ export default class ChoiceOption {
    * @param {String} args.value The actual value. 
    * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
-   * @param {String | undefined} args.icon A (relative) icon file path or a FontAwesome icon class. 
+   * @param {String | undefined} args.iconLightMode A (relative) icon file path or a FontAwesome icon class. 
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
+   * @param {String | undefined} args.iconDarkMode A (relative) icon file path or a FontAwesome icon class. 
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
    */
   constructor(args = {}) {
     this.#value = args.value;
     this.#localizedValue = args.localizedValue;
-    this.#icon = args.icon;
+    this.#iconLightMode = args.iconLightMode;
+    this.#iconDarkMode = args.iconDarkMode;
   }
 }

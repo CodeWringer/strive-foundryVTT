@@ -9,6 +9,7 @@
 .v-divider {
   width: 1px;
   margin: 0 5px;
+  padding-right: 1px; // Ensures symmetry on the right side.
 }
 
 .theme-dark .v-divider {

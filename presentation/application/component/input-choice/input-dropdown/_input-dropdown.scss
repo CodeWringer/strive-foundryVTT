@@ -1,36 +1,81 @@
-.strive {
-  &.dropdown {
-    height: 35px;
+.strive.dropdown {
+  button {
+    height: 48px;
     border-radius: unset;
     padding: 0 5px;
+    margin: 0;
     font-size: 18pt;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-top: unset;
     border-left: unset;
     border-right: unset;
+    background-color: unset;
+
+    &:hover, &:focus, &:focus-within {
+      background-color: unset;
+    }
   }
-  
+
+  menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    min-width: 100%;
+  }
+
   &.readonly {
     font-size: 18pt;
+    border-bottom: unset;
+  }
+
+  img {
+    min-width: 1.8rem;
+    max-width: 1.8rem;
   }
 }
 
 .theme-dark .strive.dropdown {
-  background-color: $c-bg-input-dark;
-  border-bottom-color: $c-border-dark;
-  color: $c-text-dark;
-  option {
+  button {
     background-color: $c-bg-input-dark;
     color: $c-text-dark;
+    border-bottom-color: $c-border-dark;
+
+    &:hover, &:focus, &:focus-within {
+      background-color: $c-bg-input-focus-dark;
+      border-top: unset;
+      border-left: unset;
+      border-right: unset;
+      border-bottom: 1px solid $c-border-highlight-dark;
+      outline: unset;
+      box-shadow: none;
+    }
+  }
+  
+  &.readonly {
+    background-color: unset;
   }
 }
+
 .theme-light .strive.dropdown {
-  background-color: $c-bg-input-light;
-  border-bottom-color: $c-border-light;
-  color: $c-text-light;
-  option {
+  button {
     background-color: $c-bg-input-light;
+    color: $c-text-light;
     border-bottom-color: $c-border-light;
+
+    &:hover, &:focus, &:focus-within {
+      background-color: $c-bg-input-focus-light;
+      border-top: unset;
+      border-left: unset;
+      border-right: unset;
+      border-bottom: 1px solid $c-border-highlight-light;
+      outline: unset;
+      box-shadow: none;
+    }
+  }
+  
+  &.readonly {
+    background-color: unset;
   }
 }

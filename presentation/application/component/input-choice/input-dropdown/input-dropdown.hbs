@@ -3,23 +3,33 @@ viewModel: InputDropDownViewModel
 --}}
 {{#if viewModel.isEditable}}
   {{!-- Edit mode --}}
-  <select 
-    class="strive dropdown strive-regular-font"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    value="{{viewModel.value.value}}"
-  >
+  <div class="strive dropdown" id="{{viewModel.id}}">
+    <button id="{{viewModel.id}}-button" aria-controls="{{viewModel.id}}-menu" aria-expanded=false class="flex flex-row flex-middle strive-regular-font">
+      {{{viewModel.value.iconHtml}}}
+      {{#if viewModel.displayValue}}
+      <span>{{viewModel.value.localizedValue}}</span>
+      {{/if}}
+      <i class="ico ico-triangle-down"></i>
+    </button>
+    <select 
+      id="{{viewModel.id}}-select"
+      name="{{viewModel.id}}"
+      value="{{viewModel.value.value}}"
+      class="hidden"
+    >
+      {{#each viewModel.options as |option index|}}
+        <option value="{{option.value}}">{{option.localizedValue}}</option>
+      {{/each}}
+    </select>
+    <menu id="{{viewModel.id}}-menu">
     {{#each viewModel.options as |option index|}}
-      <option class="flex flex-middle" value="{{option.value}}" title="{{option.localizedValue}}">
-        {{#if option.hasIcon}}
-          {{#if option.hasIconClass}}
-            <i class="ico {{option.icon}}"></i>
-          {{/if}}
-        {{/if}}
+      <li id="{{option.value}}" role="button" class="flex flex-row flex-middle strive-regular-font">
+        {{{option.iconHtml}}}
         <span>{{option.localizedValue}}</span>
-      </option>
+      </li>
     {{/each}}
-  </select>
+    </menu>
+  </div>
 {{else}}
   {{!-- Read-only --}}
   <div 
