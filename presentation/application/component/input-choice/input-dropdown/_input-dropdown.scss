@@ -21,9 +21,11 @@
     }
   }
 
-  &.readonly {
+  .read-mode {
+    height: 48px;
+    line-height: 48px;
     font-size: 18pt;
-    border-bottom: unset;
+    border: unset;
   }
 
   img {
@@ -51,7 +53,7 @@
     }
   }
 
-  &.readonly {
+  .read-mode {
     background-color: unset;
   }
 }
@@ -75,7 +77,7 @@
     }
   }
 
-  &.readonly {
+  .read-mode {
     background-color: unset;
   }
 }

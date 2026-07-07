@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -33,7 +34,7 @@ export const SELECTOR_BUTTON = "custom-system-button";
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_BUTTON; }
+  static get TEMPLATE() { return TEMPLATES.application.component.button; }
 
   /**
    * Registers the Handlebars partial for this component. 
@@ -43,6 +44,9 @@ export default class ButtonViewModel extends ViewModel {
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('button', `{{> "${ButtonViewModel.TEMPLATE}"}}`);
   }
+
+  /** @override */
+  get clazz() { return ButtonViewModel; }
 
   /**
    * @param {Object} args

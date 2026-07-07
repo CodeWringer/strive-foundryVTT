@@ -6,15 +6,15 @@ import ViewModel from "./view-model.mjs";
  * 
  * @extends ViewModel
  * 
+ * @abstract Inheritors MUST override: 
+ * * `static get TEMPLATE`
+ * * `get clazz`
+ * 
  * @property {TransientDocument} document The underlying data document instance. 
  * This represents a concrete Actor or Item document instance. 
  * @property {Number} _scrollValue Cached scroll value of the sheet. 
  * * Private
- * 
- * @abstract Inheritors MUST override: 
- * * `static get TEMPLATE`
- * * `get clazz`
-*/
+ */
 export default class BaseSheetViewModel extends ViewModel {
   /**
    * @param {Object} args
@@ -40,6 +40,8 @@ export default class BaseSheetViewModel extends ViewModel {
 
     // Prepare scroll value. 
     this.saveScrollPosition();
+
+    game.strive.viewModels.set(this.id, this);
   }
 
   /** @override */
@@ -63,8 +65,14 @@ export default class BaseSheetViewModel extends ViewModel {
    * Restores the cached scroll value. 
    * 
    * @protected
-  */
+   */
   restoreScrollPosition() {
     this.sheet.scrollValue = this._scrollValue;
+  }
+
+  /** @override */
+  dispose() {
+    game.strive.viewModels.remove(this.id);
+    super.dispose();
   }
 }

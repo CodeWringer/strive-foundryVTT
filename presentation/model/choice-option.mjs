@@ -87,7 +87,7 @@ export default class ChoiceOption {
     }
 
     if (iconLightMode.length > 0 || iconDarkMode.length > 0) {
-      return `<div>${iconLightMode}${iconDarkMode}</div>`
+      return `<div class="flex">${iconLightMode}${iconDarkMode}</div>`
     } else {
       return "";
     }

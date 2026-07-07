@@ -42,9 +42,11 @@ export const TEMPLATES = {
       language: `${basePathApplication}/item/language/language-content.hbs`,
     },
     component: {
+      button: `${basePathComponent}/button/button.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
       dropDown: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
+      richText: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
     },
   },
   /**

@@ -72,6 +72,10 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * this.writeViewState(); // Must be called explicitly to persist the view state change. 
  * ```
  * 
+ * @abstract Inheritors MUST implement:
+ * * `static get TEMPLATE`
+ * * `get clazz`
+ * 
  * @property {String} id Unique ID of this view model instance. 
  * * Read-only. 
  * @property {ViewModel | undefined} parent Optional. Parent ViewModel instance of this instance. 
@@ -85,7 +89,6 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * @property {Boolean} isGM If true, the current user is a GM. 
  * * Read-only. 
  * @property {Boolean} isEditable If true, the view model data is editable.
- * @property {Boolean} isSendable If true, the document represented by the sheet can be sent to chat.
  * @property {Boolean} isOwner If true, the current user is the owner of the represented document.
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
@@ -212,33 +215,30 @@ export default class ViewModel {
   viewStateFields = [];
 
   /**
+   * @type {Boolean}
+   * @protected
+   */
+  _isEditable = false;
+  /**
    * If true, the view model data is editable. 
    * 
    * @type {Boolean}
    * @default `false`
    */
-  isEditable = false;
+  get isEditable() { return this._isEditable; }
+  set isEditable(value) { this._isEditable = value; }
   
   /**
-   * If true, the document represented by the sheet can be sent to chat. 
-   * 
-   * @type {Boolean}
-   * @default `false`
-   */
-  isSendable = false;
-
-  /**
    * If true, the current user is the owner of the represented document. 
-   * 
    * @type {Boolean}
-   * @default `false`
+   * @readonly
    */
   isOwner = false;
   
   /**
    * If true, the current user is a GM. 
-   * 
    * @type {Boolean}
+   * @readonly
    */
   get isGM() { return game.user.isGM; }
   
@@ -324,8 +324,6 @@ export default class ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
-   * * Default `false`. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
    * * Default `false`. 
    * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
@@ -352,8 +350,7 @@ export default class ViewModel {
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 
-    this.isEditable = args.isEditable ?? (args.parent !== undefined ? args.parent.isEditable : false);
-    this.isSendable = args.isSendable ?? (args.parent !== undefined ? args.parent.isSendable : false);
+    this._isEditable = args.isEditable ?? (args.parent !== undefined ? args.parent.isEditable : false);
     this.isOwner = args.isOwner ?? (args.parent !== undefined ? args.parent.isOwner : false);
 
     if (common.util.validation.isDefined(this.localizedToolTip)) {
@@ -394,16 +391,13 @@ export default class ViewModel {
    * @param {Object} args 
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
-   * * Default `false`. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
    * * Default `false`. 
    * 
    * @virtual
    */
   update(args = {}) {
-    this.isEditable = args.isEditable ?? false;
-    this.isSendable = args.isSendable ?? false;
+    this._isEditable = args.isEditable ?? false;
     this.isOwner = args.isOwner ?? false;
 
     const childUpdates = this._getChildUpdates();
@@ -418,7 +412,7 @@ export default class ViewModel {
    * update arguments. 
    * 
    * By default, all child view models will have their `isEditable`, 
-   * `isSendable` and `isOwner` properties updated. 
+   * `isOwner` property updated. 
    * 
    * **IMPORTANT** You only need to override this if a child view model requires 
    * more/other arguments than the default as described above. 
@@ -446,7 +440,6 @@ export default class ViewModel {
     for (const childViewModel of this.children) {
       result.set(childViewModel, {
         isEditable: this.isEditable,
-        isSendable: this.isSendable,
         isOwner: this.isOwner,
       });
     }
@@ -688,7 +681,7 @@ export default class ViewModel {
    * @param {Array<ViewModel>} currentList An array of "current" view model 
    * instances. 
    * @param {Function} factoryFunc A factory function that receives the default 
-   * instantiation arguments (`id`, `document`, `isEditable`, `isSendable` and `isOwner`) 
+   * instantiation arguments (`id`, `document`, `isEditable` and `isOwner`) 
    * and which must return a new instance of a view model of the expected type. 
    * 
    * @returns {Array<ViewModel>}
@@ -706,7 +699,6 @@ export default class ViewModel {
           document: document,
           parent: this,
           isEditable: this.isEditable,
-          isSendable: this.isSendable,
           isOwner: this.isOwner,
         });
       }

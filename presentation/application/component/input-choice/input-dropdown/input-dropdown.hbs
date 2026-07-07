@@ -1,9 +1,10 @@
 {{!-- Required context:
 viewModel: InputDropDownViewModel
+cssClass: String | undefined
 --}}
-{{#if viewModel.isEditable}}
+<div id="{{viewModel.id}}" class="strive dropdown flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
-  <div class="strive dropdown" id="{{viewModel.id}}">
+  <div class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}" >
     <button 
       id="{{viewModel.id}}-button" 
       aria-controls="{{viewModel.id}}-menu" 
@@ -28,11 +29,14 @@ viewModel: InputDropDownViewModel
     {{/each}}
     </menu>
   </div>
-{{else}}
-  {{!-- Read-only --}}
+  {{!-- Read mode --}}
   <div 
-    class="strive dropdown strive-regular-font readonly" 
+    class="read-mode flex{{#if viewModel.isEditable}} hidden{{/if}}" 
     name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-  >{{viewModel.localizedValue}}</div>
-{{/if}}
+  >
+    {{{viewModel.value.iconHtml}}}
+    {{#if viewModel.showValue}}
+    <span>{{viewModel.value.localizedValue}}</span>
+    {{/if}}
+  </div>
+</div>

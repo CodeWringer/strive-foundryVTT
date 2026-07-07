@@ -18,6 +18,10 @@ export const SELECTOR_READ = "custom-system-read-only";
  * 
  * @extends ViewModel
  * 
+ * @abstract Inheritors MUST implement:
+ * * `static get TEMPLATE`
+ * * `get clazz`
+ * 
  * @property {String} id Unique ID of this view model instance. 
  * @property {Boolean} isEditable If `true`, input(s) will 
  * be in edit mode. If `false`, will be in read-only mode.
@@ -45,6 +49,53 @@ export const SELECTOR_READ = "custom-system-read-only";
  * * `viewModel: {ViewModel}`
  */
 export default class InputViewModel extends ViewModel {
+  /**
+   * Gets or sets the edit-mode of the control. 
+   * 
+   * When setting, it will also toggle between edit-mode and read-mode, in the DOM. 
+   * @type {Boolean}
+   * @override
+   */
+  get isEditable() { return super.isEditable; }
+  set isEditable(value) {
+    super.isEditable = value;
+
+    const editElement = this.element.find(".edit-mode");
+    const readElement = this.element.find(".read-mode");
+    
+    if (ValidationUtil.isDefined(this._timeout)) {
+      clearTimeout(this._timeout)
+      this.element.removeClass("slide-anim");
+    }
+    this.element.addClass("slide-anim");
+
+    editElement.removeClass("hidden");
+    readElement.removeClass("hidden");
+
+    if (value) {
+      editElement.addClass("entrance");
+      readElement.addClass("exit");
+    } else {
+      editElement.addClass("exit");
+      readElement.addClass("entrance");
+    }
+    
+    this._timeout = setTimeout(() => {
+      this.element.removeClass("slide-anim");
+      editElement.removeClass("entrance");
+      editElement.removeClass("exit");
+      readElement.removeClass("entrance");
+      readElement.removeClass("exit");
+      
+      if (value) {
+        readElement.addClass("hidden");
+      } else {
+        editElement.addClass("hidden");
+      }
+
+      this._timeout = null;
+    }, 500);
+  }
 
   /**
    * Returns the current value. 

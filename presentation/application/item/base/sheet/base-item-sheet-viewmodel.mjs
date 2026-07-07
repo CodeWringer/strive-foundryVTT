@@ -7,18 +7,20 @@ import ViewModel from "../../../view-model/view-model.mjs";
  * Represents the abstract base class for all view models that represent 
  * an item sheet. 
  * 
+ * @extends BaseSheetViewModel
+ * 
+ * @abstract Inheritors MUST override: 
+ * * `static get TEMPLATE`
+ * * `get clazz`
+ * 
  * @property {String} contentTemplate Returns the relative url of the content template. 
  * E. g. `TEMPLATES.application.item.language`
  * * Read-only
- * 
- * @extends BaseSheetViewModel
- * 
- * @abstract 
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_ITEM_SHEET; }
-  
+
   /** @override */
   get clazz() { return BaseItemSheetViewModel; }
 
@@ -32,6 +34,20 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get contentTemplate() { throw new Error("Not implemented"); }
 
   /**
+   * If true, the sheet can be edited. 
+   * @type {Boolean}
+   */
+  get isEditMode() { return this._isEditMode; }
+  set isEditMode(value) {
+    this._isEditMode = value;
+    for (const child of this.children) {
+      if (ValidationUtil.isDefined(child.isEditable)) {
+        child.isEditable = this._isEditMode;
+      }
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -42,10 +58,14 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {TransientDocument} args.document 
+   * @param {Boolean | undefined} args.isEditMode If true, the sheet can be edited. 
+   * * default `false`
    */
   constructor(args = {}) {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document"]);
+
+    this._isEditMode = args.isEditMode ?? false;
   }
 
   /**

@@ -3,6 +3,7 @@ import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import ChoiceOption from "../../../model/choice-option.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
@@ -10,7 +11,7 @@ import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs"
 export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
-  
+
   /** @override */
   get clazz() { return LanguageItemSheetViewModel; }
 
@@ -23,6 +24,7 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
     this.vmName = new InputTextFieldViewModel({
       id: "vmName",
       parent: this,
+      isEditable: this.isEditMode,
       value: this.document.name,
       onChange: (_, newValue) => {
         this.document.name = newValue;
@@ -32,10 +34,11 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
     this.vmGrade = new InputDropDownViewModel({
       id: "vmGrade",
       parent: this,
+      isEditable: this.isEditMode,
       value: gradeOptions.find(it => it.value === this.document.grade.name),
       options: gradeOptions,
       onChange: (_, newValue) => {
-        console.log(newValue); // TODO #761
+        this.document.grade = LANGUAGE_GRADES[newValue.value];
       },
     });
     const readAndWriteOptions = [
@@ -55,12 +58,33 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
     this.vmReadAndWrite = new InputDropDownViewModel({
       id: "vmReadAndWrite",
       parent: this,
-      value: readAndWriteOptions.find(it => it.value === this.document.readAndWrite),
+      isEditable: this.isEditMode,
+      value: readAndWriteOptions.find(it => it.value === (this.document.readAndWrite + "")),
       options: readAndWriteOptions,
       showValue: false,
       onChange: (_, newValue) => {
-        console.log(newValue); // TODO #761
+        this.document.readAndWrite = newValue.value === "true";
       },
     });
+    this.vmDescription = new InputRichTextViewModel({
+      id: "vmDescription",
+      parent: this,
+      isEditable: this.isEditMode,
+      value: this.document.description,
+      onChange: (_, newValue) => {
+        this.document.description = newValue;
+      },
+    });
+    if (this.isGM) {
+      this.vmGmNotes = new InputRichTextViewModel({
+        id: "vmGmNotes",
+        parent: this,
+        isEditable: this.isEditMode,
+        value: this.document.gmNotes,
+        onChange: (_, newValue) => {
+          this.document.gmNotes = newValue;
+        },
+      });
+    }
   }
 }

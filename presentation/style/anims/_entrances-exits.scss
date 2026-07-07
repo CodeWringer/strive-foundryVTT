@@ -1,0 +1,57 @@
+.slide-anim {
+  overflow: hidden !important;
+  position: relative;
+
+  .entrance {
+    -webkit-animation: slide-in 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+            animation: slide-in 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  }
+  .exit {
+    -webkit-animation: slide-out 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+            animation: slide-out 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    position: absolute;
+  }
+}
+
+$a: 150%;
+@-webkit-keyframes slide-in {
+  0% {
+    -webkit-transform: translateY(-$a);
+            transform: translateY(-$a);
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%);
+  }
+}
+@keyframes slide-in {
+  0% {
+    -webkit-transform: translateY(-$a);
+            transform: translateY(-$a);
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%);
+  }
+}
+
+@-webkit-keyframes slide-out {
+  0% {
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%);
+  }
+  100% {
+    -webkit-transform: translateY($a);
+            transform: translateY($a);
+  }
+}
+@keyframes slide-out {
+  0% {
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%);
+  }
+  100% {
+    -webkit-transform: translateY($a);
+            transform: translateY($a);
+  }
+}

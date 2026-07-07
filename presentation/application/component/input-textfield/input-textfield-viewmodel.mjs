@@ -20,7 +20,7 @@ export default class InputTextFieldViewModel extends InputViewModel {
 
   /** @override */
   get clazz() { return InputTextFieldViewModel; }
-
+  
   /**
    * Registers the Handlebars partial for this component. 
    * 

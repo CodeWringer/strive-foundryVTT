@@ -3,48 +3,32 @@ $c-tox-button-override-bg: #d9d8c8;
 $c-tox-button-hover-override-bg: #f0f0e0;
 $c-tox-button-override-bg: #000;
 
-.component-rich-text {
-  min-height: 100px;
-
-  .editor-content {
-    min-height: 100px;
-  }
-}
-
-.component-rich-text-editbutton {
-  float: right;
-  width: 32px;
-  height: 32px;
-
-  a.button {
-    font-size: 1.3em;
-  }
-}
-
-.component-rich-text-container {
+.strive.rich-text {
   min-height: 2em;
-  
+
   .tox.tox-tinymce {
     border-radius: 0;
   }
-  
-  > div.tox.tox-tinymce {
+
+  >div.tox.tox-tinymce {
     height: 100% !important;
     min-height: 20em;
-    > div.tox-editor-container {
-      > div.tox-editor-header {
+
+    >div.tox-editor-container {
+      >div.tox-editor-header {
         background-color: $c-tox-toolbar-override-bg;
-    
+
         .tox-toolbar-overlord {
           background-color: transparent;
-          
+
           .tox-toolbar__primary {
             background-color: transparent;
 
             button.tox-tbtn--select {
               background-color: $c-tox-button-override-bg;
-              
-              &:hover, &:active {
+
+              &:hover,
+              &:active {
                 background-color: $c-tox-button-hover-override-bg;
               }
             }
@@ -53,4 +37,23 @@ $c-tox-button-override-bg: #000;
       }
     }
   }
+
+  .editbutton {
+    float: right;
+    width: 32px;
+    height: 32px;
+
+    a.button {
+      font-size: 1.3em;
+    }
+  }
+
+  .content {
+    min-height: 100px;
+
+    .editor-content {
+      min-height: 100px;
+    }
+  }
+
 }

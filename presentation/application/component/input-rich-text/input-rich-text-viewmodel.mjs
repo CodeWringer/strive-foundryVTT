@@ -1,3 +1,5 @@
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -17,8 +19,8 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class InputRichTextViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_RICH_TEXT; }
-
+  static get TEMPLATE() { return TEMPLATES.application.component.richText; }
+  
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -27,6 +29,9 @@ export default class InputRichTextViewModel extends InputViewModel {
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('inputRichText', `{{> "${InputRichTextViewModel.TEMPLATE}"}}`);
   }
+
+  /** @override */
+  get clazz() { return InputRichTextViewModel; }
 
   /**
    * @type {Object}
@@ -123,7 +128,7 @@ export default class InputRichTextViewModel extends InputViewModel {
     this._elementEditor = this.element.find(".component-rich-text");
     this._elementReadOnlyContents = this.element.find("#content");
 
-    const renderedContent = await TextEditor.enrichHTML(this.value ?? "", { async: true, secrets: this.isEditable });
+    const renderedContent = await FoundryWrapper.TextEditor.enrichHTML(this.value ?? "", { async: true, secrets: this.isEditable });
     this._elementReadOnlyContents.empty();
     this._elementReadOnlyContents.append(renderedContent);
   }

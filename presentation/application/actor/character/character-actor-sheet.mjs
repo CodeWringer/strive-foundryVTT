@@ -133,7 +133,6 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
    */
   async _prepareContext(options) {
     const context = await super._prepareContext(options)
-    SheetUtil.enrichData(context);
 
     // Ensure view model. 
     this.viewModel = this.createViewModel(context, context.item, this);
