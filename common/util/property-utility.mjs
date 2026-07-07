@@ -117,7 +117,7 @@ export const PropertyUtil = {
 	 * 
 	 * Supports array-access-notation. Does not support accessing properties via '[<propName>]'.
 	 * 
-	 * @param {Object} obj The object whose nested property is to be ensured. 
+	 * @param {Object} obj The object whose nested property is to be deleted. 
 	 * @param {String} path The property path. 
 	 *        Separate properties with dot-notation. 
 	 *        Access arrays with bracket-notation. 

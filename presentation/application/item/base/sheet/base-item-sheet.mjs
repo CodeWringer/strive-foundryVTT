@@ -1,7 +1,6 @@
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
-import { SheetUtil } from "../../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 
@@ -33,10 +32,32 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   /** @override */
   static DEFAULT_OPTIONS = {
     position: { width: 500, height: 520, },
-    classes: ["strive", "sheet", "item"],
+    classes: ["strive", "sheet", "item", "strive-regular-font"],
     tag: "form",
     window: {
       resizable: true,
+    },
+    actions: {
+      enterEditMode: {
+        buttons: [0],
+        handler: (event, element) => {
+          const id = $(element).parent().parent().attr("id")
+          const viewModel = game.strive.viewModels.get(id);
+          viewModel.sheet.isEditMode = true;
+          $(`#${id} button[data-action=enterEditMode]`).addClass("hidden");
+          $(`#${id} button[data-action=exitEditMode]`).removeClass("hidden");
+        },
+      },
+      exitEditMode: {
+        buttons: [0],
+        handler: (event, element) => {
+          const id = $(element).parent().parent().attr("id")
+          const viewModel = game.strive.viewModels.get(id);
+          viewModel.sheet.isEditMode = false;
+          $(`#${id} button[data-action=enterEditMode]`).removeClass("hidden");
+          $(`#${id} button[data-action=exitEditMode]`).addClass("hidden");
+        },
+      },
     },
   }
 
@@ -83,12 +104,25 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     this.contentElement[0].scrollTop = value;
   }
 
+  /**
+   * @type {Boolean}
+   */
+  get isEditMode() { return this._isEditMode ?? false; }
+  set isEditMode(value) {
+    this._isEditMode = value;
+
+    $(`form#${this.id}`).find("h1.window-title").text(this.title);
+    if (ValidationUtil.isDefined(this.viewModel)) {
+      this.viewModel.isEditMode = value;
+    }
+  }
+
   /** @override */
   get title() {
     let loca = this.localizedDocumentType;
     if (this.isEditMode) {
       loca = StringUtil.format(
-        StringUtil.getLoca("system.general.editingSheet"), 
+        StringUtil.getLoca("system.general.edit.editingSheet"), 
         loca,
       );
     }
@@ -126,6 +160,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
 
   /** @override */
   async close() {
+    this.isEditMode = false;
     if (ValidationUtil.isDefined(this.viewModel)) {
       this.viewModel.writeViewState();
       this.viewModel.dispose();
@@ -155,7 +190,25 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
 
   /** @override */
   _getHeaderControls() {
-    return super._getHeaderControls();
+    const controls = super._getHeaderControls();
+    return controls;
+  }
+
+  /** @override */
+  _getFrameButtons() {
+    const controls = super._getFrameButtons();
+    return [
+      {
+        action: "enterEditMode",
+        icon: "ico ico-edit",
+        label: "system.general.edit.enterEditMode",
+      },
+      {
+        action: "exitEditMode",
+        icon: "ico ico-floppy-disk",
+        label: "system.general.edit.exitEditMode",
+      },
+    ].concat(controls);
   }
 
   /** @override */
@@ -164,6 +217,12 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     this.#content = $(this.html).find("section.window-content");
 
     await this.viewModel.activateListeners(this.#html);
+
+    if (this.isEditMode) {
+      $(`#${this.id} button[data-action=enterEditMode]`).addClass("hidden");
+    } else {
+      $(`#${this.id} button[data-action=exitEditMode]`).addClass("hidden");
+    }
 
     return await super._postRender(context, options);
   }

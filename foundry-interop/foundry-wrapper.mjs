@@ -18,6 +18,7 @@ export default class FoundryWrapper {
   static HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
   static CombatTracker = foundry.applications.sidebar.tabs.CombatTracker;
   static TokenHUD = foundry.applications.hud.TokenHUD;
+  static TextEditor = foundry.applications.ux.TextEditor.implementation;
 
   static deepClone = foundry.utils.deepClone;
 

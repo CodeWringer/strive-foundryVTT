@@ -33,6 +33,9 @@ export default class InputRichTextViewModel extends InputViewModel {
   /** @override */
   get clazz() { return InputRichTextViewModel; }
 
+  /** @override */
+  get inputElement() { return this.element; }
+  
   /**
    * @type {Object}
    * @private

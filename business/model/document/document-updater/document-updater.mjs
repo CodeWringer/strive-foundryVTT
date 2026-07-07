@@ -1,52 +1,118 @@
 import { common } from "../../../../common/_module.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 
 /**
- * Allows updating a document's data. 
+ * Utility for updating a document's data. 
  */
 export default class DocumentUpdater {
+  /**
+   * @type {Object}
+   * @private
+   */
   get _logger() { return game.strive.logger; }
 
   /**
-   * Updates a property on the given document entity, identified via the given path. 
+   * If `true`, field updates do not immediately fire and get 
+   * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
    * 
-   * @param {Actor|Item} document An Actor or Item document. 
-   * @param {String} propertyPath Path leading to the property to update, on the given document entity. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "system.attributes[0].level"
-   *        E.g.: "system.attributes[4]" 
-   *        E.g.: "system.attributes" 
-   * @param {any} newValue The value to assign to the property. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * Setting this to `false` immediately flushes all updates. 
+   * @type {Boolean}
+   * @private
+   */
+  #isTransactionMode = false;
+  get isTransactionMode() { return this.#isTransactionMode; }
+  set isTransactionMode(value) {
+    this.#isTransactionMode = value;
+    if (!value) {
+      this.flushUpdates();
+    }
+  }
+
+  /**
+   * Holds all currently outstanding updates. 
+   * @type {Object}
+   * @private
+   */
+  #transactions = {};
+
+  constructor(document) {
+    if (!ValidationUtil.isDefined(document)) {
+      throw new Error("document must be defined");
+    }
+
+    this.document = document;
+  }
+
+  /**
+   * Updates the document with the given `delta` object. 
+   * 
+   * @param {Object} delta The update delta to persist. 
+   * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
    * 
    * @async
    */
-  async updateByPath(document, propertyPath, newValue, render = true) {
-    const dto = this._buildDto(document, propertyPath, newValue);
-    await document.update(dto, { render: render });
+  async update(delta, render = true) {
+    if (this.isTransactionMode) {
+      this.#transactions = {
+        ...this.#transactions,
+        ...delta,
+      };
+    } else {
+      this.document.update(delta, { render: render, });
+    }
+  }
+
+  /**
+   * Updates a property on the document, identified via the given path. 
+   * 
+   * @param {String} propertyPath Path leading to the property to update, on the document. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: `"system.attributes[0].level"`
+   *        E.g.: `"system.attributes[4]" `
+   *        E.g.: `"system.attributes" `
+   * @param {any} newValue The value to assign to the property. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * default `true`. 
+   * 
+   * @async
+   */
+  async updateByPath(propertyPath, newValue, render = true) {
+    const dto = this._buildDto(propertyPath, newValue);
+    if (this.isTransactionMode) {
+      this.#transactions = {
+        ...this.#transactions,
+        ...dto,
+      };
+    } else {
+      await this.document.update(dto, { render: render });
+    }
   }
   
   /**
-   * Deletes a property on the given document, via the given path. 
-   * @param {Actor | Item} document An Actor or Item document. 
-   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
+   * Deletes a property on the document, identified via the given path. 
+   * 
+   * @param {String} propertyPath Path leading to the property to delete, on the document. 
    * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    * * E.g.: `"system.attributes[0].level"`
    * * E.g.: `"system.attributes[4]"`
    * * E.g.: `"system.attributes"`
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * default `true`. 
+   * 
    * @async
    */
-  async deleteByPath(document, propertyPath, render = true) {
+  async deleteByPath(propertyPath, render = true) {
     if (propertyPath.endsWith("]")) { // Delete item from array.
       const indexBracket = propertyPath.lastIndexOf("[");
       const indexLastBracket = propertyPath.length - 1;
       const arrayPropertyPath = propertyPath.substring(0, indexBracket);
       
-      let array = common.util.property.getNestedPropertyValue(document, arrayPropertyPath);
+      let array = common.util.property.getNestedPropertyValue(this.document, arrayPropertyPath);
       const index = parseInt(propertyPath.substring(indexBracket + 1, indexLastBracket));
       array = array.slice(0, index).concat(array.slice(index + 1));
 
-      await this.updateByPath(document, arrayPropertyPath, array, render);
+      await this.updateByPath(arrayPropertyPath, array, render);
     } else { // Delete property from object. 
       const parts = propertyPath.split(/\./g);
 
@@ -57,15 +123,22 @@ export default class DocumentUpdater {
 
       // Null must be given as the value for a property to be deleted. 
       // Undefined wouldn't work, as undefined properties are simply skipped by FoundryVTT.
-      await this.updateByPath(document, parentPropertyPath, null, render);
+      await this.updateByPath(parentPropertyPath, null, render);
     }
   }
 
   /**
-   * Returns a data transfer object (dto), based on the given document and property path, 
+   * Persists all currently outstanding updates to the data base. 
+   */
+  flushUpdates() {
+    this.document.update(this.#transactions, { render: true, });
+    this.#transactions = {};
+  }
+
+  /**
+   * Returns a data transfer object (dto), based on the document and given property path, 
    * with the given value applied. 
    * 
-   * @param {Actor | Item} document An Actor or Item document. 
    * @param {String} propertyPath Path leading to the property to update, on the given document entity. 
    * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    * * E.g.: `"system.attributes[0].level"`
@@ -81,7 +154,7 @@ export default class DocumentUpdater {
    * 
    * @private
    */
-  _buildDto(document, propertyPath, newValue) {
+  _buildDto(propertyPath, newValue) {
     if (propertyPath === undefined || propertyPath.trim().length < 1) {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
@@ -112,7 +185,7 @@ export default class DocumentUpdater {
     let previousDtoProperty = dto;
     // A reference to the previously looked at property, on the document. 
     // Initially, this is a reference to the document itself. 
-    let previousDocumentProperty = document;
+    let previousDocumentProperty = this.document;
     // If this value is true, then an array is part of the property path. 
     // In such a case, we can no longer create small delta objects and have to instead start 
     // taking whole objects. Otherwise, all but the targeted property could be lost. 

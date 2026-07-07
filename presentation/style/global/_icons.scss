@@ -25,43 +25,53 @@ $size: 24px;
   }
 }
 
-body {
-
-  // Specific light-mode icons -> use dark variants!
-  &.theme-light {
-    i.ico-chevron-down {
-      background-image: url("/systems/strive/presentation/image/chevron-down-35x20-dark.svg");
-    }
-    i.ico-triangle-down {
-      background-image: url("/systems/strive/presentation/image/triangle-down-24x24-dark.svg");
-    }
-    i.ico-floppy-disk {
-      background-image: url("/systems/strive/presentation/image/floppy-14x15-dark.svg");
-    }
-    i.ico-edit {
-      background-image: url("/systems/strive/presentation/image/edit-17x17-dark.svg");
-    }
-    i.ico-speech-bubble {
-      background-image: url("/systems/strive/presentation/image/speech-bubble-15x12-dark.svg");
-    }
+// Specific styles for frame buttons.
+header {
+  button.ico-floppy-disk {
+    background-image: url("/systems/strive/presentation/image/floppy-24x24-frame-light.svg");
   }
-  
-  // Specific dark-mode icons -> use light variants!
-  &.theme-dark {
-    i.ico-chevron-down {
-      background-image: url("/systems/strive/presentation/image/chevron-down-35x20-light.svg");
-    }
-    i.ico-triangle-down {
-      background-image: url("/systems/strive/presentation/image/triangle-down-24x24-light.svg");
-    }
-    i.ico-floppy-disk {
-      background-image: url("/systems/strive/presentation/image/floppy-14x15-light.svg");
-    }
-    i.ico-edit {
-      background-image: url("/systems/strive/presentation/image/edit-17x17-light.svg");
-    }
-    i.ico-speech-bubble {
-      background-image: url("/systems/strive/presentation/image/speech-bubble-15x12-light.svg");
-    }
+  button.ico-edit {
+    background-image: url("/systems/strive/presentation/image/edit-24x24-frame-light.svg");
+  }
+  button.ico-speech-bubble {
+    background-image: url("/systems/strive/presentation/image/speech-bubble-24x24-frame-light.svg");
+  }
+}
+
+// Specific light-mode icons -> use dark variants!
+.theme-light {
+  i.ico-chevron-down {
+    background-image: url("/systems/strive/presentation/image/chevron-down-35x20-dark.svg");
+  }
+  i.ico-triangle-down {
+    background-image: url("/systems/strive/presentation/image/triangle-down-24x24-dark.svg");
+  }
+  i.ico-floppy-disk {
+    background-image: url("/systems/strive/presentation/image/floppy-14x15-dark.svg");
+  }
+  i.ico-edit {
+    background-image: url("/systems/strive/presentation/image/edit-17x17-dark.svg");
+  }
+  i.ico-speech-bubble {
+    background-image: url("/systems/strive/presentation/image/speech-bubble-15x12-dark.svg");
+  }
+}
+
+// Specific dark-mode icons -> use light variants!
+.theme-dark {
+  i.ico-chevron-down {
+    background-image: url("/systems/strive/presentation/image/chevron-down-35x20-light.svg");
+  }
+  i.ico-triangle-down {
+    background-image: url("/systems/strive/presentation/image/triangle-down-24x24-light.svg");
+  }
+  i.ico-floppy-disk {
+    background-image: url("/systems/strive/presentation/image/floppy-14x15-light.svg");
+  }
+  i.ico-edit {
+    background-image: url("/systems/strive/presentation/image/edit-17x17-light.svg");
+  }
+  i.ico-speech-bubble {
+    background-image: url("/systems/strive/presentation/image/speech-bubble-15x12-light.svg");
   }
 }

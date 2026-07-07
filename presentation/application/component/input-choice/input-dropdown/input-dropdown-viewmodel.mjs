@@ -45,6 +45,9 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
   get clazz() { return InputDropDownViewModel; }
 
   /** @override */
+  get inputElement() { return this.element.find("button"); }
+  
+  /** @override */
   get value() { return super.value; }
   set value(value) {
     super.value = value;

@@ -51,6 +51,9 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * * Read-only.
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
+ * @property {Boolean} isTransactionMode If `true`, field updates do not immediately fire and get 
+ * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
+ * Setting this to `false` immediately flushes all updates. 
  */
 export default class TransientDocument {
   /**
@@ -164,6 +167,16 @@ export default class TransientDocument {
   get system() { return this.document.system; }
 
   /**
+   * If `true`, field updates do not immediately fire and get 
+   * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
+   * 
+   * Setting this to `false` immediately flushes all updates. 
+   * @type {Boolean}
+   */
+  get isTransactionMode() { return this._updater.isTransactionMode; }
+  set isTransactionMode(value) { this._updater.isTransactionMode = value; }
+
+  /**
    * @param {Actor | Item} document An encapsulated document instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -173,7 +186,7 @@ export default class TransientDocument {
       throw new Error("A document instance must be provided");
     }
 
-    this._updater = new DocumentUpdater();
+    this._updater = new DocumentUpdater(document);
     this.document = document;
 
     this._gmNotes = new DataFieldBridge({
@@ -231,7 +244,7 @@ export default class TransientDocument {
    * @async
    */
   async deleteByPath(propertyPath, render = true) {
-    await this._updater.deleteByPath(this.document, propertyPath, render);
+    await this._updater.deleteByPath(propertyPath, render);
   }
 
   /**
@@ -248,7 +261,7 @@ export default class TransientDocument {
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
-    await this._updater.updateByPath(this.document, propertyPath, newValue, render);
+    await this._updater.updateByPath(propertyPath, newValue, render);
   }
 
   /**
@@ -301,7 +314,7 @@ export default class TransientDocument {
    * @async
    */
   async update(delta, render = true) {
-    await this.document.update(delta, { render: render });
+    await this._updater.update(delta, render);
   }
 
   /**
@@ -368,5 +381,12 @@ export default class TransientDocument {
    */
   getTransientObject() {
     return this;
+  }
+
+  /**
+   * Persists all currently outstanding updates to the data base. 
+   */
+  flushUpdates() {
+    this._updater.flushUpdates();
   }
 }

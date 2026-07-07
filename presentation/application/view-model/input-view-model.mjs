@@ -21,6 +21,7 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @abstract Inheritors MUST implement:
  * * `static get TEMPLATE`
  * * `get clazz`
+ * * `get inputElement`
  * 
  * @property {String} id Unique ID of this view model instance. 
  * @property {Boolean} isEditable If `true`, input(s) will 
@@ -115,6 +116,13 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
+   * Returns the actual input element, which may be nested within `this.element`. 
+   * @type {JQuery | HTMLElement}
+   * @readonly
+   */
+  get inputElement() { return new Error("Not implemented"); }
+
+  /**
    * Set to `true` when updating the value without wanting events to fire. 
    * 
    * This is intended to prevent infinite circular onChange invocations. For use by inheritors 
@@ -162,12 +170,10 @@ export default class InputViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    if (this.isEditable !== true) return;
-
-    this.element.change(this._onChange.bind(this));
-    this.element.on("input", this._onInput.bind(this));
-    this.element.on("focus", this._onFocus.bind(this));
-    this.element.on("focusout", this._onFocusLost.bind(this));
+    this.inputElement.change(this._onChange.bind(this));
+    this.inputElement.on("input", this._onInput.bind(this));
+    this.inputElement.on("focus", this._onFocus.bind(this));
+    this.inputElement.on("focusout", this._onFocusLost.bind(this));
   }
   
   /** @override */

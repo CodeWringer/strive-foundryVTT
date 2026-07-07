@@ -38,6 +38,10 @@
 @import 'global/overrides/editor';
 @import 'global/overrides/context-menu';
 
+form.strive-regular-font h1.window-title {
+  font-size: 16pt;
+}
+
 // Global override of root interface element. 
 // body > div#interface {
 //   width: 100%;

@@ -16,6 +16,7 @@ import ViewModel from "../../../view-model/view-model.mjs";
  * @property {String} contentTemplate Returns the relative url of the content template. 
  * E. g. `TEMPLATES.application.item.language`
  * * Read-only
+ * @property {Boolean} isEditMode If true, the sheet can be edited. 
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
@@ -45,6 +46,8 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
         child.isEditable = this._isEditMode;
       }
     }
+
+    this.document.isTransactionMode = value;
   }
 
   /**
@@ -91,6 +94,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
   /** @override */
   dispose() {
+    this.isEditMode = false;
     super.dispose();
 
     // An extremely aggressive band-aid solution. But, this ensures lingering tool tip elements 
