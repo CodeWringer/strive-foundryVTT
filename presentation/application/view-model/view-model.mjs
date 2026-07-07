@@ -498,14 +498,12 @@ export default class ViewModel {
    * @virtual
    */
   dispose() {
-    this.parent = undefined;
-
     if (common.util.validation.isDefined(this._toolTip)) {
       this._toolTip.deactivateListeners();
     }
 
     // Dispose of children. 
-    if (this.children !== undefined && this.children !== null) {
+    if (ValidationUtil.isDefined(this.children)) {
       for (const child of this.children) {
         try {
           child.dispose();
@@ -513,7 +511,13 @@ export default class ViewModel {
           game.strive.logger.logWarn(error);
         }
       }
+
+      // Remove children from collection.
+      for (const child of this.children) {
+        child.parent = undefined;
+      }
     }
+    
     this.children = undefined;
   }
 

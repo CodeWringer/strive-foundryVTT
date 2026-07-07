@@ -29,8 +29,6 @@ export const SELECTOR_READ = "custom-system-read-only";
  * 
  * @property {Any | undefined} value The current value. 
  * * Upon change, invokes the `onChange` callback. 
- * @property {String} localizedValue The current value, localized. 
- * * Read-only
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
@@ -63,17 +61,6 @@ export default class InputViewModel extends ViewModel {
     const oldValue = this._value;
     this._value = newValue;
     this.onChange(oldValue, newValue);
-  }
-
-  /**
-   * The current value, localized. 
-   * 
-   * @type {String}
-   * @readonly
-   */
-  get localizedValue() {
-    const value = this.value;
-    return (value !== undefined && value !== null) ? game.i18n.localize(`${value}`) : value;
   }
 
   /**

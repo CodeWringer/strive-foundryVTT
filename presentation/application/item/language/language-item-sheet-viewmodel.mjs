@@ -34,16 +34,19 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       parent: this,
       value: gradeOptions.find(it => it.value === this.document.grade.name),
       options: gradeOptions,
+      onChange: (_, newValue) => {
+        console.log(newValue); // TODO #761
+      },
     });
     const readAndWriteOptions = [
       new ChoiceOption({
-        value: true,
+        value: "true",
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.canReadAndWrite"),
         iconLightMode: "systems/strive/presentation/image/can-read-write-32x27-dark.svg",
         iconDarkMode: "systems/strive/presentation/image/can-read-write-32x27-light.svg",
       }),
       new ChoiceOption({
-        value: false,
+        value: "false",
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.cannotReadAndWrite"),
         iconLightMode: "systems/strive/presentation/image/cannot-read-write-24x32-dark.svg",
         iconDarkMode: "systems/strive/presentation/image/cannot-read-write-24x32-light.svg",
@@ -54,7 +57,10 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       parent: this,
       value: readAndWriteOptions.find(it => it.value === this.document.readAndWrite),
       options: readAndWriteOptions,
-      displayValue: false,
+      showValue: false,
+      onChange: (_, newValue) => {
+        console.log(newValue); // TODO #761
+      },
     });
   }
 }

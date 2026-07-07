@@ -1,3 +1,5 @@
+import { Rect } from "./rect.mjs";
+
 /**
  * @constant
  */
@@ -99,4 +101,19 @@ export const SheetUtil = {
   unwrapJQueryElement: function(element) {
     return $(element)[0];
   },
+
+  /**
+   * Returns the given element's rectangle. 
+   * 
+   * @returns {Rect}
+   */
+  getElementRect(element) {
+    const parentPos = element.offset();
+    return new Rect({
+      x: parentPos.left,
+      y: parentPos.top,
+      width: element.outerWidth(),
+      height: element.outerHeight(),
+    });
+  }
 }

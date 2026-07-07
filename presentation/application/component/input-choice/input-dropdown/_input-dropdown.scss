@@ -1,4 +1,6 @@
 .strive.dropdown {
+  position: relative;
+
   button {
     height: 48px;
     border-radius: unset;
@@ -12,17 +14,11 @@
     border-right: unset;
     background-color: unset;
 
-    &:hover, &:focus, &:focus-within {
+    &:hover,
+    &:focus,
+    &:focus-within {
       background-color: unset;
     }
-  }
-
-  menu {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    min-width: 100%;
   }
 
   &.readonly {
@@ -42,7 +38,9 @@
     color: $c-text-dark;
     border-bottom-color: $c-border-dark;
 
-    &:hover, &:focus, &:focus-within {
+    &:hover,
+    &:focus,
+    &:focus-within {
       background-color: $c-bg-input-focus-dark;
       border-top: unset;
       border-left: unset;
@@ -52,7 +50,7 @@
       box-shadow: none;
     }
   }
-  
+
   &.readonly {
     background-color: unset;
   }
@@ -64,7 +62,9 @@
     color: $c-text-light;
     border-bottom-color: $c-border-light;
 
-    &:hover, &:focus, &:focus-within {
+    &:hover,
+    &:focus,
+    &:focus-within {
       background-color: $c-bg-input-focus-light;
       border-top: unset;
       border-left: unset;
@@ -74,8 +74,50 @@
       box-shadow: none;
     }
   }
-  
+
   &.readonly {
     background-color: unset;
+  }
+}
+
+// Menu styling
+menu.strive.dropdown {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  min-width: 10rem;
+  z-index: 9999;
+
+  li {
+    height: 48px;
+    font-size: 18pt;
+    padding: 0 5px;
+    cursor: pointer;
+  }
+}
+
+.theme-dark menu.strive.dropdown {
+  background-color: $c-bg-input-dark;
+
+  li {
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      background-color: $c-bg-input-focus-dark;
+    }
+  }
+}
+
+.theme-light menu.strive.dropdown {
+  background-color: $c-bg-input-light;
+
+  li {
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      background-color: $c-bg-input-focus-light;
+    }
   }
 }

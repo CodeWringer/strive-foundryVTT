@@ -3,7 +3,7 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 /**
  * Represents a choice option for drop-downs, radio-buttons or check-boxes. 
  * 
- * @property {String} value The actual value. 
+ * @property {Any} value The actual value. 
  * @property {String | undefined} localizedValue The text that represents the value, to display to the user. 
  * @property {String | undefined} iconLightMode A (relative) icon file path or a FontAwesome icon class. 
  * * E.g. `"systems/strive/presentation/image/texture.svg"`
@@ -43,10 +43,7 @@ export default class ChoiceOption {
    */
   #iconLightMode = undefined;
   /**
-   * A (relative) icon file path or a FontAwwesome icon class. 
-   * 
-   * * E.g. `"systems/strive/presentation/image/texture.svg"`
-   * * E.g. `"fas fa-plus"`
+   * An icon for the light mode.
    * @type {String | undefined}
    * @readonly
    */
@@ -58,10 +55,7 @@ export default class ChoiceOption {
    */
   #iconDarkMode = undefined;
   /**
-   * A (relative) icon file path or a FontAwwesome icon class. 
-   * 
-   * * E.g. `"systems/strive/presentation/image/texture.svg"`
-   * * E.g. `"fas fa-plus"`
+   * An icon for the dark mode.
    * @type {String | undefined}
    * @readonly
    */
@@ -76,7 +70,7 @@ export default class ChoiceOption {
   get iconHtml() {
     let iconLightMode = "";
     if (ValidationUtil.isDefined(this.iconLightMode)) {
-      if ((this.iconLightMode.startsWith("fas fa-") || this.iconLightMode.startsWith("ico"))) {
+      if (this.#isIconClass(this.iconLightMode)) {
         iconLightMode = `<i class="${this.iconLightMode} light-mode"></i>`;
       } else {
         iconLightMode = `<img src="${this.iconLightMode}" class="light-mode">`;
@@ -85,7 +79,7 @@ export default class ChoiceOption {
 
     let iconDarkMode = "";
     if (ValidationUtil.isDefined(this.iconDarkMode)) {
-      if ((this.iconDarkMode.startsWith("fas fa-") || this.iconDarkMode.startsWith("ico"))) {
+      if (this.#isIconClass(this.iconDarkMode)) {
         iconDarkMode = `<i class="${this.iconDarkMode} dark-mode"></i>`;
       } else {
         iconDarkMode = `<img src="${this.iconDarkMode}" class="dark-mode">`;
@@ -101,20 +95,45 @@ export default class ChoiceOption {
 
   /**
    * @param {Object} args
-   * @param {String} args.value The actual value. 
+   * @param {Any} args.value The actual value. 
    * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
-   * @param {String | undefined} args.iconLightMode A (relative) icon file path or a FontAwesome icon class. 
+   * @param {String | undefined} args.icon A theming-agnostic (relative) icon file path or a FontAwesome icon class. 
+   * Takes precedence over `iconLightMode` and `iconDarkMode`.
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
-   * @param {String | undefined} args.iconDarkMode A (relative) icon file path or a FontAwesome icon class. 
+   * @param {String | undefined} args.iconLightMode An icon for the light mode.
+   * A (relative) icon file path or a FontAwesome icon class. 
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
+   * @param {String | undefined} args.iconDarkMode An icon for the dark mode.
+   * A (relative) icon file path or a FontAwesome icon class. 
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
    */
   constructor(args = {}) {
     this.#value = args.value;
     this.#localizedValue = args.localizedValue;
-    this.#iconLightMode = args.iconLightMode;
-    this.#iconDarkMode = args.iconDarkMode;
+    
+    if (ValidationUtil.isDefined(args.icon)) {
+      this.#iconLightMode = args.icon;
+      this.#iconDarkMode = args.icon;
+    } else {
+      this.#iconLightMode = args.iconLightMode;
+      this.#iconDarkMode = args.iconDarkMode;
+    }
+  }
+
+  /**
+   * Returns true, if the given string represents an icon css class. 
+   * @param {String} str 
+   * @returns {Boolean}
+   * @private
+   */
+  #isIconClass(str) {
+    return (ValidationUtil.isDefined(str) 
+      && ValidationUtil.isString(str) 
+      && ((str.startsWith("fas fa-") || str.startsWith("ico")))
+    );
   }
 }

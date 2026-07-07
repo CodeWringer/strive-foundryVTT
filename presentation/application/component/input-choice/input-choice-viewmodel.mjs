@@ -7,23 +7,39 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {String} id Unique ID of this view model instance. 
+ * @property {Boolean} isEditable If `true`, input(s) will 
+ * be in edit mode. If `false`, will be in read-only mode.
+ * @property {JQuery | HTMLElement} element The DOM element that is 
+ * associated with this view model. 
+ * * Read-only
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
+ * 
+ * @property {Any | undefined} value The current value. 
+ * * Upon change, invokes the `onChange` callback. 
+ * 
  * @property {ChoiceOption} value The current value. 
  * @property {Array<ChoiceOption>} options Gets the options available. 
  * * Read-only. 
- * @property {String} localizedValue The localized value of the current 
- * `ChoiceOption`. 
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
  * * `oldValue: {ChoiceOption}`
  * * `newValue: {ChoiceOption}`
+ * @method onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
+ * @method onFocus Callback that is invoked when the input element is focused. 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
+ * @method onFocusLost Callback that is invoked when the input element is unfocused. 
+ * * `event: {Event}`
+ * * `viewModel: {ViewModel}`
  * 
  * @abstract
  */
 export default class InputChoiceViewModel extends InputViewModel {
-  /** @override */
-  get localizedValue() { return (this.value ?? {}).localizedValue; }
-
   /**
    * @param {Object} args 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
@@ -33,8 +49,6 @@ export default class InputChoiceViewModel extends InputViewModel {
    * 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @param {String | undefined} args.iconHtml Raw HTML to render as 
-   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * 
    * @param {ChoiceOption | undefined} args.value The current value. 
    * * default is the first option given.
