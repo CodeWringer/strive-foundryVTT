@@ -4,6 +4,7 @@ import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
 import { AnimationUtil } from "../../../../util/anim-utility.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
+import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
 
 /**
  * Abstract base Item sheet class. 
@@ -11,10 +12,12 @@ import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
  * @abstract Inheritors MUST override:
  * * `static TABS`
  * * `static PARTS`
- * * `getViewModel()`
  * * `get localizedDocumentType`
+
+ * Inheritors _should_ override:
+ * * `createViewModel()`
  * 
- * Inheritors MAY override:
+ * Inheritors _may_ override:
  * * `_getTabsConfig()`
  * * `get title`
  * 
@@ -44,7 +47,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
         handler: (event, element) => {
           const id = $(element).parent().parent().attr("id")
           const viewModel = game.strive.viewModels.get(id);
-          // TODO #761 send to chat
+          viewModel.sendToChat();
         },
       },
       enterEditMode: {
@@ -122,20 +125,6 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   get html() { return this.#html; }
 
   /**
-   * The content container's current scroll value. 
-   * 
-   * @type {Number | undefined}
-   */
-  get scrollValue() {
-    if (ValidationUtil.isDefined(this.contentElement) !== true) return undefined;
-    return this.contentElement[0].scrollTop;
-  }
-  set scrollValue(value) {
-    if (ValidationUtil.isDefined(this.contentElement) !== true) return;
-    this.contentElement[0].scrollTop = value;
-  }
-
-  /**
    * @type {Boolean}
    */
   get isEditMode() { return this._isEditMode ?? false; }
@@ -194,10 +183,13 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    * @param {TransientDocument} document 
    * @returns {BaseSheetViewModel}
    * 
-   * @abstract
+   * @virtual
    */
   createViewModel(document) {
-    throw new Error("Not implemented");
+    return new BaseItemSheetViewModel({
+      id: document.id,
+      document: document,
+    });
   }
 
   /** @override */
@@ -224,17 +216,11 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     const context = await super._prepareContext(options)
 
     // Ensure view model. 
-    this.viewModel = this.createViewModel(context, context.item, this);
+    this.viewModel = this.createViewModel(context.document);
     this.viewModel.readAllViewState();
     context.viewModel = this.viewModel;
 
     return context;
-  }
-
-  /** @override */
-  _getHeaderControls() {
-    const controls = super._getHeaderControls();
-    return controls;
   }
 
   /** @override */

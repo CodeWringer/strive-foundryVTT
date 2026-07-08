@@ -41,12 +41,16 @@ export const TEMPLATES = {
       baseSheet: `${basePathApplication}/item/base/sheet/base-item-sheet.hbs`,
       language: `${basePathApplication}/item/language/language-content.hbs`,
     },
+    dialog: {
+      modal: `${basePathApplication}/dialog/modal-dialog/modal-dialog.hbs`,
+    },
     component: {
       button: `${basePathComponent}/button/button.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
       dropDown: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
       richText: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
+      row: `${basePathComponent}/row/row.hbs`,
     },
   },
   /**

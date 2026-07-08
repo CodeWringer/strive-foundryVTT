@@ -8,7 +8,6 @@ import { KEY_CODES } from "./keyboard/key-codes.mjs";
 import { KEYBOARD } from "./keyboard/keyboard.mjs";
 import { Rect } from "./rect.mjs";
 import { SheetUtil } from "./sheet-utility.mjs";
-// import SendToChatHandler from "./send-to-chat-handler.mjs";
 
 /**
  * Wraps the `presentation.util` module. 
@@ -21,7 +20,6 @@ export const util = {
   ClipboardHandler: ClipboardHandler,
   DragDropHandler: DragDropHandler,
   HANDLEBARS_GLOBALS: HANDLEBARS_GLOBALS,
-  // SendToChatHandler: SendToChatHandler,
   Rect: Rect,
   sheet: SheetUtil,
   chat: ChatUtil,

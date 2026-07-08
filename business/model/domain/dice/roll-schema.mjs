@@ -1,4 +1,3 @@
-import DynamicInputDialog from "../../../../presentation/application/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import RollData from "./roll-data.mjs"
 import RollQueryData from "./roll-query-data.mjs"
 
@@ -99,23 +98,23 @@ export class RollSchema {
   async queryRollData(document) {
     // Prepare the dialog. 
     // By default, it allows selection of the visibility mode. 
-    const dialog = new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("system.roll.query"),
-      inputDefinitions: [
-        // new DynamicInputDefinition({
-        //   name: this._nameInputVisibility,
-        //   template: InputDropDownViewModel.TEMPLATE,
-        //   viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
-        //     id: id,
-        //     parent: parent,
-        //     value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
-        //     options: VISIBILITY_MODES.asChoices(),
-        //     ...overrides,
-        //   }),
-        //   localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
-        // }),
-      ],
-    });
+    // const dialog = new DynamicInputDialog({
+    //   localizedTitle: game.i18n.localize("system.roll.query"),
+    //   inputDefinitions: [
+    //     new DynamicInputDefinition({
+    //       name: this._nameInputVisibility,
+    //       template: InputDropDownViewModel.TEMPLATE,
+    //       viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
+    //         id: id,
+    //         parent: parent,
+    //         value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+    //         options: VISIBILITY_MODES.asChoices(),
+    //         ...overrides,
+    //       }),
+    //       localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
+    //     }),
+    //   ],
+    // });
 
     return await this._queryRollData(document, dialog);
   }

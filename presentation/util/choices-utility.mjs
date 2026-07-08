@@ -26,7 +26,7 @@ export const ChoicesUtil = {
   * 
   * @returns {Array<ChoiceOption>}
   */
-  getAsChoices: function(constantsObject, exclude = ChoicesUtil._defaultExcludes) {
+  getAsChoices: (constantsObject, exclude = ChoicesUtil._defaultExcludes) => {
     return ConstantsUtil._getAs(constantsObject, exclude, (entry) => {
       const localizedName = ValidationUtil.isDefined(entry.localizableName) ? StringUtil.getLoca(entry.localizableName) : undefined;
       const icon = entry.img ?? entry.icon;

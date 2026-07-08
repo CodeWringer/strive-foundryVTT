@@ -1,18 +1,24 @@
 import ButtonViewModel from "./button/button-viewmodel.mjs";
+import DynamicComponent from "./dynamic-component/dynamic-component.mjs";
 import InputDropDownViewModel from "./input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
+import PreparedSection from "./dynamic-component/prepared-section.mjs";
+import RowViewModel from "./row/row-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
  */
 export const component = {
+  PreparedSection: PreparedSection,
   ButtonViewModel: ButtonViewModel,
   InputTextFieldViewModel: InputTextFieldViewModel,
   InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
   InputDropDownViewModel: InputDropDownViewModel,
   InputRichTextViewModel: InputRichTextViewModel,
+  DynamicComponent: DynamicComponent,
+  RowViewModel: RowViewModel,
   /**
    * Initialization, which MUST be called during system setup!
    */

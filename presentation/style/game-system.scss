@@ -32,6 +32,9 @@
 @import 'anims/spinner';
 @import 'anims/entrances-exits';
 
+/* Dialogs */
+@import '../application/dialog/modal-dialog/modal-dialog';
+
 /* Overrides */
 // Overrides of default or FoundryVTT introduced styles. 
 @import 'global/overrides/code';

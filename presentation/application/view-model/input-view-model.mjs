@@ -22,6 +22,8 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @abstract Inheritors MUST implement:
  * * `static get TEMPLATE`
  * * `get clazz`
+ * 
+ * Inheritors _should_ override:
  * * `get inputElement`
  * 
  * @property {String} id Unique ID of this view model instance. 
@@ -100,8 +102,9 @@ export default class InputViewModel extends ViewModel {
    * Returns the actual input element, which may be nested within `this.element`. 
    * @type {JQuery | HTMLElement}
    * @readonly
+   * @virtual
    */
-  get inputElement() { return new Error("Not implemented"); }
+  get inputElement() { return ""; }
 
   /**
    * Set to `true` when updating the value without wanting events to fire. 
@@ -151,10 +154,10 @@ export default class InputViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this.inputElement.change(this._onChange.bind(this));
-    this.inputElement.on("input", this._onInput.bind(this));
-    this.inputElement.on("focus", this._onFocus.bind(this));
-    this.inputElement.on("focusout", this._onFocusLost.bind(this));
+    $(this.inputElement).change(this._onChange.bind(this));
+    $(this.inputElement).on("input", this._onInput.bind(this));
+    $(this.inputElement).on("focus", this._onFocus.bind(this));
+    $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
   }
   
   /** @override */

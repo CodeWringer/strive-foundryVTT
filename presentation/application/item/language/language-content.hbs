@@ -10,7 +10,9 @@ viewModel: LanguageItemSheetViewModel
 </div>
 <div class="flex flex-column">
   {{> inputRichText viewModel=viewModel.vmDescription }}
-  {{#if viewModel.isGM}}
-  {{> inputRichText viewModel=viewModel.vmGmNotes }}
-  {{/if}}
 </div>
+{{#if viewModel.isGM}}
+<div class="gm-only">
+  {{> inputRichText viewModel=viewModel.vmGmNotes }}
+</div>
+{{/if}}

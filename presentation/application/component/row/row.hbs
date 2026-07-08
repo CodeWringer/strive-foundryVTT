@@ -1,7 +1,8 @@
 {{!-- Required context:
-viewModel: ModalDialogViewModel
+viewModel: RowViewModel
+cssClass: String | undefined
 --}}
-<section id="{{viewModel.id}}" class="strive flex flex-column flex-grow auto-margin-v-lg">
+<div id="{{viewModel.id}}" class="strive flex flex-row auto-margin-h-lg{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#each viewModel.preparedSections as |section|}}
   {{#if section.html}}
   {{{section.html}}}
@@ -11,4 +12,4 @@ viewModel: ModalDialogViewModel
   {{/with}}
   {{/if}}
   {{/each}}
-</section>
+</div>
