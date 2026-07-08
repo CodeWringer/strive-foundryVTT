@@ -55,4 +55,12 @@ export default class InputTextFieldViewModel extends InputViewModel {
     this._value = args.value ?? "";
     this.placeholder = args.placeholder ?? "";
   }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    // Ensure the correct value is displayed. 
+    this.inputElement.attr("value", this.value);
+  }
 }

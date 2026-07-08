@@ -132,6 +132,13 @@ export default class DocumentUpdater {
    */
   flushUpdates() {
     this.document.update(this.#transactions, { render: true, });
+    this.discardUpdates();  
+  }
+
+  /**
+   * Clears the current updates buffer. 
+   */
+  discardUpdates() {
     this.#transactions = {};
   }
 

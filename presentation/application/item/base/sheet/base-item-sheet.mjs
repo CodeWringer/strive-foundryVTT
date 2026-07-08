@@ -160,11 +160,12 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
 
   /** @override */
   async close() {
-    this.isEditMode = false;
     if (ValidationUtil.isDefined(this.viewModel)) {
       this.viewModel.writeViewState();
       this.viewModel.dispose();
+      this.viewModel = null;
     }
+    this.isEditMode = false;
     return super.close();
   }
 

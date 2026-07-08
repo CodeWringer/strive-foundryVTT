@@ -178,6 +178,16 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
         this.closeMenu();
       }
     });
+
+    // Ensure the correct value is displayed. 
+    const element = this.#buttonElement.find(`#${this.id}-button-value`);
+    let newContent = this.value.iconHtml;
+    if (this.showValue) {
+      newContent = `${newContent}<span>${this.value.localizedValue}</span>`;
+    }
+
+    element.empty();
+    element.append(newContent);
   }
 
   /** @override */

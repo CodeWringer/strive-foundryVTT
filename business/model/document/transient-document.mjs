@@ -91,7 +91,9 @@ export default class TransientDocument {
    */
   get img() { return this.document.img; }
   set img(value) {
-    this.document.img = value;
+    if (!this._updater.isTransactionMode) {
+      this.document.img = value;
+    }
     this.updateByPath("img", value);
   }
 
@@ -102,7 +104,9 @@ export default class TransientDocument {
    */
   get name() { return this.document.name; }
   set name(value) {
-    this.document.name = value;
+    if (!this._updater.isTransactionMode) {
+      this.document.name = value;
+    }
     this.updateByPath("name", value);
   }
 
@@ -388,5 +392,12 @@ export default class TransientDocument {
    */
   flushUpdates() {
     this._updater.flushUpdates();
+  }
+
+  /**
+   * Clears the current updates buffer. 
+   */
+  discardUpdates() {
+    this._updater.discardUpdates();
   }
 }

@@ -94,6 +94,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
   /** @override */
   dispose() {
+    this.document.discardUpdates();
     this.isEditMode = false;
     super.dispose();
 
