@@ -1,6 +1,7 @@
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
+import { AnimationUtil } from "../../../../util/anim-utility.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 
@@ -38,14 +39,35 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
       resizable: true,
     },
     actions: {
+      sendToChat: {
+        buttons: [0],
+        handler: (event, element) => {
+          const id = $(element).parent().parent().attr("id")
+          const viewModel = game.strive.viewModels.get(id);
+          // TODO #761 send to chat
+        },
+      },
       enterEditMode: {
         buttons: [0],
         handler: (event, element) => {
           const id = $(element).parent().parent().attr("id")
           const viewModel = game.strive.viewModels.get(id);
           viewModel.sheet.isEditMode = true;
-          $(`#${id} button[data-action=enterEditMode]`).addClass("hidden");
-          $(`#${id} button[data-action=exitEditMode]`).removeClass("hidden");
+
+          if (ValidationUtil.isDefined(this._timeout)) {
+            clearTimeout(this._timeout)
+          }
+
+          const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
+          const exitModeButton = $(`#${id} button[data-action=exitEditMode]`);
+          const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
+          AnimationUtil.slideDisplace({
+            enteringElements: [exitModeButton],
+            exitingElements: [enterModeButton],
+          });
+          AnimationUtil.slideOut({
+            elements: [sendToChatButton],
+          });
         },
       },
       exitEditMode: {
@@ -54,8 +76,17 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
           const id = $(element).parent().parent().attr("id")
           const viewModel = game.strive.viewModels.get(id);
           viewModel.sheet.isEditMode = false;
-          $(`#${id} button[data-action=enterEditMode]`).removeClass("hidden");
-          $(`#${id} button[data-action=exitEditMode]`).addClass("hidden");
+
+          const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
+          const exitModeButton = $(`#${id} button[data-action=exitEditMode]`);
+          const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
+          AnimationUtil.slideDisplace({
+            enteringElements: [enterModeButton],
+            exitingElements: [exitModeButton],
+          });
+          AnimationUtil.slideIn({
+            elements: [sendToChatButton],
+          });
         },
       },
     },
@@ -111,7 +142,18 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   set isEditMode(value) {
     this._isEditMode = value;
 
-    $(`form#${this.id}`).find("h1.window-title").text(this.title);
+    const titleElement = $(`form#${this.id}`).find("h1.window-title");
+    const titleReplacement = $(`<h1 class="window-title">${this.title}</h1>`);
+    $(titleReplacement).insertBefore(titleElement);
+    
+    AnimationUtil.slideDisplace({
+      enteringElements: [titleReplacement],
+      exitingElements: [titleElement],
+      containerFlexGrow: true,
+    }).then(() => {
+      $(titleElement).remove();
+    });
+
     if (ValidationUtil.isDefined(this.viewModel)) {
       this.viewModel.isEditMode = value;
     }
@@ -122,7 +164,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     let loca = this.localizedDocumentType;
     if (this.isEditMode) {
       loca = StringUtil.format(
-        StringUtil.getLoca("system.general.edit.editingSheet"), 
+        StringUtil.getLoca("system.general.edit.editingSheet"),
         loca,
       );
     }
@@ -199,6 +241,11 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   _getFrameButtons() {
     const controls = super._getFrameButtons();
     return [
+      {
+        action: "sendToChat",
+        icon: "ico ico-speech-bubble",
+        label: "system.general.sendToChat",
+      },
       {
         action: "enterEditMode",
         icon: "ico ico-edit",

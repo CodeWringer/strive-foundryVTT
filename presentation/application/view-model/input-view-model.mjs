@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { AnimationUtil } from "../../util/anim-utility.mjs";
 import { SheetUtil } from "../../util/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -63,39 +64,19 @@ export default class InputViewModel extends ViewModel {
 
     const editElement = this.element.find(".edit-mode");
     const readElement = this.element.find(".read-mode");
-    
-    if (ValidationUtil.isDefined(this._timeout)) {
-      clearTimeout(this._timeout)
-      this.element.removeClass("slide-anim");
-    }
-    this.element.addClass("slide-anim");
-
-    editElement.removeClass("hidden");
-    readElement.removeClass("hidden");
-
     if (value) {
-      editElement.addClass("entrance");
-      readElement.addClass("exit");
+      AnimationUtil.slideDisplace({
+        enteringElements: [editElement],
+        exitingElements: [readElement],
+        containerElement: this.element,
+      });
     } else {
-      editElement.addClass("exit");
-      readElement.addClass("entrance");
+      AnimationUtil.slideDisplace({
+        enteringElements: [readElement],
+        exitingElements: [editElement],
+        containerElement: this.element,
+      });
     }
-    
-    this._timeout = setTimeout(() => {
-      this.element.removeClass("slide-anim");
-      editElement.removeClass("entrance");
-      editElement.removeClass("exit");
-      readElement.removeClass("entrance");
-      readElement.removeClass("exit");
-      
-      if (value) {
-        readElement.addClass("hidden");
-      } else {
-        editElement.addClass("hidden");
-      }
-
-      this._timeout = null;
-    }, 500);
   }
 
   /**

@@ -1,3 +1,4 @@
+import { AnimationUtil } from "./anim-utility.mjs";
 import { ChatUtil } from "./chat-utility.mjs";
 import { ChoicesUtil } from "./choices-utility.mjs";
 import ClipboardHandler from "./clipboard-handler.mjs";
@@ -25,6 +26,7 @@ export const util = {
   sheet: SheetUtil,
   chat: ChatUtil,
   choices: ChoicesUtil,
+  anim: AnimationUtil,
   /**
    * Initialization to be called during the system's "ready" hook. 
    */

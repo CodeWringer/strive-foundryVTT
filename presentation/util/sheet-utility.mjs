@@ -86,6 +86,8 @@ export const SheetUtil = {
   /**
    * Returns the given element's rectangle. 
    * 
+   * @param {HTMLElement} element 
+   * 
    * @returns {Rect}
    */
   getElementRect(element) {
