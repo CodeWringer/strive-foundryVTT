@@ -75,10 +75,10 @@ export default class ButtonViewModel extends ViewModel {
     if (ValidationUtil.isDefined(args.iconHtml)) {
       game.strive.logger.logWarn("Deprecated parameter, 'iconHtml', use 'content', instead");
     }
-    
+
     this.content = args.content;
 
-    this.onClick = args.onClick ?? (async (event, data) => {});
+    this.onClick = args.onClick ?? (async (event, data) => { });
   }
 
   /** @override */
@@ -91,6 +91,15 @@ export default class ButtonViewModel extends ViewModel {
       if (this.isEditable === true) {
         const data = await this._onClick(event);
         await this.onClick(event, data);
+      }
+    });
+    this.element.on("keydown", async (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        if (this.isEditable === true) {
+          const data = await this._onClick(event);
+          await this.onClick(event, data);
+        }
       }
     });
   }

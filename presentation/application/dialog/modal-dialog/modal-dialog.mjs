@@ -23,6 +23,7 @@ import ModalDialogViewModel from "./modal-dialog-viewmodel.mjs";
  * * Default `true`
  * @property {Array<DynamicComponent>} sections The sections that will 
  * be rendered as content of the dialog. 
+ * @property {String | undefined} initialFocus
  * 
  * @method onClose Invoked upon the dialog closing. 
  * Receives this dialog instance as its only argument. 
@@ -127,6 +128,7 @@ export default class ModalDialog extends FoundryWrapper.HandlebarsApplicationMix
    * @param {String | undefined} args.title Localized string for the dialog title. 
    * @param {Array<DynamicComponent> | undefined} args.sections The sections that will 
    * be rendered as content of the dialog. 
+   * @param {String | undefined} args.initialFocus
    */
   constructor(args = {}) {
     super(args);
@@ -137,6 +139,7 @@ export default class ModalDialog extends FoundryWrapper.HandlebarsApplicationMix
     this.onClose = args.onClose ?? (() => {});
     this._title = args.title ?? "";
     this.sections = args.sections ?? [];
+    this.initialFocus = args.initialFocus;
   }
 
   /**
@@ -149,6 +152,7 @@ export default class ModalDialog extends FoundryWrapper.HandlebarsApplicationMix
     return new ModalDialogViewModel({
       isEditable: true,
       sections: this.sections,
+      initialFocus: this.initialFocus,
     });
   }
 

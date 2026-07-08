@@ -2,7 +2,6 @@ import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import DynamicComponent from "../../component/dynamic-component/dynamic-component.mjs";
 import RowViewModel from "../../component/row/row-viewmodel.mjs";
-import { TEMPLATES } from "../../templates.mjs";
 import ModalDialog from "../modal-dialog/modal-dialog.mjs";
 
 /**
@@ -20,6 +19,7 @@ import ModalDialog from "../modal-dialog/modal-dialog.mjs";
  * * Default `true`
  * @property {Boolean} confirmed If `true`, the user closed the dialog 
  * through confirmation. 
+ * @property {String | undefined} initialFocus
  * 
  * @method onClose Invoked upon the dialog closing. 
  * Receives this dialog instance as its only argument. 
@@ -35,10 +35,12 @@ export default class ConfirmableModalDialog extends ModalDialog {
    * @param {String | undefined} args.title Localized string for the dialog title. 
    * @param {Array<DynamicComponent> | undefined} args.sections The sections that will 
    * be rendered as content of the dialog. 
+   * @param {String | undefined} args.initialFocus
    */
   constructor(args = {}) {
     super({
       ...args,
+      initialFocus: args.initialFocus ?? "vmConfirm",
       sections: (args.sections ?? []).concat([
         new DynamicComponent({
           html: '<span class="flex-grow"></span>',

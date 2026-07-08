@@ -2,6 +2,7 @@ import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DynamicComponent from "../../component/dynamic-component/dynamic-component.mjs";
 import { PreparedSectionViewModelUtility } from "../../component/dynamic-component/prepared-section-viewmodel-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 
@@ -15,6 +16,7 @@ import { PreparedSectionViewModelUtility } from "../../component/dynamic-compone
  * 
  * @property {Array<DynamicComponent>} sections
  * @property {Array<PreparedSection>} preparedSections
+ * @property {String | undefined} initialFocus
  */
 export default class ModalDialogViewModel extends ViewModel {
   /** @override */
@@ -50,11 +52,37 @@ export default class ModalDialogViewModel extends ViewModel {
    * * default `true`
    * 
    * @param {Array<DynamicComponent> | undefined} args.sections
+   * @param {String | undefined} args.initialFocus
    */
   constructor(args = {}) {
     super(args);
 
     this.sections = args.sections ?? [];
     PreparedSectionViewModelUtility.convertDynamicComponents(this, this.sections);
+    this.initialFocus = args.initialFocus;
+  }
+
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    if (ValidationUtil.isDefined(this.initialFocus)) {
+      const _findChildToFocus = (children) => {
+        for (const child of children) {
+          if (child._id == this.initialFocus) {
+            return child;
+          }
+          const childOfChildToFocus = _findChildToFocus(child.children);
+          if (ValidationUtil.isDefined(childOfChildToFocus)) {
+            return childOfChildToFocus;
+          }
+        }
+      }
+      const childToFocus = _findChildToFocus(this.children);
+      if (ValidationUtil.isDefined(childToFocus)) {
+        childToFocus.element.focus();
+      }
+    } else if (this.children.length > 0) {
+      this.children[0].element.focus();
+    }
   }
 }
