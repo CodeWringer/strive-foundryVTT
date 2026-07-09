@@ -61,8 +61,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   set isEditMode(value) {
     this.#isEditMode = value;
 
-    this.#updateTitle();
-
     // Ensure edit mode is propagated to children. 
     if (ValidationUtil.isDefined(this.children)) {
       for (const child of this.children) {
@@ -130,6 +128,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     AnimationUtil.slideOut({
       elements: [sendToChatButton],
     });
+    this.#updateTitle();
 
     this.document.isTransactionMode = true;
     this.document.discardUpdates();
@@ -154,6 +153,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     AnimationUtil.slideIn({
       elements: [sendToChatButton],
     });
+    this.#updateTitle();
 
     this.document.isTransactionMode = false;
   }

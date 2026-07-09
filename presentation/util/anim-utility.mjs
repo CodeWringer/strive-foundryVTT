@@ -1,3 +1,4 @@
+import { UuidUtil } from "../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import { SheetUtil } from "./sheet-utility.mjs";
 
@@ -9,10 +10,13 @@ export const AnimationUtil = {
   _timeouts: new Map(),
 
   /**
-   * @type {String}
+   * @param {String} id
+   * @returns {String}
    * @private
    */
-  _containerElementString: '<div class="strive flex flex-middle"></div>',
+  getContainerElementString: (id) => {
+    return `<div id="${id}" class="strive flex flex-middle"></div>`;
+  },
 
   /**
    * @param {Object} args
@@ -34,9 +38,12 @@ export const AnimationUtil = {
     const isUserDefinedContainer = ValidationUtil.isDefined(containerElement);
 
     if (!isUserDefinedContainer) {
+      const containerId = UuidUtil.createUUID();
+      const containerString = AnimationUtil.getContainerElementString(containerId);
       const firstElement = args.enteringElements.length > 0 ? args.enteringElements[0] : args.exitingElements[0];
-      $(AnimationUtil._containerElementString).insertBefore(firstElement);
-      containerElement = firstElement.prev();
+      $(containerString).insertBefore(firstElement);
+      containerElement = $(`#${containerId}`);
+
       if (args.containerFlexGrow === true) {
         $(containerElement).addClass("flex-grow");
       }
@@ -117,9 +124,12 @@ export const AnimationUtil = {
     const isUserDefinedContainer = ValidationUtil.isDefined(containerElement);
 
     if (!isUserDefinedContainer) {
+      const containerId = UuidUtil.createUUID();
+      const containerString = AnimationUtil.getContainerElementString(containerId);
       const firstElement = args.elements[0];
-      $(AnimationUtil._containerElementString).insertBefore(firstElement);
-      containerElement = firstElement.prev();
+      $(containerString).insertBefore(firstElement);
+      containerElement = $(`#${containerId}`);
+
       if (args.containerFlexGrow === true) {
         $(containerElement).addClass("flex-grow");
       }
@@ -187,9 +197,12 @@ export const AnimationUtil = {
     const isUserDefinedContainer = ValidationUtil.isDefined(containerElement);
 
     if (!isUserDefinedContainer) {
+      const containerId = UuidUtil.createUUID();
+      const containerString = AnimationUtil.getContainerElementString(containerId);
       const firstElement = args.elements[0];
-      $(AnimationUtil._containerElementString).insertBefore(firstElement);
-      containerElement = firstElement.prev();
+      $(containerString).insertBefore(firstElement);
+      containerElement = $(`#${containerId}`);
+
       if (args.containerFlexGrow === true) {
         $(containerElement).addClass("flex-grow");
       }
