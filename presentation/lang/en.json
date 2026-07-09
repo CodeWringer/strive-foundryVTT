@@ -152,8 +152,8 @@
         "edit": "Edit",
         "editing": "Editing",
         "editingSheet": "%s (Editing)",
-        "enterEditMode": "Enter Edit Mode",
-        "saveEdits": "Save Changes & Exit Edit Mode",
+        "enterEditMode": "Enter Edit Mode (CTRL + E)",
+        "saveEdits": "Save Changes & Exit Edit Mode (CTRL + S)",
         "metadata": "Edit Metadata"
       },
       "expansion": {

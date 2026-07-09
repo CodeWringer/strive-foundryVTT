@@ -1,20 +1,19 @@
 /**
- * Represents key codes as jQuery knows them. These can be queried via jQuery's event object's 
- * `which` property. 
- * 
- * @example
- * ```JS
- * $("body").on("keydown", (event) => {
- *   if (event.which === KEY_CODES.ALT) {
- *     // Do something
- *   }
- * })
- * ```
- * 
+ * Represents key codes. 
  * @constant
  */
 export const KEY_CODES = {
   ENTER: 13,
-  ALT: 18,
   ESCAPE: 27,
+  E: 69,
+  S: 83,
+}
+
+/**
+ * Represents modifier key codes. 
+ * @constant
+ */
+export const MODIFIER_KEY_CODES = {
+  CTRL: 17,
+  ALT: 18,
 }

@@ -4,6 +4,8 @@ import { ValidationUtil } from "../../../../../common/util/validation-utility.mj
 import { AnimationUtil } from "../../../../util/anim-utility.mjs";
 import { ChatUtil } from "../../../../util/chat-utility.mjs";
 import { ChoicesUtil } from "../../../../util/choices-utility.mjs";
+import { KEY_CODES, MODIFIER_KEY_CODES } from "../../../../util/keyboard/key-codes.mjs";
+import { KEYBOARD } from "../../../../util/keyboard/keyboard.mjs";
 import DynamicComponent from "../../../component/dynamic-component/dynamic-component.mjs";
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
@@ -161,6 +163,8 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     super.dispose();
     this.document.discardUpdates();
     this.document.isTransactionMode = false;
+    KEYBOARD.offKeyDown(this._editHotKeyListenerId);
+    KEYBOARD.offKeyDown(this._saveHotKeyListenerId);
 
     // An extremely aggressive band-aid solution. But, this ensures lingering tool tip elements 
     // with (at least partially) dynamic IDs are always cleared properly. 
@@ -202,11 +206,27 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
+    // Ensure the correct button is visible.
     if (this.isEditMode) {
       $(`#${this.sheet.id} button[data-action=enterEditMode]`).addClass("hidden");
     } else {
       $(`#${this.sheet.id} button[data-action=saveEdits]`).addClass("hidden");
     }
+
+    this._editHotKeyListenerId = KEYBOARD.onKeyDown({
+      keyCode: KEY_CODES.E,
+      modifier: MODIFIER_KEY_CODES.CTRL,
+      handler: () => {
+        this.enterEditMode();
+      },
+    });
+    this._saveHotKeyListenerId = KEYBOARD.onKeyDown({
+      keyCode: KEY_CODES.S,
+      modifier: MODIFIER_KEY_CODES.CTRL,
+      handler: () => {
+        this.saveEdits();
+      },
+    });
   }
 
   /**
