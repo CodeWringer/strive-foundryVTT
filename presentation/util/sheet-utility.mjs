@@ -91,12 +91,13 @@ export const SheetUtil = {
    * @returns {Rect}
    */
   getElementRect(element) {
-    const parentPos = element.offset();
+    const elm = $(element)
+    const parentPos = elm.offset();
     return new Rect({
       x: parentPos.left,
       y: parentPos.top,
-      width: element.outerWidth(),
-      height: element.outerHeight(),
+      width: elm.outerWidth(),
+      height: elm.outerHeight(),
     });
   }
 }

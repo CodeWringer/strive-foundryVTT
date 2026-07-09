@@ -240,7 +240,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     await AnimationUtil.slideDisplace({
       enteringElements: [titleReplacement],
       exitingElements: [titleElement],
-      containerFlexGrow: true,
     }).then(() => {
       $(titleElement).remove();
     });

@@ -70,13 +70,11 @@ export default class InputViewModel extends ViewModel {
       AnimationUtil.slideDisplace({
         enteringElements: [editElement],
         exitingElements: [readElement],
-        containerElement: this.element,
       });
     } else {
       AnimationUtil.slideDisplace({
         enteringElements: [readElement],
         exitingElements: [editElement],
-        containerElement: this.element,
       });
     }
   }

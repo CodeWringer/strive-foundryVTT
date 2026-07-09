@@ -1,22 +1,12 @@
 import { UuidUtil } from "../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../common/util/validation-utility.mjs";
-import { SheetUtil } from "./sheet-utility.mjs";
 
 export const AnimationUtil = {
   /**
-   * @type {Map<String, Number>}
+   * @type {Array<ActiveAnimation>}
    * @private
    */
-  _timeouts: new Map(),
-
-  /**
-   * @param {String} id
-   * @returns {String}
-   * @private
-   */
-  getContainerElementString: (id) => {
-    return `<div id="${id}" class="strive flex flex-middle"></div>`;
-  },
+  _activeAnimations: [],
 
   /**
    * @param {Object} args
@@ -25,84 +15,53 @@ export const AnimationUtil = {
    * to slide into view. 
    * @param {Array<JQuery | HTMLElement>} args.exitingElements The elements that are 
    * to be displaced and slide out of view. 
-   * @param {JQuery | HTMLElement | undefined} args.containerElement 
-   * @param {Boolean | undefined} args.containerFlexGrow If `true`, and `containerElement` 
-   * is `null` or `undefined`, then the temporarily added wrapper container will receive 
-   * the flex-grow class. 
-   * * default `false`
    * @returns {Promise<void>}
    * @async
    */
   slideDisplace: async (args = {}) => {
-    let containerElement = args.containerElement;
-    const isUserDefinedContainer = ValidationUtil.isDefined(containerElement);
+    const allElements = args.enteringElements.concat(args.exitingElements);
+    if (allElements.length == 0 || allElements[0].length == 0) return;
+    AnimationUtil._clearConflicts(allElements);
 
-    if (!isUserDefinedContainer) {
-      const containerId = UuidUtil.createUUID();
-      const containerString = AnimationUtil.getContainerElementString(containerId);
-      const firstElement = args.enteringElements.length > 0 ? args.enteringElements[0] : args.exitingElements[0];
-      $(containerString).insertBefore(firstElement);
-      containerElement = $(`#${containerId}`);
+    const id = UuidUtil.createUUID();
 
-      if (args.containerFlexGrow === true) {
-        $(containerElement).addClass("flex-grow");
-      }
+    for (const element of args.enteringElements) {
+      $(element).addClass("enter");
+      $(element).removeClass("hidden");
+      $(element).parent().addClass("slide-anim");
     }
 
-    const idToClear = AnimationUtil._timeouts.get(containerElement);
-    clearTimeout(idToClear);
-
-    for (const enteringElement of args.enteringElements) {
-      $(enteringElement).addClass("enter");
-      $(enteringElement).removeClass("hidden");
-
-      if (!isUserDefinedContainer) {
-        $(enteringElement).detach();
-        $(containerElement).append(enteringElement);
-      }
+    for (const element of args.exitingElements) {
+      $(element).removeClass("hidden");
+      $(element).addClass("exit");
+      $(element).parent().addClass("slide-anim");
     }
 
-    for (const exitingElement of args.exitingElements) {
-      $(exitingElement).addClass("exit");
-
-      if (!isUserDefinedContainer) {
-        $(exitingElement).detach();
-        $(containerElement).append(exitingElement);
+    const _reset = () => {
+      for (const element of args.enteringElements) {
+        $(element).removeClass("enter");
+        $(element).parent().removeClass("slide-anim");
       }
-    }
 
-    $(containerElement).addClass("slide-anim");
+      for (const element of args.exitingElements) {
+        $(element).removeClass("exit");
+        $(element).addClass("hidden");
+        $(element).parent().removeClass("slide-anim");
+      }
+    };
 
     return new Promise((resolve) => {
       const timeoutId = setTimeout(() => {
-        for (const enteringElement of args.enteringElements) {
-          $(enteringElement).removeClass("enter");
-  
-          if (!isUserDefinedContainer) {
-            $(enteringElement).detach();
-            $(enteringElement).insertBefore(containerElement);
-          }
-        }
-  
-        for (const exitingElement of args.exitingElements) {
-          $(exitingElement).removeClass("exit");
-          $(exitingElement).addClass("hidden");
-  
-          if (!isUserDefinedContainer) {
-            $(exitingElement).detach();
-            $(exitingElement).insertBefore(containerElement);
-          }
-        }
-  
-        $(containerElement).removeClass("slide-anim");
-        if (!isUserDefinedContainer) {
-          $(containerElement).remove();
-        }
-  
-        AnimationUtil._timeouts.delete(containerElement);
+        AnimationUtil._removeAnimById(id);
         resolve();
       }, 500);
-      AnimationUtil._timeouts.set(containerElement, timeoutId);
+      AnimationUtil._activeAnimations.push(new ActiveAnimation({
+        elements: allElements,
+        reset: _reset,
+        timeoutId: timeoutId,
+        id: id,
+        resolve: resolve,
+      }));
     });
   },
 
@@ -111,71 +70,41 @@ export const AnimationUtil = {
    * Slides the given `elements` out of view, hiding them. 
    * @param {Array<JQuery | HTMLElement>} args.elements The elements that are 
    * to slide out of view. 
-   * @param {JQuery | HTMLElement | undefined} args.containerElement 
-   * @param {Boolean | undefined} args.containerFlexGrow If `true`, and `containerElement` 
-   * is `null` or `undefined`, then the temporarily added wrapper container will receive 
-   * the flex-grow class. 
-   * * default `false`
    * @returns {Promise<void>}
    * @async
    */
   slideOut: async (args = {}) => {
-    let containerElement = args.containerElement;
-    const isUserDefinedContainer = ValidationUtil.isDefined(containerElement);
+    if (args.elements.length == 0 || args.elements[0].length == 0) return;
+    AnimationUtil._clearConflicts(args.elements);
 
-    if (!isUserDefinedContainer) {
-      const containerId = UuidUtil.createUUID();
-      const containerString = AnimationUtil.getContainerElementString(containerId);
-      const firstElement = args.elements[0];
-      $(containerString).insertBefore(firstElement);
-      containerElement = $(`#${containerId}`);
-
-      if (args.containerFlexGrow === true) {
-        $(containerElement).addClass("flex-grow");
-      }
-    }
-
-    const idToClear = AnimationUtil._timeouts.get(containerElement);
-    clearTimeout(idToClear);
+    const id = UuidUtil.createUUID();
 
     for (const element of args.elements) {
+      $(element).removeClass("hidden");
       $(element).addClass("exit");
-
-      const elementRect = SheetUtil.getElementRect(element);
-
-      if (!isUserDefinedContainer) {
-        $(element).detach();
-        $(containerElement).append(element);
-      }
-
-      // This ensures the layout remains the same until the element has finished sliding out. 
-      // Otherwise, the element won't be visible. 
-      $(`<div style="width: ${elementRect.width}px; height: ${elementRect.height}px;"></div>`).insertBefore(element);
+      $(element).parent().addClass("slide-anim");
     }
 
-    $(containerElement).addClass("slide-anim");
+    const _reset = () => {
+      for (const element of args.elements) {
+        $(element).removeClass("exit");
+        $(element).addClass("hidden");
+        $(element).parent().removeClass("slide-anim");
+      }
+    };
 
     return new Promise((resolve) => {
       const timeoutId = setTimeout(() => {
-        for (const element of args.elements) {
-          $(element).addClass("hidden");
-          $(element).removeClass("exit");
-  
-          if (!isUserDefinedContainer) {
-            $(element).detach();
-            $(element).insertBefore(containerElement);
-          }
-        }
-  
-        $(containerElement).removeClass("slide-anim");
-        if (!isUserDefinedContainer) {
-          $(containerElement).remove();
-        }
-  
-        AnimationUtil._timeouts.delete(containerElement);
+        AnimationUtil._removeAnimById(id);
         resolve();
       }, 500);
-      AnimationUtil._timeouts.set(containerElement, timeoutId);
+      AnimationUtil._activeAnimations.push(new ActiveAnimation({
+        elements: args.elements,
+        reset: _reset,
+        timeoutId: timeoutId,
+        id: id,
+        resolve: resolve,
+      }));
     });
   },
 
@@ -184,65 +113,95 @@ export const AnimationUtil = {
    * Slides the given `elements` into view. 
    * @param {Array<JQuery | HTMLElement>} args.elements The elements that are 
    * to slide into view. 
-   * @param {JQuery | HTMLElement | undefined} args.containerElement 
-   * @param {Boolean | undefined} args.containerFlexGrow If `true`, and `containerElement` 
-   * is `null` or `undefined`, then the temporarily added wrapper container will receive 
-   * the flex-grow class. 
-   * * default `false`
    * @returns {Promise<void>}
    * @async
    */
   slideIn: async (args = {}) => {
-    let containerElement = args.containerElement;
-    const isUserDefinedContainer = ValidationUtil.isDefined(containerElement);
+    if (args.elements.length == 0 || args.elements[0].length == 0) return;
+    AnimationUtil._clearConflicts(args.elements);
 
-    if (!isUserDefinedContainer) {
-      const containerId = UuidUtil.createUUID();
-      const containerString = AnimationUtil.getContainerElementString(containerId);
-      const firstElement = args.elements[0];
-      $(containerString).insertBefore(firstElement);
-      containerElement = $(`#${containerId}`);
-
-      if (args.containerFlexGrow === true) {
-        $(containerElement).addClass("flex-grow");
-      }
-    }
-
-    const idToClear = AnimationUtil._timeouts.get(containerElement);
-    clearTimeout(idToClear);
+    const id = UuidUtil.createUUID();
 
     for (const element of args.elements) {
       $(element).addClass("enter");
       $(element).removeClass("hidden");
-
-      if (!isUserDefinedContainer) {
-        $(element).detach();
-        $(containerElement).append(element);
-      }
+      $(element).parent().addClass("slide-anim");
     }
 
-    $(containerElement).addClass("slide-anim");
+    const _reset = () => {
+      for (const element of args.elements) {
+        $(element).removeClass("enter");
+        $(element).parent().removeClass("slide-anim");
+      }
+    };
 
     return new Promise((resolve) => {
       const timeoutId = setTimeout(() => {
-        for (const element of args.elements) {
-          $(element).removeClass("enter");
-  
-          if (!isUserDefinedContainer) {
-            $(element).detach();
-            $(element).insertBefore(containerElement);
-          }
-        }
-  
-        $(containerElement).removeClass("slide-anim");
-        if (!isUserDefinedContainer) {
-          $(containerElement).remove();
-        }
-  
-        AnimationUtil._timeouts.delete(containerElement);
+        AnimationUtil._removeAnimById(id);
         resolve();
       }, 500);
-      AnimationUtil._timeouts.set(containerElement, timeoutId);
+      AnimationUtil._activeAnimations.push(new ActiveAnimation({
+        elements: args.elements,
+        reset: _reset,
+        timeoutId: timeoutId,
+        id: id,
+        resolve: resolve,
+      }));
     });
   },
+
+  /**
+   * @param {Array<JQuery | HTMLElement>} elements 
+   * @private
+   */
+  _clearConflicts(elements) {
+    const animsToKill = AnimationUtil._activeAnimations.filter((anim) => {
+      for (const element of elements) {
+        if (anim.elements.find(it => it == element)) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    for (const animToKill of animsToKill) {
+      AnimationUtil._removeAnimById(animToKill.id);
+    }
+  },
+
+  /**
+   * @param {String} id 
+   * @private
+   */
+  _removeAnimById(id) {
+    const animToKill = AnimationUtil._activeAnimations.find(it => it.id === id);
+    if (!ValidationUtil.isDefined(animToKill)) return;
+
+    clearTimeout(animToKill.timeoutId);
+    animToKill.reset();
+    const index = AnimationUtil._activeAnimations.findIndex(it => it.id === id);
+    if (index >= 0) {
+      AnimationUtil._activeAnimations.splice(index, 1);
+    }
+    animToKill.resolve();
+  }
 };
+
+export class ActiveAnimation {
+  /**
+   * @param {Object} args
+   * @param {Array<JQuery | HTMLElement>} args.elements
+   * @param {Function} args.reset
+   * @param {String} args.timeoutId
+   * @param {Function} args.resolve
+   * @param {String | undefined} args.id
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["elements", "reset", "timeoutId", "resolve"]);
+    this.elements = args.elements;
+    this.reset = args.reset;
+    this.timeoutId = args.timeoutId;
+    this.resolve = args.resolve;
+    this.id = args.id ?? UuidUtil.createUUID();
+  }
+}

@@ -1,4 +1,4 @@
-import { AnimationUtil } from "./anim-utility.mjs";
+import { ActiveAnimation, AnimationUtil } from "./anim-utility.mjs";
 import { ChatUtil } from "./chat-utility.mjs";
 import { ChoicesUtil } from "./choices-utility.mjs";
 import ClipboardHandler from "./clipboard-handler.mjs";
@@ -26,6 +26,7 @@ export const util = {
   chat: ChatUtil,
   choices: ChoicesUtil,
   anim: AnimationUtil,
+  ActiveAnimation: ActiveAnimation,
   /**
    * Initialization to be called during the system's "ready" hook. 
    */
