@@ -93,6 +93,8 @@ export default class InputViewModel extends ViewModel {
    * @param {Any} newValue
    */
   set value(newValue) {
+    if (this.isDisposed) return;
+
     const oldValue = this._value;
     this._value = newValue;
     this.onChange(oldValue, newValue);
@@ -160,13 +162,6 @@ export default class InputViewModel extends ViewModel {
     $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
   }
   
-  /** @override */
-  dispose() {
-    this.onChange = null;
-
-    super.dispose();
-  }
-
   /**
    * Internal callback for the value change. 
    * 

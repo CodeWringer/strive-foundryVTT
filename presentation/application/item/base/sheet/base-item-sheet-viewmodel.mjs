@@ -1,6 +1,7 @@
 import { VISIBILITY_MODES } from "../../../../../business/model/domain/const/visibility-modes.mjs";
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
+import { AnimationUtil } from "../../../../util/anim-utility.mjs";
 import { ChatUtil } from "../../../../util/chat-utility.mjs";
 import { ChoicesUtil } from "../../../../util/choices-utility.mjs";
 import DynamicComponent from "../../../component/dynamic-component/dynamic-component.mjs";
@@ -23,7 +24,6 @@ import ViewModel from "../../../view-model/view-model.mjs";
  * @property {String} contentTemplate Returns the relative url of the content template. 
  * E. g. `TEMPLATES.application.item.language`
  * * Read-only
- * @property {Boolean} isEditMode If true, the sheet can be edited. 
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
@@ -42,23 +42,33 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get contentTemplate() { throw new Error("Not implemented"); }
 
   /**
+   * @type {Boolean}
+   * @private
+   */
+  #isEditMode = false;
+  /**
    * If true, the sheet can be edited. 
    * @type {Boolean}
    */
-  get isEditMode() { return this._isEditMode; }
+  get isEditMode() { return this.#isEditMode; }
+  /**
+   * If true, the sheet can be edited. 
+   * @type {Boolean}
+   * @private
+   */
   set isEditMode(value) {
-    this._isEditMode = value;
+    this.#isEditMode = value;
+
+    this.#updateTitle();
 
     // Ensure edit mode is propagated to children. 
     if (ValidationUtil.isDefined(this.children)) {
       for (const child of this.children) {
         if (ValidationUtil.isDefined(child.isEditable)) {
-          child.isEditable = this._isEditMode;
+          child.isEditable = this.#isEditMode;
         }
       }
     }
-
-    this.document.isTransactionMode = value;
   }
 
   /**
@@ -79,7 +89,8 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    this._isEditMode = args.isEditMode ?? false;
+    this.#isEditMode = args.isEditMode ?? false;
+    this.document.isTransactionMode = this.#isEditMode;
   }
 
   /**
@@ -98,11 +109,58 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     }
   }
 
+  /**
+   * Transitions to edit mode. 
+   * @async
+   */
+  async enterEditMode() {
+    if (this.isEditMode) return;
+    this.isEditMode = true;
+
+    const id = this.sheet.id;
+    const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
+    const exitModeButton = $(`#${id} button[data-action=saveEdits]`);
+    const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
+    AnimationUtil.slideDisplace({
+      enteringElements: [exitModeButton],
+      exitingElements: [enterModeButton],
+    });
+    AnimationUtil.slideOut({
+      elements: [sendToChatButton],
+    });
+
+    this.document.isTransactionMode = true;
+    this.document.discardUpdates();
+  }
+
+  /**
+   * Saves edits and transitions from edit mode. 
+   * @async
+   */
+  async saveEdits() {
+    if (!this.isEditMode) return;
+    this.isEditMode = false;
+
+    const id = this.sheet.id;
+    const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
+    const exitModeButton = $(`#${id} button[data-action=saveEdits]`);
+    const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
+    AnimationUtil.slideDisplace({
+      enteringElements: [enterModeButton],
+      exitingElements: [exitModeButton],
+    });
+    AnimationUtil.slideIn({
+      elements: [sendToChatButton],
+    });
+
+    this.document.isTransactionMode = false;
+  }
+
   /** @override */
   dispose() {
     super.dispose();
     this.document.discardUpdates();
-    this.isEditMode = false;
+    this.document.isTransactionMode = false;
 
     // An extremely aggressive band-aid solution. But, this ensures lingering tool tip elements 
     // with (at least partially) dynamic IDs are always cleared properly. 
@@ -138,5 +196,33 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
         visibilityMode: visibilityMode,
       });
     }
+  }
+
+  /** @override @inheritdoc */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    if (this.isEditMode) {
+      $(`#${this.sheet.id} button[data-action=enterEditMode]`).addClass("hidden");
+    } else {
+      $(`#${this.sheet.id} button[data-action=saveEdits]`).addClass("hidden");
+    }
+  }
+
+  /**
+   * @private
+   */
+  async #updateTitle() {
+    const titleElement = $(`form#${this.sheet.id}`).find("h1.window-title");
+    const titleReplacement = $(`<h1 class="window-title">${this.sheet.title}</h1>`);
+    $(titleReplacement).insertBefore(titleElement);
+    
+    await AnimationUtil.slideDisplace({
+      enteringElements: [titleReplacement],
+      exitingElements: [titleElement],
+      containerFlexGrow: true,
+    }).then(() => {
+      $(titleElement).remove();
+    });
   }
 }

@@ -1,9 +1,7 @@
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
-import { AnimationUtil } from "../../../../util/anim-utility.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
-import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
 
 /**
@@ -21,7 +19,7 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
  * * `_getTabsConfig()`
  * * `get title`
  * 
- * @property {ViewModel} viewModel
+ * @property {BaseItemSheetViewModel} viewModel
  * @property {HTMLElement} html The form element of the sheet. 
  * * Read-only
  * @property {HTMLElement} content The content element of the sheet. 
@@ -30,7 +28,6 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
  * * Read-only
  * @property {String} localizedDocumentType
  * * Read-only
- * @property {Boolean} isEditMode
  */
 export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
   /** @override */
@@ -55,41 +52,15 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
         handler: (event, element) => {
           const id = $(element).parent().parent().attr("id")
           const viewModel = game.strive.viewModels.get(id);
-          viewModel.sheet.isEditMode = true;
-
-          if (ValidationUtil.isDefined(this._timeout)) {
-            clearTimeout(this._timeout)
-          }
-
-          const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
-          const exitModeButton = $(`#${id} button[data-action=exitEditMode]`);
-          const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
-          AnimationUtil.slideDisplace({
-            enteringElements: [exitModeButton],
-            exitingElements: [enterModeButton],
-          });
-          AnimationUtil.slideOut({
-            elements: [sendToChatButton],
-          });
+          viewModel.enterEditMode();
         },
       },
-      exitEditMode: {
+      saveEdits: {
         buttons: [0],
         handler: (event, element) => {
           const id = $(element).parent().parent().attr("id")
           const viewModel = game.strive.viewModels.get(id);
-          viewModel.sheet.isEditMode = false;
-
-          const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
-          const exitModeButton = $(`#${id} button[data-action=exitEditMode]`);
-          const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
-          AnimationUtil.slideDisplace({
-            enteringElements: [enterModeButton],
-            exitingElements: [exitModeButton],
-          });
-          AnimationUtil.slideIn({
-            elements: [sendToChatButton],
-          });
+          viewModel.saveEdits();
         },
       },
     },
@@ -124,34 +95,10 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    */
   get html() { return this.#html; }
 
-  /**
-   * @type {Boolean}
-   */
-  get isEditMode() { return this._isEditMode ?? false; }
-  set isEditMode(value) {
-    this._isEditMode = value;
-
-    const titleElement = $(`form#${this.id}`).find("h1.window-title");
-    const titleReplacement = $(`<h1 class="window-title">${this.title}</h1>`);
-    $(titleReplacement).insertBefore(titleElement);
-    
-    AnimationUtil.slideDisplace({
-      enteringElements: [titleReplacement],
-      exitingElements: [titleElement],
-      containerFlexGrow: true,
-    }).then(() => {
-      $(titleElement).remove();
-    });
-
-    if (ValidationUtil.isDefined(this.viewModel)) {
-      this.viewModel.isEditMode = value;
-    }
-  }
-
   /** @override */
   get title() {
     let loca = this.localizedDocumentType;
-    if (this.isEditMode) {
+    if ((this.viewModel ?? {}).isEditMode) {
       loca = StringUtil.format(
         StringUtil.getLoca("system.general.edit.editingSheet"),
         loca,
@@ -174,14 +121,9 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
    */
   get isOwner() { return ((this.actor ?? this.item) ?? {}).isOwner ?? false; }
 
-  constructor(document) {
-    super(document);
-    this.isEditMode = false;
-  }
-
   /**
    * @param {TransientDocument} document 
-   * @returns {BaseSheetViewModel}
+   * @returns {BaseItemSheetViewModel}
    * 
    * @virtual
    */
@@ -199,7 +141,6 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
       this.viewModel.dispose();
       this.viewModel = null;
     }
-    this.isEditMode = false;
     return super.close();
   }
 
@@ -238,9 +179,9 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
         label: "system.general.edit.enterEditMode",
       },
       {
-        action: "exitEditMode",
+        action: "saveEdits",
         icon: "ico ico-floppy-disk",
-        label: "system.general.edit.exitEditMode",
+        label: "system.general.edit.saveEdits",
       },
     ].concat(controls);
   }
@@ -251,12 +192,6 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     this.#content = $(this.html).find("section.window-content");
 
     await this.viewModel.activateListeners(this.#html);
-
-    if (this.isEditMode) {
-      $(`#${this.id} button[data-action=enterEditMode]`).addClass("hidden");
-    } else {
-      $(`#${this.id} button[data-action=exitEditMode]`).addClass("hidden");
-    }
 
     return await super._postRender(context, options);
   }

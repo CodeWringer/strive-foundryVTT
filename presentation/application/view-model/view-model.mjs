@@ -1,10 +1,8 @@
-import { GameSystemUserSettings } from "../../../business/setting/game-system-user-settings.mjs";
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import { PropertyUtil } from "../../../common/util/property-utility.mjs";
 import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
-import { TEMPLATES } from "../templates.mjs";
 
 /**
  * @summary
@@ -79,26 +77,29 @@ import { TEMPLATES } from "../templates.mjs";
  * * `get clazz`
  * 
  * @property {String} id Unique ID of this view model instance. 
- * * Read-only. 
+ * * Read-only
  * @property {ViewModel | undefined} parent Optional. Parent ViewModel instance of this instance. 
  * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
  * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
  * @property {Array<ViewModel>} children An array of the child view models of this view model. 
- * * Read-only. 
+ * * Read-only
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * * Read-only. 
+ * * Read-only
  * @property {Boolean} isEditable If true, the view model data is editable.
  * @property {Boolean} isGM Returns `true`, if the current user is a GM. 
- * * Read-only. 
+ * * Read-only
  * @property {Boolean} isOwner Returns `true`, if the current user is the owner of the represented document.
- * * Read-only. 
+ * * Read-only
  * @property {ViewModelToolTipDefinition | undefined} toolTipDefinition A localized text to 
  * display as a tool tip. 
  * @property {Boolean} showReminders Returns `true`, if rule reminders are enabled. 
- * * Read-only. 
+ * * Read-only
  * @property {JQuery} element Returns a JQuery-wrapped HTMLElement whose id attribute corresponds to `this.id`. 
  * Note: Only available **after** the *first* call to `activateListeners`! 
- * * Read-only. 
+ * * Read-only
+ * @property {Boolean} isDisposed Internal flag for use by inheritors. 
+ * * Read-only
+ * * Protected
  */
 export default class ViewModel {
   /**
@@ -323,10 +324,11 @@ export default class ViewModel {
   }
 
   /**
-   * @type {Object}
+   * @type {Boolean}
    * @readonly
+   * @protected
    */
-  get TEMPLATES() { return TEMPLATES; }
+  get isDisposed() { return this._isDisposed; }
 
   /**
    * @param {Object} args The arguments object. 
@@ -353,6 +355,7 @@ export default class ViewModel {
     this.parent = args.parent;
     this._visible = args.visible ?? true;
     this._toolTipDefinition = args.toolTip;
+    this._isDisposed = false;
 
     if (ValidationUtil.isDefined(args.document) && ValidationUtil.isDefined(args.document.getTransientObject)) {
       this.document = args.document.getTransientObject();
@@ -497,6 +500,8 @@ export default class ViewModel {
    * @virtual
    */
   dispose() {
+    this._isDisposed = true;
+
     if (ValidationUtil.isDefined(this._toolTip)) {
       this._toolTip.deactivateListeners();
     }
