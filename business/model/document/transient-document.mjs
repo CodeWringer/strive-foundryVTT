@@ -256,7 +256,7 @@ export default class TransientDocument {
    */
   async updateByPath(propertyPath, newValue, render = true) {
     if (!this.isTransactionMode) {
-      common.util.property.setNestedPropertyValue(this, propertyPath, newValue);
+      common.util.property.setNestedPropertyValue(this.document, propertyPath, newValue);
     }
     await this._updater.updateByPath(propertyPath, newValue, render);
   }
