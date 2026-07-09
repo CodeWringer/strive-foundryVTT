@@ -34,6 +34,5 @@ export const util = {
   setup: () => {
     // Initialize global Handlebars helpers and partials.
     HANDLEBARS_GLOBALS.initHandlebarsHelpers();
-    HANDLEBARS_GLOBALS.initHandlebarsPartials();
   },
 };
