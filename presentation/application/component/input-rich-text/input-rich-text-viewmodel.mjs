@@ -67,12 +67,6 @@ export default class InputRichTextViewModel extends InputViewModel {
     this.element.append(rendered);
   }
 
-  /** @override */
-  dispose() {
-    // this.flushValue();
-    super.dispose();
-  }
-
   flushValue() {
     const html = this.element.find(".editor-content.ProseMirror").html();
     this.value = html;
