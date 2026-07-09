@@ -6,6 +6,7 @@ import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.
 import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
 import PreparedSection from "./dynamic-component/prepared-section.mjs";
 import RowViewModel from "./row/row-viewmodel.mjs";
+import CustomProseMirrorMenu from "./input-rich-text/custom-prose-mirror-menu.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -19,6 +20,7 @@ export const component = {
   InputRichTextViewModel: InputRichTextViewModel,
   DynamicComponent: DynamicComponent,
   RowViewModel: RowViewModel,
+  CustomProseMirrorMenu: CustomProseMirrorMenu,
   /**
    * Initialization, which MUST be called during system setup!
    */

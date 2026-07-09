@@ -49,8 +49,19 @@ export const TEMPLATES = {
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
       dropDown: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
-      richText: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
+      richText: {
+        main: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
+        lazy: `${basePathComponent}/input-rich-text/input-rich-text-lazy-content.hbs`,
+      },
       row: `${basePathComponent}/row/row.hbs`,
+    },
+  },
+  image: {
+    underline: {
+      h2: {
+        dark: `${basePathPresentation}/image/underline-h2-325x7-dark.svg`,
+        light: `${basePathPresentation}/image/underline-h2-325x7-light.svg`,
+      },
     },
   },
   /**

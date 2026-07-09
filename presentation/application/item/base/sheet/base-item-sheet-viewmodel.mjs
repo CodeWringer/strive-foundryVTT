@@ -48,9 +48,13 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get isEditMode() { return this._isEditMode; }
   set isEditMode(value) {
     this._isEditMode = value;
-    for (const child of this.children) {
-      if (ValidationUtil.isDefined(child.isEditable)) {
-        child.isEditable = this._isEditMode;
+
+    // Ensure edit mode is propagated to children. 
+    if (ValidationUtil.isDefined(this.children)) {
+      for (const child of this.children) {
+        if (ValidationUtil.isDefined(child.isEditable)) {
+          child.isEditable = this._isEditMode;
+        }
       }
     }
 
@@ -96,9 +100,9 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
   /** @override */
   dispose() {
+    super.dispose();
     this.document.discardUpdates();
     this.isEditMode = false;
-    super.dispose();
 
     // An extremely aggressive band-aid solution. But, this ensures lingering tool tip elements 
     // with (at least partially) dynamic IDs are always cleared properly. 

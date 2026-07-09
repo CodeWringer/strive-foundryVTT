@@ -1,4 +1,3 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
@@ -19,7 +18,7 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  */
 export default class InputRichTextViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.richText; }
+  static get TEMPLATE() { return TEMPLATES.application.component.richText.main; }
 
   /**
    * Registers the Handlebars partial for this component. 
@@ -32,41 +31,6 @@ export default class InputRichTextViewModel extends InputViewModel {
 
   /** @override */
   get clazz() { return InputRichTextViewModel; }
-
-  /**
-   * @type {JQuery}
-   * @readonly
-   */
-  get editModeElement() { return this.element.find(".edit-mode"); }
-
-  /**
-   * @type {JQuery}
-   * @readonly
-   */
-  get editorPlaceholderElement() { return this.element.find(".editor-placeholder"); }
-
-  /**
-   * @type {JQuery}
-   * @readonly
-   */
-  get readModeElement() { return this.element.find(".read-mode"); }
-
-  get isEditable() { return super.isEditable; }
-  set isEditable(value) {
-    super.isEditable = value;
-
-    if (value) {
-      this._createEditor();
-    } else if (ValidationUtil.isDefined(this.#editor)) {
-      this._disposeEditor();
-    }
-  }
-
-  /**
-   * @type {ProseMirrorEditor}
-   * @private
-   */
-  #editor = null;
 
   /**
    * @param {Object} args 
@@ -90,49 +54,27 @@ export default class InputRichTextViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this.readModeElement.empty();
-    const enriched = await FoundryWrapper.TextEditor.enrichHTML(this.value);
-    this.readModeElement.append(enriched);
-
-    if (this.isEditable) {
-      this._createEditor();
-    }
+    this.element.empty();
+    this.enrichedHtml = await FoundryWrapper.TextEditor.implementation.enrichHTML(
+      this.value, {
+        secrets: this.isOwner,
+        relativeTo: this,
+      }
+    );
+    const rendered = await FoundryWrapper.renderTemplate(TEMPLATES.application.component.richText.lazy, {
+      viewModel: this,
+    });
+    this.element.append(rendered);
   }
 
   /** @override */
   dispose() {
+    // this.flushValue();
     super.dispose();
-    this._disposeEditor();
   }
 
-  /**
-   * @private
-   */
-  _disposeEditor() {
-    if (ValidationUtil.isDefined(this.#editor)) {
-      this.#editor.destroy();
-    }
-    this.#editor = null;
-    this.editModeElement.empty();
-    this.editModeElement.append('<div class="editor-placeholder"></div>');
-  }
-
-  /**
-   * @returns {Promise<void>}
-   * @private
-   * @async
-   */
-  async _createEditor() {
-    if (!ValidationUtil.isDefined(this.#editor)) {
-      this.#editor = await FoundryWrapper.TextEditor.create({
-        target: this.editorPlaceholderElement[0],
-        engine: "prosemirror",
-      }, this.value);
-
-      this.element.find('button[data-action=save]').click(async (event) => {
-        event.preventDefault(); // Prevents side-effects from event-bubbling. 
-        this.value = "???"; // TODO #761
-      });
-    }
+  flushValue() {
+    const html = this.element.find(".editor-content.ProseMirror").html();
+    this.value = html;
   }
 }

@@ -9,8 +9,6 @@ import { ValidationUtil } from "../common/util/validation-utility.mjs";
 export default class FoundryWrapper {
   // Class wraps.
   static ApplicationV2 = foundry.applications.api.ApplicationV2;
-
-  /** @see https://foundryvtt.com/api/classes/foundry.applications.api.DocumentSheetV2.html */
   static DocumentSheetV2 = foundry.applications.api.DocumentSheetV2;
   static ActorSheetV2 = foundry.applications.sheets.ActorSheetV2;
   static ItemSheetV2 = foundry.applications.sheets.ItemSheetV2;
@@ -19,6 +17,7 @@ export default class FoundryWrapper {
   static CombatTracker = foundry.applications.sidebar.tabs.CombatTracker;
   static TokenHUD = foundry.applications.hud.TokenHUD;
   static TextEditor = foundry.applications.ux.TextEditor.implementation;
+  static ProseMirrorMenu = foundry.prosemirror.ProseMirrorMenu;
 
   static deepClone = foundry.utils.deepClone;
 
@@ -59,22 +58,6 @@ export default class FoundryWrapper {
     },
   }
 
-  /**
-   * Merges `defaultOptions` with `overrides`. Properties with the same name found in `overrides` 
-   * take precedence. 
-   * 
-   * @param {Object} defaultOptions 
-   * @param {Object} overrides 
-   * @returns {Object}
-   */
-  mergeObject(defaultOptions, overrides) {
-    if (ValidationUtil.isDefined(foundry) && ValidationUtil.isDefined(foundry.utils) && ValidationUtil.isDefined(foundry.utils.mergeObject)) { // Foundry 12
-      return foundry.utils.mergeObject(defaultOptions, overrides);
-    } else { // Foundry 11
-      return mergeObject(defaultOptions, overrides);
-    }
-  }
-  
   /**
    * Uses Foundry's dice roller to roll `number` of dice with `faces` faces and returns 
    * the rolled face results. 
@@ -126,9 +109,10 @@ export default class FoundryWrapper {
    * 
    * @returns {Promise<String>} The rendered HTML. 
    * 
+   * @static
    * @async
    */
-  async renderTemplate(templatePath, args = {}) {
+  static async renderTemplate(templatePath, args = {}) {
     return await foundry.applications.handlebars.renderTemplate(templatePath, args);
   }
 
@@ -153,8 +137,9 @@ export default class FoundryWrapper {
    * @param {Array<ContextMenuItem>} items 
    * 
    * @returns {ContextMenu}
+   * @static
    */
-  createContextMenu(html, id, items) {
+  static createContextMenu(html, id, items) {
     return new ContextMenu(html, id, items);
   }
 

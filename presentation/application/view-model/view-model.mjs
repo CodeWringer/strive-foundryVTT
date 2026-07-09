@@ -4,6 +4,7 @@ import { PropertyUtil } from "../../../common/util/property-utility.mjs";
 import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
+import { TEMPLATES } from "../templates.mjs";
 
 /**
  * @summary
@@ -87,12 +88,17 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * * Read-only. 
  * @property {Boolean} isEditable If true, the view model data is editable.
- * @property {Boolean} isGM If true, the current user is a GM. 
+ * @property {Boolean} isGM Returns `true`, if the current user is a GM. 
  * * Read-only. 
- * @property {Boolean} isOwner If true, the current user is the owner of the represented document.
+ * @property {Boolean} isOwner Returns `true`, if the current user is the owner of the represented document.
  * * Read-only. 
  * @property {ViewModelToolTipDefinition | undefined} toolTipDefinition A localized text to 
  * display as a tool tip. 
+ * @property {Boolean} showReminders Returns `true`, if rule reminders are enabled. 
+ * * Read-only. 
+ * @property {JQuery} element Returns a JQuery-wrapped HTMLElement whose id attribute corresponds to `this.id`. 
+ * Note: Only available **after** the *first* call to `activateListeners`! 
+ * * Read-only. 
  */
 export default class ViewModel {
   /**
@@ -295,11 +301,10 @@ export default class ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showReminders() { return GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
+  get showReminders() { return game.strive.enableReminders; }
 
   /**
-   * Returns the element. 
-   * 
+   * Returns a JQuery-wrapped HTMLElement whose id attribute corresponds to `this.id`. 
    * Note: Only available **after** the *first* call to `activateListeners`! 
    * 
    * @type {JQuery}
@@ -316,6 +321,12 @@ export default class ViewModel {
       this.element.addClass("hidden");
     }
   }
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get TEMPLATES() { return TEMPLATES; }
 
   /**
    * @param {Object} args The arguments object. 

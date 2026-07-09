@@ -161,6 +161,7 @@
         "expandOf": "Expand %{s}"
       },
       "formula": "Formula",
+      "gm": "GM",
       "id": "ID",
       "increment": "Increment",
       "isCustom": "Custom",
@@ -176,17 +177,9 @@
       "messageVisibility": {
         "label": "Visibility",
         "query": "Select Message Visibility",
-        "public": {
-          "label": "Public"
-        },
-        "self": {
-          "label": "Self"
-        },
-        "gm": {
-          "label": "Game-Master",
-          "secrets": "Game-Master Secrets",
-          "toggleSecrets": "Toggle Game-Master Secrets"
-        }
+        "public": "Public",
+        "self": "Self",
+        "gm": "Game-Master"
       },
       "modifier": {
         "label": "Modifier",
@@ -211,8 +204,7 @@
       "search": "Search",
       "sheet": {
         "tab": {
-          "content": "Content",
-          "gmNotes": "GM"
+          "content": "Content"
         }
       },
       "toggleVisibility": "Toggle visibility",

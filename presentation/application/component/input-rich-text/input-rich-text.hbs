@@ -3,13 +3,6 @@ viewModel: InputRichTextViewModel
 cssClass: String | undefined
 --}}
 <div
-  class="strive rich-text{{#if cssClass}} {{cssClass}}{{/if}}" 
   id="{{viewModel.id}}" 
->
-  {{!-- Edit mode --}}
-  <prose-mirror class="edit-mode editor prosemirror active{{#if viewModel.isEditable}}{{else}} hidden{{/if}}">
-    <div class="editor-placeholder"></div>
-  </prose-mirror>
-  {{!-- Read mode --}}
-  <div class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}"></div>
-</div>
+  class="strive rich-text{{#if cssClass}} {{cssClass}}{{/if}}" 
+><i class="fas fa-spinner anim-spin font-size-xxl"></i></div>

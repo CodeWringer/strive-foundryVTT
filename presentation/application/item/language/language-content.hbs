@@ -8,11 +8,15 @@ viewModel: LanguageItemSheetViewModel
   <span class="v-divider"></span>
   {{> inputDropDown viewModel=viewModel.vmReadAndWrite }}
 </div>
-<div class="flex flex-column">
-  {{> inputRichText viewModel=viewModel.vmDescription }}
+<div class="flex flex-column flex-grow">
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
 </div>
 {{#if viewModel.isGM}}
-<div class="gm-only">
-  {{> inputRichText viewModel=viewModel.vmGmNotes }}
+<div class="gm-only flex-grow">
+  <h2 class="flex flex-column strive-regular-font" style="font-weight: normal;">
+    <span class="pad-l-md pad-t-md">{{localize "system.general.gm"}}</span>
+    <img src="{{viewModel.TEMPLATES.image.underline.h2.light}}" style="max-width: 500px; min-width: 500px;">
+  </h2>
+  {{> inputRichText viewModel=viewModel.vmGmNotes cssClass="pad-md" }}
 </div>
 {{/if}}

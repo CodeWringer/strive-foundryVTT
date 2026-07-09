@@ -1,0 +1,13 @@
+{{!-- Required context:
+viewModel: InputRichTextViewModel
+--}}
+{{!-- Edit mode --}}
+<prose-mirror 
+  class="edit-mode editor prosemirror active{{#if viewModel.isEditable}}{{else}} hidden{{/if}}"
+  name="viewModel.value"
+  relative
+  editable="true"
+  value="{{viewModel.value}}"
+>{{{viewModel.enrichedHtml}}}</prose-mirror>
+{{!-- Read mode --}}
+<div class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}">{{{viewModel.enrichedHtml}}}</div>

@@ -90,12 +90,7 @@ export default class TransientDocument {
    * @type {String}
    */
   get img() { return this.document.img; }
-  set img(value) {
-    if (!this._updater.isTransactionMode) {
-      this.document.img = value;
-    }
-    this.updateByPath("img", value);
-  }
+  set img(value) { this.updateByPath("img", value); }
 
   /**
    * The internal name of the document. 
@@ -103,12 +98,7 @@ export default class TransientDocument {
    * @type {String}
    */
   get name() { return this.document.name; }
-  set name(value) {
-    if (!this._updater.isTransactionMode) {
-      this.document.name = value;
-    }
-    this.updateByPath("name", value);
-  }
+  set name(value) { this.updateByPath("name", value); }
 
   /**
    * @type {String}
@@ -265,6 +255,9 @@ export default class TransientDocument {
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
+    if (!this.isTransactionMode) {
+      common.util.property.setNestedPropertyValue(this, propertyPath, newValue);
+    }
     await this._updater.updateByPath(propertyPath, newValue, render);
   }
 

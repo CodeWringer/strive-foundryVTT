@@ -33,7 +33,6 @@ export default class DataFieldBridge {
   set value(value) {
     const mapped = this.toDto(value);
     this._value = mapped;
-    common.util.property.setNestedPropertyValue(this.document, this._dataPath, mapped);
     this.document.updateByPath(this._dataPath, mapped);
   }
 
