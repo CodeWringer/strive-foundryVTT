@@ -1,5 +1,6 @@
 import { common } from "../../../../common/_module.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * Utility for updating a document's data. 
@@ -54,10 +55,7 @@ export default class DocumentUpdater {
    */
   async update(delta, render = true) {
     if (this.isTransactionMode) {
-      this.#transactions = {
-        ...this.#transactions,
-        ...delta,
-      };
+      this.#transactions = FoundryWrapper.mergeObject(this.#transactions, delta);
     } else {
       this.document.update(delta, { render: render, });
     }
@@ -80,10 +78,7 @@ export default class DocumentUpdater {
   async updateByPath(propertyPath, newValue, render = true) {
     const dto = this._buildDto(propertyPath, newValue);
     if (this.isTransactionMode) {
-      this.#transactions = {
-        ...this.#transactions,
-        ...dto,
-      };
+      this.#transactions = FoundryWrapper.mergeObject(this.#transactions, dto);
     } else {
       await this.document.update(dto, { render: render });
     }

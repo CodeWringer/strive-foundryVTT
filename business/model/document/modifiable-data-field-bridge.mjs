@@ -32,7 +32,7 @@ export default class ModifiableDataFieldBridge extends DataFieldBridge {
    */
   get modified() { return this._value; }
   set modified(value) {
-    const applicableModifiers = this.document.modifiers.find(it => it.dataPath == this._dataPath);
+    const applicableModifiers = this.document.modifiers.find(it => it.dataPath == this.dataPath);
     // TODO
   }
 }

@@ -20,6 +20,7 @@ export default class FoundryWrapper {
   static ProseMirrorMenu = foundry.prosemirror.ProseMirrorMenu;
 
   static deepClone = foundry.utils.deepClone;
+  static mergeObject = foundry.utils.mergeObject;
 
   /**
    * 
