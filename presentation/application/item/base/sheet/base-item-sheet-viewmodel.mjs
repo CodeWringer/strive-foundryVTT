@@ -1,7 +1,9 @@
 import { VISIBILITY_MODES } from "../../../../../business/model/domain/const/visibility-modes.mjs";
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
-import { AnimationUtil } from "../../../../util/anim-utility.mjs";
+import { SlideDisplaceAnim } from "../../../../animation/slide-displace-anim.mjs";
+import { SlideInAnim } from "../../../../animation/slide-in-anim.mjs";
+import { SlideOutAnim } from "../../../../animation/slide-out-anim.mjs";
 import { ChatUtil } from "../../../../util/chat-utility.mjs";
 import { ChoicesUtil } from "../../../../util/choices-utility.mjs";
 import { KEY_CODES, MODIFIER_KEY_CODES } from "../../../../util/keyboard/key-codes.mjs";
@@ -117,17 +119,13 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     if (this.isEditMode) return;
     this.isEditMode = true;
 
-    const id = this.sheet.id;
-    const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
-    const exitModeButton = $(`#${id} button[data-action=saveEdits]`);
-    const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
-    AnimationUtil.slideDisplace({
-      enteringElements: [exitModeButton],
-      exitingElements: [enterModeButton],
-    });
-    AnimationUtil.slideOut({
-      elements: [sendToChatButton],
-    });
+    new SlideDisplaceAnim({
+      elmA: this._exitModeButton,
+      elmB: this._enterModeButton,
+    }).execute();
+    new SlideOutAnim({
+      elm: this._sendToChatButton,
+    }).execute();
     this.#updateTitle();
 
     this.document.isTransactionMode = true;
@@ -142,17 +140,13 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     if (!this.isEditMode) return;
     this.isEditMode = false;
 
-    const id = this.sheet.id;
-    const enterModeButton = $(`#${id} button[data-action=enterEditMode]`);
-    const exitModeButton = $(`#${id} button[data-action=saveEdits]`);
-    const sendToChatButton = $(`#${id} button[data-action=sendToChat]`);
-    AnimationUtil.slideDisplace({
-      enteringElements: [enterModeButton],
-      exitingElements: [exitModeButton],
-    });
-    AnimationUtil.slideIn({
-      elements: [sendToChatButton],
-    });
+    new SlideDisplaceAnim({
+      elmA: this._enterModeButton,
+      elmB: this._exitModeButton,
+    }).execute();
+    new SlideInAnim({
+      elm: this._sendToChatButton,
+    }).execute();
     this.#updateTitle();
 
     this.document.isTransactionMode = false;
@@ -206,13 +200,24 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
+    const sheetId = this.sheet.id;
+    this._enterModeButton = $(`#${sheetId} button[data-action=enterEditMode]`);
+    this._exitModeButton = $(`#${sheetId} button[data-action=saveEdits]`);
+    this._sendToChatButton = $(`#${sheetId} button[data-action=sendToChat]`);
+
+    this._titleElement = $(`form#${sheetId}`).find("h1.window-title");
+    this._titleReplacement = this._titleElement.clone();
+    this._titleReplacement.addClass("hidden");
+    this._titleReplacement.insertBefore(this._titleElement);
+
     // Ensure the correct button is visible.
     if (this.isEditMode) {
-      $(`#${this.sheet.id} button[data-action=enterEditMode]`).addClass("hidden");
+      this._enterModeButton.addClass("hidden");
     } else {
-      $(`#${this.sheet.id} button[data-action=saveEdits]`).addClass("hidden");
+      this._exitModeButton.addClass("hidden");
     }
 
+    // Ensure hot-keys. 
     this._editHotKeyListenerId = KEYBOARD.onKeyDown({
       keyCode: KEY_CODES.E,
       modifier: MODIFIER_KEY_CODES.CTRL,
@@ -233,15 +238,12 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @private
    */
   async #updateTitle() {
-    const titleElement = $(`form#${this.sheet.id}`).find("h1.window-title");
-    const titleReplacement = $(`<h1 class="window-title">${this.sheet.title}</h1>`);
-    $(titleReplacement).insertBefore(titleElement);
-    
-    await AnimationUtil.slideDisplace({
-      enteringElements: [titleReplacement],
-      exitingElements: [titleElement],
-    }).then(() => {
-      $(titleElement).remove();
-    });
+    this._titleReplacement.text(this.sheet.title);
+
+    await new SlideDisplaceAnim({
+      elmA: this._titleReplacement,
+      elmB: this._titleElement,
+    }).execute();
+    this._titleElement.text(this.sheet.title);
   }
 }

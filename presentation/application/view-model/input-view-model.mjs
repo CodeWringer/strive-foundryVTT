@@ -1,5 +1,5 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import { AnimationUtil } from "../../util/anim-utility.mjs";
+import { SlideDisplaceAnim } from "../../animation/slide-displace-anim.mjs";
 import { SheetUtil } from "../../util/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -67,15 +67,15 @@ export default class InputViewModel extends ViewModel {
     const editElement = this.element.find(".edit-mode");
     const readElement = this.element.find(".read-mode");
     if (value) {
-      AnimationUtil.slideDisplace({
-        enteringElements: [editElement],
-        exitingElements: [readElement],
-      });
+      new SlideDisplaceAnim({
+        elmA: editElement,
+        elmB: readElement,
+      }).execute();
     } else {
-      AnimationUtil.slideDisplace({
-        enteringElements: [readElement],
-        exitingElements: [editElement],
-      });
+      new SlideDisplaceAnim({
+        elmA: readElement,
+        elmB: editElement,
+      }).execute();
     }
   }
 
@@ -144,10 +144,10 @@ export default class InputViewModel extends ViewModel {
     super(args);
 
     this._value = args.value;
-    this.onChange = args.onChange ?? (() => {});
-    this.onInput = args.onInput ?? (() => {});
-    this.onFocus = args.onFocus ?? (() => {});
-    this.onFocusLost = args.onFocusLost ?? (() => {});
+    this.onChange = args.onChange ?? (() => { });
+    this.onInput = args.onInput ?? (() => { });
+    this.onFocus = args.onFocus ?? (() => { });
+    this.onFocusLost = args.onFocusLost ?? (() => { });
   }
 
   /** @override */
@@ -159,7 +159,7 @@ export default class InputViewModel extends ViewModel {
     $(this.inputElement).on("focus", this._onFocus.bind(this));
     $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
   }
-  
+
   /**
    * Internal callback for the value change. 
    * 

@@ -9,6 +9,7 @@ import ChoiceOption from "./model/choice-option.mjs";
 import { GameSystemUserSettings } from "../business/setting/game-system-user-settings.mjs";
 import GameSystemSetting from "../business/setting/game-system-setting.mjs";
 import { SETTING_SCOPES } from "../business/setting/setting-scopes.mjs";
+import { animation } from "./animation/_module.mjs";
 
 /**
  * Wraps the `presentation` module. 
@@ -26,6 +27,7 @@ export const presentation = {
   model: {
     ChoiceOption: ChoiceOption,
   },
+  animation: animation,
   /**
    * Initialization, which MUST be called during system setup!
    * 
