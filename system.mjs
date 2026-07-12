@@ -9,6 +9,7 @@ import VersionCode from "./business/migration/version-code.mjs";
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import { GameSystemUserSettings } from "./business/setting/game-system-user-settings.mjs";
 import CustomProseMirrorMenu from "./presentation/application/component/input-rich-text/custom-prose-mirror-menu.mjs";
+import BaseAnimation from "./presentation/animation/base-anim.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -26,6 +27,7 @@ Hooks.once('init', function () {
     /**
      * Used to log system specific notifications. 
      * @type {ConsoleLogger}
+     * @readonly
      */
     logger: new common.logging.ConsoleLogger(common.logging.LOG_LEVELS.ERROR),
 
@@ -71,14 +73,27 @@ Hooks.once('init', function () {
      * they'll pull (remove) themselves from this list and add themselves to their corresponding owner. 
      * An owner could be an {ActorSheet} or {ItemSheet}. 
      * @type {ViewModelCollection}
+     * @readonly
      */
     viewModels: new presentation.application.viewModel.ViewModelCollection(),
     /**
      * The global view states map. 
      * 
      * @type {Map<String, Object>}
+     * @readonly
      */
     viewStates: new Map(),
+
+    /**
+     * Global list of all* currently active animations. 
+     * 
+     * Exceptions are all infinite animations, e. g. a loading spinner, if it is 
+     * handled purely via css. 
+     * 
+     * @type {Array<BaseAnimation>}
+     * @readonly
+     */
+    activeAnims: [],
 
     /**
      * Registered extenders. A class may have any number of extenders applied to it, 
@@ -87,6 +102,7 @@ Hooks.once('init', function () {
      * To register an extender, use `game.strive.util.extender.addExtender(clazz, extender)`
      * 
      * @type {Map<any, Array<Object>>}
+     * @readonly
      */
     extenders: new Map(),
   };

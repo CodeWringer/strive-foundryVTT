@@ -116,7 +116,11 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async enterEditMode() {
-    if (this.isEditMode) return;
+    if (this.isEditMode || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
+    this._stateChangeTimeout = setTimeout(() => {
+      this._stateChangeTimeout = null;
+    }, 300);
+    
     this.isEditMode = true;
 
     new SlideDisplaceAnim({
@@ -130,6 +134,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
     this.document.isTransactionMode = true;
     this.document.discardUpdates();
+
   }
 
   /**
@@ -137,7 +142,11 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async saveEdits() {
-    if (!this.isEditMode) return;
+    if (!this.isEditMode || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
+    this._stateChangeTimeout = setTimeout(() => {
+      this._stateChangeTimeout = null;
+    }, 300);
+    
     this.isEditMode = false;
 
     new SlideDisplaceAnim({

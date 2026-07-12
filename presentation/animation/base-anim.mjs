@@ -18,8 +18,27 @@ import { SheetUtil } from "../util/sheet-utility.mjs";
  * 
  * Inheritors should NOT override:
  * * `execute()`
+ * 
+ * @property {String} id
+ * @property {Array<JQuery | HTMLElement>} elements
+ * @property {Boolean} isCanceled If `true`, the animation has been canceled. 
+ * This is a one-way street and irreversible. 
+ * * read-only
+ * @property {Boolean} isCompleted If `true`, the animation has been finished. 
+ * * read-only
  */
 export default class BaseAnimation {
+  /**
+   * @type {String}
+   * @private
+   */
+  #id = false;
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get id() { return this.#id; }
+
   /**
    * @type {Boolean}
    * @private
@@ -29,6 +48,7 @@ export default class BaseAnimation {
    * If `true`, the animation has been canceled. This is a one-way street 
    * and irreversible. 
    * @type {Boolean}
+   * @readonly
    */
   get isCanceled() { return this.#isCanceled; }
 
@@ -40,8 +60,20 @@ export default class BaseAnimation {
   /**
    * If `true`, the animation has been finished. 
    * @type {Boolean}
+   * @readonly
    */
   get isCompleted() { return this.#isCompleted; }
+
+  /**
+   * @type {Array<JQuery | HTMLElement>}
+   * @private
+   */
+  #elements = false;
+  /**
+   * @type {Array<JQuery | HTMLElement>}
+   * @readonly
+   */
+  get elements() { return this.#elements; }
 
   /**
    * @param {Object} args
@@ -49,8 +81,8 @@ export default class BaseAnimation {
    * @param {Array<JQuery | HTMLElement> | undefined} args.elements 
    */
   constructor(args = {}) {
-    this.id = args.id ?? UuidUtil.createUUID();
-    this.elements = args.elements ?? [];
+    this.#id = args.id ?? UuidUtil.createUUID();
+    this.#elements = args.elements ?? [];
   }
 
   /**
@@ -77,6 +109,8 @@ export default class BaseAnimation {
     if (this.#isCompleted) {
       throw new Error("Animation finished already and cannot be executed again");
     }
+    this.#cancelConflictingAnims();
+    game.strive.activeAnims.push(this);
     return new Promise(async (resolve, reject) => {
       this._setup(this.elements);
 
@@ -84,13 +118,13 @@ export default class BaseAnimation {
 
       this._tearDown();
 
-      if (this.isCanceled) {
-        reject();
-      } else {
+      if (!this.isCanceled) {
         this._complete();
-        resolve();
       }
+      resolve();
       this.#isCompleted = true;
+      const thisIndex = game.strive.activeAnims.indexOf(this);
+      game.strive.activeAnims.splice(thisIndex, 1);
     });
   }
 
@@ -118,6 +152,39 @@ export default class BaseAnimation {
    * @virtual
    */
   _complete() {}
+
+  /**
+   * Cancels ALL other active animations which target any one of the elements 
+   * this animation also targets. 
+   * @private
+   */
+  #cancelConflictingAnims() {
+    for (const anim of game.strive.activeAnims) {
+      for (const element of this.elements) {
+        if (anim.#hasElement(element)) {
+          anim.cancel();
+          break;
+        }
+      }
+    }
+  }
+
+  /**
+   * Returns `true`, if the given element is targeted by this animation. 
+   * @param {JQuery | HTMLElement} element The element to test. 
+   * @returns {Boolean} `true`, if the given element is targeted by this animation. 
+   * @private
+   */
+  #hasElement(element) {
+    const nonJqueryElm = ValidationUtil.isDefined(element.length) ? element[0] : element;
+    for (const element of this.elements) {
+      const nonJqueryThisElm = ValidationUtil.isDefined(element.length) ? element[0] : element;
+      if (nonJqueryElm == nonJqueryThisElm) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * Creates the container and clones which will be used for the animation. 
