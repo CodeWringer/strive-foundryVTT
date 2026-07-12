@@ -1,0 +1,15 @@
+{{!-- Required context:
+viewModel: RowViewModel
+cssClass: String | undefined
+--}}
+<div id="{{viewModel.id}}" class="strive flex flex-row auto-margin-h-lg{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#each viewModel.preparedSections as |section|}}
+  {{#if section.html}}
+  {{{section.html}}}
+  {{else}}
+  {{#with section.template as | template |}}
+    {{> (template) viewModel=section.viewModel cssClass=section.cssClass }}
+  {{/with}}
+  {{/if}}
+  {{/each}}
+</div>

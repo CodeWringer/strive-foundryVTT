@@ -106,7 +106,6 @@ export class SkillRollSchema extends RollSchema {
       new DynamicInputDefinition({
         name: "diceCompositionLabel",
         localizedLabel: `<p class="font-size-sm">${availableDiceExplanation}</p>`,
-        showFancyFont: false,
       }),
       new DynamicInputDefinition({
         name: nameInputObstacle,
@@ -169,7 +168,6 @@ export class SkillRollSchema extends RollSchema {
         new DynamicInputDefinition({
           name: "forkReminderLabel",
           localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
-          showFancyFont: false,
         }),
       );
     }

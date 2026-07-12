@@ -6,14 +6,35 @@
   word-wrap: break-word;
 }
 
-.secret {
-  background: $c-bg-secret;
+.v-divider {
+  width: 1px;
+  margin: 0 10px;
+  padding-right: 1px; // Ensures symmetry on the right side.
 }
 
-.line-height {
-  height: $line-height;
-  line-height: 1;
-  font-size: $font-size-default;
+.theme-dark {
+  .v-divider {
+    background-color: $c-border-dark;
+  }
+
+  .gm-only {
+    background-color: $c-bg-gm-dark;
+  }
+}
+
+.theme-light {
+  .v-divider {
+    background-color: $c-border-light;
+  }
+
+  .gm-only {
+    background-color: $c-bg-gm-light;
+  }
+}
+
+.strive.sheet-section {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 // Padding styles
@@ -21,15 +42,19 @@
   &-xs {
     padding: $padding-xs !important;
   }
+
   &-sm {
     padding: $padding-sm !important;
   }
+
   &-md {
     padding: $padding-md !important;
   }
+
   &-lg {
     padding: $padding-lg !important;
   }
+
   &-xl {
     padding: $padding-xl !important;
   }
@@ -38,66 +63,85 @@
     &-xs {
       padding-bottom: $padding-xs !important;
     }
+
     &-sm {
       padding-bottom: $padding-sm !important;
     }
+
     &-md {
       padding-bottom: $padding-md !important;
     }
+
     &-lg {
       padding-bottom: $padding-lg !important;
     }
+
     &-xl {
       padding-bottom: $padding-xl !important;
     }
   }
+
   &-t {
     &-xs {
       padding-top: $padding-xs !important;
     }
+
     &-sm {
       padding-top: $padding-sm !important;
     }
+
     &-md {
       padding-top: $padding-md !important;
     }
+
     &-lg {
       padding-top: $padding-lg !important;
     }
+
     &-xl {
       padding-top: $padding-xl !important;
     }
   }
+
   &-l {
     &-xs {
       padding-left: $padding-xs !important;
     }
+
     &-sm {
       padding-left: $padding-sm !important;
     }
+
     &-md {
       padding-left: $padding-md !important;
     }
+
     &-lg {
       padding-left: $padding-lg !important;
     }
+
     &-xl {
       padding-left: $padding-xl !important;
     }
   }
+
   &-r {
     &-xs {
       padding-right: $padding-xs !important;
     }
+
     &-sm {
       padding-right: $padding-sm !important;
     }
+
     &-md {
       padding-right: $padding-md !important;
     }
+
     &-lg {
       padding-right: $padding-lg !important;
     }
+
     &-xl {
       padding-right: $padding-xl !important;
     }
@@ -127,18 +171,23 @@
   &-xs {
     width: $width-column-xs;
   }
+
   &-sm {
     width: $width-column-sm;
   }
+
   &-md {
     width: $width-column-md;
   }
+
   &-lg {
     width: $width-column-lg;
   }
+
   &-xl {
     width: $width-column-xl;
   }
+
   &-xxl {
     width: $width-column-xxl;
   }
@@ -149,18 +198,23 @@
   &-xs {
     min-width: $width-column-xs;
   }
+
   &-sm {
     min-width: $width-column-sm;
   }
+
   &-md {
     min-width: $width-column-md;
   }
+
   &-lg {
     min-width: $width-column-lg;
   }
+
   &-xl {
     min-width: $width-column-xl;
   }
+
   &-xxl {
     min-width: $width-column-xxl;
   }
@@ -171,18 +225,23 @@
   &-xs {
     max-width: $width-column-xs;
   }
+
   &-sm {
     max-width: $width-column-sm;
   }
+
   &-md {
     max-width: $width-column-md;
   }
+
   &-lg {
     max-width: $width-column-lg;
   }
+
   &-xl {
     max-width: $width-column-xl;
   }
+
   &-xxl {
     max-width: $width-column-xxl;
   }
@@ -194,66 +253,85 @@
     &-xs {
       margin-top: $padding-xs;
     }
+
     &-sm {
       margin-top: $padding-sm;
     }
+
     &-md {
       margin-top: $padding-md;
     }
+
     &-lg {
       margin-top: $padding-lg;
     }
+
     &-xl {
       margin-top: $padding-xl;
     }
   }
+
   &-b {
     &-xs {
       margin-bottom: $padding-xs;
     }
+
     &-sm {
       margin-bottom: $padding-sm;
     }
+
     &-md {
       margin-bottom: $padding-md;
     }
+
     &-lg {
       margin-bottom: $padding-lg;
     }
+
     &-xl {
       margin-bottom: $padding-xl;
     }
   }
+
   &-l {
     &-xs {
       margin-left: $padding-xs;
     }
+
     &-sm {
       margin-left: $padding-sm;
     }
+
     &-md {
       margin-left: $padding-md;
     }
+
     &-lg {
       margin-left: $padding-lg;
     }
+
     &-xl {
       margin-left: $padding-xl;
     }
   }
+
   &-r {
     &-xs {
       margin-right: $padding-xs;
     }
+
     &-sm {
       margin-right: $padding-sm;
     }
+
     &-md {
       margin-right: $padding-md;
     }
+
     &-lg {
       margin-right: $padding-lg;
     }
+
     &-xl {
       margin-right: $padding-xl;
     }
@@ -261,68 +339,78 @@
 }
 
 .auto-margin {
-  > *:not(:last-child) {
+  >*:not(:last-child) {
     margin-right: $padding-md;
     margin-bottom: $padding-md;
   }
 
   &-h {
-    > *:not(:last-child) {
+    >*:not(:last-child) {
       margin-right: $padding-md;
     }
+
     &-xs {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-right: $padding-xs;
       }
     }
+
     &-sm {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-right: $padding-sm;
       }
     }
+
     &-md {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-right: $padding-md;
       }
     }
+
     &-lg {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-right: $padding-lg;
       }
     }
+
     &-xl {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-right: $padding-xl;
       }
     }
   }
 
   &-v {
-    > *:not(:last-child) {
+    >*:not(:last-child) {
       margin-bottom: $padding-md;
     }
+
     &-xs {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-bottom: $padding-xs;
       }
     }
+
     &-sm {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-bottom: $padding-sm;
       }
     }
+
     &-md {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-bottom: $padding-md;
       }
     }
+
     &-lg {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-bottom: $padding-lg;
       }
     }
+
     &-xl {
-      > *:not(:last-child) {
+      >*:not(:last-child) {
         margin-bottom: $padding-xl;
       }
     }
@@ -336,12 +424,14 @@
     min-height: $line-height;
     max-height: 150px;
   }
+
   &-md {
     overflow-x: hidden;
     overflow-y: auto;
     min-height: $line-height;
     max-height: 250px;
   }
+
   &-lg {
     overflow-x: hidden;
     overflow-y: auto;
@@ -355,47 +445,64 @@
   &-xxs {
     font-size: $font-size-xxs;
   }
+
   &-xs {
     font-size: $font-size-xs;
   }
+
   &-sm {
     font-size: $font-size-sm;
   }
+
   &-default {
     font-size: $font-size-default;
   }
+
   &-lg {
     font-size: $font-size-lg;
   }
+
   &-xl {
     font-size: $font-size-xl;
   }
+
   &-xxl {
     font-size: $font-size-xxl;
   }
 }
 
 // Override to enable input font-sizes. 
-input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="time"], input[type="search"] {
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="search"] {
   &.font-size {
     &-xxs {
       font-size: $font-size-xxs;
     }
+
     &-xs {
       font-size: $font-size-xs;
     }
+
     &-sm {
       font-size: $font-size-sm;
     }
+
     &-default {
       font-size: $font-size-default;
     }
+
     &-lg {
       font-size: $font-size-lg;
     }
+
     &-xl {
       font-size: $font-size-xl;
     }
+
     &-xxl {
       font-size: $font-size-xxl;
     }

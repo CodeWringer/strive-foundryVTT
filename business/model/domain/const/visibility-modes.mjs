@@ -24,14 +24,14 @@ export class VisibilityMode {
 export const VISIBILITY_MODES = {
   public: new VisibilityMode({
     name: "public",
-    localizableName: "system.general.messageVisibility.public.label"
+    localizableName: "system.general.messageVisibility.public"
   }),
   self: new VisibilityMode({
     name: "self",
-    localizableName: "system.general.messageVisibility.self.label"
+    localizableName: "system.general.messageVisibility.self"
   }),
   gm: new VisibilityMode({
     name: "gm",
-    localizableName: "system.general.messageVisibility.gm.label"
+    localizableName: "system.general.messageVisibility.gm"
   }),
 };

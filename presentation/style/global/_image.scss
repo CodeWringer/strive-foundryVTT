@@ -5,31 +5,22 @@ $size-xl: 100px;
 
 img {
   &.custom-icon {
-    &-chat {
-      background: $c-bg-medium;
-      border-radius: 0.2rem;
-      border: 1px solid $c-border-beige-light;
-    }
     &-sm {
-      border: $c-border-input 1px solid;
       flex: none;
       height: $line-height;
       min-width: 10px;
     }
     &-md {
-      border: $c-border-input 1px solid;
       flex: none;
       height: $size-md;
       min-width: 10px;
     }
     &-lg {
-      border: $c-border-input 1px solid;
       flex: none;
       height: $size-lg;
       min-width: 10px;
     }
     &-xl {
-      border: $c-border-input 1px solid;
       flex: none;
       height: $size-xl;
       min-width: 10px;
@@ -46,4 +37,31 @@ img {
 img.inline-img {
   border: none;
   display: inline-block;
+}
+
+// The following ensures theming is always applied without any extra code required to make it work. 
+body {
+  &.theme-dark {
+    img.light-mode, i.light-mode {
+      display: none;
+    }
+  }
+
+  &.theme-light {
+    img.dark-mode, i.dark-mode {
+      display: none;
+    }
+  }
+}
+
+.theme-dark {
+  img.strive.themed.dark {
+    display: none;
+  }
+}
+
+.theme-light {
+  img.strive.themed.light {
+    display: none;
+  }
 }

@@ -1,24 +1,19 @@
 {{!-- Required context:
-viewModel: {InputTextFieldViewModel}
-cssClass: {String | undefined}
-readOnlyCssClass: {String | undefined}
+viewModel: InputTextFieldViewModel
+cssClass: String | undefined
 --}}
-{{#if viewModel.isEditable}}
+<div id="{{viewModel.id}}" class="strive textfield flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Edit mode --}}
   <input 
-    class="custom-system-edit input-width-override component-input-textfield {{cssClass}}"
+    class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}"
     type="text"
     name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
     placeholder="{{viewModel.placeholder}}"
     value="{{viewModel.value}}"
   />
-{{else}}
-  {{!-- Display read-only value --}}
+  {{!-- Read mode --}}
   <div 
-    class="custom-system-read-only pad-sm border-solid-sm fill component-input-textfield {{readOnlyCssClass}}" 
+    class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}" 
     name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-  >
-    {{viewModel.localizedValue}}
-  </div>
-{{/if}}
+  >{{viewModel.value}}</div>
+</div>

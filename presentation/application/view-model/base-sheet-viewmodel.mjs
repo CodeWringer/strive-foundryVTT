@@ -6,21 +6,16 @@ import ViewModel from "./view-model.mjs";
  * 
  * @extends ViewModel
  * 
+ * @abstract Inheritors MUST override: 
+ * * `static get TEMPLATE`
+ * * `get clazz`
+ * 
  * @property {TransientDocument} document The underlying data document instance. 
  * This represents a concrete Actor or Item document instance. 
  * @property {Number} _scrollValue Cached scroll value of the sheet. 
  * * Private
- * 
- * @abstract Inheritors MUST override: 
- * * `TEMPLATE`
-*/
+ */
 export default class BaseSheetViewModel extends ViewModel {
-  /** @override */
-  static get TEMPLATE() { throw new Error("NotImplementedException"); }
-
-  /** @override */
-  get entityId() { return this.document.id; }
-
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -38,7 +33,6 @@ export default class BaseSheetViewModel extends ViewModel {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
-    this.document = args.document;
     this.sheet = args.sheet;
 
     // Register view state properties. 
@@ -46,6 +40,8 @@ export default class BaseSheetViewModel extends ViewModel {
 
     // Prepare scroll value. 
     this.saveScrollPosition();
+
+    game.strive.viewModels.set(this.id, this);
   }
 
   /** @override */
@@ -64,13 +60,19 @@ export default class BaseSheetViewModel extends ViewModel {
     this._scrollValue = this.sheet.scrollValue ?? 0;
     this.writeViewState();
   }
-  
+
   /**
    * Restores the cached scroll value. 
    * 
    * @protected
-  */
- restoreScrollPosition() {
+   */
+  restoreScrollPosition() {
     this.sheet.scrollValue = this._scrollValue;
+  }
+
+  /** @override */
+  dispose() {
+    game.strive.viewModels.remove(this.id);
+    super.dispose();
   }
 }

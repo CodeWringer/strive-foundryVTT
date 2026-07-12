@@ -35,29 +35,11 @@ export default class ArrayDataFieldBridge extends DataFieldBridge {
     super({
       ...args,
       default: [],
-      fromDto: this.fromDto,
-      toDto: this.toDto,
+      fromDto: (dto) => dto.map(it => args.dataClass.fromDto(it)),
+      toDto: (value) => value.map(it => it.toDto()),
     });
     common.util.validation.validateOrThrow(args, ["document", "dataPath", "dataClass"]);
 
     this.dataClass = args.dataClass;
-  }
-  
-  /**
-   * 
-   * @param {Array<Object>} value 
-   * @returns {Array<Any>}
-   */
-  fromDto(dto) {
-    return dto.map(it => this.dataClass.fromDto(it));
-  }
-  
-  /**
-   * 
-   * @param {Array<Any>} value 
-   * @returns {Array<Object>}
-   */
-  toDto(value) {
-    return value.map(it => it.toDto());
   }
 }

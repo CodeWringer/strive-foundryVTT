@@ -1,5 +1,6 @@
 import { common } from "../../../../common/_module.mjs";
 import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -28,7 +29,10 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  */
 export default class InputNumberSpinnerViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER; }
+  static get TEMPLATE() { return TEMPLATES.application.component.numberSpinner; }
+
+  /** @override */
+  get clazz() { return InputNumberSpinnerViewModel; }
 
   /**
    * Registers the Handlebars partial for this component. 

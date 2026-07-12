@@ -16,7 +16,6 @@ import Reference from "../reference.mjs";
  * * Read-only.
  * * Abstract. 
  * @property {String} clazz Returns the class reference of this document. 
- * Required for use in the `getExtenders` method. 
  * * Read-only.
  * * Abstract. 
  * @property {String} id Returns the id of the document. 
@@ -118,9 +117,6 @@ export default class Expertise extends Persistable {
 
   /**
    * Returns the class reference of this document. 
-   * 
-   * Required for use in the `getExtenders` method. 
-   * 
    * @type {Expertise}
    * @abstract
    * @readonly
@@ -128,10 +124,7 @@ export default class Expertise extends Persistable {
   get clazz() { return Expertise; }
 
   /**
-   * Returns the class reference of this document. 
-   * 
-   * Required for use in the `getExtenders` method. 
-   * 
+   * Returns the id of the document. 
    * @type {Expertise}
    * @abstract
    * @readonly

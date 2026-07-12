@@ -5,15 +5,11 @@ import { common } from "../../../common/_module.mjs";
  * For use in `TransientDocument`s, provides access to a document's 
  * data, with regard for data mappings. 
  * 
- * @property {Any} value The current value. Note that this is only 
- * a cached value - if you bypass this `DataFieldBridge` instance 
- * and update the value directly in the document's system reference, 
- * that change will not be reflected here!
+ * @property {Any} value The current value, as cached on the document. 
  * @property {TransientDocument} document
  * @property {String} dataPath Identifies the data field on 
  * the document instance itself. E. g. `"system.bulk"`
  * * Read-only
- * * private
  * @property {Any | undefined} default A default value to 
  * use in case the data base field's value is undefined.
  * 
@@ -29,13 +25,31 @@ export default class DataFieldBridge {
   /**
    * @type {Any}
    */
-  get value() { return this._value; }
+  get value() { 
+    // Fetch and transform value. 
+    const dto = common.util.property.getNestedPropertyValue(this.document, this.#dataPath);
+    if (!common.util.validation.isDefined(dto) && common.util.validation.isDefined(this.default)) {
+      return this.default;
+    } else {
+      return this.fromDto(dto);
+    }
+  }
   set value(value) {
     const mapped = this.toDto(value);
-    this._value = mapped;
-    common.util.property.setNestedPropertyValue(this.document, this._dataPath, mapped);
-    this.document.updateByPath(this._dataPath, mapped);
+    this.document.updateByPath(this.#dataPath, mapped);
   }
+
+  /**
+   * @type {String}
+   * @private
+   * @readonly
+   */
+  #dataPath;
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get dataPath() { return this.#dataPath; }
 
   /**
    * @param {Object} args 
@@ -54,17 +68,9 @@ export default class DataFieldBridge {
     common.util.validation.validateOrThrow(args, ["document", "dataPath"]);
 
     this.document = args.document;
-    this._dataPath = args.dataPath;
+    this.#dataPath = args.dataPath;
     this.default = args.default;
     this.fromDto = args.fromDto ?? ((dto) => dto);
     this.toDto = args.toDto ?? ((value) => value);
-
-    // Fetch and transform value. 
-    const dto = common.util.property.getNestedPropertyValue(this.document, this._dataPath);
-    if (!common.util.validation.isDefined(dto) && common.util.validation.isDefined(this.default)) {
-      this._value = this.default;
-    } else {
-      this._value = this.fromDto(dto);
-    }
   }
 }

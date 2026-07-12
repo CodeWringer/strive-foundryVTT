@@ -1,6 +1,5 @@
 import { common } from "../../../../common/_module.mjs";
 import { ACTOR_TYPES } from "./actor-types.mjs";
-import { ARMOR_TYPES, ArmorType } from "./armor-types.mjs";
 import { ATTACK_TYPES, AttackType } from "./attack-types.mjs";
 import { ATTRIBUTE_TYPES, AttributeType } from "./attribute-types.mjs";
 import { Attribute, ATTRIBUTES } from "./attributes.mjs";
@@ -12,7 +11,6 @@ import { INJURY_SHRUG_OFF_STATES, InjuryShrugOffState } from "./injury-shrug-off
 import { INJURY_STATES, InjuryState } from "./injury-states.mjs";
 import { ITEM_TYPES } from "./item-types.mjs";
 import { LANGUAGE_GRADES, LanguageGrade } from "./language-grades.mjs";
-import { SHIELD_TYPES, ShieldType } from "./shield-types.mjs";
 import { TIME_UNITS, TimeUnit } from "./time-units.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
 
@@ -22,8 +20,6 @@ import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
 export const constants = {
   ITEM_TYPES: ITEM_TYPES,
   ACTOR_TYPES: ACTOR_TYPES,
-  ArmorType: ArmorType,
-  ARMOR_TYPES: ARMOR_TYPES,
   TimeUnit: TimeUnit,
   TIME_UNITS: TIME_UNITS,
   AttackType: AttackType,
@@ -42,8 +38,6 @@ export const constants = {
   INJURY_SHRUG_OFF_STATES: INJURY_SHRUG_OFF_STATES,
   InjuryState: InjuryState,
   INJURY_STATES: INJURY_STATES,
-  ShieldType: ShieldType,
-  SHIELD_TYPES: SHIELD_TYPES,
   VisibilityMode: VisibilityMode,
   VISIBILITY_MODES: VISIBILITY_MODES,
   LanguageGrade: LanguageGrade,
@@ -52,7 +46,6 @@ export const constants = {
   init: () => {
     common.util.constants.enrichConstant(ACTOR_TYPES);
     common.util.constants.enrichConstant(ITEM_TYPES);
-    common.util.constants.enrichConstant(ARMOR_TYPES);
     common.util.constants.enrichConstant(TIME_UNITS);
     common.util.constants.enrichConstant(ATTACK_TYPES);
     common.util.constants.enrichConstant(ATTRIBUTE_TYPES);
@@ -63,7 +56,7 @@ export const constants = {
     common.util.constants.enrichConstant(ILLNESS_STATES);
     common.util.constants.enrichConstant(INJURY_SHRUG_OFF_STATES);
     common.util.constants.enrichConstant(INJURY_STATES);
-    common.util.constants.enrichConstant(SHIELD_TYPES);
     common.util.constants.enrichConstant(VISIBILITY_MODES);
+    common.util.constants.enrichConstant(LANGUAGE_GRADES);
   },
 };

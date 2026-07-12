@@ -1,12 +1,15 @@
 import { util } from "./util/_module.mjs";
-import FoundryWrapper from "../foundry-interop/foundry-wrapper.mjs";
 import { application } from "./application/_module.mjs";
 import { canvas } from "./canvas/_module.mjs";
 import { font } from "./font/_module.mjs";
 import RulesetExplainer from "./ruleset/ruleset-explainer.mjs";
 import { sidebar } from "./application/sidebar/_module.mjs";
-import { TEMPLATES } from "./templates.mjs";
+import { TEMPLATES } from "./application/templates.mjs";
 import ChoiceOption from "./model/choice-option.mjs";
+import { GameSystemUserSettings } from "../business/setting/game-system-user-settings.mjs";
+import GameSystemSetting from "../business/setting/game-system-setting.mjs";
+import { SETTING_SCOPES } from "../business/setting/setting-scopes.mjs";
+import { animation } from "./animation/_module.mjs";
 
 /**
  * Wraps the `presentation` module. 
@@ -24,6 +27,7 @@ export const presentation = {
   model: {
     ChoiceOption: ChoiceOption,
   },
+  animation: animation,
   /**
    * Initialization, which MUST be called during system setup!
    * 
@@ -35,7 +39,6 @@ export const presentation = {
     canvas.init();
     sidebar.init();
     font.init();
-    await _preloadHandlebarsTemplates();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 
@@ -48,21 +51,14 @@ export const presentation = {
    */
   ready: () => {
     util.ready();
+    
+    // Enable STRIVE's custom font, based on user setting. 
+    const isUsingStriveFont = new GameSystemSetting({
+      key: GameSystemUserSettings.KEY_USE_STRIVE_FONT,
+      scope: SETTING_SCOPES.USER,
+    }).value;
+    if (isUsingStriveFont) {
+      $("body").addClass("strive-regular-font");
+    }
   },
-};
-
-/**
- * Returns the pre-loaded Handlebars templates, for fast access when rendering. 
- * 
- * @return {Promise<Any>}
- * 
- * @async
- * @private
- */
- export async function _preloadHandlebarsTemplates() {
-  const templateArr = [];
-  for (const propertyName in TEMPLATES) {
-    templateArr.push(TEMPLATES[propertyName]);
-  }
-  return await new FoundryWrapper().loadTemplates(templateArr);
 };

@@ -1,4 +1,6 @@
-import { TEMPLATES } from "../templates.mjs";
+import { PropertyUtil } from "../../common/util/property-utility.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+import { TEMPLATES } from "../application/templates.mjs";
 
 /**
  * Utility for registering Handlebars global helpers. 
@@ -26,29 +28,7 @@ export const HANDLEBARS_GLOBALS = {
     Handlebars.registerHelper('or', HANDLEBARS_GLOBALS.or);
     Handlebars.registerHelper('not', HANDLEBARS_GLOBALS.not);
     Handlebars.registerHelper('ifThenElse', HANDLEBARS_GLOBALS.ifThenElse);
-  },
-
-  /**
-   * @summary
-   * Registers Handlebars helper partials, for use in Handlebars templates. 
-   * 
-   * @description
-   * Registers the following Handlebars helper partials:
-   * * `label` - accepts child content.
-   * * `header1` - accepts child content.
-   * * `header2` - accepts child content.
-   * * `header3` - accepts child content.
-   * * `hintCard` - accepts child content.
-   * * `hDivider` - accepts **no** child content.
-   */
-  initHandlebarsPartials: () => {
-    Handlebars.registerPartial('verticalLine', `{{#> "${TEMPLATES.COMPONENT_VERTICAL_LINE}"}}{{/"${TEMPLATES.COMPONENT_VERTICAL_LINE}"}}`);
-    Handlebars.registerPartial('label', `{{#> "${TEMPLATES.COMPONENT_LABEL}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL}"}}`);
-    Handlebars.registerPartial('header1', `{{#> "${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}`);
-    Handlebars.registerPartial('header2', `{{#> "${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}`);
-    Handlebars.registerPartial('header3', `{{#> "${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}`);
-    Handlebars.registerPartial('hintCard', `{{#> "${TEMPLATES.COMPONENT_HINT_CARD}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HINT_CARD}"}}`);
-    Handlebars.registerPartial('hDivider', `{{> "${TEMPLATES.COMPONENT_HORIZONTAL_DIVIDER}"}}`);
+    Handlebars.registerHelper('themedImage', HANDLEBARS_GLOBALS.themedImage);
   },
 
   /**
@@ -142,5 +122,23 @@ export const HANDLEBARS_GLOBALS = {
     } else {
       return elseValue;
     }
+  },
+
+  /**
+   * Returns two `img` elements which respect the dark and light mode theming. 
+   * 
+   * @param {String} templatePath A `TEMPLATES` relative template path. 
+   * E. g. `"image.underline.h2"`
+   * @param {String | undefined} cssClass
+   * @param {String | undefined} style
+   * @returns {String}
+   */
+  themedImage: (templatePath, cssClass, style) => {
+    const root = PropertyUtil.getNestedPropertyValue(TEMPLATES, templatePath);
+    const dark = root.dark ?? root;
+    const light = root.light ?? root;
+    const _cssClass = ValidationUtil.isDefined(cssClass) ? ` ${cssClass}` : "";
+
+    return `<img src="${dark}" class="strive themed dark${_cssClass}" style="${style}"><img src="${light}" class="strive themed light${_cssClass}" style="${style}">`
   },
 };

@@ -1,41 +1,42 @@
 {{!-- Required context:
-viewModel: {InputDropDownViewModel}
-cssClass: {String | undefined}
-readOnlyCssClass: {String | undefined}
+viewModel: InputDropDownViewModel
+cssClass: String | undefined
 --}}
-{{#if viewModel.isEditable}}
-  <select 
-    class="custom-system-edit drop-down width-fill component-input-dropdown {{cssClass}}"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    value="{{viewModel.value.value}}"
-  >
-    {{#each viewModel.options as |option index|}}
-      <option class="flex flex-middle" value="{{option.value}}"
-        {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
-      >
-        {{#if option.displayHtmlOverride}}
-          {{{option.displayHtmlOverride}}}
-        {{else}}
-          {{#if option.shouldDisplayIcon}}
-            {{#if option.hasIconClass}}
-              <i class="ico dark {{option.icon}}"></i>
-            {{else}}
-              <img class="radio-button-icon" src="{{option.icon}}" />
-            {{/if}}
-          {{/if}}
-          {{#if option.shouldDisplayValue}}
-            <span>{{option.localizedValue}}</span>
-          {{/if}}
+<div id="{{viewModel.id}}" class="strive dropdown flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Edit mode --}}
+  <div class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}" >
+    <button 
+      id="{{viewModel.id}}-button" 
+      aria-controls="{{viewModel.id}}-menu" 
+      aria-expanded=false 
+      class="flex flex-row flex-middle strive-regular-font"
+      tabindex="0"
+    >
+      <div id="{{viewModel.id}}-button-value">
+        {{{viewModel.value.iconHtml}}}
+        {{#if viewModel.showValue}}
+        <span>{{viewModel.value.localizedValue}}</span>
         {{/if}}
-      </option>
+      </div>
+      <i class="ico ico-triangle-down"></i>
+    </button>
+    <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden">
+    {{#each viewModel.options as |option index|}}
+      <li id="{{option.value}}" role="button" tabindex="-1" class="flex flex-row flex-middle auto-margin-h-lg strive-regular-font">
+        {{{option.iconHtml}}}
+        <span>{{option.localizedValue}}</span>
+      </li>
     {{/each}}
-  </select>
-{{else}}
-  {{!-- Display read-only value --}}
+    </menu>
+  </div>
+  {{!-- Read mode --}}
   <div 
-    class="custom-system-read-only pad-sm border-solid-sm fill component-input-dropdown {{readOnlyCssClass}}" 
+    class="read-mode flex{{#if viewModel.isEditable}} hidden{{/if}}" 
     name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-  >{{viewModel.localizedValue}}</div>
-{{/if}}
+  >
+    {{{viewModel.value.iconHtml}}}
+    {{#if viewModel.showValue}}
+    <span>{{viewModel.value.localizedValue}}</span>
+    {{/if}}
+  </div>
+</div>

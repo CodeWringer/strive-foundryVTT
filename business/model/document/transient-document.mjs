@@ -1,4 +1,5 @@
 import { common } from "../../../common/_module.mjs"
+import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import AtReferencer from "../../search/at-referencer.mjs"
 import DataFieldBridge from "./data-field-bridge.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs"
@@ -29,7 +30,7 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * * Read-only.
  * * Abstract. 
  * @property {String} clazz Returns the class reference of this document. 
- * Required for use in the `getExtenders` method. 
+ * Required for extending this instance. 
  * * Read-only.
  * * Abstract. 
  * @property {String} id Returns the id of the document. 
@@ -50,6 +51,9 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * * Read-only.
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
+ * @property {Boolean} isTransactionMode If `true`, field updates do not immediately fire and get 
+ * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
+ * Setting this to `false` immediately flushes all updates. 
  */
 export default class TransientDocument {
   /**
@@ -72,7 +76,7 @@ export default class TransientDocument {
   /**
    * Returns the class reference of this document. 
    * 
-   * Required for use in the `getExtenders` method. 
+   * Required for extending this instance. 
    * 
    * @type {TransientDocument}
    * @abstract
@@ -86,10 +90,7 @@ export default class TransientDocument {
    * @type {String}
    */
   get img() { return this.document.img; }
-  set img(value) {
-    this.document.img = value;
-    this.updateByPath("img", value);
-  }
+  set img(value) { this.updateByPath("img", value); }
 
   /**
    * The internal name of the document. 
@@ -97,10 +98,7 @@ export default class TransientDocument {
    * @type {String}
    */
   get name() { return this.document.name; }
-  set name(value) {
-    this.document.name = value;
-    this.updateByPath("name", value);
-  }
+  set name(value) { this.updateByPath("name", value); }
 
   /**
    * @type {String}
@@ -163,6 +161,16 @@ export default class TransientDocument {
   get system() { return this.document.system; }
 
   /**
+   * If `true`, field updates do not immediately fire and get 
+   * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
+   * 
+   * Setting this to `false` immediately flushes all updates. 
+   * @type {Boolean}
+   */
+  get isTransactionMode() { return this._updater.isTransactionMode; }
+  set isTransactionMode(value) { this._updater.isTransactionMode = value; }
+
+  /**
    * @param {Actor | Item} document An encapsulated document instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -172,7 +180,7 @@ export default class TransientDocument {
       throw new Error("A document instance must be provided");
     }
 
-    this._updater = new DocumentUpdater();
+    this._updater = new DocumentUpdater(document);
     this.document = document;
 
     this._gmNotes = new DataFieldBridge({
@@ -197,6 +205,7 @@ export default class TransientDocument {
       document: this,
       dataPath: "system.description",
     });
+    ExtenderUtil.extend(this, this.clazz);
   }
 
   /**
@@ -229,7 +238,7 @@ export default class TransientDocument {
    * @async
    */
   async deleteByPath(propertyPath, render = true) {
-    await this._updater.deleteByPath(this.document, propertyPath, render);
+    await this._updater.deleteByPath(propertyPath, render);
   }
 
   /**
@@ -246,7 +255,10 @@ export default class TransientDocument {
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
-    await this._updater.updateByPath(this.document, propertyPath, newValue, render);
+    if (!this.isTransactionMode) {
+      common.util.property.setNestedPropertyValue(this.document, propertyPath, newValue);
+    }
+    await this._updater.updateByPath(propertyPath, newValue, render);
   }
 
   /**
@@ -299,7 +311,7 @@ export default class TransientDocument {
    * @async
    */
   async update(delta, render = true) {
-    await this.document.update(delta, { render: render });
+    await this._updater.update(delta, render);
   }
 
   /**
@@ -365,19 +377,20 @@ export default class TransientDocument {
    * @returns {TransientDocument} 
    */
   getTransientObject() {
-    const extenders = this.getExtenders();
-    extenders.forEach(extender => {
-      extender.extend(this);
-    });
     return this;
   }
 
   /**
-   * Returns extenders. 
-   * 
-   * @returns {Array<Object>}
+   * Persists all currently outstanding updates to the data base. 
    */
-  getExtenders() {
-    return common.util.extender.getExtenders(this.clazz);
+  flushUpdates() {
+    this._updater.flushUpdates();
+  }
+
+  /**
+   * Clears the current updates buffer. 
+   */
+  discardUpdates() {
+    this._updater.discardUpdates();
   }
 }

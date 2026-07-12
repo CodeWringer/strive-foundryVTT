@@ -3,8 +3,7 @@
  */
 export const ConstantsUtil = {
   /**
-   * Names of the properties to skip when invoking "getAsChoices" or 
-   * "getAsArray". 
+   * Names of the properties to skip when invoking `getAsArray`. 
    * 
    * @type {Array<String>}
    * @constant
@@ -12,15 +11,11 @@ export const ConstantsUtil = {
   excludes: ["asChoices", "_asChoices", "asArray", "_asArray"],
   
   /**
-   * Enriches the given constants object, by adding a "asChoices" and 
-   * a "asArray" method to it. 
+   * Enriches the given constants object, by adding a "asArray" method to it. 
    * 
    * @param {Object} constantsObject Any constants object.
    */
   enrichConstant: function(constantsObject) {
-    constantsObject.asChoices = function() {
-      return ConstantsUtil.getAsChoices(constantsObject, ConstantsUtil.excludes);
-    };
     constantsObject.asArray = function() {
       return ConstantsUtil.getAsArray(constantsObject, ConstantsUtil.excludes);
     };

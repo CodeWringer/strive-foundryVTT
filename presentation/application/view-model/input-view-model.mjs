@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { SlideDisplaceAnim } from "../../animation/slide-displace-anim.mjs";
 import { SheetUtil } from "../../util/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -18,6 +19,13 @@ export const SELECTOR_READ = "custom-system-read-only";
  * 
  * @extends ViewModel
  * 
+ * @abstract Inheritors MUST implement:
+ * * `static get TEMPLATE`
+ * * `get clazz`
+ * 
+ * Inheritors _should_ override:
+ * * `get inputElement`
+ * 
  * @property {String} id Unique ID of this view model instance. 
  * @property {Boolean} isEditable If `true`, input(s) will 
  * be in edit mode. If `false`, will be in read-only mode.
@@ -29,8 +37,6 @@ export const SELECTOR_READ = "custom-system-read-only";
  * 
  * @property {Any | undefined} value The current value. 
  * * Upon change, invokes the `onChange` callback. 
- * @property {String} localizedValue The current value, localized. 
- * * Read-only
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
@@ -47,6 +53,31 @@ export const SELECTOR_READ = "custom-system-read-only";
  * * `viewModel: {ViewModel}`
  */
 export default class InputViewModel extends ViewModel {
+  /**
+   * Gets or sets the edit-mode of the control. 
+   * 
+   * When setting, it will also toggle between edit-mode and read-mode, in the DOM. 
+   * @type {Boolean}
+   * @override
+   */
+  get isEditable() { return super.isEditable; }
+  set isEditable(value) {
+    super.isEditable = value;
+
+    const editElement = this.element.find(".edit-mode");
+    const readElement = this.element.find(".read-mode");
+    if (value) {
+      new SlideDisplaceAnim({
+        elmA: editElement,
+        elmB: readElement,
+      }).execute();
+    } else {
+      new SlideDisplaceAnim({
+        elmA: readElement,
+        elmB: editElement,
+      }).execute();
+    }
+  }
 
   /**
    * Returns the current value. 
@@ -60,21 +91,20 @@ export default class InputViewModel extends ViewModel {
    * @param {Any} newValue
    */
   set value(newValue) {
+    if (this.isDisposed) return;
+
     const oldValue = this._value;
     this._value = newValue;
     this.onChange(oldValue, newValue);
   }
 
   /**
-   * The current value, localized. 
-   * 
-   * @type {String}
+   * Returns the actual input element, which may be nested within `this.element`. 
+   * @type {JQuery | HTMLElement}
    * @readonly
+   * @virtual
    */
-  get localizedValue() {
-    const value = this.value;
-    return (value !== undefined && value !== null) ? game.i18n.localize(`${value}`) : value;
-  }
+  get inputElement() { return ""; }
 
   /**
    * Set to `true` when updating the value without wanting events to fire. 
@@ -114,29 +144,20 @@ export default class InputViewModel extends ViewModel {
     super(args);
 
     this._value = args.value;
-    this.onChange = args.onChange ?? (() => {});
-    this.onInput = args.onInput ?? (() => {});
-    this.onFocus = args.onFocus ?? (() => {});
-    this.onFocusLost = args.onFocusLost ?? (() => {});
+    this.onChange = args.onChange ?? (() => { });
+    this.onInput = args.onInput ?? (() => { });
+    this.onFocus = args.onFocus ?? (() => { });
+    this.onFocusLost = args.onFocusLost ?? (() => { });
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    if (this.isEditable !== true) return;
-
-    this.element.change(this._onChange.bind(this));
-    this.element.on("input", this._onInput.bind(this));
-    this.element.on("focus", this._onFocus.bind(this));
-    this.element.on("focusout", this._onFocusLost.bind(this));
-  }
-  
-  /** @override */
-  dispose() {
-    this.onChange = null;
-
-    super.dispose();
+    $(this.inputElement).change(this._onChange.bind(this));
+    $(this.inputElement).on("input", this._onInput.bind(this));
+    $(this.inputElement).on("focus", this._onFocus.bind(this));
+    $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
   }
 
   /**

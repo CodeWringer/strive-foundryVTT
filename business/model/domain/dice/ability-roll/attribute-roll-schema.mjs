@@ -62,7 +62,6 @@ export class AttributeRollSchema extends RollSchema {
       new DynamicInputDefinition({
         name: "diceCompositionLabel",
         localizedLabel: `<p class="font-size-sm">${diceComposition}</p>`,
-        showFancyFont: false,
       }),
       new DynamicInputDefinition({
         name: nameInputObstacle,

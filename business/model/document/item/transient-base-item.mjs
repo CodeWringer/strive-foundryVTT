@@ -24,7 +24,6 @@ import TransientDocument from "../transient-document.mjs";
  * * Read-only.
  * * Abstract. 
  * @property {String} clazz Returns the class reference of this document. 
- * Required for use in the `getExtenders` method. 
  * * Read-only.
  * * Abstract. 
  * @property {String} id Returns the id of the document. 

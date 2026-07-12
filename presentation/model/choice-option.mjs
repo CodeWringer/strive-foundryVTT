@@ -3,112 +3,137 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 /**
  * Represents a choice option for drop-downs, radio-buttons or check-boxes. 
  * 
- * @property {String} value The actual value. 
+ * @property {Any} value The actual value. 
  * @property {String | undefined} localizedValue The text that represents the value, to display to the user. 
- * @property {String | undefined} icon A (relative) icon file path or a FontAwwesome icon class. 
+ * @property {String | undefined} iconLightMode A (relative) icon file path or a FontAwesome icon class. 
  * * E.g. `"systems/strive/presentation/image/texture.svg"`
  * * E.g. `"fas fa-plus"`
- * @property {Boolean} shouldDisplayValue Gets or sets whether the value should be displayed. 
- * @property {Boolean} shouldDisplayIcon Gets or sets whether the icon should be displayed. 
- * @property {String | undefined} displayHtmlOverride Gets or sets the raw HTML to display as the content. 
- * * If not undefined, this value should take precedence over both localizedValue and icon, 
- * and be used instead!
+ * @property {String | undefined} iconDarkMode A (relative) icon file path or a FontAwesome icon class. 
+ * * E.g. `"systems/strive/presentation/image/texture.svg"`
+ * * E.g. `"fas fa-plus"`
  */
 export default class ChoiceOption {
   /**
    * @type {String}
    * @private
    */
-  _value = undefined;
+  #value = undefined;
   /**
    * The actual value. 
    * @type {String}
    * @readonly
    */
-  get value() { return this._value; }
+  get value() { return this.#value; }
 
   /**
    * @type {String | undefined}
    * @private
    */
-  _localizedValue = undefined;
+  #localizedValue = undefined;
   /**
    * The text that represents the value, to display to the user. 
    * @type {String | undefined}
    * @readonly
    */
-  get localizedValue() { return this._localizedValue; }
+  get localizedValue() { return this.#localizedValue; }
 
   /**
    * @type {String | undefined}
    * @private
    */
-  _icon = undefined;
+  #iconLightMode = undefined;
   /**
-   * A (relative) icon file path or a FontAwwesome icon class. 
-   * 
-   * * E.g. `"systems/strive/presentation/image/texture.svg"`
-   * * E.g. `"fas fa-plus"`
+   * An icon for the light mode.
    * @type {String | undefined}
    * @readonly
    */
-  get icon() { return this._icon; }
+  get iconLightMode() { return this.#iconLightMode; }
 
   /**
-   * Returns true, if the icon string represents a FontAwesome or custom icon CSS class. 
-   * @returns {Boolean}
+   * @type {String | undefined}
+   * @private
    */
-  get hasIconClass() {
-    if (ValidationUtil.isDefined(this.icon) && (this.icon.startsWith("fas fa-") || this.icon.startsWith("ico"))) {
-      return true;
+  #iconDarkMode = undefined;
+  /**
+   * An icon for the dark mode.
+   * @type {String | undefined}
+   * @readonly
+   */
+  get iconDarkMode() { return this.#iconDarkMode; }
+
+  /**
+   * Returns an HTML representing string containing the light and dark mode icons, 
+   * neatly wrapped in a div to be easily inserted into the DOM. 
+   * @type {String}
+   * @readonly
+   */
+  get iconHtml() {
+    let iconLightMode = "";
+    if (ValidationUtil.isDefined(this.iconLightMode)) {
+      if (this.#isIconClass(this.iconLightMode)) {
+        iconLightMode = `<i class="${this.iconLightMode} light-mode"></i>`;
+      } else {
+        iconLightMode = `<img src="${this.iconLightMode}" class="light-mode">`;
+      }
+    }
+
+    let iconDarkMode = "";
+    if (ValidationUtil.isDefined(this.iconDarkMode)) {
+      if (this.#isIconClass(this.iconDarkMode)) {
+        iconDarkMode = `<i class="${this.iconDarkMode} dark-mode"></i>`;
+      } else {
+        iconDarkMode = `<img src="${this.iconDarkMode}" class="dark-mode">`;
+      }
+    }
+
+    if (iconLightMode.length > 0 || iconDarkMode.length > 0) {
+      return `<div class="flex">${iconLightMode}${iconDarkMode}</div>`
     } else {
-      return false;
+      return "";
     }
   }
 
   /**
-   * Gets or sets whether the value should be displayed. 
-   * @type {Boolean}
-   * @default true
-   */
-  shouldDisplayValue = true;
-  
-  /**
-   * Gets or sets whether the icon should be displayed. 
-   * @type {Boolean}
-   * @default true
-   */
-  shouldDisplayIcon = true;
-
-  /**
-   * Gets or sets the raw HTML to display as the content. 
-   * 
-   * If not undefined, this value should take precedence over both localizedValue and icon, 
-   * and be used instead!
-   * @type {String | undefined}
-   */
-  displayHtmlOverride = undefined;
-
-  /**
    * @param {Object} args
-   * @param {String} args.value The actual value. 
-   * @param {String | undefined} args.localizedValue Optional. The text that represents the value, 
+   * @param {Any} args.value The actual value. 
+   * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
-   * @param {String | undefined} args.icon Optional. A (relative) icon file path or a FontAwwesome icon class. 
+   * @param {String | undefined} args.icon A theming-agnostic (relative) icon file path or a FontAwesome icon class. 
+   * Takes precedence over `iconLightMode` and `iconDarkMode`.
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
-   * @param {Boolean | undefined} args.shouldDisplayValue Optional. Sets whether the value should be displayed. Default true. 
-   * * default `true`
-   * @param {Boolean | undefined} args.shouldDisplayIcon Optional. Sets whether the icon should be displayed. Default true. 
-   * * default `true`
-   * @param {Boolean | undefined} args.displayHtmlOverride Optional. Sets the raw HTML to display as the content. 
+   * @param {String | undefined} args.iconLightMode An icon for the light mode.
+   * A (relative) icon file path or a FontAwesome icon class. 
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
+   * @param {String | undefined} args.iconDarkMode An icon for the dark mode.
+   * A (relative) icon file path or a FontAwesome icon class. 
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
    */
   constructor(args = {}) {
-    this._value = args.value;
-    this._localizedValue = args.localizedValue;
-    this._icon = args.icon;
-    this.shouldDisplayValue = args.shouldDisplayValue ?? true;
-    this.shouldDisplayIcon = args.shouldDisplayIcon ?? true;
-    this.displayHtmlOverride = args.displayHtmlOverride;
+    this.#value = args.value;
+    this.#localizedValue = args.localizedValue;
+    
+    if (ValidationUtil.isDefined(args.icon)) {
+      this.#iconLightMode = args.icon;
+      this.#iconDarkMode = args.icon;
+    } else {
+      this.#iconLightMode = args.iconLightMode;
+      this.#iconDarkMode = args.iconDarkMode;
+    }
+  }
+
+  /**
+   * Returns true, if the given string represents an icon css class. 
+   * @param {String} str 
+   * @returns {Boolean}
+   * @private
+   */
+  #isIconClass(str) {
+    return (ValidationUtil.isDefined(str) 
+      && ValidationUtil.isString(str) 
+      && ((str.startsWith("fas fa-") || str.startsWith("ico")))
+    );
   }
 }

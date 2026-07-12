@@ -32,7 +32,6 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * * Read-only.
  * * Abstract. 
  * @property {String} clazz Returns the class reference of this document. 
- * Required for use in the `getExtenders` method. 
  * * Read-only.
  * * Abstract. 
  * @property {String} id Returns the id of the document. 
@@ -229,6 +228,8 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * * Read-only. 
  * @property {Array<Modifier>} modifiers.own Modifiers directly applied to this character, 
  * not stemming from any embedded Item documents. 
+ * 
+ * @property {Boolean} isNpc
  */
 export default class TransientCharacterActor extends TransientBaseActor {
   /** @override */
@@ -738,6 +739,12 @@ export default class TransientCharacterActor extends TransientBaseActor {
   }
 
   /**
+   * @type {Boolean}
+   */
+  get isNpc() { return this._isNpc.value; }
+  set isNpc(value) { this._isNpc.value = value; }
+
+  /**
    * @param {Actor} document An encapsulated actor instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -1060,6 +1067,11 @@ export default class TransientCharacterActor extends TransientBaseActor {
         dataClass: Modifier,
       }),
     };
+    this._isNpc = new DataFieldBridge({
+      document: this,
+      dataPath: "system.isNpc",
+      default: false,
+    });
   }
 
   /**

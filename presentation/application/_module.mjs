@@ -1,14 +1,15 @@
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { component } from "./component/_module.mjs";
 import Tooltip from "./component/tooltip/tooltip.mjs";
-import DynamicInputDefinition from "./dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialogViewModel from "./dialog/dynamic-input-dialog/dynamic-input-dialog-viewmodel.mjs";
-import DynamicInputDialog from "./dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { LanguageItemSheet } from "./domain/item/language/language-item-sheet.mjs";
+import BaseItemSheetViewModel from "./item/base/sheet/base-item-sheet-viewmodel.mjs";
+import { BaseItemSheet } from "./item/base/sheet/base-item-sheet.mjs";
+import { LanguageItemSheet } from "./item/language/language-item-sheet.mjs";
+import { TEMPLATES } from "./templates.mjs";
 import BaseSheetViewModel from "./view-model/base-sheet-viewmodel.mjs";
 import InputViewModel from "./view-model/input-view-model.mjs";
 import ViewModelCollection from "./view-model/view-model-collection.mjs";
 import ViewModel from "./view-model/view-model.mjs";
+import { dialog } from "./dialog/_module.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -21,34 +22,26 @@ export const application = {
     ViewModelCollection: ViewModelCollection,
     InputViewModel: InputViewModel,
     BaseSheetViewModel: BaseSheetViewModel,
+    BaseItemSheetViewModel: BaseItemSheetViewModel,
   },
-  dialog: {
-    dynamic: {
-      DynamicInputDefinition: DynamicInputDefinition,
-      DynamicInputDialogViewModel: DynamicInputDialogViewModel,
-      DynamicInputDialog: DynamicInputDialog,
-    },
-  },
+  dialog: dialog,
   sheet: {
+    BaseItemSheet: BaseItemSheet,
     LanguageItemSheet: LanguageItemSheet,
   },
   Tooltip: Tooltip,
+  TEMPLATES: TEMPLATES,
   /**
    * Ensures sheets are registered.
    */
-  init: () => {
+  init: async () => {
+    await TEMPLATES._preloadHandlebarsTemplates();
+    component.init();
+    // Register sheet application classes. 
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,
       type: "language",
       sheet: LanguageItemSheet,
     });
-
-    // TODO #739
-    // // Register sheet application classes. 
-    // Actors.unregisterSheet("core", ActorSheet);
-    // Actors.registerSheet(SYSTEM_ID, GameSystemActorSheet, { makeDefault: true });
-
-    // Items.unregisterSheet("core", ItemSheet);
-    // Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
   },
 };

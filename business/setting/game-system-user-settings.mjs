@@ -13,7 +13,7 @@ export const GameSystemUserSettings = {
    * @type {String}
    * @readonly
    */
-  KEY_SHOW_FANCY_FONT: "userShowFancyFont",
+  KEY_USE_STRIVE_FONT: "userShowStriveFont",
 
   /**
    * @static
@@ -42,7 +42,7 @@ export const GameSystemUserSettings = {
   init() {
     GameSystemSettings.addDeclaration(
       new GameSystemSettingDeclaration({
-        key: GameSystemUserSettings.KEY_SHOW_FANCY_FONT,
+        key: GameSystemUserSettings.KEY_USE_STRIVE_FONT,
         name: game.i18n.localize("system.settings.fancyFont.label"),
         hint: game.i18n.localize("system.settings.fancyFont.hint"),
         scope: SETTING_SCOPES.USER,

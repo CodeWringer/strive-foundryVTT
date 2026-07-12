@@ -1,3 +1,4 @@
+import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -15,8 +16,14 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  */
 export default class InputTextFieldViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
+  static get TEMPLATE() { return TEMPLATES.application.component.textField; }
 
+  /** @override */
+  get clazz() { return InputTextFieldViewModel; }
+  
+  /** @override */
+  get inputElement() { return this.element.find("input"); }
+  
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -47,5 +54,13 @@ export default class InputTextFieldViewModel extends InputViewModel {
 
     this._value = args.value ?? "";
     this.placeholder = args.placeholder ?? "";
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    // Ensure the correct value is displayed. 
+    this.inputElement.attr("value", this.value);
   }
 }

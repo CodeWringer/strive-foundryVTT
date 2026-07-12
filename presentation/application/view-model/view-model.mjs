@@ -1,5 +1,7 @@
-import { GameSystemUserSettings } from "../../../business/setting/game-system-user-settings.mjs";
-import { common } from "../../../common/_module.mjs";
+import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
+import { PropertyUtil } from "../../../common/util/property-utility.mjs";
+import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
@@ -70,26 +72,34 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * this.writeViewState(); // Must be called explicitly to persist the view state change. 
  * ```
  * 
+ * @abstract Inheritors MUST implement:
+ * * `static get TEMPLATE`
+ * * `get clazz`
+ * 
  * @property {String} id Unique ID of this view model instance. 
- * * Read-only. 
+ * * Read-only
  * @property {ViewModel | undefined} parent Optional. Parent ViewModel instance of this instance. 
  * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
  * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
- * * Read-only. 
  * @property {Array<ViewModel>} children An array of the child view models of this view model. 
- * * Read-only. 
+ * * Read-only
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * * Read-only. 
- * @property {Boolean} isGM If true, the current user is a GM. 
- * * Read-only. 
+ * * Read-only
  * @property {Boolean} isEditable If true, the view model data is editable.
- * @property {Boolean} isSendable If true, the document represented by the sheet can be sent to chat.
- * @property {Boolean} isOwner If true, the current user is the owner of the represented document.
- * @property {String | undefined} contextTemplate Name or path of a contextual template, 
- * which will be displayed in exception log entries, to aid debugging.
- * * Read-only. 
- * @property {String | undefined} localizedToolTip A localized text to 
+ * @property {Boolean} isGM Returns `true`, if the current user is a GM. 
+ * * Read-only
+ * @property {Boolean} isOwner Returns `true`, if the current user is the owner of the represented document.
+ * * Read-only
+ * @property {ViewModelToolTipDefinition | undefined} toolTipDefinition A localized text to 
  * display as a tool tip. 
+ * @property {Boolean} showReminders Returns `true`, if rule reminders are enabled. 
+ * * Read-only
+ * @property {JQuery} element Returns a JQuery-wrapped HTMLElement whose id attribute corresponds to `this.id`. 
+ * Note: Only available **after** the *first* call to `activateListeners`! 
+ * * Read-only
+ * @property {Boolean} isDisposed Internal flag for use by inheritors. 
+ * * Read-only
+ * * Protected
  */
 export default class ViewModel {
   /**
@@ -115,13 +125,13 @@ export default class ViewModel {
    * @type {Map<String, Object>}
    * @private
    */
-  _viewStateSource = undefined;
+  #viewStateSource = game.strive.viewStates;
 
   /**
    * Internal unique ID of this view model instance.
    * 
    * @type {String}
-   * @private
+   * @protected
    */
   _id = undefined;
   /**
@@ -142,7 +152,15 @@ export default class ViewModel {
    * @readonly
    */
   get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}-${this._id}`; }
-  
+
+  /**
+   * Returns the class reference of this instance. Required for extending this object. 
+   * 
+   * @abstract
+   * @readonly
+   */
+  get clazz() { throw Error("Not implemented"); }
+
   /**
    * @type {ViewModel | undefined}
    * @private
@@ -175,14 +193,14 @@ export default class ViewModel {
     }
 
     // Remove from previous parent. 
-    if (common.util.validation.isDefined(this._parent) && common.util.validation.isDefined(this._parent.children)) {
+    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
       const index = this._parent.children.indexOf(this);
       this._parent.children.splice(index, 1);
     }
 
     // Add to new parent. 
     this._parent = value;
-    if (common.util.validation.isDefined(this._parent) && common.util.validation.isDefined(this._parent.children)) {
+    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
       this._parent.children.push(this);
     }
   }
@@ -205,104 +223,65 @@ export default class ViewModel {
   viewStateFields = [];
 
   /**
-   * Returns the id of the associated entity (e. g. an actor document), or undefined, 
-   * if this view model is not associated with any identifiable entity. 
-   * 
-   * @type {String | undefined}
-   * @readonly
-   * @virtual
+   * @type {Boolean}
+   * @protected
    */
-  get entityId() { return undefined; }
-
+  _isEditable = false;
   /**
    * If true, the view model data is editable. 
    * 
    * @type {Boolean}
    * @default `false`
    */
-  isEditable = false;
+  get isEditable() { return this._isEditable; }
+  set isEditable(value) { this._isEditable = value; }
   
   /**
-   * If true, the document represented by the sheet can be sent to chat. 
-   * 
+   * Returns true, if the current user is the owner of the represented document. 
    * @type {Boolean}
-   * @default `false`
+   * @readonly
    */
-  isSendable = false;
-
-  /**
-   * If true, the current user is the owner of the represented document. 
-   * 
-   * @type {Boolean}
-   * @default `false`
-   */
-  isOwner = false;
+  get isOwner() {
+    if (ValidationUtil.isDefined(this.document)) {
+      return this.document.isOwner;
+    } else {
+      return false;
+    }
+  }
   
   /**
    * If true, the current user is a GM. 
-   * 
    * @type {Boolean}
+   * @readonly
    */
   get isGM() { return game.user.isGM; }
   
   /**
-   * An internal override of the `showFancyFont` field. 
-   * 
-   * If undefined, `showFancyFont` will return the global setting, otherwise, 
-   * returns this value. 
-   * 
-   * @type {Boolean | undefined}
-   * @private
+   * @type {ViewModelToolTipDefinition | undefined}
    */
-  _showFancyFont = undefined;
-  /**
-   * If true, use the 'fancy' font. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get showFancyFont() {
-    if (this._showFancyFont === undefined) {
-      return GameSystemUserSettings.get(GameSystemUserSettings.KEY_SHOW_FANCY_FONT);
-    } else {
-      return this._showFancyFont;
-    }
-  };
-  /**
-   * Sets or unsets the `fancy font` override. 
-   * 
-   * @param {Boolean | undefined}
-   */
-  set showFancyFont(value) {
-    this._showFancyFont = value;
-  }
-
-  /**
-   * @type {String | undefined}
-   */
-  get localizedToolTip() {
-    return this._localizedToolTip;
+  get toolTipDefinition() {
+    return this._toolTipDefinition;
   }
   /**
-   * @param {String | undefined} value 
+   * @param {ViewModelToolTipDefinition | undefined} value 
    */
-  set localizedToolTip(value) {
-    this._localizedToolTip = value;
+  set toolTipDefinition(value) {
+    this._toolTipDefinition = value;
 
     let toolTipVisible = false;
 
-    if (common.util.validation.isDefined(this._toolTip)) {
+    if (ValidationUtil.isDefined(this._toolTip)) {
       toolTipVisible = this._toolTip.visible;
       this._toolTip.deactivateListeners();
       this._toolTip.hide();
       this._toolTip = null;
     }
 
-    if (common.util.validation.isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
-        content: this.localizedToolTip,
-        style: this.toolTipStyle,
+        content: this._toolTipDefinition.localized,
+        style: this._toolTipDefinition.style,
         onShown: () => {
           this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
         },
@@ -323,19 +302,10 @@ export default class ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showReminders() { return GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
+  get showReminders() { return game.strive.enableReminders; }
 
   /**
-   * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 
-   * 
-   * @type {String | undefined}
-   * @readonly
-   */
-  contextTemplate = undefined;
-
-  /**
-   * Returns the element. 
-   * 
+   * Returns a JQuery-wrapped HTMLElement whose id attribute corresponds to `this.id`. 
    * Note: Only available **after** the *first* call to `activateListeners`! 
    * 
    * @type {JQuery}
@@ -354,6 +324,13 @@ export default class ViewModel {
   }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   * @protected
+   */
+  get isDisposed() { return this._isDisposed; }
+
+  /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
@@ -367,54 +344,34 @@ export default class ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
-   * * Default `false`. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
-   * * Default `false`. 
-   * @param {String | undefined} args.contextTemplate Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging.
-   * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
-   * * Default `game.strive.viewStates`. 
    * @param {Object | undefined} args.document An associated data document. 
-   * @param {Boolean | undefined} args.showFancyFont If `true`, will render any text, where 
-   * appropriate, with the "fancy" font. 
-   * * Default is the globally configured setting. 
-   * @param {String | undefined} args.localizedToolTip A localized text to 
-   * display as a tool tip. 
-   * @param {String | undefined} args.toolTipStyle A style override to attach to the tool tip's DOM element. 
-   * E. g. `text-align: center`
    * @param {Boolean | undefined} args.visible
    * * default `true`
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    */
   constructor(args = {}) {
-    this._id = common.util.uuid.sanitizeId(args.id ?? common.util.uuid.createUUID());
+    this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
     
     this.parent = args.parent;
-    this.document = args.document;
-    this._showFancyFont = args.showFancyFont;
-    this._localizedToolTip = args.localizedToolTip;
-    this.toolTipStyle = args.toolTipStyle;
     this._visible = args.visible ?? true;
+    this._toolTipDefinition = args.toolTip;
+    this._isDisposed = false;
 
-    this.contextTemplate = args.contextTemplate;
-    this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
+    if (ValidationUtil.isDefined(args.document) && ValidationUtil.isDefined(args.document.getTransientObject)) {
+      this.document = args.document.getTransientObject();
+    } else if (ValidationUtil.isDefined((args.document ?? {}).document) && ValidationUtil.isDefined((args.document ?? {}).document.getTransientObject)) {
+      this.document = args.document.document.getTransientObject();
+    }
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 
-    this.isEditable = args.isEditable ?? (args.parent !== undefined ? args.parent.isEditable : false);
-    this.isSendable = args.isSendable ?? (args.parent !== undefined ? args.parent.isSendable : false);
-    this.isOwner = args.isOwner ?? (args.parent !== undefined ? args.parent.isOwner : false);
+    this._isEditable = args.isEditable ?? (ValidationUtil.isDefined(args.parent) ? args.parent.isEditable : false);
 
-    const extenders = this.getExtenders();
-    extenders.forEach(extender => {
-      extender.extend(this);
-    });
-
-    if (common.util.validation.isDefined(this.localizedToolTip)) {
+    if (ValidationUtil.isDefined(this._toolTipDefinition)) {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
-        content: this.localizedToolTip,
-        style: this.toolTipStyle,
+        content: this._toolTipDefinition.localized,
+        style: this._toolTipDefinition.style,
         onShown: () => {
           this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
         },
@@ -423,6 +380,8 @@ export default class ViewModel {
         },
       });
     }
+
+    ExtenderUtil.extend(this, this.clazz);
   }
 
   /**
@@ -446,17 +405,11 @@ export default class ViewModel {
    * @param {Object} args 
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
-   * * Default `false`. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
-   * * Default `false`. 
    * 
    * @virtual
    */
   update(args = {}) {
-    this.isEditable = args.isEditable ?? false;
-    this.isSendable = args.isSendable ?? false;
-    this.isOwner = args.isOwner ?? false;
+    this._isEditable = args.isEditable ?? false;
 
     const childUpdates = this._getChildUpdates();
     for (const childViewModel of this.children) {
@@ -469,8 +422,7 @@ export default class ViewModel {
    * Returns a map of view models and their respective 
    * update arguments. 
    * 
-   * By default, all child view models will have their `isEditable`, 
-   * `isSendable` and `isOwner` properties updated. 
+   * By default, all child view models will have their `isEditable` property updated. 
    * 
    * **IMPORTANT** You only need to override this if a child view model requires 
    * more/other arguments than the default as described above. 
@@ -498,8 +450,6 @@ export default class ViewModel {
     for (const childViewModel of this.children) {
       result.set(childViewModel, {
         isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
       });
     }
 
@@ -518,7 +468,7 @@ export default class ViewModel {
     if ($(html).attr("id") == this.id) {
       this._element = $(html);
     } else {
-      this._element = html.find(`#${this.id}`);
+      this._element = $(html).find(`#${this.id}`);
     }
 
     if (this._element === undefined || this._element === null || this._element.length === 0) {
@@ -529,7 +479,7 @@ export default class ViewModel {
       this.element.addClass("hidden");
     }
 
-    if (common.util.validation.isDefined(this._toolTip)) {
+    if (ValidationUtil.isDefined(this._toolTip)) {
       this._toolTip.activateListeners(this._element);
     }
 
@@ -550,14 +500,14 @@ export default class ViewModel {
    * @virtual
    */
   dispose() {
-    this.parent = undefined;
+    this._isDisposed = true;
 
-    if (common.util.validation.isDefined(this._toolTip)) {
+    if (ValidationUtil.isDefined(this._toolTip)) {
       this._toolTip.deactivateListeners();
     }
 
     // Dispose of children. 
-    if (this.children !== undefined && this.children !== null) {
+    if (ValidationUtil.isDefined(this.children)) {
       for (const child of this.children) {
         try {
           child.dispose();
@@ -565,7 +515,13 @@ export default class ViewModel {
           game.strive.logger.logWarn(error);
         }
       }
+
+      // Remove children from collection.
+      for (const child of this.children) {
+        child.parent = undefined;
+      }
     }
+    
     this.children = undefined;
   }
 
@@ -647,7 +603,7 @@ export default class ViewModel {
 
     for (const propertyName of this.viewStateFields) {
       // Skip any potential "mistakes" - for example from old versions of the code. 
-      if (common.util.property.hasProperty(viewState, propertyName) !== true) continue;
+      if (PropertyUtil.hasProperty(viewState, propertyName) !== true) continue;
       // Override the matching property's value. 
       this[propertyName] = viewState[propertyName];
     }
@@ -660,7 +616,7 @@ export default class ViewModel {
    * registered and the view state written out, beforehand. 
    */
   readViewState() {
-    const viewState = this._viewStateSource.get(this.id);
+    const viewState = this.#viewStateSource.get(this.id);
     if (viewState !== undefined) {
       this.applyViewState(viewState);
     }
@@ -686,8 +642,8 @@ export default class ViewModel {
    */
   writeViewState() {
     const viewState = this.getViewState()
-    if (common.util.validation.isDefined(viewState) === true) {
-      this._viewStateSource.set(this.id, viewState);
+    if (ValidationUtil.isDefined(viewState) === true) {
+      this.#viewStateSource.set(this.id, viewState);
     }
   }
 
@@ -725,17 +681,6 @@ export default class ViewModel {
   }
 
   /**
-   * Returns extenders. 
-   * 
-   * @returns {Array<Object>}
-   * 
-   * @protected
-   */
-  getExtenders() {
-    return [];
-  }
-  
-  /**
    * Returns an array of view model instances that have either been fetched 
    * from the `currentList` or newly instantiated, using the `factoryFunc`. 
    * 
@@ -747,7 +692,7 @@ export default class ViewModel {
    * @param {Array<ViewModel>} currentList An array of "current" view model 
    * instances. 
    * @param {Function} factoryFunc A factory function that receives the default 
-   * instantiation arguments (`id`, `document`, `isEditable`, `isSendable` and `isOwner`) 
+   * instantiation arguments (`id`, `document` and `isEditable`) 
    * and which must return a new instance of a view model of the expected type. 
    * 
    * @returns {Array<ViewModel>}
@@ -765,8 +710,6 @@ export default class ViewModel {
           document: document,
           parent: this,
           isEditable: this.isEditable,
-          isSendable: this.isSendable,
-          isOwner: this.isOwner,
         });
       }
       result.push(vm);
@@ -794,5 +737,27 @@ export default class ViewModel {
         viewModel.parent = undefined;
       }
     }
+  }
+}
+
+/**
+ * @param {String} localized A localized text to 
+ * display as a tool tip. 
+ * @param {String | undefined} style A style override to attach to the tool tip's DOM element. 
+ * E. g. `text-align: center`
+ */
+export class ViewModelToolTipDefinition {
+  /**
+   * @param {Object} args 
+   * @param {String} args.localized A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.style A style override to attach to the tool tip's DOM element. 
+   * E. g. `text-align: center`
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["localized"]);
+
+    this.localized = args.localized;
+    this.style = args.style;
   }
 }
