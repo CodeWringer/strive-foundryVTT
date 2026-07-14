@@ -122,8 +122,7 @@ export default class InputViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
    * be in edit mode. If `false`, will be in read-only mode.
    * * default `false`. 
-   * @param {String | undefined} args.localizedToolTip A localized text to 
-   * display as a tool tip. 
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {Any | undefined} args.value The current value. 
    * @param {Function | undefined} args.onChange Callback that is invoked 

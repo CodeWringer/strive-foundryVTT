@@ -39,8 +39,8 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
    * be in edit mode. If `false`, will be in read-only mode.
    * * default `false`. 
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
    * @param {String | undefined} args.value The current value. 
    * @param {String | undefined} args.placeholder A placeholder text to display while the textfield is empty. 

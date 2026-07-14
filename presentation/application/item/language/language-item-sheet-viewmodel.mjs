@@ -6,6 +6,7 @@ import InputDropDownViewModel from "../../component/input-choice/input-dropdown/
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
+import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
 
 export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
@@ -25,6 +26,9 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       id: "vmName",
       parent: this,
       isEditable: this.isEditMode,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.name.documentName"),
+      }),
       value: this.document.name,
       onChange: (_, newValue) => {
         this.document.name = newValue;
@@ -37,6 +41,9 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       isEditable: this.isEditMode,
       value: gradeOptions.find(it => it.value === this.document.grade.name),
       options: gradeOptions,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.language.grade.grade"),
+      }),
       onChange: (_, newValue) => {
         this.document.grade = LANGUAGE_GRADES[newValue.value];
       },
@@ -59,6 +66,9 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       id: "vmReadAndWrite",
       parent: this,
       isEditable: this.isEditMode,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.language.readAndWrite.readAndWrite"),
+      }),
       value: readAndWriteOptions.find(it => it.value === (this.document.readAndWrite + "")),
       options: readAndWriteOptions,
       showValue: false,
@@ -70,6 +80,9 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       id: "vmDescription",
       parent: this,
       isEditable: this.isEditMode,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.description"),
+      }),
       value: this.document.description,
       onChange: (_, newValue) => {
         this.document.description = newValue;
@@ -80,6 +93,9 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
         id: "vmGmNotes",
         parent: this,
         isEditable: this.isEditMode,
+        toolTip: new ViewModelToolTipDefinition({
+          localized: StringUtil.getLoca("system.general.gm.gmNotes"),
+        }),
         value: this.document.gmNotes,
         onChange: (_, newValue) => {
           this.document.gmNotes = newValue;

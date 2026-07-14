@@ -161,7 +161,10 @@
         "expandOf": "Expand %{s}"
       },
       "formula": "Formula",
-      "gm": "GM",
+      "gm": {
+        "gm": "GM",
+        "gmNotes": "GM Notes"
+      },
       "id": "ID",
       "increment": "Increment",
       "isCustom": "Custom",
@@ -186,7 +189,7 @@
         "abbreviation": "Mod."
       },
       "name": {
-        "label": "Name",
+        "documentName": "Document Name",
         "edit": "Edit Name",
         "editOf": "Edit Name of %s"
       },
@@ -239,11 +242,13 @@
       "language": {
         "language": "Language",
         "grade": {
+          "grade": "Language Grade",
           "dabbling": "Dabbling",
           "proficient": "Proficient",
           "native": "Native"
         },
         "readAndWrite": {
+          "readAndWrite": "Read/Write Ability",
           "canReadAndWrite": "Can Read/Write",
           "cannotReadAndWrite": "Can not Read/Write"
         }

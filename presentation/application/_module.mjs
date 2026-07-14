@@ -8,7 +8,7 @@ import { TEMPLATES } from "./templates.mjs";
 import BaseSheetViewModel from "./view-model/base-sheet-viewmodel.mjs";
 import InputViewModel from "./view-model/input-view-model.mjs";
 import ViewModelCollection from "./view-model/view-model-collection.mjs";
-import ViewModel from "./view-model/view-model.mjs";
+import ViewModel, { ViewModelToolTipDefinition } from "./view-model/view-model.mjs";
 import { dialog } from "./dialog/_module.mjs";
 
 /**
@@ -19,6 +19,7 @@ export const application = {
   component: component,
   viewModel: {
     ViewModel: ViewModel,
+    ViewModelToolTipDefinition: ViewModelToolTipDefinition,
     ViewModelCollection: ViewModelCollection,
     InputViewModel: InputViewModel,
     BaseSheetViewModel: BaseSheetViewModel,
