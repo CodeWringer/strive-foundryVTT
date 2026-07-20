@@ -180,7 +180,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
       },
       {
         action: "saveEdits",
-        icon: "ico ico-floppy-disk",
+        icon: "ico ico-floppy",
         label: "system.general.edit.saveEdits",
       },
     ].concat(controls);
