@@ -69,12 +69,12 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       new ChoiceOption({
         value: "true",
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.canReadAndWrite"),
-        icon: "ico ico-can-read x32",
+        icon: "ico ico-can-read x48",
       }),
       new ChoiceOption({
         value: "false",
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.cannotReadAndWrite"),
-        icon: "ico ico-cannot-read x32",
+        icon: "ico ico-cannot-read x48",
       }),
     ];
     this.vmReadAndWrite = new InputDropDownViewModel({
