@@ -104,7 +104,7 @@ export default class InputViewModel extends ViewModel {
    * @readonly
    * @virtual
    */
-  get inputElement() { return ""; }
+  get inputElement() { return this.element.find("input"); }
 
   /**
    * Set to `true` when updating the value without wanting events to fire. 

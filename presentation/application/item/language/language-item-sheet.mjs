@@ -3,12 +3,15 @@ import { BaseItemSheet } from "../base/sheet/base-item-sheet.mjs";
 import LanguageItemSheetViewModel from "./language-item-sheet-viewmodel.mjs";
 
 /**
- * @property {ViewModel} viewModel
+ * @property {LanguageItemSheetViewModel} viewModel
  * @property {HTMLElement} html The form element of the sheet. 
  * * Read-only
  * @property {HTMLElement} content The content element of the sheet. 
  * * Read-only
- * @property {Boolean} isEditMode
+ * @property {String} title
+ * * Read-only
+ * @property {String} localizedDocumentType
+ * * Read-only
  * 
  * @extends BaseItemSheet
  */
@@ -24,9 +27,6 @@ export class LanguageItemSheet extends BaseItemSheet {
       id: this.id,
       document: document,
       sheet: this,
-      isOwner: this.isOwner,
-      isEditable: this.isOwner,
-      isSendable: this.isOwner,
     });
   }
 }

@@ -12,8 +12,5 @@ cssClass: String | undefined
     value="{{viewModel.value}}"
   />
   {{!-- Read mode --}}
-  <div 
-    class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}" 
-    name="{{viewModel.id}}"
-  >{{viewModel.value}}</div>
+  <div class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}">{{viewModel.value}}</div>
 </div>

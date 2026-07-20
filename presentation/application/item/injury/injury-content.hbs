@@ -1,0 +1,34 @@
+{{!-- context:
+viewModel: InjuryContentViewModel
+--}}
+<div id="{{viewModel.id}}" class="flex flex-column">
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
+  <span class="h-divider"></span>
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    <i class="ico ico-treatment-date"></i>
+    {{> inputTextField viewModel=viewModel.vmTreatmentDate }}
+    <span class="v-divider"></span>
+    <i class="ico ico-obstacle"></i>
+    {{> inputTextField viewModel=viewModel.vmTreatmentObstacle }}
+    <i class="ico ico-arrow-right"></i>
+    {{> inputTextField viewModel=viewModel.vmTreatmentSkill }}
+  </div>
+  <span class="h-divider"></span>
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    <i class="ico ico-treatment-supplies"></i>
+    {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount }}
+    {{> inputReference viewModel=viewModel.vmTreatmentSuppliesAsset }}
+    <span class="v-divider"></span>
+    <i class="ico ico-healing-time"></i>
+    {{> inputSplitNumberSpinner viewModel=viewModel.vmTreatmentProgress }}
+  </div>
+  {{#if viewModel.isGM}}
+  <div class="gm-only flex-grow border-t-sm">
+    <h2 class="flex flex-column strive-regular-font" style="font-weight: normal;">
+      <span class="pad-l-md pad-t-md">{{localize "system.general.gm.gm"}}</span>
+      {{{themedImage "image.underline.h2" "" "min-width: 500px; max-width: 500px;"}}}
+    </h2>
+    {{> inputRichText viewModel=viewModel.vmGmNotes cssClass="pad-md" }}
+  </div>
+  {{/if}}
+</div>

@@ -22,11 +22,21 @@ import ViewModel from "../../../view-model/view-model.mjs";
  * @extends BaseSheetViewModel
  * 
  * @abstract Inheritors MUST override: 
- * * `static get TEMPLATE`
  * * `get clazz`
+ * * `get headerTemplate`
+ * * `get contentTemplate`
  * 
+ * Inheritors _should_ override:
+ * `get contentViewModel`
+ * 
+ * @property {String} headerTemplate Returns the relative url of the header template. 
+ * E. g. `TEMPLATES.application.item.language.header`
+ * * Read-only
  * @property {String} contentTemplate Returns the relative url of the content template. 
- * E. g. `TEMPLATES.application.item.language`
+ * E. g. `TEMPLATES.application.item.language.content`
+ * * Read-only
+ * @property {ViewModel} contentViewModel Returns the `ViewModel` instance of the 
+ * content template.
  * * Read-only
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
@@ -37,8 +47,17 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get clazz() { return BaseItemSheetViewModel; }
 
   /**
+   * Returns the relative url of the header template. 
+   * E. g. `TEMPLATES.application.item.language.header`
+   * @type {String}
+   * @readonly
+   * @abstract
+   */
+  get headerTemplate() { throw new Error("Not implemented"); }
+
+  /**
    * Returns the relative url of the content template. 
-   * E. g. `TEMPLATES.application.item.language`
+   * E. g. `TEMPLATES.application.item.language.content`
    * @type {String}
    * @readonly
    * @abstract
@@ -46,53 +65,29 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get contentTemplate() { throw new Error("Not implemented"); }
 
   /**
-   * @type {Boolean}
-   * @private
+   * Returns the `ViewModel` instance of the content template.
+   * @type {ViewModel}
+   * @readonly
+   * @virtual
    */
-  #isEditMode = false;
-  /**
-   * If true, the sheet can be edited. 
-   * @type {Boolean}
-   */
-  get isEditMode() { return this.#isEditMode; }
-  /**
-   * If true, the sheet can be edited. 
-   * @type {Boolean}
-   * @private
-   */
-  set isEditMode(value) {
-    this.#isEditMode = value;
-
-    // Ensure edit mode is propagated to children. 
-    if (ValidationUtil.isDefined(this.children)) {
-      for (const child of this.children) {
-        if (ValidationUtil.isDefined(child.isEditable)) {
-          child.isEditable = this.#isEditMode;
-        }
-      }
-    }
-  }
+  get contentViewModel() { return this; }
 
   /**
-   * @param {Object} args 
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientDocument} args.document 
-   * @param {Boolean | undefined} args.isEditMode If true, the sheet can be edited. 
-   * * default `false`
+   * @param {TransientDocument} args.document The represented transient document instance. 
+   * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    this.#isEditMode = args.isEditMode ?? false;
-    this.document.isTransactionMode = this.#isEditMode;
+    this.document.isTransactionMode = this.isEditable;
   }
 
   /**
@@ -116,12 +111,12 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async enterEditMode() {
-    if (this.isEditMode || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
+    if (this.isEditable || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
     this._stateChangeTimeout = setTimeout(() => {
       this._stateChangeTimeout = null;
     }, 300);
-    
-    this.isEditMode = true;
+
+    this.isEditable = true;
 
     new SlideDisplaceAnim({
       elmA: this._exitModeButton,
@@ -134,7 +129,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
     this.document.isTransactionMode = true;
     this.document.discardUpdates();
-
   }
 
   /**
@@ -142,12 +136,12 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async saveEdits() {
-    if (!this.isEditMode || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
+    if (!this.isEditable || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
     this._stateChangeTimeout = setTimeout(() => {
       this._stateChangeTimeout = null;
     }, 300);
-    
-    this.isEditMode = false;
+
+    this.isEditable = false;
 
     new SlideDisplaceAnim({
       elmA: this._enterModeButton,
@@ -158,6 +152,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     }).execute();
     this.#updateTitle();
 
+    await new Promise(resolve => setTimeout(resolve, 500));
     this.document.isTransactionMode = false;
   }
 
@@ -214,33 +209,44 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this._exitModeButton = $(`#${sheetId} button[data-action=saveEdits]`);
     this._sendToChatButton = $(`#${sheetId} button[data-action=sendToChat]`);
 
-    this._titleElement = $(`form#${sheetId}`).find("h1.window-title");
-    this._titleReplacement = this._titleElement.clone();
-    this._titleReplacement.addClass("hidden");
-    this._titleReplacement.insertBefore(this._titleElement);
+    if (this.isOwner || this.isGM) {
+      this._titleElement = $(`form#${sheetId}`).find("h1.window-title");
+      this._titleReplacement = $(`form#${sheetId}`).find("h1.window-title.anim-replacement");
 
-    // Ensure the correct button is visible.
-    if (this.isEditMode) {
-      this._enterModeButton.addClass("hidden");
+      if (this._titleReplacement.length == 0) {
+        this._titleReplacement = this._titleElement.clone();
+        this._titleReplacement.addClass("hidden");
+        this._titleReplacement.addClass("anim-replacement");
+        this._titleReplacement.insertBefore(this._titleElement);
+      }
+
+      // Ensure initial button visibility.
+      if (this.isEditable) {
+        this._enterModeButton.addClass("hidden");
+      } else {
+        this._exitModeButton.addClass("hidden");
+      }
+
+      // Ensure hot-keys. 
+      this._editHotKeyListenerId = KEYBOARD.onKeyDown({
+        keyCode: KEY_CODES.E,
+        modifier: MODIFIER_KEY_CODES.CTRL,
+        handler: () => {
+          this.enterEditMode();
+        },
+      });
+      this._saveHotKeyListenerId = KEYBOARD.onKeyDown({
+        keyCode: KEY_CODES.S,
+        modifier: MODIFIER_KEY_CODES.CTRL,
+        handler: () => {
+          this.saveEdits();
+        },
+      });
     } else {
+      this._enterModeButton.addClass("hidden");
       this._exitModeButton.addClass("hidden");
+      this._sendToChatButton.addClass("hidden");
     }
-
-    // Ensure hot-keys. 
-    this._editHotKeyListenerId = KEYBOARD.onKeyDown({
-      keyCode: KEY_CODES.E,
-      modifier: MODIFIER_KEY_CODES.CTRL,
-      handler: () => {
-        this.enterEditMode();
-      },
-    });
-    this._saveHotKeyListenerId = KEYBOARD.onKeyDown({
-      keyCode: KEY_CODES.S,
-      modifier: MODIFIER_KEY_CODES.CTRL,
-      handler: () => {
-        this.saveEdits();
-      },
-    });
   }
 
   /**
@@ -254,5 +260,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
       elmB: this._titleElement,
     }).execute();
     this._titleElement.text(this.sheet.title);
+    this._titleElement.removeClass("hidden");
+    this._titleReplacement.addClass("hidden");
   }
 }

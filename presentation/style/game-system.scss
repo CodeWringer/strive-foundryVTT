@@ -20,13 +20,13 @@
 @import 'global/shadows';
 @import 'global/sheet';
 
-/* Global and composable component styles */
-// @import 'components/input';
-// @import 'components/pill';
 /* Specific component styles */
 @import '../application/component/input-textfield/input-textfield';
 @import '../application/component/input-choice/input-dropdown/input-dropdown';
 @import '../application/component/input-rich-text/input-rich-text';
+@import '../application/component/input-number-spinner/input-number-spinner';
+@import '../application/component/input-split-number-spinner/input-split-number-spinner';
+@import '../application/component/input-reference/input-reference';
 @import '../application/component/tooltip/tooltip';
 
 /* Animations */
@@ -45,9 +45,3 @@
 form.strive-regular-font h1.window-title {
   font-size: 16pt;
 }
-
-// Global override of root interface element. 
-// body > div#interface {
-//   width: 100%;
-//   height: 100%;
-// }

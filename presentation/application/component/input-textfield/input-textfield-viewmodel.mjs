@@ -21,9 +21,6 @@ export default class InputTextFieldViewModel extends InputViewModel {
   /** @override */
   get clazz() { return InputTextFieldViewModel; }
   
-  /** @override */
-  get inputElement() { return this.element.find("input"); }
-  
   /**
    * Registers the Handlebars partial for this component. 
    * 

@@ -26,7 +26,7 @@ export const INJURY_STATES = {
   active: new InjuryState({
     name: "active",
     localizableName: "system.character.health.injury.state.active.label",
-    icon: "fas fa-bone"
+    icon: "ico ico-"
   }),
   treated: new InjuryState({
     name: "treated",

@@ -1,4 +1,3 @@
-import { common } from "../../../../common/_module.mjs";
 import { SheetUtil } from "../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
@@ -116,20 +115,28 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 
   /**
-   * Returns the value to be rendered in the template. 
-   * 
-   * @type {String}
-   * @readonly
-   */
-  get valueForDisplay() { return common.util.validation.isDefined(this.displayValueMapper) ? this.displayValueMapper(this.value) : this.value; }
-
-  /**
    * @param {Object} args
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {String | undefined} args.localizedToolTip A localized text to display as a tool tip. 
+   * @param {Any | undefined} args.value The current value. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Any}`
+   * * `newValue: {Any}`
+   * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocus Callback that is invoked when the input element is focused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
    * 
-   * @param {Number | undefined} args.value The current value. 
-   * * default `0`
    * @param {Number | undefined} args.min Optional. The minimum value. 
    * @param {Number | undefined} args.max Optional. The maximum value. 
    * @param {Number | undefined} args.step Optional. The increment/decrement step size. 
@@ -138,11 +145,6 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Number}`
    * * `newValue: {Number}`
-   * @param {Function | undefined} args.displayValueMapper If not undefined, will invoke this 
-   * function to map the actual value, before it is rendered. This function has no effect on 
-   * the actual value underneath. **Must** return a value. Arguments: 
-   * * `value: Number`
-   * @param {String | undefined} args.contentCssClass
    */
   constructor(args = {}) {
     super(args);
@@ -151,8 +153,6 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     this._min = args.min ?? undefined;
     this._max = args.max ?? undefined;
     this._step = args.step ?? 1;
-    this.displayValueMapper = args.displayValueMapper;
-    this.contentCssClass = args.contentCssClass;
   }
 
   /** @override */
@@ -161,8 +161,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
     if (this.isEditable !== true) return;
 
-    this.element.parent().find(".button-spinner-up").click(this._onClickNumberSpinnerUp.bind(this));
-    this.element.parent().find(".button-spinner-down").click(this._onClickNumberSpinnerDown.bind(this));
+    this.element.parent().find(".button-spinner.up").click(this._onClickNumberSpinnerUp.bind(this));
+    this.element.parent().find(".button-spinner.down").click(this._onClickNumberSpinnerDown.bind(this));
   }
 
   /**

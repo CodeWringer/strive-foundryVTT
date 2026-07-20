@@ -53,10 +53,6 @@ export default class InjuryItemData extends BaseItemData {
           initial: 0,
           min: 0,
         }),
-        untilCured: new FoundrySchemaFields.BooleanField({
-          nullable: false,
-          initial: false,
-        }),
       }),
     }
   }

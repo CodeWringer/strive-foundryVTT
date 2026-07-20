@@ -1,0 +1,17 @@
+{{!-- Required context:
+viewModel: InputReferenceViewModel
+cssClass: String | undefined
+--}}
+<div id="{{viewModel.id}}" class="strive reference flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Edit mode --}}
+  <input 
+    class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}"
+    type="text"
+    name="{{viewModel.id}}"
+    placeholder="{{viewModel.placeholder}}"
+    value="{{viewModel.value}}"
+  />
+  <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden"></menu>
+  {{!-- Read mode --}}
+  <div class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}">{{viewModel.value}}</div>
+</div>

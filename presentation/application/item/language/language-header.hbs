@@ -1,0 +1,10 @@
+{{!-- context:
+viewModel: LanguageItemSheetViewModel
+--}}
+<div class="flex flex-row pad-lg border-b-md">
+  {{> inputTextField viewModel=viewModel.vmName cssClass="flex-grow" }}
+  <span class="v-divider"></span>
+  {{> inputDropDown viewModel=viewModel.vmGrade }}
+  <span class="v-divider"></span>
+  {{> inputDropDown viewModel=viewModel.vmReadAndWrite }}
+</div>

@@ -252,6 +252,9 @@
           "canReadAndWrite": "Can Read/Write",
           "cannotReadAndWrite": "Can not Read/Write"
         }
+      },
+      "injury": {
+        "injury": "Injury"
       }
     }
   }

@@ -7,6 +7,8 @@ import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel
 import PreparedSection from "./dynamic-component/prepared-section.mjs";
 import RowViewModel from "./row/row-viewmodel.mjs";
 import CustomProseMirrorMenu from "./input-rich-text/custom-prose-mirror-menu.mjs";
+import InputReferenceViewModel from "./input-reference/input-reference-viewmodel.mjs";
+import InputSplitNumberSpinnerViewModel from "./input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -21,6 +23,8 @@ export const component = {
   DynamicComponent: DynamicComponent,
   RowViewModel: RowViewModel,
   CustomProseMirrorMenu: CustomProseMirrorMenu,
+  InputSplitNumberSpinnerViewModel: InputSplitNumberSpinnerViewModel,
+  InputReferenceViewModel: InputReferenceViewModel,
   /**
    * Initialization, which MUST be called during system setup!
    */
@@ -30,6 +34,8 @@ export const component = {
     InputNumberSpinnerViewModel.registerHandlebarsPartial();
     InputDropDownViewModel.registerHandlebarsPartial();
     InputRichTextViewModel.registerHandlebarsPartial();
+    InputSplitNumberSpinnerViewModel.registerHandlebarsPartial();
+    InputReferenceViewModel.registerHandlebarsPartial();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 

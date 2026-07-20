@@ -230,11 +230,19 @@ export default class ViewModel {
   /**
    * If true, the view model data is editable. 
    * 
+   * Propagates changes to this property to all children. 
+   * 
    * @type {Boolean}
    * @default `false`
    */
   get isEditable() { return this._isEditable; }
-  set isEditable(value) { this._isEditable = value; }
+  set isEditable(value) {
+    this._isEditable = value;
+
+    for (const child of this.children) {
+      child.isEditable = value;
+    }
+  }
   
   /**
    * Returns true, if the current user is the owner of the represented document. 

@@ -54,7 +54,9 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * * Read-only.
  * @property {Number} healProgress.current
  * @property {Number} healProgress.required
- * @property {Boolean} healProgress.untilCured
+ * @property {Boolean} healProgress.untilCured Is `true`, if `healProgress.required` 
+ * is `<= 0`. 
+ * * Read-only.
  * 
  * @extends TransientBaseItem
  */
@@ -127,9 +129,9 @@ export default class TransientInjury extends TransientBaseItem {
 
       /**
        * @type {Boolean}
+       * @readonly
        */
-      get untilCured() { return thiz._healProgress.untilCured.value; },
-      set untilCured(value) { thiz._healProgress.untilCured.value = value; },
+      get untilCured() { return parseInt(thiz._healProgress.required.value) <= 0; },
     };
   }
 
@@ -199,10 +201,6 @@ export default class TransientInjury extends TransientBaseItem {
       required: new DataFieldBridge({
         document: this,
         dataPath: "system.healProgress.required",
-      }),
-      untilCured: new DataFieldBridge({
-        document: this,
-        dataPath: "system.healProgress.untilCured",
       }),
     };
   }

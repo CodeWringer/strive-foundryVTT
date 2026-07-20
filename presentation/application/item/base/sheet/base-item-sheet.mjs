@@ -98,7 +98,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   /** @override */
   get title() {
     let loca = this.localizedDocumentType;
-    if ((this.viewModel ?? {}).isEditMode) {
+    if ((this.viewModel ?? {}).isEditable) {
       loca = StringUtil.format(
         StringUtil.getLoca("system.general.edit.editingSheet"),
         loca,

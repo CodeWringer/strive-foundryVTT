@@ -2,33 +2,28 @@
 viewModel: {InputNumberSpinnerViewModel}
 cssClass: {String | undefined}
 --}}
-{{#if viewModel.isEditable}}
-<span class="spinner-container flex-middle flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
-  <input 
-    class="custom-system-edit spinner{{#if viewModel.contentCssClass}} {{viewModel.contentCssClass}}{{/if}}"
-    type="number"
-    data-dtype="Number"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    value="{{viewModel.valueForDisplay}}"
-    {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
-    {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
-    step="{{viewModel.step}}"
-  />
-  <div class="spinner-button-container">
-    <a class="button-spinner button-spinner-up">
-      <i class="fas fa-caret-up"></i>
-    </a>
-    <a class="button-spinner button-spinner-down">
-      <i class="fas fa-caret-down"></i>
-    </a>
+<div id="{{viewModel.id}}" class="strive number-spinner flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Edit mode --}}
+  <div class="edit-mode flex flex-row flex-middle">
+    <input 
+      type="number"
+      data-dtype="Number"
+      name="{{viewModel.id}}"
+      id="{{viewModel.id}}"
+      value="{{viewModel.value}}"
+      {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
+      {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
+      step="{{viewModel.step}}"
+    />
+    <div class="buttons">
+      <a class="button-spinner up">
+        <i class="fas fa-caret-up"></i>
+      </a>
+      <a class="button-spinner down">
+        <i class="fas fa-caret-down"></i>
+      </a>
+    </div>
   </div>
-</span>
-{{else}}
-  {{!-- Display read-only value --}}
-  <div 
-    class="custom-system-read-only flex flex-center pad-sm border-solid-sm fill{{#if cssClass}} {{cssClass}}{{/if}}" 
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-  >{{viewModel.valueForDisplay}}</div>
-{{/if}}
+  {{!-- Read mode --}}
+  <div class="read-mode">{{viewModel.value}}</div>
+</div>

@@ -2,7 +2,10 @@
 viewModel: ViewModel
 --}}
 <section id="{{viewModel.id}}" class="strive flex flex-column flex-grow sheet-section">
-  {{#with viewModel.contentTemplate as | template |}}
+  {{#with viewModel.headerTemplate as | template |}}
   {{> (template) viewModel=../viewModel }}
+  {{/with}}
+  {{#with viewModel.contentTemplate as | template |}}
+  {{> (template) viewModel=../viewModel.contentViewModel }}
   {{/with}}
 </section>

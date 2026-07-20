@@ -1,11 +1,7 @@
-$size: 24px;
-
 .ico {
   aspect-ratio: 1/1;
   background-size: cover;
   display: inline-block;
-  font-size: $size;
-  height: $size;
 }
 
 .icon-with-centered-label {
@@ -38,40 +34,90 @@ header {
   }
 }
 
+@function getTheme($isDark) {
+  @if $isDark == true {
+    @return "dark";
+  } @else {
+    @return "light";
+  }
+}
+
+@mixin icon-template-24($urlPartial, $isDark) {
+  $theme: getTheme($isDark);
+  &.x24 {
+    background-image: url($urlPartial + "-24-" + $theme + ".svg");
+    font-size: 24px;
+    height: 24px;
+  }
+}
+
+@mixin icon-template-32($urlPartial, $isDark) {
+  $theme: getTheme($isDark);
+  &.x32 {
+    background-image: url($urlPartial + "-32-" + $theme + ".svg");
+    font-size: 32px;
+    height: 32px;
+  }
+}
+
 // Specific light-mode icons -> use dark variants!
 .theme-light {
-  i.ico-chevron-down {
-    background-image: url("/systems/strive/presentation/image/chevron-down-35x20-dark.svg");
-  }
   i.ico-triangle-down {
-    background-image: url("/systems/strive/presentation/image/triangle-down-24x24-dark.svg");
+    @include icon-template-24("/systems/strive/presentation/image/triangle-down", true);
   }
   i.ico-floppy-disk {
-    background-image: url("/systems/strive/presentation/image/floppy-14x15-dark.svg");
+    @include icon-template-24("/systems/strive/presentation/image/floppy", true);
   }
   i.ico-edit {
-    background-image: url("/systems/strive/presentation/image/edit-17x17-dark.svg");
+    @include icon-template-24("/systems/strive/presentation/image/edit", true);
   }
   i.ico-speech-bubble {
-    background-image: url("/systems/strive/presentation/image/speech-bubble-15x12-dark.svg");
+    @include icon-template-24("/systems/strive/presentation/image/speech-bubble", true);
+  }
+  i.ico-treatment-date {
+    @include icon-template-24("/systems/strive/presentation/image/treatment-date", true);
+  }
+  i.ico-obstacle {
+    @include icon-template-24("/systems/strive/presentation/image/obstacle", true);
+  }
+  i.ico-arrow-right {
+    @include icon-template-24("/systems/strive/presentation/image/arrow-right", true);
+  }
+  i.ico-treatment-supplies {
+    @include icon-template-24("/systems/strive/presentation/image/treatment-supplies", true);
+  }
+  i.ico-healing-progress {
+    @include icon-template-24("/systems/strive/presentation/image/healing-progress", true);
   }
 }
 
 // Specific dark-mode icons -> use light variants!
 .theme-dark {
-  i.ico-chevron-down {
-    background-image: url("/systems/strive/presentation/image/chevron-down-35x20-light.svg");
-  }
   i.ico-triangle-down {
-    background-image: url("/systems/strive/presentation/image/triangle-down-24x24-light.svg");
+    @include icon-template-24("/systems/strive/presentation/image/triangle-down", false);
   }
   i.ico-floppy-disk {
-    background-image: url("/systems/strive/presentation/image/floppy-14x15-light.svg");
+    @include icon-template-24("/systems/strive/presentation/image/floppy", false);
   }
   i.ico-edit {
-    background-image: url("/systems/strive/presentation/image/edit-17x17-light.svg");
+    @include icon-template-24("/systems/strive/presentation/image/edit", false);
   }
   i.ico-speech-bubble {
-    background-image: url("/systems/strive/presentation/image/speech-bubble-15x12-light.svg");
+    @include icon-template-24("/systems/strive/presentation/image/speech-bubble", false);
+  }
+  i.ico-treatment-date {
+    @include icon-template-24("/systems/strive/presentation/image/treatment-date", false);
+  }
+  i.ico-obstacle {
+    @include icon-template-24("/systems/strive/presentation/image/obstacle", false);
+  }
+  i.ico-arrow-right {
+    @include icon-template-24("/systems/strive/presentation/image/arrow-right", false);
+  }
+  i.ico-treatment-supplies {
+    @include icon-template-24("/systems/strive/presentation/image/treatment-supplies", false);
+  }
+  i.ico-healing-progress {
+    @include icon-template-24("/systems/strive/presentation/image/healing-progress", false);
   }
 }

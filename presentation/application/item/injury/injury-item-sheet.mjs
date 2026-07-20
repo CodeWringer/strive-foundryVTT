@@ -1,22 +1,32 @@
-import ItemSheetSubType from "../item-sheet-subtype.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { BaseItemSheet } from "../base/sheet/base-item-sheet.mjs";
 import InjuryItemSheetViewModel from "./injury-item-sheet-viewmodel.mjs";
 
-export default class InjuryItemSheet extends ItemSheetSubType {
+/**
+ * @property {InjuryItemSheetViewModel} viewModel
+ * @property {HTMLElement} html The form element of the sheet. 
+ * * Read-only
+ * @property {HTMLElement} content The content element of the sheet. 
+ * * Read-only
+ * @property {String} title
+ * * Read-only
+ * @property {String} localizedDocumentType
+ * * Read-only
+ * 
+ * @extends BaseItemSheet
+ */
+export default class InjuryItemSheet extends BaseItemSheet {
   /** @override */
-  get template() { return InjuryItemSheetViewModel.TEMPLATE; }
-
+  get localizedDocumentType() {
+    return StringUtil.getLoca("system.item.injury.injury");
+  }
+  
   /** @override */
-  get localizedType() { return game.i18n.localize("system.character.health.injury.singular"); }
-
-  /** @override */
-  createViewModel(context, document, sheet) {
+  createViewModel(document) {
     return new InjuryItemSheetViewModel({
-      id: document.id,
-      document: document.getTransientObject(),
-      isEditable: context.isEditable,
-      isSendable: context.isSendable,
-      isOwner: context.isOwner,
-      sheet: sheet,
+      id: this.id,
+      document: document,
+      sheet: this,
     });
   }
 }

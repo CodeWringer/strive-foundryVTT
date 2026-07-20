@@ -4,6 +4,8 @@ import DataFieldBridge from "../data-field-bridge.mjs"
 import { common } from "../../../../common/_module.mjs"
 import { TIME_UNITS, TimeUnit } from "../../domain/const/time-units.mjs"
 import AssetSlot from "../../domain/asset/asset-slot.mjs"
+import ArrayDataFieldBridge from "../array-data-field-bridge.mjs"
+import Complication from "../../domain/complication/complication.mjs"
 
 /**
  * Represents the full transient data of an asset. 
@@ -47,14 +49,7 @@ import AssetSlot from "../../domain/asset/asset-slot.mjs"
  * @property {Number} quantity.current
  * @property {Number} quantity.maximum
  * @property {Number} quality
- * @property {Object} crafting
- * * Read-only
- * @property {Number} crafting.progressIncrement
- * @property {Number} crafting.amount
- * @property {Object} crafting.timeIncrement
- * * Read-only
- * @property {Number} crafting.timeIncrement.value
- * @property {TimeUnit} crafting.timeIncrement.unit 
+ * @property {Array<Complication>} complications
  * 
  * @property {Boolean} isProperty Returns `true`, if the asset is in the 
  * "property" section on a character sheet. 
@@ -101,36 +96,11 @@ export default class TransientAsset extends TransientBaseItem {
   get quality() { return this._quality.value; }
   set quality(value) { this._quality.value = value; }
 
-  get crafting() {
-    const thiz = this;
-    return {
-      /**
-       * @type {Number}
-       */
-      get progressIncrement() { return thiz._crafting.progressIncrement.value; },
-      set progressIncrement(value) { thiz._crafting.progressIncrement.value = value; },
-
-      /**
-       * @type {Number}
-       */
-      get amount() { return thiz._crafting.amount.value; },
-      set amount(value) { thiz._crafting.amount.value = value; },
-
-      timeIncrement: {
-        /**
-         * @type {Number}
-         */
-        get value() { return thiz._crafting.timeIncrement.value.value; },
-        set value(value) { thiz._crafting.timeIncrement.value.value = value; },
-
-        /**
-         * @type {TimeUnit}
-         */
-        get unit() { return thiz._crafting.timeIncrement.unit.value; },
-        set unit(value) { thiz._crafting.timeIncrement.unit.value = value; },
-      },
-    };
-  }
+  /**
+   * @type {Array<Complication>}
+   */
+  get complications() { return this._complications.value; }
+  set complications(value) { this._complications.value = value; }
 
   /**
    * Returns `true`, if the asset is in the "property" section on a 
@@ -222,38 +192,11 @@ export default class TransientAsset extends TransientBaseItem {
       dataPath: "system.quality",
       default: 1,
     });
-
-    this._crafting = {
-      progressIncrement: new DataFieldBridge({
-        document: this,
-        dataPath: "system.crafting.progressIncrement",
-        default: 0,
-      }),
-      amount: new DataFieldBridge({
-        document: this,
-        dataPath: "system.crafting.amount",
-        default: 1,
-      }),
-
-      timeIncrement: {
-        value: new DataFieldBridge({
-          document: this,
-          dataPath: "system.crafting.timeIncrement.value",
-          default: 0,
-        }),
-        unit: new DataFieldBridge({
-          document: this,
-          dataPath: "system.crafting.timeIncrement.unit",
-          default: TIME_UNITS.none,
-          fromDto: (dto) => {
-            return TIME_UNITS[dto];
-          },
-          toDto: (value) => {
-            return value.name;
-          },
-        }),
-      },
-    };
+    this._complications = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: "system.complications",
+      dataClass: Complication,
+    });
   }
 
   /**

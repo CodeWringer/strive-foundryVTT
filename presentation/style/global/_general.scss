@@ -12,8 +12,21 @@
   padding-right: 1px; // Ensures symmetry on the right side.
 }
 
+.h-divider {
+  height: 1px;
+  margin: 10px 0;
+  padding-bottom: 1px; // Ensures symmetry below.
+
+  &-full {
+    margin: 0;
+  }
+}
+
 .theme-dark {
-  .v-divider {
+
+  .v-divider,
+  .h-divider,
+  .h-divider-full {
     background-color: $c-border-dark;
   }
 
@@ -23,7 +36,10 @@
 }
 
 .theme-light {
-  .v-divider {
+
+  .v-divider,
+  .h-divider,
+  .h-divider-full {
     background-color: $c-border-light;
   }
 
