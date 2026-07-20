@@ -186,6 +186,7 @@ export default class TransientDocument {
     this._gmNotes = new DataFieldBridge({
       document: this,
       dataPath: "system.gmNotes",
+      default: "",
       fromDto: (dto) => {
         if (common.util.validation.isBlankOrUndefined(dto)) {
           return null;
@@ -204,6 +205,7 @@ export default class TransientDocument {
     this._description = new DataFieldBridge({
       document: this,
       dataPath: "system.description",
+      default: "",
     });
     ExtenderUtil.extend(this, this.clazz);
   }
