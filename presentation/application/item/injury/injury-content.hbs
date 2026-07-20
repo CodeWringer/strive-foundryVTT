@@ -5,21 +5,21 @@ viewModel: InjuryContentViewModel
   {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
   <span class="h-divider"></span>
   <div class="flex flex-row flex-middle auto-margin-h-md">
-    <i class="ico ico-treatment-date"></i>
+    <i class="ico ico-treatment-date x24"></i>
     {{> inputTextField viewModel=viewModel.vmTreatmentDate }}
     <span class="v-divider"></span>
-    <i class="ico ico-obstacle"></i>
+    <i class="ico ico-obstacle x24"></i>
     {{> inputTextField viewModel=viewModel.vmTreatmentObstacle }}
-    <i class="ico ico-arrow-right"></i>
+    <i class="ico ico-arrow-right x24"></i>
     {{> inputTextField viewModel=viewModel.vmTreatmentSkill }}
   </div>
   <span class="h-divider"></span>
   <div class="flex flex-row flex-middle auto-margin-h-md">
-    <i class="ico ico-treatment-supplies"></i>
+    <i class="ico ico-treatment-supplies x24"></i>
     {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount }}
     {{> inputReference viewModel=viewModel.vmTreatmentSuppliesAsset }}
     <span class="v-divider"></span>
-    <i class="ico ico-healing-time"></i>
+    <i class="ico ico-healing-time x24"></i>
     {{> inputSplitNumberSpinner viewModel=viewModel.vmTreatmentProgress }}
   </div>
   {{#if viewModel.isGM}}

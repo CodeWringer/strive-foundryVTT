@@ -19,8 +19,6 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
   get contentTemplate() { return TEMPLATES.application.item.language.content; }
 
-  get contentViewModel() { return this._contentViewModel; }
-
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -33,7 +31,13 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      contentViewModel: new LanguageContentViewModel({
+        id: "vmContent",
+        document: args.document,
+      }),
+    });
 
     this.vmName = new InputTextFieldViewModel({
       id: "vmName",
@@ -65,14 +69,12 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       new ChoiceOption({
         value: "true",
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.canReadAndWrite"),
-        iconLightMode: "systems/strive/presentation/image/can-read-write-32x27-dark.svg",
-        iconDarkMode: "systems/strive/presentation/image/can-read-write-32x27-light.svg",
+        icon: "ico ico-can-read x32",
       }),
       new ChoiceOption({
         value: "false",
         localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.cannotReadAndWrite"),
-        iconLightMode: "systems/strive/presentation/image/cannot-read-write-24x32-dark.svg",
-        iconDarkMode: "systems/strive/presentation/image/cannot-read-write-24x32-light.svg",
+        icon: "ico ico-cannot-read x32",
       }),
     ];
     this.vmReadAndWrite = new InputDropDownViewModel({
@@ -88,12 +90,6 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       onChange: (_, newValue) => {
         this.document.readAndWrite = newValue.value === "true";
       },
-    });
-
-    this._contentViewModel = new LanguageContentViewModel({
-      id: "vmContent",
-      document: this.document,
-      parent: this,
     });
   }
 }

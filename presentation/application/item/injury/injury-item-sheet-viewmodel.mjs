@@ -5,6 +5,7 @@ import InputTextFieldViewModel from "../../component/input-textfield/input-textf
 import { TEMPLATES } from "../../templates.mjs";
 import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
+import InjuryContentViewModel from "./injury-content-viewmodel.mjs";
 
 /**
  * @property {TransientInjury} document 
@@ -31,7 +32,13 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      contentViewModel: new InjuryContentViewModel({
+        id: "vmContent",
+        document: args.document,
+      }),
+    });
 
     this.vmName = new InputTextFieldViewModel({
       id: "vmName",

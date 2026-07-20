@@ -170,17 +170,17 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
     return [
       {
         action: "sendToChat",
-        icon: "ico ico-speech-bubble",
+        icon: "ico ico-speech-bubble x24",
         label: "system.general.sendToChat",
       },
       {
         action: "enterEditMode",
-        icon: "ico ico-edit",
+        icon: "ico ico-edit x24",
         label: "system.general.edit.enterEditMode",
       },
       {
         action: "saveEdits",
-        icon: "ico ico-floppy",
+        icon: "ico ico-floppy x24",
         label: "system.general.edit.saveEdits",
       },
     ].concat(controls);

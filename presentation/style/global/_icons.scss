@@ -29,6 +29,15 @@
   }
 }
 
+@mixin icon-template-10($urlPartial, $isDark) {
+  $theme: getTheme($isDark);
+  &.x10 {
+    background-image: url($urlPartial + "-10-" + $theme + ".svg");
+    font-size: 10px;
+    height: 10px;
+  }
+}
+
 @mixin icon-template-24($urlPartial, $isDark) {
   $theme: getTheme($isDark);
   &.x24 {
@@ -49,134 +58,156 @@
 
 // Specific light-mode icons -> use dark variants!
 .theme-light {
-  i.ico-arrow-right {
+  .ico-arrow-right {
     @include icon-template-24("/systems/strive/presentation/image/arrow-right", true);
   }
-  i.ico-cannot-read {
+  .ico-cannot-read {
     @include icon-template-24("/systems/strive/presentation/image/cannot-read", true);
   }
-  i.ico-can-read {
+  .ico-can-read {
     @include icon-template-24("/systems/strive/presentation/image/can-read", true);
   }
-  i.ico-chain-link {
+  .ico-chain-link {
     @include icon-template-24("/systems/strive/presentation/image/chain-link", true);
   }
-  i.ico-chain-link-broken {
+  .ico-chain-link-broken {
     @include icon-template-24("/systems/strive/presentation/image/chain-link-broken", true);
   }
-  i.ico-edit {
+  .ico-edit {
     @include icon-template-24("/systems/strive/presentation/image/edit", true);
   }
-  i.ico-floppy {
+  .ico-floppy {
     @include icon-template-24("/systems/strive/presentation/image/floppy", true);
   }
-  i.ico-healing-progress {
+  .ico-healing-progress {
     @include icon-template-24("/systems/strive/presentation/image/healing-progress", true);
   }
-  i.ico-illness-state-active {
+  .ico-illness-state-active {
     @include icon-template-24("/systems/strive/presentation/image/illness-state-active", true);
   }
-  i.ico-illness-state-treated {
+  .ico-illness-state-treated {
     @include icon-template-24("/systems/strive/presentation/image/illness-state-treated", true);
   }
-  i.ico-injury-state-active {
+  .ico-injury-state-active {
     @include icon-template-24("/systems/strive/presentation/image/injury-state-active", true);
   }
-  i.ico-injury-state-treated {
+  .ico-injury-state-treated {
     @include icon-template-24("/systems/strive/presentation/image/injury-state-treated", true);
   }
-  i.ico-obstacle {
+  .ico-obstacle {
     @include icon-template-24("/systems/strive/presentation/image/obstacle", true);
   }
-  i.ico-pushes {
+  .ico-pushes {
     @include icon-template-24("/systems/strive/presentation/image/pushes", true);
   }
-  i.ico-quality {
+  .ico-quality {
     @include icon-template-24("/systems/strive/presentation/image/quality", true);
   }
-  i.ico-quantity {
+  .ico-quantity {
     @include icon-template-24("/systems/strive/presentation/image/quantity", true);
   }
-  i.ico-skill {
+  .ico-skill {
     @include icon-template-24("/systems/strive/presentation/image/skill", true);
   }
-  i.ico-speech-bubble {
+  .ico-speech-bubble {
     @include icon-template-24("/systems/strive/presentation/image/speech-bubble", true);
   }
-  i.ico-treatment-supplies {
+  .ico-treatment-supplies {
     @include icon-template-24("/systems/strive/presentation/image/treatment-supplies", true);
   }
-  i.ico-treatment-date {
+  .ico-treatment-date {
     @include icon-template-24("/systems/strive/presentation/image/treatment-date", true);
   }
-  i.ico-triangle-down {
-    @include icon-template-24("/systems/strive/presentation/image/triangle-down", true);
+  .ico-triangle-down {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-down", true);
+  }
+  .ico-triangle-left {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-left", true);
+    @include icon-template-24("/systems/strive/presentation/image/triangle-left", true);
+  }
+  .ico-triangle-right {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-right", true);
+    @include icon-template-24("/systems/strive/presentation/image/triangle-ight", true);
+  }
+  .ico-triangle-up {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-up", true);
   }
 }
 
 // Specific dark-mode icons -> use light variants!
 .theme-dark {
-  i.ico-arrow-right {
+  .ico-arrow-right {
     @include icon-template-24("/systems/strive/presentation/image/arrow-right", false);
   }
-  i.ico-cannot-read {
+  .ico-cannot-read {
     @include icon-template-24("/systems/strive/presentation/image/cannot-read", false);
   }
-  i.ico-can-read {
+  .ico-can-read {
     @include icon-template-24("/systems/strive/presentation/image/can-read", false);
   }
-  i.ico-chain-link {
+  .ico-chain-link {
     @include icon-template-24("/systems/strive/presentation/image/chain-link", false);
   }
-  i.ico-chain-link-broken {
+  .ico-chain-link-broken {
     @include icon-template-24("/systems/strive/presentation/image/chain-link-broken", false);
   }
-  i.ico-edit {
+  .ico-edit {
     @include icon-template-24("/systems/strive/presentation/image/edit", false);
   }
-  i.ico-floppy {
+  .ico-floppy {
     @include icon-template-24("/systems/strive/presentation/image/floppy", false);
   }
-  i.ico-healing-progress {
+  .ico-healing-progress {
     @include icon-template-24("/systems/strive/presentation/image/healing-progress", false);
   }
-  i.ico-illness-state-active {
+  .ico-illness-state-active {
     @include icon-template-24("/systems/strive/presentation/image/illness-state-active", false);
   }
-  i.ico-illness-state-treated {
+  .ico-illness-state-treated {
     @include icon-template-24("/systems/strive/presentation/image/illness-state-treated", false);
   }
-  i.ico-injury-state-active {
+  .ico-injury-state-active {
     @include icon-template-24("/systems/strive/presentation/image/injury-state-active", false);
   }
-  i.ico-injury-state-treated {
+  .ico-injury-state-treated {
     @include icon-template-24("/systems/strive/presentation/image/injury-state-treated", false);
   }
-  i.ico-obstacle {
+  .ico-obstacle {
     @include icon-template-24("/systems/strive/presentation/image/obstacle", false);
   }
-  i.ico-pushes {
+  .ico-pushes {
     @include icon-template-24("/systems/strive/presentation/image/pushes", false);
   }
-  i.ico-quality {
+  .ico-quality {
     @include icon-template-24("/systems/strive/presentation/image/quality", false);
   }
-  i.ico-quantity {
+  .ico-quantity {
     @include icon-template-24("/systems/strive/presentation/image/quantity", false);
   }
-  i.ico-skill {
+  .ico-skill {
     @include icon-template-24("/systems/strive/presentation/image/skill", false);
   }
-  i.ico-speech-bubble {
+  .ico-speech-bubble {
     @include icon-template-24("/systems/strive/presentation/image/speech-bubble", false);
   }
-  i.ico-treatment-supplies {
+  .ico-treatment-supplies {
     @include icon-template-24("/systems/strive/presentation/image/treatment-supplies", false);
   }
-  i.ico-treatment-date {
+  .ico-treatment-date {
     @include icon-template-24("/systems/strive/presentation/image/treatment-date", false);
   }
-  i.ico-triangle-down {
-    @include icon-template-24("/systems/strive/presentation/image/triangle-down", false);
+  .ico-triangle-down {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-down", false);
+  }
+  .ico-triangle-left {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-left", false);
+    @include icon-template-24("/systems/strive/presentation/image/triangle-left", false);
+  }
+  .ico-triangle-right {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-right", false);
+    @include icon-template-24("/systems/strive/presentation/image/triangle-right", false);
+  }
+  .ico-triangle-up {
+    @include icon-template-10("/systems/strive/presentation/image/triangle-up", false);
   }
 }

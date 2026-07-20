@@ -10,6 +10,12 @@ import InputViewModel from "./view-model/input-view-model.mjs";
 import ViewModelCollection from "./view-model/view-model-collection.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "./view-model/view-model.mjs";
 import { dialog } from "./dialog/_module.mjs";
+import LanguageContentViewModel from "./item/language/language-content-viewmodel.mjs";
+import LanguageItemSheetViewModel from "./item/language/language-item-sheet-viewmodel.mjs";
+import InjuryItemSheet from "./item/injury/injury-item-sheet.mjs";
+import InjuryItemSheetViewModel from "./item/injury/injury-item-sheet-viewmodel.mjs";
+import InjuryContentViewModel from "./item/injury/injury-content-viewmodel.mjs";
+import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -22,12 +28,23 @@ export const application = {
     ViewModelToolTipDefinition: ViewModelToolTipDefinition,
     ViewModelCollection: ViewModelCollection,
     InputViewModel: InputViewModel,
-    BaseSheetViewModel: BaseSheetViewModel,
-    BaseItemSheetViewModel: BaseItemSheetViewModel,
+    base: {
+      BaseSheetViewModel: BaseSheetViewModel,
+      BaseItemSheetViewModel: BaseItemSheetViewModel,
+    },
+    injury: {
+      InjuryItemSheetViewModel: InjuryItemSheetViewModel,
+      InjuryContentViewModel: InjuryContentViewModel,
+    },
+    language: {
+      LanguageItemSheetViewModel: LanguageItemSheetViewModel,
+      LanguageContentViewModel: LanguageContentViewModel,
+    },
   },
   dialog: dialog,
   sheet: {
     BaseItemSheet: BaseItemSheet,
+    InjuryItemSheet: InjuryItemSheet,
     LanguageItemSheet: LanguageItemSheet,
   },
   Tooltip: Tooltip,
@@ -41,7 +58,12 @@ export const application = {
     // Register sheet application classes. 
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,
-      type: "language",
+      type: ITEM_TYPES.injury,
+      sheet: InjuryItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.language,
       sheet: LanguageItemSheet,
     });
   },

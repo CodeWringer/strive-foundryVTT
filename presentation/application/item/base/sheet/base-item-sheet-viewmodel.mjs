@@ -70,7 +70,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @readonly
    * @virtual
    */
-  get contentViewModel() { return this; }
+  get contentViewModel() { return this._contentViewModel ?? this; }
 
   /**
    * @param {Object} args
@@ -82,12 +82,17 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * 
    * @param {TransientDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * @param {ViewModel | undefined} args.contentViewModel
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
     this.document.isTransactionMode = this.isEditable;
+    this._contentViewModel = args.contentViewModel;
+    if (ValidationUtil.isDefined(this._contentViewModel)) {
+      this._contentViewModel.parent = this;
+    }
   }
 
   /**

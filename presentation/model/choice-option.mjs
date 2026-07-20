@@ -87,7 +87,7 @@ export default class ChoiceOption {
     }
 
     if (iconLightMode.length > 0 || iconDarkMode.length > 0) {
-      return `<div class="flex">${iconLightMode}${iconDarkMode}</div>`
+      return `<div class="flex flex-center">${iconLightMode}${iconDarkMode}</div>`
     } else {
       return "";
     }
@@ -98,9 +98,11 @@ export default class ChoiceOption {
    * @param {Any} args.value The actual value. 
    * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
-   * @param {String | undefined} args.icon A theming-agnostic (relative) icon file path or a FontAwesome icon class. 
+   * @param {String | undefined} args.icon A theming-agnostic icon. Can be a CSS class or 
+   * relative file path. 
    * Takes precedence over `iconLightMode` and `iconDarkMode`.
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"ico ico-skill"`
    * * E.g. `"fas fa-plus"`
    * @param {String | undefined} args.iconLightMode An icon for the light mode.
    * A (relative) icon file path or a FontAwesome icon class. 
