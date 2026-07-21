@@ -1,10 +1,7 @@
 .strive.dropdown {
   position: relative;
-  height: $input-size-md;
-  line-height: $input-size-md;
-  font-size: $font-size-md;
 
-  button {
+  .button {
     height: inherit;
     font-size: inherit;
     line-height: inherit;
@@ -14,6 +11,7 @@
     margin: 0;
     border: unset;
     background: unset;
+    min-height: unset;
 
     &:hover,
     &:focus,

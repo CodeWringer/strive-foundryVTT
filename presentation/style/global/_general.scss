@@ -20,14 +20,20 @@
   padding-bottom: 1px; // Ensures symmetry below.
 
   &-full {
+    width: stretch;
+    height: 1px;
     margin: 0;
+    padding-bottom: 1px; // Ensures symmetry below.
   }
 }
 
 .strive {
   .input {
     border-radius: unset;
-    
+    height: $input-size-md;
+    line-height: $input-size-md;
+    font-size: $font-size-md;
+
     &.lg {
       height: $input-size-lg;
       line-height: $input-size-lg;
@@ -99,6 +105,11 @@
     .input {
       .edit-mode {
         background-color: $c-bg-input-light;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-top: unset;
+        border-left: unset;
+        border-right: unset;
         border-bottom-color: $c-border-light;
         color: $c-text-light;
   

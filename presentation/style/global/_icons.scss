@@ -5,28 +5,28 @@
 
   // All image files must be 10x10 pixels in dimensions.
   &.xs {
-    font-size: calc(0.625rem - 1px);
-    height: calc(0.625rem - 1px);
+    font-size: calc(0.625rem - 2px);
+    height: calc(0.625rem - 2px);
     margin: 1px;
   }
   &.sm {
-    font-size: calc(1rem - 3px);
-    height: calc(1rem - 3px);
+    font-size: calc(1rem - 6px);
+    height: calc(1rem - 6px);
     margin: 3px;
   }
   &.md {
-    font-size: calc(1.5rem - 5px);
-    height: calc(1.5rem - 5px);
-    margin: 5px;
+    font-size: calc(1.5rem - 6px);
+    height: calc(1.5rem - 6px);
+    margin: 3px;
   }
   &.lg {
-    font-size: calc(2rem - 5px);
-    height: calc(2rem - 5px);
-    margin: 5px;
+    font-size: calc(2rem - 8px);
+    height: calc(2rem - 8px);
+    margin: 4px;
   }
   &.xl {
-    font-size: calc(3rem - 5px);
-    height: calc(3rem - 5px);
+    font-size: calc(3rem - 10px);
+    height: calc(3rem - 10px);
     margin: 5px;
   }
 }

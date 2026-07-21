@@ -174,10 +174,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    if (this.isEditable !== true) return;
-
-    this.element.parent().find(".button-spinner.up").click(this._onClickNumberSpinnerUp.bind(this));
-    this.element.parent().find(".button-spinner.down").click(this._onClickNumberSpinnerDown.bind(this));
+    this.element.find(".button-spinner.up").click(this._onClickNumberSpinnerUp.bind(this));
+    this.element.find(".button-spinner.down").click(this._onClickNumberSpinnerDown.bind(this));
   }
 
   /**

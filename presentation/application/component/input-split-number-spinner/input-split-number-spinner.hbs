@@ -2,7 +2,7 @@
 viewModel: InputSplitNumberSpinnerViewModel
 cssClass: String | undefined
 --}}
-<div id="{{viewModel.id}}" class="strive split-number-spinner flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="strive input split-number-spinner flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
   <div class="edit-mode flex flex-column">
     {{> inputNumberSpinner viewModel=viewModel.vmCurrent }}

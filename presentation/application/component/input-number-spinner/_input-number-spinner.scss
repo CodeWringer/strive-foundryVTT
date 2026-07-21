@@ -1,13 +1,31 @@
 .strive.number-spinner {
   position: relative;
-  height: $input-size-md;
-  line-height: $input-size-md;
-  font-size: $font-size-md;
-  border-radius: unset;
-  padding: 0 5px;
   box-sizing: content-box;
 
-  .button-spinner {
+  input[type=number] {
+    padding-left: 0.3rem;
+    text-align: center;
+    max-width: 4rem;
+  }
+
+  a.button-spinner {
     line-height: 50%;
+  }
+}
+
+.theme-light {
+  a.button-spinner {
+    &:hover,
+    &:focus {
+      background: $c-bg-input-focus-light;
+    }
+  }
+}
+.theme-dark {
+  a.button-spinner {
+    &:hover,
+    &:focus {
+      background: $c-bg-input-focus-dark;
+    }
   }
 }
