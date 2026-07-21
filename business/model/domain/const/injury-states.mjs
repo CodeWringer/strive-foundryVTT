@@ -31,6 +31,6 @@ export const INJURY_STATES = {
   treated: new InjuryState({
     name: "treated",
     localizableName: "system.item.injury.state.treated",
-    icon: "ico-injury-state-treated"
+    icon: "ico ico-injury-state-treated"
   }),
 };
