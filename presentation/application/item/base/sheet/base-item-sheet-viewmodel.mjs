@@ -124,8 +124,8 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this.isEditable = true;
 
     new SlideDisplaceAnim({
-      elmA: this._exitModeButton,
-      elmB: this._enterModeButton,
+      displacingElement: this._exitModeButton,
+      displacedElement: this._enterModeButton,
     }).execute();
     new SlideOutAnim({
       elm: this._sendToChatButton,
@@ -149,8 +149,8 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this.isEditable = false;
 
     new SlideDisplaceAnim({
-      elmA: this._enterModeButton,
-      elmB: this._exitModeButton,
+      displacingElement: this._enterModeButton,
+      displacedElement: this._exitModeButton,
     }).execute();
     new SlideInAnim({
       elm: this._sendToChatButton,
@@ -261,8 +261,8 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this._titleReplacement.text(this.sheet.title);
 
     await new SlideDisplaceAnim({
-      elmA: this._titleReplacement,
-      elmB: this._titleElement,
+      displacingElement: this._titleReplacement,
+      displacedElement: this._titleElement,
     }).execute();
     this._titleElement.text(this.sheet.title);
     this._titleElement.removeClass("hidden");

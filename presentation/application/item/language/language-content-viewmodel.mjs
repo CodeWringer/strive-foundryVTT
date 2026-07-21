@@ -1,4 +1,5 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";

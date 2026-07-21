@@ -1,6 +1,6 @@
 import { LANGUAGE_GRADES } from "../../../../business/model/domain/const/language-grades.mjs";
+import { LANGUAGE_READ_WRITE } from "../../../../business/model/domain/const/language-read-write-states.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import ChoiceOption from "../../../model/choice-option.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -65,18 +65,7 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
         this.document.grade = LANGUAGE_GRADES[newValue.value];
       },
     });
-    const readAndWriteOptions = [
-      new ChoiceOption({
-        value: "true",
-        localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.canReadAndWrite"),
-        icon: "ico ico-can-read x48",
-      }),
-      new ChoiceOption({
-        value: "false",
-        localizedValue: StringUtil.getLoca("system.item.language.readAndWrite.cannotReadAndWrite"),
-        icon: "ico ico-cannot-read x48",
-      }),
-    ];
+    const readAndWriteOptions = ChoicesUtil.getAsChoices(LANGUAGE_READ_WRITE, "xl");
     this.vmReadAndWrite = new InputDropDownViewModel({
       id: "vmReadAndWrite",
       parent: this,
@@ -84,11 +73,11 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.language.readAndWrite.readAndWrite"),
       }),
-      value: readAndWriteOptions.find(it => it.value === (this.document.readAndWrite + "")),
+      value: readAndWriteOptions.find(it => it.value === (this.document.readAndWrite ? "able" : "unable")),
       options: readAndWriteOptions,
       showValue: false,
       onChange: (_, newValue) => {
-        this.document.readAndWrite = newValue.value === "true";
+        this.document.readAndWrite = newValue.value === "able";
       },
     });
   }

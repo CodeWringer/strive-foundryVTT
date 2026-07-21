@@ -8,11 +8,13 @@
 
 .v-divider {
   width: 1px;
+  height: stretch;
   margin: 0 10px;
   padding-right: 1px; // Ensures symmetry on the right side.
 }
 
 .h-divider {
+  width: stretch;
   height: 1px;
   margin: 10px 0;
   padding-bottom: 1px; // Ensures symmetry below.
@@ -180,87 +182,6 @@
 .height-fill {
   height: 100%;
   min-height: inherit;
-}
-
-// Specific widths
-.width {
-  &-xs {
-    width: $width-column-xs;
-  }
-
-  &-sm {
-    width: $width-column-sm;
-  }
-
-  &-md {
-    width: $width-column-md;
-  }
-
-  &-lg {
-    width: $width-column-lg;
-  }
-
-  &-xl {
-    width: $width-column-xl;
-  }
-
-  &-xxl {
-    width: $width-column-xxl;
-  }
-}
-
-// Minimum widths
-.width-min {
-  &-xs {
-    min-width: $width-column-xs;
-  }
-
-  &-sm {
-    min-width: $width-column-sm;
-  }
-
-  &-md {
-    min-width: $width-column-md;
-  }
-
-  &-lg {
-    min-width: $width-column-lg;
-  }
-
-  &-xl {
-    min-width: $width-column-xl;
-  }
-
-  &-xxl {
-    min-width: $width-column-xxl;
-  }
-}
-
-// Maximum widths
-.width-max {
-  &-xs {
-    max-width: $width-column-xs;
-  }
-
-  &-sm {
-    max-width: $width-column-sm;
-  }
-
-  &-md {
-    max-width: $width-column-md;
-  }
-
-  &-lg {
-    max-width: $width-column-lg;
-  }
-
-  &-xl {
-    max-width: $width-column-xl;
-  }
-
-  &-xxl {
-    max-width: $width-column-xxl;
-  }
 }
 
 // Margins
@@ -437,97 +358,23 @@
   &-sm {
     overflow-x: hidden;
     overflow-y: auto;
-    min-height: $line-height;
+    min-height: $font-size-md;
     max-height: 150px;
   }
 
   &-md {
     overflow-x: hidden;
     overflow-y: auto;
-    min-height: $line-height;
+    min-height: $font-size-md;
     max-height: 250px;
   }
 
   &-lg {
     overflow-x: hidden;
     overflow-y: auto;
-    min-height: $line-height;
+    min-height: $font-size-md;
     max-height: 350px;
   }
-}
-
-// Font sizes
-.font-size {
-  &-xxs {
-    font-size: $font-size-xxs;
-  }
-
-  &-xs {
-    font-size: $font-size-xs;
-  }
-
-  &-sm {
-    font-size: $font-size-sm;
-  }
-
-  &-default {
-    font-size: $font-size-default;
-  }
-
-  &-lg {
-    font-size: $font-size-lg;
-  }
-
-  &-xl {
-    font-size: $font-size-xl;
-  }
-
-  &-xxl {
-    font-size: $font-size-xxl;
-  }
-}
-
-// Override to enable input font-sizes. 
-input[type="text"],
-input[type="number"],
-input[type="password"],
-input[type="date"],
-input[type="time"],
-input[type="search"] {
-  &.font-size {
-    &-xxs {
-      font-size: $font-size-xxs;
-    }
-
-    &-xs {
-      font-size: $font-size-xs;
-    }
-
-    &-sm {
-      font-size: $font-size-sm;
-    }
-
-    &-default {
-      font-size: $font-size-default;
-    }
-
-    &-lg {
-      font-size: $font-size-lg;
-    }
-
-    &-xl {
-      font-size: $font-size-xl;
-    }
-
-    &-xxl {
-      font-size: $font-size-xxl;
-    }
-  }
-}
-
-// Font weight
-.font-bold {
-  font-weight: bold;
 }
 
 // Relative arrangements

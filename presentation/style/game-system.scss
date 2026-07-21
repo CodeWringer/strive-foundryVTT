@@ -4,9 +4,9 @@
 }
 
 /* Utilities */
-@import 'utils/typography';
-@import 'utils/colors';
 @import 'utils/variables';
+@import 'utils/colors';
+@import 'utils/typography';
 
 /* Global styles */
 @import 'global/borders';
@@ -42,6 +42,29 @@
 @import 'global/overrides/editor';
 @import 'global/overrides/context-menu';
 
-form.strive-regular-font h1.window-title {
-  font-size: 16pt;
+.strive {
+  &.input[type=text],
+  &.input[type=number],
+  &.input[type=password],
+  &.input[type=date],
+  &.input[type=time],
+  &.input[type=datetime-local],
+  &.input[type=search],
+  &.input[type=file],
+  &.select {
+    height: unset;
+    line-height: unset;
+    padding: unset;
+    background: unset;
+    border: unset;
+    border-radius: unset;
+    box-shadow: unset;
+    outline: unset;
+    user-select: text;
+    transition: unset;
+  }
+}
+
+button {
+  min-height: unset;
 }

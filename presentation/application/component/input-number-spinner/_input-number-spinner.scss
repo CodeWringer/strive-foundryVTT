@@ -1,21 +1,32 @@
 .strive.number-spinner {
-  input {
-    height: 48px;
-    border-radius: unset;
-    padding: 0 5px;
-    font-size: 18pt;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-top: unset;
-    border-left: unset;
-    border-right: unset;
+  position: relative;
+  height: $input-size-md;
+  line-height: $input-size-md;
+  font-size: $font-size-md;
+  border-radius: unset;
+  padding: 0 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-top: unset;
+  border-left: unset;
+  border-right: unset;
+  box-sizing: content-box;
+  
+  &.lg {
+    height: $input-size-lg;
+    line-height: $input-size-lg;
+    font-size: $font-size-lg;
   }
 
   .read-mode {
-    height: 48px;
-    line-height: 48px;
-    font-size: 18pt;
+    height: inherit;
+    font-size: inherit;
+    line-height: inherit;
     border: unset;
+  }
+
+  .button-spinner {
+    line-height: 50%;
   }
 }
 

@@ -2,9 +2,9 @@
 viewModel: LanguageItemSheetViewModel
 --}}
 <div class="flex flex-row pad-lg border-b-md">
-  {{> inputTextField viewModel=viewModel.vmName cssClass="flex-grow" }}
+  {{> inputTextField viewModel=viewModel.vmName cssClass="flex-grow lg" }}
   <span class="v-divider"></span>
-  {{> inputDropDown viewModel=viewModel.vmGrade }}
+  {{> inputDropDown viewModel=viewModel.vmGrade cssClass="lg" }}
   <span class="v-divider"></span>
-  {{> inputDropDown viewModel=viewModel.vmReadAndWrite }}
+  {{> inputDropDown viewModel=viewModel.vmReadAndWrite cssClass="lg" }}
 </div>

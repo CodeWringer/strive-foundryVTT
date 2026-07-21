@@ -11,6 +11,11 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
  * @property {String | undefined} iconDarkMode A (relative) icon file path or a FontAwesome icon class. 
  * * E.g. `"systems/strive/presentation/image/texture.svg"`
  * * E.g. `"fas fa-plus"`
+ * @property {String} iconHtml Returns an HTML representing string containing the 
+ * light and dark mode icons, neatly wrapped in a div to be easily inserted into the DOM. 
+ * * Read-only
+ * @property {String | undefined} iconCssClass Additional CSS classes to add to the icon. 
+ * 
  */
 export default class ChoiceOption {
   /**
@@ -68,26 +73,28 @@ export default class ChoiceOption {
    * @readonly
    */
   get iconHtml() {
+    let additionalCss = ValidationUtil.isDefined(this.iconCssClass) ? ` ${this.iconCssClass}` : "";
+
     let iconLightMode = "";
     if (ValidationUtil.isDefined(this.iconLightMode)) {
       if (this.#isIconClass(this.iconLightMode)) {
-        iconLightMode = `<i class="${this.iconLightMode} light-mode"></i>`;
+        iconLightMode = `<i class="${this.iconLightMode} light-mode${additionalCss}"></i>`;
       } else {
-        iconLightMode = `<img src="${this.iconLightMode}" class="light-mode">`;
+        iconLightMode = `<img src="${this.iconLightMode}" class="light-mode${additionalCss}">`;
       }
     }
 
     let iconDarkMode = "";
     if (ValidationUtil.isDefined(this.iconDarkMode)) {
       if (this.#isIconClass(this.iconDarkMode)) {
-        iconDarkMode = `<i class="${this.iconDarkMode} dark-mode"></i>`;
+        iconDarkMode = `<i class="${this.iconDarkMode} dark-mode${additionalCss}"></i>`;
       } else {
-        iconDarkMode = `<img src="${this.iconDarkMode}" class="dark-mode">`;
+        iconDarkMode = `<img src="${this.iconDarkMode}" class="dark-mode${additionalCss}">`;
       }
     }
 
     if (iconLightMode.length > 0 || iconDarkMode.length > 0) {
-      return `<div class="flex flex-center">${iconLightMode}${iconDarkMode}</div>`
+      return `<div class="flex flex-center${additionalCss}">${iconLightMode}${iconDarkMode}</div>`
     } else {
       return "";
     }
@@ -104,6 +111,7 @@ export default class ChoiceOption {
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"ico ico-skill"`
    * * E.g. `"fas fa-plus"`
+   * @param {String | undefined} args.iconCssClass Additional CSS classes to add to the icon. 
    * @param {String | undefined} args.iconLightMode An icon for the light mode.
    * A (relative) icon file path or a FontAwesome icon class. 
    * * E.g. `"systems/strive/presentation/image/texture.svg"`
@@ -116,6 +124,7 @@ export default class ChoiceOption {
   constructor(args = {}) {
     this.#value = args.value;
     this.#localizedValue = args.localizedValue;
+    this.iconCssClass = args.iconCssClass;
     
     if (ValidationUtil.isDefined(args.icon)) {
       this.#iconLightMode = args.icon;

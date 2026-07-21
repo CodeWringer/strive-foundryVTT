@@ -34,6 +34,21 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   get clazz() { return InputNumberSpinnerViewModel; }
 
   /**
+   * @type {Number}
+   */
+  get value() { return super.value; }
+  /**
+   * @param {Number} value 
+   */
+  set value(value) {
+    super.value = value;
+
+    const readModeElement = this.element.find(".read-mode");
+    readModeElement.empty();
+    readModeElement.append(value);
+  }
+
+  /**
    * Registers the Handlebars partial for this component. 
    * 
    * @static

@@ -11,6 +11,7 @@ import { INJURY_SHRUG_OFF_STATES, InjuryShrugOffState } from "./injury-shrug-off
 import { INJURY_STATES, InjuryState } from "./injury-states.mjs";
 import { ITEM_TYPES } from "./item-types.mjs";
 import { LANGUAGE_GRADES, LanguageGrade } from "./language-grades.mjs";
+import { LANGUAGE_READ_WRITE, LanguageReadWriteState } from "./language-read-write-states.mjs";
 import { TIME_UNITS, TimeUnit } from "./time-units.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
 
@@ -42,6 +43,8 @@ export const constants = {
   VISIBILITY_MODES: VISIBILITY_MODES,
   LanguageGrade: LanguageGrade,
   LANGUAGE_GRADES: LANGUAGE_GRADES,
+  LanguageReadWriteState: LanguageReadWriteState,
+  LANGUAGE_READ_WRITE: LANGUAGE_READ_WRITE,
   ComparisonType: ComparisonType,
   init: () => {
     common.util.constants.enrichConstant(ACTOR_TYPES);
@@ -58,5 +61,6 @@ export const constants = {
     common.util.constants.enrichConstant(INJURY_STATES);
     common.util.constants.enrichConstant(VISIBILITY_MODES);
     common.util.constants.enrichConstant(LANGUAGE_GRADES);
+    common.util.constants.enrichConstant(LANGUAGE_READ_WRITE);
   },
 };

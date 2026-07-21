@@ -1,4 +1,5 @@
 import { INJURY_STATES } from "../../../../business/model/domain/const/injury-states.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -52,13 +53,20 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
         this.document.name = newValue;
       },
     });
-    const stateOptions = ChoicesUtil.getAsChoices(INJURY_STATES);
+    const stateOptions = ChoicesUtil.getAsChoices(INJURY_STATES, "xl");
     this.vmState = new InputDropDownViewModel({
       id: "vmState",
       parent: this,
       isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.state.state"),
+      }),
       options: stateOptions,
+      showValue: false,
       value: stateOptions.find(it => it.value === (this.document.state + "")),
+      onChange: (_, newValue) => {
+        this.document.state = newValue.value;
+      },
     });
   }
 }

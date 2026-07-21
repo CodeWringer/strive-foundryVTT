@@ -22,11 +22,13 @@ export const ChoicesUtil = {
   * @param {Object} constantsObject Any constants object.
   * * **All** not explicitly excluded properties, that aren't part of the prototype, will be turned 
   * into `ChoiceOption`s. 
+  * @param {String | undefined} iconCssClass Additional CSS classes to add to the 
+  * icon, if it is defined.
   * @param {Array<String> | undefined} exclude An array of property names to exclude. 
   * 
   * @returns {Array<ChoiceOption>}
   */
-  getAsChoices: (constantsObject, exclude = ChoicesUtil._defaultExcludes) => {
+  getAsChoices: (constantsObject, iconCssClass, exclude = ChoicesUtil._defaultExcludes) => {
     return ConstantsUtil._getAs(constantsObject, exclude, (entry) => {
       const localizedName = ValidationUtil.isDefined(entry.localizableName) ? StringUtil.getLoca(entry.localizableName) : undefined;
       const icon = entry.img ?? entry.icon;
@@ -35,6 +37,7 @@ export const ChoicesUtil = {
         value: entry.name,
         localizedValue: localizedName,
         icon: icon,
+        iconCssClass: iconCssClass,
       });
     });
   },

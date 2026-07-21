@@ -31,6 +31,21 @@ export default class InputRichTextViewModel extends InputViewModel {
 
   /** @override */
   get clazz() { return InputRichTextViewModel; }
+  
+  /**
+   * @type {String}
+   */
+  get value() { return super.value; }
+  /**
+   * @param {String} value 
+   */
+  set value(value) {
+    super.value = value;
+
+    const readModeElement = this.element.find(".read-mode");
+    readModeElement.empty();
+    readModeElement.append(value);
+  }
 
   /**
    * @param {Object} args 
@@ -65,6 +80,16 @@ export default class InputRichTextViewModel extends InputViewModel {
       viewModel: this,
     });
     this.element.append(rendered);
+
+    const editModeElm = this.element.find(".edit-mode");
+    const readModeElm = this.element.find(".read-mode");
+    if (this.isEditable) {
+      editModeElm.removeClass("hidden");
+      readModeElm.addClass("hidden");
+    } else {
+      editModeElm.addClass("hidden");
+      readModeElm.removeClass("hidden");
+    }
   }
 
   flushValue() {

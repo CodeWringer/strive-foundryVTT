@@ -4,7 +4,7 @@ cssClass: String | undefined
 --}}
 <div id="{{viewModel.id}}" class="strive dropdown flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
-  <div class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}" >
+  <div class="edit-mode" >
     <button 
       id="{{viewModel.id}}-button" 
       aria-controls="{{viewModel.id}}-menu" 
@@ -18,7 +18,7 @@ cssClass: String | undefined
         <span>{{viewModel.value.localizedValue}}</span>
         {{/if}}
       </div>
-      <i class="ico ico-triangle-down x16 margin-l-md"></i>
+      <i class="ico ico-triangle-down xs margin-l-md"></i>
     </button>
     <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden">
     {{#each viewModel.options as |option index|}}
@@ -31,7 +31,7 @@ cssClass: String | undefined
   </div>
   {{!-- Read mode --}}
   <div 
-    class="read-mode flex{{#if viewModel.isEditable}} hidden{{/if}}" 
+    class="read-mode flex" 
     name="{{viewModel.id}}"
   >
     {{{viewModel.value.iconHtml}}}

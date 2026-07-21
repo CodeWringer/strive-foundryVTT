@@ -5,12 +5,12 @@ cssClass: String | undefined
 <div id="{{viewModel.id}}" class="strive textfield flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
   <input 
-    class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}"
+    class="edit-mode"
     type="text"
     name="{{viewModel.id}}"
     placeholder="{{viewModel.placeholder}}"
     value="{{viewModel.value}}"
   />
   {{!-- Read mode --}}
-  <div class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}">{{viewModel.value}}</div>
+  <div class="read-mode">{{viewModel.value}}</div>
 </div>

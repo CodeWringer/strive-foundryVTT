@@ -2,13 +2,13 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="24"
-   height="24"
-   viewBox="0 0 6.3499999 6.3500001"
+   width="10"
+   height="10"
+   viewBox="0 0 2.6458333 2.6458334"
    version="1.1"
    id="svg1"
    xml:space="preserve"
-   sodipodi:docname="obstacle-24-dark.svg"
+   sodipodi:docname="obstacle-dark.svg"
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -23,8 +23,8 @@
      inkscape:pagecheckerboard="true"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="39.055289"
-     inkscape:cx="9.3457252"
-     inkscape:cy="12.072629"
+     inkscape:cx="5.6330399"
+     inkscape:cy="10.869206"
      inkscape:window-width="2560"
      inkscape:window-height="1369"
      inkscape:window-x="-8"
@@ -33,14 +33,14 @@
      inkscape:current-layer="svg1" /><defs
      id="defs1" /><g
      id="layer1"
-     transform="matrix(0.87993127,0,0,0.87993127,-177.9643,39.716764)"
-     style="stroke-width:1.13645"><g
+     transform="matrix(0.39996876,0,0,0.3935261,-81.013128,17.665259)"
+     style="stroke-width:2.52058"><g
        id="g537"
        transform="translate(-492.9748,-502.66391)"
-       style="stroke-width:1.13645"><path
+       style="stroke-width:2.52058"><path
          id="path536"
-         style="fill:#232323;fill-opacity:1;stroke-width:0.301159;stroke-linecap:round"
+         style="fill:#232323;fill-opacity:1;stroke-width:0.667951;stroke-linecap:round"
          d="m 696.97916,458.27849 v 1.1374 h -1.45572 v 1.85156 h 1.45572 v 2.32906 h -0.33073 v 0.39687 h 1.32292 v -0.39687 h -0.33073 v -2.32906 h 2.38073 v 2.32906 h -0.33073 v 0.39687 h 1.32292 v -0.39687 h -0.33073 v -2.32906 h 1.45573 v -1.85156 h -1.45573 v -1.1374 h -0.66146 v 1.1374 h -2.38073 v -1.1374 z" /><path
          id="path537"
-         style="fill:#cfcaba;fill-opacity:1;stroke:none;stroke-width:0.300686;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#cfcaba;fill-opacity:1;stroke:none;stroke-width:0.666903;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
          d="m 697.24323,459.54818 -1.5875,1.5875 h 0.82476 l 1.5875,-1.5875 z m 1.96629,0 -1.5875,1.5875 h 0.82475 l 1.5875,-1.5875 z m 1.96577,0 -1.5875,1.5875 h 0.82475 l 1.5875,-1.5875 z" /></g></g></svg>

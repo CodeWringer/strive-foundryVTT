@@ -1,8 +1,8 @@
 .strive.button {
   padding: 0;
   margin: 0;
-  min-height: $line-height;
-  min-width: $line-height;
+  min-height: unset;
+  min-width: unset;
   border-radius: 3px;
   border: 1px $c-border-medium solid;
   background-color: $c-bg-medium;

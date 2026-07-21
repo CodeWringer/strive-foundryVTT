@@ -110,21 +110,36 @@ export const ValidationUtil = {
   },
   
   /**
-   * Returns true, if the given value is blank or undefined. 
+   * Returns true, if the given string value is blank. 
    * 
-   * @param {String | Number} value 
+   * @param {String} value 
    * 
    * @returns {Boolean}
    */
-  isBlankOrUndefined: function(value) {
-    if (value === undefined || value === null)
-      return true;
+  isBlank: function(value) {
+    if (!ValidationUtil.isString(value))
+      return false;
   
     if (value.trim === undefined)
       return false;
   
-    const trimmed = value.trim() !== undefined ? value.trim() : value;
+    const trimmed = value.trim();
     return trimmed === "" || trimmed.length <= 0;
+  },
+  
+  /**
+   * Returns true, if the given string value is blank or undefined. 
+   * 
+   * @param {String} value 
+   * 
+   * @returns {Boolean}
+   */
+  isBlankOrUndefined: function(value) {
+    if (!ValidationUtil.isDefined(value)) {
+      return true;
+    }
+  
+    return ValidationUtil.isBlank(value);
   },
   
   /**

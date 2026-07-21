@@ -1,13 +1,23 @@
 .strive.dropdown {
   position: relative;
+  height: $input-size-md;
+  line-height: $input-size-md;
+  font-size: $font-size-md;
+  
+  &.lg {
+    height: $input-size-lg;
+    line-height: $input-size-lg;
+    font-size: $font-size-lg;
+  }
 
   button {
-    height: 48px;
+    height: inherit;
+    font-size: inherit;
+    line-height: inherit;
     width: 100%;
     border-radius: unset;
     padding: 0 5px;
     margin: 0;
-    font-size: 18pt;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-top: unset;
@@ -23,9 +33,9 @@
   }
 
   .read-mode {
-    height: 48px;
-    line-height: 48px;
-    font-size: 18pt;
+    height: inherit;
+    font-size: inherit;
+    line-height: inherit;
     border: unset;
   }
 
@@ -92,8 +102,9 @@ menu.strive.dropdown {
   z-index: 9999;
 
   li {
-    height: 48px;
-    font-size: 18pt;
+    height: inherit;
+    font-size: inherit;
+    line-height: inherit;
     padding: 0 5px;
     cursor: pointer;
   }

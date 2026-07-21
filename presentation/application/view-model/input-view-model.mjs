@@ -68,13 +68,13 @@ export default class InputViewModel extends ViewModel {
     const readElement = this.element.find(".read-mode");
     if (value) {
       new SlideDisplaceAnim({
-        elmA: editElement,
-        elmB: readElement,
+        displacingElement: editElement,
+        displacedElement: readElement,
       }).execute();
     } else {
       new SlideDisplaceAnim({
-        elmA: readElement,
-        elmB: editElement,
+        displacingElement: readElement,
+        displacedElement: editElement,
       }).execute();
     }
   }
@@ -152,6 +152,16 @@ export default class InputViewModel extends ViewModel {
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
+
+    const editModeElm = this.element.find(".edit-mode");
+    const readModeElm = this.element.find(".read-mode");
+    if (this.isEditable) {
+      editModeElm.removeClass("hidden");
+      readModeElm.addClass("hidden");
+    } else {
+      editModeElm.addClass("hidden");
+      readModeElm.removeClass("hidden");
+    }
 
     $(this.inputElement).change(this._onChange.bind(this));
     $(this.inputElement).on("input", this._onInput.bind(this));
