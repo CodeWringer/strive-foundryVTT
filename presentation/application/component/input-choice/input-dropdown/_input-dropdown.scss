@@ -3,7 +3,7 @@
   height: $input-size-md;
   line-height: $input-size-md;
   font-size: $font-size-md;
-  
+
   &.lg {
     height: $input-size-lg;
     line-height: $input-size-lg;
@@ -45,51 +45,83 @@
   }
 }
 
-.theme-dark .strive.dropdown {
-  button {
-    background-color: $c-bg-input-dark;
-    color: $c-text-dark;
-    border-bottom-color: $c-border-dark;
-
-    &:hover,
-    &:focus,
-    &:focus-within {
-      background-color: $c-bg-input-focus-dark;
-      border-top: unset;
-      border-left: unset;
-      border-right: unset;
-      border-bottom: 1px solid $c-border-highlight-dark;
-      outline: unset;
-      box-shadow: none;
+.theme-dark {
+  .strive.dropdown {
+    button {
+      background-color: $c-bg-input-dark;
+      color: $c-text-dark;
+      border-bottom-color: $c-border-dark;
+  
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-dark;
+        border-top: unset;
+        border-left: unset;
+        border-right: unset;
+        border-bottom: 1px solid $c-border-highlight-dark;
+        outline: unset;
+        box-shadow: none;
+      }
     }
   }
 
   .read-mode {
     background-color: unset;
+  }
+
+  menu.strive.dropdown {
+    background-color: $c-bg-input-dark;
+
+    li {
+      background-color: $c-bg-input-dark;
+
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-dark;
+      }
+    }
   }
 }
 
-.theme-light .strive.dropdown {
-  button {
-    background-color: $c-bg-input-light;
-    color: $c-text-light;
-    border-bottom-color: $c-border-light;
-
-    &:hover,
-    &:focus,
-    &:focus-within {
-      background-color: $c-bg-input-focus-light;
-      border-top: unset;
-      border-left: unset;
-      border-right: unset;
-      border-bottom: 1px solid $c-border-highlight-light;
-      outline: unset;
-      box-shadow: none;
+.theme-light {
+  .strive.dropdown {
+    button {
+      background-color: $c-bg-input-light;
+      color: $c-text-light;
+      border-bottom-color: $c-border-light;
+  
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-light;
+        border-top: unset;
+        border-left: unset;
+        border-right: unset;
+        border-bottom: 1px solid $c-border-highlight-light;
+        outline: unset;
+        box-shadow: none;
+      }
     }
   }
 
   .read-mode {
     background-color: unset;
+  }
+
+  menu.strive.dropdown {
+    background-color: $c-bg-input-light;
+
+    li {
+      background-color: $c-bg-input-light;
+
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-light;
+      }
+    }
   }
 }
 
@@ -102,36 +134,9 @@ menu.strive.dropdown {
   z-index: 9999;
 
   li {
-    height: inherit;
     font-size: inherit;
     line-height: inherit;
     padding: 0 5px;
     cursor: pointer;
-  }
-}
-
-.theme-dark menu.strive.dropdown {
-  background-color: $c-bg-input-dark;
-
-  li {
-
-    &:hover,
-    &:focus,
-    &:focus-within {
-      background-color: $c-bg-input-focus-dark;
-    }
-  }
-}
-
-.theme-light menu.strive.dropdown {
-  background-color: $c-bg-input-light;
-
-  li {
-
-    &:hover,
-    &:focus,
-    &:focus-within {
-      background-color: $c-bg-input-focus-light;
-    }
   }
 }
