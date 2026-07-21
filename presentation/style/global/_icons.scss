@@ -2,26 +2,7 @@
   aspect-ratio: 1/1;
   background-size: cover;
   display: inline-block;
-}
 
-.icon-with-centered-label {
-  position: relative;
-  text-align: center;
-
-  i.icon-with-centered-label-image,
-  img.icon-with-centered-label-image {
-    display: block;
-  }
-
-  .icon-with-centered-label-label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-@mixin icon-size-template() {
   &.x10 {
     font-size: 10px;
     height: 10px;
@@ -44,103 +25,96 @@
   }
 }
 
+.icon-with-centered-label {
+  position: relative;
+  text-align: center;
+
+  i.icon-with-centered-label-image,
+  img.icon-with-centered-label-image {
+    display: block;
+  }
+
+  .icon-with-centered-label-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 // Specific light-mode icons -> use dark variants!
 .theme-light {
   .ico-arrow-right {
     background-image: url("/systems/strive/presentation/image/arrow-right-dark.svg");
-    @include icon-size-template();
   }
   .ico-cannot-read {
     background-image: url("/systems/strive/presentation/image/cannot-read-dark.svg");
-    @include icon-size-template();
   }
   .ico-can-read {
     background-image: url("/systems/strive/presentation/image/can-read-dark.svg");
-    @include icon-size-template();
   }
   .ico-chain-link {
     background-image: url("/systems/strive/presentation/image/arrow-right-dark.svg");
-    @include icon-size-template();
   }
   .ico-chain-link-broken {
     background-image: url("/systems/strive/presentation/image/chain-link-broken-dark.svg");
-    @include icon-size-template();
   }
   .ico-edit {
     background-image: url("/systems/strive/presentation/image/edit-dark.svg");
-    @include icon-size-template();
   }
   .ico-floppy {
     background-image: url("/systems/strive/presentation/image/floppy-dark.svg");
-    @include icon-size-template();
   }
   .ico-healing-progress {
     background-image: url("/systems/strive/presentation/image/healing-progress-dark.svg");
-    @include icon-size-template();
   }
   .ico-illness-state-active {
     background-image: url("/systems/strive/presentation/image/illness-state-active-dark.svg");
-    @include icon-size-template();
   }
   .ico-illness-state-treated {
     background-image: url("/systems/strive/presentation/image/illness-state-treated-dark.svg");
-    @include icon-size-template();
   }
   .ico-injury-state-active {
     background-image: url("/systems/strive/presentation/image/injury-state-active-dark.svg");
-    @include icon-size-template();
   }
   .ico-injury-state-treated {
     background-image: url("/systems/strive/presentation/image/injury-state-treated-dark.svg");
-    @include icon-size-template();
   }
   .ico-obstacle {
     background-image: url("/systems/strive/presentation/image/obstacle-dark.svg");
-    @include icon-size-template();
   }
   .ico-pushes {
     background-image: url("/systems/strive/presentation/image/pushes-dark.svg");
-    @include icon-size-template();
   }
   .ico-quality {
     background-image: url("/systems/strive/presentation/image/quality-dark.svg");
-    @include icon-size-template();
   }
   .ico-quantity {
     background-image: url("/systems/strive/presentation/image/quantity-dark.svg");
-    @include icon-size-template();
   }
   .ico-skill {
     background-image: url("/systems/strive/presentation/image/skill-dark.svg");
-    @include icon-size-template();
   }
   .ico-speech-bubble {
     background-image: url("/systems/strive/presentation/image/speech-bubble-dark.svg");
-    @include icon-size-template();
   }
   .ico-treatment-supplies {
     background-image: url("/systems/strive/presentation/image/treatment-supplies-dark.svg");
-    @include icon-size-template();
   }
   .ico-treatment-date {
     background-image: url("/systems/strive/presentation/image/treatment-date-dark.svg");
-    @include icon-size-template();
   }
   .ico-triangle-down {
     background-image: url("/systems/strive/presentation/image/triangle-down-dark.svg");
-    @include icon-size-template();
   }
   .ico-triangle-left {
     background-image: url("/systems/strive/presentation/image/triangle-left-dark.svg");
-    @include icon-size-template();
   }
   .ico-triangle-right {
     background-image: url("/systems/strive/presentation/image/triangle-right-dark.svg");
-    @include icon-size-template();
   }
   .ico-triangle-up {
     background-image: url("/systems/strive/presentation/image/triangle-up-dark.svg");
-    @include icon-size-template();
   }
 }
 
@@ -148,98 +122,74 @@
 .theme-dark {
   .ico-arrow-right {
     background-image: url("/systems/strive/presentation/image/chain-link-broken-light.svg");
-    @include icon-size-template();
   }
   .ico-cannot-read {
     background-image: url("/systems/strive/presentation/image/cannot-read-light.svg");
-    @include icon-size-template();
   }
   .ico-can-read {
     background-image: url("/systems/strive/presentation/image/can-read-light.svg");
-    @include icon-size-template();
   }
   .ico-chain-link {
     background-image: url("/systems/strive/presentation/image/chain-link-light.svg");
-    @include icon-size-template();
   }
   .ico-chain-link-broken {
     background-image: url("/systems/strive/presentation/image/chain-link-broken-light.svg");
-    @include icon-size-template();
   }
   .ico-edit {
     background-image: url("/systems/strive/presentation/image/edit-light.svg");
-    @include icon-size-template();
   }
   .ico-floppy {
     background-image: url("/systems/strive/presentation/image/floppy-light.svg");
-    @include icon-size-template();
   }
   .ico-healing-progress {
     background-image: url("/systems/strive/presentation/image/healing-progress-light.svg");
-    @include icon-size-template();
   }
   .ico-illness-state-active {
     background-image: url("/systems/strive/presentation/image/illness-state-active-light.svg");
-    @include icon-size-template();
   }
   .ico-illness-state-treated {
     background-image: url("/systems/strive/presentation/image/illness-state-treated-light.svg");
-    @include icon-size-template();
   }
   .ico-injury-state-active {
     background-image: url("/systems/strive/presentation/image/injury-state-active-light.svg");
-    @include icon-size-template();
   }
   .ico-injury-state-treated {
     background-image: url("/systems/strive/presentation/image/injury-state-treated-light.svg");
-    @include icon-size-template();
   }
   .ico-obstacle {
     background-image: url("/systems/strive/presentation/image/obstacle-light.svg");
-    @include icon-size-template();
   }
   .ico-pushes {
     background-image: url("/systems/strive/presentation/image/pushes-light.svg");
-    @include icon-size-template();
   }
   .ico-quality {
     background-image: url("/systems/strive/presentation/image/quality-light.svg");
-    @include icon-size-template();
   }
   .ico-quantity {
     background-image: url("/systems/strive/presentation/image/quantity-light.svg");
-    @include icon-size-template();
   }
   .ico-skill {
     background-image: url("/systems/strive/presentation/image/skill-light.svg");
-    @include icon-size-template();
   }
   .ico-speech-bubble {
     background-image: url("/systems/strive/presentation/image/speech-bubble-light.svg");
-    @include icon-size-template();
   }
   .ico-treatment-supplies {
     background-image: url("/systems/strive/presentation/image/treatment-supplies-light.svg");
-    @include icon-size-template();
   }
   .ico-treatment-date {
     background-image: url("/systems/strive/presentation/image/treatment-date-light.svg");
-    @include icon-size-template();
   }
   .ico-triangle-down {
     background-image: url("/systems/strive/presentation/image/triangle-down-light.svg");
-    @include icon-size-template();
   }
   .ico-triangle-left {
     background-image: url("/systems/strive/presentation/image/triangle-left-light.svg");
-    @include icon-size-template();
   }
   .ico-triangle-right {
     background-image: url("/systems/strive/presentation/image/triangle-right-light.svg");
-    @include icon-size-template();
   }
   .ico-triangle-up {
     background-image: url("/systems/strive/presentation/image/triangle-up-light.svg");
-    @include icon-size-template();
   }
 }
