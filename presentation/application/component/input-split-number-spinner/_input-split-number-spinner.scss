@@ -1,8 +1,36 @@
-.strive.input.split-number-spinner {
+.strive.split-number-spinner {
+  font-size: $font-size-md;
+
   .number-spinner {
-    height: $input-size-sm;
-    line-height: $input-size-sm;
+    height: $input-size-md;
+    line-height: $input-size-md;
     font-size: $font-size-sm;
     border: unset;
+
+    .edit-mode {
+      border-bottom: unset;
+    }
+  }
+
+  .h-divider-full {
+    height: 2px;
+  }
+}
+
+.theme-dark,
+.theme-light {
+  .strive.split-number-spinner {
+
+    .number-spinner {
+      .edit-mode {
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+          background-color: $c-bg-input-focus-dark;
+          border-bottom: unset;
+        }
+      }
+    }
   }
 }

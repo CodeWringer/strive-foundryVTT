@@ -11,6 +11,7 @@ import { ExtenderUtil } from "./util/extender-util.mjs"
 import { LOG_LEVELS } from "./logging/log-levels.mjs"
 import { ConsoleLogger } from "./logging/console-logger.mjs"
 import { CompareUtility } from "./util/compare-utility.mjs"
+import { FormulaUtility } from "./util/formula-utility.mjs"
 
 export const common = {
   util: {
@@ -22,6 +23,7 @@ export const common = {
     uuid: UuidUtil,
     validation: ValidationUtil,
     compare: CompareUtility,
+    formula: FormulaUtility,
   },
   observables: {
     COLLECTION_CHANGE_TYPES: COLLECTION_CHANGE_TYPES,

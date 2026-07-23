@@ -6,14 +6,9 @@ cssClass: {String | undefined}
   {{!-- Edit mode --}}
   <div class="edit-mode flex flex-row flex-middle">
     <input 
-      type="number"
-      data-dtype="Number"
+      type="text"
       name="{{viewModel.id}}"
-      id="{{viewModel.id}}"
       value="{{viewModel.value}}"
-      {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
-      {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
-      step="{{viewModel.step}}"
     />
     <div class="flex flex-column flex-center">
       <a class="button-spinner up">

@@ -1,4 +1,5 @@
-import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import { FormulaUtility } from "../../../../common/util/formula-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -34,21 +35,6 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   get clazz() { return InputNumberSpinnerViewModel; }
 
   /**
-   * @type {Number}
-   */
-  get value() { return super.value; }
-  /**
-   * @param {Number} value 
-   */
-  set value(value) {
-    super.value = value;
-
-    const readModeElement = this.element.find(".read-mode");
-    readModeElement.empty();
-    readModeElement.append(value);
-  }
-
-  /**
    * Registers the Handlebars partial for this component. 
    * 
    * @static
@@ -59,10 +45,21 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
   /** @override */
   get value() { return parseInt(this._value); }
-  /** @override */
+  /**
+   * @param {String | Number} newValue The new value to set.
+   * Supports integer numbers and arithmetic formulae, e. g.
+   * `"33 - (7 / 2)"`
+   * @override
+   */
   set value(newValue) {
+    let parsedValue = NaN;
+    try {
+      parsedValue = FormulaUtility.eval(newValue);
+    } catch (error) {
+      // TODO: pop-up
+    }
+
     const oldValue = this._value;
-    const parsedValue = parseInt(newValue);
     if (parsedValue === NaN)
       this._value = this.hasMin ? this.min : 0;
     else if (this.hasMin && parsedValue < this.min)
@@ -72,12 +69,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     else
       this._value = parsedValue;
 
-    // Update visuals. 
-    this._suppressEvent = true;
-    SheetUtil.setElementValue(this.element, newValue);
-    this._suppressEvent = false;
-
     this.onChange(oldValue, this._value);
+
+    // Update visuals. 
+
+    this.inputElement[0].value = parsedValue + "";
+
+    const readModeElement = this.element.find(".read-mode");
+    readModeElement.empty();
+    readModeElement.append(this._value);
   }
 
   /**
@@ -85,13 +85,13 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hasMin() { return this.min !== undefined; }
+  get hasMin() { return ValidationUtil.isDefined(this.min); }
   /**
    * Returns true, if the maximum value is defined. 
    * @type {Boolean}
    * @readonly
    */
-  get hasMax() { return this.max !== undefined; }
+  get hasMax() { return ValidationUtil.isDefined(this.max); }
 
   /**
    * @type {Number}
@@ -174,33 +174,48 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this.element.find(".button-spinner.up").click(this._onClickNumberSpinnerUp.bind(this));
-    this.element.find(".button-spinner.down").click(this._onClickNumberSpinnerDown.bind(this));
+    this.element.find(".button-spinner.up").click(this._onIncrement.bind(this));
+    this.element.find(".button-spinner.down").click(this._onDecrement.bind(this));
+
+    this.inputElement.on("keydown", (event) => {
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        this._onIncrement();
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        this._onDecrement();
+      }
+    });
+    this.inputElement.on("mousewheel", (event) => {
+      if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+        // Scrolled up.
+        event.preventDefault();
+        this._onIncrement();
+      } else {
+        // Scrolled down.
+        event.preventDefault();
+        this._onDecrement();
+      }
+    });
   }
 
   /**
-   * Callback for when the "up" arrow is clicked. 
-   * 
+   * Increases the current value by `this._step`. 
    * @param {Event} event 
-   * 
    * @private
    */
-  _onClickNumberSpinnerUp(event) {
-    const newValue = parseInt(this.value) + 1;
-    if (this.max !== undefined && newValue > this.max) return;
+  _onIncrement(event) {
+    const newValue = parseInt(this.value) + this._step;
     this.value = newValue;
   }
 
   /**
-   * Callback for when the "down" arrow is clicked. 
-   * 
+   * Decreases the current value by `this._step`. 
    * @param {Event} event 
-   * 
    * @private
    */
-  _onClickNumberSpinnerDown(event) {
-    const newValue = parseInt(this.value) - 1;
-    if (this.min !== undefined && newValue < this.min) return;
+  _onDecrement(event) {
+    const newValue = parseInt(this.value) - this._step;
     this.value = newValue;
   }
 }

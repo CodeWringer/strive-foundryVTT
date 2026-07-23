@@ -30,21 +30,32 @@
 .strive {
   .input {
     border-radius: unset;
-    height: $input-size-md;
-    line-height: $input-size-md;
-    font-size: $font-size-md;
+
+    .edit-mode {
+      height: $input-size-md;
+      line-height: $input-size-md;
+      font-size: $font-size-md;
+    }
+
+    .read-mode {
+      height: $input-size-md;
+      line-height: $input-size-md;
+      font-size: $font-size-md;
+      border: unset;
+    }
 
     &.lg {
-      height: $input-size-lg;
-      line-height: $input-size-lg;
-      font-size: $font-size-lg;
-    }
-  
-    .read-mode {
-      height: inherit;
-      font-size: inherit;
-      line-height: inherit;
-      border: unset;
+      .edit-mode {
+        height: $input-size-lg;
+        line-height: $input-size-lg;
+        font-size: $font-size-lg;
+      }
+
+      .read-mode {
+        height: $input-size-lg;
+        line-height: $input-size-lg;
+        font-size: $font-size-lg;
+      }
     }
   }
 }
@@ -72,7 +83,7 @@
         border-right: unset;
         border-bottom-color: $c-border-dark;
         color: $c-text-dark;
-  
+
         &:hover,
         &:focus,
         &:focus-within {
@@ -112,7 +123,7 @@
         border-right: unset;
         border-bottom-color: $c-border-light;
         color: $c-text-light;
-  
+
         &:hover,
         &:focus,
         &:focus-within {

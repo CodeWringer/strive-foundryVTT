@@ -1,3 +1,4 @@
+import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -19,6 +20,44 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
    */
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('inputSplitNumberSpinner', `{{> "${InputSplitNumberSpinnerViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
+   * Gets or sets the edit-mode of the control. 
+   * 
+   * When setting, it will also toggle between edit-mode and read-mode, in the DOM. 
+   * @type {Boolean}
+   * @override
+   */
+  get isEditable() { return super.isEditable; }
+  set isEditable(value) {
+    // set super.isEditable should not be called! 
+    // It would prevent selectively enabling children. 
+
+    this._isEditable = value;
+
+    if (value) {
+      if (this._allowEditingCurrent) {
+        this.vmCurrent.isEditable = value;
+      }
+      if (this._allowEditingMaximum) {
+        this.vmCurrent.isEditable = value;
+      }
+    }
+
+    const editElement = this.element.find(".edit-mode");
+    const readElement = this.element.find(".read-mode");
+    if (value) {
+      new SlideDisplaceAnim({
+        displacingElement: editElement,
+        displacedElement: readElement,
+      }).execute();
+    } else {
+      new SlideDisplaceAnim({
+        displacingElement: readElement,
+        displacedElement: editElement,
+      }).execute();
+    }
   }
 
   /**
@@ -93,12 +132,18 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
    * @param {Number | undefined} args.current.min
    * @param {Number | undefined} args.current.max
    * @param {Number | undefined} args.current.step
+   * @param {Boolean | undefined} args.current.allowEditing If `true` will allow editing 
+   * the current value when the control is in edit-mode. 
+   * * default `true`
    * 
    * @param {Object | undefined} args.maximum
    * @param {Number | undefined} args.maximum.value
    * @param {Number | undefined} args.maximum.min
    * @param {Number | undefined} args.maximum.max
    * @param {Number | undefined} args.maximum.step
+   * @param {Boolean | undefined} args.maximum.allowEditing If `true` will allow editing 
+   * the maximum value when the control is in edit-mode. 
+   * * default `true`
    */
   constructor(args = {}) {
     super({
@@ -109,6 +154,12 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       },
     });
 
+    const current = args.current ?? {};
+    const maximum = args.maximum ?? {};
+
+    this._allowEditingCurrent = current.allowEditing ?? true;
+    this._allowEditingMaximum = maximum.allowEditing ?? true;
+
     this.vmCurrent = new InputNumberSpinnerViewModel({
       id: "vmCurrent",
       parent: this,
@@ -116,6 +167,9 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       onChange: (_, newValue) => {
         this.value.current = newValue;
       },
+      min: current.min,
+      max: current.max,
+      step: current.step,
       onInput: this.onInput,
       onFocus: this.onFocus,
       onFocusLost: this.onFocusLost,
@@ -127,6 +181,9 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       onChange: (_, newValue) => {
         this.value.maximum = newValue;
       },
+      min: maximum.min,
+      max: maximum.max,
+      step: maximum.step,
       onInput: this.onInput,
       onFocus: this.onFocus,
       onFocusLost: this.onFocusLost,

@@ -53,6 +53,30 @@ export const ArrayUtil = {
   
   /**
    * Returns a new array, based on the given array and only including elements 
+   * between the given `start` and `end` indices.
+   * 
+   * @param {Array<Any>} arr An array from which to take elements. 
+   * @param {Number | undefined} start 
+   * * default `0`
+   * @param {Number | undefined} end 
+   * * default `arr.length`
+   * 
+   * @returns {Array<Any>}
+   */
+  arrayTake: function(arr, start = 0, end) {
+    const result = [];
+  
+    for (let i = start; i < (end ?? arr.length); i++) {
+      const element = arr[i];
+      result.push(element);
+    }
+  
+    return result;
+  },
+  
+  
+  /**
+   * Returns a new array, based on the given array and only including elements 
    * for which the given `predicate` function returns `true`. 
    * 
    * @param {Array<Any>} arr An array from which to take elements. 
