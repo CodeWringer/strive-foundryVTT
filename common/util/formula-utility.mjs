@@ -128,39 +128,44 @@ export const FormulaUtility = {
      */
     const _getArithmeticOperation = (operations) => {
       let operandA;
+      let isOperandASynthetic = false;
       let operandB;
       let operator;
-      let i = 0;
-      for (; i < operations.length; i++) {
-        const operation = operations[i];
-        if (operation.isOperator) {
-          operator = operation.value;
 
-          if (i == 0) {
-            // Special case - the first operation is an operator. 
-            // Common case for negative numbers at the beginning of the expression. 
-            operandA = 0;
-          } else if (operations[i - 1].isGroup) {
-            const previousOperand = operations[i - 1].value;
-            const previousOperandOperations = FormulaUtility._getOperations(previousOperand.substring(1, previousOperand.length - 1));
-            operandA = _getArithmeticOperation(previousOperandOperations);
-          } else {
-            operandA = parseFloat(operations[i - 1].value);
-          }
+      if (operations[0].isGroup) {
+        const subOps = FormulaUtility._getOperations(operations[0].value.substring(1, operations[0].value.length - 1));
+        operandA = _getArithmeticOperation(subOps);
+      } else if (operations[0].isOperator) {
+        operandA = 0;
+        isOperandASynthetic = true;
+        operator = operations[0].value;
+      } else {
+        operandA = parseFloat(operations[0].value);
+      }
 
-          break;
+      if (!ValidationUtil.isDefined(operator)) {
+        if (operations[1].isOperator) {
+          operator = operations[1].value;
+        } else {
+          throw new Error("Operand must be followed by operator");
         }
       }
 
-      const subOps = ArrayUtil.arrayTake(operations, i + 1);
-      if (subOps[0].isGroup) {
-        const succedingOperand = subOps[0].value;
-        const succceedingOperandOperations = FormulaUtility._getOperations(succedingOperand.substring(1, succedingOperand.length - 1));
-        operandB = _getArithmeticOperation(succceedingOperandOperations);
-      } else if (subOps.length > 1) {
+      if (isOperandASynthetic) {
+        if (operations.length > 2) {
+          const subOps = ArrayUtil.arrayTake(operations, 1);
+          operandB = _getArithmeticOperation(subOps);
+        } else if (operations.length === 2) {
+          operandB = parseFloat(operations[1].value);
+        }
+      } else if (operations.length > 3) {
+        const subOps = ArrayUtil.arrayTake(operations, 2);
+        operandB = _getArithmeticOperation(subOps);
+      } else if (operations[2].isGroup) {
+        const subOps = FormulaUtility._getOperations(operations[2].value.substring(1, operations[2].value.length - 1));
         operandB = _getArithmeticOperation(subOps);
       } else {
-        operandB = parseFloat(subOps[0].value);
+        operandB = parseFloat(operations[2].value);
       }
 
       return new ArithmeticOperation({
@@ -297,15 +302,15 @@ class Operation {
 class ArithmeticOperation {
   /**
    * @param {Object} args 
-   * @param {Number | ArithmeticOperation | undefined} args.operandA 
+   * @param {Number | ArithmeticOperation} args.operandA 
    * * default `0`
    * @param {String} args.operator `"+" | "-" | "/" | "*"`
    * @param {Number | ArithmeticOperation} args.operandB 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["operator", "operandB"]);
+    ValidationUtil.validateOrThrow(args, ["operandA", "operator", "operandB"]);
 
-    this.operandA = args.operandA ?? 0;
+    this.operandA = args.operandA;
     this.operator = args.operator;
     this.operandB = args.operandB;
   }
