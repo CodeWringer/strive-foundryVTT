@@ -16,16 +16,20 @@ export default class Reference extends Persistable {
    * @param {String | undefined} dto.uuid If undefined, `name` MUST be defined. 
    * @param {String | undefined} dto.name If undefined, `uuid` MUST be defined. 
    * 
-   * @returns {Reference}
+   * @returns {Reference | null}
    * 
    * @static
    * @override
    */
   static fromDto(dto) {
-    return new Reference({
-      uuid: dto.uuid,
-      name: dto.name,
-    });
+    if (ValidationUtil.isDefined(dto.uuid) || ValidationUtil.isDefined(dto.name)) {
+      return new Reference({
+        uuid: dto.uuid,
+        name: dto.name,
+      });
+    } else {
+      return null;
+    }
   }
 
   /**

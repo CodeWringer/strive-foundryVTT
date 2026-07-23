@@ -22,6 +22,9 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
     Handlebars.registerPartial('inputSplitNumberSpinner', `{{> "${InputSplitNumberSpinnerViewModel.TEMPLATE}"}}`);
   }
 
+  /** @override */
+  get inputElement() { return undefined; }
+
   /**
    * Gets or sets the edit-mode of the control. 
    * 
@@ -87,6 +90,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       set maximum(newValue) {
         const oldValue = thiz._value;
         thiz._value.maximum = newValue;
+        thiz.vmCurrent.max = newValue;
         thiz.onChange(oldValue, thiz._value);
       },
     };
@@ -97,10 +101,10 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
    * @param {Number | undefined} newValue.maximum 
    */
   set value(newValue) {
-    const oldValue = thiz._value;
+    const oldValue = this._value;
     this._value = {
       current: (newValue ?? {}).current ?? this._value.current,
-      current: (newValue ?? {}).maximum ?? this._value.maximum,
+      maximum: (newValue ?? {}).maximum ?? this._value.maximum,
     };
     this.onChange(oldValue, this._value);
   }

@@ -1,5 +1,5 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { BaseItemSheet } from "../base/sheet/base-item-sheet.mjs";
+import BaseItemSheet from "../base/sheet/base-item-sheet.mjs";
 import LanguageItemSheetViewModel from "./language-item-sheet-viewmodel.mjs";
 
 /**
@@ -15,7 +15,7 @@ import LanguageItemSheetViewModel from "./language-item-sheet-viewmodel.mjs";
  * 
  * @extends BaseItemSheet
  */
-export class LanguageItemSheet extends BaseItemSheet {
+export default class LanguageItemSheet extends BaseItemSheet {
   /** @override */
   get localizedDocumentType() {
     return StringUtil.getLoca("system.item.language.language");

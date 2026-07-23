@@ -5,6 +5,7 @@ import BaseItemData from "./item/base-item-data.mjs";
 import FateCardItemData from "./item/fate-card-item-data.mjs";
 import HealthConditionItemData from "./item/health-condition-item-data.mjs";
 import IllnessItemData from "./item/illness-item-data.mjs";
+import InjuryItemData from "./item/injury-item-data.mjs";
 import LanguageItemData from "./item/language-item-data.mjs";
 import MutationItemData from "./item/mutation-item-data.mjs";
 import ProjectItemData from "./item/project-item-data.mjs";
@@ -28,6 +29,7 @@ export const dataModel = {
     LanguageItemData: LanguageItemData,
     SkillItemData: SkillItemData,
     FateCardItemData: FateCardItemData,
+    InjuryItemData: InjuryItemData,
     IllnessItemData: IllnessItemData,
     MutationItemData: MutationItemData,
     HealthConditionItemData: HealthConditionItemData,
@@ -53,6 +55,7 @@ export const dataModel = {
       language: LanguageItemData,
       skill: SkillItemData,
       fateCard: FateCardItemData,
+      injury: InjuryItemData,
       illness: IllnessItemData,
       mutation: MutationItemData,
       healthCondition: HealthConditionItemData,

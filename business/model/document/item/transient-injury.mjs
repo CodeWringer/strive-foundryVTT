@@ -146,7 +146,7 @@ export default class TransientInjury extends TransientBaseItem {
     this._state = new DataFieldBridge({
       document: this,
       dataPath: "system.state",
-      default: INJURY_STATES.active,
+      default: INJURY_STATES.active.name,
       fromDto: (dto) => {
         return INJURY_STATES[dto];
       },

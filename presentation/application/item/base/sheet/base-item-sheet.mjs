@@ -29,7 +29,7 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
  * @property {String} localizedDocumentType
  * * Read-only
  */
-export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
+export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
     position: { width: 500, height: 520, },

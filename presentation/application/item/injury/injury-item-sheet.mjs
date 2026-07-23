@@ -1,5 +1,5 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { BaseItemSheet } from "../base/sheet/base-item-sheet.mjs";
+import BaseItemSheet from "../base/sheet/base-item-sheet.mjs";
 import InjuryItemSheetViewModel from "./injury-item-sheet-viewmodel.mjs";
 
 /**

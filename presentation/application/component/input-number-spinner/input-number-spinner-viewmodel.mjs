@@ -73,7 +73,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
     // Update visuals. 
 
-    this.inputElement[0].value = parsedValue + "";
+    this.inputElement[0].value = this._value + "";
 
     const readModeElement = this.element.find(".read-mode");
     readModeElement.empty();
@@ -102,7 +102,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set min(value) {
     this._min = value;
-    $(this.element).attr("min", value);
+    if (this._value < this._min) {
+      this._value = this._min;
+    }
   }
 
   /**
@@ -114,7 +116,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set max(value) {
     this._max = value;
-    $(this.element).attr("max", value);
+    if (this._value > this._max) {
+      this._value = this._max;
+    }
   }
 
   /**
@@ -124,10 +128,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   /**
    * @param {Number} value
    */
-  set step(value) {
-    this._step = value;
-    $(this.element).attr("step", value);
-  }
+  set step(value) { this._step = value; }
 
   /**
    * @param {Object} args

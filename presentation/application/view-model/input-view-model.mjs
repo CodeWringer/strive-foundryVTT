@@ -23,7 +23,7 @@ export const SELECTOR_READ = "custom-system-read-only";
  * * `static get TEMPLATE`
  * * `get clazz`
  * 
- * Inheritors _should_ override:
+ * Inheritors _may_ override:
  * * `get inputElement`
  * 
  * @property {String} id Unique ID of this view model instance. 
@@ -163,10 +163,12 @@ export default class InputViewModel extends ViewModel {
       readModeElm.removeClass("hidden");
     }
 
-    $(this.inputElement).change(this._onChange.bind(this));
-    $(this.inputElement).on("input", this._onInput.bind(this));
-    $(this.inputElement).on("focus", this._onFocus.bind(this));
-    $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
+    if (ValidationUtil.isDefined(this.inputElement) && this.inputElement.length > 0) {
+      $(this.inputElement).change(this._onChange.bind(this));
+      $(this.inputElement).on("input", this._onInput.bind(this));
+      $(this.inputElement).on("focus", this._onFocus.bind(this));
+      $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
+    }
   }
 
   /**
