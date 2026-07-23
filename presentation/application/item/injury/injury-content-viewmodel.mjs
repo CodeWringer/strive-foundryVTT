@@ -44,6 +44,9 @@ export default class InjuryContentViewModel extends ViewModel {
       id: "vmTreatmentDate",
       parent: this,
       isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.treatment.date"),
+      }),
       value: this.document.treatment.lastTreatmentTime,
       onChange: (_, newValue) => {
         this.document.treatment.lastTreatmentTime = newValue;
@@ -53,6 +56,9 @@ export default class InjuryContentViewModel extends ViewModel {
       id: "vmTreatmentObstacle",
       parent: this,
       isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.treatment.obstacle"),
+      }),
       value: this.document.treatment.obstacle,
       onChange: (_, newValue) => {
         this.document.treatment.obstacle = newValue;
@@ -62,6 +68,9 @@ export default class InjuryContentViewModel extends ViewModel {
       id: "vmTreatmentSkill",
       parent: this,
       isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.treatment.skill"),
+      }),
       value: this.document.treatment.skill,
       onChange: (_, newValue) => {
         this.document.treatment.skill = newValue;
@@ -71,6 +80,9 @@ export default class InjuryContentViewModel extends ViewModel {
       id: "vmTreatmentSuppliesAmount",
       parent: this,
       isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.treatment.supplies.amount"),
+      }),
       value: this.document.treatment.requiredSupplies.amount,
       min: 0,
       onChange: (_, newValue) => {
@@ -81,15 +93,21 @@ export default class InjuryContentViewModel extends ViewModel {
       id: "vmTreatmentSuppliesAsset",
       parent: this,
       isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.treatment.supplies.asset"),
+      }),
       value: this.document.treatment.requiredSupplies.asset,
       onChange: (_, newValue) => {
         this.document.treatment.requiredSupplies.asset = newValue;
       },
     });
-    this.vmTreatmentProgress = new InputSplitNumberSpinnerViewModel({
-      id: "vmTreatmentProgress",
+    this.vmHealingProgress = new InputSplitNumberSpinnerViewModel({
+      id: "vmHealingProgress",
       parent: this,
       isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.healProgress"),
+      }),
       current: {
         value: this.document.healProgress.current,
         min: 0,

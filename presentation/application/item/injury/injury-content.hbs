@@ -5,22 +5,22 @@ viewModel: InjuryContentViewModel
   {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
   <span class="h-divider"></span>
   <div class="flex flex-row flex-middle auto-margin-h-md">
-    <i class="ico ico-treatment-date lg"></i>
+    <i class="ico ico-treatment-date xl"></i>
     {{> inputTextField viewModel=viewModel.vmTreatmentDate }}
     <span class="v-divider"></span>
-    <i class="ico ico-obstacle lg"></i>
+    <i class="ico ico-obstacle xl"></i>
     {{> inputTextField viewModel=viewModel.vmTreatmentObstacle }}
-    <i class="ico ico-arrow-right lg"></i>
+    <i class="ico ico-arrow-right xl"></i>
     {{> inputTextField viewModel=viewModel.vmTreatmentSkill }}
   </div>
   <span class="h-divider"></span>
   <div class="flex flex-row flex-middle auto-margin-h-md">
-    <i class="ico ico-treatment-supplies lg"></i>
+    <i class="ico ico-treatment-supplies xl"></i>
     {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount }}
     {{> inputReference viewModel=viewModel.vmTreatmentSuppliesAsset }}
     <span class="v-divider"></span>
-    <i class="ico ico-healing-progress lg"></i>
-    {{> inputSplitNumberSpinner viewModel=viewModel.vmTreatmentProgress }}
+    <i class="ico ico-healing-progress xl"></i>
+    {{> inputSplitNumberSpinner viewModel=viewModel.vmHealingProgress }}
   </div>
   {{#if viewModel.isGM}}
   <div class="gm-only flex-grow border-t-sm margin-t-lg">
