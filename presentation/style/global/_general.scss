@@ -44,6 +44,15 @@
       border: unset;
     }
 
+    &.flex-grow {
+      .edit-mode {
+        flex: 1;
+      }
+      .read-mode {
+        flex: 1;
+      }
+    }
+
     &.lg {
       .edit-mode {
         height: $input-size-lg;

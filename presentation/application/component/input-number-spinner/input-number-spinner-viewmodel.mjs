@@ -139,6 +139,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {Any | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Any}`

@@ -66,16 +66,18 @@ export default class InputViewModel extends ViewModel {
 
     const editElement = this.element.find(".edit-mode");
     const readElement = this.element.find(".read-mode");
-    if (value) {
-      new SlideDisplaceAnim({
-        displacingElement: editElement,
-        displacedElement: readElement,
-      }).execute();
-    } else {
-      new SlideDisplaceAnim({
-        displacingElement: readElement,
-        displacedElement: editElement,
-      }).execute();
+    if (!this._suppressAnims) {
+      if (value) {
+        new SlideDisplaceAnim({
+          displacingElement: editElement,
+          displacedElement: readElement,
+        }).execute();
+      } else {
+        new SlideDisplaceAnim({
+          displacingElement: readElement,
+          displacedElement: editElement,
+        }).execute();
+      }
     }
   }
 
@@ -125,6 +127,9 @@ export default class InputViewModel extends ViewModel {
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {Any | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Any}`
@@ -143,6 +148,7 @@ export default class InputViewModel extends ViewModel {
     super(args);
 
     this._value = args.value;
+    this._suppressAnims = args.suppressAnims ?? false;
     this.onChange = args.onChange ?? (() => { });
     this.onInput = args.onInput ?? (() => { });
     this.onFocus = args.onFocus ?? (() => { });

@@ -51,6 +51,9 @@ export default class InputReferenceViewModel extends InputViewModel {
    * * default `false`. 
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Any}`

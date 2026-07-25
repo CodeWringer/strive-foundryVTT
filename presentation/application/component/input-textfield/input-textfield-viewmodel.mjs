@@ -40,6 +40,9 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * 
    * display as a tool tip. 
    * @param {String | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {String | undefined} args.placeholder A placeholder text to display while the textfield is empty. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 

@@ -56,7 +56,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
                 viewModelFactory: (parent) => new ButtonViewModel({
                   id: "vmConfirm",
                   parent: parent,
-                  content: `<i class="fas fa-check"></i><span class="strive-regular-font font-size-xl">${StringUtil.getLoca("system.general.confirm")}</span>`,
+                  content: `<i class="fas fa-check"></i><span class="strive-regular-font font-size-lg">${StringUtil.getLoca("system.general.confirm")}</span>`,
                   onClick: () => {
                     this.confirmed = true;
                     this.close();
@@ -69,7 +69,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
                 viewModelFactory: (parent) => new ButtonViewModel({
                   id: "vmCancel",
                   parent: parent,
-                  content: `<i class="fas fa-times"></i><span class="strive-regular-font font-size-xl">${StringUtil.getLoca("system.general.cancel")}</span>`,
+                  content: `<i class="fas fa-times"></i><span class="strive-regular-font font-size-lg">${StringUtil.getLoca("system.general.cancel")}</span>`,
                   onClick: () => {
                     this.confirmed = false;
                     this.close();

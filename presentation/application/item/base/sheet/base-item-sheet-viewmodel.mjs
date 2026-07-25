@@ -1,17 +1,12 @@
-import { VISIBILITY_MODES } from "../../../../../business/model/domain/const/visibility-modes.mjs";
-import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import { SlideDisplaceAnim } from "../../../../animation/slide-displace-anim.mjs";
 import { SlideInAnim } from "../../../../animation/slide-in-anim.mjs";
 import { SlideOutAnim } from "../../../../animation/slide-out-anim.mjs";
 import { ChatUtil } from "../../../../util/chat-utility.mjs";
-import { ChoicesUtil } from "../../../../util/choices-utility.mjs";
 import { KEY_CODES, MODIFIER_KEY_CODES } from "../../../../util/keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../../../util/keyboard/keyboard.mjs";
-import DynamicComponent from "../../../component/dynamic-component/dynamic-component.mjs";
-import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
-import ConfirmableModalDialog from "../../../dialog/confirmable-modal-dialog/confirmable-modal-dialog.mjs";
+import VisibilityChoiceDialog from "../../../dialog/visibility-choice-dialog/visibility-choice-dialog.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
@@ -180,23 +175,10 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async sendToChat() {
-    const visibilityModeOptions = ChoicesUtil.getAsChoices(VISIBILITY_MODES);
-    const dialog = await new ConfirmableModalDialog({
-      title: StringUtil.getLoca("system.general.messageVisibility.query"),
-      sections: [
-        new DynamicComponent({
-          template: InputDropDownViewModel.TEMPLATE,
-          viewModelFactory: (parent) => new InputDropDownViewModel({
-            id: "vmVisibilityMode",
-            parent: parent,
-            options: visibilityModeOptions,
-          }),
-        }),
-      ],
-    }).renderAndAwait();
+    const dialog = await new VisibilityChoiceDialog().renderAndAwait();
 
     if (dialog.confirmed) {
-      const visibilityMode = VISIBILITY_MODES[dialog.viewModel.vmVisibilityMode.value.value];
+      const visibilityMode = dialog.value;
 
       ChatUtil.sendToChat({
         renderedContent: `@UUID[Item.${this.document.id}]{${this.document.name}}`,

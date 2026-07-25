@@ -53,6 +53,9 @@ export default class InputRichTextViewModel extends InputViewModel {
    * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
    * @param {String | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {String}`

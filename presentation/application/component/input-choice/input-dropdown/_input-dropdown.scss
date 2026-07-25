@@ -63,8 +63,9 @@ menu.strive.dropdown {
   z-index: 9999;
 
   li {
-    font-size: inherit;
-    line-height: inherit;
+    height: $input-size-md;
+    line-height: $input-size-md;
+    font-size: $font-size-md;
     padding: 0 5px;
     cursor: pointer;
   }

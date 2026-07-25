@@ -379,6 +379,7 @@ export default class ViewModel {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
         content: this._toolTipDefinition.localized,
+        additionalContent: this._toolTipDefinition.additionalLocalized,
         style: this._toolTipDefinition.style,
         onShown: () => {
           this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
@@ -751,6 +752,8 @@ export default class ViewModel {
 /**
  * @param {String} localized A localized text to 
  * display as a tool tip. 
+ * @param {String | undefined} additionalLocalized Additional localized text to 
+ * display in the tool tip, if the user presses the modifier key (such as 'Alt'). 
  * @param {String | undefined} style A style override to attach to the tool tip's DOM element. 
  * E. g. `text-align: center`
  */
@@ -759,6 +762,8 @@ export class ViewModelToolTipDefinition {
    * @param {Object} args 
    * @param {String} args.localized A localized text to 
    * display as a tool tip. 
+   * @param {String | undefined} args.additionalLocalized Additional localized text to 
+   * display in the tool tip, if the user presses the modifier key (such as 'Alt'). 
    * @param {String | undefined} args.style A style override to attach to the tool tip's DOM element. 
    * E. g. `text-align: center`
    */
@@ -766,6 +771,7 @@ export class ViewModelToolTipDefinition {
     ValidationUtil.validateOrThrow(args, ["localized"]);
 
     this.localized = args.localized;
+    this.additionalLocalized = args.additionalLocalized;
     this.style = args.style;
   }
 }

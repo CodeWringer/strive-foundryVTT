@@ -9,7 +9,7 @@ cssClass: String | undefined
       id="{{viewModel.id}}-button" 
       aria-controls="{{viewModel.id}}-menu" 
       aria-expanded=false 
-      class="flex flex-row flex-middle strive-regular-font button"
+      class="flex flex-row flex-middle flex-start strive-regular-font button"
       tabindex="0"
     >
       <div id="{{viewModel.id}}-button-value">
@@ -18,7 +18,10 @@ cssClass: String | undefined
         <span>{{viewModel.value.localizedValue}}</span>
         {{/if}}
       </div>
-      <i class="ico ico-triangle-down xs margin-l-md"></i>
+      <span class="flex-grow"></span>
+      <div class="flex-center">
+        <i class="ico ico-triangle-down xs margin-l-md"></i>
+      </div>
     </a>
     <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden">
     {{#each viewModel.options as |option index|}}

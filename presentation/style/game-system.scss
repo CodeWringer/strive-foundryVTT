@@ -28,6 +28,7 @@
 @import '../application/component/input-split-number-spinner/input-split-number-spinner';
 @import '../application/component/input-reference/input-reference';
 @import '../application/component/tooltip/tooltip';
+@import '../application/component/button/button';
 
 /* Animations */
 @import 'anims/spinner';
@@ -63,8 +64,4 @@
     user-select: text;
     transition: unset;
   }
-}
-
-button {
-  min-height: unset;
 }
