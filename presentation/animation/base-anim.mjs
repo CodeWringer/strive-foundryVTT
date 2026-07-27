@@ -9,6 +9,7 @@ import { SheetUtil } from "../util/sheet-utility.mjs";
  * and then disappear. Do NOT re-use them! 
  * 
  * @abstract Inheritors MUST implement:
+ * * `get cssClass`
  * * `_execute()`
  * 
  * Inheritors _may_ override:
@@ -74,6 +75,14 @@ export default class BaseAnimation {
    * @readonly
    */
   get elements() { return this.#elements; }
+
+  /**
+   * Returns the base CSS class of the animation to apply to the temporary parent container. 
+   * @type {String}
+   * @readonly
+   * @abstract
+   */
+  get cssClass() { throw new Error("Not implemented"); }
 
   /**
    * @param {Object} args
@@ -214,7 +223,7 @@ export default class BaseAnimation {
       $(element).addClass("hidden");
     }
     let style = `width: ${width}px; height: ${height}px;`;
-    const str = `<div id="anim-${this.id}" class="strive slide-anim" style="${style}"></div>`;
+    const str = `<div id="anim-${this.id}" class="strive ${this.cssClass}" style="${style}"></div>`;
     $(str).insertBefore(firstElement);
     this._container = $(`div#anim-${this.id}`);
 

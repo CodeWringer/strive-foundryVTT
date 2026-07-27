@@ -2,6 +2,9 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import BaseAnim from "./base-anim.mjs";
 
 export class SlideDisplaceAnim extends BaseAnim {
+  /** @override */
+  get cssClass() { return "displace-anim"; }
+
   /**
    * @param {Object} args
    * @param {JQuery | HTMLElement} args.displacingElement The element that will displace the other.
