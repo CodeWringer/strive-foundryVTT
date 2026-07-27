@@ -42,7 +42,7 @@ export default class InputRichTextViewModel extends InputViewModel {
   set value(value) {
     super.value = value;
 
-    const readModeElement = this.element.find(".read-mode");
+    const readModeElement = this.element.find("> .read-mode");
     readModeElement.empty();
     readModeElement.append(value);
   }
@@ -84,8 +84,8 @@ export default class InputRichTextViewModel extends InputViewModel {
     });
     this.element.append(rendered);
 
-    const editModeElm = this.element.find(".edit-mode");
-    const readModeElm = this.element.find(".read-mode");
+    const editModeElm = this.element.find("> .edit-mode");
+    const readModeElm = this.element.find("> .read-mode");
     if (this.isEditable) {
       editModeElm.removeClass("hidden");
       readModeElm.addClass("hidden");

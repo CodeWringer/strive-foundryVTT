@@ -1,3 +1,7 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
+import DynamicComponent from "./dynamic-component.mjs";
+
 /**
  * @property {String | undefined} html 
  * @property {String | undefined} template Relative path identifying the template 
@@ -8,6 +12,27 @@
  * * default `""`
  */
 export default class PreparedSection {
+  /**
+   * Converts a `DynamicComponent` to an instance of this class. 
+   * @param {DynamicComponent} dynamicComponent 
+   * @param {ViewModel} parent
+   * @returns {PreparedSection}
+   * @static
+   */
+  static fromDynamicComponent(dynamicComponent, parent) {
+    let viewModel;
+    if (ValidationUtil.isDefined(dynamicComponent.viewModelFactory)) {
+      viewModel = dynamicComponent.viewModelFactory(parent);
+    }
+
+    return new PreparedSection({
+      html: dynamicComponent.html,
+      template: dynamicComponent.template,
+      viewModel: viewModel,
+      cssClass: dynamicComponent.cssClass,
+    });
+  }
+
   /**
    * @param {Object} args 
    * @param {String | undefined} args.html

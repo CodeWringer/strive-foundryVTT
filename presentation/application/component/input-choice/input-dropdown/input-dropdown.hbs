@@ -12,7 +12,7 @@ cssClass: String | undefined
       class="flex flex-row flex-middle flex-start strive-regular-font button"
       tabindex="0"
     >
-      <div id="{{viewModel.id}}-button-value">
+      <div id="{{viewModel.id}}-button-value" class="flex flex-row">
         {{{viewModel.value.iconHtml}}}
         {{#if viewModel.showValue}}
         <span>{{viewModel.value.localizedValue}}</span>
@@ -34,7 +34,7 @@ cssClass: String | undefined
   </div>
   {{!-- Read mode --}}
   <div 
-    class="read-mode flex" 
+    class="read-mode flex flex-row" 
     name="{{viewModel.id}}"
   >
     {{{viewModel.value.iconHtml}}}

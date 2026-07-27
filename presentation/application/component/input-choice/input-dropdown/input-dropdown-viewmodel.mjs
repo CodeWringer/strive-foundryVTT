@@ -67,7 +67,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     buttonValueElement.empty();
     buttonValueElement.append(newContent);
 
-    const readModeElement = this.element.find(".read-mode");
+    const readModeElement = this.element.find("> .read-mode");
     readModeElement.empty();
     readModeElement.append(newContent);
   }

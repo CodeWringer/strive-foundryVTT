@@ -55,6 +55,7 @@ export const application = {
   init: async () => {
     await TEMPLATES._preloadHandlebarsTemplates();
     component.init();
+    dialog.init();
     // Register sheet application classes. 
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,

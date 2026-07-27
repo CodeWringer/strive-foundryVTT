@@ -1,7 +1,7 @@
 /**
  * For insertion into an application at run-time. 
  * 
- * @property {String | undefined} html 
+ * @property {String | undefined} html Literal HTML string to insert. Takes precedence over `template`. 
  * @property {String | undefined} template Relative path identifying the template 
  * to use.
  * @property {Function<ViewModel> | undefined} viewModelFactory Must return a `ViewModel` 
@@ -12,7 +12,7 @@
 export default class DynamicComponent {
   /**
    * @param {Object} args 
-   * @param {String | undefined} args.html
+   * @param {String | undefined} args.html Literal HTML string to insert. Takes precedence over `template`. 
    * @param {String | undefined} args.template Relative path identifying the template 
    * to use.
    * @param {Function<ViewModel> | undefined} args.viewModelFactory Must return a `ViewModel` 

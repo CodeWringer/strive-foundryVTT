@@ -65,8 +65,9 @@ export const ArrayUtil = {
    */
   arrayTake: function(arr, start = 0, end) {
     const result = [];
+    const clampedEnd = Math.min((end ?? arr.length), arr.length);
   
-    for (let i = start; i < (end ?? arr.length); i++) {
+    for (let i = start; i < clampedEnd; i++) {
       const element = arr[i];
       result.push(element);
     }

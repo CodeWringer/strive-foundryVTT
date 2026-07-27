@@ -44,12 +44,12 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
         this.vmCurrent.isEditable = value;
       }
       if (this._allowEditingMaximum) {
-        this.vmCurrent.isEditable = value;
+        this.vmMaximum.isEditable = value;
       }
     }
 
-    const editElement = this.element.find(".edit-mode");
-    const readElement = this.element.find(".read-mode");
+    const editElement = this.element.find("> .edit-mode");
+    const readElement = this.element.find("> .read-mode");
     if (value) {
       new SlideDisplaceAnim({
         displacingElement: editElement,

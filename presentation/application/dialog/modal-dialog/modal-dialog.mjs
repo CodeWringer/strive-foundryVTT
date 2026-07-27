@@ -15,7 +15,14 @@ import ModalDialogViewModel from "./modal-dialog-viewmodel.mjs";
  * @extends ApplicationV2
  * 
  * @abstract Inheritors _should_ override:
- * * `get id`
+ * * To pass the template(s):
+ * * * `constructor()` - Override the `sections` argument, to insert the dialog's 
+ * actual html content. Override the `title` argument, to pass the dialog's title. 
+ * * * Or, if you don't want the sub-viewmodels that requires, and just want to use 
+ * your dialog's viewmodel, instead override `static PARTS`
+ * * `get id` - give it a unique ID to identify the dialog *type*. Foundry already handles giving 
+ * dialog *instances* unique IDs. 
+ * * `createViewModel()` - And make it return the `ViewModel` you actually need for your dialog. 
  * 
  * @property {ModalDialogViewModel} viewModel
  * @property {Boolean} easyDismissal If `true`, allows for easier dialog 
@@ -32,7 +39,7 @@ export default class ModalDialog extends FoundryWrapper.HandlebarsApplicationMix
   /** @override */
   static DEFAULT_OPTIONS = {
     position: { width: 400, height: 300, },
-    classes: ["strive", ModalDialog.DIALOG_ELEMENT_CLASS, "strive-regular-font"],
+    classes: ["strive", "modal", "strive-regular-font"],
     tag: "form",
     window: {
       resizable: true,
@@ -55,15 +62,6 @@ export default class ModalDialog extends FoundryWrapper.HandlebarsApplicationMix
    * @static
    */
   static get BACKDROP_ELEMENT_CLASS() { return "strive modal-backdrop"; }
-
-  /**
-   * Styling class of the dialog element. 
-   * 
-   * @type {String}
-   * @readonly
-   * @static
-   */
-  static get DIALOG_ELEMENT_CLASS() { return "strive modal"; }
 
   /**
    * @type {HTMLElement}
@@ -146,7 +144,7 @@ export default class ModalDialog extends FoundryWrapper.HandlebarsApplicationMix
    * @param {TransientDocument} document 
    * @returns {ModalDialogViewModel}
    * 
-   * @abstract
+   * @virtual
    */
   createViewModel() {
     return new ModalDialogViewModel({
@@ -211,7 +209,6 @@ export default class ModalDialog extends FoundryWrapper.HandlebarsApplicationMix
 
   /** @override */
   async _postRender(context, options) {
-    console.log("A");
     this.#html = $(`section#${context.viewModel.id}`).closest("form");
     this.#content = $(this.html).find("section.window-content");
     

@@ -2,7 +2,6 @@ import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -99,27 +98,6 @@ export default class InjuryContentViewModel extends ViewModel {
       value: this.document.treatment.requiredSupplies.asset,
       onChange: (_, newValue) => {
         this.document.treatment.requiredSupplies.asset = newValue;
-      },
-    });
-    this.vmHealingProgress = new InputSplitNumberSpinnerViewModel({
-      id: "vmHealingProgress",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.injury.healProgress"),
-      }),
-      current: {
-        value: this.document.healProgress.current,
-        min: 0,
-        max: this.document.healProgress.required,
-      },
-      maximum: {
-        value: this.document.healProgress.required,
-        min: 0,
-      },
-      onChange: (_, newValue) => {
-        this.document.healProgress.current = newValue.current;
-        this.document.healProgress.required = newValue.maximum;
       },
     });
     if (this.isGM) {

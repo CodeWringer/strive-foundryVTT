@@ -4,14 +4,19 @@ cssClass: String | undefined
 --}}
 <div id="{{viewModel.id}}" class="strive input reference flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
-  <input 
-    class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}"
-    type="text"
-    name="{{viewModel.id}}"
-    placeholder="{{viewModel.placeholder}}"
-    value="{{viewModel.value}}"
-  />
-  <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden"></menu>
+  <div class="edit-mode flex flex-row flex-middle{{#if viewModel.isEditable}}{{else}} hidden{{/if}}">
+    <input
+      type="text"
+      name="{{viewModel.id}}"
+      placeholder="{{viewModel.placeholder}}"
+      value="{{viewModel.value}}"
+    />
+    <i class="ico ico-chain-link lg"></i>
+    <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden"></menu>
+  </div>
   {{!-- Read mode --}}
-  <div class="read-mode{{#if viewModel.isEditable}} hidden{{/if}}">{{viewModel.value}}</div>
+  <div class="read-mode flex flex-row{{#if viewModel.isEditable}} hidden{{/if}}">
+    <span class="flex-grow">{{viewModel.value}}</span>
+    <i class="ico ico-chain-link lg"></i>
+  </div>
 </div>

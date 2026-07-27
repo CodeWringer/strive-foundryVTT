@@ -50,6 +50,7 @@ export const TEMPLATES = {
     },
     dialog: {
       modal: `${basePathApplication}/dialog/modal-dialog/modal-dialog.hbs`,
+      uiDebug: `${basePathApplication}/dialog/ui-debug-dialog/ui-debug-dialog.hbs`,
     },
     component: {
       button: `${basePathComponent}/button/button.hbs`,

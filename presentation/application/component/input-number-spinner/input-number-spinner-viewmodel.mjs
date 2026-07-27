@@ -75,7 +75,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
     this.inputElement[0].value = this._value + "";
 
-    const readModeElement = this.element.find(".read-mode");
+    const readModeElement = this.element.find("> .read-mode");
     readModeElement.empty();
     readModeElement.append(this._value);
   }

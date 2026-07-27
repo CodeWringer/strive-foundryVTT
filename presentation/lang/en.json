@@ -24,6 +24,9 @@
     "gm": "GM"
   },
   "system": {
+    "debug": {
+      "uiDebugDialogTitle": "UI Element Debug Dialog"
+    },
     "migration": {
       "title": "Data Migration",
       "titleMigrationRequired": "Data Migration Required",
@@ -228,7 +231,10 @@
         "singular": "Tag",
         "plural": "Tags"
       },
-      "propertyPath": "Property path"
+      "propertyPath": "Property path",
+      "reference": {
+        "referenceFrom": "%{contentType} from %{pack}"
+      }
     },
     "actor": {
       "plain": {

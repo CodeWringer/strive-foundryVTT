@@ -3,7 +3,7 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 /**
  * Represents a choice option for drop-downs, radio-buttons or check-boxes. 
  * 
- * @property {Any} value The actual value. 
+ * @property {String} value The actual value. 
  * @property {String | undefined} localizedValue The text that represents the value, to display to the user. 
  * @property {String | undefined} iconLightMode A (relative) icon file path or a FontAwesome icon class. 
  * * E.g. `"systems/strive/presentation/image/texture.svg"`
@@ -102,7 +102,7 @@ export default class ChoiceOption {
 
   /**
    * @param {Object} args
-   * @param {Any} args.value The actual value. 
+   * @param {String} args.value The actual value. 
    * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
    * @param {String | undefined} args.icon A theming-agnostic icon. Can be a CSS class or 

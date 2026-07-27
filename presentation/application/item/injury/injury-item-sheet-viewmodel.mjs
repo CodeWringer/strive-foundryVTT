@@ -7,6 +7,7 @@ import { TEMPLATES } from "../../templates.mjs";
 import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
 import InjuryContentViewModel from "./injury-content-viewmodel.mjs";
+import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 
 /**
  * @property {TransientInjury} document 
@@ -51,6 +52,27 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
       value: this.document.name,
       onChange: (_, newValue) => {
         this.document.name = newValue;
+      },
+    });
+    this.vmHealingProgress = new InputSplitNumberSpinnerViewModel({
+      id: "vmHealingProgress",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.healProgress"),
+      }),
+      current: {
+        value: this.document.healProgress.current,
+        min: 0,
+        max: this.document.healProgress.required,
+      },
+      maximum: {
+        value: this.document.healProgress.required,
+        min: 0,
+      },
+      onChange: (_, newValue) => {
+        this.document.healProgress.current = newValue.current;
+        this.document.healProgress.required = newValue.maximum;
       },
     });
     const stateOptions = ChoicesUtil.getAsChoices(INJURY_STATES, "xl");

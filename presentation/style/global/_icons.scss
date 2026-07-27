@@ -108,7 +108,7 @@ $size-header-button-icon: 1rem;
     background-image: url("/systems/strive/presentation/image/can-read-dark.svg");
   }
   .ico-chain-link {
-    background-image: url("/systems/strive/presentation/image/arrow-right-dark.svg");
+    background-image: url("/systems/strive/presentation/image/chain-link-dark");
   }
   .ico-chain-link-broken {
     background-image: url("/systems/strive/presentation/image/chain-link-broken-dark.svg");
@@ -175,7 +175,7 @@ $size-header-button-icon: 1rem;
 // Specific dark-mode icons -> use light variants!
 .theme-dark {
   .ico-arrow-right {
-    background-image: url("/systems/strive/presentation/image/chain-link-broken-light.svg");
+    background-image: url("/systems/strive/presentation/image/arrow-right-light.svg");
   }
   .ico-cannot-read {
     background-image: url("/systems/strive/presentation/image/cannot-read-light.svg");

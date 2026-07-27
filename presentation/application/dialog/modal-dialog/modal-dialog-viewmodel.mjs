@@ -1,8 +1,8 @@
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DynamicComponent from "../../component/dynamic-component/dynamic-component.mjs";
-import { PreparedSectionViewModelUtility } from "../../component/dynamic-component/prepared-section-viewmodel-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import PreparedSection from "../../component/dynamic-component/prepared-section.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 
@@ -58,7 +58,12 @@ export default class ModalDialogViewModel extends ViewModel {
     super(args);
 
     this.sections = args.sections ?? [];
-    PreparedSectionViewModelUtility.convertDynamicComponents(this, this.sections);
+    this.preparedSections = this.sections.map(it => PreparedSection.fromDynamicComponent(it, this));
+    for (const prepared of this.preparedSections) {
+      if (ValidationUtil.isDefined(prepared.viewModel)) {
+        this[prepared.viewModel._id] = prepared.viewModel;
+      }
+    }
     this.initialFocus = args.initialFocus;
   }
 

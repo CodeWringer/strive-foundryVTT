@@ -9,15 +9,15 @@
 .v-divider {
   width: 1px;
   height: stretch;
-  margin: 0 10px;
   padding-right: 1px; // Ensures symmetry on the right side.
 }
 
 .h-divider {
   width: stretch;
   height: 1px;
-  margin: 10px 0;
+  margin: 5px 0;
   padding-bottom: 1px; // Ensures symmetry below.
+  display: block;
 
   &-full {
     width: stretch;
@@ -74,11 +74,12 @@
   .v-divider,
   .h-divider,
   .h-divider-full {
-    background-color: $c-border-dark;
+    background-color: $c-border-dark-secondary;
   }
 
   .gm-only {
     background-color: $c-bg-gm-dark;
+    border-top: 1px solid $c-border-dark-secondary;
   }
 
   .strive {
@@ -114,11 +115,12 @@
   .v-divider,
   .h-divider,
   .h-divider-full {
-    background-color: $c-border-light;
+    background-color: $c-border-light-secondary;
   }
 
   .gm-only {
     background-color: $c-bg-gm-light;
+    border-top: 1px solid $c-border-light-secondary;
   }
 
   .strive {
@@ -154,114 +156,56 @@
   overflow-x: hidden;
 }
 
-// Padding styles
-.pad {
+@mixin padding-template($padding) {
   &-xs {
-    padding: $padding-xs !important;
+    #{$padding}: $padding-xs !important;
   }
 
   &-sm {
-    padding: $padding-sm !important;
+    #{$padding}: $padding-sm !important;
   }
 
   &-md {
-    padding: $padding-md !important;
+    #{$padding}: $padding-md !important;
   }
 
   &-lg {
-    padding: $padding-lg !important;
+    #{$padding}: $padding-lg !important;
   }
 
   &-xl {
-    padding: $padding-xl !important;
+    #{$padding}: $padding-xl !important;
+  }
+};
+
+// Padding styles
+.pad {
+  @include padding-template(padding);
+
+  &-h {
+    @include padding-template(padding-left);
+    @include padding-template(padding-right);
   }
 
+  &-v {
+    @include padding-template(padding-top);
+    @include padding-template(padding-bottom);
+  }
+  
   &-b {
-    &-xs {
-      padding-bottom: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-bottom: $padding-sm !important;
-    }
-
-    &-md {
-      padding-bottom: $padding-md !important;
-    }
-
-    &-lg {
-      padding-bottom: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-bottom: $padding-xl !important;
-    }
+    @include padding-template(padding-bottom);
   }
-
+  
   &-t {
-    &-xs {
-      padding-top: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-top: $padding-sm !important;
-    }
-
-    &-md {
-      padding-top: $padding-md !important;
-    }
-
-    &-lg {
-      padding-top: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-top: $padding-xl !important;
-    }
+    @include padding-template(padding-top);
   }
-
+  
   &-l {
-    &-xs {
-      padding-left: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-left: $padding-sm !important;
-    }
-
-    &-md {
-      padding-left: $padding-md !important;
-    }
-
-    &-lg {
-      padding-left: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-left: $padding-xl !important;
-    }
+    @include padding-template(padding-left);
   }
-
+  
   &-r {
-    &-xs {
-      padding-right: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-right: $padding-sm !important;
-    }
-
-    &-md {
-      padding-right: $padding-md !important;
-    }
-
-    &-lg {
-      padding-right: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-right: $padding-xl !important;
-    }
+    @include padding-template(padding-right);
   }
 }
 
@@ -276,6 +220,21 @@
 .width-fill {
   width: 100%;
   min-width: inherit;
+}
+
+.width {
+  &-sm {
+    width: 3rem;
+    max-width: 3rem;
+  }
+  &-md {
+    width: 4rem;
+    max-width: 4rem;
+  }
+  &-lg {
+    width: 6rem;
+    max-width: 6rem;
+  }
 }
 
 .height-fill {

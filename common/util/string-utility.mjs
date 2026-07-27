@@ -34,7 +34,7 @@ export const StringUtil = {
    * @type {String}
    * @constant
    */
-  REGEX_PLACEHOLDER: /%\{(?<placeholder>[a-zA-Z0-9-_]+)\}/g,
+  REGEX_PLACEHOLDER: /%\{(?<placeholder>[^}]+)\}/g,
 
   /**
    * Every property corresponds to an HTML special character and its value 
@@ -108,7 +108,7 @@ export const StringUtil = {
    * ```
    * 
    * @param {String} str A string that contains placeholders. All placeholders must 
-   * follow the format `%{<placeholder>}`. 
+   * follow the format `%{<placeholder>}`. E. g. `"%{myPlaceholder}"`
    * @param {Object} replacements An object that must contain properties whose names match 
    * the exact placeholder names in the given string. Their value is the replacement. 
    * E. g. `{ firstName: "Bob", lastName: "Bauer" }`

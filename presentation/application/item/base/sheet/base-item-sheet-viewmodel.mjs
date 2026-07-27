@@ -216,14 +216,14 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
 
       // Ensure hot-keys. 
       this._editHotKeyListenerId = KEYBOARD.onKeyDown({
-        keyCode: KEY_CODES.E,
+        keyCodes: [KEY_CODES.E],
         modifier: MODIFIER_KEY_CODES.CTRL,
         handler: () => {
           this.enterEditMode();
         },
       });
       this._saveHotKeyListenerId = KEYBOARD.onKeyDown({
-        keyCode: KEY_CODES.S,
+        keyCodes: [KEY_CODES.S],
         modifier: MODIFIER_KEY_CODES.CTRL,
         handler: () => {
           this.saveEdits();
