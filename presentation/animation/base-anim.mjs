@@ -199,16 +199,22 @@ export default class BaseAnimation {
     const firstElement = elements[0];
 
     let width = 0;
+    let height = 0;
     for (const element of this.elements) {
       $(element).removeClass("hidden");
       const rect = SheetUtil.getElementRect(element);
+      
       if (rect.width > width) {
         width = rect.width;
       }
+      if (rect.height > height) {
+        height = rect.height;
+      }
+
       $(element).addClass("hidden");
     }
-    let style = `min-width: ${width}px; max-width: ${width}px;`;
-    const str = `<div id="anim-${this.id}" class="strive flex flex-row flex-middle slide-anim" style="${style}"></div>`;
+    let style = `width: ${width}px; height: ${height}px;`;
+    const str = `<div id="anim-${this.id}" class="strive slide-anim" style="${style}"></div>`;
     $(str).insertBefore(firstElement);
     this._container = $(`div#anim-${this.id}`);
 

@@ -5,53 +5,57 @@
   .enter {
     -webkit-animation: slide-in 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
             animation: slide-in 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    position: relative;
   }
   .exit {
     -webkit-animation: slide-out 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
             animation: slide-out 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-    position: absolute;
+    position: relative;
   }
 }
 
-$a: 150%;
+$initialSlideIn: -150%;
+$finalSlideIn: 0%;
 @-webkit-keyframes slide-in {
   0% {
-    -webkit-transform: translateY(-$a);
-            transform: translateY(-$a);
+    -webkit-transform: translateY($initialSlideIn);
+            transform: translateY($initialSlideIn);
   }
   100% {
-    -webkit-transform: translateY(0%);
-            transform: translateY(0%);
+    -webkit-transform: translateY($finalSlideIn);
+            transform: translateY($finalSlideIn);
   }
 }
 @keyframes slide-in {
   0% {
-    -webkit-transform: translateY(-$a);
-            transform: translateY(-$a);
+    -webkit-transform: translateY($initialSlideIn);
+            transform: translateY($initialSlideIn);
   }
   100% {
-    -webkit-transform: translateY(0%);
-            transform: translateY(0%);
+    -webkit-transform: translateY($finalSlideIn);
+            transform: translateY($finalSlideIn);
   }
 }
 
+$initialSlideOut: -100%;
+$finalSlideOut: 150%;
 @-webkit-keyframes slide-out {
   0% {
-    -webkit-transform: translateY(0%);
-            transform: translateY(0%);
+    -webkit-transform: translateY($initialSlideOut);
+            transform: translateY($initialSlideOut);
   }
   100% {
-    -webkit-transform: translateY($a);
-            transform: translateY($a);
+    -webkit-transform: translateY($finalSlideOut);
+            transform: translateY($finalSlideOut);
   }
 }
 @keyframes slide-out {
   0% {
-    -webkit-transform: translateY(0%);
-            transform: translateY(0%);
+    -webkit-transform: translateY($initialSlideOut);
+            transform: translateY($initialSlideOut);
   }
   100% {
-    -webkit-transform: translateY($a);
-            transform: translateY($a);
+    -webkit-transform: translateY($finalSlideOut);
+            transform: translateY($finalSlideOut);
   }
 }
