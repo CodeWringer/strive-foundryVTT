@@ -1,9 +1,9 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
-import ModalDialog from "../modal-dialog/modal-dialog.mjs";
+import BaseDialog from "../base-dialog/base-dialog.mjs";
 import UiDebugDialogViewModel from "./ui-debug-dialog-viewmodel.mjs";
 
-export default class UiDebugDialog extends ModalDialog {
+export default class UiDebugDialog extends BaseDialog {
   /** @override */
   static DEFAULT_OPTIONS = {
     position: { width: 600, height: 800, },

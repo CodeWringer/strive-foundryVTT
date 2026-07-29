@@ -1,12 +1,13 @@
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/model/document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../../../business/model/document/document-fetcher/document-fetcher.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../../../business/model/document/general-document-types.mjs";
-import TransientDocument from "../../../../business/model/document/transient-document.mjs";
+import { ITEM_TYPES } from "../../../../business/model/domain/const/item-types.mjs";
 import Reference from "../../../../business/model/domain/reference.mjs";
 import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { DragDropHandler } from "../../../util/drag-drop/drag-drop-handler.mjs";
 import { SheetUtil } from "../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
@@ -39,19 +40,33 @@ export default class InputReferenceViewModel extends InputViewModel {
    */
   set value(value) {
     super.value = value;
-    
-    this.#inputElement.empty();
-    
+
     const readModeElement = this.element.find("> .read-mode");
     readModeElement.empty();
-    
+
+    let newContent = "";
     if (ValidationUtil.isDefined(this.value)) {
       this.#inputElement.val(this.value.name);
-      readModeElement.append(`<span class="flex-grow">${value.name}</span><i class="ico ico-chain-link lg"></i>`);
+      newContent = `<span class="flex-grow">${value.name}</span><i class="ico ico-chain-link lg"></i>`;
     } else {
-      readModeElement.append(`<span class="flex-grow"></span><i class="ico ico-chain-link-broken lg"></i>`);
+      this.#inputElement.val("");
+      newContent = `<span class="flex-grow"></span><i class="ico ico-chain-link-broken lg"></i>`;
     }
+    readModeElement.append(newContent);
+
+    new Promise(async (resolve) => {
+      this._referenced = await this.getReferenced();
+      this._updateIcon();
+      resolve();
+    });
   }
+
+  /**
+   * Returns the maximum number of search results to display. 
+   * @type {Number}
+   * @readonly
+   */
+  get maxNumberOfEntries() { return 5; }
 
   /**
    * Initialized late - in `activateListeners`!
@@ -68,6 +83,14 @@ export default class InputReferenceViewModel extends InputViewModel {
    * @private
    */
   #inputElement = undefined;
+
+  /**
+   * Initialized late - in `activateListeners`!
+   * @type {JQuery}
+   * @readonly
+   * @private
+   */
+  #clearButtonElement = undefined;
 
   /**
    * @type {Boolean}
@@ -107,6 +130,23 @@ export default class InputReferenceViewModel extends InputViewModel {
       ...args,
       autoHandleEvents: false,
     });
+
+    this.dragDropHandler = new DragDropHandler({
+      elementId: this.id,
+      enableReceiving: true,
+      onReceive: (event, data) => {
+        if (data.type === ITEM_TYPES.skill) {
+          this.value = new Reference({
+            uuid: data.id,
+            name: data.name,
+          });
+        }
+      },
+      onDragOver: (event, data) => {
+        console.log(event);
+        console.log(data);
+      },
+    });
   }
 
   /**
@@ -117,13 +157,41 @@ export default class InputReferenceViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
+    this._referenced = await this.getReferenced();
+    this._updateIcon();
+
+    this._onDragStartId = DragDropHandler.onDragStart((event, data) => {
+      if (data.type === ITEM_TYPES.skill) {
+        this.element.addClass("drag-accept");
+      }
+    });
+    this._onDragEndId = DragDropHandler.onDragEnd((event) => {
+      this.element.removeClass("drag-accept");
+    });
+
     this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
+    for (let i = 0; i < this.maxNumberOfEntries; i++) {
+      this.#menuElement.append(`<li class="grid-2col hidden" style="max-width: 50rem;" data-index="${i}"></li>`);
+      const menuItem = this.#menuElement.find(`li[data-index=${i}]`);
+      $(menuItem).click((event) => {
+        event.preventDefault();
+        const id = $(menuItem).attr("data-id");
+        const selected = this._searchableItems.find(it => it.id === id);
+        this.closeMenu();
+        this.value = new Reference({
+          uuid: selected.id,
+          name: selected.name,
+        });
+      });
+    }
+
     this.#inputElement = $(this.element).find("input");
     this.#inputElement.on("focus", () => {
       this.openMenu();
     });
-    this.#inputElement.on("focusout", () => {
-      this.closeMenu();
+    this.#inputElement.on("focusout", (event) => {
+      // TODO #764
+      // this.closeMenu();
     });
     this.#inputElement.on("input", async (event) => {
       this.updateOptions();
@@ -137,14 +205,38 @@ export default class InputReferenceViewModel extends InputViewModel {
       }
     });
 
-    this._referenced = await this.getReferenced();
-    this._updateIcon();
+    this.#clearButtonElement = $(this.element).find(`a#${this.id}-clear`);
+    this.#clearButtonElement.click(() => {
+      this.value = null;
+      this.closeMenu();
+    });
   }
 
   /** @override */
   dispose() {
-    this.closeMenu();
     super.dispose();
+    this.closeMenu();
+    DragDropHandler.offDragStart(this._onDragStartId);
+    DragDropHandler.offDragEnd(this._onDragEndId);
+  }
+
+  /**
+   * Returns the referenced document instance, if possible. 
+   * @returns {Promise<Document | null>}
+   * @async
+   * @protected
+   */
+  async getReferenced() {
+    if (ValidationUtil.isDefined(this.value)) {
+      const idParts = this.value.uuid.split(".");
+      const id = idParts[idParts.length - 1];
+      return await new DocumentFetcher().find({
+        id: id,
+        name: this.value.name,
+      });
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -154,14 +246,12 @@ export default class InputReferenceViewModel extends InputViewModel {
   updateOptions() {
     const inputValue = this.#inputElement.val();
 
-    this.#menuElement.empty();
     if ((inputValue + "").length < 3) {
       return;
     }
-    this.#menuElement.append('<li class="flex flex-center"><i class="fas fa-spinner anim-spin font-size-lg"></i></li>');
 
-    const searchableItems = this._getAllSearchableItems();
-    const searchItems = searchableItems.map(it => new SearchItem({
+    this._searchableItems = this._getAllSearchableItems();
+    const searchItems = this._searchableItems.map(it => new SearchItem({
       id: it.id,
       term: it.name,
     }));
@@ -170,31 +260,26 @@ export default class InputReferenceViewModel extends InputViewModel {
       searchTerm: this.#inputElement.val(),
       searchMode: SEARCH_MODES.FUZZY,
     });
-    let topFive = ArrayUtil.arrayTake(scores, 0, 5);
-    topFive = ArrayUtil.arrayTakeWhen(topFive, (it) => it.score > 0 && it.deviation < 3);
-    const topFiveMapped = topFive.map(it => searchableItems.find(searchableItem => it.id === searchableItem.id));
+    let top = ArrayUtil.arrayTake(scores, 0, this.maxNumberOfEntries);
+    top = ArrayUtil.arrayTakeWhen(top, (it) => it.score > 0 && it.deviation < 3);
+    const topMapped = top.map(it => this._searchableItems.find(searchableItem => it.id === searchableItem.id));
 
-    this.#menuElement.empty();
+    const menuItems = this.#menuElement.find("> li");
+    for (let i = 0; i < menuItems.length; i++) {
+      const menuItem = menuItems[i];
 
-    for (const element of topFiveMapped) {
-      const sourceLoca = StringUtil.format2(StringUtil.getLoca("system.general.reference.referenceFrom"), {
-        contentType: StringUtil.getLoca(`TYPES.Item.${element.contentType}`),
-        pack: element.pack,
-      })
-      this.#menuElement.append(`<li class="grid-2col" style="max-width: 50rem;" data-id="${element.id}"><span>${element.name}</span><span class="font-size-sm"> (${sourceLoca})</span></li>`);
-    }
-
-    const menuItems = this.#menuElement.find("li");
-    for (const menuItem of menuItems) {
-      menuItem.click(() => {
-        const id = $(menuItem).attr("data-id");
-        const selected = allDocuments.find(it => it.id === id);
-        this.closeMenu();
-        this.value = new Reference({
-          uuid: selected.id,
-          name: selected.name,
+      if (i < topMapped.length) {
+        const topMappedItem = topMapped[i];
+        const sourceLoca = StringUtil.format2(StringUtil.getLoca("system.general.reference.referenceFrom"), {
+          contentType: StringUtil.getLoca(`TYPES.Item.${topMappedItem.contentType}`),
+          pack: topMappedItem.pack,
         });
-      });
+        $(menuItem).attr("data-id", topMappedItem.id);
+        $(menuItem).html(`<span>${topMappedItem.name}</span><span class="font-size-sm"> (${sourceLoca})</span>`);
+        $(menuItem).removeClass("hidden");
+      } else {
+        $(menuItem).addClass("hidden");
+      }
     }
   }
 
@@ -229,7 +314,7 @@ export default class InputReferenceViewModel extends InputViewModel {
     this.#menuElement.addClass("hidden");
     this.#menuElement.detach();
     this.element.append(this.#menuElement);
-    
+
     this.#isMenuOpen = false;
   }
 
@@ -242,23 +327,6 @@ export default class InputReferenceViewModel extends InputViewModel {
       this.closeMenu();
     } else {
       this.openMenu();
-    }
-  }
-
-  /**
-   * Returns the referenced document instance, if possible. 
-   * @returns {Promise<Document | null>}
-   * @async
-   * @protected
-   */
-  async getReferenced() {
-    if (ValidationUtil.isDefined(this.value)) {
-      return await new DocumentFetcher().find({
-        id: this.value.id,
-        name: this.value.name,
-      });
-    } else {
-      return null;
     }
   }
 

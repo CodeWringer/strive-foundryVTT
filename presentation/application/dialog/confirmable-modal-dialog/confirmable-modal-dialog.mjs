@@ -13,7 +13,7 @@ import ModalDialog from "../modal-dialog/modal-dialog.mjs";
  * @abstract Inheritors _should_ override:
  * * `get id`
  * 
- * @property {ModalDialogViewModel} viewModel
+ * @property {BaseDialogViewModel} viewModel
  * @property {Boolean} easyDismissal If `true`, allows for easier dialog 
  * dismissal, by clicking anywhere on the backdrop element. 
  * * Default `true`

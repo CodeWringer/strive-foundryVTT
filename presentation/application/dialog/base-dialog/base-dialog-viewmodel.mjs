@@ -6,7 +6,7 @@ import PreparedSection from "../../component/dynamic-component/prepared-section.
 
 /**
  * Represents the abstract base class for all view models that represent 
- * an item sheet. 
+ * a dialog. 
  * 
  * @extends ViewModel
  * 
@@ -18,12 +18,12 @@ import PreparedSection from "../../component/dynamic-component/prepared-section.
  * @property {Array<PreparedSection>} preparedSections
  * @property {String | undefined} initialFocus
  */
-export default class ModalDialogViewModel extends ViewModel {
+export default class BaseDialogViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.dialog.modal; }
+  static get TEMPLATE() { return TEMPLATES.application.dialog.base; }
 
   /** @override */
-  get clazz() { return ModalDialogViewModel; }
+  get clazz() { return BaseDialogViewModel; }
 
   /**
    * @param {Object} args The arguments object. 
