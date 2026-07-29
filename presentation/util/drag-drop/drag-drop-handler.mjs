@@ -2,6 +2,8 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/model/document/do
 import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs";
 import { common } from "../../../common/_module.mjs";
 import { ArrayUtil } from "../../../common/util/array-utility.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
 import DragData from "./drag-data.mjs";
 
 /**
@@ -132,7 +134,7 @@ export class DragDropHandler {
    * @private
    */
   static #registerGlobalListener(dragSelector) {
-    const gameItemsDragDrop = new foundry.applications.ux.DragDrop({
+    const foundryDragDrop = new FoundryWrapper.DragDrop({
       dragSelector: dragSelector,
       callbacks: {
         dragstart: async (event) => {
@@ -164,7 +166,7 @@ export class DragDropHandler {
         }
       },
     });
-    gameItemsDragDrop.bind($("body")[0]);
+    foundryDragDrop.bind($("body")[0]);
   }
 
   /**
@@ -176,14 +178,13 @@ export class DragDropHandler {
    * @param {Array<String> | undefined} args.acceptedTypes A list of accepted reference types. 
    * Only those provided will receive events. If left empty, allows all types. 
    * E. g. `[ITEM_TYPES.skill]` 
-   * @param {Boolean | undefined} args.enableDragging If `true`, allows the element to be dragged. 
-   * * default `false`
-   * @param {Boolean | undefined} args.enableReceiving If `true`, allows the element to receive other, dragged elements. 
-   * * default `false`
    * @param {String | undefined} args.dragOverClass CSS class to automatically add to the element 
    * when something is dragged over it. 
    * * default `"dragover"`
    * 
+   * @param {Function | undefined} args.mayReceive Invoked to determine whether the currently dragged data 
+   * is applicable. Must return a boolean value. Arguments: 
+   * * `data: DragData`
    * @param {Function | undefined} args.onDragStart Async callback that is invoked when the dragging of 
    * the element begins. Arguments:
    * * `event: Event`
@@ -205,14 +206,13 @@ export class DragDropHandler {
     this.elementId = args.elementId;
     this.dragData = args.dragData;
     this.acceptedTypes = args.acceptedTypes ?? [];
-    this.enableDragging = args.enableDragging ?? false;
-    this.enableReceiving = args.enableReceiving ?? false;
     this.dragOverClass = args.dragOverClass ?? DragDropHandler.DEFAULT_DRAGOVER_CSS_CLASS;
 
-    this.onDragStart = args.onDragStart ?? (async () => { });
-    this.onDragOver = args.onDragOver ?? (async () => { });
-    this.onDragLeave = args.onDragLeave ?? (async () => { });
-    this.onReceive = args.onReceive ?? (async () => { });
+    this.mayReceive = args.mayApply ?? (() => true);
+    this.onDragStart = args.onDragStart ?? null;
+    this.onDragOver = args.onDragOver ?? null;
+    this.onDragLeave = args.onDragLeave ?? null;
+    this.onReceive = args.onReceive ?? null;
   }
 
   /**
@@ -226,10 +226,11 @@ export class DragDropHandler {
       return;
     }
 
-    if (this.enableDragging) {
+    // Events for when the element is a drag source.
+
+    if (ValidationUtil.isDefined(this.onDragStart)) {
       // Ensure HTML attribute for draggability is set. 
       element.attr("draggable", "true");
-
       element.bind("dragstart", (event) => {
         DragDropHandler.#draggedData = this.dragData;
         this.onDragStart(event, this.dragData);
@@ -237,7 +238,9 @@ export class DragDropHandler {
           handler(event, this.dragData);
         }
       });
+    }
 
+    if (ValidationUtil.isDefined(this.onDragEnd)) {
       element.bind("dragend", (event) => {
         for (const [id, handler] of DragDropHandler.#globalListeners.onDragEnd) {
           handler(event);
@@ -246,24 +249,33 @@ export class DragDropHandler {
       });
     }
 
-    if (this.enableReceiving) {
+    // Events for when the element is a drag target/receiver.
+
+    if (ValidationUtil.isDefined(this.onDragOver)) {
       element.bind("dragover", (event) => {
         if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+        if (!this.mayReceive(DragDropHandler.#draggedData)) return;
 
         element.addClass(this.dragOverClass);
         this.onDragOver(event, DragDropHandler.#draggedData);
       });
+    }
 
+    if (ValidationUtil.isDefined(this.onDragLeave)) {
       element.bind("dragleave", (event) => {
         if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+        if (!this.mayReceive(DragDropHandler.#draggedData)) return;
 
         element.removeClass(this.dragOverClass);
         this.onDragLeave(event, DragDropHandler.#draggedData);
       });
+    }
 
+    if (ValidationUtil.isDefined(this.onReceive)) {
       element.bind("drop", async (event) => {
         event.preventDefault(); // Prevent effects of a normal click. 
         if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+        if (!this.mayReceive(DragDropHandler.#draggedData)) return;
 
         await this.onReceive(event, DragDropHandler.#draggedData);
 
@@ -271,5 +283,26 @@ export class DragDropHandler {
         DragDropHandler.#draggedData = null;
       });
     }
+
+    // React to global drag start and end. 
+
+    this._onDragStartId = DragDropHandler.onDragStart((event, data) => {
+      if (!this.mayReceive(data)) return;
+
+      element.addClass("drag-accept");
+    }, this.acceptedTypes);
+    this._onDragEndId = DragDropHandler.onDragEnd((event) => {
+      element.removeClass("drag-accept");
+    }, this.acceptedTypes);
+  }
+
+  /**
+   * Disposes of any working data.
+   * 
+   * This is a clean-up operation that should only be called when the instance of this class is no longer needed!
+   */
+  dispose() {
+    DragDropHandler.offDragStart(this._onDragStartId);
+    DragDropHandler.offDragEnd(this._onDragEndId);
   }
 }

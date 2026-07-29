@@ -12,6 +12,9 @@ import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
+ * @property {Reference | null} value The current value. 
+ * @property {String} placeholder A localized placeholder text to display while the input is empty. 
+ * 
  * @extends InputViewModel
  */
 export default class InputReferenceViewModel extends InputViewModel {
@@ -126,6 +129,7 @@ export default class InputReferenceViewModel extends InputViewModel {
    * @param {Array<String> | undefined} args.acceptedTypes A list of accepted reference types. 
    * Only those provided will be searchable and drag-droppable. If left empty, allows all types. 
    * E. g. `[ITEM_TYPES.skill]`
+   * @param {String | undefined} args.placeholder A placeholder text to display while the input is empty. 
    */
   constructor(args = {}) {
     super({
@@ -136,17 +140,20 @@ export default class InputReferenceViewModel extends InputViewModel {
     this.acceptedTypes = args.acceptedTypes ?? [];
     this.dragDropHandler = new DragDropHandler({
       elementId: this.id,
-      enableReceiving: true,
       acceptedTypes: this.acceptedTypes,
+      mayReceive: () => {
+        return this.isEditable;
+      },
       onReceive: (event, data) => {
         if (!this.isEditable) return;
-        
+
         this.value = new Reference({
           uuid: data.id,
           name: data.name,
         });
       },
     });
+    this.placeholder = args.placeholder ?? "";
   }
 
   /**
@@ -161,16 +168,6 @@ export default class InputReferenceViewModel extends InputViewModel {
     this._updateIcon();
 
     this.dragDropHandler.activateListeners(html);
-    this._onDragStartId = DragDropHandler.onDragStart((event, data) => {
-      if (!this.isEditable) return;
-
-      this.element.addClass("drag-accept");
-    }, this.acceptedTypes);
-    this._onDragEndId = DragDropHandler.onDragEnd((event) => {
-      if (!this.isEditable) return;
-
-      this.element.removeClass("drag-accept");
-    }, this.acceptedTypes);
 
     this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
     for (let i = 0; i < this.maxNumberOfEntries; i++) {
@@ -178,9 +175,12 @@ export default class InputReferenceViewModel extends InputViewModel {
       const menuItem = this.#menuElement.find(`li[data-index=${i}]`);
       $(menuItem).click((event) => {
         event.preventDefault();
-
+        
         const id = $(menuItem).attr("data-id");
         const selected = this._searchableItems.find(it => it.id === id);
+        
+        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, selected.contentType)) return;
+
         this.value = new Reference({
           uuid: selected.id,
           name: selected.name,
@@ -238,8 +238,7 @@ export default class InputReferenceViewModel extends InputViewModel {
   dispose() {
     super.dispose();
     this.closeMenu();
-    DragDropHandler.offDragStart(this._onDragStartId);
-    DragDropHandler.offDragEnd(this._onDragEndId);
+    this.dragDropHandler.dispose();
   }
 
   /**

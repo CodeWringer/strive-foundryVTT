@@ -131,6 +131,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
             value: this._vmReferenceValue,
             isEditable: false,
             acceptedTypes: [ITEM_TYPES.language],
+            placeholder: "Choose a Language",
             toolTip: new ViewModelToolTipDefinition({
               localized: "Reference",
             }),
