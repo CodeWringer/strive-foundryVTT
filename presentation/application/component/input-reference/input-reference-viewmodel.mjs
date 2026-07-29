@@ -1,7 +1,6 @@
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../../business/model/document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../../../business/model/document/document-fetcher/document-fetcher.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../../../business/model/document/general-document-types.mjs";
-import { ITEM_TYPES } from "../../../../business/model/domain/const/item-types.mjs";
 import Reference from "../../../../business/model/domain/reference.mjs";
 import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs";
@@ -124,6 +123,9 @@ export default class InputReferenceViewModel extends InputViewModel {
    * * `viewModel: {ViewModel}`
    * 
    * @param {Reference | undefined} args.value
+   * @param {Array<String> | undefined} args.acceptedTypes A list of accepted reference types. 
+   * Only those provided will be searchable and drag-droppable. If left empty, allows all types. 
+   * E. g. `[ITEM_TYPES.skill]`
    */
   constructor(args = {}) {
     super({
@@ -131,20 +133,18 @@ export default class InputReferenceViewModel extends InputViewModel {
       autoHandleEvents: false,
     });
 
+    this.acceptedTypes = args.acceptedTypes ?? [];
     this.dragDropHandler = new DragDropHandler({
       elementId: this.id,
       enableReceiving: true,
+      acceptedTypes: this.acceptedTypes,
       onReceive: (event, data) => {
-        if (data.type === ITEM_TYPES.skill) {
-          this.value = new Reference({
-            uuid: data.id,
-            name: data.name,
-          });
-        }
-      },
-      onDragOver: (event, data) => {
-        console.log(event);
-        console.log(data);
+        if (!this.isEditable) return;
+        
+        this.value = new Reference({
+          uuid: data.id,
+          name: data.name,
+        });
       },
     });
   }
@@ -160,14 +160,17 @@ export default class InputReferenceViewModel extends InputViewModel {
     this._referenced = await this.getReferenced();
     this._updateIcon();
 
+    this.dragDropHandler.activateListeners(html);
     this._onDragStartId = DragDropHandler.onDragStart((event, data) => {
-      if (data.type === ITEM_TYPES.skill) {
-        this.element.addClass("drag-accept");
-      }
-    });
+      if (!this.isEditable) return;
+
+      this.element.addClass("drag-accept");
+    }, this.acceptedTypes);
     this._onDragEndId = DragDropHandler.onDragEnd((event) => {
+      if (!this.isEditable) return;
+
       this.element.removeClass("drag-accept");
-    });
+    }, this.acceptedTypes);
 
     this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
     for (let i = 0; i < this.maxNumberOfEntries; i++) {
@@ -175,23 +178,42 @@ export default class InputReferenceViewModel extends InputViewModel {
       const menuItem = this.#menuElement.find(`li[data-index=${i}]`);
       $(menuItem).click((event) => {
         event.preventDefault();
+
         const id = $(menuItem).attr("data-id");
         const selected = this._searchableItems.find(it => it.id === id);
-        this.closeMenu();
         this.value = new Reference({
           uuid: selected.id,
           name: selected.name,
         });
+
+        this.closeMenu();
       });
     }
+    // These event handlers ensure a click on a menu item doesn't cause the menu to be closed 
+    // in the "focusout" handler, which would prevent the click events from firing correctly. 
+    this.#menuElement.on("mouseenter", (event) => {
+      this._hoverOverMenu = true;
+    });
+    this.#menuElement.on("mouseleave", (event) => {
+      this._hoverOverMenu = false;
+    });
 
     this.#inputElement = $(this.element).find("input");
     this.#inputElement.on("focus", () => {
       this.openMenu();
     });
     this.#inputElement.on("focusout", (event) => {
-      // TODO #764
-      // this.closeMenu();
+      if (!this._hoverOverMenu) {
+        this.closeMenu();
+        if (!ValidationUtil.isDefined(this._referenced)) {
+          // Ensures an unconfirmed reference isn't left half-completed. 
+          this.value = null;
+        } else {
+          // Ensures the user can't leave half-completed references. 
+          this.#inputElement.val(this.value.name);
+        }
+      }
+
     });
     this.#inputElement.on("input", async (event) => {
       this.updateOptions();

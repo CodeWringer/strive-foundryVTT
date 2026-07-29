@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../../business/model/domain/const/item-types.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import ChoiceOption from "../../../model/choice-option.mjs";
 import DynamicComponent from "../../component/dynamic-component/dynamic-component.mjs";
@@ -129,6 +130,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
             parent: parent,
             value: this._vmReferenceValue,
             isEditable: false,
+            acceptedTypes: [ITEM_TYPES.language],
             toolTip: new ViewModelToolTipDefinition({
               localized: "Reference",
             }),

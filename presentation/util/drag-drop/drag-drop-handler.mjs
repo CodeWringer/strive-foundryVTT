@@ -1,4 +1,7 @@
+import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/model/document/document-fetcher/document-collection-source.mjs";
+import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs";
 import { common } from "../../../common/_module.mjs";
+import { ArrayUtil } from "../../../common/util/array-utility.mjs";
 import DragData from "./drag-data.mjs";
 
 /**
@@ -16,11 +19,11 @@ export class DragDropHandler {
   /**
    * Global transfer property. To allow for easier data transmission from one DragDropHandler to another. 
    * 
-   * @type {Object | undefined}
+   * @type {Object | null}
    * @static
    * @private
    */
-  static #draggedData;
+  static #draggedData = null;
 
   /**
    * @type {Object}
@@ -34,21 +37,145 @@ export class DragDropHandler {
      */
     eventId: 0,
     /**
-     * @type {Map<Number, Function<void>>}
+     * The object is expected to have the properties:
+     * * `handler: Function<void>`
+     * * `acceptedTypes: Array<String>`
+     * @type {Map<Number, Object>}
      */
     onDragStart: new Map(),
     /**
-     * @type {Map<Number, Function<void>>}
+     * The object is expected to have the properties:
+     * * `handler: Function<void>`
+     * * `acceptedTypes: Array<String>`
+     * @type {Map<Number, Object>}
      */
     onDragEnd: new Map(),
   };
+
+  /**
+   * Registers the given `handler` function to be invoked when *any* drag operation 
+   * begins, globally. 
+   * @param {Function<void>} handler Invoked when any global drag event begins. Arguments:
+   * * `event: Event`
+   * * `data: DragData`
+   * @param {Array<String>} acceptedTypes A list of accepted reference types. 
+   * Only those provided will receive events. If left empty, allows all types. 
+   * E. g. `[ITEM_TYPES.skill]` 
+   * @returns {Number} An ID that may be passed to `DragDropHandler.offDragStart` 
+   * to unregister the `handler` for cleanup. 
+   * @static
+   */
+  static onDragStart(handler, acceptedTypes = []) {
+    const newId = DragDropHandler.#globalListeners.eventId++;
+    this.#globalListeners.onDragStart.set(newId, {
+      handler: handler,
+      acceptedTypes: acceptedTypes,
+    });
+    return newId;
+  }
+
+  /**
+   * Unregisters the drag start event with the given `id`. 
+   * @param {Number} id ID of the event to unregister. 
+   * @static
+   */
+  static offDragStart(id) {
+    this.#globalListeners.onDragStart.delete(id);
+  }
+
+  /**
+   * Registers the given `handler` function to be invoked when *any* drag operation 
+   * ends, globally. 
+   * @param {Function<void>} handler Invoked when any global drag event ends. Arguments:
+   * * `event: Event`
+   * @param {Array<String>} acceptedTypes A list of accepted reference types. 
+   * Only those provided will receive events. If left empty, allows all types. 
+   * E. g. `[ITEM_TYPES.skill]` 
+   * @returns {Number} An ID that may be passed to `DragDropHandler.offDragEnd` 
+   * to unregister the `handler` for cleanup. 
+   * @static
+   */
+  static onDragEnd(handler, acceptedTypes = []) {
+    const newId = DragDropHandler.#globalListeners.eventId++;
+    this.#globalListeners.onDragEnd.set(newId, {
+      handler: handler,
+      acceptedTypes: acceptedTypes,
+    });
+    return newId;
+  }
+
+  /**
+   * Unregisters the drag end event with the given `id`. 
+   * @param {Number} id ID of the event to unregister. 
+   * @static
+   */
+  static offDragEnd(id) {
+    this.#globalListeners.onDragEnd.delete(id);
+  }
+
+  /**
+   * To be invoked **once**, by the system during the "ready" phase of system setup. 
+   * Handles setting up global event listeners. 
+   * @static
+   */
+  static ready() {
+    // world & compendium actors
+    DragDropHandler.#registerGlobalListener(".directory-actor");
+    // world & compendium items
+    DragDropHandler.#registerGlobalListener(".directory-item");
+  }
+
+  /**
+   * Registers a global dragstart and dragend listener for the given `dragSelector`. 
+   * @param {String} dragSelector A CSS selector. E. g. `".directory-item"`
+   * @static
+   * @private
+   */
+  static #registerGlobalListener(dragSelector) {
+    const gameItemsDragDrop = new foundry.applications.ux.DragDrop({
+      dragSelector: dragSelector,
+      callbacks: {
+        dragstart: async (event) => {
+          const sourceElement = $(event.srcElement);
+          const id = sourceElement.attr("data-entry-id");
+          const document = await new DocumentFetcher().find({
+            id: id,
+            source: DOCUMENT_COLLECTION_SOURCES.world,
+          });
+          DragDropHandler.#draggedData = new DragData({
+            id: id,
+            name: document.name,
+            type: document.type,
+          });
+
+          for (const [id, obj] of DragDropHandler.#globalListeners.onDragStart) {
+            if (obj.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(obj.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) continue;
+
+            obj.handler(event, DragDropHandler.#draggedData);
+          }
+        },
+        dragend: (event) => {
+          for (const [id, obj] of DragDropHandler.#globalListeners.onDragEnd) {
+            if (obj.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(obj.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) continue;
+
+            obj.handler(event);
+          }
+          DragDropHandler.#draggedData = null;
+        }
+      },
+    });
+    gameItemsDragDrop.bind($("body")[0]);
+  }
 
   /**
    * @param {Object} args 
    * @param {String | undefined} args.elementId ID of the element to target. 
    * If left undefined, will use the root element of the HTML passed to the `activateListeners` method. 
    * @param {DragData | undefined} args.dragData A data object that represents the element when it is dragged. This will be passed 
-   * to the `onReceive` callback of a receiver. 
+   * to the `onReceive` callback of a receiver.
+   * @param {Array<String> | undefined} args.acceptedTypes A list of accepted reference types. 
+   * Only those provided will receive events. If left empty, allows all types. 
+   * E. g. `[ITEM_TYPES.skill]` 
    * @param {Boolean | undefined} args.enableDragging If `true`, allows the element to be dragged. 
    * * default `false`
    * @param {Boolean | undefined} args.enableReceiving If `true`, allows the element to receive other, dragged elements. 
@@ -77,70 +204,22 @@ export class DragDropHandler {
   constructor(args = {}) {
     this.elementId = args.elementId;
     this.dragData = args.dragData;
+    this.acceptedTypes = args.acceptedTypes ?? [];
     this.enableDragging = args.enableDragging ?? false;
     this.enableReceiving = args.enableReceiving ?? false;
     this.dragOverClass = args.dragOverClass ?? DragDropHandler.DEFAULT_DRAGOVER_CSS_CLASS;
 
-    this.onDragStart = args.onDragStart ?? (async () => {});
-    this.onDragOver = args.onDragOver ?? (async () => {});
-    this.onDragLeave = args.onDragLeave ?? (async () => {});
-    this.onReceive = args.onReceive ?? (async () => {});
-  }
-
-  /**
-   * Registers the given `handler` function to be invoked when *any* drag operation 
-   * begins, globally. 
-   * @param {Function<void>} handler Invoked when any global drag event begins. Arguments:
-   * * `event: Event`
-   * * `data: DragData`
-   * @returns {Number} An ID that may be passed to `DragDropHandler.offDragStart` 
-   * to unregister the `handler` for cleanup. 
-   * @static
-   */
-  static onDragStart(handler) {
-    const newId = DragDropHandler.#globalListeners.eventId++;
-    this.#globalListeners.onDragStart.set(newId, handler);
-    return newId;
-  }
-  
-  /**
-   * Unregisters the drag start event with the given `id`. 
-   * @param {Number} id ID of the event to unregister. 
-   * @static
-   */
-  static offDragStart(id) {
-    this.#globalListeners.onDragStart.delete(id);
-  }
-
-  /**
-   * Registers the given `handler` function to be invoked when *any* drag operation 
-   * ends, globally. 
-   * @param {Function<void>} handler Invoked when any global drag event ends. Arguments:
-   * * `event: Event`
-   * @returns {Number} An ID that may be passed to `DragDropHandler.offDragEnd` 
-   * to unregister the `handler` for cleanup. 
-   * @static
-   */
-  static onDragEnd(handler) {
-    const newId = DragDropHandler.#globalListeners.eventId++;
-    this.#globalListeners.onDragEnd.set(newId, handler);
-    return newId;
-  }
-  
-  /**
-   * Unregisters the drag end event with the given `id`. 
-   * @param {Number} id ID of the event to unregister. 
-   * @static
-   */
-  static offDragEnd(id) {
-    this.#globalListeners.onDragEnd.delete(id);
+    this.onDragStart = args.onDragStart ?? (async () => { });
+    this.onDragOver = args.onDragOver ?? (async () => { });
+    this.onDragLeave = args.onDragLeave ?? (async () => { });
+    this.onReceive = args.onReceive ?? (async () => { });
   }
 
   /**
    * @param {JQuery} html 
    */
   activateListeners(html) {
-    const element = common.util.validation.isDefined(this.elementId) ? html.find(`#${this.elementId}`) : html;
+    const element = common.util.validation.isDefined(this.elementId) ? $(html).find(`#${this.elementId}`) : html;
 
     if (!common.util.validation.isDefined(element) || element.length === 0) {
       game.strive.logger.logWarn(`Failed to find drag drop element '${this.elementId}'`);
@@ -150,7 +229,7 @@ export class DragDropHandler {
     if (this.enableDragging) {
       // Ensure HTML attribute for draggability is set. 
       element.attr("draggable", "true");
-  
+
       element.bind("dragstart", (event) => {
         DragDropHandler.#draggedData = this.dragData;
         this.onDragStart(event, this.dragData);
@@ -158,33 +237,38 @@ export class DragDropHandler {
           handler(event, this.dragData);
         }
       });
-      
+
       element.bind("dragend", (event) => {
-        DragDropHandler.#draggedData = undefined;
         for (const [id, handler] of DragDropHandler.#globalListeners.onDragEnd) {
           handler(event);
         }
+        DragDropHandler.#draggedData = null;
       });
     }
-    
+
     if (this.enableReceiving) {
       element.bind("dragover", (event) => {
+        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+
         element.addClass(this.dragOverClass);
         this.onDragOver(event, DragDropHandler.#draggedData);
       });
 
       element.bind("dragleave", (event) => {
+        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+
         element.removeClass(this.dragOverClass);
         this.onDragLeave(event, DragDropHandler.#draggedData);
       });
 
       element.bind("drop", async (event) => {
         event.preventDefault(); // Prevent effects of a normal click. 
-  
+        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+
         await this.onReceive(event, DragDropHandler.#draggedData);
-        
+
         element.removeClass(this.dragOverClass);
-        DragDropHandler.#draggedData = undefined;
+        DragDropHandler.#draggedData = null;
       });
     }
   }

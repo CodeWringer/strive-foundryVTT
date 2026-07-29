@@ -31,6 +31,7 @@ export const util = {
    */
   ready: () => {
     KEYBOARD.init();
+    DragDropHandler.ready();
   },
   setup: () => {
     // Initialize global Handlebars helpers and partials.
