@@ -300,6 +300,9 @@
           }
         },
         "healProgress": "Healing Progress (Current / Required)"
+      },
+      "mutation": {
+        "mutation": "Mutation"
       }
     }
   }

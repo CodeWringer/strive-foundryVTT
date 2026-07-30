@@ -3,12 +3,12 @@ import InputRichTextViewModel from "../../component/input-rich-text/input-rich-t
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 
-export default class LanguageContentViewModel extends ViewModel {
+export default class MutationContentViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.item.language.header; }
+  static get TEMPLATE() { return TEMPLATES.application.item.mutation.header; }
 
   /** @override */
-  get clazz() { return LanguageContentViewModel; }
+  get clazz() { return MutationContentViewModel; }
 
   /**
    * @param {Object} args
@@ -18,7 +18,7 @@ export default class LanguageContentViewModel extends ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * 
-   * @param {TransientLanguage} args.document The represented transient document instance. 
+   * @param {TransientMutation} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {

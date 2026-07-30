@@ -19,6 +19,9 @@ import { ITEM_TYPES } from "../../business/model/domain/const/item-types.mjs";
 import IllnessContentViewModel from "./item/illness/illness-content-viewmodel.mjs";
 import IllnessItemSheetViewModel from "./item/illness/illness-item-sheet-viewmodel.mjs";
 import IllnessItemSheet from "./item/illness/illness-item-sheet.mjs";
+import MutationContentViewModel from "./item/mutation/mutation-content-viewmodel.mjs";
+import MutationItemSheetViewModel from "./item/mutation/mutation-item-sheet-viewmodel.mjs";
+import MutationItemSheet from "./item/mutation/mutation-item-sheet.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -43,6 +46,10 @@ export const application = {
       IllnessContentViewModel: IllnessContentViewModel,
       IllnessItemSheetViewModel: IllnessItemSheetViewModel,
     },
+    mutation: {
+      MutationContentViewModel: MutationContentViewModel,
+      MutationItemSheetViewModel: MutationItemSheetViewModel,
+    },
     language: {
       LanguageItemSheetViewModel: LanguageItemSheetViewModel,
       LanguageContentViewModel: LanguageContentViewModel,
@@ -53,6 +60,7 @@ export const application = {
     BaseItemSheet: BaseItemSheet,
     InjuryItemSheet: InjuryItemSheet,
     IllnessItemSheet: IllnessItemSheet,
+    MutationItemSheet: MutationItemSheet,
     LanguageItemSheet: LanguageItemSheet,
   },
   Tooltip: Tooltip,
@@ -74,6 +82,11 @@ export const application = {
       registry: FoundryWrapper.collections.documents.items,
       type: ITEM_TYPES.illness,
       sheet: IllnessItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.mutation,
+      sheet: MutationItemSheet,
     });
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,
