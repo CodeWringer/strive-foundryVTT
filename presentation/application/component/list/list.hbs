@@ -13,7 +13,7 @@ cssClass: String | undefined
     {{/if}}
   </ul>
   {{!-- Add button --}}
-  <div class="fill flex flex-row flex-right{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
+  <div class="fill flex flex-row flex-end{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
     {{> button viewModel=viewModel.vmBtnAddItem }}
   </div>
 </section>

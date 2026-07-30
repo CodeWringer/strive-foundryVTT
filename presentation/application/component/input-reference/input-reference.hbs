@@ -1,0 +1,25 @@
+{{!-- Required context:
+viewModel: InputReferenceViewModel
+cssClass: String | undefined
+--}}
+<div id="{{viewModel.id}}" class="strive input reference flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Edit mode --}}
+  <div class="edit-mode flex flex-row flex-middle{{#if viewModel.isEditable}}{{else}} hidden{{/if}}">
+    <input
+      type="text"
+      name="{{viewModel.id}}"
+      placeholder="{{viewModel.placeholder}}"
+      value="{{viewModel.value.name}}"
+    />
+    <a id="{{viewModel.id}}-clear" class="flex flex-center font-size-sm">
+      <i class="fas fa-trash"></i>
+    </a>
+    <i class="ico ico-chain-link lg"></i>
+    <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden"></menu>
+  </div>
+  {{!-- Read mode --}}
+  <div class="read-mode flex flex-row{{#if viewModel.isEditable}} hidden{{/if}}">
+    <span class="flex-grow">{{viewModel.value.name}}</span>
+    <i class="ico ico-chain-link lg"></i>
+  </div>
+</div>

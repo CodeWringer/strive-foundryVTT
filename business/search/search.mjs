@@ -1,3 +1,5 @@
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
+
 /**
  * Defines the search modes for use in a search. 
  * 
@@ -87,27 +89,30 @@ export class Search {
    * Searches through the given list of `SearchItem`s and returns a grading of all 
    * items, in regards to how well they match the given search term. 
    * 
-   * @param {Array<SearchItem>} searchItems The list of items to search in. 
-   * @param {String} searchTerm The term to match against.
-   * @param {SEARCH_MODES | undefined} searchMode The strictness of matching. 
+   * * Lowest score is always `0`. 
+   * * Every correctly cased matching character yields `+2` score. 
+   * * Every incorrectly cased matching character yields `+1` score. 
+   * * Every non-matching character (regardless of casing) yields `0` score. 
+   * 
+   * @param {Object} args
+   * @param {Array<SearchItem>} args.searchItems The list of items to search in. 
+   * @param {String} args.searchTerm The term to match against.
+   * @param {SEARCH_MODES | undefined} args.searchMode The strictness of matching. 
    * * default `SEARCH_MODES.STRICT_CASE_INSENSITIVE`
    * 
    * @returns {Array<SearchResult>} The list of graded results, sorted by best score first, 
    * to worst score last. 
-   * * Lowest score is always `0`. 
-   * * Every correctly cased matching character yields +2 score. 
-   * * Every incorrectly cased matching character yields +1 score. 
-   * * Every non-matching character (regardless of casing) yields 0 score. 
    */
-  search(searchItems, searchTerm, searchMode = SEARCH_MODES.STRICT_CASE_INSENSITIVE) {
+  search(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["searchItems", "searchTerm"]);
     const results = [];
     const deviationTolerance = 2;
 
-    for (const searchItem of searchItems) {
+    for (const searchItem of args.searchItems) {
       let totalScore = 0;
       let totalDeviation = 0;
       let compareCharacterIndex = 0;
-      let compareCharacter = searchTerm[compareCharacterIndex];
+      let compareCharacter = args.searchTerm[compareCharacterIndex];
 
       // The score per matching run. Will only be added to the total score, 
       // when a matching run is concluded successfully. 
@@ -119,7 +124,7 @@ export class Search {
 
       // Test every single character... 
       for (const char of searchItem.term) {
-        const charMatch = this._matchCharacter(char, compareCharacter, searchMode, runDeviation, deviationTolerance, matchingRunBegun);
+        const charMatch = this._matchCharacter(char, compareCharacter, args.searchMode, runDeviation, deviationTolerance, matchingRunBegun);
         if (charMatch.success === true) {
           compareCharacterIndex++;
           matchingRunBegun = true;
@@ -129,7 +134,7 @@ export class Search {
             runDeviation++;
           }
 
-          if (compareCharacterIndex >= searchTerm.length) {
+          if (compareCharacterIndex >= args.searchTerm.length) {
             // Matching run concluded with success. 
             totalScore += runScore;
             totalDeviation += runDeviation
@@ -144,7 +149,7 @@ export class Search {
           runDeviation = 0;
           matchingRunBegun = false;
         }
-        compareCharacter = searchTerm[compareCharacterIndex];
+        compareCharacter = args.searchTerm[compareCharacterIndex];
       }
 
       results.push(new SearchResult({

@@ -20,21 +20,13 @@
   flex: 1;
 }
 
-.flex-shrink {
-  flex: 0;
-}
-
-.flexlarge {
-  flex: 2;
-}
-
 // Alignment styles
-.flex-left {
+.flex-start {
   justify-content: flex-start;
   align-items: flex-start;
 }
 
-.flex-right {
+.flex-end {
   justify-content: flex-end;
   align-items: flex-end;
 }

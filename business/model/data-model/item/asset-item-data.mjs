@@ -1,5 +1,5 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import TimeIncrementField from "../../data-field/time-increment-field.mjs";
+import ComplicationField from "../../data-field/complication-field.mjs";
 import BaseItemData from "./base-item-data.mjs";
 
 export default class AssetItemData extends BaseItemData {
@@ -41,24 +41,9 @@ export default class AssetItemData extends BaseItemData {
         min: 1,
         positive: true,
       }),
-      crafting: new FoundrySchemaFields.SchemaField({
-        progressIncrement: new FoundrySchemaFields.NumberField({
-          nullable: false,
-          required: true,
-          initial: 1,
-          integer: true,
-          min: 1,
-          positive: true,
-        }),
-        timeIncrement: new TimeIncrementField(),
-        amount: new FoundrySchemaFields.NumberField({
-          nullable: false,
-          required: true,
-          initial: 1,
-          integer: true,
-          min: 1,
-          positive: true,
-        }),
+      complications: new FoundrySchemaFields.ArrayField(new ComplicationField(), {
+        nullable: false,
+        initial: [],
       }),
     }
   }

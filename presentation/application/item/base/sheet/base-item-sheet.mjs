@@ -29,10 +29,10 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
  * @property {String} localizedDocumentType
  * * Read-only
  */
-export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
+export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
-    position: { width: 500, height: 520, },
+    position: { width: 600, height: 520, },
     classes: ["strive", "sheet", "item", "strive-regular-font"],
     tag: "form",
     window: {
@@ -98,7 +98,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
   /** @override */
   get title() {
     let loca = this.localizedDocumentType;
-    if ((this.viewModel ?? {}).isEditMode) {
+    if ((this.viewModel ?? {}).isEditable) {
       loca = StringUtil.format(
         StringUtil.getLoca("system.general.edit.editingSheet"),
         loca,
@@ -180,7 +180,7 @@ export class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(Fou
       },
       {
         action: "saveEdits",
-        icon: "ico ico-floppy-disk",
+        icon: "ico ico-floppy",
         label: "system.general.edit.saveEdits",
       },
     ].concat(controls);

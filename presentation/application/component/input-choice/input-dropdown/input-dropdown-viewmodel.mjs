@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
+import ChoiceOption from "../../../../model/choice-option.mjs";
 import { SheetUtil } from "../../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
@@ -47,19 +48,28 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
   /** @override */
   get inputElement() { return this.element.find("button"); }
   
-  /** @override */
+  /**
+   * @type {ChoiceOption}
+   */
   get value() { return super.value; }
+  /**
+   * @param {ChoiceOption} value 
+   */
   set value(value) {
     super.value = value;
 
-    const element = this.#buttonElement.find(`#${this.id}-button-value`);
     let newContent = value.iconHtml;
     if (this.showValue) {
       newContent = `${newContent}<span>${value.localizedValue}</span>`;
     }
+    
+    const buttonValueElement = this.#buttonElement.find(`#${this.id}-button-value`);
+    buttonValueElement.empty();
+    buttonValueElement.append(newContent);
 
-    element.empty();
-    element.append(newContent);
+    const readModeElement = this.element.find("> .read-mode");
+    readModeElement.empty();
+    readModeElement.append(newContent);
   }
 
   /**
@@ -96,6 +106,9 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
    * 
    * @param {ChoiceOption | undefined} args.value The current value. 
    * * default is the first option given.
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Array<ChoiceOption>} args.options The options available to the drop-down. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
@@ -121,7 +134,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     await super.activateListeners(html);
 
     this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
-    this.#buttonElement = $(this.element).find(`button#${this.id}-button`);
+    this.#buttonElement = $(this.element).find(`#${this.id}-button`);
 
     this.#buttonElement.click((event) => {
       event.preventDefault(); // Prevents side-effects from event-bubbling. 

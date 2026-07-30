@@ -1,45 +1,9 @@
-$size-sm: $line-height;
+$size-sm: 26px;
 $size-md: 48px;
 $size-lg: 64px;
 $size-xl: 100px;
 
-img {
-  &.custom-icon {
-    &-sm {
-      flex: none;
-      height: $line-height;
-      min-width: 10px;
-    }
-    &-md {
-      flex: none;
-      height: $size-md;
-      min-width: 10px;
-    }
-    &-lg {
-      flex: none;
-      height: $size-lg;
-      min-width: 10px;
-    }
-    &-xl {
-      flex: none;
-      height: $size-xl;
-      min-width: 10px;
-    }
-  }
-
-  &.unstyled {
-    border: unset;
-    margin: 0;
-    padding: 0;
-  }
-}
-
-img.inline-img {
-  border: none;
-  display: inline-block;
-}
-
-// The following ensures theming is always applied without any extra code required to make it work. 
+// The following ensures theming is works for images. To make it work, use the "themedImage" Handlebars mixin. 
 body {
   &.theme-dark {
     img.light-mode, i.light-mode {

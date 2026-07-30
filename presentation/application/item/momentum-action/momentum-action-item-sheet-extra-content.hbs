@@ -4,7 +4,7 @@ viewModel: MomentumActionItemSheetViewModel
 <section class="grid-2col grid-gap-sm margin-t-lg">
   {{!-- Heroics --}}
   <div class="sheet-block">
-    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex flex-right flex-row auto-margin-h-md"}}
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex flex-end flex-row auto-margin-h-md"}}
       {{> inputImage viewModel=viewModel.vmImgHeroic cssClass="custom-icon-lg" }}
       {{> inputTextField viewModel=viewModel.vmNameHeroic cssClass="minimal-input"}}
     {{/header2}}
@@ -14,7 +14,7 @@ viewModel: MomentumActionItemSheetViewModel
   </div>
   {{!-- Desperation --}}
   <div class="sheet-block">
-    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex flex-right flex-row auto-margin-h-md"}}
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex flex-end flex-row auto-margin-h-md"}}
       {{> inputImage viewModel=viewModel.vmImgDesperate cssClass="custom-icon-lg" }}
       {{> inputTextField viewModel=viewModel.vmNameDesperate cssClass="minimal-input"}}
     {{/header2}}

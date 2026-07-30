@@ -1,4 +1,5 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
+import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -69,15 +70,7 @@ export default class ButtonViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    if (ValidationUtil.isDefined(args.localizedLabel)) {
-      game.strive.logger.logWarn("Deprecated parameter, 'localizedLabel', use 'content', instead");
-    }
-    if (ValidationUtil.isDefined(args.iconHtml)) {
-      game.strive.logger.logWarn("Deprecated parameter, 'iconHtml', use 'content', instead");
-    }
-
     this.content = args.content;
-
     this.onClick = args.onClick ?? (async (event, data) => { });
   }
 

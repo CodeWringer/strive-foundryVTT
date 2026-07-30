@@ -1,5 +1,5 @@
-import { common } from "../../../../common/_module.mjs";
-import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import { FormulaUtility } from "../../../../common/util/formula-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -45,10 +45,21 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
   /** @override */
   get value() { return parseInt(this._value); }
-  /** @override */
+  /**
+   * @param {String | Number} newValue The new value to set.
+   * Supports integer numbers and arithmetic formulae, e. g.
+   * `"33 - (7 / 2)"`
+   * @override
+   */
   set value(newValue) {
+    let parsedValue = NaN;
+    try {
+      parsedValue = FormulaUtility.eval(newValue);
+    } catch (error) {
+      // TODO: pop-up
+    }
+
     const oldValue = this._value;
-    const parsedValue = parseInt(newValue);
     if (parsedValue === NaN)
       this._value = this.hasMin ? this.min : 0;
     else if (this.hasMin && parsedValue < this.min)
@@ -58,12 +69,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     else
       this._value = parsedValue;
 
-    // Update visuals. 
-    this._suppressEvent = true;
-    SheetUtil.setElementValue(this.element, newValue);
-    this._suppressEvent = false;
-
     this.onChange(oldValue, this._value);
+
+    // Update visuals. 
+
+    this.inputElement[0].value = this._value + "";
+
+    const readModeElement = this.element.find("> .read-mode");
+    readModeElement.empty();
+    readModeElement.append(this._value);
   }
 
   /**
@@ -71,13 +85,13 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hasMin() { return this.min !== undefined; }
+  get hasMin() { return ValidationUtil.isDefined(this.min); }
   /**
    * Returns true, if the maximum value is defined. 
    * @type {Boolean}
    * @readonly
    */
-  get hasMax() { return this.max !== undefined; }
+  get hasMax() { return ValidationUtil.isDefined(this.max); }
 
   /**
    * @type {Number}
@@ -88,7 +102,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set min(value) {
     this._min = value;
-    $(this.element).attr("min", value);
+    if (this._value < this._min) {
+      this._value = this._min;
+    }
   }
 
   /**
@@ -100,7 +116,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set max(value) {
     this._max = value;
-    $(this.element).attr("max", value);
+    if (this._value > this._max) {
+      this._value = this._max;
+    }
   }
 
   /**
@@ -110,26 +128,34 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   /**
    * @param {Number} value
    */
-  set step(value) {
-    this._step = value;
-    $(this.element).attr("step", value);
-  }
-
-  /**
-   * Returns the value to be rendered in the template. 
-   * 
-   * @type {String}
-   * @readonly
-   */
-  get valueForDisplay() { return common.util.validation.isDefined(this.displayValueMapper) ? this.displayValueMapper(this.value) : this.value; }
+  set step(value) { this._step = value; }
 
   /**
    * @param {Object} args
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {String | undefined} args.localizedToolTip A localized text to display as a tool tip. 
+   * @param {Any | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Any}`
+   * * `newValue: {Any}`
+   * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocus Callback that is invoked when the input element is focused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
    * 
-   * @param {Number | undefined} args.value The current value. 
-   * * default `0`
    * @param {Number | undefined} args.min Optional. The minimum value. 
    * @param {Number | undefined} args.max Optional. The maximum value. 
    * @param {Number | undefined} args.step Optional. The increment/decrement step size. 
@@ -138,11 +164,6 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Number}`
    * * `newValue: {Number}`
-   * @param {Function | undefined} args.displayValueMapper If not undefined, will invoke this 
-   * function to map the actual value, before it is rendered. This function has no effect on 
-   * the actual value underneath. **Must** return a value. Arguments: 
-   * * `value: Number`
-   * @param {String | undefined} args.contentCssClass
    */
   constructor(args = {}) {
     super(args);
@@ -151,43 +172,54 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     this._min = args.min ?? undefined;
     this._max = args.max ?? undefined;
     this._step = args.step ?? 1;
-    this.displayValueMapper = args.displayValueMapper;
-    this.contentCssClass = args.contentCssClass;
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    if (this.isEditable !== true) return;
+    this.element.find(".button-spinner.up").click(this._onIncrement.bind(this));
+    this.element.find(".button-spinner.down").click(this._onDecrement.bind(this));
 
-    this.element.parent().find(".button-spinner-up").click(this._onClickNumberSpinnerUp.bind(this));
-    this.element.parent().find(".button-spinner-down").click(this._onClickNumberSpinnerDown.bind(this));
+    this.inputElement.on("keydown", (event) => {
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        this._onIncrement();
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        this._onDecrement();
+      }
+    });
+    this.inputElement.on("mousewheel", (event) => {
+      if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+        // Scrolled up.
+        event.preventDefault();
+        this._onIncrement();
+      } else {
+        // Scrolled down.
+        event.preventDefault();
+        this._onDecrement();
+      }
+    });
   }
 
   /**
-   * Callback for when the "up" arrow is clicked. 
-   * 
+   * Increases the current value by `this._step`. 
    * @param {Event} event 
-   * 
    * @private
    */
-  _onClickNumberSpinnerUp(event) {
-    const newValue = parseInt(this.value) + 1;
-    if (this.max !== undefined && newValue > this.max) return;
+  _onIncrement(event) {
+    const newValue = parseInt(this.value) + this._step;
     this.value = newValue;
   }
 
   /**
-   * Callback for when the "down" arrow is clicked. 
-   * 
+   * Decreases the current value by `this._step`. 
    * @param {Event} event 
-   * 
    * @private
    */
-  _onClickNumberSpinnerDown(event) {
-    const newValue = parseInt(this.value) - 1;
-    if (this.min !== undefined && newValue < this.min) return;
+  _onDecrement(event) {
+    const newValue = parseInt(this.value) - this._step;
     this.value = newValue;
   }
 }

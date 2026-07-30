@@ -1,38 +1,30 @@
-span.spinner-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  height: 100%;
-  align-items: center;
-  border: 1px solid #888;
-  border-radius: 3px;
-  background-color: rgba(0, 0, 0, 0.05);
+.strive.number-spinner {
+  position: relative;
+  box-sizing: content-box;
 
-  input {
-    border: 0;
-    background-color: transparent;
+  input[type=text] {
+    padding-left: 0.3rem;
+    text-align: center;
+  }
+
+  a.button-spinner {
+    line-height: 50%;
   }
 }
 
-.spinner-button-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  height: 26px;
-  line-height: 13px;
-  font-size: 13px;
+.theme-light {
+  a.button-spinner {
+    &:hover,
+    &:focus {
+      background: $c-bg-input-focus-light;
+    }
+  }
 }
-
-a.button-spinner {
-  height: 50%;
-  padding: 0 $padding-sm;
+.theme-dark {
+  a.button-spinner {
+    &:hover,
+    &:focus {
+      background: $c-bg-input-focus-dark;
+    }
+  }
 }

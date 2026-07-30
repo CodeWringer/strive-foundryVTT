@@ -39,20 +39,30 @@ export const TEMPLATES = {
     },
     item: {
       baseSheet: `${basePathApplication}/item/base/sheet/base-item-sheet.hbs`,
-      language: `${basePathApplication}/item/language/language-content.hbs`,
+      language: {
+        header: `${basePathApplication}/item/language/language-header.hbs`,
+        content: `${basePathApplication}/item/language/language-content.hbs`,
+      },
+      injury: {
+        header: `${basePathApplication}/item/injury/injury-header.hbs`,
+        content: `${basePathApplication}/item/injury/injury-content.hbs`,
+      }
     },
     dialog: {
-      modal: `${basePathApplication}/dialog/modal-dialog/modal-dialog.hbs`,
+      base: `${basePathApplication}/dialog/base-dialog/base-dialog.hbs`,
+      uiDebug: `${basePathApplication}/dialog/ui-debug-dialog/ui-debug-dialog.hbs`,
     },
     component: {
       button: `${basePathComponent}/button/button.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
+      splitNumberSpinner: `${basePathComponent}/input-split-number-spinner/input-split-number-spinner.hbs`,
       dropDown: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
       richText: {
         main: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
         lazy: `${basePathComponent}/input-rich-text/input-rich-text-lazy-content.hbs`,
       },
+      reference: `${basePathComponent}/input-reference/input-reference.hbs`,
       row: `${basePathComponent}/row/row.hbs`,
     },
   },

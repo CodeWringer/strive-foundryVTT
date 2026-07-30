@@ -4,9 +4,9 @@
 }
 
 /* Utilities */
-@import 'utils/typography';
-@import 'utils/colors';
 @import 'utils/variables';
+@import 'utils/colors';
+@import 'utils/typography';
 
 /* Global styles */
 @import 'global/borders';
@@ -20,14 +20,16 @@
 @import 'global/shadows';
 @import 'global/sheet';
 
-/* Global and composable component styles */
-// @import 'components/input';
-// @import 'components/pill';
 /* Specific component styles */
 @import '../application/component/input-textfield/input-textfield';
 @import '../application/component/input-choice/input-dropdown/input-dropdown';
 @import '../application/component/input-rich-text/input-rich-text';
+@import '../application/component/input-number-spinner/input-number-spinner';
+@import '../application/component/input-split-number-spinner/input-split-number-spinner';
+@import '../application/component/input-reference/input-reference';
 @import '../application/component/tooltip/tooltip';
+@import '../application/component/button/button';
+@import '../util/drag-drop/drag-drop';
 
 /* Animations */
 @import 'anims/spinner';
@@ -42,12 +44,25 @@
 @import 'global/overrides/editor';
 @import 'global/overrides/context-menu';
 
-form.strive-regular-font h1.window-title {
-  font-size: 16pt;
+.strive {
+  input[type=text],
+  input[type=number],
+  input[type=password],
+  input[type=date],
+  input[type=time],
+  input[type=datetime-local],
+  input[type=search],
+  input[type=file],
+  select {
+    height: unset;
+    line-height: unset;
+    padding: unset;
+    background: unset;
+    border: unset;
+    border-radius: unset;
+    box-shadow: unset;
+    outline: unset;
+    user-select: text;
+    transition: unset;
+  }
 }
-
-// Global override of root interface element. 
-// body > div#interface {
-//   width: 100%;
-//   height: 100%;
-// }

@@ -23,7 +23,7 @@ export const SELECTOR_READ = "custom-system-read-only";
  * * `static get TEMPLATE`
  * * `get clazz`
  * 
- * Inheritors _should_ override:
+ * Inheritors _may_ override:
  * * `get inputElement`
  * 
  * @property {String} id Unique ID of this view model instance. 
@@ -64,18 +64,28 @@ export default class InputViewModel extends ViewModel {
   set isEditable(value) {
     super.isEditable = value;
 
-    const editElement = this.element.find(".edit-mode");
-    const readElement = this.element.find(".read-mode");
-    if (value) {
-      new SlideDisplaceAnim({
-        elmA: editElement,
-        elmB: readElement,
-      }).execute();
+    const editElement = this.element.find("> .edit-mode");
+    const readElement = this.element.find("> .read-mode");
+    if (!this._suppressAnims) {
+      if (value) {
+        new SlideDisplaceAnim({
+          displacingElement: editElement,
+          displacedElement: readElement,
+        }).execute();
+      } else {
+        new SlideDisplaceAnim({
+          displacingElement: readElement,
+          displacedElement: editElement,
+        }).execute();
+      }
     } else {
-      new SlideDisplaceAnim({
-        elmA: readElement,
-        elmB: editElement,
-      }).execute();
+      if (value) {
+        editElement.removeClass("hidden");
+        readElement.addClass("hidden");
+      } else {
+        editElement.addClass("hidden");
+        readElement.removeClass("hidden");
+      }
     }
   }
 
@@ -95,6 +105,12 @@ export default class InputViewModel extends ViewModel {
 
     const oldValue = this._value;
     this._value = newValue;
+
+    if (ValidationUtil.isDefined(this.inputElement) && this.inputElement.length > 0) {
+      const readElement = this.element.find("> .read-mode");
+      readElement.html(newValue);
+    }
+
     this.onChange(oldValue, newValue);
   }
 
@@ -104,7 +120,7 @@ export default class InputViewModel extends ViewModel {
    * @readonly
    * @virtual
    */
-  get inputElement() { return ""; }
+  get inputElement() { return this.element.find("input"); }
 
   /**
    * Set to `true` when updating the value without wanting events to fire. 
@@ -119,12 +135,22 @@ export default class InputViewModel extends ViewModel {
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
    * be in edit mode. If `false`, will be in read-only mode.
    * * default `false`. 
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
+   * @param {Boolean | undefined} args.autoHandleEvents If `true`, will automatically attach 
+   * event listeners for the input element. This behavior may be undesirable by some inheritors, 
+   * which can disable it by setting this to `false`. 
+   * * default `true`
    * @param {Any | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Any}`
@@ -142,7 +168,9 @@ export default class InputViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
+    this._autoHandleEvents = args.autoHandleEvents ?? true;
     this._value = args.value;
+    this._suppressAnims = args.suppressAnims ?? false;
     this.onChange = args.onChange ?? (() => { });
     this.onInput = args.onInput ?? (() => { });
     this.onFocus = args.onFocus ?? (() => { });
@@ -153,10 +181,24 @@ export default class InputViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    $(this.inputElement).change(this._onChange.bind(this));
-    $(this.inputElement).on("input", this._onInput.bind(this));
-    $(this.inputElement).on("focus", this._onFocus.bind(this));
-    $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
+    const editModeElm = this.element.find("> .edit-mode");
+    const readModeElm = this.element.find("> .read-mode");
+    if (this.isEditable) {
+      editModeElm.removeClass("hidden");
+      readModeElm.addClass("hidden");
+    } else {
+      editModeElm.addClass("hidden");
+      readModeElm.removeClass("hidden");
+    }
+
+    if (!this._autoHandleEvents) return;
+
+    if (ValidationUtil.isDefined(this.inputElement) && this.inputElement.length > 0) {
+      $(this.inputElement).change(this._onChange.bind(this));
+      $(this.inputElement).on("input", this._onInput.bind(this));
+      $(this.inputElement).on("focus", this._onFocus.bind(this));
+      $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
+    }
   }
 
   /**

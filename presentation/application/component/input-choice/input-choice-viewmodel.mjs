@@ -52,6 +52,9 @@ export default class InputChoiceViewModel extends InputViewModel {
    * 
    * @param {ChoiceOption | undefined} args.value The current value. 
    * * default is the first option given.
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Array<ChoiceOption>} args.options The options available to the drop-down. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 

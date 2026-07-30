@@ -75,6 +75,7 @@ export default class TransientLanguage extends TransientBaseItem {
     this._grade = new DataFieldBridge({
       document: this,
       dataPath: "system.grade",
+      default: LANGUAGE_GRADES.dabbling.name,
       fromDto: (dto) => {
         return LANGUAGE_GRADES[dto];
       },

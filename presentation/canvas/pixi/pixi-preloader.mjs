@@ -24,8 +24,8 @@ export const PixiLoader = {
   TEXTURES: {
     ACTION_POINT_EMPTY: `${BASE_PATH}/action-point-empty.png`,
     ACTION_POINT_FULL: `${BASE_PATH}/action-point-full.png`,
-    CARET_LEFT: `${BASE_PATH}/caret-left-solid.png`,
-    CARET_RIGHT: `${BASE_PATH}/caret-right-solid.png`,
+    CARET_LEFT: `${BASE_PATH}/triangle-left-24-dark.png`,
+    CARET_RIGHT: `${BASE_PATH}/triangle-right-24-dark.png`,
   },
 
   /**
@@ -39,9 +39,8 @@ export const PixiLoader = {
    * @property {String} CARET_RIGHT 
    */
   VECTOR_GRAPHICS: {
-    // HEALTH_CONDITION_BURNING: `${BASE_PATH}/damage-type-burning-solid.svg`,
-    // CARET_LEFT: `${BASE_PATH}/caret-left-solid.svg`,
-    // CARET_RIGHT: `${BASE_PATH}/caret-right-solid.svg`,
+    // CARET_LEFT: `${BASE_PATH}/triangle-left-24-dark.svg`,
+    // CARET_RIGHT: `${BASE_PATH}/triangle-right-24-dark.svg`,
   },
 
   /**

@@ -1,0 +1,18 @@
+{{!-- Required context:
+viewModel: InputSplitNumberSpinnerViewModel
+cssClass: String | undefined
+--}}
+<div id="{{viewModel.id}}" class="strive split-number-spinner flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Edit mode --}}
+  <div class="edit-mode flex flex-column flex-grow">
+    {{> inputNumberSpinner viewModel=viewModel.vmCurrent cssClass="flex-center" }}
+    <span class="h-divider-full"></span>
+    {{> inputNumberSpinner viewModel=viewModel.vmMaximum cssClass="flex-center" }}
+  </div>
+  {{!-- Read mode --}}
+  <div class="read-mode flex flex-column flex-center flex-grow">
+    <span>{{viewModel.vmCurrent.value}}</span>
+    <span class="h-divider-full"></span>
+    <span>{{viewModel.vmMaximum.value}}</span>
+  </div>
+</div>

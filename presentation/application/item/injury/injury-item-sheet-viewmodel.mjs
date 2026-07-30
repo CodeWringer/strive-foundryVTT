@@ -1,111 +1,102 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
-import CompositeCurrentAndMaximumNumbersViewModel from "../../../component/composite-current-and-maximum-numbers/composite-current-and-maximum-numbers-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
-import { DataFieldComponent } from "../../datafield-component.mjs";
+import { INJURY_STATES } from "../../../../business/model/domain/const/injury-states.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ChoicesUtil } from "../../../util/choices-utility.mjs";
+import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
+import { TEMPLATES } from "../../templates.mjs";
+import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
+import InjuryContentViewModel from "./injury-content-viewmodel.mjs";
+import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 
 /**
  * @property {TransientInjury} document 
  */
 export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
-  getDataFields() {
-    return [
-      new DataFieldComponent({
-        template: CompositeCurrentAndMaximumNumbersViewModel.TEMPLATE,
-        viewModel: new CompositeCurrentAndMaximumNumbersViewModel({
-          id: "treatmentTime",
-          parent: this,
-          currentValue: this.document.timeToHealElapsed,
-          currentValueMin: 0,
-          currentValueToolTip: game.i18n.localize("system.character.health.healingTime.current"),
-          currentValueIconClass: "ico dark ico-time-to-heal-solid",
-          maximumValue: this.document.timeToHeal,
-          maximumValueMin: 0,
-          maximumValueToolTip: this.showReminders 
-            ? `${game.i18n.localize("system.character.health.healingTime.total")}<br>${game.i18n.localize("system.character.health.healingTime.totalReminder")}`
-            : game.i18n.localize("system.character.health.healingTime.total"),
-          onCurrentValueChange: (_, newValue) => {
-            this.document.timeToHealElapsed = newValue;
-          },
-          onMaximumValueChange: (_, newValue) => {
-            this.document.timeToHeal = newValue;
-          },
-        }),
-      }),
-      new DataFieldComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModel: new InputTextFieldViewModel({
-          parent: this,
-          id: "lastTreatmentTime",
-          value: this.document.lastTreatmentTime,
-          onChange: (_, newValue) => {
-            this.document.lastTreatmentTime = newValue;
-          },
-        }),
-        localizedToolTip: game.i18n.localize("system.character.health.lastTreatmentTime"),
-        iconClass: "ico-time-to-heal-treated-solid",
-      }),
-      new DataFieldComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModel: new InputTextFieldViewModel({
-          parent: this,
-          id: "vmTreatmentSkill",
-          value: this.document.treatmentSkill,
-          onChange: (_, newValue) => {
-            this.document.treatmentSkill = newValue;
-          },
-        }),
-        localizedToolTip: game.i18n.localize("system.character.health.treatmentSkill.treatmentSkill"),
-        iconClass: "ico-skill-solid",
-      }),
-      new DataFieldComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModel: new InputTextFieldViewModel({
-          parent: this,
-          id: "vmRequiredSupplies",
-          value: this.document.requiredSupplies,
-          onChange: (_, newValue) => {
-            this.document.requiredSupplies = newValue;
-          },
-        }),
-        localizedToolTip: game.i18n.localize("system.character.health.requiredSupplies"),
-        iconClass: "ico-medical-supplies-solid",
-      }),
-      new DataFieldComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModel: new InputTextFieldViewModel({
-          parent: this,
-          id: "vmObstacleTreatment",
-          value: this.document.obstacleTreatment,
-          onChange: (_, newValue) => {
-            this.document.obstacleTreatment = newValue;
-          },
-        }),
-        localizedToolTip: this.showReminders 
-          ? `${game.i18n.localize("system.character.health.obstacleTreatment.obstacleTreatment")}<br>${game.i18n.localize("system.character.health.obstacleTreatment.reminder")}`
-          : game.i18n.localize("system.character.health.obstacleTreatment.obstacleTreatment"),
-        iconClass: "ico-obstacle-solid",
-      }),
-      new DataFieldComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModel: new InputTextFieldViewModel({
-          parent: this,
-          id: "vmScar",
-          value: this.document.scar,
-          onChange: (_, newValue) => {
-            this.document.scar = newValue;
-          },
-        }),
-        localizedToolTip: game.i18n.localize("system.character.health.scar.singular"),
-        iconClass: "ico-scar-solid",
-      }),
-    ];
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(InjuryItemSheetViewModel));
-  }
+  get clazz() { return InjuryItemSheetViewModel; }
 
+  /** @override */
+  get headerTemplate() { return TEMPLATES.application.item.injury.header; }
+
+  /** @override */
+  get contentTemplate() { return TEMPLATES.application.item.injury.content; }
+
+  /**
+   * @param {Object} args
+   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
+   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
+   * 
+   * @param {TransientInjury} args.document The represented transient document instance. 
+   * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   */
+  constructor(args = {}) {
+    super({
+      ...args,
+      contentViewModel: new InjuryContentViewModel({
+        id: "vmContent",
+        document: args.document,
+      }),
+    });
+
+    this.vmName = new InputTextFieldViewModel({
+      id: "vmName",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.name.documentName"),
+      }),
+      value: this.document.name,
+      onChange: (_, newValue) => {
+        this.document.name = newValue;
+      },
+    });
+    this.vmHealingProgress = new InputSplitNumberSpinnerViewModel({
+      id: "vmHealingProgress",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.injury.healProgress"),
+      }),
+      current: {
+        value: this.document.healProgress.current,
+        min: 0,
+        max: this.document.healProgress.required,
+      },
+      maximum: {
+        value: this.document.healProgress.required,
+        min: 0,
+      },
+      onChange: (_, newValue) => {
+        this.document.healProgress.current = newValue.current;
+        this.document.healProgress.required = newValue.maximum;
+      },
+    });
+    const stateOptions = ChoicesUtil.getAsChoices(INJURY_STATES, "xl");
+    const currentStateOption = stateOptions.find(it => it.value === this.document.state.name);
+    this.vmState = new InputDropDownViewModel({
+      id: "vmState",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.format(
+          StringUtil.getLoca("system.item.injury.state.stateWithCurrent"),
+          currentStateOption.localizedValue,
+        ),
+      }),
+      options: stateOptions,
+      showValue: false,
+      value: currentStateOption,
+      onChange: (_, newValue) => {
+        this.document.state = newValue.value;
+        this.vmState.setToolTipContent(StringUtil.format(
+          StringUtil.getLoca("system.item.injury.state.stateWithCurrent"),
+          newValue.localizedValue,
+        ));
+      },
+    });
+  }
 }

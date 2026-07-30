@@ -1,0 +1,19 @@
+{{!-- Required context:
+viewModel: UiDebugDialogViewModel
+--}}
+<section id="{{viewModel.id}}" class="strive flex flex-column flex-grow">
+  {{#each viewModel.preparedSections as |section|}}
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    {{#with section.template as | template |}}
+      {{> (template) viewModel=section.viewModel cssClass=section.cssClass }}
+    {{/with}}
+    <button id="{{section.viewModel.id}}-switch-edit">
+      <i class="ico ico-edit md"></i>
+    </button>
+    <button id="{{section.viewModel.id}}-switch-read">
+      <i class="ico ico-floppy md"></i>
+    </button>
+  </div>
+  <span class="h-divider"></span>
+  {{/each}}
+</section>

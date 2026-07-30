@@ -2,6 +2,9 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import BaseAnim from "./base-anim.mjs";
 
 export class SlideInAnim extends BaseAnim {
+  /** @override */
+  get cssClass() { return "slide-anim"; }
+
   /**
    * @param {Object} args
    * @param {JQuery | HTMLElement} args.elm

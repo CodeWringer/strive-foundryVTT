@@ -1,20 +1,25 @@
 .strive.button {
   padding: 0;
-  margin: 0;
-  min-height: $line-height;
-  min-width: $line-height;
-  border-radius: 3px;
-  border: 1px $c-border-medium solid;
-  background-color: $c-bg-medium;
+  min-height: unset;
+  min-width: unset;
+  border-radius: 5px;
   display: flex;
+  max-height: unset;
+  --button-size: unset;
+  --button-background-color: unset;
+  --button-border-color: unset;
+  --button-text-color: unset;
+  --button-focus-outline-color: unset;
+  --button-hover-background-color: unset;
+  --button-hover-border-color: unset;
+  --button-hover-text-color: unset;
 
   &.light {
-    border-radius: unset;
     border: unset;
     background-color: unset;
 
     &:hover {
-      border-color: unset;
+      border: unset;
       background-color: unset;
     }
   }
@@ -28,7 +33,7 @@
       text-shadow: unset;
     }
   }
-  
+
   &.square {
     aspect-ratio: 1/1;
   }
@@ -41,9 +46,33 @@
     min-width: unset;
     min-height: unset;
   }
+}
 
-  &:hover {
-    border-color: $c-border-highlight-light;
-    background-color: $c-bg-lighter;
+.theme-dark .strive.button {
+  border: 1px $c-border-dark solid;
+  background-color: $c-bg-input-dark;
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: $c-border-highlight-dark;
+    background-color: $c-bg-input-focus-dark;
+    text-shadow: 0 0 0.3rem $c-bg-themed;
   }
+}
+
+.theme-light .strive.button {
+  border: 1px $c-border-light solid;
+  background-color: $c-bg-input-light;
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: $c-border-highlight-light;
+    background-color: $c-bg-input-focus-light;
+  }
+}
+
+button {
+  min-height: unset;
 }

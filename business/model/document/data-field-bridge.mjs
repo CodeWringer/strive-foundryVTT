@@ -23,17 +23,25 @@ import { common } from "../../../common/_module.mjs";
  */
 export default class DataFieldBridge {
   /**
-   * @type {Any}
+   * Returns the mapped value obtained through `this.fromDto`, if possible. Otherwise, returns `null`. 
+   * @type {Any | null}
    */
   get value() { 
     // Fetch and transform value. 
     const dto = common.util.property.getNestedPropertyValue(this.document, this.#dataPath);
-    if (!common.util.validation.isDefined(dto) && common.util.validation.isDefined(this.default)) {
-      return this.default;
+    if (!common.util.validation.isDefined(dto)) {
+      if (common.util.validation.isDefined(this.default)) {
+        return this.default;
+      } else {
+        return null;
+      }
     } else {
       return this.fromDto(dto);
     }
   }
+  /**
+   * Sets the new value, after mapping it through `this.toDto`. 
+   */
   set value(value) {
     const mapped = this.toDto(value);
     this.document.updateByPath(this.#dataPath, mapped);

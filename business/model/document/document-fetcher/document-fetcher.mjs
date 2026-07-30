@@ -1,4 +1,5 @@
 import { common } from "../../../../common/_module.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { DOCUMENT_COLLECTION_SOURCES, DocumentCollectionSource } from "./document-collection-source.mjs";
 import { DocumentIndex } from "./document-index.mjs";
 
@@ -51,7 +52,7 @@ export default class DocumentFetcher {
    * * Only relevant, if compendium packs are searched. 
    * * Default `true`.
    * 
-   * @returns {Promise<Document | undefined>} 
+   * @returns {Promise<Document | null>} 
    * 
    * @throws {Error} Thrown, if neither `id`, nor `name` are defined. 
    * 
@@ -67,7 +68,7 @@ export default class DocumentFetcher {
     // Search compendia
     if (this._shouldSearchCompendia(filter) === true) {
       const document = await this._findInCompendia(filter);
-      if (document !== undefined) {
+      if (ValidationUtil.isDefined(document)) {
         return document;
       }
     }
@@ -75,11 +76,11 @@ export default class DocumentFetcher {
     // Search world
     if (this._shouldSearchWorld(filter) === true) {
       const document = this._findInWorld(filter);
-      if (document !== undefined) {
+      if (ValidationUtil.isDefined(document)) {
         return document;
       }
     }
-    return undefined;
+    return null;
   }
 
   /**
@@ -206,7 +207,7 @@ export default class DocumentFetcher {
    * * Only relevant, if compendium packs are searched. 
    * * Default `true`.
    * 
-   * @returns {Promise<Document | undefined>} 
+   * @returns {Promise<Document | null>} 
    * 
    * @private
    * @async
@@ -232,11 +233,10 @@ export default class DocumentFetcher {
           const actor = await pack.getDocument(id);
 
           let document = actor.items.find(it => (it.id ?? it._id) === filter.id);
-          if (document == undefined) {
-            document = actor.items.find(it => it.name === filter.name);
-          }
-          if (document !== undefined) {
+          if (ValidationUtil.isDefined(document)) {
             return document;
+          } else {
+            document = actor.items.find(it => it.name === filter.name);
           }
         }
       }
@@ -245,7 +245,7 @@ export default class DocumentFetcher {
       // This skip must happen _after_ the embedded document search. Even if the current 
       // search does not target actor type packs, those actors could still contain 
       // the targeted document instance. 
-      if (filter.documentType !== undefined 
+      if (ValidationUtil.isDefined(filter.documentType) 
         && packDocumentType !== filter.documentType) {
         continue;
       }
@@ -261,14 +261,14 @@ export default class DocumentFetcher {
         }
         
         // Skip, if neither id nor name match. 
-        if (filter.id !== undefined && filter.id !== id) continue;
-        if (filter.name !== undefined && filter.name.toLowerCase() !== index.name.toLowerCase()) continue;
+        if (ValidationUtil.isDefined(filter.id) && filter.id !== id) continue;
+        if (ValidationUtil.isDefined(filter.name) && filter.name.toLowerCase() !== index.name.toLowerCase()) continue;
 
         // Get a loaded instance of the document from the data base. 
         return await pack.getDocument(id);
       }
     }
-    return undefined;
+    return null;
   }
 
   /**
@@ -289,7 +289,7 @@ export default class DocumentFetcher {
    * * Default `false`. 
    * * Note, that this setting may slow searches down, **significantly**. 
    * 
-   * @returns {Document | undefined} 
+   * @returns {Document | null} 
    * 
    * @private
    */
@@ -306,17 +306,16 @@ export default class DocumentFetcher {
       if (filter.searchEmbedded === true && collectionDocumentType == "actor") {
         for (const actor of worldCollection) {
           let document = actor.items.find(it => (it.id ?? it._id) === filter.id);
-          if (document == undefined) {
-            document = actor.items.find(it => it.name === filter.name);
-          }
-          if (document !== undefined) {
+          if (ValidationUtil.isDefined(document)) {
             return document;
+          } else {
+            document = actor.items.find(it => it.name === filter.name);
           }
         }
       }
 
       // Skip, if the collection is of the wrong document type. 
-      if (filter.documentType !== undefined 
+      if (ValidationUtil.isDefined(filter.documentType) 
         && collectionDocumentType != filter.documentType) {
         continue;
       }
@@ -324,19 +323,19 @@ export default class DocumentFetcher {
       const entries = worldCollection.values();
       for (const entry of entries) {
         // Skip, if the entry is of the wrong content type. 
-        if (filter.contentType !== undefined 
+        if (ValidationUtil.isDefined(filter.contentType) 
           && entry.type.toLowerCase() != filter.contentType) {
           continue;
         }
 
         // Skip, if neither id nor name match. 
-        if (filter.id !== undefined && filter.id !== entry.id) continue;
-        if (filter.name !== undefined && filter.name.toLowerCase() !== entry.name.toLowerCase()) continue;
+        if (ValidationUtil.isDefined(filter.id) && filter.id !== entry.id) continue;
+        if (ValidationUtil.isDefined(filter.name) && filter.name.toLowerCase() !== entry.name.toLowerCase()) continue;
 
         return entry;
       }
     }
-    return undefined;
+    return null;
   }
   
   /**
@@ -364,7 +363,7 @@ export default class DocumentFetcher {
    * * Only relevant, if compendium packs are searched. 
    * * Default `true`.
    * 
-   * @returns {Promise<Array<Document> | undefined>} 
+   * @returns {Promise<Array<Document>>} 
    * 
    * @private
    * @async
@@ -403,7 +402,7 @@ export default class DocumentFetcher {
       // This skip must happen _after_ the embedded document search. Even if the current 
       // search does not target actor type packs, those actors could still contain 
       // the targeted document(s). 
-      if (filter.documentType !== undefined 
+      if (ValidationUtil.isDefined(filter.documentType) 
         && packDocumentType !== filter.documentType) {
         continue;
       }
@@ -412,14 +411,14 @@ export default class DocumentFetcher {
         const id = index._id;
 
         // Skip, if the entry is of the wrong content type. 
-        if (filter.contentType !== undefined 
+        if (ValidationUtil.isDefined(filter.contentType) 
           && index.type.toLowerCase() !== filter.contentType) {
           continue;
         }
         
         // Skip, if neither id nor name match. 
-        if (filter.id !== undefined && filter.id !== id) continue;
-        if (filter.name !== undefined && filter.name.toLowerCase() !== index.name.toLowerCase()) continue;
+        if (ValidationUtil.isDefined(filter.id) && filter.id !== id) continue;
+        if (ValidationUtil.isDefined(filter.name) && filter.name.toLowerCase() !== index.name.toLowerCase()) continue;
 
         // Get a loaded instance of the document from the data base. 
         const document = await pack.getDocument(id);
@@ -447,7 +446,7 @@ export default class DocumentFetcher {
    * * Default `false`. 
    * * Note, that this setting may slow searches down, **significantly**. 
    * 
-   * @returns {Array<Document> | undefined} 
+   * @returns {Array<Document>} 
    * 
    * @private
    */
@@ -474,7 +473,7 @@ export default class DocumentFetcher {
       }
 
       // Skip, if the collection is of the wrong document type. 
-      if (filter.documentType !== undefined 
+      if (ValidationUtil.isDefined(filter.documentType) 
         && collectionDocumentType !== filter.documentType) {
         continue;
       }
@@ -482,14 +481,14 @@ export default class DocumentFetcher {
       const entries = worldCollection.values();
       for (const entry of entries) {
         // Skip, if the entry is of the wrong content type. 
-        if (filter.contentType !== undefined 
+        if (ValidationUtil.isDefined(filter.contentType) 
           && entry.type.toLowerCase() != filter.contentType) {
           continue;
         }
 
         // Skip, if neither id nor name match. 
-        if (filter.id !== undefined && filter.id !== entry.id) continue;
-        if (filter.name !== undefined && filter.name.toLowerCase() !== entry.name.toLowerCase()) continue;
+        if (ValidationUtil.isDefined(filter.id) && filter.id !== entry.id) continue;
+        if (ValidationUtil.isDefined(filter.name) && filter.name.toLowerCase() !== entry.name.toLowerCase()) continue;
 
         result.push(entry);
       }
@@ -534,7 +533,7 @@ export default class DocumentFetcher {
       if (this._packSourceFilterMatches(filter, pack) !== true) continue;
 
       // Skip, if the pack is of the wrong document type. 
-      if (filter.documentType !== undefined 
+      if (ValidationUtil.isDefined(filter.documentType)  
         && pack.metadata.type.toLowerCase() != filter.documentType) {
         continue;
       }
@@ -590,7 +589,7 @@ export default class DocumentFetcher {
       if (worldCollection.size < 1) continue;
 
       // Skip, if the collection is of the wrong document type. 
-      if (filter.documentType !== undefined 
+      if (ValidationUtil.isDefined(filter.documentType) 
         && worldCollection.documentName.toLowerCase() != filter.documentType) {
         continue;
       }
@@ -598,7 +597,7 @@ export default class DocumentFetcher {
       const entries = worldCollection.values();
       for (const entry of entries) {
         // Skip, if the entry is of the wrong content type. 
-        if (filter.contentType !== undefined 
+        if (ValidationUtil.isDefined(filter.contentType) 
           && entry.type.toLowerCase() != filter.contentType) {
           continue;
         }
@@ -650,10 +649,10 @@ export default class DocumentFetcher {
     filter.includeLocked = filter.includeLocked ?? true;
 
     // Convert the type string to lowercase, for easier comparisons. 
-    if (filter.documentType !== undefined) {
+    if (ValidationUtil.isDefined(filter.documentType)) {
       filter.documentType = filter.documentType.toLowerCase();
     }
-    if (filter.contentType !== undefined) {
+    if (ValidationUtil.isDefined(filter.contentType)) {
       filter.contentType = filter.contentType.toLowerCase();
     }
 

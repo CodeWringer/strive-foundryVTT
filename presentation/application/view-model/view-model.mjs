@@ -230,11 +230,19 @@ export default class ViewModel {
   /**
    * If true, the view model data is editable. 
    * 
+   * Propagates changes to this property to all children. 
+   * 
    * @type {Boolean}
    * @default `false`
    */
   get isEditable() { return this._isEditable; }
-  set isEditable(value) { this._isEditable = value; }
+  set isEditable(value) {
+    this._isEditable = value;
+
+    for (const child of this.children) {
+      child.isEditable = value;
+    }
+  }
   
   /**
    * Returns true, if the current user is the owner of the represented document. 
@@ -371,6 +379,7 @@ export default class ViewModel {
       this._toolTip = new Tooltip({
         id: `${this.id}-tooltip`,
         content: this._toolTipDefinition.localized,
+        additionalContent: this._toolTipDefinition.additionalLocalized,
         style: this._toolTipDefinition.style,
         onShown: () => {
           this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
@@ -681,6 +690,21 @@ export default class ViewModel {
   }
 
   /**
+   * Sets the given `newContent` as the tool tip's content, if it is defined. 
+   * @param {String} newContent New HTML content to display in the tool tip, if it is defined. 
+   */
+  setToolTipContent(newContent) {
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      this._toolTipDefinition.localized = newContent;
+      this._toolTip.content = newContent;
+      if (this._toolTip.visible) {
+        this._toolTip.hide();
+        this._toolTip.show();
+      }
+    }
+  }
+
+  /**
    * Returns an array of view model instances that have either been fetched 
    * from the `currentList` or newly instantiated, using the `factoryFunc`. 
    * 
@@ -743,6 +767,8 @@ export default class ViewModel {
 /**
  * @param {String} localized A localized text to 
  * display as a tool tip. 
+ * @param {String | undefined} additionalLocalized Additional localized text to 
+ * display in the tool tip, if the user presses the modifier key (such as 'Alt'). 
  * @param {String | undefined} style A style override to attach to the tool tip's DOM element. 
  * E. g. `text-align: center`
  */
@@ -751,6 +777,8 @@ export class ViewModelToolTipDefinition {
    * @param {Object} args 
    * @param {String} args.localized A localized text to 
    * display as a tool tip. 
+   * @param {String | undefined} args.additionalLocalized Additional localized text to 
+   * display in the tool tip, if the user presses the modifier key (such as 'Alt'). 
    * @param {String | undefined} args.style A style override to attach to the tool tip's DOM element. 
    * E. g. `text-align: center`
    */
@@ -758,6 +786,7 @@ export class ViewModelToolTipDefinition {
     ValidationUtil.validateOrThrow(args, ["localized"]);
 
     this.localized = args.localized;
+    this.additionalLocalized = args.additionalLocalized;
     this.style = args.style;
   }
 }

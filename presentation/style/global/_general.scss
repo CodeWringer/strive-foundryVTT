@@ -8,27 +8,146 @@
 
 .v-divider {
   width: 1px;
-  margin: 0 10px;
+  height: stretch;
   padding-right: 1px; // Ensures symmetry on the right side.
 }
 
+.h-divider {
+  width: stretch;
+  height: 1px;
+  margin: 5px 0;
+  padding-bottom: 1px; // Ensures symmetry below.
+  display: block;
+
+  &-full {
+    width: stretch;
+    height: 1px;
+    margin: 0;
+    padding-bottom: 1px; // Ensures symmetry below.
+  }
+}
+
+.strive {
+  .input {
+    border-radius: unset;
+
+    .edit-mode {
+      height: $input-size-md;
+      line-height: $input-size-md;
+      font-size: $font-size-md;
+    }
+
+    .read-mode {
+      height: $input-size-md;
+      line-height: $input-size-md;
+      font-size: $font-size-md;
+      border: unset;
+    }
+
+    &.flex-grow {
+      .edit-mode {
+        flex: 1;
+      }
+      .read-mode {
+        flex: 1;
+      }
+    }
+
+    &.lg {
+      .edit-mode {
+        height: $input-size-lg;
+        line-height: $input-size-lg;
+        font-size: $font-size-lg;
+      }
+
+      .read-mode {
+        height: $input-size-lg;
+        line-height: $input-size-lg;
+        font-size: $font-size-lg;
+      }
+    }
+  }
+}
+
 .theme-dark {
-  .v-divider {
-    background-color: $c-border-dark;
+
+  .v-divider,
+  .h-divider,
+  .h-divider-full {
+    background-color: $c-border-dark-secondary;
   }
 
   .gm-only {
     background-color: $c-bg-gm-dark;
+    border-top: 1px solid $c-border-dark-secondary;
+  }
+
+  .strive {
+    .input {
+      .edit-mode {
+        background-color: $c-bg-input-dark;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-top: unset;
+        border-left: unset;
+        border-right: unset;
+        border-bottom-color: $c-border-dark;
+        color: $c-text-dark;
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+          background-color: $c-bg-input-focus-dark;
+          border-top: unset;
+          border-left: unset;
+          border-right: unset;
+          border-bottom: 1px solid $c-border-highlight-dark;
+          outline: unset;
+          box-shadow: none;
+        }
+      }
+    }
   }
 }
 
 .theme-light {
-  .v-divider {
-    background-color: $c-border-light;
+
+  .v-divider,
+  .h-divider,
+  .h-divider-full {
+    background-color: $c-border-light-secondary;
   }
 
   .gm-only {
     background-color: $c-bg-gm-light;
+    border-top: 1px solid $c-border-light-secondary;
+  }
+
+  .strive {
+    .input {
+      .edit-mode {
+        background-color: $c-bg-input-light;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-top: unset;
+        border-left: unset;
+        border-right: unset;
+        border-bottom-color: $c-border-light;
+        color: $c-text-light;
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+          background-color: $c-bg-input-focus-light;
+          border-top: unset;
+          border-left: unset;
+          border-right: unset;
+          border-bottom: 1px solid $c-border-highlight-light;
+          outline: unset;
+          box-shadow: none;
+        }
+      }
+    }
   }
 }
 
@@ -37,114 +156,56 @@
   overflow-x: hidden;
 }
 
-// Padding styles
-.pad {
+@mixin padding-template($padding) {
   &-xs {
-    padding: $padding-xs !important;
+    #{$padding}: $padding-xs !important;
   }
 
   &-sm {
-    padding: $padding-sm !important;
+    #{$padding}: $padding-sm !important;
   }
 
   &-md {
-    padding: $padding-md !important;
+    #{$padding}: $padding-md !important;
   }
 
   &-lg {
-    padding: $padding-lg !important;
+    #{$padding}: $padding-lg !important;
   }
 
   &-xl {
-    padding: $padding-xl !important;
+    #{$padding}: $padding-xl !important;
+  }
+};
+
+// Padding styles
+.pad {
+  @include padding-template(padding);
+
+  &-h {
+    @include padding-template(padding-left);
+    @include padding-template(padding-right);
   }
 
+  &-v {
+    @include padding-template(padding-top);
+    @include padding-template(padding-bottom);
+  }
+  
   &-b {
-    &-xs {
-      padding-bottom: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-bottom: $padding-sm !important;
-    }
-
-    &-md {
-      padding-bottom: $padding-md !important;
-    }
-
-    &-lg {
-      padding-bottom: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-bottom: $padding-xl !important;
-    }
+    @include padding-template(padding-bottom);
   }
-
+  
   &-t {
-    &-xs {
-      padding-top: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-top: $padding-sm !important;
-    }
-
-    &-md {
-      padding-top: $padding-md !important;
-    }
-
-    &-lg {
-      padding-top: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-top: $padding-xl !important;
-    }
+    @include padding-template(padding-top);
   }
-
+  
   &-l {
-    &-xs {
-      padding-left: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-left: $padding-sm !important;
-    }
-
-    &-md {
-      padding-left: $padding-md !important;
-    }
-
-    &-lg {
-      padding-left: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-left: $padding-xl !important;
-    }
+    @include padding-template(padding-left);
   }
-
+  
   &-r {
-    &-xs {
-      padding-right: $padding-xs !important;
-    }
-
-    &-sm {
-      padding-right: $padding-sm !important;
-    }
-
-    &-md {
-      padding-right: $padding-md !important;
-    }
-
-    &-lg {
-      padding-right: $padding-lg !important;
-    }
-
-    &-xl {
-      padding-right: $padding-xl !important;
-    }
+    @include padding-template(padding-right);
   }
 }
 
@@ -161,90 +222,24 @@
   min-width: inherit;
 }
 
+.width {
+  &-sm {
+    width: 3rem;
+    max-width: 3rem;
+  }
+  &-md {
+    width: 4rem;
+    max-width: 4rem;
+  }
+  &-lg {
+    width: 6rem;
+    max-width: 6rem;
+  }
+}
+
 .height-fill {
   height: 100%;
   min-height: inherit;
-}
-
-// Specific widths
-.width {
-  &-xs {
-    width: $width-column-xs;
-  }
-
-  &-sm {
-    width: $width-column-sm;
-  }
-
-  &-md {
-    width: $width-column-md;
-  }
-
-  &-lg {
-    width: $width-column-lg;
-  }
-
-  &-xl {
-    width: $width-column-xl;
-  }
-
-  &-xxl {
-    width: $width-column-xxl;
-  }
-}
-
-// Minimum widths
-.width-min {
-  &-xs {
-    min-width: $width-column-xs;
-  }
-
-  &-sm {
-    min-width: $width-column-sm;
-  }
-
-  &-md {
-    min-width: $width-column-md;
-  }
-
-  &-lg {
-    min-width: $width-column-lg;
-  }
-
-  &-xl {
-    min-width: $width-column-xl;
-  }
-
-  &-xxl {
-    min-width: $width-column-xxl;
-  }
-}
-
-// Maximum widths
-.width-max {
-  &-xs {
-    max-width: $width-column-xs;
-  }
-
-  &-sm {
-    max-width: $width-column-sm;
-  }
-
-  &-md {
-    max-width: $width-column-md;
-  }
-
-  &-lg {
-    max-width: $width-column-lg;
-  }
-
-  &-xl {
-    max-width: $width-column-xl;
-  }
-
-  &-xxl {
-    max-width: $width-column-xxl;
-  }
 }
 
 // Margins
@@ -421,97 +416,23 @@
   &-sm {
     overflow-x: hidden;
     overflow-y: auto;
-    min-height: $line-height;
+    min-height: $font-size-md;
     max-height: 150px;
   }
 
   &-md {
     overflow-x: hidden;
     overflow-y: auto;
-    min-height: $line-height;
+    min-height: $font-size-md;
     max-height: 250px;
   }
 
   &-lg {
     overflow-x: hidden;
     overflow-y: auto;
-    min-height: $line-height;
+    min-height: $font-size-md;
     max-height: 350px;
   }
-}
-
-// Font sizes
-.font-size {
-  &-xxs {
-    font-size: $font-size-xxs;
-  }
-
-  &-xs {
-    font-size: $font-size-xs;
-  }
-
-  &-sm {
-    font-size: $font-size-sm;
-  }
-
-  &-default {
-    font-size: $font-size-default;
-  }
-
-  &-lg {
-    font-size: $font-size-lg;
-  }
-
-  &-xl {
-    font-size: $font-size-xl;
-  }
-
-  &-xxl {
-    font-size: $font-size-xxl;
-  }
-}
-
-// Override to enable input font-sizes. 
-input[type="text"],
-input[type="number"],
-input[type="password"],
-input[type="date"],
-input[type="time"],
-input[type="search"] {
-  &.font-size {
-    &-xxs {
-      font-size: $font-size-xxs;
-    }
-
-    &-xs {
-      font-size: $font-size-xs;
-    }
-
-    &-sm {
-      font-size: $font-size-sm;
-    }
-
-    &-default {
-      font-size: $font-size-default;
-    }
-
-    &-lg {
-      font-size: $font-size-lg;
-    }
-
-    &-xl {
-      font-size: $font-size-xl;
-    }
-
-    &-xxl {
-      font-size: $font-size-xxl;
-    }
-  }
-}
-
-// Font weight
-.font-bold {
-  font-weight: bold;
 }
 
 // Relative arrangements

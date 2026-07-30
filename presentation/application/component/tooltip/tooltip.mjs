@@ -1,4 +1,7 @@
 import { common } from "../../../../common/_module.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { MODIFIER_KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
+import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
 import { Rect } from "../../../util/rect.mjs";
 import { SheetUtil } from "../../../util/sheet-utility.mjs";
 
@@ -82,6 +85,11 @@ export default class Tooltip {
    * This is also the element that controls the tooltips visibility on hover. 
    * @param {String | undefined} args.content The content to display in the tooltip. 
    * This can be any valid HTML content, or just a simple text. 
+   * @param {String | undefined} args.additionalContent Additional content to display in the tooltip, 
+   * while the `modifier` key is held down.
+   * @param {String | undefined} args.modifierKey The `additionalContent` is only displayed while 
+   * this modifier key is held down. 
+   * * default `MODIFIER_KEY_CODES.ALT`
    * @param {String | undefined} args.maxWidth Sets the maximum width the tooltip can assume. 
    * This must be a numeric value with css unit. E. g. `"50rem"`. 
    * * default `"50rem"`
@@ -101,10 +109,13 @@ export default class Tooltip {
 
     this.anchorElement = args.anchorElement;
     this.content = args.content;
+    this.additionalContent = args.additionalContent;
+    this.modifierKey = args.modifierKey ?? MODIFIER_KEY_CODES.ALT,
     this.maxWidth = args.maxWidth ?? "50rem";
     this.showOnHover = args.showOnHover ?? true;
     this.style = args.style ?? "";
 
+    this._modifierIsDown = false;
     this._visible = false;
 
     this.onShown = args.onShown ?? (() => { });
@@ -119,12 +130,33 @@ export default class Tooltip {
   activateListeners(anchorElement) {
     this.anchorElement = anchorElement;
 
-    if (this.showOnHover === true && common.util.validation.isDefined(this.anchorElement)) {
+    if (this.showOnHover === true && ValidationUtil.isDefined(this.anchorElement)) {
       this.anchorElement.on(`mouseenter.${Tooltip.EVENT_NAMESPACE}.${this._id}`, (event) => {
         this.show();
       });
       this.anchorElement.on(`mouseleave.${Tooltip.EVENT_NAMESPACE}.${this._id}`, () => {
         this.hide();
+      });
+    }
+
+    if (ValidationUtil.isDefined(this.additionalContent)) {
+      this._keyboardOnDownEventId = KEYBOARD.onKeyDown({
+        modifier: this.modifierKey,
+        handler: () => {
+          this._modifierIsDown = true;
+          if (ValidationUtil.isDefined(this._element)) {
+            this._element.html(`<div class="flex flex-column">${this.content}<hr>${this.additionalContent}</div>`);
+          }
+        },
+      });
+      this._keyboardOnUpEventId = KEYBOARD.onKeyUp({
+        modifier: this.modifierKey,
+        handler: () => {
+          this._modifierIsDown = false;
+          if (ValidationUtil.isDefined(this._element)) {
+            this._element.html(this.content);
+          }
+        },
       });
     }
   }
@@ -133,9 +165,15 @@ export default class Tooltip {
    * Unregisters event handlers from the `anchorElement`. 
    */
   deactivateListeners() {
-    if (common.util.validation.isDefined(this.anchorElement)) {
+    if (ValidationUtil.isDefined(this.anchorElement)) {
       this.anchorElement.off(`mouseenter.${Tooltip.EVENT_NAMESPACE}.${this._id}`);
       this.anchorElement.off(`mouseleave.${Tooltip.EVENT_NAMESPACE}.${this._id}`);
+    }
+    if (ValidationUtil.isDefined(this._keyboardOnDownEventId)) {
+      KEYBOARD.offKeyDown(this._keyboardOnDownEventId);
+    }
+    if (ValidationUtil.isDefined(this._keyboardOnUpEventId)) {
+      KEYBOARD.offKeyDown(this._keyboardOnUpEventId);
     }
     this.hide();
   }
@@ -144,7 +182,7 @@ export default class Tooltip {
    * Makes the tooltip visible, by adding it to the DOM and positioning it accordingly. 
    */
   show() {
-    if (!common.util.validation.isDefined(this.anchorElement)) return;
+    if (!ValidationUtil.isDefined(this.anchorElement)) return;
 
     this._visible = true;
 
@@ -152,7 +190,11 @@ export default class Tooltip {
     this._ensureElementRemoved();
     this._ensureElement();
     // Ensure the content is up to date. 
-    this._element.html(this.content);
+    if (this._modifierIsDown && ValidationUtil.isDefined(this.additionalContent)) {
+      this._element.html(`<div class="flex flex-column">${this.content}<hr>${this.additionalContent}</div>`);
+    } else {
+      this._element.html(this.content);
+    }
 
     // Determine position and bounds. 
 
@@ -262,7 +304,7 @@ export default class Tooltip {
    */
   _ensureElement() {
     const elementInDom = this._getElementFromDom();
-    if (common.util.validation.isDefined(elementInDom)) {
+    if (ValidationUtil.isDefined(elementInDom)) {
       this._element = elementInDom;
     } else {
       const elementCreationString = `<div class="${Tooltip.CSS_CLASS}" id="${this._id}" style="max-width:${this.maxWidth}">${this.content}</div>`;
@@ -277,12 +319,12 @@ export default class Tooltip {
    * @private
    */
   _ensureElementRemoved() {
-    if (common.util.validation.isDefined(this._element)) {
+    if (ValidationUtil.isDefined(this._element)) {
       this._element.remove();
     }
 
     const elementInDom = this._getElementFromDom();
-    if (common.util.validation.isDefined(elementInDom)) {
+    if (ValidationUtil.isDefined(elementInDom)) {
       elementInDom.remove();
     }
 

@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { INJURY_STATES, InjuryState } from "../../domain/const/injury-states.mjs";
 import Reference from "../../domain/reference.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
@@ -54,7 +55,9 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * * Read-only.
  * @property {Number} healProgress.current
  * @property {Number} healProgress.required
- * @property {Boolean} healProgress.untilCured
+ * @property {Boolean} healProgress.untilCured Is `true`, if `healProgress.required` 
+ * is `<= 0`. 
+ * * Read-only.
  * 
  * @extends TransientBaseItem
  */
@@ -70,7 +73,7 @@ export default class TransientInjury extends TransientBaseItem {
    */
   get state() { return this._state.value; }
   set state(value) { this._state.value = value; }
-  
+
   get treatment() {
     const thiz = this;
     return {
@@ -79,7 +82,7 @@ export default class TransientInjury extends TransientBaseItem {
        */
       get lastTreatmentTime() { return thiz._treatment.lastTreatmentTime.value; },
       set lastTreatmentTime(value) { thiz._treatment.lastTreatmentTime.value = value; },
-      
+
       /**
        * @type {String}
        */
@@ -91,7 +94,7 @@ export default class TransientInjury extends TransientBaseItem {
        */
       get skill() { return thiz._treatment.skill.value; },
       set skill(value) { thiz._treatment.skill.value = value; },
-      
+
       get requiredSupplies() {
         return {
           /**
@@ -99,7 +102,7 @@ export default class TransientInjury extends TransientBaseItem {
            */
           get amount() { return thiz._treatment.requiredSupplies.amount.value; },
           set amount(value) { thiz._treatment.requiredSupplies.amount.value = value; },
-    
+
           /**
            * @type {Reference}
            */
@@ -109,7 +112,7 @@ export default class TransientInjury extends TransientBaseItem {
       },
     };
   }
-  
+
   get healProgress() {
     const thiz = this;
     return {
@@ -118,7 +121,7 @@ export default class TransientInjury extends TransientBaseItem {
        */
       get current() { return thiz._healProgress.current.value; },
       set current(value) { thiz._healProgress.current.value = value; },
-      
+
       /**
        * @type {Number}
        */
@@ -127,9 +130,9 @@ export default class TransientInjury extends TransientBaseItem {
 
       /**
        * @type {Boolean}
+       * @readonly
        */
-      get untilCured() { return thiz._healProgress.untilCured.value; },
-      set untilCured(value) { thiz._healProgress.untilCured.value = value; },
+      get untilCured() { return parseInt(thiz._healProgress.required.value) <= 0; },
     };
   }
 
@@ -144,7 +147,7 @@ export default class TransientInjury extends TransientBaseItem {
     this._state = new DataFieldBridge({
       document: this,
       dataPath: "system.state",
-      default: INJURY_STATES.active,
+      default: INJURY_STATES.active.name,
       fromDto: (dto) => {
         return INJURY_STATES[dto];
       },
@@ -169,7 +172,11 @@ export default class TransientInjury extends TransientBaseItem {
           return Reference.fromDto(dto);
         },
         toDto: (value) => {
-          return value.toDto();
+          if (ValidationUtil.isDefined(value)) {
+            return value.toDto();
+          } else {
+            return new Reference();
+          }
         },
       }),
 
@@ -185,7 +192,11 @@ export default class TransientInjury extends TransientBaseItem {
             return Reference.fromDto(dto);
           },
           toDto: (value) => {
-            return value.toDto();
+            if (ValidationUtil.isDefined(value)) {
+              return value.toDto();
+            } else {
+              return new Reference();
+            }
           },
         }),
       },
@@ -199,10 +210,6 @@ export default class TransientInjury extends TransientBaseItem {
       required: new DataFieldBridge({
         document: this,
         dataPath: "system.healProgress.required",
-      }),
-      untilCured: new DataFieldBridge({
-        document: this,
-        dataPath: "system.healProgress.untilCured",
       }),
     };
   }

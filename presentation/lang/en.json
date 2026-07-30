@@ -1,16 +1,16 @@
 {
   "TYPES.Actor.character": "Character",
   "TYPES.Actor.plain": "Plain Actor",
-  "TYPES.Item.item": "Asset",
-  "TYPES.Item.skill": "Skill",
-  "TYPES.Item.fate-card": "Fate-Card",
-  "TYPES.Item.injury": "Injury",
+  "TYPES.Item.asset": "Asset",
+  "TYPES.Item.fateCard": "Fate-Card",
+  "TYPES.Item.healthCondition": "Health Condition",
   "TYPES.Item.illness": "Illness",
-  "TYPES.Item.momentum-action": "Momentum Action",
-  "TYPES.Item.health-condition": "Health Condition",
+  "TYPES.Item.injury": "Injury",
+  "TYPES.Item.language": "Language",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.project": "Project",
-  "TYPES.Item.scar": "Scar",
+  "TYPES.Item.recipe": "Recipe",
+  "TYPES.Item.skill": "Skill",
   "TYPES.Item.trait": "Trait",
   "COMBAT.ActionPoints": "Set Action Points",
   "COMBAT.GritPoints": "Set Grit Points",
@@ -24,6 +24,9 @@
     "gm": "GM"
   },
   "system": {
+    "debug": {
+      "uiDebugDialogTitle": "UI Element Debug Dialog"
+    },
     "migration": {
       "title": "Data Migration",
       "titleMigrationRequired": "Data Migration Required",
@@ -147,6 +150,9 @@
         "queryTypeOf": "Confirm Deletion of %s '%s'"
       },
       "description": "Description",
+      "dragDrop": {
+        "accept": "Drag Here"
+      },
       "duplicate": "Duplicate",
       "edit": {
         "edit": "Edit",
@@ -228,7 +234,10 @@
         "singular": "Tag",
         "plural": "Tags"
       },
-      "propertyPath": "Property path"
+      "propertyPath": "Property path",
+      "reference": {
+        "referenceFrom": "%{contentType} from %{pack}"
+      }
     },
     "actor": {
       "plain": {
@@ -249,9 +258,29 @@
         },
         "readAndWrite": {
           "readAndWrite": "Read/Write Ability",
+          "readAndWriteWithCurrent": "Read/Write Ability<br>(= %s)",
           "canReadAndWrite": "Can Read/Write",
           "cannotReadAndWrite": "Can not Read/Write"
         }
+      },
+      "injury": {
+        "injury": "Injury",
+        "state": {
+          "state": "Injury State",
+          "stateWithCurrent": "Injury State<br>(= %s)",
+          "active": "Active",
+          "treated": "Treated"
+        },
+        "treatment": {
+          "date": "Last Treatment Date",
+          "obstacle": "Treatment Obstacle",
+          "skill": "Treatment Skill",
+          "supplies": {
+            "amount": "Treatment Supplies Amount",
+            "asset": "Treatment Supplies Asset"
+          }
+        },
+        "healProgress": "Healing Progress (Current / Required)"
       }
     }
   }

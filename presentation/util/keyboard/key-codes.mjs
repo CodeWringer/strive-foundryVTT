@@ -7,6 +7,7 @@ export const KEY_CODES = {
   ESCAPE: 27,
   E: 69,
   S: 83,
+  SPACE: 32,
 }
 
 /**

@@ -1,7 +1,7 @@
 import { StringUtil } from "../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
-import { KEYBOARD } from "../../keyboard/keyboard.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -125,14 +125,22 @@ export default class SortControlsViewModel extends ViewModel {
       buttonsSortDescending: this.element.find(".sort-descending"),
     }
 
-    KEYBOARD.onKeyDown(KEY_CODES.ALT, this._handleGlobalKeyDown, data);
-    KEYBOARD.onKeyUp(KEY_CODES.ALT, this._handleGlobalKeyUp, data);
+    this._keyDownEventId = KEYBOARD.onKeyDown({
+      keyCodes: [KEY_CODES.ALT], 
+      handler: this._handleGlobalKeyDown, 
+      data: data,
+    });
+    this._keyUpEventId = KEYBOARD.onKeyUp({
+      keyCodes: [KEY_CODES.ALT],
+      handler: this._handleGlobalKeyUp,
+      data: data,
+    });
   }
 
   /** @override */
   dispose() {
-    KEYBOARD.offKeyDown(KEY_CODES.ALT, this._handleGlobalKeyDown);
-    KEYBOARD.offKeyUp(KEY_CODES.ALT, this._handleGlobalKeyUp);
+    KEYBOARD.offKeyDown(this._keyDownEventId);
+    KEYBOARD.offKeyUp(this._keyUpEventId);
 
     super.dispose();
   }

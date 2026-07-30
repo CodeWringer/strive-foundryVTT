@@ -1,8 +1,12 @@
+import { ArrayUtil } from "../../../common/util/array-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { MODIFIER_KEY_CODES } from "./key-codes.mjs";
 
 /**
- * Provides means to query global key events. 
+ * Provides means to query ***global*** key events. 
+ * 
+ * DO NOT use this for key events that are only supposed to be invoked when 
+ * a certain element has focus!
  * 
  * @constant
  */
@@ -60,12 +64,12 @@ export const KEYBOARD = {
    * Binds the given handler to the **global** keydown event. 
    * 
    * @param {Object} args
-   * @param {Number | undefined} args.keyCode The key code on which to invoke the `handler`. 
+   * @param {Array<Number> | undefined} args.keyCodes Key codes on which to invoke the `handler`. 
    * * see the `KEY_CODES` constant. 
    * @param {Number | undefined} args.modifier The modifier required to invoke the `handler`. 
    * * see the `MODIFIER_KEY_CODES` constant. 
-   * @param {Function} args.handler The callback function to bind. Gets invoked whenever the key with the given 
-   * `keyCode` is pressed down. 
+   * @param {Function} args.handler The callback function to bind. Gets invoked whenever any key of the given 
+   * `keyCodes` is pressed down. 
    * * Receives `data` as sole argument. 
    * @param {Any | undefined} args.data Optional data to pass through to the `handler`. 
    * @returns {Number} Listener id. Can be passed to `offKeyDown` to deactivate the listener. 
@@ -73,7 +77,7 @@ export const KEYBOARD = {
   onKeyDown: function(args = {}) {
     const listenerId = KEYBOARD._listenerId;
     KEYBOARD._keyDownListeners.set(listenerId, {
-      keyCode: args.keyCode,
+      keyCodes: args.keyCodes,
       modifier: args.modifier,
       handler: args.handler,
       data: args.data,
@@ -95,12 +99,12 @@ export const KEYBOARD = {
    * Binds the given handler to the **global** keyup event. 
    * 
    * @param {Object} args
-   * @param {Number | undefined} args.keyCode The key code on which to invoke the `handler`. 
+   * @param {Number | undefined} args.keyCodes Key codes on which to invoke the `handler`. 
    * * see the `KEY_CODES` constant. 
    * @param {Number | undefined} args.modifier The modifier required to invoke the `handler`. 
    * * see the `MODIFIER_KEY_CODES` constant. 
-   * @param {Function} args.handler The callback function to bind. Gets invoked whenever the key with the given 
-   * `keyCode` is released. 
+   * @param {Function} args.handler The callback function to bind. Gets invoked whenever any key of the given 
+   * `keyCodes` is released. 
    * * Receives `data` as sole argument. 
    * @param {Any | undefined} args.data Optional data to pass through to the `handler`. 
    * @returns {Number} Listener id. Can be passed to `offKeyUp` to deactivate the listener. 
@@ -108,7 +112,7 @@ export const KEYBOARD = {
   onKeyUp: function(args = {}) {
     const listenerId = KEYBOARD._listenerId;
     KEYBOARD._keyUpListeners.set(listenerId, {
-      keyCode: args.keyCode,
+      keyCodes: args.keyCodes,
       modifier: args.modifier,
       handler: args.handler,
       data: args.data,
@@ -140,8 +144,8 @@ export const KEYBOARD = {
         if (value.modifier === MODIFIER_KEY_CODES.ALT && !event.altKey) continue;
         if (value.modifier === MODIFIER_KEY_CODES.CTRL && !event.ctrlKey) continue;
       }
-      if (ValidationUtil.isDefined(value.keyCode)) {
-        if (value.keyCode !== keyCode) continue;
+      if (ValidationUtil.isDefined(value.keyCodes)) {
+        if (!ArrayUtil.arrayContains(value.keyCodes, keyCode)) continue;
       }
       value.handler(value.data);
     }
@@ -161,8 +165,8 @@ export const KEYBOARD = {
         if (value.modifier === MODIFIER_KEY_CODES.ALT && !event.altKey) continue;
         if (value.modifier === MODIFIER_KEY_CODES.CTRL && !event.ctrlKey) continue;
       }
-      if (ValidationUtil.isDefined(value.keyCode)) {
-        if (value.keyCode !== keyCode) continue;
+      if (ValidationUtil.isDefined(value.keyCodes)) {
+        if (!ArrayUtil.arrayContains(value.keyCodes, keyCode)) continue;
       }
       value.handler(value.data);
     }

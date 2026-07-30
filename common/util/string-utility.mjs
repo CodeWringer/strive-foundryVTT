@@ -1,3 +1,5 @@
+import { ValidationUtil } from "./validation-utility.mjs";
+
 /**
  * @constant
  */
@@ -32,7 +34,7 @@ export const StringUtil = {
    * @type {String}
    * @constant
    */
-  REGEX_PLACEHOLDER: /%\{(?<placeholder>[a-zA-Z0-9-_]+)\}/g,
+  REGEX_PLACEHOLDER: /%\{(?<placeholder>[^}]+)\}/g,
 
   /**
    * Every property corresponds to an HTML special character and its value 
@@ -106,7 +108,7 @@ export const StringUtil = {
    * ```
    * 
    * @param {String} str A string that contains placeholders. All placeholders must 
-   * follow the format `%{<placeholder>}`. 
+   * follow the format `%{<placeholder>}`. E. g. `"%{myPlaceholder}"`
    * @param {Object} replacements An object that must contain properties whose names match 
    * the exact placeholder names in the given string. Their value is the replacement. 
    * E. g. `{ firstName: "Bob", lastName: "Bauer" }`
@@ -169,5 +171,151 @@ export const StringUtil = {
    */
   getLoca(key) {
     return game.i18n.localize(key);
-  }
-}
+  },
+
+  /**
+   * Returns `true`, if the given string is matched by the given pattern. 
+   * @param {String} str The string to test.
+   * @param {String} regex A regex pattern.
+   * @returns {Boolean} `true`, if the string is matched by the pattern. 
+   */
+  matches(str, regex) {
+    const m = str.match(regex);
+    return m !== undefined && m !== null;
+  },
+
+  /**
+   * Returns the index of the matching closing character. 
+   * @param {String} str String to search in.
+   * E. g. `"(a (b))"`
+   * @param {Number} char Indicates the type of matchable character. 
+   * See `StringUtil.MATCHABLE_CHARS`. 
+   * @param {Number} index Index to start searching from.
+   * @returns {Number} Index of the closing character, or `-1`, if it 
+   * couldn't find it. 
+   */
+  findClosing(str, char, index) {
+    if (ValidationUtil.isBlankOrUndefined(str)) {
+      throw new Error("`str` must not be blank or null");
+    }
+    if (!ValidationUtil.isDefined(char)) {
+      throw new Error("`char` must not undefined or null");
+    }
+    if (!ValidationUtil.isDefined(index)) {
+      throw new Error("`index` must not undefined or null");
+    }
+
+    let open = 0;
+    for (let i = index; i < str.length; i++) {
+      const c = str[i];
+      
+      if (char === StringUtil.MATCHABLE_CHARS.ANGLE_BRACKETS) {
+        if (c === "<") {
+          open++;
+        } else if (c === ">") {
+          open--;
+        }
+      } else if (char === StringUtil.MATCHABLE_CHARS.BRACKETS) {
+        if (c === "[") {
+          open++;
+        } else if (c === "]") {
+          open--;
+        }
+      } else if (char === StringUtil.MATCHABLE_CHARS.CURLY_BRACES) {
+        if (c === "{") {
+          open++;
+        } else if (c === "}") {
+          open--;
+        }
+      } else if (char === StringUtil.MATCHABLE_CHARS.PARENTHESES) {
+        if (c === "(") {
+          open++;
+        } else if (c === ")") {
+          open--;
+        }
+      }
+
+      if (open === 0) {
+        return i;
+      }
+    }
+    return -1;
+  },
+
+  /**
+   * Returns the index of the matching opening character. 
+   * @param {String} str String to search in.
+   * E. g. `"(a (b))"`
+   * @param {Number} char Indicates the type of matchable character. 
+   * See `StringUtil.MATCHABLE_CHARS`. 
+   * @param {Number} index Index to start searching from.
+   * @returns {Number} Index of the opening character, or `-1`, if it 
+   * couldn't find it. 
+   */
+  findOpening(str, char, index) {
+    if (ValidationUtil.isBlankOrUndefined(str)) {
+      throw new Error("`str` must not be blank or null");
+    }
+    if (!ValidationUtil.isDefined(char)) {
+      throw new Error("`char` must not undefined or null");
+    }
+    if (!ValidationUtil.isDefined(index)) {
+      throw new Error("`index` must not undefined or null");
+    }
+
+    let open = 0;
+    for (let i = index; i >= 0; i--) {
+      const c = str[i];
+      
+      if (char === StringUtil.MATCHABLE_CHARS.ANGLE_BRACKETS) {
+        if (c === ">") {
+          open++;
+        } else if (c === "<") {
+          open--;
+        }
+      } else if (char === StringUtil.MATCHABLE_CHARS.BRACKETS) {
+        if (c === "]") {
+          open++;
+        } else if (c === "[") {
+          open--;
+        }
+      } else if (char === StringUtil.MATCHABLE_CHARS.CURLY_BRACES) {
+        if (c === "}") {
+          open++;
+        } else if (c === "{") {
+          open--;
+        }
+      } else if (char === StringUtil.MATCHABLE_CHARS.PARENTHESES) {
+        if (c === ")") {
+          open++;
+        } else if (c === "(") {
+          open--;
+        }
+      }
+
+      if (open === 0) {
+        return i;
+      }
+    }
+    return -1;
+  },
+
+  MATCHABLE_CHARS: {
+    /**
+     * "<" and ">"
+     */
+    ANGLE_BRACKETS: 0,
+    /**
+     * "[" and "]"
+     */
+    BRACKETS: 1,
+    /**
+     * "{" and "}"
+     */
+    CURLY_BRACES: 2,
+    /**
+     * "(" and ")"
+     */
+    PARENTHESES: 3,
+  },
+};

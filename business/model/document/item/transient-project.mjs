@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import Complication from "../../domain/complication/complication.mjs";
 import { TIME_UNITS } from "../../domain/const/time-units.mjs";
 import Reference from "../../domain/reference.mjs";
@@ -165,7 +166,11 @@ export default class TransientProject extends TransientBaseItem {
         return Reference.fromDto(dto);
       },
       toDto: (value) => {
-        return value.toDto();
+        if (ValidationUtil.isDefined(value)) {
+          return value.toDto();
+        } else {
+          return new Reference();
+        }
       },
     });
     this._pushes = new DataFieldBridge({

@@ -1,7 +1,7 @@
 import { TEMPLATES } from "../../templates.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import DynamicComponent from "../dynamic-component/dynamic-component.mjs";
-import { PreparedSectionViewModelUtility } from "../dynamic-component/prepared-section-viewmodel-utility.mjs";
+import PreparedSection from "../dynamic-component/prepared-section.mjs";
 
 /**
  * A composable row of a dynamic number of components. 
@@ -43,6 +43,11 @@ export default class RowViewModel extends ViewModel {
     super(args);
 
     this.sections = args.sections ?? [];
-    PreparedSectionViewModelUtility.convertDynamicComponents(this, this.sections);
+    this.preparedSections = this.sections.map(it => PreparedSection.fromDynamicComponent(it, this));
+    for (const prepared of this.preparedSections) {
+      if (ValidationUtil.isDefined(prepared.viewModel)) {
+        this[prepared.viewModel._id] = prepared.viewModel;
+      }
+    }
   }
 }

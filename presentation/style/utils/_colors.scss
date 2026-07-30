@@ -7,12 +7,14 @@ $c-bg-dark: #18171fff;
 $c-bg-gm-dark: #381f38;
 
 $c-bg-input-light: #d9d6cc;
-$c-bg-input-focus-light: #c0bdb2;
+$c-bg-input-focus-light: #bebbb279;
 $c-bg-input-dark: #242329ff;
-$c-bg-input-focus-dark: #38363f;
+$c-bg-input-focus-dark: #514f5a81;
 
 $c-border-light: #232323ff;
+$c-border-light-secondary: #9c9c9c;
 $c-border-dark: #cfcabaff;
+$c-border-dark-secondary: #737373ff;
 $c-border-highlight-light: #616161ff;
 $c-border-highlight-dark: #fffbedff;
 
@@ -21,9 +23,7 @@ $c-text-light-disabled: #464646;
 $c-text-dark: #cfcabaff;
 $c-text-dark-disabled: #969592;
 
-$c-themed-bg-disabled: #676662;
-$c-themed-bg-lighter: #ec81237d;
-$c-themed-bg-light: #e0771c7d;
+$c-bg-themed: #ec5f23d9;
 
 // Themed operation state - success, warn, error and failure
 

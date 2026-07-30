@@ -1,0 +1,14 @@
+{{!-- Required context:
+viewModel: BaseDialogViewModel
+--}}
+<section id="{{viewModel.id}}" class="strive flex flex-column flex-grow auto-margin-v-lg">
+  {{#each viewModel.preparedSections as |section|}}
+  {{#if section.html}}
+  {{{section.html}}}
+  {{else}}
+  {{#with section.template as | template |}}
+    {{> (template) viewModel=section.viewModel cssClass=section.cssClass }}
+  {{/with}}
+  {{/if}}
+  {{/each}}
+</section>

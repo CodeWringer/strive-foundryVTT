@@ -1,6 +1,6 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import { ILLNESS_STATES } from "../../const/illness-states.mjs";
 import ReferenceField from "../../data-field/reference-field.mjs";
+import { ILLNESS_STATES } from "../../domain/const/illness-states.mjs";
 import BaseItemData from "./base-item-data.mjs";
 
 export default class InjuryItemData extends BaseItemData {
@@ -42,20 +42,14 @@ export default class InjuryItemData extends BaseItemData {
         current: new FoundrySchemaFields.NumberField({
           nullable: true,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
         }),
         required: new FoundrySchemaFields.NumberField({
           nullable: true,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
-        }),
-        untilCured: new FoundrySchemaFields.BooleanField({
-          nullable: false,
-          initial: false,
         }),
       }),
     }

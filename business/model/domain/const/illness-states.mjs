@@ -26,11 +26,11 @@ export const ILLNESS_STATES = {
   active: new IllnessState({
     name: "active",
     localizableName: "system.character.health.illness.state.active.label",
-    icon: "fas fa-virus"
+    icon: "ico ico-illness-state-active"
   }),
   treated: new IllnessState({
     name: "treated",
     localizableName: "system.character.health.illness.state.treated.label",
-    icon: "fas fa-mortar-pestle"
+    icon: "ico ico-illness-state-treated"
   }),
 };

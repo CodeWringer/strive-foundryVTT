@@ -2,24 +2,27 @@
 viewModel: InputDropDownViewModel
 cssClass: String | undefined
 --}}
-<div id="{{viewModel.id}}" class="strive dropdown flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="strive input dropdown flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
-  <div class="edit-mode{{#if viewModel.isEditable}}{{else}} hidden{{/if}}" >
-    <button 
+  <div class="edit-mode" >
+    <a 
       id="{{viewModel.id}}-button" 
       aria-controls="{{viewModel.id}}-menu" 
       aria-expanded=false 
-      class="flex flex-row flex-middle strive-regular-font"
+      class="flex flex-row flex-middle flex-start strive-regular-font button"
       tabindex="0"
     >
-      <div id="{{viewModel.id}}-button-value">
+      <div id="{{viewModel.id}}-button-value" class="flex flex-row">
         {{{viewModel.value.iconHtml}}}
         {{#if viewModel.showValue}}
         <span>{{viewModel.value.localizedValue}}</span>
         {{/if}}
       </div>
-      <i class="ico ico-triangle-down"></i>
-    </button>
+      <span class="flex-grow"></span>
+      <div class="flex-center">
+        <i class="ico ico-triangle-down xs margin-l-md"></i>
+      </div>
+    </a>
     <menu id="{{viewModel.id}}-menu" class="strive dropdown hidden">
     {{#each viewModel.options as |option index|}}
       <li id="{{option.value}}" role="button" tabindex="-1" class="flex flex-row flex-middle auto-margin-h-lg strive-regular-font">
@@ -31,7 +34,7 @@ cssClass: String | undefined
   </div>
   {{!-- Read mode --}}
   <div 
-    class="read-mode flex{{#if viewModel.isEditable}} hidden{{/if}}" 
+    class="read-mode flex flex-row" 
     name="{{viewModel.id}}"
   >
     {{{viewModel.value.iconHtml}}}
