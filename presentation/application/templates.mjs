@@ -51,6 +51,10 @@ export const TEMPLATES = {
         header: `${basePathApplication}/item/illness/illness-header.hbs`,
         content: `${basePathApplication}/item/illness/illness-content.hbs`,
       },
+      mutation: {
+        header: `${basePathApplication}/item/mutation/mutation-header.hbs`,
+        content: `${basePathApplication}/item/mutation/mutation-content.hbs`,
+      },
     },
     dialog: {
       base: `${basePathApplication}/dialog/base-dialog/base-dialog.hbs`,
