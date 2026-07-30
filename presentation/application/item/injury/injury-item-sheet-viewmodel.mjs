@@ -94,7 +94,7 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
       showValue: false,
       value: currentStateOption,
       onChange: (_, newValue) => {
-        this.document.state = newValue.value;
+        this.document.state = INJURY_STATES[newValue.value];
         this.vmState.setToolTipContent(StringUtil.format(
           StringUtil.getLoca("system.item.injury.state.stateWithCurrent"),
           newValue.localizedValue,

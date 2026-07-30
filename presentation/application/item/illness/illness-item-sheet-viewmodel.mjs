@@ -94,7 +94,7 @@ export default class IllnessItemSheetViewModel extends BaseItemSheetViewModel {
       showValue: false,
       value: currentStateOption,
       onChange: (_, newValue) => {
-        this.document.state = newValue.value;
+        this.document.state = ILLNESS_STATES[newValue.value];
         this.vmState.setToolTipContent(StringUtil.format(
           StringUtil.getLoca("system.item.illness.state.stateWithCurrent"),
           newValue.localizedValue,
