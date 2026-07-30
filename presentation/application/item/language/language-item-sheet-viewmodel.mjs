@@ -66,18 +66,26 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       },
     });
     const readAndWriteOptions = ChoicesUtil.getAsChoices(LANGUAGE_READ_WRITE, "xl");
+    const currentReadAndWriteOption = readAndWriteOptions.find(it => it.value === (this.document.readAndWrite ? "able" : "unable"));
     this.vmReadAndWrite = new InputDropDownViewModel({
       id: "vmReadAndWrite",
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.language.readAndWrite.readAndWrite"),
+        localized: StringUtil.format(
+          StringUtil.getLoca("system.item.language.readAndWrite.readAndWriteWithCurrent"),
+          currentReadAndWriteOption.localizedValue,
+        ),
       }),
-      value: readAndWriteOptions.find(it => it.value === (this.document.readAndWrite ? "able" : "unable")),
+      value: currentReadAndWriteOption,
       options: readAndWriteOptions,
       showValue: false,
       onChange: (_, newValue) => {
         this.document.readAndWrite = newValue.value === "able";
+        this.vmReadAndWrite.setToolTipContent(StringUtil.format(
+          StringUtil.getLoca("system.item.language.readAndWrite.readAndWriteWithCurrent"),
+          newValue.localizedValue,
+        ));
       },
     });
   }

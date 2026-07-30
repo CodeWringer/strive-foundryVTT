@@ -690,6 +690,21 @@ export default class ViewModel {
   }
 
   /**
+   * Sets the given `newContent` as the tool tip's content, if it is defined. 
+   * @param {String} newContent New HTML content to display in the tool tip, if it is defined. 
+   */
+  setToolTipContent(newContent) {
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      this._toolTipDefinition.localized = newContent;
+      this._toolTip.content = newContent;
+      if (this._toolTip.visible) {
+        this._toolTip.hide();
+        this._toolTip.show();
+      }
+    }
+  }
+
+  /**
    * Returns an array of view model instances that have either been fetched 
    * from the `currentList` or newly instantiated, using the `factoryFunc`. 
    * 

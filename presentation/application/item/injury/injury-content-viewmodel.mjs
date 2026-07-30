@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../../business/model/domain/const/item-types.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
@@ -70,6 +71,7 @@ export default class InjuryContentViewModel extends ViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.injury.treatment.skill"),
       }),
+      acceptedTypes: [ITEM_TYPES.skill],
       value: this.document.treatment.skill,
       onChange: (_, newValue) => {
         this.document.treatment.skill = newValue;
@@ -95,6 +97,7 @@ export default class InjuryContentViewModel extends ViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.injury.treatment.supplies.asset"),
       }),
+      acceptedTypes: [ITEM_TYPES.asset],
       value: this.document.treatment.requiredSupplies.asset,
       onChange: (_, newValue) => {
         this.document.treatment.requiredSupplies.asset = newValue;

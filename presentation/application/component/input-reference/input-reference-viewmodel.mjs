@@ -216,7 +216,7 @@ export default class InputReferenceViewModel extends InputViewModel {
       this.updateOptions();
     });
     this.#inputElement.on("keydown", (event) => {
-      if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+      if (event.key === "ArrowDown" || event.key === "Enter") {
         event.preventDefault();
         this.#menuElement.find("li").first().focus();
       } else if (event.key === "Escape" || event.key === "Tab") {
@@ -246,8 +246,13 @@ export default class InputReferenceViewModel extends InputViewModel {
    */
   async getReferenced() {
     if (ValidationUtil.isDefined(this.value)) {
-      const idParts = this.value.uuid.split(".");
-      const id = idParts[idParts.length - 1];
+      let id = null;
+
+      if (ValidationUtil.isDefined(this.value.uuid)) {
+        const idParts = this.value.uuid.split(".");
+        id = idParts[idParts.length - 1];
+      }
+      
       return await new DocumentFetcher().find({
         id: id,
         name: this.value.name,
@@ -369,6 +374,8 @@ export default class InputReferenceViewModel extends InputViewModel {
   _getAllSearchableItems() {
     const result = [];
     for (const item of game.items) {
+      if (!ArrayUtil.arrayContains(this.acceptedTypes, item.type)) continue;
+
       result.push(({
         id: item.uuid ?? item.id,
         name: item.name,
@@ -379,6 +386,8 @@ export default class InputReferenceViewModel extends InputViewModel {
     }
 
     for (const actor of game.actors) {
+      if (!ArrayUtil.arrayContains(this.acceptedTypes, item.type)) continue;
+
       result.push(({
         id: actor.uuid ?? actor.id,
         name: actor.name,
@@ -392,6 +401,8 @@ export default class InputReferenceViewModel extends InputViewModel {
       if (pack.metadata.type !== GENERAL_DOCUMENT_TYPES.ITEM) continue;
 
       for (const index of pack.index) {
+        if (!ArrayUtil.arrayContains(this.acceptedTypes, index.type)) continue;
+
         result.push(({
           id: index.uuid,
           name: index.name,

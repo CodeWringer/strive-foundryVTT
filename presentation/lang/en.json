@@ -258,6 +258,7 @@
         },
         "readAndWrite": {
           "readAndWrite": "Read/Write Ability",
+          "readAndWriteWithCurrent": "Read/Write Ability<br>(= %s)",
           "canReadAndWrite": "Can Read/Write",
           "cannotReadAndWrite": "Can not Read/Write"
         }
@@ -266,6 +267,7 @@
         "injury": "Injury",
         "state": {
           "state": "Injury State",
+          "stateWithCurrent": "Injury State<br>(= %s)",
           "active": "Active",
           "treated": "Treated"
         },

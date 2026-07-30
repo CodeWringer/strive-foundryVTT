@@ -76,18 +76,26 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
       },
     });
     const stateOptions = ChoicesUtil.getAsChoices(INJURY_STATES, "xl");
+    const currentStateOption = stateOptions.find(it => it.value === this.document.state.name);
     this.vmState = new InputDropDownViewModel({
       id: "vmState",
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.injury.state.state"),
+        localized: StringUtil.format(
+          StringUtil.getLoca("system.item.injury.state.stateWithCurrent"),
+          currentStateOption.localizedValue,
+        ),
       }),
       options: stateOptions,
       showValue: false,
-      value: stateOptions.find(it => it.value === (this.document.state + "")),
+      value: currentStateOption,
       onChange: (_, newValue) => {
         this.document.state = newValue.value;
+        this.vmState.setToolTipContent(StringUtil.format(
+          StringUtil.getLoca("system.item.injury.state.stateWithCurrent"),
+          newValue.localizedValue,
+        ));
       },
     });
   }

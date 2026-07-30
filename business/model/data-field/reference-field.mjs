@@ -10,13 +10,17 @@ import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper
  * @extends FoundrySchemaFields.SchemaField
  */
 export default class ReferenceField extends FoundrySchemaFields.SchemaField {
-  constructor(fields = {}, { initialValue = null, ...options } = {}) {
+  constructor(fields = {}, options = {}) {
     fields = {
       uuid: new FoundrySchemaFields.DocumentUUIDField({
         nullable: true,
+        required: false,
+        initial: null,
       }),
       name: new FoundrySchemaFields.StringField({
         nullable: true,
+        required: false,
+        initial: null,
       }),
       ...fields
     };

@@ -22,7 +22,7 @@ export default class Reference extends Persistable {
    * @override
    */
   static fromDto(dto) {
-    if (ValidationUtil.isDefined(dto.uuid) || ValidationUtil.isDefined(dto.name)) {
+    if (ValidationUtil.isDefined(dto) && (ValidationUtil.isDefined(dto.uuid) || ValidationUtil.isDefined(dto.name))) {
       return new Reference({
         uuid: dto.uuid,
         name: dto.name,
@@ -34,15 +34,11 @@ export default class Reference extends Persistable {
 
   /**
    * @param {Object} args 
-   * @param {String | undefined} args.uuid If undefined, `name` MUST be defined. 
-   * @param {String | undefined} args.name If undefined, `uuid` MUST be defined. 
+   * @param {String | undefined} args.uuid 
+   * @param {String | undefined} args.name 
    */
   constructor(args = {}) {
     super(args);
-    if (common.util.validation.isBlankOrUndefined(args.uuid) &&
-      common.util.validation.isBlankOrUndefined(args.name)) {
-      throw new Error("Must define either uuid or name");
-    }
 
     this.uuid = args.uuid ?? null;
     this.name = args.name ?? null;

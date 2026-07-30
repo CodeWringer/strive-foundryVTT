@@ -9,7 +9,7 @@ cssClass: String | undefined
       type="text"
       name="{{viewModel.id}}"
       placeholder="{{viewModel.placeholder}}"
-      value="{{viewModel.value}}"
+      value="{{viewModel.value.name}}"
     />
     <a id="{{viewModel.id}}-clear" class="flex flex-center font-size-sm">
       <i class="fas fa-trash"></i>
@@ -19,7 +19,7 @@ cssClass: String | undefined
   </div>
   {{!-- Read mode --}}
   <div class="read-mode flex flex-row{{#if viewModel.isEditable}} hidden{{/if}}">
-    <span class="flex-grow">{{viewModel.value}}</span>
+    <span class="flex-grow">{{viewModel.value.name}}</span>
     <i class="ico ico-chain-link lg"></i>
   </div>
 </div>

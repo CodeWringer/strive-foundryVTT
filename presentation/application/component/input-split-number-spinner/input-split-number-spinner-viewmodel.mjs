@@ -188,6 +188,9 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       value: this._value.maximum,
       onChange: (_, newValue) => {
         this.value.maximum = newValue;
+        if (this.value.maximum < this.value.current) {
+          this.vmCurrent.value = this.value.maximum;
+        }
       },
       min: maximum.min,
       max: maximum.max,
