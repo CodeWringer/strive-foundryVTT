@@ -1,0 +1,31 @@
+$c-bg-overlay-dark: #595661b6;
+$c-bg-overlay-highlight-dark: #595661ce;
+$c-bg-overlay-light: #a79e84b0;
+$c-bg-overlay-highlight-light: #a79e84c5;
+
+.drag-accept {
+  position: absolute;
+  border-width: 3px;
+  border-style: dashed;
+  border-radius: 8px;
+}
+
+.theme-dark .drag-accept {
+  border-color: $c-border-dark-secondary;
+  background-color: $c-bg-overlay-dark;
+  
+  &:hover {
+    border-color: $c-border-dark;
+    background-color: $c-bg-overlay-highlight-dark;
+  }
+}
+
+.theme-light .drag-accept {
+  border-color: $c-border-light-secondary;
+  background-color: $c-bg-overlay-light;
+  
+  &:hover {
+    border-color: $c-border-light;
+    background-color: $c-bg-overlay-highlight-light;
+  }
+}

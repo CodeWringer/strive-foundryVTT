@@ -150,6 +150,9 @@
         "queryTypeOf": "Confirm Deletion of %s '%s'"
       },
       "description": "Description",
+      "dragDrop": {
+        "accept": "Drag Here"
+      },
       "duplicate": "Duplicate",
       "edit": {
         "edit": "Edit",

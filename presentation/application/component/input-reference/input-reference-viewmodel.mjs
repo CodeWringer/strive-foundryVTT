@@ -139,14 +139,11 @@ export default class InputReferenceViewModel extends InputViewModel {
 
     this.acceptedTypes = args.acceptedTypes ?? [];
     this.dragDropHandler = new DragDropHandler({
-      elementId: this.id,
-      acceptedTypes: this.acceptedTypes,
-      mayReceive: () => {
+      mayReceive: (data) => {
+        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, data.type)) return false;
         return this.isEditable;
       },
       onReceive: (event, data) => {
-        if (!this.isEditable) return;
-
         this.value = new Reference({
           uuid: data.id,
           name: data.name,
@@ -167,7 +164,7 @@ export default class InputReferenceViewModel extends InputViewModel {
     this._referenced = await this.getReferenced();
     this._updateIcon();
 
-    this.dragDropHandler.activateListeners(html);
+    this.dragDropHandler.activateListeners(this.element);
 
     this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
     for (let i = 0; i < this.maxNumberOfEntries; i++) {
@@ -175,11 +172,11 @@ export default class InputReferenceViewModel extends InputViewModel {
       const menuItem = this.#menuElement.find(`li[data-index=${i}]`);
       $(menuItem).click((event) => {
         event.preventDefault();
-        
+
         const id = $(menuItem).attr("data-id");
         const selected = this._searchableItems.find(it => it.id === id);
-        
-        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, selected.contentType)) return;
+
+        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, selected.type)) return;
 
         this.value = new Reference({
           uuid: selected.id,
@@ -292,7 +289,7 @@ export default class InputReferenceViewModel extends InputViewModel {
       if (i < topMapped.length) {
         const topMappedItem = topMapped[i];
         const sourceLoca = StringUtil.format2(StringUtil.getLoca("system.general.reference.referenceFrom"), {
-          contentType: StringUtil.getLoca(`TYPES.Item.${topMappedItem.contentType}`),
+          type: StringUtil.getLoca(`TYPES.Item.${topMappedItem.type}`),
           pack: topMappedItem.pack,
         });
         $(menuItem).attr("data-id", topMappedItem.id);
@@ -377,9 +374,20 @@ export default class InputReferenceViewModel extends InputViewModel {
         name: item.name,
         source: DOCUMENT_COLLECTION_SOURCES.world,
         pack: "world.items",
-        contentType: item.type,
+        type: item.type,
       }));
     }
+
+    for (const actor of game.actors) {
+      result.push(({
+        id: actor.uuid ?? actor.id,
+        name: actor.name,
+        source: DOCUMENT_COLLECTION_SOURCES.world,
+        pack: "world.actors",
+        type: actor.type,
+      }));
+    }
+
     for (const pack of game.packs) {
       if (pack.metadata.type !== GENERAL_DOCUMENT_TYPES.ITEM) continue;
 
@@ -389,7 +397,7 @@ export default class InputReferenceViewModel extends InputViewModel {
           name: index.name,
           source: DOCUMENT_COLLECTION_SOURCES.allCompendia,
           pack: pack.metadata.id,
-          contentType: index.type,
+          type: index.type,
         }));
       }
     }

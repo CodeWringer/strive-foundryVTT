@@ -1,13 +1,18 @@
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/model/document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs";
-import { common } from "../../../common/_module.mjs";
-import { ArrayUtil } from "../../../common/util/array-utility.mjs";
+import { StringUtil } from "../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
+import { SheetUtil } from "../sheet-utility.mjs";
 import DragData from "./drag-data.mjs";
 
 /**
  * Enables drag and drop operations on arbitrary HTML elements. 
+ * 
+ * On a receiver element, it automatically adds an overlay element with the CSS class 
+ * "drag-accept". The receiver element also receives the CSS class "dragover". 
+ * If you want to override the styling, you can do so by targeting 
+ * `".dragover .drag-accept"` in your CSS. 
  */
 export class DragDropHandler {
   /**
@@ -16,7 +21,7 @@ export class DragDropHandler {
    * @type {String}
    * @readonly
    */
-  static get DEFAULT_DRAGOVER_CSS_CLASS() { return "dragover"; }
+  static get DRAGOVER_CSS_CLASS() { return "dragover"; }
 
   /**
    * Global transfer property. To allow for easier data transmission from one DragDropHandler to another. 
@@ -39,17 +44,11 @@ export class DragDropHandler {
      */
     eventId: 0,
     /**
-     * The object is expected to have the properties:
-     * * `handler: Function<void>`
-     * * `acceptedTypes: Array<String>`
-     * @type {Map<Number, Object>}
+     * @type {Map<Number, Function<Boolean>>}
      */
     onDragStart: new Map(),
     /**
-     * The object is expected to have the properties:
-     * * `handler: Function<void>`
-     * * `acceptedTypes: Array<String>`
-     * @type {Map<Number, Object>}
+     * @type {Map<Number, Function<Boolean>>}
      */
     onDragEnd: new Map(),
   };
@@ -60,19 +59,13 @@ export class DragDropHandler {
    * @param {Function<void>} handler Invoked when any global drag event begins. Arguments:
    * * `event: Event`
    * * `data: DragData`
-   * @param {Array<String>} acceptedTypes A list of accepted reference types. 
-   * Only those provided will receive events. If left empty, allows all types. 
-   * E. g. `[ITEM_TYPES.skill]` 
    * @returns {Number} An ID that may be passed to `DragDropHandler.offDragStart` 
    * to unregister the `handler` for cleanup. 
    * @static
    */
-  static onDragStart(handler, acceptedTypes = []) {
+  static onDragStart(handler) {
     const newId = DragDropHandler.#globalListeners.eventId++;
-    this.#globalListeners.onDragStart.set(newId, {
-      handler: handler,
-      acceptedTypes: acceptedTypes,
-    });
+    this.#globalListeners.onDragStart.set(newId, handler);
     return newId;
   }
 
@@ -90,19 +83,13 @@ export class DragDropHandler {
    * ends, globally. 
    * @param {Function<void>} handler Invoked when any global drag event ends. Arguments:
    * * `event: Event`
-   * @param {Array<String>} acceptedTypes A list of accepted reference types. 
-   * Only those provided will receive events. If left empty, allows all types. 
-   * E. g. `[ITEM_TYPES.skill]` 
    * @returns {Number} An ID that may be passed to `DragDropHandler.offDragEnd` 
    * to unregister the `handler` for cleanup. 
    * @static
    */
-  static onDragEnd(handler, acceptedTypes = []) {
+  static onDragEnd(handler) {
     const newId = DragDropHandler.#globalListeners.eventId++;
-    this.#globalListeners.onDragEnd.set(newId, {
-      handler: handler,
-      acceptedTypes: acceptedTypes,
-    });
+    this.#globalListeners.onDragEnd.set(newId, handler);
     return newId;
   }
 
@@ -150,17 +137,13 @@ export class DragDropHandler {
             type: document.type,
           });
 
-          for (const [id, obj] of DragDropHandler.#globalListeners.onDragStart) {
-            if (obj.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(obj.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) continue;
-
-            obj.handler(event, DragDropHandler.#draggedData);
+          for (const [id, handler] of DragDropHandler.#globalListeners.onDragStart) {
+            handler(event, DragDropHandler.#draggedData);
           }
         },
         dragend: (event) => {
-          for (const [id, obj] of DragDropHandler.#globalListeners.onDragEnd) {
-            if (obj.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(obj.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) continue;
-
-            obj.handler(event);
+          for (const [id, handler] of DragDropHandler.#globalListeners.onDragEnd) {
+            handler(event);
           }
           DragDropHandler.#draggedData = null;
         }
@@ -171,16 +154,8 @@ export class DragDropHandler {
 
   /**
    * @param {Object} args 
-   * @param {String | undefined} args.elementId ID of the element to target. 
-   * If left undefined, will use the root element of the HTML passed to the `activateListeners` method. 
    * @param {DragData | undefined} args.dragData A data object that represents the element when it is dragged. This will be passed 
    * to the `onReceive` callback of a receiver.
-   * @param {Array<String> | undefined} args.acceptedTypes A list of accepted reference types. 
-   * Only those provided will receive events. If left empty, allows all types. 
-   * E. g. `[ITEM_TYPES.skill]` 
-   * @param {String | undefined} args.dragOverClass CSS class to automatically add to the element 
-   * when something is dragged over it. 
-   * * default `"dragover"`
    * 
    * @param {Function | undefined} args.mayReceive Invoked to determine whether the currently dragged data 
    * is applicable. Must return a boolean value. Arguments: 
@@ -203,12 +178,9 @@ export class DragDropHandler {
    * * `data: DragData` - Data object given by the source handler. 
    */
   constructor(args = {}) {
-    this.elementId = args.elementId;
     this.dragData = args.dragData;
-    this.acceptedTypes = args.acceptedTypes ?? [];
-    this.dragOverClass = args.dragOverClass ?? DragDropHandler.DEFAULT_DRAGOVER_CSS_CLASS;
 
-    this.mayReceive = args.mayApply ?? (() => true);
+    this.mayReceive = args.mayReceive ?? (() => true);
     this.onDragStart = args.onDragStart ?? null;
     this.onDragOver = args.onDragOver ?? null;
     this.onDragLeave = args.onDragLeave ?? null;
@@ -216,13 +188,13 @@ export class DragDropHandler {
   }
 
   /**
-   * @param {JQuery} html 
+   * @param {JQuery} element The element for which drag and drop handling is to be registered. 
    */
-  activateListeners(html) {
-    const element = common.util.validation.isDefined(this.elementId) ? $(html).find(`#${this.elementId}`) : html;
+  activateListeners(element) {
+    const jElement = $(element);
 
-    if (!common.util.validation.isDefined(element) || element.length === 0) {
-      game.strive.logger.logWarn(`Failed to find drag drop element '${this.elementId}'`);
+    if (!ValidationUtil.isDefined(jElement) || jElement.length === 0) {
+      game.strive.logger.logWarn("element must not be null");
       return;
     }
 
@@ -230,10 +202,12 @@ export class DragDropHandler {
 
     if (ValidationUtil.isDefined(this.onDragStart)) {
       // Ensure HTML attribute for draggability is set. 
-      element.attr("draggable", "true");
-      element.bind("dragstart", (event) => {
+      jElement.attr("draggable", "true");
+      jElement.bind("dragstart", (event) => {
         DragDropHandler.#draggedData = this.dragData;
+
         this.onDragStart(event, this.dragData);
+
         for (const [id, handler] of DragDropHandler.#globalListeners.onDragStart) {
           handler(event, this.dragData);
         }
@@ -241,7 +215,7 @@ export class DragDropHandler {
     }
 
     if (ValidationUtil.isDefined(this.onDragEnd)) {
-      element.bind("dragend", (event) => {
+      jElement.bind("dragend", (event) => {
         for (const [id, handler] of DragDropHandler.#globalListeners.onDragEnd) {
           handler(event);
         }
@@ -252,34 +226,31 @@ export class DragDropHandler {
     // Events for when the element is a drag target/receiver.
 
     if (ValidationUtil.isDefined(this.onDragOver)) {
-      element.bind("dragover", (event) => {
-        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+      jElement.bind("dragover", (event) => {
         if (!this.mayReceive(DragDropHandler.#draggedData)) return;
 
-        element.addClass(this.dragOverClass);
+        jElement.addClass(DragDropHandler.DRAGOVER_CSS_CLASS);
         this.onDragOver(event, DragDropHandler.#draggedData);
       });
     }
 
     if (ValidationUtil.isDefined(this.onDragLeave)) {
-      element.bind("dragleave", (event) => {
-        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
+      jElement.bind("dragleave", (event) => {
         if (!this.mayReceive(DragDropHandler.#draggedData)) return;
 
-        element.removeClass(this.dragOverClass);
+        jElement.removeClass(DragDropHandler.DRAGOVER_CSS_CLASS);
         this.onDragLeave(event, DragDropHandler.#draggedData);
       });
     }
 
     if (ValidationUtil.isDefined(this.onReceive)) {
-      element.bind("drop", async (event) => {
+      jElement.bind("drop", async (event) => {
         event.preventDefault(); // Prevent effects of a normal click. 
-        if (this.acceptedTypes.length > 0 && !ArrayUtil.arrayContains(this.acceptedTypes, (DragDropHandler.#draggedData ?? {}).type)) return;
         if (!this.mayReceive(DragDropHandler.#draggedData)) return;
 
         await this.onReceive(event, DragDropHandler.#draggedData);
 
-        element.removeClass(this.dragOverClass);
+        jElement.removeClass(DragDropHandler.DRAGOVER_CSS_CLASS);
         DragDropHandler.#draggedData = null;
       });
     }
@@ -289,11 +260,13 @@ export class DragDropHandler {
     this._onDragStartId = DragDropHandler.onDragStart((event, data) => {
       if (!this.mayReceive(data)) return;
 
-      element.addClass("drag-accept");
-    }, this.acceptedTypes);
+      const rect = SheetUtil.getElementRect(jElement);
+      const padding = 8;
+      jElement.append(`<div class="drag-accept flex flex-center font-size-md" style="width: ${rect.width + padding}px; height: ${rect.height + padding}px;">${StringUtil.getLoca("system.general.dragDrop.accept")}</div>`)
+    });
     this._onDragEndId = DragDropHandler.onDragEnd((event) => {
-      element.removeClass("drag-accept");
-    }, this.acceptedTypes);
+      jElement.find(".drag-accept").remove();
+    });
   }
 
   /**
