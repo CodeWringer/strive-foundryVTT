@@ -25,12 +25,12 @@ export class IllnessState {
 export const ILLNESS_STATES = {
   active: new IllnessState({
     name: "active",
-    localizableName: "system.character.health.illness.state.active.label",
+    localizableName: "system.item.illness.state.active",
     icon: "ico ico-illness-state-active"
   }),
   treated: new IllnessState({
     name: "treated",
-    localizableName: "system.character.health.illness.state.treated.label",
+    localizableName: "system.item.illness.state.treated",
     icon: "ico ico-illness-state-treated"
   }),
 };
