@@ -74,6 +74,8 @@ export default class IllnessItemSheetViewModel extends BaseItemSheetViewModel {
       onChange: (_, newValue) => {
         this.document.healProgress.current = newValue.current;
         this.document.healProgress.required = newValue.maximum;
+        
+        this.#updateProgressMaximumReadMode();
       },
     });
     const stateOptions = ChoicesUtil.getAsChoices(ILLNESS_STATES, "xl");
@@ -99,5 +101,26 @@ export default class IllnessItemSheetViewModel extends BaseItemSheetViewModel {
         ));
       },
     });
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    this.#updateProgressMaximumReadMode();
+  }
+
+  /**
+   * @private
+   */
+  #updateProgressMaximumReadMode() {
+    const re = this.vmHealingProgress.element.find(".read-mode > .maximum");
+    if (this.vmHealingProgress.value.maximum < 1) {
+      re.empty();
+      re.append('<i class="ico ico-infinity lg"></i>');
+    } else {
+      re.empty();
+      re.append(this.vmHealingProgress.value.maximum);
+    }
   }
 }
