@@ -42,14 +42,12 @@ export default class IllnessItemData extends BaseItemData {
         current: new FoundrySchemaFields.NumberField({
           nullable: true,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
         }),
         required: new FoundrySchemaFields.NumberField({
           nullable: true,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
         }),

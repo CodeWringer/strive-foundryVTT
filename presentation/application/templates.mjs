@@ -46,7 +46,11 @@ export const TEMPLATES = {
       injury: {
         header: `${basePathApplication}/item/injury/injury-header.hbs`,
         content: `${basePathApplication}/item/injury/injury-content.hbs`,
-      }
+      },
+      illness: {
+        header: `${basePathApplication}/item/illness/illness-header.hbs`,
+        content: `${basePathApplication}/item/illness/illness-content.hbs`,
+      },
     },
     dialog: {
       base: `${basePathApplication}/dialog/base-dialog/base-dialog.hbs`,

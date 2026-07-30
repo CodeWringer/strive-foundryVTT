@@ -281,6 +281,25 @@
           }
         },
         "healProgress": "Healing Progress (Current / Required)"
+      },
+      "illness": {
+        "illness": "Illness",
+        "state": {
+          "state": "Illness State",
+          "stateWithCurrent": "Illness State<br>(= %s)",
+          "active": "Active",
+          "treated": "Treated"
+        },
+        "treatment": {
+          "date": "Last Treatment Date",
+          "obstacle": "Treatment Obstacle",
+          "skill": "Treatment Skill",
+          "supplies": {
+            "amount": "Treatment Supplies Amount",
+            "asset": "Treatment Supplies Asset"
+          }
+        },
+        "healProgress": "Healing Progress (Current / Required)"
       }
     }
   }
