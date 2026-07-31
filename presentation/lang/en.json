@@ -303,6 +303,10 @@
       },
       "mutation": {
         "mutation": "Mutation"
+      },
+      "healthCondition": {
+        "healthCondition": "Health Condition",
+        "quantity": "Degree (Current / Limit)"
       }
     }
   }

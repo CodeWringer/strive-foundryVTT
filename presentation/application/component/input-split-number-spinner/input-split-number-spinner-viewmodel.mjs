@@ -90,7 +90,9 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       set maximum(newValue) {
         const oldValue = thiz._value;
         thiz._value.maximum = newValue;
-        thiz.vmCurrent.max = newValue;
+        if (this._isCurrentLimitedByMax && newValue < this.value.current) {
+          this.vmCurrent.value = newValue;
+        }
         thiz.onChange(oldValue, thiz._value);
       },
     };
@@ -137,7 +139,9 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
    * @param {Object | undefined} args.current
    * @param {Number | undefined} args.current.value
    * @param {Number | undefined} args.current.min
-   * @param {Number | undefined} args.current.max
+   * @param {Boolean | undefined} args.current.limitToMax If `true` the current value will 
+   * be limited to be at most the max value. 
+   * * default `false`
    * @param {Number | undefined} args.current.step
    * @param {Boolean | undefined} args.current.allowEditing If `true` will allow editing 
    * the current value when the control is in edit-mode. 
@@ -166,6 +170,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
 
     this._allowEditingCurrent = current.allowEditing ?? true;
     this._allowEditingMaximum = maximum.allowEditing ?? true;
+    this._isCurrentLimitedByMax = current.limitToMax ?? false;
 
     this.vmCurrent = new InputNumberSpinnerViewModel({
       id: "vmCurrent",
@@ -175,7 +180,6 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
         this.value.current = newValue;
       },
       min: current.min,
-      max: current.max,
       step: current.step,
       suppressAnims: true,
       onInput: this.onInput,
@@ -188,7 +192,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       value: this._value.maximum,
       onChange: (_, newValue) => {
         this.value.maximum = newValue;
-        if (this.value.maximum < this.value.current) {
+        if (this._isCurrentLimitedByMax && this.value.maximum < this.value.current) {
           this.vmCurrent.value = this.value.maximum;
         }
       },
