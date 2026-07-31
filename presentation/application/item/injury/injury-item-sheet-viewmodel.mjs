@@ -64,12 +64,11 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
       current: {
         value: this.document.healProgress.current,
         min: 0,
-        max: this.document.healProgress.required,
+        limitToMax: true,
       },
       maximum: {
         value: this.document.healProgress.required,
         min: 0,
-        negativeIsInfinite: true,
       },
       onChange: (_, newValue) => {
         this.document.healProgress.current = newValue.current;

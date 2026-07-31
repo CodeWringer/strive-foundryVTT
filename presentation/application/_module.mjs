@@ -22,6 +22,9 @@ import IllnessItemSheet from "./item/illness/illness-item-sheet.mjs";
 import MutationContentViewModel from "./item/mutation/mutation-content-viewmodel.mjs";
 import MutationItemSheetViewModel from "./item/mutation/mutation-item-sheet-viewmodel.mjs";
 import MutationItemSheet from "./item/mutation/mutation-item-sheet.mjs";
+import HealthConditionContentViewModel from "./item/health-condition/health-condition-content-viewmodel.mjs";
+import HealthConditionItemSheetViewModel from "./item/health-condition/health-condition-item-sheet-viewmodel.mjs";
+import HealthConditionItemSheet from "./item/health-condition/health-condition-item-sheet.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -54,6 +57,10 @@ export const application = {
       LanguageItemSheetViewModel: LanguageItemSheetViewModel,
       LanguageContentViewModel: LanguageContentViewModel,
     },
+    healthCondition: {
+      HealthConditionContentViewModel: HealthConditionContentViewModel,
+      HealthConditionItemSheetViewModel: HealthConditionItemSheetViewModel,
+    },
   },
   dialog: dialog,
   sheet: {
@@ -62,6 +69,7 @@ export const application = {
     IllnessItemSheet: IllnessItemSheet,
     MutationItemSheet: MutationItemSheet,
     LanguageItemSheet: LanguageItemSheet,
+    HealthConditionItemSheet: HealthConditionItemSheet,
   },
   Tooltip: Tooltip,
   TEMPLATES: TEMPLATES,
@@ -92,6 +100,11 @@ export const application = {
       registry: FoundryWrapper.collections.documents.items,
       type: ITEM_TYPES.language,
       sheet: LanguageItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.health_condition,
+      sheet: HealthConditionItemSheet,
     });
   },
 };

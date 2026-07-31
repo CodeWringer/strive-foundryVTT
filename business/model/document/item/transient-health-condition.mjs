@@ -43,7 +43,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  */
 export default class TransientHealthCondition extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/health-condition.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/health-condition-light.svg"; }
   
   /** @override */
   get clazz() { return TransientHealthCondition; }
