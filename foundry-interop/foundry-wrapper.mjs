@@ -22,6 +22,7 @@ export default class FoundryWrapper {
   static deepClone = foundry.utils.deepClone;
   static mergeObject = foundry.utils.mergeObject;
   static DragDrop = foundry.applications.ux.DragDrop;
+  static FilePicker = foundry.applications.apps.FilePicker.implementation;
 
   /**
    * 

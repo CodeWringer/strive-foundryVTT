@@ -21,12 +21,13 @@
 @import 'global/sheet';
 
 /* Specific component styles */
-@import '../application/component/input-textfield/input-textfield';
 @import '../application/component/input-choice/input-dropdown/input-dropdown';
-@import '../application/component/input-rich-text/input-rich-text';
+@import '../application/component/input-image/input-image';
 @import '../application/component/input-number-spinner/input-number-spinner';
-@import '../application/component/input-split-number-spinner/input-split-number-spinner';
 @import '../application/component/input-reference/input-reference';
+@import '../application/component/input-rich-text/input-rich-text';
+@import '../application/component/input-split-number-spinner/input-split-number-spinner';
+@import '../application/component/input-textfield/input-textfield';
 @import '../application/component/tooltip/tooltip';
 @import '../application/component/button/button';
 @import '../util/drag-drop/drag-drop';

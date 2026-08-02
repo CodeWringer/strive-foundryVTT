@@ -2,8 +2,13 @@
 viewModel: {InputImageViewModel}
 cssClass: {String | undefined}
 --}}
-<img 
-  class="custom-system-edit{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}" 
-  id="{{viewModel.id}}" 
-  src="{{viewModel.value}}" 
-  />
+<div id="{{viewModel.id}}" class="strive image flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Edit mode --}}
+  <div class="edit-mode flex flex-column flex-center flex-grow">
+    <img src="{{viewModel.value}}"/>
+  </div>
+  {{!-- Read mode --}}
+  <div class="read-mode flex flex-column flex-center flex-grow">
+    <img src="{{viewModel.value}}"/>
+  </div>
+</div>

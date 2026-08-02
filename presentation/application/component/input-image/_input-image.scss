@@ -1,7 +1,20 @@
-img.custom-system-edit {
-  cursor: pointer;
+.strive.image {
+  img {
+    width: $input-size-md;
+    height: $input-size-md;
+  }
 
-  &.disabled {
-    cursor: default;
+  &.lg img {
+    width: $input-size-lg;
+    height: $input-size-lg;
+  }
+
+  .edit-mode {
+    cursor: pointer;
+  
+    &.disabled {
+      cursor: default;
+    }
   }
 }
+

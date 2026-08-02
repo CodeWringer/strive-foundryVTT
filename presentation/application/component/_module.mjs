@@ -9,6 +9,7 @@ import RowViewModel from "./row/row-viewmodel.mjs";
 import CustomProseMirrorMenu from "./input-rich-text/custom-prose-mirror-menu.mjs";
 import InputReferenceViewModel from "./input-reference/input-reference-viewmodel.mjs";
 import InputSplitNumberSpinnerViewModel from "./input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
+import InputImageViewModel from "./input-image/input-image-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -25,6 +26,7 @@ export const component = {
   CustomProseMirrorMenu: CustomProseMirrorMenu,
   InputSplitNumberSpinnerViewModel: InputSplitNumberSpinnerViewModel,
   InputReferenceViewModel: InputReferenceViewModel,
+  InputImageViewModel: InputImageViewModel,
   /**
    * Initialization, which MUST be called during system setup!
    */
@@ -36,6 +38,7 @@ export const component = {
     InputRichTextViewModel.registerHandlebarsPartial();
     InputSplitNumberSpinnerViewModel.registerHandlebarsPartial();
     InputReferenceViewModel.registerHandlebarsPartial();
+    InputImageViewModel.registerHandlebarsPartial();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 

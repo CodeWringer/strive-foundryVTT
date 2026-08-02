@@ -1,3 +1,5 @@
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -15,7 +17,32 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  */
 export default class InputImageViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_IMAGE; }
+  static get TEMPLATE() { return TEMPLATES.application.component.image; }
+
+  /** @override */
+  get clazz() { return InputImageViewModel; }
+
+  /** @override */
+  get value() { return this._value; }
+  /**
+   * @param {String | Number} newValue The new value to set.
+   * Supports integer numbers and arithmetic formulae, e. g.
+   * `"33 - (7 / 2)"`
+   * @override
+   */
+  set value(newValue) {
+    if (this.isDisposed) return;
+
+    const oldValue = this._value;
+    this._value = newValue;
+
+    const readElement = this.element.find("> .read-mode > img");
+    readElement.attr("src", newValue);
+    const editElement = this.element.find("> .edit-mode > img");
+    editElement.attr("src", newValue);
+
+    this.onChange(oldValue, newValue);
+  }
 
   /**
    * Registers the Handlebars partial for this component. 
@@ -26,12 +53,15 @@ export default class InputImageViewModel extends InputViewModel {
     Handlebars.registerPartial('inputImage', `{{> "${InputImageViewModel.TEMPLATE}"}}`);
   }
 
+  /** @override */
+  get inputElement() { return this.element.find("> .edit-mode > img"); }
+
   /**
    * @param {Object} args 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {String | undefined} args.value The current value. 
+   * @param {String | undefined} args.value The current value. Must be a URL string. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {String | undefined}`
@@ -45,7 +75,8 @@ export default class InputImageViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
     
-    this.element.click(this._onClick.bind(this));
+    const editModeImgElement = this.element.find("> .edit-mode > img");
+    editModeImgElement.click(this._onClick.bind(this));
   }
   
   /**
@@ -59,13 +90,11 @@ export default class InputImageViewModel extends InputViewModel {
   async _onClick(event) {
     event.preventDefault();
 
-    const thiz = this;
-
-    const fp = new FilePicker({
+    const fp = new FoundryWrapper.FilePicker({
       type: "image",
       current: this.value ?? "",
       callback: path => {
-        thiz.value = path;
+        this.value = path;
       },
     });
     return fp.browse();
