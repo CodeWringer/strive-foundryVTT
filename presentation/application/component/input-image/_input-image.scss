@@ -18,3 +18,28 @@
   }
 }
 
+.theme-light {
+  
+  .strive.image > .edit-mode > img {
+    background: $c-bg-input-light;
+    border-bottom: 1px solid $c-border-light;
+
+    &:hover,
+    &:focus {
+      background: $c-bg-input-focus-light;
+      border-bottom: 1px solid  $c-border-highlight-light;
+    }
+  }
+}
+.theme-dark {
+  .strive.image > .edit-mode > img {
+    background: $c-bg-input-dark;
+    border-bottom: 1px solid  $c-border-dark;
+
+    &:hover,
+    &:focus {
+      background: $c-bg-input-focus-dark;
+      border-bottom: 1px solid  $c-border-highlight-dark;
+    }
+  }
+}
