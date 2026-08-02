@@ -12,5 +12,11 @@ cssClass: String | undefined
     placeholder="{{viewModel.placeholder}}"
   />
   {{!-- Read mode --}}
-  <div class="read-mode">{{viewModel.value}}</div>
+  <div class="read-mode">
+    {{#if viewModel.isReadModeClickable}}
+    <a>{{viewModel.value}}</a>
+    {{else}}
+    <span>{{viewModel.value}}</span>
+    {{/if}}
+  </div>
 </div>

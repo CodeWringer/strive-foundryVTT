@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -31,6 +32,38 @@ export default class InputTextFieldViewModel extends InputViewModel {
   }
 
   /**
+   * Returns the current value. 
+   * 
+   * @type {Any}
+   */
+  get value() { return this._value; }
+  /**
+   * Sets the current value. 
+   * 
+   * @param {Any} newValue
+   */
+  set value(newValue) {
+    if (this.isDisposed) return;
+
+    const oldValue = this._value;
+    this._value = newValue;
+
+    let readElement;
+    if (this.isReadModeClickable) {
+      readElement = this.element.find("> .read-mode > a");
+    } else {
+      readElement = this.element.find("> .read-mode");
+    }
+    readElement.html(newValue);
+
+    this.inputElement.val(newValue);
+
+    this.onChange(oldValue, newValue);
+  }
+
+  get isReadModeClickable() { return ValidationUtil.isDefined(this.onClick); }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
@@ -51,12 +84,15 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * when the value changes. Receives two arguments: 
    * * `oldValue: {String}`
    * * `newValue: {String}`
+   * @param {Function | undefined} args.onClickInReadMode Invoked when clicking on the text displayed 
+   * in read-mode. 
    */
   constructor(args = {}) {
     super(args);
 
     this._value = args.value ?? "";
     this.placeholder = args.placeholder ?? "";
+    this.onClick = args.onClickInReadMode;
   }
 
   /** @override */
@@ -65,5 +101,11 @@ export default class InputTextFieldViewModel extends InputViewModel {
 
     // Ensure the correct value is displayed. 
     this.inputElement.attr("value", this.value);
+
+    this.element.find("> .read-mode > a").click(() => {
+      if (this.isReadModeClickable) {
+        this.onClick();
+      }
+    });
   }
 }
