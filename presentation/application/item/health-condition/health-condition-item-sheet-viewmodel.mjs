@@ -1,20 +1,10 @@
-import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
-import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../templates.mjs";
-import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
 import HealthConditionContentViewModel from "./health-condition-content-viewmodel.mjs";
+import HealthConditionHeaderViewModel from "./health-condition-header-viewmodel.mjs";
 
 export default class HealthConditionItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
   get clazz() { return HealthConditionItemSheetViewModel; }
-
-  /** @override */
-  get headerTemplate() { return TEMPLATES.application.item.healthCondition.header; }
-
-  /** @override */
-  get contentTemplate() { return TEMPLATES.application.item.healthCondition.content; }
 
   /**
    * @param {Object} args
@@ -32,41 +22,16 @@ export default class HealthConditionItemSheetViewModel extends BaseItemSheetView
       ...args,
       contentViewModel: new HealthConditionContentViewModel({
         id: "vmContent",
+        isEditable: args.isEditable,
         document: args.document,
+        sheet: args.sheet,
       }),
-    });
-
-    this.vmName = new InputTextFieldViewModel({
-      id: "vmName",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.general.name.documentName"),
+      headerViewModel: new HealthConditionHeaderViewModel({
+        id: "vmHeader",
+        isEditable: args.isEditable,
+        document: args.document,
+        sheet: args.sheet,
       }),
-      value: this.document.name,
-      onChange: (_, newValue) => {
-        this.document.name = newValue;
-      },
-    });
-    this.vmQuantity = new InputSplitNumberSpinnerViewModel({
-      id: "vmQuantity",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.healthCondition.quantity"),
-      }),
-      current: {
-        value: this.document.current,
-        min: 1,
-      },
-      maximum: {
-        value: this.document.maximum,
-        min: 0,
-      },
-      onChange: (_, newValue) => {
-        this.document.current = newValue.current;
-        this.document.maximum = newValue.maximum > 0 ? newValue.maximum : null;
-      },
     });
   }
 }

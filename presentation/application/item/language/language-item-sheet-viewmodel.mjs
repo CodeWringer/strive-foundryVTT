@@ -1,23 +1,10 @@
-import { LANGUAGE_GRADES } from "../../../../business/model/domain/const/language-grades.mjs";
-import { LANGUAGE_READ_WRITE } from "../../../../business/model/domain/const/language-read-write-states.mjs";
-import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { ChoicesUtil } from "../../../util/choices-utility.mjs";
-import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../templates.mjs";
-import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
 import LanguageContentViewModel from "./language-content-viewmodel.mjs";
+import LanguageHeaderViewModel from "./language-header-viewmodel.mjs";
 
 export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
   get clazz() { return LanguageItemSheetViewModel; }
-
-  /** @override */
-  get headerTemplate() { return TEMPLATES.application.item.language.header; }
-
-  /** @override */
-  get contentTemplate() { return TEMPLATES.application.item.language.content; }
 
   /**
    * @param {Object} args
@@ -35,58 +22,16 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
       ...args,
       contentViewModel: new LanguageContentViewModel({
         id: "vmContent",
+        isEditable: args.isEditable,
         document: args.document,
+        sheet: args.sheet,
       }),
-    });
-
-    this.vmName = new InputTextFieldViewModel({
-      id: "vmName",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.general.name.documentName"),
+      headerViewModel: new LanguageHeaderViewModel({
+        id: "vmHeader",
+        isEditable: args.isEditable,
+        document: args.document,
+        sheet: args.sheet,
       }),
-      value: this.document.name,
-      onChange: (_, newValue) => {
-        this.document.name = newValue;
-      },
-    });
-    const gradeOptions = ChoicesUtil.getAsChoices(LANGUAGE_GRADES);
-    this.vmGrade = new InputDropDownViewModel({
-      id: "vmGrade",
-      parent: this,
-      isEditable: this.isEditable,
-      value: gradeOptions.find(it => it.value === this.document.grade.name),
-      options: gradeOptions,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.language.grade.grade"),
-      }),
-      onChange: (_, newValue) => {
-        this.document.grade = LANGUAGE_GRADES[newValue.value];
-      },
-    });
-    const readAndWriteOptions = ChoicesUtil.getAsChoices(LANGUAGE_READ_WRITE, "xl");
-    const currentReadAndWriteOption = readAndWriteOptions.find(it => it.value === (this.document.readAndWrite ? "able" : "unable"));
-    this.vmReadAndWrite = new InputDropDownViewModel({
-      id: "vmReadAndWrite",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.format(
-          StringUtil.getLoca("system.item.language.readAndWrite.readAndWriteWithCurrent"),
-          currentReadAndWriteOption.localizedValue,
-        ),
-      }),
-      value: currentReadAndWriteOption,
-      options: readAndWriteOptions,
-      showValue: false,
-      onChange: (_, newValue) => {
-        this.document.readAndWrite = newValue.value === "able";
-        this.vmReadAndWrite.setToolTipContent(StringUtil.format(
-          StringUtil.getLoca("system.item.language.readAndWrite.readAndWriteWithCurrent"),
-          newValue.localizedValue,
-        ));
-      },
     });
   }
 }

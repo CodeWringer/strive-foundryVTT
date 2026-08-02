@@ -1,14 +1,16 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
+import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import MutationContentViewModel from "./mutation-content-viewmodel.mjs";
 
-export default class MutationContentViewModel extends ViewModel {
+export default class MutationHeaderViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.item.mutation.content; }
+  static get TEMPLATE() { return TEMPLATES.application.item.mutation.header; }
 
   /** @override */
-  get clazz() { return MutationContentViewModel; }
+  get clazz() { return MutationHeaderViewModel; }
 
   /**
    * @param {Object} args
@@ -16,7 +18,7 @@ export default class MutationContentViewModel extends ViewModel {
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
    * @param {TransientMutation} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
@@ -24,31 +26,25 @@ export default class MutationContentViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.vmDescription = new InputRichTextViewModel({
-      id: "vmDescription",
+    this.vmImg = new InputImageViewModel({
+      id: "vmImg",
+      parent: this,
+      value: this.document.img,
+      onChange: (_, newValue) => {
+        this.document.img = newValue;
+      },
+    });
+    this.vmName = new InputTextFieldViewModel({
+      id: "vmName",
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.general.description"),
+        localized: StringUtil.getLoca("system.general.name.documentName"),
       }),
-      value: this.document.description,
+      value: this.document.name,
       onChange: (_, newValue) => {
-        this.document.description = newValue;
+        this.document.name = newValue;
       },
     });
-    if (this.isGM) {
-      this.vmGmNotes = new InputRichTextViewModel({
-        id: "vmGmNotes",
-        parent: this,
-        isEditable: this.isEditable,
-        toolTip: new ViewModelToolTipDefinition({
-          localized: StringUtil.getLoca("system.general.gm.gmNotes"),
-        }),
-        value: this.document.gmNotes,
-        onChange: (_, newValue) => {
-          this.document.gmNotes = newValue;
-        },
-      });
-    }
   }
 }

@@ -18,11 +18,12 @@ import ViewModel from "../../../view-model/view-model.mjs";
  * 
  * @abstract Inheritors MUST override: 
  * * `get clazz`
+ * 
+ * Inheritors *may* override:
  * * `get headerTemplate`
  * * `get contentTemplate`
- * 
- * Inheritors _should_ override:
- * `get contentViewModel`
+ * * `get headerViewModel`
+ * * `get contentViewModel`
  * 
  * @property {String} headerTemplate Returns the relative url of the header template. 
  * E. g. `TEMPLATES.application.item.language.header`
@@ -46,18 +47,26 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * E. g. `TEMPLATES.application.item.language.header`
    * @type {String}
    * @readonly
-   * @abstract
+   * @virtual
    */
-  get headerTemplate() { throw new Error("Not implemented"); }
+  get headerTemplate() { return this._headerViewModel.clazz.TEMPLATE; }
 
   /**
    * Returns the relative url of the content template. 
    * E. g. `TEMPLATES.application.item.language.content`
    * @type {String}
    * @readonly
-   * @abstract
+   * @virtual
    */
-  get contentTemplate() { throw new Error("Not implemented"); }
+  get contentTemplate() { return this._contentViewModel.clazz.TEMPLATE; }
+
+  /**
+   * Returns the `ViewModel` instance of the header template.
+   * @type {ViewModel}
+   * @readonly
+   * @virtual
+   */
+  get headerViewModel() { return this._headerViewModel ?? this; }
 
   /**
    * Returns the `ViewModel` instance of the content template.
@@ -77,6 +86,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * 
    * @param {TransientDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * @param {ViewModel | undefined} args.headerViewModel
    * @param {ViewModel | undefined} args.contentViewModel
    */
   constructor(args = {}) {
@@ -84,6 +94,12 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
     this.document.isTransactionMode = this.isEditable;
+
+    this._headerViewModel = args.headerViewModel;
+    if (ValidationUtil.isDefined(this._headerViewModel)) {
+      this._headerViewModel.parent = this;
+    }
+
     this._contentViewModel = args.contentViewModel;
     if (ValidationUtil.isDefined(this._contentViewModel)) {
       this._contentViewModel.parent = this;

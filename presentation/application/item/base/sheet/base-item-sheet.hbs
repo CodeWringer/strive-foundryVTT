@@ -1,9 +1,9 @@
 {{!-- context:
-viewModel: ViewModel
+viewModel: BaseItemSheetViewModel
 --}}
 <section id="{{viewModel.id}}" class="strive flex flex-column flex-grow sheet-section">
   {{#with viewModel.headerTemplate as | template |}}
-  {{> (template) viewModel=../viewModel }}
+  {{> (template) viewModel=../viewModel.headerViewModel }}
   {{/with}}
   {{#with viewModel.contentTemplate as | template |}}
   {{> (template) viewModel=../viewModel.contentViewModel }}

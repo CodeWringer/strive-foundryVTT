@@ -5,7 +5,7 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
 
 export default class LanguageContentViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.item.language.header; }
+  static get TEMPLATE() { return TEMPLATES.application.item.language.content; }
 
   /** @override */
   get clazz() { return LanguageContentViewModel; }

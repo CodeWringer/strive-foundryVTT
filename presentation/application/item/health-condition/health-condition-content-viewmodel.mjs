@@ -5,7 +5,7 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
 
 export default class HealthConditionContentViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.item.healthCondition.header; }
+  static get TEMPLATE() { return TEMPLATES.application.item.healthCondition.content; }
 
   /** @override */
   get clazz() { return HealthConditionContentViewModel; }

@@ -9,7 +9,7 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
 
 export default class IllnessContentViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.item.illness.header; }
+  static get TEMPLATE() { return TEMPLATES.application.item.illness.content; }
 
   /** @override */
   get clazz() { return IllnessContentViewModel; }

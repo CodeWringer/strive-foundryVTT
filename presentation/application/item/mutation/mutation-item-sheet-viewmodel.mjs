@@ -1,19 +1,10 @@
-import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../templates.mjs";
-import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
 import MutationContentViewModel from "./mutation-content-viewmodel.mjs";
+import MutationHeaderViewModel from "./mutation-header-viewmodel.mjs";
 
 export default class MutationItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
   get clazz() { return MutationItemSheetViewModel; }
-
-  /** @override */
-  get headerTemplate() { return TEMPLATES.application.item.mutation.header; }
-
-  /** @override */
-  get contentTemplate() { return TEMPLATES.application.item.mutation.content; }
 
   /**
    * @param {Object} args
@@ -31,21 +22,16 @@ export default class MutationItemSheetViewModel extends BaseItemSheetViewModel {
       ...args,
       contentViewModel: new MutationContentViewModel({
         id: "vmContent",
+        isEditable: args.isEditable,
         document: args.document,
+        sheet: args.sheet,
       }),
-    });
-
-    this.vmName = new InputTextFieldViewModel({
-      id: "vmName",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.general.name.documentName"),
+      headerViewModel: new MutationHeaderViewModel({
+        id: "vmHeader",
+        isEditable: args.isEditable,
+        document: args.document,
+        sheet: args.sheet,
       }),
-      value: this.document.name,
-      onChange: (_, newValue) => {
-        this.document.name = newValue;
-      },
     });
   }
 }

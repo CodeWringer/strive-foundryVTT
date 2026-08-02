@@ -25,6 +25,11 @@ import MutationItemSheet from "./item/mutation/mutation-item-sheet.mjs";
 import HealthConditionContentViewModel from "./item/health-condition/health-condition-content-viewmodel.mjs";
 import HealthConditionItemSheetViewModel from "./item/health-condition/health-condition-item-sheet-viewmodel.mjs";
 import HealthConditionItemSheet from "./item/health-condition/health-condition-item-sheet.mjs";
+import HealthConditionHeaderViewModel from "./item/health-condition/health-condition-header-viewmodel.mjs";
+import InjuryHeaderViewModel from "./item/injury/injury-header-viewmodel.mjs";
+import IllnessHeaderViewModel from "./item/illness/illness-header-viewmodel.mjs";
+import MutationHeaderViewModel from "./item/mutation/mutation-header-viewmodel.mjs";
+import LanguageHeaderViewModel from "./item/language/language-header-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -43,22 +48,27 @@ export const application = {
     },
     injury: {
       InjuryItemSheetViewModel: InjuryItemSheetViewModel,
+      InjuryHeaderViewModel: InjuryHeaderViewModel,
       InjuryContentViewModel: InjuryContentViewModel,
     },
     illness: {
       IllnessContentViewModel: IllnessContentViewModel,
+      IllnessHeaderViewModel: IllnessHeaderViewModel,
       IllnessItemSheetViewModel: IllnessItemSheetViewModel,
     },
     mutation: {
       MutationContentViewModel: MutationContentViewModel,
+      MutationHeaderViewModel: MutationHeaderViewModel,
       MutationItemSheetViewModel: MutationItemSheetViewModel,
     },
     language: {
       LanguageItemSheetViewModel: LanguageItemSheetViewModel,
+      LanguageHeaderViewModel: LanguageHeaderViewModel,
       LanguageContentViewModel: LanguageContentViewModel,
     },
     healthCondition: {
       HealthConditionContentViewModel: HealthConditionContentViewModel,
+      HealthConditionHeaderViewModel: HealthConditionHeaderViewModel,
       HealthConditionItemSheetViewModel: HealthConditionItemSheetViewModel,
     },
   },
