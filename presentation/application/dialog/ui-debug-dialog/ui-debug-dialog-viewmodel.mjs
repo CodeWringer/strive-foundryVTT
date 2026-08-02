@@ -4,6 +4,7 @@ import ChoiceOption from "../../../model/choice-option.mjs";
 import DynamicComponent from "../../component/dynamic-component/dynamic-component.mjs";
 import PreparedSection from "../../component/dynamic-component/prepared-section.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
@@ -41,6 +42,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
     };
     this._vmReferenceValue = null;
     this._vmRichTextValue = "";
+    this._vmImgValue = "systems/strive/presentation/image/health-condition-light.svg";
 
     this.sections = [
       new DynamicComponent({
@@ -155,6 +157,24 @@ export default class UiDebugDialogViewModel extends ViewModel {
             }),
             onChange: (_, newValue) => {
               this._vmRichTextValue = newValue;
+            },
+          });
+        }
+      }),
+      new DynamicComponent({
+        template: InputImageViewModel.TEMPLATE,
+        cssClass: "flex-grow",
+        viewModelFactory: (parent) => {
+          return new InputImageViewModel({
+            id: "vmImg",
+            parent: parent,
+            value: this._vmImgValue,
+            isEditable: false,
+            toolTip: new ViewModelToolTipDefinition({
+              localized: "Image",
+            }),
+            onChange: (_, newValue) => {
+              this._vmImgValue = newValue;
             },
           });
         }

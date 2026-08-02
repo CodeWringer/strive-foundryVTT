@@ -112,14 +112,6 @@ export default class ViewModel {
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
 
   /**
-   * @type {String}
-   * @static
-   * @readonly
-   * @protected
-   */
-  static CSS_CLASS_HIGHLIGHT = "highlight";
-
-  /**
    * The data source for view state objects. 
    * 
    * @type {Map<String, Object>}
@@ -290,12 +282,6 @@ export default class ViewModel {
         id: `${this.id}-tooltip`,
         content: this._toolTipDefinition.localized,
         style: this._toolTipDefinition.style,
-        onShown: () => {
-          this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
-        },
-        onHidden: () => {
-          this.element.removeClass(ViewModel.CSS_CLASS_HIGHLIGHT);
-        },
       });
       this._toolTip.activateListeners(this._element);
       if (toolTipVisible) {
@@ -381,12 +367,6 @@ export default class ViewModel {
         content: this._toolTipDefinition.localized,
         additionalContent: this._toolTipDefinition.additionalLocalized,
         style: this._toolTipDefinition.style,
-        onShown: () => {
-          this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
-        },
-        onHidden: () => {
-          this.element.removeClass(ViewModel.CSS_CLASS_HIGHLIGHT);
-        },
       });
     }
 

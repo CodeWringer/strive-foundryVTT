@@ -4,7 +4,9 @@
   padding: $padding-sm 8px;
   text-align: center;
 
-  &.highlight {
+  &:hover,
+  &:focus,
+  &:focus-within {
     background-color: #ffbc814c;
   }
 }

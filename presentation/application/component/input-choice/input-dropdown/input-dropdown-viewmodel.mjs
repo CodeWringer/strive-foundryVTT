@@ -223,7 +223,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     const left = buttonRect.left;
     const top = buttonRect.bottom;
 
-    this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`)
+    this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`);
     this.#menuElement.removeClass("hidden");
 
     this.#buttonElement.attr("aria-expanded", true);
