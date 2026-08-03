@@ -86,7 +86,7 @@ import TransientBaseItem from "./transient-base-item.mjs";
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/book.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/skill-light.svg"; }
 
   /** @override */
   get clazz() { return TransientSkill; }

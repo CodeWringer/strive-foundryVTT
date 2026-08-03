@@ -73,6 +73,10 @@ export default class BaseItemHeaderViewModel extends ViewModel {
     this.vmImg = new InputImageViewModel({
       id: "vmImg",
       parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.image"),
+      }),
       value: this.document.img,
       onChange: (_, newValue) => {
         this.document.img = newValue;

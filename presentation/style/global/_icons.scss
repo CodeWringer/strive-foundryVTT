@@ -96,10 +96,18 @@ $size-header-button-icon: 1rem;
   }
 }
 
+// Side-bar overrides
+li.directory-item > img.thumbnail {
+  padding: 5px;
+}
+
 // Specific light-mode icons -> use dark variants!
 .theme-light {
   .ico-arrow-right {
     background-image: url("/systems/strive/presentation/image/arrow-right-dark.svg");
+  }
+  .ico-bag {
+    background-image: url("/systems/strive/presentation/image/bag-dark.svg");
   }
   .ico-cannot-read {
     background-image: url("/systems/strive/presentation/image/cannot-read-dark.svg");
@@ -115,6 +123,9 @@ $size-header-button-icon: 1rem;
   }
   .ico-edit {
     background-image: url("/systems/strive/presentation/image/edit-dark.svg");
+  }
+  .ico-expertise {
+    background-image: url("/systems/strive/presentation/image/expertise-dark.svg");
   }
   .ico-eye-slash {
     background-image: url("/systems/strive/presentation/image/eye-slash-dark.svg");
@@ -152,6 +163,9 @@ $size-header-button-icon: 1rem;
   .ico-obstacle {
     background-image: url("/systems/strive/presentation/image/obstacle-dark.svg");
   }
+  .ico-project {
+    background-image: url("/systems/strive/presentation/image/project-dark.svg");
+  }
   .ico-pushes {
     background-image: url("/systems/strive/presentation/image/pushes-dark.svg");
   }
@@ -161,11 +175,20 @@ $size-header-button-icon: 1rem;
   .ico-quantity {
     background-image: url("/systems/strive/presentation/image/quantity-dark.svg");
   }
+  .ico-recipe {
+    background-image: url("/systems/strive/presentation/image/recipe-dark.svg");
+  }
   .ico-skill {
     background-image: url("/systems/strive/presentation/image/skill-dark.svg");
   }
   .ico-speech-bubble {
     background-image: url("/systems/strive/presentation/image/speech-bubble-dark.svg");
+  }
+  .ico-time {
+    background-image: url("/systems/strive/presentation/image/time-dark.svg");
+  }
+  .ico-trait {
+    background-image: url("/systems/strive/presentation/image/trait-dark.svg");
   }
   .ico-treatment-supplies {
     background-image: url("/systems/strive/presentation/image/treatment-supplies-dark.svg");
@@ -192,6 +215,9 @@ $size-header-button-icon: 1rem;
   .ico-arrow-right {
     background-image: url("/systems/strive/presentation/image/arrow-right-light.svg");
   }
+  .ico-bag {
+    background-image: url("/systems/strive/presentation/image/bag-light.svg");
+  }
   .ico-cannot-read {
     background-image: url("/systems/strive/presentation/image/cannot-read-light.svg");
   }
@@ -206,6 +232,9 @@ $size-header-button-icon: 1rem;
   }
   .ico-edit {
     background-image: url("/systems/strive/presentation/image/edit-light.svg");
+  }
+  .ico-expertise {
+    background-image: url("/systems/strive/presentation/image/expertise-light.svg");
   }
   .ico-eye-slash {
     background-image: url("/systems/strive/presentation/image/eye-slash-light.svg");
@@ -243,6 +272,9 @@ $size-header-button-icon: 1rem;
   .ico-obstacle {
     background-image: url("/systems/strive/presentation/image/obstacle-light.svg");
   }
+  .ico-project {
+    background-image: url("/systems/strive/presentation/image/project-light.svg");
+  }
   .ico-pushes {
     background-image: url("/systems/strive/presentation/image/pushes-light.svg");
   }
@@ -252,11 +284,20 @@ $size-header-button-icon: 1rem;
   .ico-quantity {
     background-image: url("/systems/strive/presentation/image/quantity-light.svg");
   }
+  .ico-recipe {
+    background-image: url("/systems/strive/presentation/image/recipe-light.svg");
+  }
   .ico-skill {
     background-image: url("/systems/strive/presentation/image/skill-light.svg");
   }
   .ico-speech-bubble {
     background-image: url("/systems/strive/presentation/image/speech-bubble-light.svg");
+  }
+  .ico-time {
+    background-image: url("/systems/strive/presentation/image/time-light.svg");
+  }
+  .ico-trait {
+    background-image: url("/systems/strive/presentation/image/trait-light.svg");
   }
   .ico-treatment-supplies {
     background-image: url("/systems/strive/presentation/image/treatment-supplies-light.svg");

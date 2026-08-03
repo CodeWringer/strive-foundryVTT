@@ -1,22 +1,20 @@
-import ItemSheetSubType from "../item-sheet-subtype.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import BaseItemSheet from "../base/sheet/base-item-sheet.mjs";
 import TraitItemSheetViewModel from "./trait-item-sheet-viewmodel.mjs";
 
-export default class TraitItemSheet extends ItemSheetSubType {
+export default class TraitItemSheet extends BaseItemSheet {
   /** @override */
-  get template() { return TraitItemSheetViewModel.TEMPLATE; }
-
+  get localizedDocumentType() {
+    return StringUtil.getLoca("system.item.trait.trait");
+  }
+  
   /** @override */
-  get localizedType() { return game.i18n.localize("system.character.trait.trait"); }
-
-  /** @override */
-  createViewModel(context, document, sheet) {
+  createViewModel(document, context) {
     return new TraitItemSheetViewModel({
-      id: document.id,
-      document: document.getTransientObject(),
-      isEditable: context.isEditable,
-      isSendable: context.isSendable,
-      isOwner: context.isOwner,
-      sheet: sheet,
+      id: this.id,
+      document: document,
+      sheet: this,
+      context: context,
     });
   }
 }

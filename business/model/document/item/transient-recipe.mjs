@@ -55,7 +55,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  */
 export default class TransientRecipe extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/book.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/recipe-light.svg"; }
 
   /** @override */
   get clazz() { return TransientRecipe; }

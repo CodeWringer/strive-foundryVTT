@@ -46,7 +46,6 @@ export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
         nullable: false,
         required: true,
         integer: true,
-        positive: true,
         initial: 0,
         min: 0,
       }),

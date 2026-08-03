@@ -15,14 +15,12 @@
 .h-divider {
   width: stretch;
   height: 1px;
-  margin: 5px 0;
   padding-bottom: 1px; // Ensures symmetry below.
   display: block;
 
   &-full {
     width: stretch;
     height: 1px;
-    margin: 0;
     padding-bottom: 1px; // Ensures symmetry below.
   }
 }

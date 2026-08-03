@@ -18,7 +18,6 @@ export default class SkillItemData extends BaseItemData {
         nullable: false,
         required: true,
         integer: true,
-        positive: true,
         initial: 0,
         min: 0,
       }),
@@ -65,7 +64,6 @@ export default class SkillItemData extends BaseItemData {
         progress: new FoundrySchemaFields.NumberField({
           nullable: false,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
         }),

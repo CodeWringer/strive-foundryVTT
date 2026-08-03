@@ -43,6 +43,14 @@ export const TEMPLATES = {
         header: `${basePathApplication}/item/base/base-item-header.hbs`,
         content: `${basePathApplication}/item/base/base-item-content.hbs`,
       },
+      asset: {
+        header: `${basePathApplication}/item/asset/asset-header.hbs`,
+        content: `${basePathApplication}/item/asset/asset-content.hbs`,
+      },
+      healthCondition: {
+        header: `${basePathApplication}/item/health-condition/health-condition-header.hbs`,
+        content: `${basePathApplication}/item/health-condition/health-condition-content.hbs`,
+      },
       language: {
         header: `${basePathApplication}/item/language/language-header.hbs`,
         content: `${basePathApplication}/item/language/language-content.hbs`,
@@ -59,9 +67,21 @@ export const TEMPLATES = {
         header: `${basePathApplication}/item/mutation/mutation-header.hbs`,
         content: `${basePathApplication}/item/mutation/mutation-content.hbs`,
       },
-      healthCondition: {
-        header: `${basePathApplication}/item/health-condition/health-condition-header.hbs`,
-        content: `${basePathApplication}/item/health-condition/health-condition-content.hbs`,
+      project: {
+        header: `${basePathApplication}/item/project/project-header.hbs`,
+        content: `${basePathApplication}/item/project/project-content.hbs`,
+      },
+      recipe: {
+        header: `${basePathApplication}/item/recipe/recipe-header.hbs`,
+        content: `${basePathApplication}/item/recipe/recipe-content.hbs`,
+      },
+      skill: {
+        header: `${basePathApplication}/item/skill/skill-header.hbs`,
+        content: `${basePathApplication}/item/skill/skill-content.hbs`,
+      },
+      trait: {
+        header: `${basePathApplication}/item/trait/trait-header.hbs`,
+        content: `${basePathApplication}/item/trait/trait-content.hbs`,
       },
     },
     dialog: {

@@ -1,112 +1,43 @@
-import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
-import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
-import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs"
-import { DataFieldComponent } from "../../datafield-component.mjs"
-import { TemplatedComponent } from "../../templated-component.mjs"
+import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
+import AssetContentViewModel from "./asset-content-viewmodel.mjs";
+import AssetHeaderViewModel from "./asset-header-viewmodel.mjs";
 
 /**
  * @property {TransientAsset} document 
  */
 export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
-  getDataFields() {
-    return [
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          parent: this,
-          id: "vmQuantity",
-          value: this.document.quantity,
-          onChange: (_, newValue) => {
-            this.document.quantity = newValue;
-          },
-          min: 1,
-        }),
-        localizedToolTip: game.i18n.localize("system.character.asset.quantity.label"),
-        iconClass: "ico-quantity-solid",
-      }),
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          parent: this,
-          id: "vmMaxQuantity",
-          value: this.document.maxQuantity,
-          onChange: (_, newValue) => {
-            this.document.maxQuantity = newValue;
-          },
-          min: 1,
-        }),
-        localizedToolTip: game.i18n.localize("system.character.asset.quantity.maximum"),
-        iconClass: "ico-limit-solid",
-      }),
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          parent: this,
-          id: "vmQuality",
-          value: this.document.quality,
-          onChange: (_, newValue) => {
-            this.document.quality = newValue;
-          },
-          min: 0,
-        }),
-        localizedToolTip: game.i18n.localize("system.character.asset.quality"),
-        iconClass: "ico-quality-solid",
-      }),
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          parent: this,
-          id: "vmBulk",
-          value: this.document.bulk,
-          onChange: (_, newValue) => {
-            this.document.bulk = newValue;
-          },
-          min: 0,
-        }),
-        localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
-        iconClass: "ico-bulk-solid",
-      }),
-      new DataFieldComponent({
-        template: InputTagsViewModel.TEMPLATE,
-        viewModel: new InputTagsViewModel({
-          id: "vmTags",
-          parent: this,
-          systemTags: ASSET_TAGS.asArray(),
-          value: this.document.tags,
-          onChange: (_, newValue) => {
-            this.document.tags = newValue;
-          },
-        }),
-        localizedToolTip: game.i18n.localize("system.general.tag.plural"),
-        iconClass: "ico-tags-solid",
-        cssClass: "grid-span-2",
-      }),
-    ];
-  }
+  get clazz() { return AssetItemSheetViewModel; }
 
-  /** @override */
-  getHeaderButtons() {
-    const inherited = super.getHeaderButtons();
-    return [
-      new TemplatedComponent({
-        template: ButtonTakeItemViewModel.TEMPLATE,
-        viewModel: new ButtonTakeItemViewModel({
-          parent: this,
-          id: "vmBtnTakeItem",
-          target: this.document,
-          contextType: TAKE_ITEM_CONTEXT_TYPES.itemSheet
-        }),
+  /**
+   * @param {Object} args
+   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
+   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
+   * 
+   * @param {TransientIllness} args.document The represented transient document instance. 
+   * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
+   */
+  constructor(args = {}) {
+    super({
+      ...args,
+      headerViewModel: new AssetHeaderViewModel({
+        id: "vmHeader",
+        isEditable: args.isEditable,
+        document: args.document,
+        sheet: args.sheet,
       }),
-    ].concat(inherited);
+      contentViewModel: new AssetContentViewModel({
+        id: "vmContent",
+        isEditable: args.isEditable,
+        document: args.document,
+        sheet: args.sheet,
+      }),
+    });
   }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(AssetItemSheetViewModel));
-  }
-
 }

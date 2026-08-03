@@ -249,6 +249,12 @@
       }
     },
     "item": {
+      "asset": {
+        "asset": "Asset",
+        "bulk": "Bulk",
+        "quantity": "Amount (Current / Limit per Stack)",
+        "quality": "Quality"
+      },
       "language": {
         "language": "Language",
         "grade": {
@@ -304,6 +310,20 @@
       },
       "mutation": {
         "mutation": "Mutation"
+      },
+      "project": {
+        "project": "Project",
+        "progress": "Progress (Current / Required)"
+      },
+      "recipe": {
+        "recipe": "Recipe",
+        "requiredProgress": "Total Required Progress"
+      },
+      "skill": {
+        "skill": "Skill"
+      },
+      "trait": {
+        "trait": "Trait"
       },
       "healthCondition": {
         "healthCondition": "Health Condition",

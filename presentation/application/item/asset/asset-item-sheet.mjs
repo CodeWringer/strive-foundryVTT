@@ -1,25 +1,20 @@
-import ItemSheetSubType from "../item-sheet-subtype.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import BaseItemSheet from "../base/sheet/base-item-sheet.mjs";
 import AssetItemSheetViewModel from "./asset-item-sheet-viewmodel.mjs";
 
-/**
- * Represents an "asset" type item sheet. 
- */
-export default class AssetItemSheet extends ItemSheetSubType {
+export default class AssetItemSheet extends BaseItemSheet {
   /** @override */
-  get template() { return AssetItemSheetViewModel.TEMPLATE;  }
+  get localizedDocumentType() {
+    return StringUtil.getLoca("system.item.asset.asset");
+  }
   
   /** @override */
-  get localizedType() { return game.i18n.localize("system.character.asset.singular"); }
-
-  /** @override */
-  createViewModel(context, document, sheet) {
+  createViewModel(document, context) {
     return new AssetItemSheetViewModel({
-      id: document.id,
-      document: document.getTransientObject(),
-      isEditable: context.isEditable,
-      isSendable: context.isSendable,
-      isOwner: context.isOwner,
-      sheet: sheet,
+      id: this.id,
+      document: document,
+      sheet: this,
+      context: context,
     });
   }
 }

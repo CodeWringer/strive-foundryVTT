@@ -12,6 +12,7 @@ import { LOG_LEVELS } from "./logging/log-levels.mjs"
 import { ConsoleLogger } from "./logging/console-logger.mjs"
 import { CompareUtility } from "./util/compare-utility.mjs"
 import { FormulaUtility } from "./util/formula-utility.mjs"
+import ConstantEntry from "./model/constant-entry.mjs"
 
 export const common = {
   util: {
@@ -33,6 +34,9 @@ export const common = {
   logging: {
     ConsoleLogger: ConsoleLogger,
     LOG_LEVELS: LOG_LEVELS,
+  },
+  model: {
+    ConstantEntry: ConstantEntry,
   },
   EventEmitter: EventEmitter,
 };

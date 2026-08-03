@@ -4,7 +4,7 @@
  * @constant
  */
 export const ITEM_TYPES = {
-  asset: "item",
+  asset: "asset",
   /**
    * Expertises are only pseudo-items. They don't actually have their own 
    * Item document instances. 

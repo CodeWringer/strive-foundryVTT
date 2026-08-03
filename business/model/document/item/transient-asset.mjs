@@ -2,7 +2,6 @@ import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
 import TransientBaseItem from "./transient-base-item.mjs"
 import DataFieldBridge from "../data-field-bridge.mjs"
 import { common } from "../../../../common/_module.mjs"
-import { TIME_UNITS, TimeUnit } from "../../domain/const/time-units.mjs"
 import AssetSlot from "../../domain/asset/asset-slot.mjs"
 import ArrayDataFieldBridge from "../array-data-field-bridge.mjs"
 import Complication from "../../domain/complication/complication.mjs"
@@ -68,7 +67,7 @@ import Complication from "../../domain/complication/complication.mjs"
  */
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/item-bag.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/bag-light.svg"; }
 
   /** @override */
   get clazz() { return TransientAsset; }

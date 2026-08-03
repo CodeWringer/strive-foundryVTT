@@ -1,25 +1,20 @@
-import ItemSheetSubType from "../item-sheet-subtype.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import BaseItemSheet from "../base/sheet/base-item-sheet.mjs";
 import SkillItemSheetViewModel from "./skill-item-sheet-viewmodel.mjs";
 
-export default class SkillItemSheet extends ItemSheetSubType {
+export default class SkillItemSheet extends BaseItemSheet {
   /** @override */
-  get template() { return SkillItemSheetViewModel.TEMPLATE; }
-
+  get localizedDocumentType() {
+    return StringUtil.getLoca("system.item.skill.skill");
+  }
+  
   /** @override */
-  get localizedType() { return game.i18n.localize("system.character.skill.singular"); }
-
-  /** @override */
-  getTitle(item) { return item.getTransientObject().nameForDisplay; }
-
-  /** @override */
-  createViewModel(context, document, sheet) {
+  createViewModel(document, context) {
     return new SkillItemSheetViewModel({
-      id: document.id,
-      document: document.getTransientObject(),
-      isEditable: context.isEditable,
-      isSendable: context.isSendable,
-      isOwner: context.isOwner,
-      sheet: sheet,
+      id: this.id,
+      document: document,
+      sheet: this,
+      context: context,
     });
   }
 }

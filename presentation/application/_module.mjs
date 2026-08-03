@@ -32,6 +32,26 @@ import MutationHeaderViewModel from "./item/mutation/mutation-header-viewmodel.m
 import LanguageHeaderViewModel from "./item/language/language-header-viewmodel.mjs";
 import BaseItemContentViewModel from "./item/base/base-item-content-viewmodel.mjs";
 import BaseItemHeaderViewModel from "./item/base/base-item-header-viewmodel.mjs";
+import AssetHeaderViewModel from "./item/asset/asset-header-viewmodel.mjs";
+import AssetContentViewModel from "./item/asset/asset-content-viewmodel.mjs";
+import AssetItemSheetViewModel from "./item/asset/asset-item-sheet-viewmodel.mjs";
+import AssetItemSheet from "./item/asset/asset-item-sheet.mjs";
+import ProjectContentViewModel from "./item/project/project-content-viewmodel.mjs";
+import ProjectHeaderViewModel from "./item/project/project-header-viewmodel.mjs";
+import ProjectItemSheetViewModel from "./item/project/project-item-sheet-viewmodel.mjs";
+import ProjectItemSheet from "./item/project/project-item-sheet.mjs";
+import RecipeItemSheetViewModel from "./item/recipe/recipe-item-sheet-viewmodel.mjs";
+import RecipeHeaderViewModel from "./item/recipe/recipe-header-viewmodel.mjs";
+import RecipeContentViewModel from "./item/recipe/recipe-content-viewmodel.mjs";
+import RecipeItemSheet from "./item/recipe/recipe-item-sheet.mjs";
+import SkillItemSheetViewModel from "./item/skill/skill-item-sheet-viewmodel.mjs";
+import SkillHeaderViewModel from "./item/skill/skill-header-viewmodel.mjs";
+import SkillContentViewModel from "./item/skill/skill-content-viewmodel.mjs";
+import SkillItemSheet from "./item/skill/skill-item-sheet.mjs";
+import TraitItemSheetViewModel from "./item/trait/trait-item-sheet-viewmodel.mjs";
+import TraitHeaderViewModel from "./item/trait/trait-header-viewmodel.mjs";
+import TraitContentViewModel from "./item/trait/trait-content-viewmodel.mjs";
+import TraitItemSheet from "./item/trait/trait-item-sheet.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -39,6 +59,7 @@ import BaseItemHeaderViewModel from "./item/base/base-item-header-viewmodel.mjs"
  */
 export const application = {
   component: component,
+  dialog: dialog,
   viewModel: {
     ViewModel: ViewModel,
     ViewModelToolTipDefinition: ViewModelToolTipDefinition,
@@ -50,6 +71,16 @@ export const application = {
       BaseItemSheetViewModel: BaseItemSheetViewModel,
       BaseSheetViewModel: BaseSheetViewModel,
     },
+    asset: {
+      AssetItemSheetViewModel: AssetItemSheetViewModel,
+      AssetHeaderViewModel: AssetHeaderViewModel,
+      AssetContentViewModel: AssetContentViewModel,
+    },
+    healthCondition: {
+      HealthConditionContentViewModel: HealthConditionContentViewModel,
+      HealthConditionHeaderViewModel: HealthConditionHeaderViewModel,
+      HealthConditionItemSheetViewModel: HealthConditionItemSheetViewModel,
+    },
     injury: {
       InjuryItemSheetViewModel: InjuryItemSheetViewModel,
       InjuryHeaderViewModel: InjuryHeaderViewModel,
@@ -60,30 +91,49 @@ export const application = {
       IllnessHeaderViewModel: IllnessHeaderViewModel,
       IllnessItemSheetViewModel: IllnessItemSheetViewModel,
     },
-    mutation: {
-      MutationContentViewModel: MutationContentViewModel,
-      MutationHeaderViewModel: MutationHeaderViewModel,
-      MutationItemSheetViewModel: MutationItemSheetViewModel,
-    },
     language: {
       LanguageItemSheetViewModel: LanguageItemSheetViewModel,
       LanguageHeaderViewModel: LanguageHeaderViewModel,
       LanguageContentViewModel: LanguageContentViewModel,
     },
-    healthCondition: {
-      HealthConditionContentViewModel: HealthConditionContentViewModel,
-      HealthConditionHeaderViewModel: HealthConditionHeaderViewModel,
-      HealthConditionItemSheetViewModel: HealthConditionItemSheetViewModel,
+    mutation: {
+      MutationContentViewModel: MutationContentViewModel,
+      MutationHeaderViewModel: MutationHeaderViewModel,
+      MutationItemSheetViewModel: MutationItemSheetViewModel,
+    },
+    project: {
+      ProjectItemSheetViewModel: ProjectItemSheetViewModel,
+      ProjectHeaderViewModel: ProjectHeaderViewModel,
+      ProjectContentViewModel: ProjectContentViewModel,
+    },
+    recipe: {
+      RecipeItemSheetViewModel: RecipeItemSheetViewModel,
+      RecipeHeaderViewModel: RecipeHeaderViewModel,
+      RecipeContentViewModel: RecipeContentViewModel,
+    },
+    skill: {
+      SkillItemSheetViewModel: SkillItemSheetViewModel,
+      SkillHeaderViewModel: SkillHeaderViewModel,
+      SkillContentViewModel: SkillContentViewModel,
+    },
+    trait: {
+      TraitItemSheetViewModel: TraitItemSheetViewModel,
+      TraitHeaderViewModel: TraitHeaderViewModel,
+      TraitContentViewModel: TraitContentViewModel,
     },
   },
-  dialog: dialog,
   sheet: {
     BaseItemSheet: BaseItemSheet,
+    AssetItemSheet: AssetItemSheet,
+    HealthConditionItemSheet: HealthConditionItemSheet,
     InjuryItemSheet: InjuryItemSheet,
     IllnessItemSheet: IllnessItemSheet,
     MutationItemSheet: MutationItemSheet,
     LanguageItemSheet: LanguageItemSheet,
-    HealthConditionItemSheet: HealthConditionItemSheet,
+    ProjectItemSheet: ProjectItemSheet,
+    RecipeItemSheet: RecipeItemSheet,
+    SkillItemSheet: SkillItemSheet,
+    TraitItemSheet: TraitItemSheet,
   },
   Tooltip: Tooltip,
   TEMPLATES: TEMPLATES,
@@ -95,6 +145,16 @@ export const application = {
     component.init();
     dialog.init();
     // Register sheet application classes. 
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.asset,
+      sheet: AssetItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.health_condition,
+      sheet: HealthConditionItemSheet,
+    });
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,
       type: ITEM_TYPES.injury,
@@ -117,8 +177,23 @@ export const application = {
     });
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,
-      type: ITEM_TYPES.health_condition,
-      sheet: HealthConditionItemSheet,
+      type: ITEM_TYPES.project,
+      sheet: ProjectItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.recipe,
+      sheet: RecipeItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.skill,
+      sheet: SkillItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.trait,
+      sheet: TraitItemSheet,
     });
   },
 };

@@ -17,21 +17,18 @@ export default class ProjectItemData extends BaseItemData {
         current: new FoundrySchemaFields.NumberField({
           nullable: false,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
         }),
         increment: new FoundrySchemaFields.NumberField({
           nullable: false,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
         }),
         total: new FoundrySchemaFields.NumberField({
           nullable: false,
           integer: true,
-          positive: true,
           initial: 0,
           min: 0,
         }),
@@ -40,14 +37,12 @@ export default class ProjectItemData extends BaseItemData {
       pushes: new FoundrySchemaFields.NumberField({
         nullable: false,
         integer: true,
-        positive: true,
         initial: 0,
         min: 0,
       }),
       quality: new FoundrySchemaFields.NumberField({
         nullable: false,
         integer: true,
-        positive: true,
         initial: 1,
         min: 1,
       }),

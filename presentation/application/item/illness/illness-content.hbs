@@ -4,7 +4,7 @@ viewModel: IllnessContentViewModel
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
 <div class="pad-h-md">
   <span class="h-divider"></span>
-  <div class="flex flex-row flex-middle auto-margin-h-md">
+  <div class="flex flex-row flex-middle auto-margin-h-md pad-v-md">
     <div class="flex flex-row flex-middle">
       <i class="ico ico-obstacle xl"></i>
       {{> inputTextField viewModel=viewModel.vmTreatmentObstacle cssClass="width-lg" }}
@@ -15,7 +15,7 @@ viewModel: IllnessContentViewModel
     </div>
   </div>
   <span class="h-divider"></span>
-  <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
+  <div class="flex flex-row flex-middle flex-grow auto-margin-h-md pad-v-md">
     <div class="flex flex-row flex-middle flex-grow" style="max-width: 40%;">
       <i class="ico ico-treatment-date xl"></i>
       {{> inputTextField viewModel=viewModel.vmTreatmentDate cssClass="flex-grow" }}

@@ -15,7 +15,6 @@ static defineSchema() {
       requiredProgress: new FoundrySchemaFields.NumberField({
         nullable: false,
         integer: true,
-        positive: true,
         initial: 0,
         min: 0,
       }),
@@ -23,7 +22,6 @@ static defineSchema() {
       quality: new FoundrySchemaFields.NumberField({
         nullable: false,
         integer: true,
-        positive: true,
         initial: 1,
         min: 1,
       }),

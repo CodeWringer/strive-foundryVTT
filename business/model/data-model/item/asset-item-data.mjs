@@ -13,16 +13,14 @@ export default class AssetItemData extends BaseItemData {
         initial: 0,
         integer: true,
         min: 0,
-        positive: true,
       }),
       quantity: new FoundrySchemaFields.SchemaField({
         current: new FoundrySchemaFields.NumberField({
           nullable: false,
           required: true,
-          initial: 1,
+          initial: 0,
           integer: true,
           min: 0,
-          positive: true,
         }),
         maximum: new FoundrySchemaFields.NumberField({
           nullable: true,
@@ -30,7 +28,6 @@ export default class AssetItemData extends BaseItemData {
           initial: null,
           integer: true,
           min: 0,
-          positive: true,
         }),
       }),
       quality: new FoundrySchemaFields.NumberField({
@@ -39,7 +36,6 @@ export default class AssetItemData extends BaseItemData {
         initial: 1,
         integer: true,
         min: 1,
-        positive: true,
       }),
       complications: new FoundrySchemaFields.ArrayField(new ComplicationField(), {
         nullable: false,

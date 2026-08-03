@@ -113,7 +113,7 @@ export default class Expertise extends Persistable {
    * @abstract
    * @readonly
    */
-  get defaultImg() { return "icons/svg/book.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/expertise-light.svg"; }
 
   /**
    * Returns the class reference of this document. 
