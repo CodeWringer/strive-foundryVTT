@@ -169,7 +169,8 @@
       "formula": "Formula",
       "gm": {
         "gm": "GM",
-        "gmNotes": "GM Notes"
+        "gmNotes": "GM Notes",
+        "gmNotesHidden": "GM Notes (Hidden)"
       },
       "id": "ID",
       "increment": "Increment",

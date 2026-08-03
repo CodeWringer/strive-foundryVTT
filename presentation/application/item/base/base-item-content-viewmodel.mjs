@@ -1,6 +1,8 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
 import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import Tooltip from "../../component/tooltip/tooltip.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 
@@ -74,14 +76,63 @@ export default class BaseItemContentViewModel extends ViewModel {
         id: "vmGmNotes",
         parent: this,
         isEditable: this.isEditable,
-        toolTip: new ViewModelToolTipDefinition({
-          localized: StringUtil.getLoca("system.general.gm.gmNotes"),
-        }),
         value: this.document.gmNotes,
         onChange: (_, newValue) => {
           this.document.gmNotes = newValue;
         },
       });
+    }
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    if (this.isGM) {
+      this._gmNotesHiddenIndicatorSection = this.element.find(".gm-notes-hidden-indicator");
+      this._gmNotesSection = this.element.find(".gm-notes");
+      this._gmNotesButton = this.element.find(`a#${this.id}-gm-header`);
+      this._gmNotesButton.click(() => {
+        this.toggleGmNotes();
+      });
+
+      // Extra, to ensure the entire GM section has the tool tip. 
+      this._gmNotesToolTip = new Tooltip({
+        id: `${this.id}-gm-notes-tooltip`,
+        content: StringUtil.getLoca("system.general.gm.gmNotesHidden"),
+      });
+      this._gmNotesToolTip.activateListeners(this.element.find(".gm-only"));
+    }
+  }
+
+  /**
+   * Toggles the visibility of the GM notes section. 
+   * @protected
+   * @async
+   */
+  async toggleGmNotes() {
+    if (this._gmNotesSection.hasClass("hidden")) {
+      // Show GM notes
+      this._gmNotesSection.removeClass("hidden");
+      await new SlideDisplaceAnim({
+        displacingElement: this._gmNotesSection,
+        displacedElement: this._gmNotesHiddenIndicatorSection,
+      }).execute();
+      this._gmNotesHiddenIndicatorSection.addClass("hidden");
+      this._gmNotesToolTip.content = StringUtil.getLoca("system.general.gm.gmNotes");
+    } else {
+      // Hide GM notes
+      this._gmNotesHiddenIndicatorSection.removeClass("hidden");
+      await new SlideDisplaceAnim({
+        displacingElement: this._gmNotesHiddenIndicatorSection,
+        displacedElement: this._gmNotesSection,
+      }).execute();
+      this._gmNotesSection.addClass("hidden");
+      this._gmNotesToolTip.content = StringUtil.getLoca("system.general.gm.gmNotesHidden");
+    }
+    
+    if (this._gmNotesToolTip.visible) {
+      this._gmNotesToolTip.show(); // Re-render.
     }
   }
 }
