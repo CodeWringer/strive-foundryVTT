@@ -163,8 +163,8 @@ export default class BaseDialog extends FoundryWrapper.HandlebarsApplicationMixi
 
   /** @override */
   async _postRender(context, options) {
-    this.#html = $(`section#${context.viewModel.id}`).closest("form");
-    this.#content = $(this.html).find("section.window-content");
+    this.#html = $(`#${context.viewModel.id}`).closest("form");
+    this.#content = $(this.html).find(".window-content");
     
     await this.viewModel.activateListeners(this.#html);
     return await super._postRender(context, options);

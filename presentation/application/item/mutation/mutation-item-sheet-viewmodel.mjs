@@ -16,18 +16,21 @@ export default class MutationItemSheetViewModel extends BaseItemSheetViewModel {
    * 
    * @param {TransientMutation} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super({
       ...args,
-      contentViewModel: new MutationContentViewModel({
-        id: "vmContent",
+      headerViewModel: new MutationHeaderViewModel({
+        id: "vmHeader",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
-      headerViewModel: new MutationHeaderViewModel({
-        id: "vmHeader",
+      contentViewModel: new MutationContentViewModel({
+        id: "vmContent",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

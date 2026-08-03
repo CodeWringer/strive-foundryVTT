@@ -2,16 +2,15 @@ import { INJURY_STATES } from "../../../../business/model/domain/const/injury-st
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
 import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
-import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 
 /**
  * @property {TransientInjury} document 
  */
-export default class InjuryHeaderViewModel extends ViewModel {
+export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.item.injury.header; }
 
@@ -28,30 +27,12 @@ export default class InjuryHeaderViewModel extends ViewModel {
    * 
    * @param {TransientInjury} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * @param {DOCUMENT_CONTEXT | undefined} args.context 
+   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
 
-    this.vmImg = new InputImageViewModel({
-      id: "vmImg",
-      parent: this,
-      value: this.document.img,
-      onChange: (_, newValue) => {
-        this.document.img = newValue;
-      },
-    });
-    this.vmName = new InputTextFieldViewModel({
-      id: "vmName",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.general.name.documentName"),
-      }),
-      value: this.document.name,
-      onChange: (_, newValue) => {
-        this.document.name = newValue;
-      },
-    });
     this.vmHealingProgress = new InputSplitNumberSpinnerViewModel({
       id: "vmHealingProgress",
       parent: this,
@@ -105,6 +86,10 @@ export default class InjuryHeaderViewModel extends ViewModel {
     await super.activateListeners(html);
 
     this.#updateProgressMaximumReadMode();
+
+    if (this.isIndependent) {
+      this.element.find(`#${this.id}-embedded-content`).addClass("hidden");
+    }
   }
 
   /**

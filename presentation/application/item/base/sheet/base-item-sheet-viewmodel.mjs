@@ -2,13 +2,17 @@ import { ValidationUtil } from "../../../../../common/util/validation-utility.mj
 import { SlideDisplaceAnim } from "../../../../animation/slide-displace-anim.mjs";
 import { SlideInAnim } from "../../../../animation/slide-in-anim.mjs";
 import { SlideOutAnim } from "../../../../animation/slide-out-anim.mjs";
+import { DOCUMENT_CONTEXT } from "../../../../model/document-context.mjs";
 import { ChatUtil } from "../../../../util/chat-utility.mjs";
 import { KEY_CODES, MODIFIER_KEY_CODES } from "../../../../util/keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../../../util/keyboard/keyboard.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
 import VisibilityChoiceDialog from "../../../dialog/visibility-choice-dialog/visibility-choice-dialog.mjs";
+import { TEMPLATES } from "../../../templates.mjs";
 import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
+import BaseItemContentViewModel from "../base-item-content-viewmodel.mjs";
+import BaseItemHeaderViewModel from "../base-item-header-viewmodel.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 
@@ -18,26 +22,16 @@ import ViewModel from "../../../view-model/view-model.mjs";
  * 
  * @abstract Inheritors MUST override: 
  * * `get clazz`
+ * * In the `constructor`, inheritors MUST provide: 
+ * * * `headerViewModel: BaseItemHeaderViewModel`
+ * * * `contentViewModel: BaseItemContentViewModel`
  * 
- * Inheritors *may* override:
- * * `get headerTemplate`
- * * `get contentTemplate`
- * * `get headerViewModel`
- * * `get contentViewModel`
- * 
- * @property {String} headerTemplate Returns the relative url of the header template. 
- * E. g. `TEMPLATES.application.item.language.header`
- * * Read-only
- * @property {String} contentTemplate Returns the relative url of the content template. 
- * E. g. `TEMPLATES.application.item.language.content`
- * * Read-only
- * @property {ViewModel} contentViewModel Returns the `ViewModel` instance of the 
- * content template.
- * * Read-only
+ * Inheritors MUST NOT override:
+ * * `static get TEMPLATE`
  */
 export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_ITEM_SHEET; }
+  static get TEMPLATE() { return TEMPLATES.application.item.base.sheet; }
 
   /** @override */
   get clazz() { return BaseItemSheetViewModel; }
@@ -45,26 +39,26 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /**
    * Returns the relative url of the header template. 
    * E. g. `TEMPLATES.application.item.language.header`
-   * @type {String}
+   * @type {String | undefined}
    * @readonly
-   * @virtual
+   * @protected
    */
-  get headerTemplate() { return this._headerViewModel.clazz.TEMPLATE; }
+  get headerTemplate() { return BaseItemHeaderViewModel.TEMPLATE; }
 
   /**
    * Returns the relative url of the content template. 
    * E. g. `TEMPLATES.application.item.language.content`
-   * @type {String}
+   * @type {String | undefined}
    * @readonly
-   * @virtual
+   * @protected
    */
-  get contentTemplate() { return this._contentViewModel.clazz.TEMPLATE; }
+  get contentTemplate() { return BaseItemContentViewModel.TEMPLATE; }
 
   /**
    * Returns the `ViewModel` instance of the header template.
    * @type {ViewModel}
    * @readonly
-   * @virtual
+   * @protected
    */
   get headerViewModel() { return this._headerViewModel ?? this; }
 
@@ -72,9 +66,30 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * Returns the `ViewModel` instance of the content template.
    * @type {ViewModel}
    * @readonly
-   * @virtual
+   * @protected
    */
   get contentViewModel() { return this._contentViewModel ?? this; }
+
+  /**
+   * Returns `true`, if this is an embedded document. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
+
+  /**
+   * Returns `true`, if this is an independent (i. e. not embedded) document. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
+  
+  /**
+   * Returns `true`, if this is locked (i. e. part of a locked compendium pack). 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isLocked() { return this.context === DOCUMENT_CONTEXT.embedded_locked || this.context === DOCUMENT_CONTEXT.independent_locked; }
 
   /**
    * @param {Object} args
@@ -86,23 +101,29 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * 
    * @param {TransientDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {ViewModel | undefined} args.headerViewModel
-   * @param {ViewModel | undefined} args.contentViewModel
+   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
+   * @param {BaseItemHeaderViewModel | undefined} args.headerViewModel
+   * @param {BaseItemContentViewModel | undefined} args.contentViewModel
    */
   constructor(args = {}) {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
+    this.context = args.context ?? DOCUMENT_CONTEXT.independent;
     this.document.isTransactionMode = this.isEditable;
 
     this._headerViewModel = args.headerViewModel;
     if (ValidationUtil.isDefined(this._headerViewModel)) {
       this._headerViewModel.parent = this;
+      this._headerViewModel.context = args.context;
     }
 
     this._contentViewModel = args.contentViewModel;
     if (ValidationUtil.isDefined(this._contentViewModel)) {
       this._contentViewModel.parent = this;
+      this._contentViewModel.context = args.context;
     }
   }
 
@@ -127,7 +148,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async enterEditMode() {
-    if (this.isEditable || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
+    if (this.isEditable || ValidationUtil.isDefined(this._stateChangeTimeout) || this.isLocked) return;
     this._stateChangeTimeout = setTimeout(() => {
       this._stateChangeTimeout = null;
     }, 300);
@@ -152,7 +173,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async saveEdits() {
-    if (!this.isEditable || ValidationUtil.isDefined(this._stateChangeTimeout)) return;
+    if (!this.isEditable || ValidationUtil.isDefined(this._stateChangeTimeout) || this.isLocked) return;
     this._stateChangeTimeout = setTimeout(() => {
       this._stateChangeTimeout = null;
     }, 300);
@@ -212,7 +233,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this._exitModeButton = $(`#${sheetId} button[data-action=saveEdits]`);
     this._sendToChatButton = $(`#${sheetId} button[data-action=sendToChat]`);
 
-    if (this.isOwner || this.isGM) {
+    if ((this.isOwner || this.isGM) && !this.isLocked) {
       this._titleElement = $(`form#${sheetId}`).find("h1.window-title");
       this._titleReplacement = $(`form#${sheetId}`).find("h1.window-title.anim-replacement");
 
@@ -248,7 +269,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     } else {
       this._enterModeButton.addClass("hidden");
       this._exitModeButton.addClass("hidden");
-      this._sendToChatButton.addClass("hidden");
     }
   }
 

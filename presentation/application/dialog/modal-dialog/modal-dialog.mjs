@@ -54,15 +54,6 @@ export default class ModalDialog extends BaseDialog {
   easyDismissal = true;
 
   /**
-   * A function to invoke upon the closing of the dialog. 
-   * 
-   * Receives this dialog instance as its only argument. 
-   * 
-   * @type {Function | undefined}
-   */
-  onClose = undefined;
-
-  /**
    * Id of the back drop element. 
    * 
    * @type {String}
@@ -98,8 +89,9 @@ export default class ModalDialog extends BaseDialog {
 
   /** @override */
   async _postRender(context, options) {
+    const o = await super._postRender(context, options);
     this._ensureModalBackdrop();
-    return await super._postRender(context, options);
+    return o;
   }
 
   /**

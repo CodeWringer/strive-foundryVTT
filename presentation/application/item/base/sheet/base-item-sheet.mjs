@@ -1,6 +1,7 @@
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
+import { DOCUMENT_CONTEXT } from "../../../../model/document-context.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
 import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
 
@@ -8,8 +9,6 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
  * Abstract base Item sheet class. 
  * 
  * @abstract Inheritors MUST override:
- * * `static TABS`
- * * `static PARTS`
  * * `get localizedDocumentType`
 
  * Inheritors _should_ override:
@@ -18,6 +17,10 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
  * Inheritors _may_ override:
  * * `_getTabsConfig()`
  * * `get title`
+ * * `static TABS` - Discouraged, as you will then have to implement all item template logic yourself. 
+ * At that point, inheriting directly from `ItemSheetV2` may be the better choice. 
+ * * `static PARTS` - Discouraged, as you will then have to implement all item template logic yourself. 
+ * At that point, inheriting directly from `ItemSheetV2` may be the better choice. 
  * 
  * @property {BaseItemSheetViewModel} viewModel
  * @property {HTMLElement} html The form element of the sheet. 
@@ -26,7 +29,9 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
  * * Read-only
  * @property {String} title
  * * Read-only
- * @property {String} localizedDocumentType
+ * @property {String} localizedDocumentType Returns the localized document sub-type. 
+ * 
+ * E. g. `"Language"`
  * * Read-only
  */
 export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
@@ -69,7 +74,7 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
   /** @override */
   static PARTS = {
     form: {
-      template: TEMPLATES.application.item.baseSheet,
+      template: TEMPLATES.application.item.base.sheet,
     },
   }
 
@@ -108,6 +113,9 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
   }
 
   /**
+   * Returns the localized document sub-type. 
+   * 
+   * E. g. `"Language"`
    * @type {String}
    * @override
    * @readonly
@@ -123,14 +131,18 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
 
   /**
    * @param {TransientDocument} document 
+   * @param {DOCUMENT_CONTEXT} context 
    * @returns {BaseItemSheetViewModel}
    * 
-   * @virtual
+   * @virtual Inheritors _should_ override this to provide their own, more specific 
+   * view model instance! 
    */
-  createViewModel(document) {
+  createViewModel(document, context) {
     return new BaseItemSheetViewModel({
       id: document.id,
       document: document,
+      sheet: this,
+      context: context,
     });
   }
 
@@ -156,8 +168,11 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
   async _prepareContext(options) {
     const context = await super._prepareContext(options)
 
+    const document = context.document.getTransientObject();
+    const documentContext = document.context;
+
     // Ensure view model. 
-    this.viewModel = this.createViewModel(context.document);
+    this.viewModel = this.createViewModel(document, documentContext);
     this.viewModel.readAllViewState();
     context.viewModel = this.viewModel;
 

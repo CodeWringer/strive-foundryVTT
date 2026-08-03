@@ -16,18 +16,21 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
    * 
    * @param {TransientInjury} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super({
       ...args,
-      contentViewModel: new InjuryContentViewModel({
-        id: "vmContent",
+      headerViewModel: new InjuryHeaderViewModel({
+        id: "vmHeader",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
-      headerViewModel: new InjuryHeaderViewModel({
-        id: "vmHeader",
+      contentViewModel: new InjuryContentViewModel({
+        id: "vmContent",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

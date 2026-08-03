@@ -6,8 +6,9 @@ import InputRichTextViewModel from "../../component/input-rich-text/input-rich-t
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import BaseItemContentViewModel from "../base/base-item-content-viewmodel.mjs";
 
-export default class InjuryContentViewModel extends ViewModel {
+export default class InjuryContentViewModel extends BaseItemContentViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.item.injury.content; }
 
@@ -24,6 +25,9 @@ export default class InjuryContentViewModel extends ViewModel {
    * 
    * @param {TransientLanguage} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
@@ -103,19 +107,5 @@ export default class InjuryContentViewModel extends ViewModel {
         this.document.treatment.requiredSupplies.asset = newValue;
       },
     });
-    if (this.isGM) {
-      this.vmGmNotes = new InputRichTextViewModel({
-        id: "vmGmNotes",
-        parent: this,
-        isEditable: this.isEditable,
-        toolTip: new ViewModelToolTipDefinition({
-          localized: StringUtil.getLoca("system.general.gm.gmNotes"),
-        }),
-        value: this.document.gmNotes,
-        onChange: (_, newValue) => {
-          this.document.gmNotes = newValue;
-        },
-      });
-    }
   }
 }

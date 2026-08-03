@@ -38,7 +38,11 @@ export const TEMPLATES = {
     actor: {
     },
     item: {
-      baseSheet: `${basePathApplication}/item/base/sheet/base-item-sheet.hbs`,
+      base: {
+        sheet: `${basePathApplication}/item/base/sheet/base-item-sheet.hbs`,
+        header: `${basePathApplication}/item/base/base-item-header.hbs`,
+        content: `${basePathApplication}/item/base/base-item-content.hbs`,
+      },
       language: {
         header: `${basePathApplication}/item/language/language-header.hbs`,
         content: `${basePathApplication}/item/language/language-content.hbs`,

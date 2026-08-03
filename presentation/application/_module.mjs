@@ -30,6 +30,8 @@ import InjuryHeaderViewModel from "./item/injury/injury-header-viewmodel.mjs";
 import IllnessHeaderViewModel from "./item/illness/illness-header-viewmodel.mjs";
 import MutationHeaderViewModel from "./item/mutation/mutation-header-viewmodel.mjs";
 import LanguageHeaderViewModel from "./item/language/language-header-viewmodel.mjs";
+import BaseItemContentViewModel from "./item/base/base-item-content-viewmodel.mjs";
+import BaseItemHeaderViewModel from "./item/base/base-item-header-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -43,8 +45,10 @@ export const application = {
     ViewModelCollection: ViewModelCollection,
     InputViewModel: InputViewModel,
     base: {
-      BaseSheetViewModel: BaseSheetViewModel,
+      BaseItemHeaderViewModel: BaseItemHeaderViewModel,
+      BaseItemContentViewModel: BaseItemContentViewModel,
       BaseItemSheetViewModel: BaseItemSheetViewModel,
+      BaseSheetViewModel: BaseSheetViewModel,
     },
     injury: {
       InjuryItemSheetViewModel: InjuryItemSheetViewModel,

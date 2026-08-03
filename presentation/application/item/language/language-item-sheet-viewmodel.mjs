@@ -16,18 +16,21 @@ export default class LanguageItemSheetViewModel extends BaseItemSheetViewModel {
    * 
    * @param {TransientLanguage} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super({
       ...args,
-      contentViewModel: new LanguageContentViewModel({
-        id: "vmContent",
+      headerViewModel: new LanguageHeaderViewModel({
+        id: "vmHeader",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
-      headerViewModel: new LanguageHeaderViewModel({
-        id: "vmHeader",
+      contentViewModel: new LanguageContentViewModel({
+        id: "vmContent",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

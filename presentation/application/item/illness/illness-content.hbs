@@ -1,41 +1,30 @@
 {{!-- context:
 viewModel: IllnessContentViewModel
 --}}
-<div id="{{viewModel.id}}" class="flex flex-column">
-  {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
-  <div class="pad-h-md">
-    <span class="h-divider"></span>
-    <div class="flex flex-row flex-middle auto-margin-h-md">
-      <div class="flex flex-row flex-middle">
-        <i class="ico ico-obstacle xl"></i>
-        {{> inputTextField viewModel=viewModel.vmTreatmentObstacle cssClass="width-lg" }}
-      </div>
-      <div class="flex flex-row flex-middle flex-grow">
-        <i class="ico ico-arrow-right lg"></i>
-        {{> inputReference viewModel=viewModel.vmTreatmentSkill cssClass="flex-grow" }}
-      </div>
+{{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
+<div class="pad-h-md">
+  <span class="h-divider"></span>
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    <div class="flex flex-row flex-middle">
+      <i class="ico ico-obstacle xl"></i>
+      {{> inputTextField viewModel=viewModel.vmTreatmentObstacle cssClass="width-lg" }}
     </div>
-    <span class="h-divider"></span>
+    <div class="flex flex-row flex-middle flex-grow">
+      <i class="ico ico-arrow-right lg"></i>
+      {{> inputReference viewModel=viewModel.vmTreatmentSkill cssClass="flex-grow" }}
+    </div>
+  </div>
+  <span class="h-divider"></span>
+  <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
+    <div class="flex flex-row flex-middle flex-grow" style="max-width: 40%;">
+      <i class="ico ico-treatment-date xl"></i>
+      {{> inputTextField viewModel=viewModel.vmTreatmentDate cssClass="flex-grow" }}
+    </div>
+    <span class="v-divider"></span>
     <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
-      <div class="flex flex-row flex-middle flex-grow" style="max-width: 40%;">
-        <i class="ico ico-treatment-date xl"></i>
-        {{> inputTextField viewModel=viewModel.vmTreatmentDate cssClass="flex-grow" }}
-      </div>
-      <span class="v-divider"></span>
-      <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
-        <i class="ico ico-treatment-supplies xl"></i>
-        {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount cssClass="width-sm" }}
-        {{> inputReference viewModel=viewModel.vmTreatmentSuppliesAsset cssClass="flex-grow" }}
-      </div>
+      <i class="ico ico-treatment-supplies xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount cssClass="width-sm" }}
+      {{> inputReference viewModel=viewModel.vmTreatmentSuppliesAsset cssClass="flex-grow" }}
     </div>
   </div>
-  {{#if viewModel.isGM}}
-  <div class="gm-only flex-grow margin-t-lg">
-    <h2 class="flex flex-column strive-regular-font" style="font-weight: normal;">
-      <span class="pad-l-md pad-t-md">{{localize "system.general.gm.gm"}}</span>
-      {{{themedImage "image.underline.h2" "" "min-width: 500px; max-width: 500px;"}}}
-    </h2>
-    {{> inputRichText viewModel=viewModel.vmGmNotes cssClass="pad-md" }}
-  </div>
-  {{/if}}
 </div>

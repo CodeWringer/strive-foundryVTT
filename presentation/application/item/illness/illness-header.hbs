@@ -1,10 +1,7 @@
 {{!-- context:
 viewModel: IllnessItemSheetViewModel
 --}}
-<div id="{{viewModel.id}}" class="flex flex-row pad-lg border-b-md auto-margin-h-md">
-  {{> inputImage viewModel=viewModel.vmImg cssClass="lg" }}
-  <span class="v-divider"></span>
-  {{> inputTextField viewModel=viewModel.vmName cssClass="flex-grow lg" }}
+<div id="{{viewModel.id}}-embedded-content">
   <span class="v-divider"></span>
   <i class="ico ico-healing-progress xl"></i>
   {{> inputSplitNumberSpinner viewModel=viewModel.vmHealingProgress cssClass="width-md" }}

@@ -1,5 +1,7 @@
 import { common } from "../../../common/_module.mjs"
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { DOCUMENT_CONTEXT } from "../../../presentation/model/document-context.mjs";
 import AtReferencer from "../../search/at-referencer.mjs"
 import DataFieldBridge from "./data-field-bridge.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs"
@@ -169,6 +171,29 @@ export default class TransientDocument {
    */
   get isTransactionMode() { return this._updater.isTransactionMode; }
   set isTransactionMode(value) { this._updater.isTransactionMode = value; }
+
+  /**
+   * Returns the context of the document - whether it is embedded or independent. 
+   * @type {DOCUMENT_CONTEXT}
+   * @readonly
+   */
+  get context() {
+    if (ValidationUtil.isDefined(this.document.parent)) {
+      // Embedded
+      if (ValidationUtil.isDefined(this.document.pack) && this.document.pack.metadata.locked) {
+        return DOCUMENT_CONTEXT.embedded_locked;
+      } else {
+        return DOCUMENT_CONTEXT.embedded;
+      }
+    } else {
+      // Independent
+      if (ValidationUtil.isDefined(this.document.pack) && this.document.pack.metadata.locked) {
+        return DOCUMENT_CONTEXT.independent_locked;
+      } else {
+        return DOCUMENT_CONTEXT.independent;
+      }
+    }
+  }
 
   /**
    * @param {Actor | Item} document An encapsulated document instance. 

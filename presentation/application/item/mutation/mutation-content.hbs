@@ -1,15 +1,4 @@
 {{!-- context:
 viewModel: MutationContentViewModel
 --}}
-<div id="{{viewModel.id}}" class="flex flex-column">
-  {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
-  {{#if viewModel.isGM}}
-  <div class="gm-only flex-grow">
-    <h2 class="flex flex-column strive-regular-font" style="font-weight: normal;">
-      <span class="pad-l-md pad-t-md">{{localize "system.general.gm.gm"}}</span>
-      {{{themedImage "image.underline.h2" "" "min-width: 500px; max-width: 500px;"}}}
-    </h2>
-    {{> inputRichText viewModel=viewModel.vmGmNotes cssClass="pad-md" }}
-  </div>
-  {{/if}}
-</div>
+{{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
