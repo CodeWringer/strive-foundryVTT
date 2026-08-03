@@ -47,7 +47,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  */
 export default class TransientLanguage extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/ice-aura.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/language-light.svg"; }
 
   /** @override */
   get clazz() { return TransientLanguage; }

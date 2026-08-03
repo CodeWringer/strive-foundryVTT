@@ -41,7 +41,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  */
 export default class TransientMutation extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/ice-aura.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/mutation-light.svg"; }
   
   /** @override */
   get clazz() { return TransientMutation; }

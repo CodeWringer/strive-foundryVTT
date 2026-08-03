@@ -61,7 +61,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  */
 export default class TransientIllness extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/poison.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/illness-state-active-light.svg"; }
 
   /** @override */
   get clazz() { return TransientIllness; }
