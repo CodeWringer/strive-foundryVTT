@@ -10,6 +10,8 @@ import CustomProseMirrorMenu from "./input-rich-text/custom-prose-mirror-menu.mj
 import InputReferenceViewModel from "./input-reference/input-reference-viewmodel.mjs";
 import InputSplitNumberSpinnerViewModel from "./input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 import InputImageViewModel from "./input-image/input-image-viewmodel.mjs";
+import ComplicationListViewModel from "./complication/complication-list-viewmodel.mjs";
+import ComplicationViewModel from "./complication/complication-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -27,6 +29,8 @@ export const component = {
   InputSplitNumberSpinnerViewModel: InputSplitNumberSpinnerViewModel,
   InputReferenceViewModel: InputReferenceViewModel,
   InputImageViewModel: InputImageViewModel,
+  ComplicationViewModel: ComplicationViewModel,
+  ComplicationListViewModel: ComplicationListViewModel,
   /**
    * Initialization, which MUST be called during system setup!
    */

@@ -3,11 +3,11 @@ viewModel: InputRichTextViewModel
 --}}
 {{!-- Edit mode --}}
 <prose-mirror 
-  class="edit-mode editor prosemirror active"
+  class="edit-mode editor prosemirror active font-size-md"
   name="viewModel.value"
   relative
   editable="true"
   value="{{viewModel.value}}"
 >{{{viewModel.enrichedHtml}}}</prose-mirror>
 {{!-- Read mode --}}
-<div class="read-mode">{{{viewModel.enrichedHtml}}}</div>
+<div class="read-mode font-size-md">{{{viewModel.enrichedHtml}}}</div>

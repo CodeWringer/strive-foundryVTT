@@ -15,5 +15,8 @@ viewModel: AssetContentViewModel
       {{> inputNumberSpinner viewModel=viewModel.vmQuality cssClass="width-lg" }}
     </div>
   </div>
-  {{!-- TODO #767 Complications --}}
+  <span class="h-divider"></span>
+  {{#with viewModel.vmComplications.clazz.TEMPLATE as |template|}}
+  {{> (template) viewModel=../viewModel.vmComplications }}
+  {{/with}}
 </div>

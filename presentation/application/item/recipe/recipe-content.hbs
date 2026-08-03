@@ -4,5 +4,7 @@ viewModel: RecipeContentViewModel
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
 <div class="pad-h-md">
   <span class="h-divider"></span>
-  {{!-- TODO #767 Complications --}}
+  {{#with viewModel.vmComplications.clazz.TEMPLATE as |template|}}
+  {{> (template) viewModel=../viewModel.vmComplications }}
+  {{/with}}
 </div>

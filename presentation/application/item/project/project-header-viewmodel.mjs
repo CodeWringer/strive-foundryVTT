@@ -33,7 +33,7 @@ export default class ProjectHeaderViewModel extends BaseItemHeaderViewModel {
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.project.progress"),
+        localized: StringUtil.getLoca("system.item.project.progress.progress"),
       }),
       current: {
         value: this.document.progress.current,

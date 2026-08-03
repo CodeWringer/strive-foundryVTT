@@ -101,6 +101,10 @@ export const TEMPLATES = {
       reference: `${basePathComponent}/input-reference/input-reference.hbs`,
       row: `${basePathComponent}/row/row.hbs`,
       image: `${basePathComponent}/input-image/input-image.hbs`,
+      complication: {
+        complication: `${basePathComponent}/complication/complication.hbs`,
+        list: `${basePathComponent}/complication/complication-list.hbs`,
+      },
     },
   },
   image: {

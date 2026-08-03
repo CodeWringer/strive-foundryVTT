@@ -30,22 +30,22 @@ export class TimeUnit {
 export const TIME_UNITS = {
   none: new TimeUnit({
     name: "none",
-    localizableName: "system.timeUnit.none",
+    localizableName: "system.general.timeUnit.none",
   }),
   second: new TimeUnit({
     name: "second",
-    localizableName: "system.timeUnit.second",
+    localizableName: "system.general.timeUnit.second",
   }),
   minute: new TimeUnit({
     name: "minute",
-    localizableName: "system.timeUnit.minute",
+    localizableName: "system.general.timeUnit.minute",
   }),
   hour: new TimeUnit({
     name: "hour",
-    localizableName: "system.timeUnit.hour",
+    localizableName: "system.general.timeUnit.hour",
   }),
   day: new TimeUnit({
     name: "day",
-    localizableName: "system.timeUnit.day",
+    localizableName: "system.general.timeUnit.day",
   }),
 };

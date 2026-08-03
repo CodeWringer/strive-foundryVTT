@@ -1,4 +1,5 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import ComplicationListViewModel from "../../component/complication/complication-list-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
@@ -63,6 +64,15 @@ export default class AssetContentViewModel extends BaseItemContentViewModel {
       }),
       onChange: (_, newValue) => {
         this.document.quality = newValue;
+      },
+    });
+    this.vmComplications = new ComplicationListViewModel({
+      id: "vmComplications",
+      parent: this,
+      isEditable: this.isEditable,
+      value: this.document.complications,
+      onChange: (_, newValue) => {
+        this.document.complications = newValue;
       },
     });
   }
