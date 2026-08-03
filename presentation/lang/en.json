@@ -247,6 +247,13 @@
         "day": "Da(s)y"
       }
     },
+    "domain": {
+      "complication": {
+        "add": "Add Complication",
+        "complication": "Complication",
+        "complications": "Complications"
+      }
+    },
     "actor": {
       "plain": {
         "plainActor": "Plain Actor",
@@ -260,8 +267,7 @@
         "asset": "Asset",
         "bulk": "Bulk",
         "quantity": "Amount (Current / Limit per Stack)",
-        "quality": "Quality",
-        "complications": "Complications"
+        "quality": "Quality"
       },
       "language": {
         "language": "Language",

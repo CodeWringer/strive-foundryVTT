@@ -1,12 +1,21 @@
-<div id="{{viewModel.id}}" class="strive complication-list">
+<div id="{{viewModel.id}}" class="strive complication-list auto-margin-v-md">
   <h2 class="flex flex-column strive-regular-font" style="font-weight: normal;">
-    <div class="flex flex-row">
-      <span class="flex-grow pad-l-md pad-t-md">{{localize "system.item.asset.complications"}}</span>
-      {{> button viewModel=viewModel.vmComplicationsButton }}
+    <div class="flex flex-row auto-margin-h-md">
+      <span class="flex-grow pad-l-md pad-t-md">{{localize "system.domain.complication.complications"}}</span>
+      <div class="context-button-section flex flex-row auto-margin-h-md">
+        <span class="v-divider"></span>
+        {{> buttonContextMenu viewModel=viewModel.vmContextMenuButton }}
+      </div>
     </div>
     {{{themedImage "image.underline.h2" "" "min-width: 500px; max-width: 500px;"}}}
   </h2>
   <ul>
-    {{!-- TODO --}}
+    {{#each viewModel.complicationViewModels as |vm|}}
+    <li>
+      {{#with vm.clazz.TEMPLATE as | template |}}
+      {{> (template) viewModel=../vm }}
+      {{/with}}
+    </li>
+    {{/each}}
   </ul>
 </div>

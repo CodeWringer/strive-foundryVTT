@@ -2,7 +2,7 @@
 viewModel: RecipeContentViewModel
 --}}
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
-<div class="pad-h-md">
+<div class="auto-margin-v-md pad-h-md">
   <span class="h-divider"></span>
   {{#with viewModel.vmComplications.clazz.TEMPLATE as |template|}}
   {{> (template) viewModel=../viewModel.vmComplications }}

@@ -13,45 +13,9 @@
   --button-hover-background-color: unset;
   --button-hover-border-color: unset;
   --button-hover-text-color: unset;
-
-  &.light {
-    border: unset;
-    background-color: unset;
-
-    &:hover {
-      border: unset;
-      background-color: unset;
-    }
-  }
-
-  &.disabled {
-    a.custom-system-button {
-      cursor: default;
-      background-color: unset;
-      color: black;
-      opacity: 50%;
-      text-shadow: unset;
-    }
-  }
-
-  &.square {
-    aspect-ratio: 1/1;
-  }
-
-  &.fill {
-    display: block;
-  }
-
-  &.override {
-    min-width: unset;
-    min-height: unset;
-  }
 }
 
 .theme-dark .strive.button {
-  border: 1px $c-border-dark solid;
-  background-color: $c-bg-input-dark;
-
   &:hover,
   &:focus,
   &:focus-within {
@@ -62,9 +26,6 @@
 }
 
 .theme-light .strive.button {
-  border: 1px $c-border-light solid;
-  background-color: $c-bg-input-light;
-
   &:hover,
   &:focus,
   &:focus-within {

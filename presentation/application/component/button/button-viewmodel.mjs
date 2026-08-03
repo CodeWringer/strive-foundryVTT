@@ -1,5 +1,3 @@
-import { KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
-import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -71,7 +69,7 @@ export default class ButtonViewModel extends ViewModel {
     super(args);
 
     this.content = args.content;
-    this.onClick = args.onClick ?? (async (event, data) => { });
+    this.onClick = args.onClick ?? (() => { });
   }
 
   /** @override */
@@ -95,21 +93,5 @@ export default class ButtonViewModel extends ViewModel {
         }
       }
     });
-  }
-
-  /**
-   * Internal click callback for use in inheriting types. 
-   * 
-   * @param {Event} event 
-   * 
-   * @returns {any | undefined} A value, if the inheriting type's implementation 
-   * returns one. 
-   * 
-   * @async
-   * @protected
-   * @virtual
-   */
-  async _onClick(event) {
-    // Implementation up to inheriting types. 
   }
 }

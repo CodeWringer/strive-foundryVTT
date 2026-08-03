@@ -1,5 +1,5 @@
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -48,7 +48,10 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * 
    * @returns {Array<ContextMenuItem>} Two button definitions. One for each state of the toggle button. 
    */
-  static createToggleButtons(args = {}) {
+  static createToggleButtons(args = {
+    content: '<i class="ico ico-burger-menu xl"></i>',
+    ...args,
+    }) {
     ValidationUtil.validateOrThrow(args, ["activeValue"]);
     
     const localizedLabel = game.i18n.localize(args.label);
@@ -66,7 +69,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
             return ValidationUtil.isDefined(value) === true;
           }
         },
-        callback: () => { args.propertyOwner[args.propertyName] = (args.inactiveValue ?? null); },
+        onClick: () => { args.propertyOwner[args.propertyName] = (args.inactiveValue ?? null); },
       }),
       new ContextMenuItem({
         name: localizedLabel,
@@ -81,7 +84,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
             return ValidationUtil.isDefined(value) === false;
           }
         },
-        callback: () => { args.propertyOwner[args.propertyName] = args.activeValue; },
+        onClick: () => { args.propertyOwner[args.propertyName] = args.activeValue; },
       }),
     ];
   }
@@ -122,8 +125,6 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @param {String | undefined} args.content Raw HTML to render as the content 
-   * of the button. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. Arguments: 
    * * `event: Event`
@@ -231,7 +232,7 @@ export class ContextMenuItem {
    * @param {String | undefined} args.icon An icon glyph HTML string
    * @param {Function | undefined} args.condition A function which returns a Boolean 
    * for whether or not to display the item
-   * @param {Function | undefined} args.callback A callback function to trigger when 
+   * @param {Function | undefined} args.onClick A callback function to trigger when 
    * the entry of the menu is clicked
   */
   constructor(args = {}) {
@@ -240,6 +241,6 @@ export class ContextMenuItem {
     this.name = args.name;
     this.icon = args.icon ?? "";
     this.condition = args.condition;
-    this.callback = args.callback;
+    this.callback = args.onClick;
   }
 }
