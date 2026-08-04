@@ -1,5 +1,8 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import ChoiceOption from "../../../model/choice-option.mjs";
+import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import { TEMPLATES } from "../../templates.mjs";
+import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -13,10 +16,14 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
  * * `event: Event`
  * * `data: undefined`
- * 
- * @see https://foundryvtt.com/api/ContextMenu.html
  */
 export default class ButtonContextMenuViewModel extends ButtonViewModel {
+  /** @override */
+  static get TEMPLATE() { return TEMPLATES.application.component.buttonContextMenu; }
+  
+  /** @override */
+  get clazz() { return ButtonContextMenuViewModel; }
+
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -46,18 +53,15 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * @param {String | undefined} args.inactiveIcon The icon to show alongside an inactive 
    * value. If left `undefined`, will show no icon. 
    * 
-   * @returns {Array<ContextMenuItem>} Two button definitions. One for each state of the toggle button. 
+   * @returns {Array<ContextMenuOption>} Two button definitions. One for each state of the toggle button. 
    */
-  static createToggleButtons(args = {
-    content: '<i class="ico ico-burger-menu xl"></i>',
-    ...args,
-    }) {
+  static createToggleButtons(args = {}) {
     ValidationUtil.validateOrThrow(args, ["activeValue"]);
     
     const localizedLabel = game.i18n.localize(args.label);
     return [
-      new ContextMenuItem({
-        name: localizedLabel,
+      new ContextMenuOption({
+        localizedValue: localizedLabel,
         icon: args.activeIcon ?? '<i class="fas fa-check"></i>',
         condition: () => {
           if (!args.isEditable) return false;
@@ -71,8 +75,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
         },
         onClick: () => { args.propertyOwner[args.propertyName] = (args.inactiveValue ?? null); },
       }),
-      new ContextMenuItem({
-        name: localizedLabel,
+      new ContextMenuOption({
+        localizedValue: localizedLabel,
         icon: args.inactiveIcon ?? '',
         condition: () => {
           if (!args.isEditable) return false;
@@ -90,31 +94,18 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   }
 
   /**
-   * @type {ContextMenu}
+   * @type {Boolean}
    * @private
    */
-  _contextMenu = undefined;
+  #isMenuOpen = false;
 
   /**
+   * Initialized late - in `activateListeners`!
+   * @type {JQuery}
+   * @readonly
    * @private
    */
-  _isShown = false;
-  /**
-   * @type {Boolean}
-   */
-  get isShown() { return this._isShown; }
-  /**
-   * @param {Boolean} value
-   */
-  set isShown(value) {
-    this._isShown = value;
-    if (value === true) {
-      this._contextMenu.render(this.element);
-      this._ensureContextMenuWithin(this.html);
-    } else {
-      this._contextMenu.close({ animate: true });
-    }
-  }
+  #menuElement = undefined;
 
   /**
    * @param {Object} args
@@ -123,33 +114,32 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
-   * @param {String | undefined} args.localizedToolTip A localized text to 
-   * display as a tool tip. 
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. Arguments: 
    * * `event: Event`
    * * `data: any | undefined` - Returned data of the click callback, if 
    * there is any. 
    * 
-   * @param {Array<ContextMenuItem> | undefined} args.menuItems An array of context menu items, 
+   * @param {Array<ContextMenuOption> | undefined} args.options An array of context menu items, 
    * which are used to populate the context menu. 
    */
   constructor(args = {}) {
     super({
       ...args,
-      content: args.content ?? '<i class="fas fa-bars"></i>',
-      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.contextMenu"),
+      toolTip: args.toolTip ?? new ViewModelToolTipDefinition({
+        localized: game.i18n.localize("system.general.contextMenu"),
+      }),
     });
 
-    this.menuItems = args.menuItems ?? [];
+    this.options = args.options ?? [];
 
     // Wrap the callback function to make it also ensure the context menu is properly closed, 
     // when the menu item is clicked. 
-    const thiz = this;
-    for (const menuItem of this.menuItems) {
+    for (const menuItem of this.options) {
       const wrappedFunction = menuItem.callback;
       menuItem.callback = () => {
-        thiz.isShown = false;
+        this.#isMenuOpen = false;
         wrappedFunction();
       }
     }
@@ -159,8 +149,53 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this.html = html;
-    this._contextMenu = new FoundryWrapper().createContextMenu(html, this.id, this.menuItems);
+    this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
+  }
+
+  /** @override */
+  dispose() {
+    this.closeMenu();
+    super.dispose();
+  }
+
+  /**
+   * Shows the drop-down menu, by detaching it from `this.element` and 
+   * attaching it to the body element, instead. 
+   */
+  openMenu() {
+    if (this.#isMenuOpen) return;
+
+    this.#menuElement.detach();
+    $("body").append(this.#menuElement);
+
+    this._ensureContextMenuWithin();
+    this.#menuElement.removeClass("hidden");
+
+    this.#isMenuOpen = true;
+  }
+
+  /**
+   * Hides the drop-down menu and re-attaches it to `this.element`. 
+   */
+  closeMenu() {
+    if (!this.#isMenuOpen) return;
+
+    this.#menuElement.addClass("hidden");
+    this.#menuElement.detach();
+    this.element.append(this.#menuElement);
+    
+    this.#isMenuOpen = false;
+  }
+
+  /**
+   * Toggles the current state. 
+   */
+  toggleMenu() {
+    if (this.#isMenuOpen) {
+      this.closeMenu();
+    } else {
+      this.openMenu();
+    }
   }
 
   /**
@@ -171,76 +206,95 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * @override
    */
   async _onClick(event) {
-    if (this.isEditable !== true) return;
+    if (!this.isEditable) return;
 
-    // Show context menu below button. 
-    this.isShown = !this.isShown;
+    this.toggleMenu();
   }
 
   /**
    * Ensures the context menu isn't being cut off beyond the edges of the 
-   * passed outer (containing) html. 
-   * @param {JQuery} outerHtml 
+   * outer (containing) html. 
    * @private
    */
-  _ensureContextMenuWithin(outerHtml) {
-    if (this.isShown !== true) return;
-
-    const wrappedOuterHtml = $(outerHtml);
-    const contextMenuElement = wrappedOuterHtml.find(`#${this.id} nav#context-menu`);
-
-    if (contextMenuElement === undefined || contextMenuElement === null || contextMenuElement.length === 0) {
-      game.strive.logger.logWarn("NullPointerException: ContextMenu: Failed to get context menu element")
-      return;
+  _ensureContextMenuWithin() {
+    let containerElm = this.element.closest("form");
+    if (!ValidationUtil.isDefined(containerElm) || containerElm.length === 0) {
+      containerElm = this.element.closest("body");
     }
 
-    const outerBounds = wrappedOuterHtml[0].getBoundingClientRect();
-    const contextMenuBounds = contextMenuElement[0].getBoundingClientRect();
+    const outerBounds = SheetUtil.getElementRect(containerElm[0]);
+    const contextMenuBounds = SheetUtil.getElementRect(this.#menuElement[0]);
+    let left = 0;
+    let top = 0;
 
     if (contextMenuBounds.right > outerBounds.right) {
-      const delta = contextMenuBounds.right - outerBounds.right;
-      contextMenuElement[0].style.left = `-${delta}px`;
+      left = contextMenuBounds.right - outerBounds.right;
     } else if (contextMenuBounds.left < outerBounds.left) {
-      const delta = outerBounds.left - contextMenuBounds.left;
-      contextMenuElement[0].style.left = `${delta}px`;
+      left = outerBounds.left - contextMenuBounds.left;
     }
 
     if (contextMenuBounds.bottom > outerBounds.bottom) {
-      const delta = contextMenuBounds.bottom - outerBounds.bottom;
-      contextMenuElement[0].style.top = `-${delta}px`;
+      top = contextMenuBounds.bottom - outerBounds.bottom;
     } else if (contextMenuBounds.top < outerBounds.top) {
-      const delta = outerBounds.top - contextMenuBounds.top;
-      contextMenuElement[0].style.top = `${delta}px`;
+      top = outerBounds.top - contextMenuBounds.top;
     }
+
+    this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`);
   }
 }
 
 /**
  * Represents a `ButtonContextMenuViewModel` entry. 
  * 
- * @property {String} name The displayed item name
- * @property {String | undefined} icon An icon glyph HTML string
- * @property {Function | undefined} condition A function which returns a Boolean 
- * for whether or not to display the item
- * @property {Function | undefined} callback A callback function to trigger when 
- * the entry of the menu is clicked
-*/
-export class ContextMenuItem {
+ * @extends ChoiceOption
+ * 
+ * @property {String} value The actual value. 
+ * @property {String | undefined} localizedValue The text that represents the value, to display to the user. 
+ * @property {String | undefined} iconLightMode A (relative) icon file path or a FontAwesome icon class. 
+ * * E.g. `"systems/strive/presentation/image/texture.svg"`
+ * * E.g. `"fas fa-plus"`
+ * @property {String | undefined} iconDarkMode A (relative) icon file path or a FontAwesome icon class. 
+ * * E.g. `"systems/strive/presentation/image/texture.svg"`
+ * * E.g. `"fas fa-plus"`
+ * @property {String} iconHtml Returns an HTML representing string containing the 
+ * light and dark mode icons, neatly wrapped in a div to be easily inserted into the DOM. 
+ * * Read-only
+ * @property {String | undefined} iconCssClass Additional CSS classes to add to the icon. 
+ * @method onClick Invoked when this option is clicked. 
+ * @method condition Invoked to determine visibility of the option. Must return `true` to make the 
+ * option visible. 
+ */
+export class ContextMenuOption extends ChoiceOption {
   /**
    * @param {Object} args 
-   * @param {String} args.name The displayed item name
-   * @param {String | undefined} args.icon An icon glyph HTML string
-   * @param {Function | undefined} args.condition A function which returns a Boolean 
-   * for whether or not to display the item
+   * @param {String} args.value The actual value. 
+   * @param {String | undefined} args.localizedValue The text that represents the value, 
+   * to display to the user. 
+   * @param {String | undefined} args.icon A theming-agnostic icon. Can be a CSS class or 
+   * relative file path. 
+   * Takes precedence over `iconLightMode` and `iconDarkMode`.
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"ico ico-skill"`
+   * * E.g. `"fas fa-plus"`
+   * @param {String | undefined} args.iconCssClass Additional CSS classes to add to the icon. 
+   * @param {String | undefined} args.iconLightMode An icon for the light mode.
+   * A (relative) icon file path or a FontAwesome icon class. 
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
+   * @param {String | undefined} args.iconDarkMode An icon for the dark mode.
+   * A (relative) icon file path or a FontAwesome icon class. 
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
+   * 
    * @param {Function | undefined} args.onClick A callback function to trigger when 
    * the entry of the menu is clicked
-  */
+   * @param {Function | undefined} args.condition Invoked to determine visibility of the option. 
+   * Must return `true` to make the option visible. 
+   */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["name"]);
+    super(args);
 
-    this.name = args.name;
-    this.icon = args.icon ?? "";
-    this.condition = args.condition;
-    this.callback = args.onClick;
+    this.onClick = args.onClick ?? (() => {});
+    this.condition = args.condition ?? (() => true);
   }
 }

@@ -4,8 +4,7 @@ import { SlideInAnim } from "../../../animation/slide-in-anim.mjs";
 import { SlideOutAnim } from "../../../animation/slide-out-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import ButtonContextMenuViewModel, { ContextMenuItem } from "../button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ButtonContextMenuViewModel, { ContextMenuOption } from "../button-context-menu/button-context-menu-viewmodel.mjs";
 import ComplicationViewModel from "./complication-viewmodel.mjs";
 
 export default class ComplicationListViewModel extends ViewModel {
@@ -17,7 +16,7 @@ export default class ComplicationListViewModel extends ViewModel {
 
   get isEditable() { return this._isEditable; }
   set isEditable(value) {
-    super._isEditable = value;
+    super.isEditable = value;
 
     new Promise(async (resolve) => {
       const elm = this.element.find(".context-button-section");
@@ -52,10 +51,10 @@ export default class ComplicationListViewModel extends ViewModel {
       id: "vmContextMenuButton",
       parent: this,
       isEditable: this.isEditable,
-      menuItems: [
+      options: [
         // TODO
-        new ContextMenuItem({
-          name: StringUtil.getLoca("system.domain.complication.add"),
+        new ContextMenuOption({
+          localizedValue: StringUtil.getLoca("system.domain.complication.add"),
           onClick: () => {
             // TODO
           },

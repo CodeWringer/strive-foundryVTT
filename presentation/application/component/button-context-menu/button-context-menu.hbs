@@ -1,0 +1,11 @@
+{{#> button}}
+<i class="ico ico-burger-menu lg"></i>
+<menu id="{{viewModel.id}}-menu" class="strive dropdown hidden">
+{{#each viewModel.options as |option|}}
+  <li data-value="{{option.value}}" role="button" tabindex="-1" class="flex flex-row flex-middle auto-margin-h-lg strive-regular-font">
+    {{{option.iconHtml}}}
+    <span>{{option.localizedValue}}</span>
+  </li>
+{{/each}}
+</menu>
+{{/button}}

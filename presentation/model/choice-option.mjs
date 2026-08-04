@@ -15,7 +15,6 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
  * light and dark mode icons, neatly wrapped in a div to be easily inserted into the DOM. 
  * * Read-only
  * @property {String | undefined} iconCssClass Additional CSS classes to add to the icon. 
- * 
  */
 export default class ChoiceOption {
   /**
