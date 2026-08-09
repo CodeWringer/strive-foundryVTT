@@ -12,7 +12,8 @@ import InputSplitNumberSpinnerViewModel from "./input-split-number-spinner/input
 import InputImageViewModel from "./input-image/input-image-viewmodel.mjs";
 import ComplicationListViewModel from "./complication/complication-list-viewmodel.mjs";
 import ComplicationViewModel from "./complication/complication-viewmodel.mjs";
-import ButtonContextMenuViewModel from "./button-context-menu/button-context-menu-viewmodel.mjs";
+import { DropDownOption } from "./button-dropdown/dropdown-option.mjs";
+import ButtonDropDownViewModel from "./button-dropdown/button-dropdown-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -20,7 +21,8 @@ import ButtonContextMenuViewModel from "./button-context-menu/button-context-men
 export const component = {
   PreparedSection: PreparedSection,
   ButtonViewModel: ButtonViewModel,
-  ButtonContextMenuViewModel: ButtonContextMenuViewModel,
+  DropDownOption: DropDownOption,
+  ButtonDropDownViewModel: ButtonDropDownViewModel,
   InputTextFieldViewModel: InputTextFieldViewModel,
   InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
   InputDropDownViewModel: InputDropDownViewModel,
@@ -38,7 +40,7 @@ export const component = {
    */
   init: async () => {
     ButtonViewModel.registerHandlebarsPartial();
-    ButtonContextMenuViewModel.registerHandlebarsPartial();
+    ButtonDropDownViewModel.registerHandlebarsPartial();
     InputTextFieldViewModel.registerHandlebarsPartial();
     InputNumberSpinnerViewModel.registerHandlebarsPartial();
     InputDropDownViewModel.registerHandlebarsPartial();

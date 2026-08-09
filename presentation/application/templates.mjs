@@ -90,7 +90,7 @@ export const TEMPLATES = {
     },
     component: {
       button: `${basePathComponent}/button/button.hbs`,
-      buttonContextMenu: `${basePathComponent}/button-context-menu/button-context-menu.hbs`,
+      buttonDropDown: `${basePathComponent}/button-dropdown/button-dropdown.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
       splitNumberSpinner: `${basePathComponent}/input-split-number-spinner/input-split-number-spinner.hbs`,

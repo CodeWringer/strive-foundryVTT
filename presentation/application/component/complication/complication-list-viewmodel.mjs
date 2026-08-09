@@ -4,7 +4,8 @@ import { SlideInAnim } from "../../../animation/slide-in-anim.mjs";
 import { SlideOutAnim } from "../../../animation/slide-out-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import ButtonContextMenuViewModel, { ContextMenuOption } from "../button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 import ComplicationViewModel from "./complication-viewmodel.mjs";
 
 export default class ComplicationListViewModel extends ViewModel {
@@ -47,13 +48,14 @@ export default class ComplicationListViewModel extends ViewModel {
       document: complication,
     }));
     
-    this.vmContextMenuButton = new ButtonContextMenuViewModel({
+    this.vmContextMenuButton = new ButtonDropDownViewModel({
       id: "vmContextMenuButton",
       parent: this,
       isEditable: this.isEditable,
+      content: '<i class="ico ico-burger-menu lg"></i>',
       options: [
         // TODO
-        new ContextMenuOption({
+        new DropDownOption({
           localizedValue: StringUtil.getLoca("system.domain.complication.add"),
           onClick: () => {
             // TODO

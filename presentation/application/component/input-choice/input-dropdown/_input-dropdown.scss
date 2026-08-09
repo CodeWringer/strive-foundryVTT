@@ -29,6 +29,8 @@ menu.strive.dropdown {
   position: absolute;
   min-width: 10rem;
   z-index: 9999;
+  max-height: 20rem;
+  overflow-y: auto;
 
   li {
     height: $input-size-md;
