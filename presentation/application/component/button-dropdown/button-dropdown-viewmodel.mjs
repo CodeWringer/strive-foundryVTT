@@ -1,14 +1,13 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { SheetUtil } from "../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
-import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import { DropDownOption } from "./dropdown-option.mjs";
 
 /**
  * A button that allows showing a context menu with specifically defined menu items. 
  * 
- * @extends ButtonViewModel
+ * @extends ViewModel
  * 
  * @property {Array<DropDownItem>} menuItems The items that define the context menu's 
  * entries. 
@@ -17,7 +16,7 @@ import { DropDownOption } from "./dropdown-option.mjs";
  * * `event: Event`
  * * `data: undefined`
  */
-export default class ButtonDropDownViewModel extends ButtonViewModel {
+export default class ButtonDropDownViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.buttonDropDown; }
 
@@ -105,6 +104,14 @@ export default class ButtonDropDownViewModel extends ButtonViewModel {
    * @readonly
    * @private
    */
+  #buttonElement = undefined;
+
+  /**
+   * Initialized late - in `activateListeners`!
+   * @type {JQuery}
+   * @readonly
+   * @private
+   */
   #menuElement = undefined;
 
   /**
@@ -115,21 +122,26 @@ export default class ButtonDropDownViewModel extends ButtonViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
+   * 
    * @param {String | undefined} args.content Raw HTML to render as the content 
    * of the button. 
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
-   * the button is clicked. Arguments: 
-   * * `event: Event`
-   * * `data: any | undefined` - Returned data of the click callback, if 
-   * there is any. 
-   * 
    * @param {Array<DropDownOption> | undefined} args.options An array of context menu items, 
    * which are used to populate the context menu. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
+   * the button is clicked. No arguments. 
+   * @param {Function | undefined} args.onMenuShown Asynchronous callback that is invoked when 
+   * the menu becomes visible. 
+   * @param {Function | undefined} args.onMenuHidden Asynchronous callback that is invoked when 
+   * the menu becomes hidden. 
    */
   constructor(args = {}) {
     super(args);
 
+    this.content = args.content;
     this.options = args.options ?? [];
+    this.onClick = args.onClick ?? (() => {});
+    this.onMenuShown = args.onMenuShown ?? (() => {});
+    this.onMenuHidden = args.onMenuHidden ?? (() => {});
   }
 
   /**
@@ -140,18 +152,15 @@ export default class ButtonDropDownViewModel extends ButtonViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
+    this.#buttonElement = $(this.element).find("a.button");
     this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
 
-    this.element.on("keydown", (event) => {
-      if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        if (this.#isMenuOpen) {
-          this.#menuElement.find("li").first().focus();
-        } else {
-          this.openMenu();
-        }
-      } else if (event.key === "Escape" || event.key === "Tab") {
-        this.closeMenu();
+    this.#buttonElement.click(async (event) => {
+      event.preventDefault(); // Prevents side-effects from event-bubbling. 
+
+      if (this.isEditable === true) {
+        const data = await this._onClick(event);
+        await this.onClick(event, data);
       }
     });
 
@@ -188,18 +197,10 @@ export default class ButtonDropDownViewModel extends ButtonViewModel {
 
     // Ensure clicks anywhere else closes the menu. 
     $("body").click(async (event) => {
-      if (event.target != this.element[0]) {
+      if (event.target != this.#buttonElement[0]) {
         this.closeMenu();
       }
     });
-
-    // Ensure the menu scrolls with the parent form, if there is one. 
-    const formElm = this.element.closest("form");
-    if (ValidationUtil.isDefined(formElm) && formElm.length > 0) {
-      formElm.on("mousewheel", (event) => {
-        this.#adjustMenuPos();
-      });
-    }
   }
 
   /** @override */
@@ -208,32 +209,33 @@ export default class ButtonDropDownViewModel extends ButtonViewModel {
     super.dispose();
   }
 
-  /**
-   * Shows the drop-down menu, by detaching it from `this.element` and 
-   * attaching it to the body element, instead. 
-   */
   openMenu() {
     if (this.#isMenuOpen) return;
-
-    this.#menuElement.detach();
-    $("body").append(this.#menuElement);
 
     this.#menuElement.removeClass("hidden");
     this.#isMenuOpen = true;
     this.#adjustMenuPos();
+
+    this.onMenuShown();
+
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      this._toolTip.hide();
+      this._toolTipShowOnHover = this._toolTip.showOnHover;
+      this._toolTip.showOnHover = false;
+    }
   }
 
-  /**
-   * Hides the drop-down menu and re-attaches it to `this.element`. 
-   */
   closeMenu() {
     if (!this.#isMenuOpen) return;
 
     this.#menuElement.addClass("hidden");
-    this.#menuElement.detach();
-    this.element.append(this.#menuElement);
-
     this.#isMenuOpen = false;
+
+    this.onMenuHidden();
+
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      this._toolTip.showOnHover = this._toolTipShowOnHover;
+    }
   }
 
   /**
@@ -266,20 +268,25 @@ export default class ButtonDropDownViewModel extends ButtonViewModel {
    * @private
    */
   #adjustMenuPos() {
-    const thisElementRect = SheetUtil.getElementRect(this.element[0]);
-    const boundsRect = SheetUtil.getElementRect($("body")[0]);
-    const menuRect = SheetUtil.getElementRect(this.#menuElement[0]);
-    let left = thisElementRect.left;
-    let top = thisElementRect.bottom;
-
-    const deltaX = boundsRect.right - (left + menuRect.width);
-    const deltaY = boundsRect.bottom - (top + menuRect.height);
-
-    if (deltaX < 0) {
-      left += deltaX;
+    let rootContainerElm = this.element.closest("form");
+    if (rootContainerElm.length === 0) {
+      rootContainerElm = this.element.closest("body");
     }
-    if (deltaY < 0) {
-      top += deltaY;
+
+    const buttonRect = SheetUtil.getElementRect(this.#buttonElement[0]);
+    const boundsRect = SheetUtil.getElementRect(rootContainerElm[0]);
+    const menuRect = SheetUtil.getElementRect(this.#menuElement[0]);
+    let left = 0;
+    let top = buttonRect.height;
+
+    const deltaX = boundsRect.right - (buttonRect.left + menuRect.width);
+    const deltaY = boundsRect.bottom - (buttonRect.bottom + menuRect.height);
+
+    if (deltaX < 0) { // Clipping right.
+      left = buttonRect.width - menuRect.width;
+    }
+    if (deltaY < 0) { // Clipping bottom.
+      top = -menuRect.height;
     }
 
     this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`);

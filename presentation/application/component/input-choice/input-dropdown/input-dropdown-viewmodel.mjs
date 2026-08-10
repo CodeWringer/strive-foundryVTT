@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import ChoiceOption from "../../../../model/choice-option.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
 import ButtonDropDownViewModel from "../../button-dropdown/button-dropdown-viewmodel.mjs";
@@ -124,6 +125,18 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
           this.value = option;
         },
       })),
+      onMenuShown: () => {
+        if (ValidationUtil.isDefined(this._toolTip)) {
+          this._toolTip.hide();
+          this._toolTipShowOnHover = this._toolTip.showOnHover;
+          this._toolTip.showOnHover = false;
+        }
+      },
+      onMenuHidden: () => {
+        if (ValidationUtil.isDefined(this._toolTip)) {
+          this._toolTip.showOnHover = this._toolTipShowOnHover;
+        }
+      },
     });
   }
 
