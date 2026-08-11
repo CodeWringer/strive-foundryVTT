@@ -238,6 +238,25 @@
       "propertyPath": "Property path",
       "reference": {
         "referenceFrom": "%{contentType} from %{pack}"
+      },
+      "timeUnit": {
+        "none": "None",
+        "second": "Second(s)",
+        "minute": "Minute(s)",
+        "hour": "Hour(s)",
+        "day": "Day(s)"
+      }
+    },
+    "domain": {
+      "complication": {
+        "add": "Add Complication",
+        "complication": "Complication",
+        "complications": "Complications",
+        "defaultName": "New Complication",
+        "delete": "Delete Complication",
+        "name": "Complication Name",
+        "sortAsc": "Sort A-Z ('Alt' inverts)",
+        "sortDesc": "Sort Z-A"
       }
     },
     "actor": {
@@ -313,7 +332,20 @@
       },
       "project": {
         "project": "Project",
-        "progress": "Progress (Current / Required)"
+        "progress": {
+          "progress": "Progress (Current / Required)",
+          "increment": {
+            "increment": "Progress Increment (PI)",
+            "abbreviation": "PI"
+          }
+        },
+        "pushes": "Project Pushes",
+        "quality": "Quality",
+        "skill": "Project Skill",
+        "time": {
+          "amount": "Time Increment Amount",
+          "unit": "Time Increment Unit"
+        }
       },
       "recipe": {
         "recipe": "Recipe",

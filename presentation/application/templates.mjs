@@ -90,6 +90,7 @@ export const TEMPLATES = {
     },
     component: {
       button: `${basePathComponent}/button/button.hbs`,
+      buttonDropDown: `${basePathComponent}/button-dropdown/button-dropdown.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
       splitNumberSpinner: `${basePathComponent}/input-split-number-spinner/input-split-number-spinner.hbs`,
@@ -101,6 +102,10 @@ export const TEMPLATES = {
       reference: `${basePathComponent}/input-reference/input-reference.hbs`,
       row: `${basePathComponent}/row/row.hbs`,
       image: `${basePathComponent}/input-image/input-image.hbs`,
+      complication: {
+        complication: `${basePathComponent}/complication/complication.hbs`,
+        list: `${basePathComponent}/complication/complication-list.hbs`,
+      },
     },
   },
   image: {
@@ -108,6 +113,10 @@ export const TEMPLATES = {
       h2: {
         dark: `${basePathPresentation}/image/underline-h2-325x7-dark.svg`,
         light: `${basePathPresentation}/image/underline-h2-325x7-light.svg`,
+      },
+      h2Secondary: {
+        dark: `${basePathPresentation}/image/underline-h2-325x7-dark-secondary.svg`,
+        light: `${basePathPresentation}/image/underline-h2-325x7-light-secondary.svg`,
       },
     },
   },

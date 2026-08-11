@@ -4,7 +4,7 @@ cssClass: {String | undefined}
 --}}
 <div id="{{viewModel.id}}" class="strive input number-spinner flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
-  <div class="edit-mode flex flex-row flex-grow flex-middle">
+  <div class="edit-mode flex flex-row flex-middle">
     <input 
       type="text"
       name="{{viewModel.id}}"
@@ -20,5 +20,5 @@ cssClass: {String | undefined}
     </div>
   </div>
   {{!-- Read mode --}}
-  <div class="read-mode flex flex-center flex-grow">{{viewModel.value}}</div>
+  <div class="read-mode flex flex-center">{{viewModel.value}}</div>
 </div>

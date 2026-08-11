@@ -1,7 +1,8 @@
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import ChoiceOption from "../../../../model/choice-option.mjs";
-import { SheetUtil } from "../../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
+import ButtonDropDownViewModel from "../../button-dropdown/button-dropdown-viewmodel.mjs";
+import { DropDownOption } from "../../button-dropdown/dropdown-option.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 
 /**
@@ -31,7 +32,6 @@ import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 export default class InputDropDownViewModel extends InputChoiceViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.dropDown; }
-  /** @override */
 
   /**
    * Registers the Handlebars partial for this component. 
@@ -45,9 +45,6 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
   /** @override */
   get clazz() { return InputDropDownViewModel; }
 
-  /** @override */
-  get inputElement() { return this.element.find("button"); }
-  
   /**
    * @type {ChoiceOption}
    */
@@ -63,13 +60,11 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
       newContent = `${newContent}<span>${value.localizedValue}</span>`;
     }
     
-    const buttonValueElement = this.#buttonElement.find(`#${this.id}-button-value`);
-    buttonValueElement.empty();
-    buttonValueElement.append(newContent);
+    this.#editValueElement.empty();
+    this.#editValueElement.append(newContent);
 
-    const readModeElement = this.element.find("> .read-mode");
-    readModeElement.empty();
-    readModeElement.append(newContent);
+    this.#readModeElement.empty();
+    this.#readModeElement.append(newContent);
   }
 
   /**
@@ -78,7 +73,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
    * @readonly
    * @private
    */
-  #menuElement = undefined;
+  #readModeElement = undefined;
 
   /**
    * Initialized late - in `activateListeners`!
@@ -86,13 +81,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
    * @readonly
    * @private
    */
-  #buttonElement = undefined;
-
-  /**
-   * @type {Boolean}
-   * @private
-   */
-  #isMenuOpen = false;
+  #editValueElement = undefined;
 
   /**
    * @param {Object} args 
@@ -123,136 +112,48 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     super(args);
 
     this.showValue = args.showValue ?? true;
+    this.vmDropDown = new ButtonDropDownViewModel({
+      id: "vmDropDown",
+      parent: this,
+      options: args.options.map(option => new DropDownOption({
+        value: option.value,
+        localizedValue: option.localizedValue,
+        iconCssClass: option.iconCssClass,
+        iconLightMode: option.iconLightMode,
+        iconDarkMode: option.iconDarkMode,
+        onClick: () => {
+          this.value = option;
+        },
+      })),
+      onMenuShown: () => {
+        if (ValidationUtil.isDefined(this._toolTip)) {
+          this._toolTip.hide();
+          this._toolTipShowOnHover = this._toolTip.showOnHover;
+          this._toolTip.showOnHover = false;
+        }
+      },
+      onMenuHidden: () => {
+        if (ValidationUtil.isDefined(this._toolTip)) {
+          this._toolTip.showOnHover = this._toolTipShowOnHover;
+        }
+      },
+    });
   }
 
-  /**
-   * @override
-   * 
-   * @throws {Error} UnknownException Thrown if the current option could not be set correctly. 
-   */
+  /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this.#menuElement = $(this.element).find(`menu#${this.id}-menu`);
-    this.#buttonElement = $(this.element).find(`#${this.id}-button`);
+    this.#editValueElement = this.element.find(".edit-value");
+    this.#readModeElement = this.element.find("> .read-mode");
 
-    this.#buttonElement.click((event) => {
-      event.preventDefault(); // Prevents side-effects from event-bubbling. 
-
-      if (this.isEditable) {
-        this.toggleMenu();
-      }
-    });
-    this.#buttonElement.on("keydown", (event) => {
-      if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        if (this.#isMenuOpen) {
-          this.#menuElement.find("li").first().focus();
-        } else {
-          this.openMenu();
-        }
-      } else if (event.key === "Escape" || event.key === "Tab") {
-        this.closeMenu();
-      }
-    });
-
-    // Find and bind to menu items. 
-    const menuItems = this.element.find("menu > li");
-    for (const menuItem of menuItems) {
-      const element = $(menuItem);
-      const value = menuItem.id;
-      const option = this.options.find(it => it.value === value);
-      if (ValidationUtil.isDefined(option)) {
-        element.click((event) => {
-          event.preventDefault();
-          this.value = option;
-        });
-
-        element.on("keydown", (event) => {
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            element.next().focus();
-          } else if (event.key === "ArrowUp") {
-            event.preventDefault();
-            element.prev().focus();
-          } else if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            this.value = option;
-            this.closeMenu();
-          }
-        });
-      } else {
-        game.strive.logger.logWarn("Failed to get drop-down option value");
-      }
-    }
-
-    $("body").click(async (event) => {
-      if (event.target != this.#buttonElement[0]) {
-        this.closeMenu();
-      }
-    });
-
-    // Ensure the correct value is displayed. 
-    const element = this.#buttonElement.find(`#${this.id}-button-value`);
+    // Ensure the correct value is displayed initially. 
     let newContent = this.value.iconHtml;
     if (this.showValue) {
       newContent = `${newContent}<span>${this.value.localizedValue}</span>`;
     }
 
-    element.empty();
-    element.append(newContent);
-  }
-
-  /** @override */
-  dispose() {
-    this.closeMenu();
-    super.dispose();
-  }
-
-  /**
-   * Shows the drop-down menu, by detaching it from `this.element` and 
-   * attaching it to the body element, instead. 
-   */
-  openMenu() {
-    if (this.#isMenuOpen) return;
-
-    this.#menuElement.detach();
-    $("body").append(this.#menuElement);
-
-    const buttonRect = SheetUtil.getElementRect(this.#buttonElement);
-    const left = buttonRect.left;
-    const top = buttonRect.bottom;
-
-    this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`);
-    this.#menuElement.removeClass("hidden");
-
-    this.#buttonElement.attr("aria-expanded", true);
-    this.#isMenuOpen = true;
-  }
-
-  /**
-   * Hides the drop-down menu and re-attaches it to `this.element`. 
-   */
-  closeMenu() {
-    if (!this.#isMenuOpen) return;
-
-    this.#menuElement.addClass("hidden");
-    this.#menuElement.detach();
-    this.element.append(this.#menuElement);
-    
-    this.#buttonElement.attr("aria-expanded", false);
-    this.#buttonElement.focus();
-    this.#isMenuOpen = false;
-  }
-
-  /**
-   * Toggles the current state. 
-   */
-  toggleMenu() {
-    if (this.#isMenuOpen) {
-      this.closeMenu();
-    } else {
-      this.openMenu();
-    }
+    this.#editValueElement.empty();
+    this.#editValueElement.append(newContent);
   }
 }

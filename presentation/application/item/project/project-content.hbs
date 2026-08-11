@@ -2,7 +2,39 @@
 viewModel: ProjectContentViewModel
 --}}
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
-<div class="pad-h-md">
+<div class="auto-margin-v-md pad-h-md">
   <span class="h-divider"></span>
-  {{!-- TODO #767 Complications --}}
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    <div class="flex flex-row flex-middle">
+      <i class="ico ico-quality xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmQuality cssClass="width-lg" }}
+    </div>
+    <span class="v-divider"></span>
+    <div class="flex flex-row flex-middle">
+      <i class="ico ico-pushes xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmPushes cssClass="width-lg" }}
+    </div>
+    <span class="v-divider"></span>
+    <div class="flex flex-row flex-middle auto-margin-h-md">
+      <span class="font-size-lg">{{localize "system.item.project.progress.increment.abbreviation"}}</span>
+      {{> inputNumberSpinner viewModel=viewModel.vmProgressIncrement cssClass="width-lg" }}
+    </div>
+  </div>
+  <span class="h-divider"></span>
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    <div class="flex flex-row flex-middle flex-grow">
+      <i class="ico ico-skill xl"></i>
+      {{> inputReference viewModel=viewModel.vmProjectSkill cssClass="flex-grow" }}
+    </div>
+    <span class="v-divider"></span>
+    <div class="flex flex-row flex-middle auto-margin-h-md">
+      <i class="ico ico-time xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmProgressTimeAmount cssClass="width-md" }}
+      {{> inputDropDown viewModel=viewModel.vmProgressTimeUnit cssClass="" }}
+    </div>
+  </div>
+  <span class="h-divider"></span>
+  {{#with viewModel.vmComplications.clazz.TEMPLATE as |template|}}
+  {{> (template) viewModel=../viewModel.vmComplications }}
+  {{/with}}
 </div>

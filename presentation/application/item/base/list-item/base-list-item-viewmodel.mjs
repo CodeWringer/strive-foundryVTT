@@ -4,7 +4,6 @@ import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../../common/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs"
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs"
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
@@ -21,6 +20,7 @@ import { CONTEXT_TYPES } from "../../../context-types.mjs"
 import { DataFieldComponent } from "../datafield-component.mjs"
 import ItemDropData from "../item-drop-data.mjs"
 import { TemplatedComponent } from "../templated-component.mjs"
+import ButtonDropDownViewModel from "../../../component/button-dropdown/button-dropdown-viewmodel.mjs"
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 
@@ -360,8 +360,8 @@ export default class BaseListItemViewModel extends ViewModel {
     return [
       // Context menu button
       new TemplatedComponent({
-        template: ButtonContextMenuViewModel.TEMPLATE,
-        viewModel: new ButtonContextMenuViewModel({
+        template: ButtonDropDownViewModel.TEMPLATE,
+        viewModel: new ButtonDropDownViewModel({
           id: "vmBtnContextMenu",
           parent: this,
           isEditable: (this.isEditable || this.isGM),

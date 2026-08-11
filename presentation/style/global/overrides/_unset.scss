@@ -1,0 +1,37 @@
+.strive {
+
+  input[type=text],
+  input[type=number],
+  input[type=password],
+  input[type=date],
+  input[type=time],
+  input[type=datetime-local],
+  input[type=search],
+  input[type=file],
+  select {
+    height: unset;
+    line-height: unset;
+    padding: unset;
+    background: unset;
+    border: unset;
+    border-radius: unset;
+    box-shadow: unset;
+    outline: unset;
+    user-select: text;
+    transition: unset;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+ul.strive.unset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

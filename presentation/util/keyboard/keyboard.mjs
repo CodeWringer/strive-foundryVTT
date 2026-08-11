@@ -35,6 +35,13 @@ export const KEYBOARD = {
   _listenerId: 0,
 
   /**
+   * The last keyboard event. Used in determining relevant keyUp events. 
+   * @type {Event | null}
+   * @private
+   */
+  _lastEvent: null,
+
+  /**
    * Initializes working data. 
    * 
    * To be called in the system's set up. 
@@ -149,6 +156,7 @@ export const KEYBOARD = {
       }
       value.handler(value.data);
     }
+    this._lastEvent = event;
   },
 
   /**
@@ -159,13 +167,13 @@ export const KEYBOARD = {
    * @private
    */
   _handleGlobalKeyUp: function(event) {
-    const keyCode = event.which;
     for (const [key, value] of KEYBOARD._keyUpListeners) {
-      if (ValidationUtil.isDefined(value.modifier)) {
-        if (value.modifier === MODIFIER_KEY_CODES.ALT && !event.altKey) continue;
-        if (value.modifier === MODIFIER_KEY_CODES.CTRL && !event.ctrlKey) continue;
+      if (ValidationUtil.isDefined(value.modifier) && ValidationUtil.isDefined(this._lastEvent)) {
+        if (value.modifier === MODIFIER_KEY_CODES.ALT && !this._lastEvent.altKey) continue;
+        if (value.modifier === MODIFIER_KEY_CODES.CTRL && !this._lastEvent.ctrlKey) continue;
       }
-      if (ValidationUtil.isDefined(value.keyCodes)) {
+      if (ValidationUtil.isDefined(value.keyCodes) && ValidationUtil.isDefined(this._lastEvent)) {
+        const keyCode = this._lastEvent.which;
         if (!ArrayUtil.arrayContains(value.keyCodes, keyCode)) continue;
       }
       value.handler(value.data);

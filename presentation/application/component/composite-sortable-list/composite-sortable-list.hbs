@@ -6,7 +6,7 @@ cssClass: {undefined | String}
   {{!-- Title --}}
   <h1 class="strive-header flex flex-row flex-center {{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
     <span class="flex-grow">{{viewModel.localizedTitle}}</span>
-    {{> buttonContextMenu viewModel=viewModel.vmContextMenu }}
+    {{> buttonDropDown viewModel=viewModel.vmContextMenu }}
   </h1>
   {{!-- Extra content --}}
   {{#if viewModel.hasHeaderExtraContent}}

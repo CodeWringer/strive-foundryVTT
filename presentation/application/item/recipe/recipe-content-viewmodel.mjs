@@ -1,4 +1,5 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import ComplicationListViewModel from "../../component/complication/complication-list-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -38,6 +39,15 @@ export default class RecipeContentViewModel extends BaseItemContentViewModel {
       value: this.document.description,
       onChange: (_, newValue) => {
         this.document.description = newValue;
+      },
+    });
+    this.vmComplications = new ComplicationListViewModel({
+      id: "vmComplications",
+      parent: this,
+      isEditable: this.isEditable,
+      value: this.document.complications,
+      onChange: (_, newValue) => {
+        this.document.complications = newValue;
       },
     });
   }

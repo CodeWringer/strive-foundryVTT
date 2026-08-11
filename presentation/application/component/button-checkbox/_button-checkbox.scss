@@ -14,7 +14,7 @@ label.component-button-checkbox {
 
     &.checked {
       background-color: $c-bg-dark;
-      color: $c-black;
+      color: $c-text-dark;
     }
 
     &:hover {
@@ -29,7 +29,7 @@ label.component-button-checkbox {
 
       &.checked {
         background-color: $c-bg-dark;
-        color: $c-black;
+        color: $c-text-dark-disabled;
       }
 
       &:hover {

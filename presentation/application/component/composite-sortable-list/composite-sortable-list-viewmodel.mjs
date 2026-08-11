@@ -3,7 +3,7 @@ import { StringUtil } from "../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { TemplatedComponent } from "../../sheet/item/base/templated-component.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import ButtonContextMenuViewModel, { ContextMenuItem } from "../button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
 import InputSearchTextViewModel from "../input-search/input-search-viewmodel.mjs";
 import ListFooterViewModel from "../sortable-list/list-footer-viewmodel.mjs";
 import SortableListViewModel from "../sortable-list/sortable-list-viewmodel.mjs";
@@ -94,7 +94,7 @@ export default class CompositeSortableListViewModel extends ViewModel {
     this.registerViewStateProperty("_searchTerm");
     this.readViewState();
 
-    this.vmContextMenu = new ButtonContextMenuViewModel({
+    this.vmContextMenu = new ButtonDropDownViewModel({
       id: "vmContextMenu",
       parent: this,
       menuItems: this.getContextMenuItems(),

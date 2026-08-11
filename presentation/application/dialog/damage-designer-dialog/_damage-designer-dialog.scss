@@ -1,5 +1,5 @@
 .damage-finding-header {
-  background-color: $c-dark;
+  background-color: $c-bg-dark;
   color: $c-text-light;
 
   position: sticky;
@@ -36,13 +36,13 @@
   grid-template-columns: 2fr 2fr repeat(11, 3.5rem);
   
   &-root {
-    background-color: $c-dark;
+    background-color: $c-bg-dark;
     color: $c-text-light;
   }
 
   &-item {
     background-color: rgba($color: #FFF, $alpha: 0.075);
-    border: 1px solid $c-dark;
+    border: 1px solid $c-border-dark;
 
     &-header {
       font-size: 1.4rem;

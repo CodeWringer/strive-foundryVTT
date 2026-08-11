@@ -1,5 +1,3 @@
-import { KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
-import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -21,8 +19,6 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @property {JQuery | HTMLElement} element The DOM element that is 
  * associated with this view model. 
  * * Read-only
- * @property {String | undefined} localizedToolTip A localized text to 
- * display as a tool tip. 
  * 
  * @property {String | undefined} content Raw HTML to render as the content 
  * of the button. 
@@ -37,6 +33,9 @@ export default class ButtonViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.button; }
 
+  /** @override */
+  get clazz() { return ButtonViewModel; }
+
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -46,9 +45,6 @@ export default class ButtonViewModel extends ViewModel {
     Handlebars.registerPartial('button', `{{> "${ButtonViewModel.TEMPLATE}"}}`);
   }
 
-  /** @override */
-  get clazz() { return ButtonViewModel; }
-
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
@@ -56,9 +52,8 @@ export default class ButtonViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {String | undefined} args.localizedToolTip A localized text to 
-   * display as a tool tip. 
    * @param {String | undefined} args.content Raw HTML to render as the content 
    * of the button. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
@@ -71,7 +66,7 @@ export default class ButtonViewModel extends ViewModel {
     super(args);
 
     this.content = args.content;
-    this.onClick = args.onClick ?? (async (event, data) => { });
+    this.onClick = args.onClick ?? (() => { });
   }
 
   /** @override */
@@ -95,21 +90,5 @@ export default class ButtonViewModel extends ViewModel {
         }
       }
     });
-  }
-
-  /**
-   * Internal click callback for use in inheriting types. 
-   * 
-   * @param {Event} event 
-   * 
-   * @returns {any | undefined} A value, if the inheriting type's implementation 
-   * returns one. 
-   * 
-   * @async
-   * @protected
-   * @virtual
-   */
-  async _onClick(event) {
-    // Implementation up to inheriting types. 
   }
 }

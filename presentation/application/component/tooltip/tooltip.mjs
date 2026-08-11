@@ -130,9 +130,11 @@ export default class Tooltip {
   activateListeners(anchorElement) {
     this.anchorElement = anchorElement;
 
-    if (this.showOnHover === true && ValidationUtil.isDefined(this.anchorElement)) {
+    if (ValidationUtil.isDefined(this.anchorElement)) {
       this.anchorElement.on(`mouseenter.${Tooltip.EVENT_NAMESPACE}.${this._id}`, (event) => {
-        this.show();
+        if (this.showOnHover) {
+          this.show();
+        }
       });
       this.anchorElement.on(`mouseleave.${Tooltip.EVENT_NAMESPACE}.${this._id}`, () => {
         this.hide();

@@ -1,0 +1,15 @@
+{{!-- Context:
+viewModel: ComplicationViewModel
+--}}
+<div id="{{viewModel.id}}" class="strive complication flex flex-column auto-margin-v-md">
+  <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
+    {{> inputTextField viewModel=viewModel.vmName cssClass="flex-grow" }}
+    <div class="edit-mode flex flex-row auto-margin-h-md">
+      <span class="v-divider"></span>
+      {{> buttonDropDown viewModel=viewModel.vmContextMenuButton }}
+    </div>
+    <div class="read-mode"></div>
+  </div>
+  <span class="h-divider"></span>
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
+</div>

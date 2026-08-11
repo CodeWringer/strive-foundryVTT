@@ -1,0 +1,26 @@
+<div id="{{viewModel.id}}" class="strive complication-list">
+  <h2 class="edit-mode strive-regular-font" style="font-weight: normal;">
+    <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
+      <i class="ico ico-complications xl"></i>
+      <span class="flex-grow pad-l-md pad-t-md">{{localize "system.domain.complication.complications"}}</span>
+      <div class="flex flex-row auto-margin-h-md">
+        <span class="v-divider"></span>
+        {{> buttonDropDown viewModel=viewModel.vmContextMenuButton }}
+      </div>
+    </div>
+  </h2>
+  <h2 class="read-mode flex flex-row flex-middle strive-regular-font" style="font-weight: normal;">
+    <i class="ico ico-complications xl"></i>
+    <span class="flex-grow pad-l-md pad-t-md">{{localize "system.domain.complication.complications"}}</span>
+  </h2>
+  {{{themedImage "image.underline.h2Secondary" "" "min-width: 500px; max-width: 500px;"}}}
+  <ul class="strive unset">
+    {{#each viewModel._complicationViewModels as |vm|}}
+    <li>
+      {{#with vm.clazz.TEMPLATE as | template |}}
+      {{> (template) viewModel=vm }}
+      {{/with}}
+    </li>
+    {{/each}}
+  </ul>
+</div>

@@ -1,0 +1,117 @@
+.strive.dropdown {
+  position: relative;
+
+  a.button {
+    height: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    width: 100%;
+    border-radius: unset;
+    padding: 0 5px;
+    margin: 0;
+    border: unset;
+    background: unset;
+    min-height: unset;
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      outline: unset;
+      box-shadow: unset;
+    }
+  }
+
+  menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    min-width: 10rem;
+    z-index: 9999;
+    min-height: 2rem;
+    max-height: 20rem;
+    overflow-y: auto;
+    // The following two lines are important - they prevent word-wrapping in the absolutely positioned element! 
+    white-space: nowrap;
+    overflow: visible;
+
+    li {
+      min-height: $input-size-md;
+      line-height: $input-size-md;
+      font-size: $font-size-md;
+      padding: 0 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+.theme-dark {
+  .strive.dropdown {
+    color: $c-text-dark;
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      color: $c-text-dark;
+    }
+
+    a.button {
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-dark;
+      }
+    }
+
+    menu {
+      background-color: $c-bg-input-dark;
+      box-shadow: 0 0 10px $c-border-dark-secondary;
+      color: $c-text-dark;
+
+      li {
+        background-color: $c-bg-input-dark;
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+          background-color: $c-bg-input-focus-dark;
+        }
+      }
+    }
+  }
+}
+
+.theme-light {
+  .strive.dropdown {
+    color: $c-text-light;
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      color: $c-text-light;
+    }
+
+    a.button {
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-light;
+      }
+    }
+
+    menu {
+      background-color: $c-bg-input-light;
+      box-shadow: 0 0 10px $c-border-light-secondary;
+      color: $c-text-light;
+
+      li {
+        background-color: $c-bg-input-light;
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+          background-color: $c-bg-input-focus-light;
+        }
+      }
+    }
+  }
+}

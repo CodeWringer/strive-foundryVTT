@@ -21,7 +21,6 @@
 @import 'global/sheet';
 
 /* Specific component styles */
-@import '../application/component/input-choice/input-dropdown/input-dropdown';
 @import '../application/component/input-image/input-image';
 @import '../application/component/input-number-spinner/input-number-spinner';
 @import '../application/component/input-reference/input-reference';
@@ -30,7 +29,9 @@
 @import '../application/component/input-textfield/input-textfield';
 @import '../application/component/tooltip/tooltip';
 @import '../application/component/button/button';
+@import '../application/component/button-dropdown/button-dropdown';
 @import '../util/drag-drop/drag-drop';
+@import '../application/component/complication/complication-list';
 
 /* Animations */
 @import 'anims/spinner';
@@ -44,26 +45,4 @@
 @import 'global/overrides/code';
 @import 'global/overrides/editor';
 @import 'global/overrides/context-menu';
-
-.strive {
-  input[type=text],
-  input[type=number],
-  input[type=password],
-  input[type=date],
-  input[type=time],
-  input[type=datetime-local],
-  input[type=search],
-  input[type=file],
-  select {
-    height: unset;
-    line-height: unset;
-    padding: unset;
-    background: unset;
-    border: unset;
-    border-radius: unset;
-    box-shadow: unset;
-    outline: unset;
-    user-select: text;
-    transition: unset;
-  }
-}
+@import 'global/overrides/unset';
