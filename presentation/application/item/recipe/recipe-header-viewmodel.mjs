@@ -28,12 +28,24 @@ export default class RecipeHeaderViewModel extends BaseItemHeaderViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.vmProgress = new InputNumberSpinnerViewModel({
-      id: "vmProgress",
+    this.vmQuality = new InputNumberSpinnerViewModel({
+      id: "vmQuality",
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.recipe.requiredProgress"),
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.quality"),
+      }),
+      value: this.document.quality,
+      onChange: (_, newValue) => {
+        this.document.quality = newValue;
+      },
+    });
+    this.vmRequiredProgress = new InputNumberSpinnerViewModel({
+      id: "vmRequiredProgress",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.progress.required"),
       }),
       value: this.document.requiredProgress,
       onChange: (_, newValue) => {

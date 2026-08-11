@@ -2,5 +2,11 @@
 viewModel: RecipeItemSheetViewModel
 --}}
 <span class="v-divider"></span>
-<i class="ico ico-quantity xl"></i>
-{{> inputNumberSpinner viewModel=viewModel.vmProgress cssClass="width-md" }}
+<div class="flex flex-row flex-middle auto-margin-h-md">
+  <div class="flex flex-row flex-middle">
+    <i class="ico ico-quality xl"></i>
+    {{> inputNumberSpinner viewModel=viewModel.vmQuality cssClass="width-lg" }}
+  </div>
+  <span class="v-divider"></span>
+  {{> inputNumberSpinner viewModel=viewModel.vmRequiredProgress cssClass="width-lg" }}
+</div>

@@ -332,24 +332,28 @@
       },
       "project": {
         "project": "Project",
+        "pushes": "Project Pushes",
         "progress": {
-          "progress": "Progress (Current / Required)",
+          "progress": "Progress (Current / Required)"
+        }
+      },
+      "recipe": {
+        "recipe": "Recipe"
+      },
+      "projectAndRecipe": {
+        "quality": "Quality",
+        "skill": "Project Skill",
+        "progress": {
+          "required": "Total Required Progress",
           "increment": {
             "increment": "Progress Increment (PI)",
             "abbreviation": "PI"
           }
         },
-        "pushes": "Project Pushes",
-        "quality": "Quality",
-        "skill": "Project Skill",
         "time": {
           "amount": "Time Increment Amount",
           "unit": "Time Increment Unit"
         }
-      },
-      "recipe": {
-        "recipe": "Recipe",
-        "requiredProgress": "Total Required Progress"
       },
       "skill": {
         "skill": "Skill"

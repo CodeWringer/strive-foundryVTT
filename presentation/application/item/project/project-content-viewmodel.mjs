@@ -51,7 +51,7 @@ export default class ProjectContentViewModel extends BaseItemContentViewModel {
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.project.quality"),
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.quality"),
       }),
       min: 1,
       value: this.document.quality,
@@ -77,7 +77,7 @@ export default class ProjectContentViewModel extends BaseItemContentViewModel {
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.project.progress.increment.increment"),
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.progress.increment.increment"),
       }),
       min: 0,
       value: this.document.progress.increment,
@@ -90,7 +90,7 @@ export default class ProjectContentViewModel extends BaseItemContentViewModel {
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.project.skill"),
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.skill"),
       }),
       value: this.document.projectSkill,
       onChange: (_, newValue) => {
@@ -102,12 +102,12 @@ export default class ProjectContentViewModel extends BaseItemContentViewModel {
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.project.time.amount"),
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.time.amount"),
       }),
       min: 0,
-      value: this.document.progress.increment,
+      value: this.document.timeIncrement.value,
       onChange: (_, newValue) => {
-        this.document.progress.increment = newValue;
+        this.document.timeIncrement.value = newValue;
       },
     });
     const timeOptions = ChoicesUtil.getAsChoices(TIME_UNITS);
@@ -117,7 +117,7 @@ export default class ProjectContentViewModel extends BaseItemContentViewModel {
       parent: this,
       isEditable: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.project.time.unit"),
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.time.unit"),
       }),
       options: timeOptions,
       value: selectedTimeOption,
