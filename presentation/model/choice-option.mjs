@@ -101,7 +101,7 @@ export default class ChoiceOption {
 
   /**
    * @param {Object} args
-   * @param {String} args.value The actual value. 
+   * @param {String | undefined} args.value The actual value. 
    * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
    * @param {String | undefined} args.icon A theming-agnostic icon. Can be a CSS class or 

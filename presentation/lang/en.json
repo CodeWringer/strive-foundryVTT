@@ -251,7 +251,12 @@
       "complication": {
         "add": "Add Complication",
         "complication": "Complication",
-        "complications": "Complications"
+        "complications": "Complications",
+        "defaultName": "New Complication",
+        "delete": "Delete Complication",
+        "name": "Complication Name",
+        "sortAsc": "Sort A-Z ('Alt' inverts)",
+        "sortDesc": "Sort Z-A"
       }
     },
     "actor": {

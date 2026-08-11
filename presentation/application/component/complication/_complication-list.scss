@@ -1,0 +1,51 @@
+.strive .complication-list {
+  img {
+    border-left-width: 1px;
+    border-left-style: solid;
+  }
+
+  ul.strive {
+    border-left-width: 1px;
+    border-left-style: solid;
+    padding: 0 0 0 0.3rem;
+
+    >*:not(:last-child) {
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+    }
+  }
+}
+
+.theme-dark {
+  .strive .complication-list {
+
+    img {
+      border-left-color: $c-border-dark-secondary;
+    }
+
+    ul.strive {
+      border-left-color: $c-border-dark-secondary;
+
+      >*:not(:last-child) {
+        border-bottom-color: $c-border-dark-secondary;
+      }
+    }
+  }
+}
+
+.theme-light {
+  .strive .complication-list {
+
+    img {
+      border-left-color: $c-border-light-secondary;
+    }
+
+    ul.strive {
+      border-left-color: $c-border-light-secondary;
+
+      >*:not(:last-child) {
+      border-bottom-color: $c-border-light-secondary;
+      }
+    }
+  }
+}

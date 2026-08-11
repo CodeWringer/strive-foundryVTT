@@ -31,6 +31,7 @@
   &:focus-within {
     border-color: $c-border-highlight-light;
     background-color: $c-bg-input-focus-light;
+    text-shadow: 0 0 0.3rem $c-bg-themed;
   }
 }
 

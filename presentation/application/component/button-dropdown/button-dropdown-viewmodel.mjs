@@ -1,4 +1,6 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { MODIFIER_KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
+import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
 import { SheetUtil } from "../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -139,9 +141,9 @@ export default class ButtonDropDownViewModel extends ViewModel {
 
     this.content = args.content;
     this.options = args.options ?? [];
-    this.onClick = args.onClick ?? (() => {});
-    this.onMenuShown = args.onMenuShown ?? (() => {});
-    this.onMenuHidden = args.onMenuHidden ?? (() => {});
+    this.onClick = args.onClick ?? (() => { });
+    this.onMenuShown = args.onMenuShown ?? (() => { });
+    this.onMenuHidden = args.onMenuHidden ?? (() => { });
   }
 
   /**
@@ -164,34 +166,77 @@ export default class ButtonDropDownViewModel extends ViewModel {
       }
     });
 
+    this._globalOnKeyDownAlt = KEYBOARD.onKeyDown({
+      modifier: MODIFIER_KEY_CODES.ALT,
+      handler: () => {
+        this._evaluateConditions({
+          altKey: true,
+          ctrlKey: false,
+        });
+        this.#adjustMenuPos();
+      },
+    });
+    this._globalOnKeyDownCtrl = KEYBOARD.onKeyDown({
+      modifier: MODIFIER_KEY_CODES.CTRL,
+      handler: () => {
+        this._evaluateConditions({
+          altKey: false,
+          ctrlKey: true,
+        });
+        this.#adjustMenuPos();
+      },
+    });
+    this._globalOnKeyUpAlt = KEYBOARD.onKeyUp({
+      modifier: MODIFIER_KEY_CODES.ALT,
+      handler: () => {
+        this._evaluateConditions({
+          altKey: false,
+          ctrlKey: false,
+        });
+        this.#adjustMenuPos();
+      },
+    });
+    this._globalOnKeyUpCtrl = KEYBOARD.onKeyUp({
+      modifier: MODIFIER_KEY_CODES.CTRL,
+      handler: () => {
+        this._evaluateConditions({
+          altKey: false,
+          ctrlKey: false,
+        });
+        this.#adjustMenuPos();
+      },
+    });
+
     // Find and bind to menu items. 
     const menuItems = this.#menuElement.find("> li");
-    for (const menuItem of menuItems) {
+    for (let i = 0; i < menuItems.length; i++) {
+      const menuItem = menuItems[i];
       const menuItemElm = $(menuItem);
-      const value = menuItemElm.attr("data-value");
-      const option = this.options.find(it => it.value === value);
-      if (ValidationUtil.isDefined(option)) {
-        menuItemElm.click((event) => {
-          event.preventDefault();
-          this.closeMenu();
-          option.onClick();
-        });
 
-        menuItemElm.on("keydown", (event) => {
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            menuItemElm.next().focus();
-          } else if (event.key === "ArrowUp") {
-            event.preventDefault();
-            menuItemElm.prev().focus();
-          } else if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            option.onClick();
-            this.closeMenu();
-          }
-        });
-      } else {
-        game.strive.logger.logWarn("Failed to get drop-down option value");
+      const option = this.options[i];
+      menuItemElm.click((event) => {
+        event.preventDefault();
+        this.closeMenu();
+        option.onClick();
+      });
+
+      menuItemElm.on("keydown", (event) => {
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          menuItemElm.next().focus();
+        } else if (event.key === "ArrowUp") {
+          event.preventDefault();
+          menuItemElm.prev().focus();
+        } else if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          option.onClick();
+          this.closeMenu();
+        }
+      });
+
+      // Ensure condition is applied initially.
+      if (!option.condition()) {
+        menuItemElm.addClass("hidden");
       }
     }
 
@@ -206,14 +251,26 @@ export default class ButtonDropDownViewModel extends ViewModel {
   /** @override */
   dispose() {
     this.closeMenu();
+    KEYBOARD.offKeyDown(this._globalOnKeyDownAlt);
+    KEYBOARD.offKeyDown(this._globalOnKeyDownCtrl);
+    KEYBOARD.offKeyUp(this._globalOnKeyUpAlt);
+    KEYBOARD.offKeyUp(this._globalOnKeyUpCtrl);
+
     super.dispose();
   }
 
+  /**
+   * Shows the menu. 
+   */
   openMenu() {
     if (this.#isMenuOpen) return;
 
     this.#menuElement.removeClass("hidden");
     this.#isMenuOpen = true;
+    this._evaluateConditions({
+      altKey: false,
+      ctrlKey: false,
+    });
     this.#adjustMenuPos();
 
     this.onMenuShown();
@@ -225,6 +282,9 @@ export default class ButtonDropDownViewModel extends ViewModel {
     }
   }
 
+  /**
+   * Hides the menu. 
+   */
   closeMenu() {
     if (!this.#isMenuOpen) return;
 
@@ -250,6 +310,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
   }
 
   /**
+   * Internal click handler. 
    * @param {Event} event
    * 
    * @async
@@ -260,6 +321,28 @@ export default class ButtonDropDownViewModel extends ViewModel {
     if (!this.isEditable) return;
 
     this.toggleMenu();
+  }
+
+  /**
+   * Invokes the `condition` method of all `this.options`, and adjusts menu item 
+   * visibilities accordingly. 
+   * @param {Object} event Simplified event data. 
+   * * `event.altKey: Boolean`
+   * * `event.ctrlKey: Boolean`
+   * 
+   * @protected
+   */
+  _evaluateConditions(event) {
+    const menuItems = this.#menuElement.find("> li");
+    for (let i = 0; i < menuItems.length; i++) {
+      const menuItem = menuItems[i];
+      const option = this.options[i];
+      if (option.condition(event)) {
+        $(menuItem).removeClass("hidden");
+      } else {
+        $(menuItem).addClass("hidden");
+      }
+    }
   }
 
   /**

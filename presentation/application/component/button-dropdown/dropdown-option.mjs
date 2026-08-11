@@ -24,7 +24,7 @@ import ChoiceOption from "../../../model/choice-option.mjs";
 export class DropDownOption extends ChoiceOption {
   /**
    * @param {Object} args 
-   * @param {String} args.value The actual value. 
+   * @param {String | undefined} args.value The actual value. 
    * @param {String | undefined} args.localizedValue The text that represents the value, 
    * to display to the user. 
    * @param {String | undefined} args.icon A theming-agnostic icon. Can be a CSS class or 
@@ -46,7 +46,10 @@ export class DropDownOption extends ChoiceOption {
    * @param {Function | undefined} args.onClick A callback function to trigger when 
    * the entry of the menu is clicked
    * @param {Function | undefined} args.condition Invoked to determine visibility of the option. 
-   * Must return `true` to make the option visible. 
+   * Must return `true` to make the option visible. Arguments:
+   * * `event: Object`
+   * * `event.altKey: Boolean`
+   * * `event.ctrlKey: Boolean`
    */
   constructor(args = {}) {
     super(args);

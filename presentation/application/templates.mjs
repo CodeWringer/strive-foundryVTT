@@ -114,6 +114,10 @@ export const TEMPLATES = {
         dark: `${basePathPresentation}/image/underline-h2-325x7-dark.svg`,
         light: `${basePathPresentation}/image/underline-h2-325x7-light.svg`,
       },
+      h2Secondary: {
+        dark: `${basePathPresentation}/image/underline-h2-325x7-dark-secondary.svg`,
+        light: `${basePathPresentation}/image/underline-h2-325x7-light-secondary.svg`,
+      },
     },
   },
   /**
