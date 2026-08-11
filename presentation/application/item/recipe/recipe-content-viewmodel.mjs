@@ -1,5 +1,10 @@
+import { TIME_UNITS } from "../../../../business/model/domain/const/time-units.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import ComplicationListViewModel from "../../component/complication/complication-list-viewmodel.mjs";
+import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -39,6 +44,46 @@ export default class RecipeContentViewModel extends BaseItemContentViewModel {
       value: this.document.description,
       onChange: (_, newValue) => {
         this.document.description = newValue;
+      },
+    });
+    this.vmSkill = new InputReferenceViewModel({
+      id: "vmSkill",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.skill"),
+      }),
+      value: this.document.projectSkill,
+      onChange: (_, newValue) => {
+        this.document.projectSkill = newValue;
+      },
+    });
+    this.vmProgressTimeAmount = new InputNumberSpinnerViewModel({
+      id: "vmProgressTimeAmount",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.time.amount"),
+      }),
+      min: 0,
+      value: this.document.timeIncrement.value,
+      onChange: (_, newValue) => {
+        this.document.timeIncrement.value = newValue;
+      },
+    });
+    const timeOptions = ChoicesUtil.getAsChoices(TIME_UNITS);
+    const selectedTimeOption = timeOptions.find(it => it.value === this.document.timeIncrement.unit.name);
+    this.vmProgressTimeUnit = new InputDropDownViewModel({
+      id: "vmProgressTimeUnit",
+      parent: this,
+      isEditable: this.isEditable,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.projectAndRecipe.time.unit"),
+      }),
+      options: timeOptions,
+      value: selectedTimeOption,
+      onChange: (_, newValue) => {
+        this.document.timeIncrement.unit = TIME_UNITS[newValue.value];
       },
     });
     this.vmComplications = new ComplicationListViewModel({

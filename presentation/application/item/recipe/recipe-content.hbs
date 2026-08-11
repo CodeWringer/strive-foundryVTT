@@ -4,6 +4,19 @@ viewModel: RecipeContentViewModel
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
 <div class="auto-margin-v-md pad-h-md">
   <span class="h-divider"></span>
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    <div class="flex flex-row flex-middle flex-grow">
+      <i class="ico ico-skill xl"></i>
+      {{> inputReference viewModel=viewModel.vmSkill cssClass="flex-grow" }}
+    </div>
+    <span class="v-divider"></span>
+    <div class="flex flex-row flex-middle auto-margin-h-md">
+      <i class="ico ico-time xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmProgressTimeAmount cssClass="width-md" }}
+      {{> inputDropDown viewModel=viewModel.vmProgressTimeUnit cssClass="" }}
+    </div>
+  </div>
+  <span class="h-divider"></span>
   {{#with viewModel.vmComplications.clazz.TEMPLATE as |template|}}
   {{> (template) viewModel=../viewModel.vmComplications }}
   {{/with}}
