@@ -1,4 +1,5 @@
 import AtReferencer from "../../../search/at-referencer.mjs";
+import { Attribute, ATTRIBUTES } from "../../domain/const/attributes.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import MomentumAction from "../../domain/momentum-action.mjs";
 import Reference from "../../domain/reference.mjs";
@@ -37,50 +38,66 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {TransientCharacterActor | undefined} owningDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
  * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
  * 
- * @property {Array<String>} baseAttributes
- * @property {Number} level
- * @property {Array<Expertise>} expertises
- * @property {Object} itemOrders
+ * @property {Array<Attribute>} baseAttributes The Attributes this Skill depends on, 
+ * and which dictate the number of dice in the pool. 
+ * @property {Number} level Current level of the Skill. 
+ * @property {Array<Expertise>} expertises Sub-abilities of this Skill. 
+ * @property {Object} itemOrders Stores sub-item rendering orders. 
  * * Read-only.
- * @property {Array<Reference>} itemOrders.expertises
- * @property {Array<Reference>} itemOrders.momentumActions
+ * @property {Array<Reference>} itemOrders.expertises Stores the order in which 
+ * Expertises are to be rendered. 
+ * @property {Array<Reference>} itemOrders.momentumActions Stores the order in which 
+ * Momentum Actions are to be rendered. 
  * @property {Object} actionPoints
  * * Read-only.
- * @property {Boolean} actionPoints.enabled
- * @property {Number} actionPoints.current
+ * @property {Boolean} actionPoints.enabled If `true`, using this Skill costs Action 
+ * Points. 
+ * @property {Number} actionPoints.current The amount of Action Points using this 
+ * Skill costs. 
  * @property {Object} distance
  * * Read-only.
- * @property {Boolean} distance.enabled
- * @property {Number} distance.current
+ * @property {Boolean} distance.enabled If `true`, this Skill may only be used up to 
+ * a certain distance away. 
+ * @property {Number} distance.current The distance up to which the Skill may be used. 
  * @property {Object} targetingType
  * * Read-only.
- * @property {Boolean} targetingType.enabled
- * @property {TargetingType} targetingType.current
+ * @property {Boolean} targetingType.enabled If `true`, this Skill may be used on 
+ * one or more targets. 
+ * @property {TargetingType} targetingType.current The number of targets affected. 
  * @property {Object} obstacle
  * * Read-only.
- * @property {Boolean} obstacle.enabled
- * @property {String} obstacle.current
+ * @property {Boolean} obstacle.enabled If `true`, using this Skill requires an 
+ * Obstacle to be overcome. 
+ * @property {String} obstacle.current The obstacle to overcome. May be a formula, 
+ * e. g. `"1D4 + @agility"`
  * @property {Object} opposedBy
  * * Read-only.
- * @property {Boolean} opposedBy.enabled
- * @property {String} opposedBy.current
+ * @property {Boolean} opposedBy.enabled If `true`, this Skill may be opposed only 
+ * by a specific other Ability. 
+ * @property {Reference} opposedBy.current References another Skill or Expertise 
+ * that may oppose this Skill. 
  * @property {Object} advancement
  * * Read-only.
- * @property {Boolean} advancement.enabled
- * @property {Number} advancement.progress
+ * @property {Boolean} advancement.enabled If `true`, this Skill may be advanced, 
+ * i. e. "leveled up". 
+ * @property {Number} advancement.progress The current advancement progress. 
+ * Required progress is not stored on the Skill, but rather fetched at run-time. 
  * @property {Object} gradedEffects
  * * Read-only.
- * @property {Boolean} gradedEffects.enabled
- * @property {Array<GradedEffect>} gradedEffects.entries
- * @property {Array<MomentumAction>} momentumActions
- * @property {Boolean} isInnate
+ * @property {Boolean} gradedEffects.enabled If `true`, this Skill has graded effects, 
+ * with escalating effects based on the number of Hits rolled. 
+ * @property {Array<GradedEffect>} gradedEffects.entries The graded effects. 
+ * @property {Array<MomentumAction>} momentumActions Momentum Actions that this 
+ * Skill grants. 
+ * @property {Boolean} isInnate If `true`, this Skill cannot be learned, and can only 
+ * be acquired through ancestry or other, special means.
  * 
  * @extends TransientBaseItem
  */
@@ -92,7 +109,7 @@ export default class TransientSkill extends TransientBaseItem {
   get clazz() { return TransientSkill; }
 
   /**
-   * @type {Array<String>}
+   * @type {Array<Attribute>}
    */
   get baseAttributes() { return this._baseAttributes.value; }
   set baseAttributes(value) { this._baseAttributes.value = value; }
@@ -204,7 +221,7 @@ export default class TransientSkill extends TransientBaseItem {
       set enabled(value) { thiz._opposedBy.enabled.value = value; },
 
       /**
-       * @type {String}
+       * @type {Reference}
        */
       get current() { return thiz._opposedBy.current.value; },
       set current(value) { thiz._opposedBy.current.value = value; },
@@ -268,6 +285,16 @@ export default class TransientSkill extends TransientBaseItem {
     this._baseAttributes = new DataFieldBridge({
       document: this,
       dataPath: "system.baseAttributes",
+      default: [
+        ATTRIBUTES.agility.name,
+        ATTRIBUTES.agility.name,
+      ],
+      fromDto: (dto) => {
+        return ATTRIBUTES[dto];
+      },
+      toDto: (value) => {
+        return value.name;
+      },
     });
     this._level = new DataFieldBridge({
       document: this,
@@ -344,6 +371,13 @@ export default class TransientSkill extends TransientBaseItem {
       current: new DataFieldBridge({
         document: this,
         dataPath: "system.opposedBy.current",
+        default: new Reference(),
+        fromDto: (dto) => {
+          return Reference.fromDto(dto);
+        },
+        toDto: (value) => {
+          return value.toDto();
+        },
       }),
     };
     this._advancement = {

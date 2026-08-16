@@ -14,6 +14,7 @@ import ComplicationListViewModel from "./complication/complication-list-viewmode
 import ComplicationViewModel from "./complication/complication-viewmodel.mjs";
 import { DropDownOption } from "./button-dropdown/dropdown-option.mjs";
 import ButtonDropDownViewModel from "./button-dropdown/button-dropdown-viewmodel.mjs";
+import AbilityLevelViewModel from "./ability-level/ability-level-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -35,6 +36,7 @@ export const component = {
   InputImageViewModel: InputImageViewModel,
   ComplicationViewModel: ComplicationViewModel,
   ComplicationListViewModel: ComplicationListViewModel,
+  AbilityLevelViewModel: AbilityLevelViewModel,
   /**
    * Initialization, which MUST be called during system setup!
    */
@@ -48,6 +50,7 @@ export const component = {
     InputSplitNumberSpinnerViewModel.registerHandlebarsPartial();
     InputReferenceViewModel.registerHandlebarsPartial();
     InputImageViewModel.registerHandlebarsPartial();
+    AbilityLevelViewModel.registerHandlebarsPartial();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 

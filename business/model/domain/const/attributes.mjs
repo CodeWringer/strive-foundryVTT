@@ -36,32 +36,32 @@ export class Attribute {
 export const ATTRIBUTES = {
   agility: new Attribute({
     name: "agility",
-    localizableName: "system.character.attribute.agility.label",
-    localizableAbbreviation: "system.character.attribute.agility.abbreviation",
+    localizableName: "system.domain.attribute.agility.agility",
+    localizableAbbreviation: "system.domain.attribute.agility.abbreviation",
     icon: "ico-agility-solid",
   }),
   awareness: new Attribute({
     name: "awareness",
-    localizableName: "system.character.attribute.awareness.label",
-    localizableAbbreviation: "system.character.attribute.awareness.abbreviation",
+    localizableName: "system.domain.attribute.awareness.awareness",
+    localizableAbbreviation: "system.domain.attribute.awareness.abbreviation",
     icon: "ico-awareness-solid",
   }),
   strength: new Attribute({
     name: "strength",
-    localizableName: "system.character.attribute.strength.label",
-    localizableAbbreviation: "system.character.attribute.strength.abbreviation",
+    localizableName: "system.domain.attribute.strength.strength",
+    localizableAbbreviation: "system.domain.attribute.strength.abbreviation",
     icon: "ico-strength-solid",
   }),
   toughness: new Attribute({
     name: "toughness",
-    localizableName: "system.character.attribute.toughness.label",
-    localizableAbbreviation: "system.character.attribute.toughness.abbreviation",
+    localizableName: "system.domain.attribute.toughness.toughness",
+    localizableAbbreviation: "system.domain.attribute.toughness.abbreviation",
     icon: "ico-toughness-solid",
   }),
   wit: new Attribute({
     name: "wit",
-    localizableName: "system.character.attribute.wit.label",
-    localizableAbbreviation: "system.character.attribute.wit.abbreviation",
+    localizableName: "system.domain.attribute.wit.wit",
+    localizableAbbreviation: "system.domain.attribute.wit.abbreviation",
     icon: "ico-wit-solid",
   }),
 };

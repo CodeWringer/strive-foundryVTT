@@ -248,6 +248,34 @@
       }
     },
     "domain": {
+      "attribute": {
+        "agility": {
+          "agility": "Agility",
+          "abbreviation": "AGI"
+        },
+        "awareness": {
+          "awareness": "Awareness",
+          "abbreviation": "AWAR"
+        },
+        "strength": {
+          "strength": "Strength",
+          "abbreviation": "STR"
+        },
+        "toughness": {
+          "toughness": "Toughness",
+          "abbreviation": "TOUGH"
+        },
+        "wit": {
+          "wit": "Wit",
+          "abbreviation": "WIT"
+        },
+        "type": {
+          "normal": "Normal",
+          "core": "Core",
+          "favored": "Favored",
+          "penalized": "Penalized"
+        }
+      },
       "complication": {
         "add": "Add Complication",
         "complication": "Complication",
@@ -356,7 +384,12 @@
         }
       },
       "skill": {
-        "skill": "Skill"
+        "skill": "Skill",
+        "roll": "Roll a Test of this Skill",
+        "level": "Skill Level",
+        "baseAttribute": {
+          "baseAttributes": "Base Attributes"
+        }
       },
       "trait": {
         "trait": "Trait"

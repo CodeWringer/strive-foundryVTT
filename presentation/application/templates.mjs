@@ -89,6 +89,7 @@ export const TEMPLATES = {
       uiDebug: `${basePathApplication}/dialog/ui-debug-dialog/ui-debug-dialog.hbs`,
     },
     component: {
+      abilityLevel: `${basePathComponent}/ability-level/ability-level.hbs`,
       button: `${basePathComponent}/button/button.hbs`,
       buttonDropDown: `${basePathComponent}/button-dropdown/button-dropdown.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
@@ -109,6 +110,10 @@ export const TEMPLATES = {
     },
   },
   image: {
+    diamondBg: {
+      dark: `${basePathPresentation}/image/diamond-bg-dark.svg`,
+      light: `${basePathPresentation}/image/diamond-bg-light.svg`,
+    },
     underline: {
       h2: {
         dark: `${basePathPresentation}/image/underline-h2-325x7-dark.svg`,

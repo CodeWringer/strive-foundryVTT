@@ -21,6 +21,7 @@ import InjuryShrugOff from "./health/injury-shrug-off.mjs";
 import PropertyLocation from "./asset/property-location.mjs";
 import AdvancementHistoryEntry from "./advancement-history-entry.mjs";
 import DriverHistoryEntry from "./driver-history-entry.mjs";
+import { Skill } from "./skill/skill.mjs";
 
 /**
  * Wraps the `business.model.domain` module, which is a bit of an oddball, 
@@ -42,6 +43,7 @@ export const domain = {
     InjuryShrugOff: InjuryShrugOff,
   },
   skill: {
+    Skill: Skill,
     DamageAndType: DamageAndType,
     Expertise: Expertise,
   },

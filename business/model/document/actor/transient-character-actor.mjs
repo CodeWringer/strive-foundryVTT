@@ -160,7 +160,7 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * * Read-only. 
  * @property {Array<TransientInjury>} health.injuries Derived. 
  * * Read-only. 
- * @property {Array<TransientIllness>} health.illnesss Derived. 
+ * @property {Array<TransientIllness>} health.illnesses Derived. 
  * * Read-only. 
  * @property {Array<TransientMutation>} health.mutations Derived. 
  * * Read-only. 
@@ -555,7 +555,7 @@ export default class TransientCharacterActor extends TransientBaseActor {
        * @type {Array<TransientIllness>}
        * @readonly
       */
-      get illnesss() { return thiz.items.filter(it => it.type === ITEM_TYPES.illness); },
+      get illnesses() { return thiz.items.filter(it => it.type === ITEM_TYPES.illness); },
       /**
        * @type {Array<TransientMutation>}
        * @readonly
@@ -1091,32 +1091,48 @@ export default class TransientCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * @override
+   * Tries to resolve the given reference. 
+   * 
+   * This method will be called implicitly, by an `AtReferencer`, when it tries 
+   * to resolve a reference on *this* document. 
    * 
    * Searches in: 
-   * * Attribute names.
-   * * Embedded documents.
+   * * Attributes.
+   * * All embedded documents.
+   * 
+   * @param {String} comparableReference A comparable version of a reference. 
+   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
+   * or only the last piece of a property path is returned. 
+   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
+   * * E. g. `"@A.B.c"` -> `"c"`
+   * @param {String | undefined} propertyPath If not undefined, a property path on 
+   * the referenced object. 
+   * * E. g. `"@A.B.c"` -> `"B.c"`
+   * 
+   * @returns {Any | undefined} The matched reference or undefined, 
+   * if no match was found. 
+   * 
+   * @override
    */
   resolveReference(comparableReference, propertyPath) {
     // Search attributes. 
-    // const attribute = this.attributes.find(it =>
-    //   it.name === comparableReference
-    //   || game.i18n.localize(it.localizableName).toLowerCase() === comparableReference
-    //   || game.i18n.localize(it.localizableAbbreviation).toLowerCase() === comparableReference
-    // );
-    // if (attribute !== undefined) {
-    //   return attribute;
-    // }
+    const attribute = this.attributes.find(it =>
+      it.name === comparableReference
+      || game.i18n.localize(it.localizableName).toLowerCase() === comparableReference
+      || game.i18n.localize(it.localizableAbbreviation).toLowerCase() === comparableReference
+    );
+    if (attribute !== undefined) {
+      return attribute;
+    }
 
     const collectionsToSearch = [
-      // this.skills.all,
-      // this.assets.all,
-      // this.health.injuries,
-      // this.health.illnesses,
-      // this.health.mutations,
-      // this.health.scars,
-      // this.health.conditions,
-      // this.traits,
+      this.skills.all,
+      this.assets.all,
+      this.health.injuries,
+      this.health.illnesses,
+      this.health.mutations,
+      this.health.conditions,
+      this.traits,
     ];
     return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
   }

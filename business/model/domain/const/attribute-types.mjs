@@ -29,23 +29,23 @@ export class AttributeType {
  * @property {AttributeType} penalized 
  */
 export const ATTRIBUTE_TYPES = {
-  secondary: new AttributeType({
-    name: "secondary",
-    localizableName: "system.character.attribute.type.secondary",
+  normal: new AttributeType({
+    name: "normal",
+    localizableName: "system.domain.attribute.type.normal",
   }),
   core: new AttributeType({
     name: "core",
-    localizableName: "system.character.attribute.type.core",
+    localizableName: "system.domain.attribute.type.core",
     icon: "ico ico-buff-themed",
   }),
   favored: new AttributeType({
     name: "favored",
-    localizableName: "system.character.attribute.type.favored",
+    localizableName: "system.domain.attribute.type.favored",
     icon: "ico ico-buff-themed",
   }),
   penalized: new AttributeType({
     name: "penalized",
-    localizableName: "system.character.attribute.type.penalized",
+    localizableName: "system.domain.attribute.type.penalized",
     icon: "ico ico-debuff-themed",
   }),
 };

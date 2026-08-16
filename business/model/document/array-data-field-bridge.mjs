@@ -29,12 +29,15 @@ export default class ArrayDataFieldBridge extends DataFieldBridge {
    * @param {TransientDocument} args.document 
    * @param {String} args.dataPath Identifies the data field on 
    * the document instance itself. E. g. `"system.bulk"`
+   * @param {Any | undefined} args.default A default value to 
+   * use in case the data base field's value is undefined.
+   * 
    * @param {Any} args.dataClass Class reference of the type this represents. 
    */
   constructor(args = {}) {
     super({
       ...args,
-      default: [],
+      default: args.default ?? [],
       fromDto: (dto) => dto.map(it => args.dataClass.fromDto(it)),
       toDto: (value) => value.map(it => it.toDto()),
     });

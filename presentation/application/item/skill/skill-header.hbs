@@ -2,3 +2,10 @@
 viewModel: SkillItemSheetViewModel
 --}}
 <span class="v-divider"></span>
+{{> abilityLevel viewModel=viewModel.vmLevel }}
+<span class="v-divider"></span>
+<div id="{{viewModel.vmBaseAttributes.id}}" class="flex flex-column flex-center auto-margin-v-md">
+  {{#each viewModel.baseAttributeVms as |vm|}}
+  {{> inputDropDown viewModel=vm cssClass="attribute" }}
+  {{/each}}
+</div>

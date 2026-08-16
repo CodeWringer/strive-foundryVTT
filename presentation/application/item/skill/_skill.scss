@@ -1,0 +1,25 @@
+.strive.input.dropdown.attribute {
+  .read-mode {
+    padding: 0 0.3rem 0.3rem 0.3rem;
+    border-radius: 0.3rem;
+    font-weight: bold;
+  }
+}
+
+.theme-dark {
+  .dropdown.attribute {
+    .read-mode {
+      background-color: $c-border-dark;
+      color: $c-text-light;
+    }
+  }
+}
+
+.theme-light {
+  .dropdown.attribute {
+    .read-mode {
+      background-color: $c-border-light;
+      color: $c-text-dark;
+    }
+  }
+}

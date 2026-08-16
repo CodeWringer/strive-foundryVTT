@@ -57,7 +57,7 @@ export default class SkillItemData extends BaseItemData {
       }),
       opposedBy: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
-        current: new FoundrySchemaFields.StringField({}),
+        current: new ReferenceField(),
       }),
       advancement: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),

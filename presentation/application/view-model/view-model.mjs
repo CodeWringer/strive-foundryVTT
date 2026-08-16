@@ -148,10 +148,10 @@ export default class ViewModel {
   /**
    * Returns the class reference of this instance. Required for extending this object. 
    * 
-   * @abstract
+   * @virtual
    * @readonly
    */
-  get clazz() { throw Error("Not implemented"); }
+  get clazz() { return ViewModel; }
 
   /**
    * @type {ViewModel | undefined}
