@@ -82,7 +82,7 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
           while (newAttributes.length <= i) {
             newAttributes.push(ATTRIBUTES.agility);
           }
-          newAttributes[i] = attributeOptions.find(it => it.value === newValue.value);
+          newAttributes[i] = ATTRIBUTES[newValue.value];
           this.document.baseAttributes = newAttributes;
         },
       }));

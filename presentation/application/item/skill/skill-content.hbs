@@ -4,4 +4,26 @@ viewModel: SkillContentViewModel
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
 <div class="auto-margin-v-md pad-h-md">
   <span class="h-divider"></span>
+  {{!-- Row --}}
+  <div class="flex flex-row flex-middle auto-margin-h-md">
+    {{!-- Action Points --}}
+    <div id="{{viewModel.id}}-ap" class="flex flex-row flex-middle auto-margin-h-md">
+      <div class="flex flex-row flex-middle">
+        <i class="ico ico-action-point xl"></i>
+        {{> inputNumberSpinner viewModel=viewModel.vmActionPoints cssClass="width-lg" }}
+      </div>
+    </div>
+    {{!-- Obstacle --}}
+    <div id="{{viewModel.id}}-ob" class="flex flex-row flex-middle auto-margin-h-md">
+      <div class="flex flex-row flex-middle">
+        <i class="ico ico-obstacle xl"></i>
+        {{> inputTextField viewModel=viewModel.vmObstacle cssClass="width-lg" }}
+      </div>
+      <div class="flex flex-row flex-middle flex-grow">
+        <i class="ico ico-arrow-right lg"></i>
+        {{> inputReference viewModel=viewModel.vmOpposedSkill cssClass="flex-grow" }}
+      </div>
+    </div>
+  </div>
+  <span class="h-divider"></span>
 </div>

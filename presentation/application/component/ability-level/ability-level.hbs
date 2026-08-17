@@ -1,23 +1,18 @@
 {{!--
 viewModel: AbilityLevelViewModel
+cssClass: String | undefined
 --}}
-<div id="{{viewModel.id}}" class="strive input ability-level flex flex-middle flex-row">
-  <div class="edit-mode flex flex-row flex-middle">
-    <div class="flex flex-center margin-r-md" style="position: relative; width: 3rem; height: 3rem">
-      {{{themedImage "image.diamondBg" "fill" "position: relative;"}}}
-      {{> inputNumberSpinner viewModel=viewModel.vmLevelEditMode }}
-    </div>
-    <span class="border-b-sm">
-      {{> button viewModel=viewModel.vmRollEditMode }}
-    </span>
+<div id="{{viewModel.id}}" class="strive input ability-level flex flex-middle flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="edit-mode flex flex-row flex-middle width-md">
+    {{> inputNumberSpinner viewModel=viewModel.vmLevelEditMode }}
   </div>
   <div class="read-mode flex flex-row flex-middle">
-    <div class="flex flex-center margin-r-md" style="position: relative; width: 3rem; height: 3rem">
+    <div class="level flex flex-center margin-r-md">
       {{{themedImage "image.diamondBg" "fill" "position: relative;"}}}
-      <span id="{{viewModel.vmLevelReadMode.id}}" style="position: absolute; font-size: 2rem;">{{viewModel.value}}</span>
+      <span id="{{viewModel.vmLevelReadMode.id}}" class="text">{{viewModel.value}}</span>
     </div>
     <span class="border-b-sm">
-      {{> button viewModel=viewModel.vmRollReadMode }}
+      {{> button viewModel=viewModel.vmRollReadMode cssClass="font-size-md strive-regular-font" }}
     </span>
   </div>
 </div>

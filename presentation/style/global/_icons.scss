@@ -103,6 +103,12 @@ li.directory-item > img.thumbnail {
 
 // Specific light-mode icons -> use dark variants!
 .theme-light {
+  .ico-action-point {
+    background-image: url("/systems/strive/presentation/image/action-point-dark.svg");
+  }
+  .ico-action-point-sm {
+    background-image: url("/systems/strive/presentation/image/action-point-sm-dark.svg");
+  }
   .ico-arrow-right {
     background-image: url("/systems/strive/presentation/image/arrow-right-dark.svg");
   }
@@ -224,6 +230,12 @@ li.directory-item > img.thumbnail {
 
 // Specific dark-mode icons -> use light variants!
 .theme-dark {
+  .ico-action-point {
+    background-image: url("/systems/strive/presentation/image/action-point-light.svg");
+  }
+  .ico-action-point-sm {
+    background-image: url("/systems/strive/presentation/image/action-point-sm-light.svg");
+  }
   .ico-arrow-right {
     background-image: url("/systems/strive/presentation/image/arrow-right-light.svg");
   }

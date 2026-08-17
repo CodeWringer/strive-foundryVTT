@@ -87,15 +87,6 @@ export default class AbilityLevelViewModel extends InputViewModel {
       toolTip: args.levelToolTip,
     });
 
-    this.vmRollEditMode = new ButtonViewModel({
-      id: "vmRollEditMode",
-      parent: this,
-      content: buttonContent,
-      toolTip: args.rollButtonToolTip,
-      onClick: () => {
-        this.onRoll();
-      },
-    });
     this.vmRollReadMode = new ButtonViewModel({
       id: "vmRollReadMode",
       parent: this,

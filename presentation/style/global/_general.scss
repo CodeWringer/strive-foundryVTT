@@ -30,13 +30,13 @@
     border-radius: unset;
 
     .edit-mode {
-      height: $input-size-md;
+      min-height: $input-size-md;
       line-height: $input-size-md;
       font-size: $font-size-md;
     }
 
     .read-mode {
-      height: $input-size-md;
+      min-height: $input-size-md;
       line-height: $input-size-md;
       font-size: $font-size-md;
       border: unset;
@@ -53,13 +53,13 @@
 
     &.lg {
       .edit-mode {
-        height: $input-size-lg;
+        min-height: $input-size-lg;
         line-height: $input-size-lg;
         font-size: $font-size-lg;
       }
 
       .read-mode {
-        height: $input-size-lg;
+        min-height: $input-size-lg;
         line-height: $input-size-lg;
         font-size: $font-size-lg;
       }
@@ -68,7 +68,7 @@
 }
 
 .embolden {
-  padding: 0 0.3rem 0.3rem 0.3rem;
+  padding: 0.12rem 0.3rem 0 0.3rem;
   border-radius: 0.3rem;
   font-weight: bold;
 }
@@ -108,6 +108,23 @@
           border-bottom: 1px solid $c-border-highlight-dark;
           outline: unset;
           box-shadow: none;
+        }
+
+        // Override nested to avoid double-highlighting. 
+        .edit-mode {
+          border-bottom: unset !important;
+          
+          &:hover,
+          &:focus,
+          &:focus-within {
+            background-color: unset !important;
+            border-top: unset !important;
+            border-left: unset !important;
+            border-right: unset !important;
+            border-bottom: unset !important;
+            outline: unset !important;
+            box-shadow: none !important;
+          }
         }
       }
     }
@@ -154,6 +171,18 @@
           border-bottom: 1px solid $c-border-highlight-light;
           outline: unset;
           box-shadow: none;
+        }
+
+        // Override nested to avoid double-highlighting. 
+        .edit-mode {
+          border-bottom: unset !important;
+
+          &:hover,
+          &:focus,
+          &:focus-within {
+            background-color: unset !important;
+            border-bottom: unset !important;
+          }
         }
       }
     }

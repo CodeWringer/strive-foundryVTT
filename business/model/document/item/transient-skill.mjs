@@ -290,10 +290,10 @@ export default class TransientSkill extends TransientBaseItem {
         ATTRIBUTES.agility.name,
       ],
       fromDto: (dto) => {
-        return ATTRIBUTES[dto];
+        return dto.map(name => ATTRIBUTES[name]);
       },
       toDto: (value) => {
-        return value.name;
+        return value.map(attribute => attribute.name);
       },
     });
     this._level = new DataFieldBridge({
