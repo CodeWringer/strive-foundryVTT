@@ -1,6 +1,6 @@
 import { common } from "../../../../common/_module.mjs";
 import { ACTOR_TYPES } from "./actor-types.mjs";
-import { ATTACK_TYPES, AttackType } from "./attack-types.mjs";
+import { TARGETING_TYPES, TargetingType } from "./targeting-types.mjs";
 import { ATTRIBUTE_TYPES, AttributeType } from "./attribute-types.mjs";
 import { Attribute, ATTRIBUTES } from "./attributes.mjs";
 import { CHARACTER_TEST_TYPES, CharacterTestType } from "./character-test-types.mjs";
@@ -23,8 +23,8 @@ export const constants = {
   ACTOR_TYPES: ACTOR_TYPES,
   TimeUnit: TimeUnit,
   TIME_UNITS: TIME_UNITS,
-  AttackType: AttackType,
-  ATTACK_TYPES: ATTACK_TYPES,
+  TargetingType: TargetingType,
+  TARGETING_TYPES: TARGETING_TYPES,
   AttributeType: AttributeType,
   ATTRIBUTE_TYPES: ATTRIBUTE_TYPES,
   Attribute: Attribute,
@@ -50,7 +50,7 @@ export const constants = {
     common.util.constants.enrichConstant(ACTOR_TYPES);
     common.util.constants.enrichConstant(ITEM_TYPES);
     common.util.constants.enrichConstant(TIME_UNITS);
-    common.util.constants.enrichConstant(ATTACK_TYPES);
+    common.util.constants.enrichConstant(TARGETING_TYPES);
     common.util.constants.enrichConstant(ATTRIBUTE_TYPES);
     common.util.constants.enrichConstant(COMPARISON_TYPES);
     common.util.constants.enrichConstant(ATTRIBUTES);

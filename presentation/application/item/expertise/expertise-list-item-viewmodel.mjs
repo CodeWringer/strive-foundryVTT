@@ -1,7 +1,7 @@
 import Expertise from "../../../../business/model/document/item/skill/expertise.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import Ruleset from "../../../../business/ruleset/ruleset.mjs"
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
+import { TARGETING_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
 import { ExtenderUtil } from "../../../../common/util/extender-util.mjs"
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
@@ -29,7 +29,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return ATTACK_TYPES.asChoices(); }
+  get attackTypeOptions() { return TARGETING_TYPES.asChoices(); }
 
   /**
    * @type {Boolean}
@@ -65,7 +65,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return ValidationUtil.isDefined(this.document.attackType) !== true; }
+  get hideTargetingType() { return ValidationUtil.isDefined(this.document.attackType) !== true; }
 
   /**
    * @type {Boolean}
@@ -81,7 +81,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    */
   get attackTypeIconClass() {
     if (ValidationUtil.isDefined(this.document.attackType)) {
-      return getAttackTypeIconClass(this.document.attackType);
+      return getTargetingTypeIconClass(this.document.attackType);
     } else {
       return "";
     }
@@ -139,7 +139,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
 
   /** @override */
   getDataFields() {
-    const attackTypeChoices = ATTACK_TYPES.asChoices();
+    const attackTypeChoices = TARGETING_TYPES.asChoices();
 
     return [
       new DataFieldComponent({
@@ -220,15 +220,15 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
       new DataFieldComponent({
         template: InputDropDownViewModel.TEMPLATE,
         viewModel: new InputDropDownViewModel({
-          id: "vmAttackType",
+          id: "vmTargetingType",
           parent: this,
           options: attackTypeChoices,
-          value: ValidationUtil.isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
+          value: ValidationUtil.isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === TARGETING_TYPES.none.name),
           onChange: (_, newValue) => {
-            this.document.attackType = ATTACK_TYPES[newValue.value];
+            this.document.attackType = TARGETING_TYPES[newValue.value];
           },
         }),
-        isHidden: this.hideAttackType,
+        isHidden: this.hideTargetingType,
         localizedToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
@@ -339,7 +339,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
       }),
       // Toggle attack type
       new DynamicInputDefinition({
-        name: "dynamicInputAttackType",
+        name: "dynamicInputTargetingType",
         localizedLabel: game.i18n.localize("system.attackType.label"),
         template: InputToggleViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputToggleViewModel({
@@ -399,7 +399,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
     this.document.obstacle = getNewValue(dialog["dynamicInputObstacle"], this.document.obstacle, "");
     this.document.opposedBy = getNewValue(dialog["dynamicInputOpposedBy"], this.document.opposedBy, "");
     this.document.distance = getNewValue(dialog["dynamicInputDistance"], this.document.distance, "");
-    this.document.attackType = getNewValue(dialog["dynamicInputAttackType"], this.document.attackType, ATTACK_TYPES.none);
+    this.document.attackType = getNewValue(dialog["dynamicInputTargetingType"], this.document.attackType, TARGETING_TYPES.none);
     this.document.condition = getNewValue(dialog["dynamicInputCondition"], this.document.condition, "");
     this.document.damage = getNewValue(dialog["dynamicInputDamage"], this.document.damage, [new DamageAndType({ damage: "", damageType: DAMAGE_TYPES.pure, })]);
   }

@@ -27,3 +27,18 @@
     }
   }
 }
+
+.theme-dark {
+  .strive.input.ability-level {
+    .text {
+      text-shadow: 0 0 0.3rem $c-bg-dark;
+    }
+  }
+}
+.theme-light {
+  .strive.input.ability-level {
+    .text {
+      text-shadow: 0 0 0.3rem $c-bg-light;
+    }
+  }
+}

@@ -115,6 +115,20 @@ export const TEMPLATES = {
       light: `${basePathPresentation}/image/diamond-bg-light.svg`,
     },
     underline: {
+      h1: {
+        left: {
+          dark: `${basePathPresentation}/image/h1-left-dark.svg`,
+          light: `${basePathPresentation}/image/h1-left-light.svg`,
+        },
+        center: {
+          dark: `${basePathPresentation}/image/h1-center-dark.svg`,
+          light: `${basePathPresentation}/image/h1-center-light.svg`,
+        },
+        right: {
+          dark: `${basePathPresentation}/image/h1-right-dark.svg`,
+          light: `${basePathPresentation}/image/h1-right-light.svg`,
+        }
+      },
       h2: {
         dark: `${basePathPresentation}/image/underline-h2-325x7-dark.svg`,
         light: `${basePathPresentation}/image/underline-h2-325x7-light.svg`,

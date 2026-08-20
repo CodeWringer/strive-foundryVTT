@@ -169,6 +169,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyDownAlt = KEYBOARD.onKeyDown({
       modifier: MODIFIER_KEY_CODES.ALT,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+        
         this._evaluateConditions({
           altKey: true,
           ctrlKey: false,
@@ -179,6 +181,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyDownCtrl = KEYBOARD.onKeyDown({
       modifier: MODIFIER_KEY_CODES.CTRL,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+
         this._evaluateConditions({
           altKey: false,
           ctrlKey: true,
@@ -189,6 +193,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyUpAlt = KEYBOARD.onKeyUp({
       modifier: MODIFIER_KEY_CODES.ALT,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+
         this._evaluateConditions({
           altKey: false,
           ctrlKey: false,
@@ -199,6 +205,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyUpCtrl = KEYBOARD.onKeyUp({
       modifier: MODIFIER_KEY_CODES.CTRL,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+
         this._evaluateConditions({
           altKey: false,
           ctrlKey: false,

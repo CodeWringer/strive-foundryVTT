@@ -1,5 +1,14 @@
+import { TARGETING_TYPES } from "../../../../business/model/domain/const/targeting-types.mjs";
+import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { ChoicesUtil } from "../../../util/choices-utility.mjs";
+import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
+import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemContentViewModel from "../base/base-item-content-viewmodel.mjs";
@@ -40,5 +49,93 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         this.document.description = newValue;
       },
     });
+    this.vmActionPoints = new InputNumberSpinnerViewModel({
+      id: "vmActionPoints",
+      parent: this,
+      value: this.document.actionPoints.current,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.actionPoints"),
+      }),
+      onChange: (_, newValue) => {
+        this.document.actionPoints.current = newValue;
+      },
+    });
+    this.vmDistance = new InputNumberSpinnerViewModel({
+      id: "vmDistance",
+      parent: this,
+      value: this.document.distance.current,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.distance"),
+      }),
+      onChange: (_, newValue) => {
+        this.document.distance.current = newValue;
+      },
+    });
+
+    const targetingTypeOptions = ChoicesUtil.getAsChoices(TARGETING_TYPES, "xl");
+    let currentTargetingType = targetingTypeOptions[0];
+    if (ValidationUtil.isDefined(this.document.targetingType.current)) {
+      currentTargetingType = targetingTypeOptions.find(it => it.value === this.document.targetingType.current.name);
+    }
+    this.vmTargetingType = new InputDropDownViewModel({
+      id: "vmTargetingType",
+      parent: this,
+      value: currentTargetingType,
+      options: targetingTypeOptions,
+      showValue: false,
+      onChange: (_, newValue) => {
+        this.document.targetingType.current = TARGETING_TYPES[newValue.value];
+      },
+    });
+
+    this.vmObstacle = new InputTextFieldViewModel({
+      id: "vmObstacle",
+      parent: this,
+      value: this.document.obstacle.current,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.obstacle"),
+      }),
+      onChange: (_, newValue) => {
+        this.document.obstacle.current = newValue;
+      },
+    });
+    this.vmOpposedSkill = new InputReferenceViewModel({
+      id: "vmOpposedSkill",
+      parent: this,
+      value: this.document.opposedBy.current,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.opposedBy"),
+      }),
+      onChange: (_, newValue) => {
+        this.document.opposedBy.current = newValue;
+      },
+    });
+    this.vmAdvancement = new InputSplitNumberSpinnerViewModel({
+      id: "vmAdvancement",
+      parent: this,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.advancement"),
+      }),
+      current: {
+        value: this.document.advancement.progress,
+        min: 0,
+        limitToMax: true,
+      },
+      maximum: {
+        value: this.#getMaximumAdvancementProgress(),
+        allowEditing: false,
+      },
+      onChange: (_, newValue) => {
+        this.document.advancement.progress = newValue.current;
+      },
+    });
+  }
+
+  /**
+   * @returns {Number}
+   * @private
+   */
+  #getMaximumAdvancementProgress() {
+    return Skill.getAdvancementRequirement(this.document.level);
   }
 }

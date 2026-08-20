@@ -73,12 +73,12 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- attackType --}}
-  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideAttackType}} hidden{{/if}}">
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideTargetingType}} hidden{{/if}}">
     <div class="width-min-xxl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.attackType.label"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{viewModel.localizedAttackType}}
+      {{viewModel.localizedTargetingType}}
     </div>
   </div>
   {{!-- distance --}}

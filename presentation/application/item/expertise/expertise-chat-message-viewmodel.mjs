@@ -47,7 +47,7 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return ValidationUtil.isDefined(this.expertise.attackType) !== true; }
+  get hideTargetingType() { return ValidationUtil.isDefined(this.expertise.attackType) !== true; }
   
   /**
    * @type {Boolean}
@@ -59,7 +59,7 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get localizedAttackType() {
+  get localizedTargetingType() {
     if (ValidationUtil.isDefined(this.expertise.attackType) !== true) return "";
 
     const localizableName = this.expertise.attackType.localizableName;

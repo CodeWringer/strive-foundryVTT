@@ -59,17 +59,18 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
       // TODO: pop-up
     }
 
-    const oldValue = this._value;
-    if (parsedValue === NaN)
-      this._value = this.hasMin ? this.min : 0;
-    else if (this.hasMin && parsedValue < this.min)
-      this._value = this.min;
-    else if (this.hasMax && parsedValue > this.max)
-      this._value = this.max;
-    else
-      this._value = parsedValue;
-
-    this.onChange(oldValue, this._value);
+    if (!Number.isNaN(parsedValue)) {
+      const oldValue = this._value;
+      
+      if (this.hasMin && parsedValue < this.min)
+        this._value = this.min;
+      else if (this.hasMax && parsedValue > this.max)
+        this._value = this.max;
+      else
+        this._value = parsedValue;
+  
+      this.onChange(oldValue, this._value);
+    }
 
     // Update visuals. 
 

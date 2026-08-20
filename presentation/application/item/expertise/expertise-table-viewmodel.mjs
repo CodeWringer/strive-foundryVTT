@@ -1,7 +1,7 @@
 import ExpertiseCreationStrategy from "../../../../business/model/document/creation/expertise-creation-strategy.mjs"
 import Expertise from "../../../../business/model/document/item/skill/expertise.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
+import { TARGETING_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import GameSystemUserSettings from "../../../../business/setting/game-system-user-settings.mjs"
 import { StringUtil } from "../../../../common/util/string-utility.mjs"
 import { UuidUtil } from "../../../../common/util/uuid-utility.mjs"
@@ -65,7 +65,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return ATTACK_TYPES.asChoices(); }
+  get attackTypeOptions() { return TARGETING_TYPES.asChoices(); }
 
   /**
    * @type {Array<ChoiceOption>}

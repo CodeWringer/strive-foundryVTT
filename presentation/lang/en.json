@@ -285,6 +285,11 @@
         "name": "Complication Name",
         "sortAsc": "Sort A-Z ('Alt' inverts)",
         "sortDesc": "Sort Z-A"
+      },
+      "targetingType": {
+        "singleTarget": "Single Target",
+        "areaOfEffect": "Area of Effect",
+        "multipleSingleTarget": "Multiple Single Targets"
       }
     },
     "actor": {
@@ -389,7 +394,12 @@
         "level": "Skill Level",
         "baseAttribute": {
           "baseAttributes": "Base Attributes"
-        }
+        },
+        "actionPoints": "Action Point cost",
+        "distance": "Maximum effective distance",
+        "obstacle": "Skill Obstacle",
+        "opposedBy": "Opposing Skill/Expertise",
+        "advancement": "Advancement (Current/Required)"
       },
       "trait": {
         "trait": "Trait"
