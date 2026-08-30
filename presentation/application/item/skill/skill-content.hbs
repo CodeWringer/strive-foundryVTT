@@ -5,27 +5,27 @@ viewModel: SkillContentViewModel
 <div class="auto-margin-v-md pad-h-md">
   <span class="h-divider"></span>
   {{!-- Row --}}
-  <div class="flex flex-row flex-middle auto-margin-h-md">
+  <div class="grid col6 gap-md border-between-rows">
     {{!-- Action Points --}}
-    <div id="{{viewModel.id}}-ap" class="flex flex-row flex-middle auto-margin-h-md">
+    <div id="{{viewModel.id}}-ap" class="flex flex-row flex-middle auto-margin-h-md grid-item">
       <div class="flex flex-row flex-middle">
         <i class="ico ico-action-point xl"></i>
         {{> inputNumberSpinner viewModel=viewModel.vmActionPoints cssClass="width-md" }}
       </div>
     </div>
     {{!-- Distance --}}
-    <div id="{{viewModel.id}}-distance" class="flex flex-row flex-middle auto-margin-h-md">
+    <div id="{{viewModel.id}}-distance" class="flex flex-row flex-middle auto-margin-h-md grid-item">
       <div class="flex flex-row flex-middle">
         <i class="ico ico-distance xl"></i>
         {{> inputNumberSpinner viewModel=viewModel.vmDistance cssClass="width-md" }}
       </div>
     </div>
     {{!-- Targeting Type --}}
-    <div id="{{viewModel.id}}-targeting-type" class="flex flex-row flex-middle auto-margin-h-md">
+    <div id="{{viewModel.id}}-targeting-type" class="flex flex-row flex-middle auto-margin-h-md grid-item">
       {{> inputDropDown viewModel=viewModel.vmTargetingType cssClass="" }}
     </div>
     {{!-- Obstacle --}}
-    <div id="{{viewModel.id}}-ob" class="flex flex-row flex-middle auto-margin-h-md">
+    <div id="{{viewModel.id}}-ob" class="flex flex-row flex-middle auto-margin-h-md grid-span-4 grid-item">
       <div class="flex flex-row flex-middle">
         <i class="ico ico-obstacle xl"></i>
         {{> inputTextField viewModel=viewModel.vmObstacle cssClass="" }}
@@ -36,7 +36,7 @@ viewModel: SkillContentViewModel
       </div>
     </div>
     {{!-- Advancement --}}
-    <div id="{{viewModel.id}}-advancement" class="flex flex-row flex-middle auto-margin-h-md">
+    <div id="{{viewModel.id}}-advancement" class="flex flex-row flex-middle auto-margin-h-md grid-item">
       <div class="flex flex-row flex-middle">
         <i class="ico ico-dumbbell xl"></i>
         {{> inputSplitNumberSpinner viewModel=viewModel.vmAdvancement cssClass="width-md" }}
