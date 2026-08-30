@@ -10,12 +10,12 @@ $grid-border-thickness: 1px;
 
 // The following sorcery was partially pilfered from: https://geary.co/internal-borders-css-grid/
 @mixin grid-borders($gap) {
-  .grid-item {
+  > * {
     position: relative;
   }
 
   &.border-between-rows {
-    .grid-item::after {
+    > *::after {
       content: '';
       position: absolute;
       z-index: 1;
@@ -28,7 +28,7 @@ $grid-border-thickness: 1px;
   }
   
   &.border-between-cols {
-    .grid-item::before {
+    > *::before {
       content: '';
       position: absolute;
       z-index: 1;
@@ -101,18 +101,30 @@ $grid-border-thickness: 1px;
 .grid-span-12 { grid-column-end: span 12 }
 
 .theme-dark {
-  .grid-item {
-    &::after,
-    &::before {
-      background-color: $c-border-dark-secondary;
+  .grid {
+    &.border-between-rows {
+      > *::after {
+        background-color: $c-border-dark-secondary;
+      }
+    }
+    &.border-between-cols {
+      > *::before {
+        background-color: $c-border-dark-secondary;
+      }
     }
   }
 }
 .theme-light {
-  .grid-item {
-    &::after,
-    &::before {
-      background-color: $c-border-light-secondary;
+  .grid {
+    &.border-between-rows {
+      > *::after {
+        background-color: $c-border-light-secondary;
+      }
+    }
+    &.border-between-cols {
+      > *::before {
+        background-color: $c-border-light-secondary;
+      }
     }
   }
 }
