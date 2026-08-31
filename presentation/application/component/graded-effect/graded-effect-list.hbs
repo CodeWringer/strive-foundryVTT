@@ -1,0 +1,9 @@
+<ul id="{{viewModel.id}}" class="strive graded-effects">
+{{#each viewModel.gradedEffectVms as |vm|}}
+  <li>
+  {{#with vm.clazz.TEMPLATE as | template |}}
+    {{> (template) viewModel=vm }}
+  {{/with}}
+  </li>
+{{/each}}
+</ul>

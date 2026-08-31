@@ -10,7 +10,7 @@ import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmode
 
 export default class ComplicationViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.complication.complication; }
+  static get TEMPLATE() { return TEMPLATES.application.component.complication.item; }
 
   /** @override */
   get clazz() { return ComplicationViewModel; }

@@ -15,6 +15,8 @@ import ComplicationViewModel from "./complication/complication-viewmodel.mjs";
 import { DropDownOption } from "./button-dropdown/dropdown-option.mjs";
 import ButtonDropDownViewModel from "./button-dropdown/button-dropdown-viewmodel.mjs";
 import AbilityLevelViewModel from "./ability-level/ability-level-viewmodel.mjs";
+import GradedEffectViewModel from "./graded-effect/graded-effect-viewmodel.mjs";
+import GradedEffectListViewModel from "./graded-effect/graded-effect-list-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -37,6 +39,8 @@ export const component = {
   ComplicationViewModel: ComplicationViewModel,
   ComplicationListViewModel: ComplicationListViewModel,
   AbilityLevelViewModel: AbilityLevelViewModel,
+  GradedEffectViewModel: GradedEffectViewModel,
+  GradedEffectListViewModel: GradedEffectListViewModel,
   /**
    * Initialization, which MUST be called during system setup!
    */

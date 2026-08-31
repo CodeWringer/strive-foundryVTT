@@ -3,6 +3,7 @@ import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
+import GradedEffectListViewModel from "../../component/graded-effect/graded-effect-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
@@ -127,6 +128,15 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       },
       onChange: (_, newValue) => {
         this.document.advancement.progress = newValue.current;
+      },
+    });
+
+    this.vmGradedEffects = new GradedEffectListViewModel({
+      id: "vmGradedEffects",
+      parent: this,
+      value: this.document.gradedEffects.entries,
+      onChange: (_, newValue) => {
+        this.document.gradedEffects.entries = newValue;
       },
     });
   }

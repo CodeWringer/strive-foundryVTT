@@ -1,0 +1,9 @@
+<div id="{{viewModel.id}}" class="strive graded-effect flex flex-row flex-middle auto-marin-h-md">
+  <div class="flex flex-row flex-center embolden">
+    {{> inputDropDown viewModel=viewModel.vmComparison }}
+    {{> inputNumberSpinner viewModel=viewModel.vmThreshold }}
+  </div>
+  {{> inputTextField viewModel=viewModel.vmComparisonTarget }}
+  <span>:</span>
+  {{> inputRichText viewModel=viewModel.vmEffect }}
+</div>
