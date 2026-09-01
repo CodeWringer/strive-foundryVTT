@@ -1,6 +1,7 @@
 import Persistable from "./persistable.mjs";
 import Modifier from "./modifier.mjs";
 import { COMPARISON_TYPES, ComparisonType } from "./const/comparison-types.mjs";
+import { StringUtil } from "../../../common/util/string-utility.mjs";
 
 /**
  * Represents a graded effect. 
@@ -37,20 +38,20 @@ export default class GradedEffect extends Persistable {
 
   /**
    * @param {Object} args 
-   * @param {ComparisonType} args.comparisonType 
-   * @param {Number} args.threshold 
-   * @param {String} args.comparisonTarget 
+   * @param {ComparisonType | undefined} args.comparisonType 
+   * @param {Number | undefined} args.threshold 
+   * @param {String | undefined} args.comparisonTarget 
    * E. g. `"hit"` or `"agility"`
-   * @param {String} args.effect 
+   * @param {String | undefined} args.effect 
    * @param {Array<Modifier> | undefined} args.modifiers Fire-and-forget modifiers that 
    * will be applied by this effect. 
    */
   constructor(args = {}) {
     super(args);
     
-    this.comparisonType = args.comparisonType;
-    this.threshold = args.threshold;
-    this.comparisonTarget = args.comparisonTarget;
+    this.comparisonType = args.comparisonType ?? COMPARISON_TYPES.equals;
+    this.threshold = args.threshold ?? 0;
+    this.comparisonTarget = args.comparisonTarget ?? StringUtil.getLoca("system.general.hit");
 
     this.effect = args.effect ?? "";
     this.modifiers = args.modifiers ?? [];

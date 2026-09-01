@@ -20,27 +20,27 @@
       box-shadow: unset;
     }
   }
+}
 
-  menu {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    min-width: 10rem;
-    z-index: 9999;
-    min-height: 2rem;
-    max-height: 20rem;
-    overflow-y: auto;
-    // The following two lines are important - they prevent word-wrapping in the absolutely positioned element! 
-    white-space: nowrap;
-    overflow: visible;
+menu.strive.dropdown {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  min-width: 10rem;
+  z-index: 9999;
+  min-height: 2rem;
+  max-height: 20rem;
+  overflow-y: auto;
+  // The following two lines are important - they prevent word-wrapping in the absolutely positioned element! 
+  white-space: nowrap;
+  overflow: visible;
 
-    li {
-      min-height: $input-size-md;
-      line-height: $input-size-md;
-      font-size: $font-size-md;
-      padding: 0 5px;
-      cursor: pointer;
-    }
+  li {
+    min-height: $input-size-md;
+    line-height: $input-size-md;
+    font-size: $font-size-md;
+    padding: 0 5px;
+    cursor: pointer;
   }
 }
 
@@ -61,20 +61,20 @@
         background-color: $c-bg-input-focus-dark;
       }
     }
+  }
 
-    menu {
+  menu.strive.dropdown {
+    background-color: $c-bg-input-dark;
+    box-shadow: 0 0 10px $c-border-dark-secondary;
+    color: $c-text-dark;
+
+    li {
       background-color: $c-bg-input-dark;
-      box-shadow: 0 0 10px $c-border-dark-secondary;
-      color: $c-text-dark;
 
-      li {
-        background-color: $c-bg-input-dark;
-
-        &:hover,
-        &:focus,
-        &:focus-within {
-          background-color: $c-bg-input-focus-dark;
-        }
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-dark;
       }
     }
   }
@@ -97,20 +97,20 @@
         background-color: $c-bg-input-focus-light;
       }
     }
+  }
 
-    menu {
+  menu.strive.dropdown {
+    background-color: $c-bg-input-light;
+    box-shadow: 0 0 10px $c-border-light-secondary;
+    color: $c-text-light;
+
+    li {
       background-color: $c-bg-input-light;
-      box-shadow: 0 0 10px $c-border-light-secondary;
-      color: $c-text-light;
 
-      li {
-        background-color: $c-bg-input-light;
-
-        &:hover,
-        &:focus,
-        &:focus-within {
-          background-color: $c-bg-input-focus-light;
-        }
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: $c-bg-input-focus-light;
       }
     }
   }

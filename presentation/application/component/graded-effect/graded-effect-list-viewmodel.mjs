@@ -1,6 +1,9 @@
 import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
+import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 import GradedEffectViewModel from "./graded-effect-viewmodel.mjs";
 
 export default class GradedEffectListViewModel extends InputViewModel {
@@ -44,6 +47,21 @@ export default class GradedEffectListViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
+
+    this.vmContext = new ButtonDropDownViewModel({
+      id: "vmContext",
+      parent: this,
+      options: [
+        new DropDownOption({
+          localizedValue: StringUtil.getLoca("system.domain.gradedEffect.add"),
+          onClick: () => {
+            this.value = this.value.concat([
+              new GradedEffect(),
+            ]);
+          },
+        }),
+      ],
+    });
 
     let _id = 0;
     this.gradedEffectVms = this.value.map(gradedEffect => new GradedEffectViewModel({

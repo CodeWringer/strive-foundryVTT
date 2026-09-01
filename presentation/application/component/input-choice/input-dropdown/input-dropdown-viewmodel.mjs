@@ -115,6 +115,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     this.vmDropDown = new ButtonDropDownViewModel({
       id: "vmDropDown",
       parent: this,
+      content: '',
       options: args.options.map(option => new DropDownOption({
         value: option.value,
         localizedValue: option.localizedValue,

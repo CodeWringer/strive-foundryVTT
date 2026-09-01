@@ -128,7 +128,7 @@ export class EventEmitter {
     const listeners = this._events.get(event) ?? [];
 
     // Create the listener. 
-    const uuid = UuidUtil.createUUID();
+    const uuid = UuidUtil.createUuid();
     const listener = new Listener(uuid, isOnce, callback);
     listeners.push(listener);
     

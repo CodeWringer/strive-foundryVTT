@@ -167,7 +167,7 @@ export class RollResult {
     // Render the results. 
     const isObstacleRolled = this.results.resolvedObstacle.isPlainNumber === false;
     const renderedContent = await new FoundryWrapper().renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
-      id: common.util.uuid.createUUID(),
+      id: common.util.uuid.createUuid(),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,
       secondaryTitle: args.secondaryTitle,

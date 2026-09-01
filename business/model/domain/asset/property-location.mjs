@@ -30,7 +30,7 @@ export default class PropertyLocation extends Persistable {
   constructor(args = {}) {
     common.util.validation.validateOrThrow(args, ["name"]);
 
-    this.id = args.id ?? common.util.uuid.createUUID();
+    this.id = args.id ?? common.util.uuid.createUuid();
     this.name = args.name ?? "Unknown"; // TODO: loca
     this.assets = args.assets ?? [];
   }

@@ -98,7 +98,6 @@ export default class ComplicationViewModel extends ViewModel {
       id: "vmContextMenuButton",
       parent: this,
       isEditable: this.isEditable,
-      content: '<i class="ico ico-burger-menu lg"></i>',
       options: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.domain.complication.delete"),

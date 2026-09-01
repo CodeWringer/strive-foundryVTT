@@ -45,6 +45,6 @@ viewModel: SkillContentViewModel
   </div>
   {{!-- Graded Effects --}}
   {{#with viewModel.vmGradedEffects.clazz.TEMPLATE as |template|}}
-    {{> (template) viewModel=viewModel.vmGradedEffects}}
+    {{> (template) viewModel=../viewModel.vmGradedEffects}}
   {{/with}}
 </div>

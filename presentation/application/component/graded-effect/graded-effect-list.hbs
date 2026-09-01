@@ -1,9 +1,29 @@
-<ul id="{{viewModel.id}}" class="strive graded-effects">
-{{#each viewModel.gradedEffectVms as |vm|}}
-  <li>
-  {{#with vm.clazz.TEMPLATE as | template |}}
-    {{> (template) viewModel=vm }}
-  {{/with}}
-  </li>
-{{/each}}
-</ul>
+{{!--
+viewModel: GradedEffectListViewModel
+--}}
+<div id="{{viewModel.id}}" class="strive graded-effects">
+  <div class="edit-mode">
+    <h3 class="strive strive-regular-font flex flex-row flex-middle">
+      <span class="flex-grow">{{localize "system.domain.gradedEffect.gradedEffect"}}</span>
+      {{> buttonDropDown viewModel=viewModel.vmContext }}
+    </h3>
+    <ul>
+    {{#each viewModel.gradedEffectVms as |vm|}}
+      <li>
+      {{#with vm.clazz.TEMPLATE as | template |}}
+        {{> (template) viewModel=vm }}
+      {{/with}}
+      </li>
+    {{/each}}
+    </ul>
+  </div>
+  <ul class="read-mode">
+  {{#each viewModel.gradedEffectVms as |vm|}}
+    <li>
+    {{#with vm.clazz.TEMPLATE as | template |}}
+      {{> (template) viewModel=vm }}
+    {{/with}}
+    </li>
+  {{/each}}
+  </ul>
+</div>

@@ -344,7 +344,7 @@ export default class ViewModel {
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    */
   constructor(args = {}) {
-    this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
+    this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUuid());
     
     this.parent = args.parent;
     this._visible = args.visible ?? true;

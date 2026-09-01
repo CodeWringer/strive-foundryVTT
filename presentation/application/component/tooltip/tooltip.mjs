@@ -105,7 +105,7 @@ export default class Tooltip {
    * tooltip is hidden. 
    */
   constructor(args = {}) {
-    this._id = common.util.uuid.sanitizeId(args.id ?? common.util.uuid.createUUID());
+    this._id = common.util.uuid.sanitizeId(args.id ?? common.util.uuid.createUuid());
 
     this.anchorElement = args.anchorElement;
     this.content = args.content;
