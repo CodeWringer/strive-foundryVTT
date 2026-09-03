@@ -14,7 +14,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class ListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.list.entry; }
+  static get TEMPLATE() { return TEMPLATES.application.component.list.item; }
 
   /**
    * @param {Object} args
