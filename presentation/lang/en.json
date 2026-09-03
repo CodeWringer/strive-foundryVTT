@@ -96,7 +96,7 @@
         "shiftHeroic": "Heroic Act Momentum Shift",
         "shift": "Momentum Shift",
         "reminder": {
-          "reminder": "When Momentum reaches <code>%{desperationThreshold}</code>, <b>Desperate Measures</b> become available. When it reaches <code>+%{heroismThreshold}</code>, <b>Heroic Acts</b> become available.<br><div class='grid col2 gap-lg borders dark'><h3 class='strive-header'>Losing Momentum</h3><h3 class='strive-header'>Gaining Momentum</h3>%{row1}%{row2}%{row3}%{row4}%{row5}</div>",
+          "reminder": "When Momentum reaches <code>%{desperationThreshold}</code>, <b>Desperate Measures</b> become available. When it reaches <code>+%{heroismThreshold}</code>, <b>Heroic Acts</b> become available.<br><div class='grid col2 gap-lg borders dark'><h3 class='strive strive-regular-font'>Losing Momentum</h3><h3 class='strive strive-regular-font'>Gaining Momentum</h3>%{row1}%{row2}%{row3}%{row4}%{row5}</div>",
           "losingMomentum": {
             "1": "<span>PC or ally being successfully attacked: <code>-2</code></span>",
             "2": "<span>A foe helping <i>their</i> ally: <code>-2</code></span>",

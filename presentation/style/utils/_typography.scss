@@ -45,13 +45,47 @@ form.strive-regular-font h1.window-title {
   font-size: 1.5rem;
 }
 
-.strive {
+h1.strive {
+  font-size: 3em;
+  font-weight: unset;
+  text-transform: uppercase;
+  user-select: text;
+}
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    text-transform: uppercase;
-    user-select: text;
+h2.strive {
+  font-size: 2.5em;
+  font-weight: unset;
+  text-transform: uppercase;
+  user-select: text;
+}
+
+h3.strive {
+  font-size: 2em;
+  font-weight: unset;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  text-transform: uppercase;
+  user-select: text;
+}
+
+h4.strive {
+  font-size: 1.5em;
+  font-weight: unset;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  text-transform: uppercase;
+  user-select: text;
+}
+
+.theme-dark {
+  h3.strive,
+  h4.strive {
+    border-bottom-color: $c-border-dark;
+  }
+}
+.theme-light {
+  h3.strive,
+  h4.strive {
+    border-bottom-color: $c-border-light;
   }
 }

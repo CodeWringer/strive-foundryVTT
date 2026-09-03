@@ -1,7 +1,5 @@
-import { COMPARISON_TARGET_TYPES } from "../../../../business/model/domain/const/comparison-target-types.mjs";
 import { COMPARISON_TYPES } from "../../../../business/model/domain/const/comparison-types.mjs";
 import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
-import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
@@ -12,7 +10,7 @@ import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-sp
 
 export default class GradedEffectViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.gradedEffect.entry; }
+  static get TEMPLATE() { return TEMPLATES.application.component.gradedEffect.item; }
 
   /** @override */
   get clazz() { return GradedEffectViewModel; }

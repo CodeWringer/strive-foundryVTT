@@ -1,65 +1,42 @@
 @import './borders';
 
-// The following sorcery was partially pilfered from: https://geary.co/internal-borders-css-grid/
+$grid-border-thickness: 1px;
 
 // Grid.
 @mixin grid-columns-template($columnCount) {
-  grid-column: span $columnCount / span $columnCount;
+  // grid-column: span $columnCount / span $columnCount;
   grid-template-columns: repeat($columnCount, minmax(0, 1fr));
 }
 
-@mixin grid-borders($gap, $borderThickness) {
-  &.borders {
-    $line-offset: calc($gap / 2);
-    > * {
-      position: relative;
+// The following sorcery was partially pilfered from: https://geary.co/internal-borders-css-grid/
+@mixin grid-borders($gap) {
+  > * {
+    position: relative;
+  }
+
+  &.border-between-rows {
+    > *::after {
+      content: '';
+      position: absolute;
+      z-index: 1;
+
+      inline-size: 100vw;
+      block-size: $grid-border-thickness;
+      inset-inline-start: -50vw;
+      inset-block-start: calc(100% + (($gap - $grid-border-thickness) / 2))
     }
-    > {
-      ::before,
-      ::after {
-        content: '';
-        position: absolute;
-        z-index: 1;
-      }
+  }
   
-      // Row Borders
-      ::after {
-        inline-size: 100vw;
-        block-size: $borderThickness;
-        inset-inline-start: 0;
-        inset-block-start: calc($line-offset * -1);
-      }
-  
-      // Column Borders
-      ::before {
-        inline-size: $borderThickness;
-        block-size: 100vh;
-        inset-inline-start: calc($line-offset * -1);
-      }
-    }
-    &.dark {
-      ::before,
-      ::after {
-        background-color: $c-border-dark;
-      }
-      &.highlight {
-        ::before,
-        ::after {
-          background-color: $c-border-highlight-dark;
-        }
-      }
-    }
-    &.light {
-      ::before,
-      ::after {
-        background-color: $c-border-light;
-      }
-      &.highlight {
-        ::before,
-        ::after {
-          background-color: $c-border-highlight-light;
-        }
-      }
+  &.border-between-cols {
+    > *::before {
+      content: '';
+      position: absolute;
+      z-index: 1;
+
+      inline-size: $grid-border-thickness;
+      block-size: 100vh;
+      inset-block-start: -50vh;
+      inset-inline-start: calc(100% + (($gap - $grid-border-thickness) / 2))
     }
   }
 }
@@ -90,49 +67,25 @@
   &.gap {
     &-xs {
       gap: $padding-xs;
-      @include grid-borders($padding-xs, 2px);
+      @include grid-borders($padding-xs);
     }
     &-sm {
       gap: $padding-sm;
-      @include grid-borders($padding-sm, 2px);
+      @include grid-borders($padding-sm);
     }
     &-md {
       gap: $padding-md;
-      @include grid-borders($padding-md, 2px);
+      @include grid-borders($padding-md);
     }
     &-lg {
       gap: $padding-lg;
-      @include grid-borders($padding-lg, 2px);
+      @include grid-borders($padding-lg);
     }
     &-xl {
       gap: $padding-xl;
-      @include grid-borders($padding-xl, 2px);
+      @include grid-borders($padding-xl);
     }
   }
-}
-
-.grid-2col {
-  display: grid;
-  grid-column: span 2 / span 2;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.grid-3col {
-  display: grid;
-  grid-column: span 3 / span 3;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.grid-6col {
-  display: grid;
-  grid-column: span 6 / span 6;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
-.grid-7col {
-  display: grid;
-  grid-column: span 7 / span 7;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .grid-span-2 { grid-column-end: span 2 }
@@ -147,8 +100,31 @@
 .grid-span-11 { grid-column-end: span 11 }
 .grid-span-12 { grid-column-end: span 12 }
 
-.grid-gap-xs { gap: $padding-xs; }
-.grid-gap-sm { gap: $padding-sm; }
-.grid-gap-md { gap: $padding-md; }
-.grid-gap-lg { gap: $padding-lg; }
-.grid-gap-xl { gap: $padding-xl; }
+.theme-dark {
+  .grid {
+    &.border-between-rows {
+      > *::after {
+        background-color: $c-border-dark-secondary;
+      }
+    }
+    &.border-between-cols {
+      > *::before {
+        background-color: $c-border-dark-secondary;
+      }
+    }
+  }
+}
+.theme-light {
+  .grid {
+    &.border-between-rows {
+      > *::after {
+        background-color: $c-border-light-secondary;
+      }
+    }
+    &.border-between-cols {
+      > *::before {
+        background-color: $c-border-light-secondary;
+      }
+    }
+  }
+}

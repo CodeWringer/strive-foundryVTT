@@ -293,7 +293,7 @@ export default class Expertise extends Persistable {
     common.util.validation.validateOrThrow(args, ["owningDocument"]);
 
     this.owningDocument = args.owningDocument;
-    this._id = args.id ?? common.util.uuid.createUUID();
+    this._id = args.id ?? common.util.uuid.createUuid();
 
     this._gmNotes = new DataFieldBridge({
       document: this,

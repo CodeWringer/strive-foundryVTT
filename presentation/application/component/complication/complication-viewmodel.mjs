@@ -10,7 +10,7 @@ import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmode
 
 export default class ComplicationViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.complication.entry; }
+  static get TEMPLATE() { return TEMPLATES.application.component.complication.item; }
 
   /** @override */
   get clazz() { return ComplicationViewModel; }
@@ -98,7 +98,6 @@ export default class ComplicationViewModel extends ViewModel {
       id: "vmContextMenuButton",
       parent: this,
       isEditable: this.isEditable,
-      content: '<i class="ico ico-burger-menu lg"></i>',
       options: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.domain.complication.delete"),

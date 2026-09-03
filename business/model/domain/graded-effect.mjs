@@ -1,11 +1,11 @@
 import Persistable from "./persistable.mjs";
 import { COMPARISON_TYPES, ComparisonType } from "./const/comparison-types.mjs";
-import { COMPARISON_TARGET_TYPES, ComparisonTargetType } from "./const/comparison-target-types.mjs";
+import { COMPARISON_TARGET_TYPES } from "./const/comparison-target-types.mjs";
 import ComparisonTarget from "./comparison-target.mjs";
+import Modifier from "./modifier.mjs";
 
 /**
- * Represents a graded effect, usually comprised of three sets of data, 
- * each representing an effect tied to a threshold. 
+ * Represents a graded effect. 
  * 
  * For example, this can be used to represent the damage gradings based 
  * on the number of Hits an attacker achieved:
@@ -20,6 +20,8 @@ import ComparisonTarget from "./comparison-target.mjs";
  * @property {ComparisonTargetType} comparisonTarget 
  * @property {String | null} unstructured Free form text that may represent 
  * any effect, but without program support. 
+ * @property {Array<Modifier>} modifiers Fire-and-forget modifiers that 
+ * will be applied by this effect. 
  * 
  * @extends Persistable
  */
@@ -30,8 +32,8 @@ export default class GradedEffect extends Persistable {
       comparisonType: COMPARISON_TYPES[dto.comparisonType],
       threshold: dto.threshold,
       comparisonTarget: ComparisonTarget.fromDto(dto.comparisonTarget),
-      effect: dto.effect,
       unstructured: dto.unstructured,
+      modifiers: dto.modifiers.map(it => Modifier.fromDto(it)),
     });
   }
 
@@ -85,11 +87,13 @@ export default class GradedEffect extends Persistable {
 
   /**
    * @param {Object} args 
-   * @param {ComparisonType} args.comparisonType 
-   * @param {Number} args.threshold 
-   * @param {ComparisonTarget} args.comparisonTarget 
+   * @param {ComparisonType | undefined} args.comparisonType 
+   * @param {Number | undefined} args.threshold 
+   * @param {ComparisonTarget | undefined} args.comparisonTarget 
    * @param {String | undefined} args.unstructured Free form text that may represent 
    * any effect, but without program support. 
+   * @param {Array<Modifier> | undefined} args.modifiers Fire-and-forget modifiers that 
+   * will be applied by this effect. 
    */
   constructor(args = {}) {
     super(args);
@@ -100,7 +104,7 @@ export default class GradedEffect extends Persistable {
       type: COMPARISON_TARGET_TYPES.hit,
     });
     this.#unstructured = args.unstructured ?? null;
-
+    this.modifiers = args.modifiers ?? [];
     this.onChange = args.onChange ?? (() => {});
   }
 
@@ -110,8 +114,8 @@ export default class GradedEffect extends Persistable {
       comparisonType: this.comparisonType.name,
       threshold: this.threshold,
       comparisonTarget: this.comparisonTarget.toDto(),
-      effect: this.effect,
       unstructured: this.unstructured,
+      modifiers: this.modifiers.map(it => it.toDto()),
     };
   }
 }

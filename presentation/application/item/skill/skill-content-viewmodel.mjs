@@ -135,9 +135,9 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
     this.vmGradedEffects = new GradedEffectListViewModel({
       id: "vmGradedEffects",
       parent: this,
-      value: this.document.gradedEffects.current,
+      value: this.document.gradedEffects.entries,
       onChange: (_, newValue) => {
-        this.document.gradedEffects.current = newValue;
+        this.document.gradedEffects.entries = newValue;
       },
     });
 

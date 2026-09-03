@@ -17,7 +17,7 @@ export default class PropertyLocationField extends FoundrySchemaFields.SchemaFie
       id: new FoundrySchemaFields.StringField({
         nullable: false,
         required: true,
-        initial: common.util.uuid.createUUID(),
+        initial: common.util.uuid.createUuid(),
       }),
       name: new FoundrySchemaFields.StringField({
         nullable: false,

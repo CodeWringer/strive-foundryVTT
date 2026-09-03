@@ -1,3 +1,4 @@
+import { UuidUtil } from "../../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { MODIFIER_KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
@@ -127,6 +128,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
    * 
    * @param {String | undefined} args.content Raw HTML to render as the content 
    * of the button. 
+   * * default `'<i class="ico ico-burger-menu lg"></i>'`
    * @param {Array<DropDownOption> | undefined} args.options An array of context menu items, 
    * which are used to populate the context menu. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
@@ -139,7 +141,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.content = args.content;
+    this.content = args.content ?? '<i class="ico ico-burger-menu lg"></i>';
     this.options = args.options ?? [];
     this.onClick = args.onClick ?? (() => { });
     this.onMenuShown = args.onMenuShown ?? (() => { });
@@ -273,6 +275,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
   openMenu() {
     if (this.#isMenuOpen) return;
 
+    this.#menuElement.detach();
+    this.element.closest("body").append(this.#menuElement);
     this.#menuElement.removeClass("hidden");
     this.#isMenuOpen = true;
     this._evaluateConditions({
@@ -280,6 +284,14 @@ export default class ButtonDropDownViewModel extends ViewModel {
       ctrlKey: false,
     });
     this.#adjustMenuPos();
+
+    const scrollableParent = this.#getScrollableParent();
+    this._scrollEventId = UuidUtil.createUuid();
+    scrollableParent.on(`scroll.${this._scrollEventId}`, () => {
+      this._scrollTimeout = setTimeout(() => {
+        this.#adjustMenuPos();
+      }, 100);
+    });
 
     this.onMenuShown();
 
@@ -296,7 +308,13 @@ export default class ButtonDropDownViewModel extends ViewModel {
   closeMenu() {
     if (!this.#isMenuOpen) return;
 
+    const scrollableParent = this.#getScrollableParent();
+    scrollableParent.off(`scroll.${this._scrollEventId}`);
+    clearTimeout(this._scrollTimeout);
+
     this.#menuElement.addClass("hidden");
+    this.#menuElement.detach();
+    this.element.append(this.#menuElement);
     this.#isMenuOpen = false;
 
     this.onMenuHidden();
@@ -359,27 +377,44 @@ export default class ButtonDropDownViewModel extends ViewModel {
    * @private
    */
   #adjustMenuPos() {
-    let rootContainerElm = this.element.closest("form");
-    if (rootContainerElm.length === 0) {
-      rootContainerElm = this.element.closest("body");
-    }
+    const rootContainerElm = this.#getRootParent();
 
     const buttonRect = SheetUtil.getElementRect(this.#buttonElement[0]);
     const boundsRect = SheetUtil.getElementRect(rootContainerElm[0]);
     const menuRect = SheetUtil.getElementRect(this.#menuElement[0]);
-    let left = 0;
-    let top = buttonRect.height;
+    let left = buttonRect.left;
+    let top = buttonRect.bottom;
 
     const deltaX = boundsRect.right - (buttonRect.left + menuRect.width);
     const deltaY = boundsRect.bottom - (buttonRect.bottom + menuRect.height);
 
     if (deltaX < 0) { // Clipping right.
-      left = buttonRect.width - menuRect.width;
+      left = buttonRect.left - menuRect.width + buttonRect.width;
     }
     if (deltaY < 0) { // Clipping bottom.
-      top = -menuRect.height;
+      top = buttonRect.top - menuRect.height;
     }
 
     this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`);
+  }
+
+  /**
+   * Returns the root `form` or `body` element this element is nested in. 
+   * @returns {JQuery}
+   */
+  #getRootParent() {
+    let rootContainerElm = this.element.closest("form");
+    if (rootContainerElm.length === 0) {
+      rootContainerElm = this.element.closest("body");
+    }
+    return rootContainerElm;
+  }
+
+  /**
+   * Returns the root `section` this element is nested in. 
+   * @returns {JQuery}
+   */
+  #getScrollableParent() {
+    return this.element.closest(".sheet-section");
   }
 }
