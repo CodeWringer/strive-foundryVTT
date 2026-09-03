@@ -3,12 +3,14 @@ import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
+import GradedEffectListViewModel from "../../component/graded-effect/graded-effect-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
+import ListViewModel from "../../component/list/list-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemContentViewModel from "../base/base-item-content-viewmodel.mjs";
@@ -129,6 +131,19 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         this.document.advancement.progress = newValue.current;
       },
     });
+
+    this.vmGradedEffects = new GradedEffectListViewModel({
+      id: "vmGradedEffects",
+      parent: this,
+      value: this.document.gradedEffects.current,
+      onChange: (_, newValue) => {
+        this.document.gradedEffects.current = newValue;
+      },
+    });
+
+    // TODO #762
+    // this.vmExpertises = new ListViewModel({
+    // });
   }
 
   /**

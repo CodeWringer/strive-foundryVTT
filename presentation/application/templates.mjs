@@ -104,8 +104,16 @@ export const TEMPLATES = {
       row: `${basePathComponent}/row/row.hbs`,
       image: `${basePathComponent}/input-image/input-image.hbs`,
       complication: {
-        complication: `${basePathComponent}/complication/complication.hbs`,
+        entry: `${basePathComponent}/complication/complication.hbs`,
         list: `${basePathComponent}/complication/complication-list.hbs`,
+      },
+      gradedEffect: {
+        entry: `${basePathComponent}/graded-effect/graded-effect.hbs`,
+        list: `${basePathComponent}/graded-effect/graded-effect-list.hbs`,
+      },
+      list: {
+        entry: `${basePathComponent}/list/list-item.hbs`,
+        list: `${basePathComponent}/list/list.hbs`,
       },
     },
   },

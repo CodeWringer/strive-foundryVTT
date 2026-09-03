@@ -22,6 +22,7 @@ import PropertyLocation from "./asset/property-location.mjs";
 import AdvancementHistoryEntry from "./advancement-history-entry.mjs";
 import DriverHistoryEntry from "./driver-history-entry.mjs";
 import { Skill } from "./skill/skill.mjs";
+import ComparisonTarget from "./comparison-target.mjs";
 
 /**
  * Wraps the `business.model.domain` module, which is a bit of an oddball, 
@@ -64,6 +65,7 @@ export const domain = {
   GradedEffect: GradedEffect,
   AdvancementHistoryEntry: AdvancementHistoryEntry,
   DriverHistoryEntry: DriverHistoryEntry,
+  ComparisonTarget: ComparisonTarget,
   init: () => {
     constants.init();
     SystemHealthConditionBroker.preload();

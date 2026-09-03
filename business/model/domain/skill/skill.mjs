@@ -13,6 +13,10 @@ export const Skill = {
    * @param {Number} level The current level of the Skill.
    */
   getAdvancementRequirement(level) {
-    return 0; // TODO #762
+    if (level === 0) {
+      return 15;
+    } else {
+      return 8 + (level * 3);
+    }
   }
 };

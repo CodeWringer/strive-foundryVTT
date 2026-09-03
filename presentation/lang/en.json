@@ -139,6 +139,7 @@
         "world": "World"
       },
       "custom": "Custom",
+      "clearCurrentValue": "Clear the current value",
       "decrement": "Decrement",
       "delete": {
         "delete": "Delete",
@@ -172,6 +173,8 @@
         "gmNotes": "GM Notes",
         "gmNotesHidden": "GM Notes (Hidden)"
       },
+      "hit": "Hit",
+      "miss": "Miss",
       "id": "ID",
       "increment": "Increment",
       "isCustom": "Custom",
@@ -249,6 +252,7 @@
     },
     "domain": {
       "attribute": {
+        "attribute": "Attribute",
         "agility": {
           "agility": "Agility",
           "abbreviation": "AGI"
@@ -285,6 +289,11 @@
         "name": "Complication Name",
         "sortAsc": "Sort A-Z ('Alt' inverts)",
         "sortDesc": "Sort Z-A"
+      },
+      "gradedEffect": {
+        "gradedEffect": "Graded Effect",
+        "gradedEffects": "Graded Effects",
+        "add": "Add Graded Effect"
       },
       "targetingType": {
         "singleTarget": "Single Target",
@@ -400,6 +409,11 @@
         "obstacle": "Skill Obstacle",
         "opposedBy": "Opposing Skill/Expertise",
         "advancement": "Advancement (Current/Required)"
+      },
+      "expertise": {
+        "expertise": "Expertise",
+        "expertises": "Expertises",
+        "search": "Filter for Expertises by their name"
       },
       "trait": {
         "trait": "Trait"

@@ -15,6 +15,10 @@ import ComplicationViewModel from "./complication/complication-viewmodel.mjs";
 import { DropDownOption } from "./button-dropdown/dropdown-option.mjs";
 import ButtonDropDownViewModel from "./button-dropdown/button-dropdown-viewmodel.mjs";
 import AbilityLevelViewModel from "./ability-level/ability-level-viewmodel.mjs";
+import GradedEffectListViewModel from "./graded-effect/graded-effect-list-viewmodel.mjs";
+import GradedEffectViewModel from "./graded-effect/graded-effect-viewmodel.mjs";
+import ListViewModel from "./list/list-viewmodel.mjs";
+import ListItemViewModel from "./list/list-item-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -37,6 +41,10 @@ export const component = {
   ComplicationViewModel: ComplicationViewModel,
   ComplicationListViewModel: ComplicationListViewModel,
   AbilityLevelViewModel: AbilityLevelViewModel,
+  GradedEffectViewModel: GradedEffectViewModel,
+  GradedEffectListViewModel: GradedEffectListViewModel,
+  ListItemViewModel: ListItemViewModel,
+  ListViewModel: ListViewModel,
   /**
    * Initialization, which MUST be called during system setup!
    */
@@ -51,6 +59,7 @@ export const component = {
     InputReferenceViewModel.registerHandlebarsPartial();
     InputImageViewModel.registerHandlebarsPartial();
     AbilityLevelViewModel.registerHandlebarsPartial();
+    ListViewModel.registerHandlebarsPartial();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 

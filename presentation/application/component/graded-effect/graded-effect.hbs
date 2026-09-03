@@ -1,0 +1,12 @@
+{{!-- Context:
+viewModel: GradedEffectViewModel
+--}}
+<div id="{{viewModel.id}}" class="strive graded-effect flex flex-row flex-middle auto-margin-h-md">
+  <div class="flex flex-row flex-middle auto-margin-h-sm embolden">
+    {{> inputDropDown viewModel=viewModel.vmComparisonType cssClass="" }}
+    {{> inputNumberSpinner viewModel=viewModel.vmThreshold cssClass="width-md" }}
+    {{> inputDropDown viewModel=viewModel.vmComparisonTargetType cssClass="" }}
+    {{> inputTextField viewModel=viewModel.vmComparisonTarget cssClass="" }}
+  </div>
+  {{> inputRichText viewModel=viewModel.vmUnstructured cssClass="pad-md" }}
+</div>

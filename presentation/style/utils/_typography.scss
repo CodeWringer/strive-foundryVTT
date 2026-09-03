@@ -44,3 +44,14 @@ body.strive-regular-font .strive-regular-font {
 form.strive-regular-font h1.window-title {
   font-size: 1.5rem;
 }
+
+.strive {
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-transform: uppercase;
+    user-select: text;
+  }
+}

@@ -1,8 +1,9 @@
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import ListItemViewModel from "./list-item-viewmodel.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
+import { TEMPLATES } from "../../templates.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
+import ButtonViewModel from "../button/button-viewmodel.mjs"
+import ListItemViewModel from "./list-item-viewmodel.mjs"
 
 /**
  * Represents a simple item list in the sense that the presentation of 
@@ -26,7 +27,7 @@ import ListItemViewModel from "./list-item-viewmodel.mjs";
  */
 export default class ListViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_LIST; }
+  static get TEMPLATE() { return TEMPLATES.application.component.list.list; }
 
   /**
    * Registers the Handlebars partial for this component. 

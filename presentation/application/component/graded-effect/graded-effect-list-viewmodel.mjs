@@ -1,29 +1,30 @@
-import Complication from "../../../../business/model/domain/complication/complication.mjs";
+import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
+import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
 import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
-import ComplicationViewModel from "./complication-viewmodel.mjs";
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
+import GradedEffectViewModel from "./graded-effect-viewmodel.mjs";
 
-export default class ComplicationListViewModel extends InputViewModel {
+export default class GradedEffectListViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.complication.list; }
+  static get TEMPLATE() { return TEMPLATES.application.component.gradedEffect.list; }
 
   /** @override */
-  get clazz() { return ComplicationListViewModel; }
+  get clazz() { return GradedEffectListViewModel; }
 
   /**
    * Returns the current value. 
    * 
-   * @type {Array<Complication>}
+   * @type {Array<GradedEffect>}
    */
   get value() { return super.value; }
   /**
    * Sets the current value. 
    * 
-   * @param {Array<Complication>} newValue
+   * @param {Array<GradedEffect>} newValue
    */
   set value(newValue) {
     super.value = newValue;
@@ -32,10 +33,10 @@ export default class ComplicationListViewModel extends InputViewModel {
   }
 
   /**
-   * @type {Array<ComplicationViewModel>}
+   * @type {Array<GradedEffectViewModel>}
    * @private
    */
-  _complicationViewModels = [];
+  entryViewModels = [];
 
   /**
    * @param {Object} args
@@ -69,12 +70,15 @@ export default class ComplicationListViewModel extends InputViewModel {
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
    * 
-   * @param {Array<Complication> | undefined} args.value
+   * @param {Array<GradedEffect> | undefined} args.value
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? [],
+    });
 
-    this._complicationViewModels = this.#getMappedComplicationViewModels();
+    this.entryViewModels = this.#getMappedViewModels();
 
     this.vmContextMenuButton = new ButtonDropDownViewModel({
       id: "vmContextMenuButton",
@@ -83,37 +87,40 @@ export default class ComplicationListViewModel extends InputViewModel {
       content: '<i class="ico ico-burger-menu lg"></i>',
       options: [
         new DropDownOption({
-          localizedValue: StringUtil.getLoca("system.domain.complication.add"),
+          localizedValue: StringUtil.getLoca("system.domain.gradedEffect.add"),
           onClick: () => {
-            const newComplication = new Complication({
-              name: StringUtil.getLoca("system.domain.complication.defaultName")
-            });
-            this.value = this.value.concat([newComplication]);
-          },
-        }),
-        new DropDownOption({
-          localizedValue: StringUtil.getLoca("system.domain.complication.sortAsc"),
-          onClick: () => {
-            const newValue = this.value.concat([]);
-            newValue.sort((a, b) => a.name.localeCompare(b.name));
-            this.value = newValue;
-          },
-          condition: (event) => {
-            return !event.altKey;
-          },
-        }),
-        new DropDownOption({
-          localizedValue: StringUtil.getLoca("system.domain.complication.sortDesc"),
-          onClick: () => {
-            const newValue = this.value.concat([]);
-            newValue.sort((a, b) => b.name.localeCompare(a.name));
-            this.value = newValue;
-          },
-          condition: (event) => {
-            return event.altKey;
+            const newEntry = new GradedEffect();
+            this.value = this.value.concat([newEntry]);
           },
         }),
       ],
+    });
+
+    this.vmSearch = new InputTextFieldViewModel({
+      id: "vmSearch",
+      parent: this,
+      value: this._searchValue,
+      isEditable: true,
+      icon: '<i class="ico ico-search lg"></i>',
+      enableClearButton: true,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.expertise.search"),
+      }),
+      onChange: (_, newValue) => {
+        this._searchValue = newValue;
+      },
+      onFocus: () => {
+        this.element.find(".list-header-start").stop(true, true);
+        this.element.find(".list-header-start").animate({
+          width: 0,
+        }, 300);
+      },
+      onFocusLost: () => {
+        this.element.find(".list-header-start").stop(true, true);
+        this.element.find(".list-header-start").animate({
+          width: "33%",
+        }, 300);
+      },
     });
   }
 
@@ -122,16 +129,16 @@ export default class ComplicationListViewModel extends InputViewModel {
    * @protected
    */
   async _render() {
-    for (const vm of this._complicationViewModels) {
+    for (const vm of this.entryViewModels) {
       vm.dispose();
       vm.parent = undefined;
     }
-    this._complicationViewModels = this.#getMappedComplicationViewModels();
+    this._entryViewModels = this.#getMappedViewModels();
 
     const ulElm = $(this.element.find("> ul"));
     ulElm.empty();
 
-    for await (const vm of this._complicationViewModels) {
+    for await (const vm of this.entryViewModels) {
       const rendered = await FoundryWrapper.renderTemplate(vm.clazz.TEMPLATE, {
         viewModel: vm,
       });
@@ -142,51 +149,52 @@ export default class ComplicationListViewModel extends InputViewModel {
   }
 
   /**
-   * Maps the `Complication`s to `ComplicationViewModel`s and returns them. 
-   * @returns {Array<ComplicationViewModel>}
+   * @returns {Array<GradedEffectViewModel>}
    * @private
    */
-  #getMappedComplicationViewModels() {
+  #getMappedViewModels() {
     let index = 0;
-    return this.value.map(complication => new ComplicationViewModel({
-      id: `complication-${index++}`,
+    return this.value.map(entry => new GradedEffectViewModel({
+      id: `gradedeffect-${index++}`,
       parent: this,
-      document: complication,
+      document: entry,
       onChange: (fieldName, oldValue, _) => {
-        this.#onComplicationChange(fieldName, oldValue, complication);
+        this.#onEntryChange(fieldName, oldValue, entry);
       },
       onDelete: () => {
-        this.#onComplicationDelete(complication);
+        this.#onEntryDelete(entry);
       },
     }));
   }
 
   /**
-   * Internal handler of a Complication's internal value change. 
+   * Internal handler of an entry's internal value change. 
    * @param {String} fieldName 
    * @param {Any} oldValue 
-   * @param {Complication} complication 
+   * @param {GradedEffect} entry 
    * @private
    */
-  #onComplicationChange(fieldName, oldValue, complication) {
-    const thisOldValue = this.value.map(c => new Complication({
-      name: c.name,
-      description: c.description,
+  #onEntryChange(fieldName, oldValue, entry) {
+    const thisOldValue = this.value.map(c => new GradedEffect({
+      comparisonType: c.comparisonType,
+      threshold: c.threshold,
+      comparisonTarget: c.comparisonTarget,
+      unstructured: c.unstructured,
     }));
-    const index = this.value.findIndex(it => it == complication);
-    const oldComplication = thisOldValue[index];
-    oldComplication[fieldName] = oldValue;
+    const index = this.value.findIndex(it => it == entry);
+    const oldEntry = thisOldValue[index];
+    oldEntry[fieldName] = oldValue;
     this.onChange(thisOldValue, this.value);
   }
 
   /**
-   * Internal handler for the deletion of a Complication.
-   * @param {Complication} complication 
+   * Internal handler for the deletion of an entry.
+   * @param {GradedEffect} entry 
    * @private
    */
-  #onComplicationDelete(complication) {
+  #onEntryDelete(entry) {
     const newValue = this.value.concat([]);
-    const index = this.value.findIndex(it => it == complication);
+    const index = this.value.findIndex(it => it == entry);
     newValue.splice(index, 1);
     this.value = newValue;
   }

@@ -64,27 +64,6 @@ export default class UiDebugDialogViewModel extends ViewModel {
         },
       }),
       new DynamicComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        cssClass: "flex-grow",
-        viewModelFactory: (parent) => {
-          return new InputTextFieldViewModel({
-            id: "vmTextField2",
-            parent: parent,
-            value: this._vmTextFieldValue,
-            isEditable: false,
-            toolTip: new ViewModelToolTipDefinition({
-              localized: "Clickable Text Field",
-            }),
-            onChange: (_, newValue) => {
-              this._vmTextFieldValue = newValue;
-            },
-            onClickInReadMode: () => {
-              this["vmTextField2"].value = "Clicked";
-            },
-          });
-        },
-      }),
-      new DynamicComponent({
         template: InputDropDownViewModel.TEMPLATE,
         cssClass: "flex-grow",
         viewModelFactory: (parent) => {

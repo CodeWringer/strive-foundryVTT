@@ -1,19 +1,21 @@
-import Complication from "../../../../business/model/domain/complication/complication.mjs";
+import { COMPARISON_TARGET_TYPES } from "../../../../business/model/domain/const/comparison-target-types.mjs";
+import { COMPARISON_TYPES } from "../../../../business/model/domain/const/comparison-types.mjs";
+import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
+import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
-import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
-import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
-import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
-import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
+import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs";
 
-export default class ComplicationViewModel extends ViewModel {
+export default class GradedEffectViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.complication.entry; }
+  static get TEMPLATE() { return TEMPLATES.application.component.gradedEffect.entry; }
 
   /** @override */
-  get clazz() { return ComplicationViewModel; }
+  get clazz() { return GradedEffectViewModel; }
 
   get isEditable() { return super.isEditable; }
   set isEditable(value) {
@@ -63,61 +65,44 @@ export default class ComplicationViewModel extends ViewModel {
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {Complication} args.document 
+   * @param {GradedEffect} args.document 
    * @param {Function<void> | undefined} args.onChange Invoked when any property value of 
-   * the complication document changes. Arguments: 
+   * the document changes. Arguments: 
    * * `fieldName: String` - Name of the field/property on this instance that was changed. 
    * * `oldValue: Any` - Value prior to the change. 
    * * `newValue: Any` - Value after the change, and the current value. 
-   * @param {Function<void> | undefined} args.onDelete Invoked when the entry is to be deleted. 
    */
   constructor(args = {}) {
     super(args);
 
     this.onChange = args.onChange ?? (() => { });
-    this.onDelete = args.onDelete ?? (() => { });
 
     this.document = args.document;
     this.document.onChange = (fieldName, oldValue, newValue) => {
       this.onChange(fieldName, oldValue, newValue);
     }
 
-    this.vmName = new InputTextFieldViewModel({
-      id: "vmName",
+    const comparisonTypeOptions = ChoicesUtil.getAsChoices(COMPARISON_TYPES);
+    let comparisonTypeOption = comparisonTypeOptions[0];
+    if (ValidationUtil.isDefined(this.document.comparisonType)) {
+      comparisonTypeOption = comparisonTypeOptions.find(it => it.value === this.document.comparisonType.name);
+    }
+    this.vmComparisonType = new InputDropDownViewModel({
+      id: "vmComparisonType",
       parent: this,
-      isEditable: this.isEditable,
-      value: this.document.name,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.domain.complication.name"),
-      }),
-      onChange: (_, newValue) => {
-        this.document.name = newValue;
-      }
+      value: comparisonTypeOption,
+      options: comparisonTypeOptions,
+      onChange: (_, newVal) => {
+        this.document.comparisonType = COMPARISON_TYPES[newVal.value];
+      },
     });
-    this.vmContextMenuButton = new ButtonDropDownViewModel({
-      id: "vmContextMenuButton",
+
+    this.vmThreshold = new InputNumberSpinnerViewModel({
+      id: "vmThreshold",
       parent: this,
-      isEditable: this.isEditable,
-      content: '<i class="ico ico-burger-menu lg"></i>',
-      options: [
-        new DropDownOption({
-          localizedValue: StringUtil.getLoca("system.domain.complication.delete"),
-          onClick: () => {
-            this.onDelete();
-          },
-        }),
-      ],
-    });
-    this.vmDescription = new InputRichTextViewModel({
-      id: "vmDescription",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.general.description"),
-      }),
-      value: this.document.description,
-      onChange: (_, newValue) => {
-        this.document.description = newValue;
+      value: this.document.threshold,
+      onChange: (_, newVal) => {
+        this.document.threshold = newVal;
       },
     });
   }

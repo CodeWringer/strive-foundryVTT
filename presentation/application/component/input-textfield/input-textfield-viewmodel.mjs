@@ -1,6 +1,9 @@
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
+import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
  * Represents a text input. The user can enter an arbitrary text, but only in a single line. 
@@ -48,23 +51,30 @@ export default class InputTextFieldViewModel extends InputViewModel {
     const oldValue = this._value;
     this._value = newValue;
 
-    let readElement;
-    if (this.isReadModeClickable) {
-      readElement = this.element.find("> .read-mode > a");
-    } else {
-      readElement = this.element.find("> .read-mode");
-    }
+    let readElement = this.element.find("> .read-mode");
     readElement.html(newValue);
 
     this.inputElement.val(newValue);
 
+    if (this.enableClearButton && ValidationUtil.isBlankOrUndefined(newValue)) {
+      this.vmClear.visible = false;
+    }
+
     this.onChange(oldValue, newValue);
   }
 
-  get isReadModeClickable() { return ValidationUtil.isDefined(this.onClick); }
+  get enableClearButton() { return this._enableClearButton ?? false; }
+  set enableClearButton(value) {
+    this._enableClearButton = value;
+
+    const val = this.inputElement.val();
+    if (value && !ValidationUtil.isBlankOrUndefined(val)) {
+      this.vmClear.visible = true;
+    }
+  }
 
   /**
-   * @param {Object} args 
+   * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -74,25 +84,52 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * * default `false`. 
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * display as a tool tip. 
-   * @param {String | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.autoHandleEvents If `true`, will automatically attach 
+   * event listeners for the input element. This behavior may be undesirable by some inheritors, 
+   * which can disable it by setting this to `false`. 
+   * * default `true`
+   * @param {Any | undefined} args.value The current value. 
    * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
    * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
    * instead handles the animations. 
-   * @param {String | undefined} args.placeholder A placeholder text to display while the textfield is empty. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {String}`
-   * * `newValue: {String}`
-   * @param {Function | undefined} args.onClickInReadMode Invoked when clicking on the text displayed 
-   * in read-mode. 
+   * * `oldValue: {Any}`
+   * * `newValue: {Any}`
+   * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocus Callback that is invoked when the input element is focused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * 
+   * @param {String | undefined} args.icon Icon HTML to display in the text field. 
+   * @param {String | undefined} args.enableClearButton If `true`, when there is content in the text field, 
+   * it will display a button to quickly clear the current value. 
+   * * default `false`
    */
   constructor(args = {}) {
     super(args);
 
     this._value = args.value ?? "";
     this.placeholder = args.placeholder ?? "";
-    this.onClick = args.onClickInReadMode;
+    this.icon = args.icon;
+    this._enableClearButton = args.enableClearButton ?? false;
+
+    this.vmClear = new ButtonViewModel({
+      id: "vmClear",
+      parent: this,
+      content: '<i class="fas fa-times"></i>',
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.clearCurrentValue"),
+      }),
+      onClick: () => {
+        this.value = "";
+      },
+    });
   }
 
   /** @override */
@@ -102,10 +139,26 @@ export default class InputTextFieldViewModel extends InputViewModel {
     // Ensure the correct value is displayed. 
     this.inputElement.attr("value", this.value);
 
-    this.element.find("> .read-mode > a").click(() => {
-      if (this.isReadModeClickable) {
-        this.onClick();
+    // Ensure initial clear button visibility. 
+    if (this.enableClearButton && !ValidationUtil.isBlankOrUndefined(this.value)) {
+      this.vmClear.visible = true;
+    } else {
+      this.vmClear.visible = false;
+    }
+  }
+
+  /** @override */
+  _onInput() {
+    super._onInput();
+
+    // Ensure clear button visibility.
+    if (this.enableClearButton) {
+      const val = this.inputElement.val();
+      if (!ValidationUtil.isBlankOrUndefined(val)) {
+        this.vmClear.visible = true;
+      } else {
+        this.vmClear.visible = false;
       }
-    });
+    }
   }
 }

@@ -26,8 +26,6 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @method onClick Asynchronous callback that is invoked when 
  * the button is clicked. Arguments: 
  * * `event: Event`
- * * `data: any | undefined` - Returned data of the click callback, if 
- * there is any. 
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
@@ -59,8 +57,6 @@ export default class ButtonViewModel extends ViewModel {
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. Arguments: 
    * * `event: Event`
-   * * `data: any | undefined` - Returned data of the click callback, if 
-   * there is any. 
    */
   constructor(args = {}) {
     super(args);
@@ -77,18 +73,25 @@ export default class ButtonViewModel extends ViewModel {
       event.preventDefault(); // Prevents side-effects from event-bubbling. 
 
       if (this.isEditable === true) {
-        const data = await this._onClick(event);
-        await this.onClick(event, data);
+        this._onClick(event);
       }
     });
     this.element.on("keydown", async (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         if (this.isEditable === true) {
-          const data = await this._onClick(event);
-          await this.onClick(event, data);
+          this._onClick(event);
         }
       }
     });
+  }
+
+  /**
+   * Internal click handler. 
+   * @param {Event} event 
+   * @protected
+   */
+  _onClick(event) {
+    this.onClick(event);
   }
 }

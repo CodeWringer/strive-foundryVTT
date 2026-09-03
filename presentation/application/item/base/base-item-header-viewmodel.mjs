@@ -93,9 +93,6 @@ export default class BaseItemHeaderViewModel extends ViewModel {
       onChange: (_, newValue) => {
         this.document.name = newValue;
       },
-      onClickInReadMode: this.context === DOCUMENT_CONTEXT.embedded ? () => {
-        // TODO
-      } : null,
     });
   }
 }

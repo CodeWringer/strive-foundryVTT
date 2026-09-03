@@ -1,4 +1,5 @@
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -13,7 +14,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class ListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_LIST_ITEM; }
+  static get TEMPLATE() { return TEMPLATES.application.component.list.entry; }
 
   /**
    * @param {Object} args

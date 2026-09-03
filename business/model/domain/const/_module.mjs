@@ -14,6 +14,7 @@ import { LANGUAGE_GRADES, LanguageGrade } from "./language-grades.mjs";
 import { LANGUAGE_READ_WRITE, LanguageReadWriteState } from "./language-read-write-states.mjs";
 import { TIME_UNITS, TimeUnit } from "./time-units.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "./visibility-modes.mjs";
+import { COMPARISON_TARGET_TYPES, ComparisonTargetType } from "./comparison-target-types.mjs";
 
 /**
  * Wraps the `business.model.const` module.
@@ -46,6 +47,9 @@ export const constants = {
   LanguageReadWriteState: LanguageReadWriteState,
   LANGUAGE_READ_WRITE: LANGUAGE_READ_WRITE,
   ComparisonType: ComparisonType,
+  COMPARISON_TYPES: COMPARISON_TYPES,
+  ComparisonTargetType: ComparisonTargetType,
+  COMPARISON_TARGETS: COMPARISON_TARGET_TYPES,
   init: () => {
     common.util.constants.enrichConstant(ACTOR_TYPES);
     common.util.constants.enrichConstant(ITEM_TYPES);
@@ -53,6 +57,7 @@ export const constants = {
     common.util.constants.enrichConstant(TARGETING_TYPES);
     common.util.constants.enrichConstant(ATTRIBUTE_TYPES);
     common.util.constants.enrichConstant(COMPARISON_TYPES);
+    common.util.constants.enrichConstant(COMPARISON_TARGET_TYPES);
     common.util.constants.enrichConstant(ATTRIBUTES);
     common.util.constants.enrichConstant(CHARACTER_TEST_TYPES);
     common.util.constants.enrichConstant(DAMAGE_TYPES);

@@ -4,19 +4,18 @@ cssClass: String | undefined
 --}}
 <div id="{{viewModel.id}}" class="strive input textfield flex flex-middle strive-regular-font{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Edit mode --}}
-  <input 
-    class="edit-mode"
-    type="text"
-    name="{{viewModel.id}}"
-    value="{{viewModel.value}}"
-    placeholder="{{viewModel.placeholder}}"
-  />
+  <div class="edit-mode flex flex-row flex-middle auto-margin-h-md">
+    {{#if viewModel.icon}}{{{viewModel.icon}}}{{/if}}
+    <input 
+      type="text"
+      name="{{viewModel.id}}"
+      value="{{viewModel.value}}"
+      placeholder="{{viewModel.placeholder}}"
+    />
+    {{> button viewModel=viewModel.vmClear cssClass="pad-md" }}
+  </div>
   {{!-- Read mode --}}
   <div class="read-mode">
-    {{#if viewModel.isReadModeClickable}}
-    <a>{{viewModel.value}}</a>
-    {{else}}
     <span>{{viewModel.value}}</span>
-    {{/if}}
   </div>
 </div>

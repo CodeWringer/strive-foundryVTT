@@ -2,18 +2,24 @@
 viewModel: ListViewModel
 cssClass: String | undefined
 --}}
-<section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
-  <ul id="{{viewModel.id}}-ul" class="unstyled-list auto-margin-v">
-    {{#each viewModel.itemViewModels as |vm index|}}
-    {{#with ../viewModel.itemTemplate as |template|}}
-      {{> (template) viewModel=vm}}
-    {{/with}}
-    {{/each}}
-    {{#if viewModel.isItemAddable}}
-    {{/if}}
-  </ul>
-  {{!-- Add button --}}
-  <div class="fill flex flex-row flex-end{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
-    {{> button viewModel=viewModel.vmBtnAddItem }}
+<div id="{{viewModel.id}}"
+  class="auto-margin-v-md border-t-sm flex flex-column pad-t-md{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="auto-margin-v-md border-t-sm flex flex-column pad-t-md">
+    <div class="flex flex-row flex-middle">
+      <div class="list-header-start" style="width: 33%;"></div>
+      <div class="list-header-center flex flex-center" style="width: 33%;">
+        <h2 class="strive-regular-font">{{localize "system.item.expertise.expertises"}}</h2>
+      </div>
+      <div class="list-header-end flex flex-row flex-grow flex-middle auto-margin-h-md" style="width: 33%;">
+        {{> inputTextField viewModel=viewModel.vmSearch cssClass="flex-grow" }}
+        <span class="v-divider"></span>
+        {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="" }}
+      </div>
+    </div>
+    <div class="flex flex-row flex-middle">
+      {{{themedImage "image.underline.h1.left" "" "width: calc(50% - 1.0625rem); height: 1.25rem;"}}}
+      {{{themedImage "image.underline.h1.center" "" "width: 2.125; height: 1.25rem;"}}}
+      {{{themedImage "image.underline.h1.right" "" "width: calc(50% - 1.0625rem); height: 1.25rem;"}}}
+    </div>
   </div>
-</section>
+</div>
