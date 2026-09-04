@@ -64,9 +64,11 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
    * @param {Array<HealthConditionVisibilityItem> | undefined} args.value 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? [],
+    });
 
-    this._value = args.value ?? [];
     this.itemViewModels = this._getItemViewModels();
   }
 

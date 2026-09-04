@@ -62,10 +62,12 @@ export default class InputChoiceViewModel extends InputViewModel {
    * * `newValue: {ChoiceOption}`
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? (args.options.length > 0 ? args.options[0] : undefined),
+    });
     ValidationUtil.validateOrThrow(args, ["options"]);
 
     this.options = args.options;
-    this._value = args.value ?? (args.options.length > 0 ? args.options[0] : undefined);
   }
 }

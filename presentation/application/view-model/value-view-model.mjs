@@ -1,3 +1,5 @@
+import { Callbacks } from "../../../common/callbacks.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
@@ -38,9 +40,8 @@ import ViewModel from "./view-model.mjs";
  * 
  * @property {Any | undefined} value The current value. 
  * * Upon change, invokes the `onChange` callback. 
- * 
- * @method onChange Callback that is invoked when the value changes. 
- * Receives the following arguments: 
+ * @property {Callbacks} onChange Invoked when the value changes. 
+ * Listeners receive the following arguments: 
  * * `newValue: {Any}`
  * * `oldValue: {Any}`
  */
@@ -66,7 +67,17 @@ export default class ValueViewModel extends ViewModel {
 
     const oldValue = this.#value;
     this.#value = newValue;
-    this._onChange(newValue, oldValue);
+
+    if (ValidationUtil.isDefined(oldValue.onChange) && ValidationUtil.isDefined(oldValue.onChange.remove)) {
+      oldValue.onChange.remove(this._onValueInternalChangeId);
+    }
+    if (ValidationUtil.isDefined(newValue.onChange) && ValidationUtil.isDefined(oldValue.onChange.add)) {
+      this._onValueInternalChangeId = newValue.onChange.add((fieldName, newValue, oldValue) => {
+        this.onChange.invoke(fieldName, newValue, oldValue);
+      });
+    }
+
+    this.onChange.invoke(newValue, oldValue);
   }
 
   /**
@@ -91,26 +102,15 @@ export default class ValueViewModel extends ViewModel {
    * 
    * @param {Any | undefined} args.value Initial value. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
-   * when the value changes. Receives two arguments: 
-   * * `oldValue: {Any}`
+   * when the value changes. Receives arguments: 
    * * `newValue: {Any}`
+   * * `oldValue: {Any}`
    */
   constructor(args = {}) {
     super(args);
 
     this.#value = args.value;
-    this.onChange = args.onChange ?? (() => { });
-  }
-
-  /**
-   * Internal callback for the value change. 
-   * 
-   * @param {Any} newValue 
-   * @param {Any} oldValue 
-   * 
-   * @protected
-   */
-  _onChange(newValue, oldValue) {
-    this.onChange(newValue, oldValue);
+    this.onChange = new Callbacks();
+    this.onChange.add(args.onChange);
   }
 }

@@ -12,11 +12,6 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * 
  * @property {String} value The current value. 
  * @property {String} placeholder A localized placeholder text to display while the textfield is empty. 
- * 
- * @method onChange Callback that is invoked when the value changes. 
- * Receives the following arguments: 
- * * `oldValue: {String}`
- * * `newValue: {String}`
  */
 export default class InputTextFieldViewModel extends InputViewModel {
   /** @override */
@@ -37,19 +32,18 @@ export default class InputTextFieldViewModel extends InputViewModel {
   /**
    * Returns the current value. 
    * 
-   * @type {Any}
+   * @type {String}
    */
-  get value() { return this._value; }
+  get value() { return super.value; }
   /**
    * Sets the current value. 
    * 
-   * @param {Any} newValue
+   * @param {String} newValue
    */
   set value(newValue) {
     if (this.isDisposed) return;
 
-    const oldValue = this._value;
-    this._value = newValue;
+    super.value = newValue;
 
     let readElement = this.element.find("> .read-mode");
     readElement.html(newValue);
@@ -59,8 +53,6 @@ export default class InputTextFieldViewModel extends InputViewModel {
     if (this.enableClearButton && ValidationUtil.isBlankOrUndefined(newValue)) {
       this.vmClear.visible = false;
     }
-
-    this.onChange(newValue, oldValue);
   }
 
   get enableClearButton() { return this._enableClearButton ?? false; }
@@ -112,9 +104,11 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * * default `false`
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? "",
+    });
 
-    this._value = args.value ?? "";
     this.placeholder = args.placeholder ?? "";
     this.icon = args.icon;
     this._enableClearButton = args.enableClearButton ?? false;

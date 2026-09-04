@@ -22,7 +22,7 @@ export const UuidUtil = {
    * @returns {String} A new UUID. 
    */
   createUuid: function (useProperFormat = false) {
-    const format = useProperFormat ? this.properFormat : this.simpleFormat;
+    const format = useProperFormat ? UuidUtil.properFormat : UuidUtil.simpleFormat;
     let timestamp = new Date().getTime();
     let elapsedMicroSeconds = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0; //Time in microseconds since page-load or 0 if unsupported
 

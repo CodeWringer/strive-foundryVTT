@@ -1,12 +1,14 @@
+import { Callbacks } from "../../../common/callbacks.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { SlideDisplaceAnim } from "../../animation/slide-displace-anim.mjs";
 import { SheetUtil } from "../../util/sheet-utility.mjs";
+import ValueViewModel from "./value-view-model.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
  * Represents the basis for all input type view models. 
  * 
- * @extends ViewModel
+ * @extends ValueViewModel
  * 
  * @abstract Inheritors MUST implement:
  * * `static get TEMPLATE`
@@ -26,22 +28,22 @@ import ViewModel from "./view-model.mjs";
  * 
  * @property {Any | undefined} value The current value. 
  * * Upon change, invokes the `onChange` callback. 
- * 
- * @method onChange Callback that is invoked when the value changes. 
- * Receives the following arguments: 
- * * `oldValue: {Any}`
+ * @property {Callbacks} onChange Invoked when the value changes. 
+ * Listeners receive the following arguments: 
  * * `newValue: {Any}`
- * @method onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+ * * `oldValue: {Any}`
+ * 
+ * @property {Callbacks} onInput Invoked when any input is made (by keyboard or mouse or other input device). 
  * * `event: {Event}`
  * * `viewModel: {ViewModel}`
- * @method onFocus Callback that is invoked when the input element is focused. 
+ * @property {Callbacks} onFocus Invoked when the input element is focused. 
  * * `event: {Event}`
  * * `viewModel: {ViewModel}`
- * @method onFocusLost Callback that is invoked when the input element is unfocused. 
+ * @property {Callbacks} onFocusLost Invoked when the input element is unfocused. 
  * * `event: {Event}`
  * * `viewModel: {ViewModel}`
  */
-export default class InputViewModel extends ViewModel {
+export default class InputViewModel extends ValueViewModel {
   /**
    * Gets or sets the edit-mode of the control. 
    * 
@@ -83,7 +85,7 @@ export default class InputViewModel extends ViewModel {
    * 
    * @type {Any}
    */
-  get value() { return this._value; }
+  get value() { return super.value; }
   /**
    * Sets the current value. 
    * 
@@ -92,15 +94,14 @@ export default class InputViewModel extends ViewModel {
   set value(newValue) {
     if (this.isDisposed) return;
 
-    const oldValue = this._value;
-    this._value = newValue;
+    super.value = newValue;
 
+    // Update the read-mode value. The edit-mode value is usually already up-to-date as that is 
+    // what the user interacted with to make the value change. 
     if (ValidationUtil.isDefined(this.inputElement) && this.inputElement.length > 0) {
       const readElement = this.element.find("> .read-mode");
       readElement.html(newValue);
     }
-
-    this.onChange(newValue, oldValue);
   }
 
   /**
@@ -122,18 +123,19 @@ export default class InputViewModel extends ViewModel {
    * * default `false`. 
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {Boolean | undefined} args.autoHandleEvents If `true`, will automatically attach 
-   * event listeners for the input element. This behavior may be undesirable by some inheritors, 
-   * which can disable it by setting this to `false`. 
-   * * default `true`
    * @param {Any | undefined} args.value The current value. 
-   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
-   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
-   * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `newValue: {Any}`
    * * `oldValue: {Any}`
+   * 
+   * @param {Boolean | undefined} args.autoHandleEvents If `true`, will automatically attach 
+   * event listeners for the input element. This behavior may be undesirable by some inheritors, 
+   * which can disable it by setting this to `false`. 
+   * * default `true`
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
    * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
@@ -148,12 +150,16 @@ export default class InputViewModel extends ViewModel {
     super(args);
 
     this._autoHandleEvents = args.autoHandleEvents ?? true;
-    this._value = args.value;
     this._suppressAnims = args.suppressAnims ?? false;
-    this.onChange = args.onChange ?? (() => { });
-    this.onInput = args.onInput ?? (() => { });
-    this.onFocus = args.onFocus ?? (() => { });
-    this.onFocusLost = args.onFocusLost ?? (() => { });
+
+    this.onInput = new Callbacks();
+    this.onInput.add(args.onInput);
+
+    this.onFocus = new Callbacks();
+    this.onFocus.add(args.onFocus);
+
+    this.onFocusLost = new Callbacks();
+    this.onFocusLost.add(args.onFocusLost);
   }
 
   /** @override */
@@ -174,14 +180,20 @@ export default class InputViewModel extends ViewModel {
 
     if (ValidationUtil.isDefined(this.inputElement) && this.inputElement.length > 0) {
       $(this.inputElement).change(this._onChange.bind(this));
-      $(this.inputElement).on("input", this._onInput.bind(this));
-      $(this.inputElement).on("focus", this._onFocus.bind(this));
-      $(this.inputElement).on("focusout", this._onFocusLost.bind(this));
+      $(this.inputElement).on("input", (event) => {
+        this.onInput.invoke(event, this);
+      });
+      $(this.inputElement).on("focus", (event) => {
+        this.onFocus.invoke(event, this);
+      });
+      $(this.inputElement).on("focusout", (event) => {
+        this.onFocusLost.invoke(event, this);
+      });
     }
   }
 
   /**
-   * Internal callback for the value change. 
+   * Internal callback for the value change, triggered by the input element itself. 
    * 
    * @param {Event} event 
    * 
@@ -195,38 +207,5 @@ export default class InputViewModel extends ViewModel {
     }
 
     this.value = newValue;
-  }
-
-  /**
-   * Internal callback for onInput. 
-   * 
-   * @param {Event} event 
-   * 
-   * @protected
-   */
-  _onInput(event) {
-    this.onInput(event, this);
-  }
-
-  /**
-   * Internal callback for onFocus. 
-   * 
-   * @param {Event} event 
-   * 
-   * @protected
-   */
-  _onFocus(event) {
-    this.onFocus(event, this);
-  }
-
-  /**
-   * Internal callback for onFocusLost. 
-   * 
-   * @param {Event} event 
-   * 
-   * @protected
-   */
-  _onFocusLost(event) {
-    this.onFocusLost(event, this);
   }
 }

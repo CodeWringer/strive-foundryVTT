@@ -44,7 +44,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 
   /** @override */
-  get value() { return parseInt(this._value); }
+  get value() { return parseInt(super.value); }
   /**
    * @param {String | Number} newValue The new value to set.
    * Supports integer numbers and arithmetic formulae, e. g.
@@ -56,29 +56,25 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     try {
       parsedValue = FormulaUtility.eval(newValue);
     } catch (error) {
-      // TODO: pop-up
+      // TODO: error pop-up
     }
 
     if (!Number.isNaN(parsedValue)) {
-      const oldValue = this._value;
-      
       if (this.hasMin && parsedValue < this.min)
-        this._value = this.min;
+        super.value = this.min;
       else if (this.hasMax && parsedValue > this.max)
-        this._value = this.max;
+        super.value = this.max;
       else
-        this._value = parsedValue;
-  
-      this.onChange(this._value, oldValue);
+        super.value = parsedValue;
     }
 
     // Update visuals. 
 
-    this.inputElement[0].value = this._value + "";
+    this.inputElement[0].value = this.value + "";
 
     const readModeElement = this.element.find("> .read-mode");
     readModeElement.empty();
-    readModeElement.append(this._value);
+    readModeElement.append(this.value);
   }
 
   /**
@@ -103,8 +99,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set min(value) {
     this._min = value;
-    if (this._value < this._min) {
-      this._value = this._min;
+    if (this.value < this._min) {
+      this.value = this._min;
     }
   }
 
@@ -117,8 +113,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set max(value) {
     this._max = value;
-    if (this._value > this._max) {
-      this._value = this._max;
+    if (this.value > this._max) {
+      this.value = this._max;
     }
   }
 
@@ -167,9 +163,11 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * * `oldValue: {Number}`
    */
   constructor(args = {}) {
-    super(args);
-
-    this._value = args.value ?? 0;
+    super({
+      ...args,
+      value: args.value ?? 0,
+    });
+    
     this._min = args.min ?? undefined;
     this._max = args.max ?? undefined;
     this._step = args.step ?? 1;

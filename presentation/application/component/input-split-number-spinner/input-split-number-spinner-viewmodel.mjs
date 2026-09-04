@@ -1,3 +1,4 @@
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
@@ -72,28 +73,28 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
    */
   get value() {
     const thiz = this;
+    const superValue = FoundryWrapper.deepClone(super.value);
     return {
       /**
        * @type {Number}
        */
-      get current() { return thiz._value.current; },
+      get current() { return superValue.current; },
       set current(newValue) {
-        const oldValue = thiz._value;
-        thiz._value.current = newValue;
-        thiz.onChange(thiz._value, oldValue);
+        superValue.current = newValue;
+        thiz.value = superValue;
       },
       
       /**
        * @type {Number}
        */
-      get maximum() { return thiz._value.maximum; },
+      get maximum() { return superValue.maximum; },
       set maximum(newValue) {
-        const oldValue = thiz._value;
-        thiz._value.maximum = newValue;
+        superValue.maximum = newValue;
+        thiz.value = superValue;
+        
         if (this._isCurrentLimitedByMax && newValue < this.value.current) {
           this.vmCurrent.value = newValue;
         }
-        thiz.onChange(thiz._value, oldValue);
       },
     };
   }
@@ -103,12 +104,10 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
    * @param {Number | undefined} newValue.maximum 
    */
   set value(newValue) {
-    const oldValue = this._value;
-    this._value = {
-      current: (newValue ?? {}).current ?? this._value.current,
-      maximum: (newValue ?? {}).maximum ?? this._value.maximum,
+    super.value = {
+      current: (newValue ?? {}).current ?? this.value.current,
+      maximum: (newValue ?? {}).maximum ?? this.value.maximum,
     };
-    this.onChange(this._value, oldValue);
   }
 
   /**
@@ -175,7 +174,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
     this.vmCurrent = new InputNumberSpinnerViewModel({
       id: "vmCurrent",
       parent: this,
-      value: this._value.current,
+      value: this.value.current,
       onChange: (newValue) => {
         this.value.current = newValue;
       },
@@ -189,7 +188,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
     this.vmMaximum = new InputNumberSpinnerViewModel({
       id: "vmMaximum",
       parent: this,
-      value: this._value.maximum,
+      value: this.value.maximum,
       onChange: (newValue) => {
         this.value.maximum = newValue;
         if (this._isCurrentLimitedByMax && this.value.maximum < this.value.current) {

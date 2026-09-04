@@ -10,6 +10,7 @@ import { ConsoleLogger } from "./logging/console-logger.mjs"
 import { CompareUtility } from "./util/compare-utility.mjs"
 import { FormulaUtility } from "./util/formula-utility.mjs"
 import ConstantEntry from "./model/constant-entry.mjs"
+import { Callbacks } from "./callbacks.mjs"
 
 export const common = {
   util: {
@@ -30,4 +31,5 @@ export const common = {
   model: {
     ConstantEntry: ConstantEntry,
   },
+  Callbacks: Callbacks,
 };

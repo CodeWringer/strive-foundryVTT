@@ -38,9 +38,11 @@ export default class InputTextareaViewModel extends InputViewModel {
    * * `newValue: {String}`
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? "",
+    });
 
-    this._value = args.value ?? "";
     this.spellcheck = args.spellcheck ?? false;
     this.placeholder = args.placeholder ?? "";
   }

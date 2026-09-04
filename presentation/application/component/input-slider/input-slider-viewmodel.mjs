@@ -90,13 +90,15 @@ export default class InputSliderViewModel extends InputViewModel {
    * * default `args.min`
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? args.min,
+    });
 
     ValidationUtil.validateOrThrow(args, ["min", "max"]);
 
     this._min = args.min;
     this._max = args.max;
     this._step = args.step ?? 1;
-    this._value = args.value ?? args.min;
   }
 }

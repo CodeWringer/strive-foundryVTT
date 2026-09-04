@@ -38,9 +38,10 @@ export default class InputToggleViewModel extends InputViewModel {
    * * `newValue: {Boolean}`
    */
   constructor(args = {}) {
-    super(args);
-
-    this._value = args.value ?? false;
+    super({
+      ...args,
+      value: args.value ?? false,
+    });
   }
 
   /** @override */

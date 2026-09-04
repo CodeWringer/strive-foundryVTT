@@ -52,6 +52,7 @@ import TraitItemSheetViewModel from "./item/trait/trait-item-sheet-viewmodel.mjs
 import TraitHeaderViewModel from "./item/trait/trait-header-viewmodel.mjs";
 import TraitContentViewModel from "./item/trait/trait-content-viewmodel.mjs";
 import TraitItemSheet from "./item/trait/trait-item-sheet.mjs";
+import ValueViewModel from "./view-model/value-view-model.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -64,6 +65,7 @@ export const application = {
     ViewModel: ViewModel,
     ViewModelToolTipDefinition: ViewModelToolTipDefinition,
     ViewModelCollection: ViewModelCollection,
+    ValueViewModel: ValueViewModel,
     InputViewModel: InputViewModel,
     base: {
       BaseItemHeaderViewModel: BaseItemHeaderViewModel,
