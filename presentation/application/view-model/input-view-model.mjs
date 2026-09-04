@@ -100,7 +100,7 @@ export default class InputViewModel extends ViewModel {
       readElement.html(newValue);
     }
 
-    this.onChange(oldValue, newValue);
+    this.onChange(newValue, oldValue);
   }
 
   /**
@@ -110,16 +110,6 @@ export default class InputViewModel extends ViewModel {
    * @virtual
    */
   get inputElement() { return this.element.find("input"); }
-
-  /**
-   * Set to `true` when updating the value without wanting events to fire. 
-   * 
-   * This is intended to prevent infinite circular onChange invocations. For use by inheritors 
-   * who want to update the displayed value, but without triggering callbacks. 
-   * @type {Boolean}
-   * @protected
-   */
-  _suppressEvent = false;
 
   /**
    * @param {Object} args
@@ -142,8 +132,8 @@ export default class InputViewModel extends ViewModel {
    * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * * `oldValue: {Any}`
    * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
@@ -198,7 +188,6 @@ export default class InputViewModel extends ViewModel {
    * @protected
    */
   _onChange(event) {
-    if (this._suppressEvent) return;
     const newValue = SheetUtil.getElementValue(event.currentTarget);
 
     if (ValidationUtil.isDefined(newValue) !== true) {

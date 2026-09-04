@@ -58,7 +58,7 @@ export default class ListViewModel extends ViewModel {
   set value(newValue) {
     const oldValue = this._value;
     this._value = newValue;
-    this.onChange(oldValue, newValue);
+    this.onChange(newValue, oldValue);
   }
 
   /**
@@ -83,8 +83,8 @@ export default class ListViewModel extends ViewModel {
    * 
    * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
    * Receives the following arguments: 
-   * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * * `oldValue: {Any}`
    */
   constructor(args = {}) {
     super(args);

@@ -36,7 +36,7 @@ export default class RecipeHeaderViewModel extends BaseItemHeaderViewModel {
         localized: StringUtil.getLoca("system.item.projectAndRecipe.quality"),
       }),
       value: this.document.quality,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.quality = newValue;
       },
     });
@@ -48,7 +48,7 @@ export default class RecipeHeaderViewModel extends BaseItemHeaderViewModel {
         localized: StringUtil.getLoca("system.item.projectAndRecipe.progress.required"),
       }),
       value: this.document.requiredProgress,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.requiredProgress = newValue;
       },
     });

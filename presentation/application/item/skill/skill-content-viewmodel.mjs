@@ -47,7 +47,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         localized: StringUtil.getLoca("system.general.description"),
       }),
       value: this.document.description,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.description = newValue;
       },
     });
@@ -58,7 +58,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.skill.actionPoints"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.actionPoints.current = newValue;
       },
     });
@@ -69,7 +69,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.skill.distance"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.distance.current = newValue;
       },
     });
@@ -85,7 +85,13 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       value: currentTargetingType,
       options: targetingTypeOptions,
       showValue: false,
-      onChange: (_, newValue) => {
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.format(
+          StringUtil.getLoca("system.domain.targetingType.targetingTypeOf"),
+          currentTargetingType.localizedValue,
+        ),
+      }),
+      onChange: (newValue) => {
         this.document.targetingType.current = TARGETING_TYPES[newValue.value];
       },
     });
@@ -97,7 +103,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.skill.obstacle"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.obstacle.current = newValue;
       },
     });
@@ -108,7 +114,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.skill.opposedBy"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.opposedBy.current = newValue;
       },
     });
@@ -127,7 +133,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         value: this.#getMaximumAdvancementProgress(),
         allowEditing: false,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.advancement.progress = newValue.current;
       },
     });
@@ -136,7 +142,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       id: "vmGradedEffects",
       parent: this,
       value: this.document.gradedEffects.entries,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.gradedEffects.entries = newValue;
       },
     });

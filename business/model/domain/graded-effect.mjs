@@ -46,7 +46,7 @@ export default class GradedEffect extends Persistable {
   set comparisonType(value) {
     const old = this.#comparisonType;
     this.#comparisonType = value;
-    this.onChange("comparisonType", old, value);
+    this.onChange("comparisonType", value, old);
   }
 
   /**
@@ -58,7 +58,7 @@ export default class GradedEffect extends Persistable {
   set threshold(value) {
     const old = this.#threshold;
     this.#threshold = value;
-    this.onChange("threshold", old, value);
+    this.onChange("threshold", value, old);
   }
 
   /**
@@ -70,7 +70,7 @@ export default class GradedEffect extends Persistable {
   set comparisonTarget(value) {
     const old = this.#comparisonTarget;
     this.#comparisonTarget = value;
-    this.onChange("comparisonTarget", old, value);
+    this.onChange("comparisonTarget", value, old);
   }
 
   /**
@@ -82,7 +82,7 @@ export default class GradedEffect extends Persistable {
   set unstructured(value) {
     const old = this.#unstructured;
     this.#unstructured = value;
-    this.onChange("unstructured", old, value);
+    this.onChange("unstructured", value, old);
   }
 
   /**
@@ -94,6 +94,10 @@ export default class GradedEffect extends Persistable {
    * any effect, but without program support. 
    * @param {Array<Modifier> | undefined} args.modifiers Fire-and-forget modifiers that 
    * will be applied by this effect. 
+   * @param {Function<void> | undefined} args.onChange Invoked when any property value changes. Arguments: 
+   * * `fieldName: String` - Name of the field/property on this instance that was changed. 
+   * * `newValue: Any` - Value after the change, and the current value. 
+   * * `oldValue: Any` - Value prior to the change. 
    */
   constructor(args = {}) {
     super(args);

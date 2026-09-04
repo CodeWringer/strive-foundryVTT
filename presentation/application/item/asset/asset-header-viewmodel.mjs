@@ -44,7 +44,7 @@ export default class AssetHeaderViewModel extends BaseItemHeaderViewModel {
         value: this.document.quantity.maximum,
         min: 0,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.quantity.current = newValue.current;
         this.document.quantity.maximum = newValue.maximum > 0 ? newValue.maximum : null;
       },

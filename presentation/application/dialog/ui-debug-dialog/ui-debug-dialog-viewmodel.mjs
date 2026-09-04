@@ -57,7 +57,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
             toolTip: new ViewModelToolTipDefinition({
               localized: "Text Field",
             }),
-            onChange: (_, newValue) => {
+            onChange: (newValue) => {
               this._vmTextFieldValue = newValue;
             },
           });
@@ -76,7 +76,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
               localized: "Dropdown",
             }),
             options: this._vmDropDownOptions,
-            onChange: (_, newValue) => {
+            onChange: (newValue) => {
               this._vmDropDownValue = newValue;
             },
           });
@@ -94,7 +94,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
             toolTip: new ViewModelToolTipDefinition({
               localized: "Number Spinner",
             }),
-            onChange: (_, newValue) => {
+            onChange: (newValue) => {
               this._vmNumberSpinnerValue = newValue;
             },
           });
@@ -117,7 +117,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
               value: this._vmSplitNumberSpinnerValue.maximum,
             },
             isEditable: false,
-            onChange: (_, newValue) => {
+            onChange: (newValue) => {
               this._vmSplitNumberSpinnerValue = newValue;
             },
           });
@@ -137,7 +137,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
             toolTip: new ViewModelToolTipDefinition({
               localized: "Reference",
             }),
-            onChange: (_, newValue) => {
+            onChange: (newValue) => {
               this._vmReferenceValue = newValue;
             },
           });
@@ -155,7 +155,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
             toolTip: new ViewModelToolTipDefinition({
               localized: "Rich Text",
             }),
-            onChange: (_, newValue) => {
+            onChange: (newValue) => {
               this._vmRichTextValue = newValue;
             },
           });
@@ -173,7 +173,7 @@ export default class UiDebugDialogViewModel extends ViewModel {
             toolTip: new ViewModelToolTipDefinition({
               localized: "Image",
             }),
-            onChange: (_, newValue) => {
+            onChange: (newValue) => {
               this._vmImgValue = newValue;
             },
           });

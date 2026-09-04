@@ -37,7 +37,7 @@ export default class ActorBiographyViewModel extends ViewModel {
       parent: thiz,
       id: "vmRtBiography",
       value: thiz.document.person.biography,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         thiz.document.person.biography = newValue;
       },
     });

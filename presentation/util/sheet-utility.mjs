@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import { Rect } from "./rect.mjs";
 
 /**
@@ -93,11 +94,16 @@ export const SheetUtil = {
   getElementRect(element) {
     const elm = $(element)
     const parentPos = elm.offset();
-    return new Rect({
-      x: parentPos.left,
-      y: parentPos.top,
-      width: elm.outerWidth(),
-      height: elm.outerHeight(),
-    });
+    if (ValidationUtil.isDefined(parentPos)) {
+      return new Rect({
+        x: parentPos.left,
+        y: parentPos.top,
+        width: elm.outerWidth(),
+        height: elm.outerHeight(),
+      });
+    } else {
+      game.strive.logger.logWarn("Failed to get 'parentPos'");
+      return new Rect();
+    }
   }
 }

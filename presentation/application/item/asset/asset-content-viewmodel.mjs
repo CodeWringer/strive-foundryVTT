@@ -38,7 +38,7 @@ export default class AssetContentViewModel extends BaseItemContentViewModel {
         localized: StringUtil.getLoca("system.general.description"),
       }),
       value: this.document.description,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.description = newValue;
       },
     });
@@ -50,7 +50,7 @@ export default class AssetContentViewModel extends BaseItemContentViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.asset.bulk"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.bulk = newValue;
       },
     });
@@ -62,7 +62,7 @@ export default class AssetContentViewModel extends BaseItemContentViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.asset.quality"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.quality = newValue;
       },
     });
@@ -71,7 +71,7 @@ export default class AssetContentViewModel extends BaseItemContentViewModel {
       parent: this,
       isEditable: this.isEditable,
       value: this.document.complications,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.complications = newValue;
       },
     });

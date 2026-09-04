@@ -208,7 +208,7 @@ export default class ActorHealthViewModel extends ViewModel {
       localizedToolTip: game.i18n.localize("system.character.health.hp.label"),
       value: this.document.health.HP,
       min: 0,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.health.HP = newValue;
       },
     });
@@ -224,7 +224,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: this,
       localizedToolTip: this.showReminders ? `${maxHpToolTip}<br><br>${maxHpExplanation}` : maxHpToolTip,
       value: this.document.health.modifiedMaxHp,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.health.maxHpModifier = newValue - this.document.health.maxHP;
       },
     });
@@ -279,7 +279,7 @@ export default class ActorHealthViewModel extends ViewModel {
       localizedToolTip: game.i18n.localize("system.character.health.exhaustion.label"),
       value: this.document.health.exhaustion,
       min: 0,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.health.exhaustion = newValue;
       },
     });
@@ -295,7 +295,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmMaxExhaustion",
       value: this.document.health.modifiedMaxExhaustion,
       localizedToolTip: this.showReminders ? `${maxExhaustionToolTip}<br><br>${maxExhaustionExplanation}` : maxExhaustionToolTip,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.health.maxExhaustionModifier = newValue - this.document.health.maxExhaustion;
       },
     });

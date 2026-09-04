@@ -49,7 +49,7 @@ export default class GmNotesViewModel extends ViewModel {
       parent: thiz,
       id: "vmRtGmNotes",
       value: thiz.document.gmNotes,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         thiz.document.gmNotes = newValue;
       },
     });

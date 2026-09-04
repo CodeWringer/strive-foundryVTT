@@ -73,7 +73,7 @@ export default class ActorFateViewModel extends ViewModel {
       parent: this,
       id: "vmNsMifp",
       value: this.document.fateSystem.miFP,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.fateSystem.miFP = newValue;
       },
       min: 0,
@@ -82,7 +82,7 @@ export default class ActorFateViewModel extends ViewModel {
       parent: this,
       id: "vmNsMafp",
       value: this.document.fateSystem.maFP,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.fateSystem.maFP = newValue;
       },
       min: 0,
@@ -91,7 +91,7 @@ export default class ActorFateViewModel extends ViewModel {
       parent: this,
       id: "vmNsAfp",
       value: this.document.fateSystem.AFP,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.fateSystem.AFP = newValue;
       },
       min: 0,

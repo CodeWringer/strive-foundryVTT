@@ -77,7 +77,7 @@ export default class AbilityLevelViewModel extends InputViewModel {
       parent: this,
       value: this.value,
       toolTip: args.levelToolTip,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.value = newValue;
       },
     });

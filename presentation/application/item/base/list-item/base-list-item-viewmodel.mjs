@@ -249,7 +249,7 @@ export default class BaseListItemViewModel extends ViewModel {
       parent: this,
       id: "vmImg",
       value: this.document.img,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.img = newValue;
       },
     });
@@ -266,7 +266,7 @@ export default class BaseListItemViewModel extends ViewModel {
         parent: this,
         id: "vmRtDescription",
         value: this.document.description,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           this.document.description = newValue;
         },
       });
@@ -277,7 +277,7 @@ export default class BaseListItemViewModel extends ViewModel {
         id: "vmGmNotes",
         value: this.document.gmNotes,
         localizedToolTip: game.i18n.localize("system.general.messageVisibility.gm.secrets"),
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           this.document.gmNotes = newValue;
         },
       });

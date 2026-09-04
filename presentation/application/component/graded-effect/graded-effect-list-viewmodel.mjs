@@ -1,14 +1,16 @@
 import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { SlideInAnim } from "../../../animation/slide-in-anim.mjs";
+import { SlideOutAnim } from "../../../animation/slide-out-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
-import InputViewModel from "../../view-model/input-view-model.mjs";
-import { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
 import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import GradedEffectViewModel from "./graded-effect-viewmodel.mjs";
 
-export default class GradedEffectListViewModel extends InputViewModel {
+export default class GradedEffectListViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.gradedEffect.list; }
 
@@ -16,19 +18,33 @@ export default class GradedEffectListViewModel extends InputViewModel {
   get clazz() { return GradedEffectListViewModel; }
 
   /**
+   * @type {GradedEffect}
+   * @private
+   */
+  #value;
+  /**
    * Returns the current value. 
    * 
-   * @type {Array<GradedEffect>}
+   * @type {GradedEffect}
    */
-  get value() { return super.value; }
+  get value() { return this.#value; }
   /**
    * Sets the current value. 
    * 
-   * @param {Array<GradedEffect>} newValue
+   * @param {GradedEffect} newValue
    */
   set value(newValue) {
-    super.value = newValue;
+    if (this.isDisposed) return;
 
+    const oldValue = this.#value;
+    this.#value = newValue;
+
+    if (ValidationUtil.isDefined(this.inputElement) && this.inputElement.length > 0) {
+      const readElement = this.element.find("> .read-mode");
+      readElement.html(newValue);
+    }
+
+    this.onChange(newValue, oldValue);
     this._render();
   }
 
@@ -37,6 +53,21 @@ export default class GradedEffectListViewModel extends InputViewModel {
    * @private
    */
   entryViewModels = [];
+
+  get isEditable() { return super.isEditable; }
+  set isEditable(value) {
+    super.isEditable = value;
+
+    if (value) {
+      new SlideInAnim({
+        elm: this.vmContextMenuButton.element,
+      }).execute();
+    } else {
+      new SlideOutAnim({
+        elm: this.vmContextMenuButton.element,
+      }).execute();
+    }
+  }
 
   /**
    * @param {Object} args
@@ -58,8 +89,8 @@ export default class GradedEffectListViewModel extends InputViewModel {
    * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * * `oldValue: {Any}`
    * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
@@ -73,11 +104,9 @@ export default class GradedEffectListViewModel extends InputViewModel {
    * @param {Array<GradedEffect> | undefined} args.value
    */
   constructor(args = {}) {
-    super({
-      ...args,
-      value: args.value ?? [],
-    });
+    super(args);
 
+    this.#value = args.value ?? [];
     this.entryViewModels = this.#getMappedViewModels();
 
     this.vmContextMenuButton = new ButtonDropDownViewModel({
@@ -85,6 +114,7 @@ export default class GradedEffectListViewModel extends InputViewModel {
       parent: this,
       isEditable: this.isEditable,
       content: '<i class="ico ico-burger-menu lg"></i>',
+      visible: this.isEditable,
       options: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.domain.gradedEffect.add"),
@@ -95,33 +125,6 @@ export default class GradedEffectListViewModel extends InputViewModel {
         }),
       ],
     });
-
-    this.vmSearch = new InputTextFieldViewModel({
-      id: "vmSearch",
-      parent: this,
-      value: this._searchValue,
-      isEditable: true,
-      icon: '<i class="ico ico-search lg"></i>',
-      enableClearButton: true,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.expertise.search"),
-      }),
-      onChange: (_, newValue) => {
-        this._searchValue = newValue;
-      },
-      onFocus: () => {
-        this.element.find(".list-header-start").stop(true, true);
-        this.element.find(".list-header-start").animate({
-          width: 0,
-        }, 300);
-      },
-      onFocusLost: () => {
-        this.element.find(".list-header-start").stop(true, true);
-        this.element.find(".list-header-start").animate({
-          width: "33%",
-        }, 300);
-      },
-    });
   }
 
   /**
@@ -129,6 +132,8 @@ export default class GradedEffectListViewModel extends InputViewModel {
    * @protected
    */
   async _render() {
+    if (!ValidationUtil.isDefined(this.element) || this.element.length === 0) return;
+
     for (const vm of this.entryViewModels) {
       vm.dispose();
       vm.parent = undefined;
@@ -184,7 +189,7 @@ export default class GradedEffectListViewModel extends InputViewModel {
     const index = this.value.findIndex(it => it == entry);
     const oldEntry = thisOldValue[index];
     oldEntry[fieldName] = oldValue;
-    this.onChange(thisOldValue, this.value);
+    this.onChange(this.value, thisOldValue);
   }
 
   /**

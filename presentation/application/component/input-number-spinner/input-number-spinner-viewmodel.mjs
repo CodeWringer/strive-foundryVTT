@@ -69,7 +69,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
       else
         this._value = parsedValue;
   
-      this.onChange(oldValue, this._value);
+      this.onChange(this._value, oldValue);
     }
 
     // Update visuals. 
@@ -163,8 +163,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * * default `1`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Number}`
    * * `newValue: {Number}`
+   * * `oldValue: {Number}`
    */
   constructor(args = {}) {
     super(args);

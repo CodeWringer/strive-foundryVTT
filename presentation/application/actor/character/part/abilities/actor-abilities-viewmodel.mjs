@@ -183,7 +183,7 @@ export default class ActorAbilitiesViewModel extends ViewModel {
         parent: this,
         value: this.document.advancement.xp,
         min: 0,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           this.document.advancement.xp = newValue;
         },
       });

@@ -67,8 +67,8 @@ export default class GradedEffectViewModel extends ViewModel {
    * @param {Function<void> | undefined} args.onChange Invoked when any property value of 
    * the document changes. Arguments: 
    * * `fieldName: String` - Name of the field/property on this instance that was changed. 
-   * * `oldValue: Any` - Value prior to the change. 
    * * `newValue: Any` - Value after the change, and the current value. 
+   * * `oldValue: Any` - Value prior to the change. 
    */
   constructor(args = {}) {
     super(args);
@@ -76,8 +76,8 @@ export default class GradedEffectViewModel extends ViewModel {
     this.onChange = args.onChange ?? (() => { });
 
     this.document = args.document;
-    this.document.onChange = (fieldName, oldValue, newValue) => {
-      this.onChange(fieldName, oldValue, newValue);
+    this.document.onChange = (fieldName, newValue, oldValue) => {
+      this.onChange(fieldName, newValue, oldValue);
     }
 
     const comparisonTypeOptions = ChoicesUtil.getAsChoices(COMPARISON_TYPES);
@@ -90,7 +90,7 @@ export default class GradedEffectViewModel extends ViewModel {
       parent: this,
       value: comparisonTypeOption,
       options: comparisonTypeOptions,
-      onChange: (_, newVal) => {
+      onChange: (newVal) => {
         this.document.comparisonType = COMPARISON_TYPES[newVal.value];
       },
     });
@@ -99,7 +99,7 @@ export default class GradedEffectViewModel extends ViewModel {
       id: "vmThreshold",
       parent: this,
       value: this.document.threshold,
-      onChange: (_, newVal) => {
+      onChange: (newVal) => {
         this.document.threshold = newVal;
       },
     });

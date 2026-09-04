@@ -44,7 +44,7 @@ export default class ProjectHeaderViewModel extends BaseItemHeaderViewModel {
         value: this.document.progress.total,
         min: 0,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.progress.current = newValue.current;
         this.document.progress.total = newValue.maximum;
       },

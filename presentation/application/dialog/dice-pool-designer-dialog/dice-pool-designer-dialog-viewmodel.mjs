@@ -83,7 +83,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: this._uiState.value.dieFaces,
       value: this._uiState.value.hitThreshold,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           hitThreshold: newValue,
@@ -96,7 +96,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: this._uiState.value.dieFaces,
       value: this._uiState.value.hitThreshold,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           hitThreshold: newValue,
@@ -110,7 +110,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: 30,
       value: this._uiState.value.diceLimit,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           diceLimit: newValue,
@@ -123,7 +123,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.diceLimit,
       min: 1,
       max: 30,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           diceLimit: newValue,
@@ -137,7 +137,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: 30,
       value: this._uiState.value.obLimit,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           obLimit: newValue,
@@ -150,7 +150,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.obLimit,
       min: 1,
       max: 30,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           obLimit: newValue,
@@ -164,7 +164,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 2,
       max: 20,
       value: this._uiState.value.dieFaces,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           dieFaces: newValue,
@@ -177,7 +177,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.dieFaces,
       min: 2,
       max: 20,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           dieFaces: newValue,
@@ -191,7 +191,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: -20,
       max: 20,
       value: this._uiState.value.modifier,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           modifier: newValue,
@@ -204,7 +204,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.modifier,
       min: -20,
       max: 20,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           modifier: newValue,
@@ -219,7 +219,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       max: 10000,
       step: 100,
       value: this._uiState.value.sampleSize,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           sampleSize: newValue,
@@ -233,7 +233,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: 10000,
       step: 100,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           sampleSize: newValue,
@@ -247,7 +247,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 0,
       max: 20,
       value: this._uiState.value.compensationPoints,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           compensationPoints: newValue,
@@ -260,7 +260,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.compensationPoints,
       min: 0,
       max: 20,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           compensationPoints: newValue,

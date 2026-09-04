@@ -40,7 +40,7 @@ export default class LanguageHeaderViewModel extends BaseItemHeaderViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.language.grade.grade"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.grade = LANGUAGE_GRADES[newValue.value];
       },
     });
@@ -59,7 +59,7 @@ export default class LanguageHeaderViewModel extends BaseItemHeaderViewModel {
       value: currentReadAndWriteOption,
       options: readAndWriteOptions,
       showValue: false,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.readAndWrite = newValue.value === "able";
         this.vmReadAndWrite.setToolTipContent(StringUtil.format(
           StringUtil.getLoca("system.item.language.readAndWrite.readAndWriteWithCurrent"),

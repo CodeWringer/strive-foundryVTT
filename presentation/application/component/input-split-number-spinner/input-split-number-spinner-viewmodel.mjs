@@ -80,7 +80,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       set current(newValue) {
         const oldValue = thiz._value;
         thiz._value.current = newValue;
-        thiz.onChange(oldValue, thiz._value);
+        thiz.onChange(thiz._value, oldValue);
       },
       
       /**
@@ -93,7 +93,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
         if (this._isCurrentLimitedByMax && newValue < this.value.current) {
           this.vmCurrent.value = newValue;
         }
-        thiz.onChange(oldValue, thiz._value);
+        thiz.onChange(thiz._value, oldValue);
       },
     };
   }
@@ -108,7 +108,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       current: (newValue ?? {}).current ?? this._value.current,
       maximum: (newValue ?? {}).maximum ?? this._value.maximum,
     };
-    this.onChange(oldValue, this._value);
+    this.onChange(this._value, oldValue);
   }
 
   /**
@@ -124,8 +124,8 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
    * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * * `oldValue: {Any}`
    * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
@@ -176,7 +176,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       id: "vmCurrent",
       parent: this,
       value: this._value.current,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.value.current = newValue;
       },
       min: current.min,
@@ -190,7 +190,7 @@ export default class InputSplitNumberSpinnerViewModel extends InputViewModel {
       id: "vmMaximum",
       parent: this,
       value: this._value.maximum,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.value.maximum = newValue;
         if (this._isCurrentLimitedByMax && this.value.maximum < this.value.current) {
           this.vmCurrent.value = this.value.maximum;

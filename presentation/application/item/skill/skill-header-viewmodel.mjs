@@ -48,7 +48,7 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
       rollButtonToolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.skill.roll"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.level = newValue;
       },
       onRoll: () => {
@@ -77,7 +77,7 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
         parent: this,
         value: value,
         options: attributeOptions,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           const newAttributes = (this.document.baseAttributes ?? []).concat([]);
           while (newAttributes.length <= i) {
             newAttributes.push(ATTRIBUTES.agility);

@@ -77,7 +77,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       id: "vmVisibilityList",
       parent: this,
       value: this.stateVisibilityItems,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.stateVisibilityItems = newValue;
       }
     });

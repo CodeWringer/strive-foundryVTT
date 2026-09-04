@@ -16,7 +16,7 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
           parent: this,
           id: "vmNsMifp",
           value: this.document.cost.miFP,
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.cost.miFP = newValue;
           },
           min: 0,
@@ -30,7 +30,7 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
           parent: this,
           id: "vmNsMafp",
           value: this.document.cost.maFP,
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.cost.maFP = newValue;
           },
           min: 0,
@@ -44,7 +44,7 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
           parent: this,
           id: "vmNsAfp",
           value: this.document.cost.AFP,
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.cost.AFP = newValue;
           },
           min: 0,

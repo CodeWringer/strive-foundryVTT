@@ -113,7 +113,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
       id: "vmNsRequiredLevel",
       value: this.document.requiredLevel,
       localizedToolTip: game.i18n.localize("system.character.skill.expertise.requirement"),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.requiredLevel = newValue;
       },
       min: 0,
@@ -124,7 +124,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
         id: `vmDamageDefinitionList`,
         parent: this,
         value: this.document.damage,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           if (ValidationUtil.isDefined(newValue) && newValue.length > 0) {
             this.document.damage = newValue;
           } else {
@@ -149,7 +149,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmApCost",
           value: this.document.apCost,
           min: 0,
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.apCost = newValue;
           },
         }),
@@ -164,7 +164,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmObstacle",
           value: this.document.obstacle,
           placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.obstacle = newValue;
           },
         }),
@@ -179,7 +179,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmOpposedBy",
           value: this.document.opposedBy,
           placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.opposedBy = newValue;
           },
         }),
@@ -194,7 +194,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmCondition",
           value: this.document.condition,
           placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.condition = newValue;
           },
         }),
@@ -209,7 +209,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmDistance",
           value: this.document.distance,
           placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.distance = newValue;
           },
         }),
@@ -224,7 +224,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           options: attackTypeChoices,
           value: ValidationUtil.isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === TARGETING_TYPES.none.name),
-          onChange: (_, newValue) => {
+          onChange: (newValue) => {
             this.document.attackType = TARGETING_TYPES[newValue.value];
           },
         }),

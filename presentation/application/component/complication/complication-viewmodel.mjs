@@ -67,8 +67,8 @@ export default class ComplicationViewModel extends ViewModel {
    * @param {Function<void> | undefined} args.onChange Invoked when any property value of 
    * the complication document changes. Arguments: 
    * * `fieldName: String` - Name of the field/property on this instance that was changed. 
-   * * `oldValue: Any` - Value prior to the change. 
    * * `newValue: Any` - Value after the change, and the current value. 
+   * * `oldValue: Any` - Value prior to the change. 
    * @param {Function<void> | undefined} args.onDelete Invoked when the entry is to be deleted. 
    */
   constructor(args = {}) {
@@ -78,8 +78,8 @@ export default class ComplicationViewModel extends ViewModel {
     this.onDelete = args.onDelete ?? (() => { });
 
     this.document = args.document;
-    this.document.onChange = (fieldName, oldValue, newValue) => {
-      this.onChange(fieldName, oldValue, newValue);
+    this.document.onChange = (fieldName, newValue, oldValue) => {
+      this.onChange(fieldName, newValue, oldValue);
     }
 
     this.vmName = new InputTextFieldViewModel({
@@ -90,7 +90,7 @@ export default class ComplicationViewModel extends ViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.domain.complication.name"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.name = newValue;
       }
     });
@@ -115,7 +115,7 @@ export default class ComplicationViewModel extends ViewModel {
         localized: StringUtil.getLoca("system.general.description"),
       }),
       value: this.document.description,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.description = newValue;
       },
     });

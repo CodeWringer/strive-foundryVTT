@@ -151,8 +151,8 @@ export default class ComplicationListViewModel extends InputViewModel {
       id: `complication-${index++}`,
       parent: this,
       document: complication,
-      onChange: (fieldName, oldValue, _) => {
-        this.#onComplicationChange(fieldName, oldValue, complication);
+      onChange: (fieldName, oldValue) => {
+        this.#onComplicationChange(fieldName, complication, oldValue);
       },
       onDelete: () => {
         this.#onComplicationDelete(complication);
@@ -163,11 +163,11 @@ export default class ComplicationListViewModel extends InputViewModel {
   /**
    * Internal handler of a Complication's internal value change. 
    * @param {String} fieldName 
-   * @param {Any} oldValue 
    * @param {Complication} complication 
+   * @param {Any} oldValue 
    * @private
    */
-  #onComplicationChange(fieldName, oldValue, complication) {
+  #onComplicationChange(fieldName, complication, oldValue) {
     const thisOldValue = this.value.map(c => new Complication({
       name: c.name,
       description: c.description,
@@ -175,7 +175,7 @@ export default class ComplicationListViewModel extends InputViewModel {
     const index = this.value.findIndex(it => it == complication);
     const oldComplication = thisOldValue[index];
     oldComplication[fieldName] = oldValue;
-    this.onChange(thisOldValue, this.value);
+    this.onChange(this.value, thisOldValue);
   }
 
   /**

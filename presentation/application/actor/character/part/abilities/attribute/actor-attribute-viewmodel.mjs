@@ -100,7 +100,7 @@ export default class ActorAttributeViewModel extends ViewModel {
       value: this.characterAttribute.level,
       min: 0,
       localizedToolTip: attributeToolTip,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.characterAttribute.level = newValue;
       },
     });
@@ -116,7 +116,7 @@ export default class ActorAttributeViewModel extends ViewModel {
         modifiedLevel: this.characterAttribute.modifiedLevel,
       }),
       contentCssClass: "font-bold font-size-lg",
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.characterAttribute.levelModifier = newValue - this.characterAttribute.level;
       },
       displayValueMapper: (value) => {

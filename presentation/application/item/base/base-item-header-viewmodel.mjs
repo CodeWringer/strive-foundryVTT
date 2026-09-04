@@ -78,7 +78,7 @@ export default class BaseItemHeaderViewModel extends ViewModel {
         localized: StringUtil.getLoca("system.general.image"),
       }),
       value: this.document.img,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.img = newValue;
       },
     });
@@ -90,7 +90,7 @@ export default class BaseItemHeaderViewModel extends ViewModel {
         localized: StringUtil.getLoca("system.general.name.documentName"),
       }),
       value: this.document.name,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.name = newValue;
       },
     });

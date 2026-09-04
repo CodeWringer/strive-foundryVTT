@@ -58,8 +58,8 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Array<HealthConditionVisibilityItem>}`
    * * `newValue: {Array<HealthConditionVisibilityItem>}`
+   * * `oldValue: {Array<HealthConditionVisibilityItem>}`
    * 
    * @param {Array<HealthConditionVisibilityItem> | undefined} args.value 
    */
@@ -110,7 +110,7 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
             value: newValue,
           });
 
-          this.onChange(oldItemArray, newItemArray);
+          this.onChange(newItemArray, oldItemArray);
         }
       })
     );

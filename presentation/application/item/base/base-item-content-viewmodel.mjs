@@ -77,7 +77,7 @@ export default class BaseItemContentViewModel extends ViewModel {
         parent: this,
         isEditable: this.isEditable,
         value: this.document.gmNotes,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           this.document.gmNotes = newValue;
         },
       });

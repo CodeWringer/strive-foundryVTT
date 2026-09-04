@@ -91,7 +91,7 @@ export default class GritPointsViewModel extends ViewModel {
       value: this.document.gritPoints.current,
       min: 0,
       localizedToolTip: game.i18n.localize("system.character.gritPoint.plural"),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.gritPoints.current = newValue;
       },
     });

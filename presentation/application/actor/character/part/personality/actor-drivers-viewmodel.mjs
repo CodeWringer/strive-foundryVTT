@@ -66,7 +66,7 @@ export default class ActorDriversViewModel extends ViewModel {
       id: "vmTfAmbition",
       value: this.document.driverSystem.ambition,
       placeholder: game.i18n.localize("system.character.driverSystem.ambition.placeholder"),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.driverSystem.ambition = newValue;
       },
     });
@@ -89,7 +89,7 @@ export default class ActorDriversViewModel extends ViewModel {
         id: `vmAspiration-${i}`,
         value: this.document.driverSystem.aspirations[`_${i}`],
         placeholder: game.i18n.localize(aspirationPlaceholders[i]),
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           this.document.driverSystem.aspirations[`_${i}`] = newValue;
         },
       }));
@@ -113,7 +113,7 @@ export default class ActorDriversViewModel extends ViewModel {
         id: `vmReaction-${i}`,
         value: this.document.driverSystem.reactions[`_${i}`],
         placeholder: game.i18n.localize(reactionPlaceholders[i]),
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           this.document.driverSystem.reactions[`_${i}`] = newValue;
         },
       }));

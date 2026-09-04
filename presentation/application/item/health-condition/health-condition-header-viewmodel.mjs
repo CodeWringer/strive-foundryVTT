@@ -44,7 +44,7 @@ export default class HealthConditionHeaderViewModel extends BaseItemHeaderViewMo
         value: this.document.maximum,
         min: 0,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.current = newValue.current;
         this.document.maximum = newValue.maximum > 0 ? newValue.maximum : null;
       },

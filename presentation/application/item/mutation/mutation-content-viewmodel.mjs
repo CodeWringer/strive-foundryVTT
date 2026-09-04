@@ -36,7 +36,7 @@ export default class MutationContentViewModel extends BaseItemContentViewModel {
         localized: StringUtil.getLoca("system.general.description"),
       }),
       value: this.document.description,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.description = newValue;
       },
     });

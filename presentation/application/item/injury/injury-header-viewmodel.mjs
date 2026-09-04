@@ -49,7 +49,7 @@ export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
         value: this.document.healProgress.required,
         min: 0,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.healProgress.current = newValue.current;
         this.document.healProgress.required = newValue.maximum;
 
@@ -71,7 +71,7 @@ export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
       options: stateOptions,
       showValue: false,
       value: currentStateOption,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.state = INJURY_STATES[newValue.value];
         this.vmState.setToolTipContent(StringUtil.format(
           StringUtil.getLoca("system.item.injury.state.stateWithCurrent"),

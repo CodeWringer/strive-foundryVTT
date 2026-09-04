@@ -48,7 +48,7 @@ export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
         id: "vmMomentum",
         isEditable: true,
         value: data.combat.momentum,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           data.combat.momentum = newValue;
         },
       });

@@ -40,7 +40,7 @@ export default class IllnessContentViewModel extends BaseItemContentViewModel {
         localized: StringUtil.getLoca("system.general.description"),
       }),
       value: this.document.description,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.description = newValue;
       },
     });
@@ -52,7 +52,7 @@ export default class IllnessContentViewModel extends BaseItemContentViewModel {
         localized: StringUtil.getLoca("system.item.illness.treatment.date"),
       }),
       value: this.document.treatment.lastTreatmentTime,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.treatment.lastTreatmentTime = newValue;
       },
     });
@@ -64,7 +64,7 @@ export default class IllnessContentViewModel extends BaseItemContentViewModel {
         localized: StringUtil.getLoca("system.item.illness.treatment.obstacle"),
       }),
       value: this.document.treatment.obstacle,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.treatment.obstacle = newValue;
       },
     });
@@ -77,7 +77,7 @@ export default class IllnessContentViewModel extends BaseItemContentViewModel {
       }),
       acceptedTypes: [ITEM_TYPES.skill],
       value: this.document.treatment.skill,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.treatment.skill = newValue;
       },
     });
@@ -90,7 +90,7 @@ export default class IllnessContentViewModel extends BaseItemContentViewModel {
       }),
       value: this.document.treatment.requiredSupplies.amount,
       min: 0,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.treatment.requiredSupplies.amount = newValue;
       },
     });
@@ -103,7 +103,7 @@ export default class IllnessContentViewModel extends BaseItemContentViewModel {
       }),
       acceptedTypes: [ITEM_TYPES.asset],
       value: this.document.treatment.requiredSupplies.asset,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.treatment.requiredSupplies.asset = newValue;
       },
     });

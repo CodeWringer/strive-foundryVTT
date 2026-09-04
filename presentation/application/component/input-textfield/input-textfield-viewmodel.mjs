@@ -60,7 +60,7 @@ export default class InputTextFieldViewModel extends InputViewModel {
       this.vmClear.visible = false;
     }
 
-    this.onChange(oldValue, newValue);
+    this.onChange(newValue, oldValue);
   }
 
   get enableClearButton() { return this._enableClearButton ?? false; }
@@ -94,8 +94,8 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * instead handles the animations. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Any}`
    * * `newValue: {Any}`
+   * * `oldValue: {Any}`
    * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`

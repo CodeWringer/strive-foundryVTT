@@ -41,7 +41,7 @@ export default class InputImageViewModel extends InputViewModel {
     const editElement = this.element.find("> .edit-mode > img");
     editElement.attr("src", newValue);
 
-    this.onChange(oldValue, newValue);
+    this.onChange(newValue, oldValue);
   }
 
   /**
@@ -64,8 +64,8 @@ export default class InputImageViewModel extends InputViewModel {
    * @param {String | undefined} args.value The current value. Must be a URL string. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {String | undefined}`
    * * `newValue: {String | undefined}`
+   * * `oldValue: {String | undefined}`
    */
   constructor(args = {}) {
     super(args);

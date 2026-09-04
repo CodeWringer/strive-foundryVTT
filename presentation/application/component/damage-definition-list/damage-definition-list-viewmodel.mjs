@@ -74,7 +74,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
         value: damageDefinition,
         localizedLabel: game.i18n.localize(damageDefinition.damageType.localizableName),
         iconClass: damageDefinition.damageType.iconClass,
-        onChange: (_, newItemValue) => {
+        onChange: (newItemValue) => {
           if (ValidationUtil.isDefined(newItemValue) !== true) return;
           
           const newDamageDefinitions = this.value.concat([]);
