@@ -39,7 +39,7 @@ export default class BaseSheetViewModel extends ViewModel {
     // Prepare scroll value. 
     this.saveScrollPosition();
 
-    game.strive.viewModels.set(this.id, this);
+    game.strive.viewModels.add(this);
   }
 
   /** @override */
