@@ -4,17 +4,6 @@ import { SheetUtil } from "../../util/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
- * Constant that defines the css class to look for when identifying input elements for editing. 
- * @constant
- */
-export const SELECTOR_EDIT = "custom-system-edit";
-/**
- * Constant that defines the css class to look for when identifying input elements for display. 
- * @constant
- */
-export const SELECTOR_READ = "custom-system-read-only";
-
-/**
  * Represents the basis for all input type view models. 
  * 
  * @extends ViewModel
@@ -66,7 +55,7 @@ export default class InputViewModel extends ViewModel {
 
     const editElement = this.element.find("> .edit-mode");
     const readElement = this.element.find("> .read-mode");
-    if (!this._suppressAnims) {
+    if (!this._suppressAnims && editElement.length > 0 && readElement.length > 0) {
       if (value) {
         new SlideDisplaceAnim({
           displacingElement: editElement,

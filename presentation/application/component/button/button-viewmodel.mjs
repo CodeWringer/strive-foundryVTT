@@ -2,13 +2,6 @@ import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
- * Constant that defines the css class to look for when identifying button elements. 
- * 
- * @constant
- */
-export const SELECTOR_BUTTON = "custom-system-button";
-
-/**
  * This is a basic implementation of a clickable button, that calls a given callback function 
  * when clicked. 
  * 
