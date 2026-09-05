@@ -133,6 +133,11 @@
   .embolden {
     background-color: $c-border-dark;
     color: $c-text-light;
+    
+    * {
+      background-color: $c-border-dark;
+      color: $c-text-light;
+    }
   }
 }
 
@@ -191,6 +196,11 @@
   .embolden {
     background-color: $c-border-light;
     color: $c-text-dark;
+    
+    * {
+      background-color: $c-border-light;
+      color: $c-text-dark;
+    }
   }
 }
 

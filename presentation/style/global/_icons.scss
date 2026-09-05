@@ -101,322 +101,92 @@ li.directory-item > img.thumbnail {
   padding: 5px;
 }
 
-// Specific light-mode icons -> use dark variants!
-.theme-light {
-  .ico-action-point {
-    background-image: url("/systems/strive/presentation/image/action-point-dark.svg");
+/**
+ * @param $className CSS name of the icon class, including the dot. E.g. `".ico-less-than"`
+ * @param $urlPartial URL name of the icon, excluding the path up to and including the image dir, 
+ * and excluding the "-dark.svg" or "-light.svg" suffix. These will be added automatically. 
+ * E.g. `"less-than"` will create the full URL `"/systems/strive/presentation/image/less-than-dark.svg"` 
+ * (with an equivalent for the "light" theme, as well.)
+ */
+@mixin icon-template($className, $urlPartial) {
+  // In light-mode, use dark variants!
+  .theme-light {
+    #{$className} {
+      background-image: url("/systems/strive/presentation/image/" + $urlPartial + "-dark.svg");
+    }
+    // Embolden inverts the color-scheme.
+    .embolden #{$className} {
+      background-image: url("/systems/strive/presentation/image/" + $urlPartial + "-light.svg");
+    }
   }
-  .ico-action-point-sm {
-    background-image: url("/systems/strive/presentation/image/action-point-sm-dark.svg");
+  // In dark-mode, use light variants!
+  .theme-dark {
+    #{$className} {
+      background-image: url("/systems/strive/presentation/image/" + $urlPartial + "-light.svg");
+    }
+    // Embolden inverts the color-scheme.
+    .embolden #{$className} {
+      background-image: url("/systems/strive/presentation/image/" + $urlPartial + "-dark.svg");
+    }
   }
-  .ico-arrow-right {
-    background-image: url("/systems/strive/presentation/image/arrow-right-dark.svg");
-  }
-  .ico-bag {
-    background-image: url("/systems/strive/presentation/image/bag-dark.svg");
-  }
-  .ico-bulk {
-    background-image: url("/systems/strive/presentation/image/bulk-dark.svg");
-  }
-  .ico-burger-menu {
-    background-image: url("/systems/strive/presentation/image/burger-menu-dark.svg");
-  }
-  .ico-cannot-read {
-    background-image: url("/systems/strive/presentation/image/cannot-read-dark.svg");
-  }
-  .ico-can-read {
-    background-image: url("/systems/strive/presentation/image/can-read-dark.svg");
-  }
-  .ico-chain-link {
-    background-image: url("/systems/strive/presentation/image/chain-link-dark.svg");
-  }
-  .ico-chain-link-broken {
-    background-image: url("/systems/strive/presentation/image/chain-link-broken-dark.svg");
-  }
-  .ico-complications {
-    background-image: url("/systems/strive/presentation/image/complications-dark.svg");
-  }
-  .ico-die {
-    background-image: url("/systems/strive/presentation/image/die-dark.svg");
-  }
-  .ico-distance {
-    background-image: url("/systems/strive/presentation/image/distance-dark.svg");
-  }
-  .ico-dumbbell {
-    background-image: url("/systems/strive/presentation/image/dumbbell-dark.svg");
-  }
-  .ico-edit {
-    background-image: url("/systems/strive/presentation/image/edit-dark.svg");
-  }
-  .ico-equals {
-    background-image: url("/systems/strive/presentation/image/equals-dark.svg");
-  }
-  .ico-expertise {
-    background-image: url("/systems/strive/presentation/image/expertise-dark.svg");
-  }
-  .ico-eye-slash {
-    background-image: url("/systems/strive/presentation/image/eye-slash-dark.svg");
-  }
-  .ico-floppy {
-    background-image: url("/systems/strive/presentation/image/floppy-dark.svg");
-  }
-  .ico-greater-than {
-    background-image: url("/systems/strive/presentation/image/greater-than-dark.svg");
-  }
-  .ico-greater-than-equals {
-    background-image: url("/systems/strive/presentation/image/greater-than-equals-dark.svg");
-  }
-  .ico-healing-progress {
-    background-image: url("/systems/strive/presentation/image/healing-progress-dark.svg");
-  }
-  .ico-health-condition {
-    background-image: url("/systems/strive/presentation/image/health-condition-dark.svg");
-  }
-  .ico-illness-state-active {
-    background-image: url("/systems/strive/presentation/image/illness-state-active-dark.svg");
-  }
-  .ico-illness-state-treated {
-    background-image: url("/systems/strive/presentation/image/illness-state-treated-dark.svg");
-  }
-  .ico-infinity {
-    background-image: url("/systems/strive/presentation/image/infinity-dark.svg");
-  }
-  .ico-language {
-    background-image: url("/systems/strive/presentation/image/language-dark.svg");
-  }
-  .ico-less-than {
-    background-image: url("/systems/strive/presentation/image/less-than-dark.svg");
-  }
-  .ico-less-than-equals {
-    background-image: url("/systems/strive/presentation/image/less-than-equals-dark.svg");
-  }
-  .ico-injury-state-active {
-    background-image: url("/systems/strive/presentation/image/injury-state-active-dark.svg");
-  }
-  .ico-injury-state-treated {
-    background-image: url("/systems/strive/presentation/image/injury-state-treated-dark.svg");
-  }
-  .ico-mutation {
-    background-image: url("/systems/strive/presentation/image/mutation-dark.svg");
-  }
-  .ico-obstacle {
-    background-image: url("/systems/strive/presentation/image/obstacle-dark.svg");
-  }
-  .ico-project {
-    background-image: url("/systems/strive/presentation/image/project-dark.svg");
-  }
-  .ico-pushes {
-    background-image: url("/systems/strive/presentation/image/pushes-dark.svg");
-  }
-  .ico-quality {
-    background-image: url("/systems/strive/presentation/image/quality-dark.svg");
-  }
-  .ico-quantity {
-    background-image: url("/systems/strive/presentation/image/quantity-dark.svg");
-  }
-  .ico-recipe {
-    background-image: url("/systems/strive/presentation/image/recipe-dark.svg");
-  }
-  .ico-search {
-    background-image: url("/systems/strive/presentation/image/search-dark.svg");
-  }
-  .ico-skill {
-    background-image: url("/systems/strive/presentation/image/skill-dark.svg");
-  }
-  .ico-speech-bubble {
-    background-image: url("/systems/strive/presentation/image/speech-bubble-dark.svg");
-  }
-  .ico-targeting-type-aoe {
-    background-image: url("/systems/strive/presentation/image/targeting-type-aoe-dark.svg");
-  }
-  .ico-targeting-type-multi {
-    background-image: url("/systems/strive/presentation/image/targeting-type-multi-dark.svg");
-  }
-  .ico-targeting-type-single {
-    background-image: url("/systems/strive/presentation/image/targeting-type-single-dark.svg");
-  }
-  .ico-time {
-    background-image: url("/systems/strive/presentation/image/time-dark.svg");
-  }
-  .ico-trait {
-    background-image: url("/systems/strive/presentation/image/trait-dark.svg");
-  }
-  .ico-treatment-supplies {
-    background-image: url("/systems/strive/presentation/image/treatment-supplies-dark.svg");
-  }
-  .ico-treatment-date {
-    background-image: url("/systems/strive/presentation/image/treatment-date-dark.svg");
-  }
-  .ico-triangle-down {
-    background-image: url("/systems/strive/presentation/image/triangle-down-dark.svg");
-  }
-  .ico-triangle-left {
-    background-image: url("/systems/strive/presentation/image/triangle-left-dark.svg");
-  }
-  .ico-triangle-right {
-    background-image: url("/systems/strive/presentation/image/triangle-right-dark.svg");
-  }
-  .ico-triangle-up {
-    background-image: url("/systems/strive/presentation/image/triangle-up-dark.svg");
-  }
-}
+};
 
-// Specific dark-mode icons -> use light variants!
-.theme-dark {
-  .ico-action-point {
-    background-image: url("/systems/strive/presentation/image/action-point-light.svg");
-  }
-  .ico-action-point-sm {
-    background-image: url("/systems/strive/presentation/image/action-point-sm-light.svg");
-  }
-  .ico-arrow-right {
-    background-image: url("/systems/strive/presentation/image/arrow-right-light.svg");
-  }
-  .ico-bag {
-    background-image: url("/systems/strive/presentation/image/bag-light.svg");
-  }
-  .ico-bulk {
-    background-image: url("/systems/strive/presentation/image/bulk-light.svg");
-  }
-  .ico-burger-menu {
-    background-image: url("/systems/strive/presentation/image/burger-menu-light.svg");
-  }
-  .ico-cannot-read {
-    background-image: url("/systems/strive/presentation/image/cannot-read-light.svg");
-  }
-  .ico-can-read {
-    background-image: url("/systems/strive/presentation/image/can-read-light.svg");
-  }
-  .ico-chain-link {
-    background-image: url("/systems/strive/presentation/image/chain-link-light.svg");
-  }
-  .ico-chain-link-broken {
-    background-image: url("/systems/strive/presentation/image/chain-link-broken-light.svg");
-  }
-  .ico-complications {
-    background-image: url("/systems/strive/presentation/image/complications-light.svg");
-  }
-  .ico-die {
-    background-image: url("/systems/strive/presentation/image/die-light.svg");
-  }
-  .ico-distance {
-    background-image: url("/systems/strive/presentation/image/distance-light.svg");
-  }
-  .ico-dumbbell {
-    background-image: url("/systems/strive/presentation/image/dumbbell-light.svg");
-  }
-  .ico-edit {
-    background-image: url("/systems/strive/presentation/image/edit-light.svg");
-  }
-  .ico-equals {
-    background-image: url("/systems/strive/presentation/image/equals-light.svg");
-  }
-  .ico-expertise {
-    background-image: url("/systems/strive/presentation/image/expertise-light.svg");
-  }
-  .ico-eye-slash {
-    background-image: url("/systems/strive/presentation/image/eye-slash-light.svg");
-  }
-  .ico-floppy {
-    background-image: url("/systems/strive/presentation/image/floppy-light.svg");
-  }
-  .ico-greater-than {
-    background-image: url("/systems/strive/presentation/image/greater-than-light.svg");
-  }
-  .ico-greater-than-equals {
-    background-image: url("/systems/strive/presentation/image/greater-than-equals-light.svg");
-  }
-  .ico-healing-progress {
-    background-image: url("/systems/strive/presentation/image/healing-progress-light.svg");
-  }
-  .ico-health-condition {
-    background-image: url("/systems/strive/presentation/image/health-condition-light.svg");
-  }
-  .ico-illness-state-active {
-    background-image: url("/systems/strive/presentation/image/illness-state-active-light.svg");
-  }
-  .ico-illness-state-treated {
-    background-image: url("/systems/strive/presentation/image/illness-state-treated-light.svg");
-  }
-  .ico-infinity {
-    background-image: url("/systems/strive/presentation/image/infinity-light.svg");
-  }
-  .ico-language {
-    background-image: url("/systems/strive/presentation/image/language-light.svg");
-  }
-  .ico-less-than {
-    background-image: url("/systems/strive/presentation/image/less-than-light.svg");
-  }
-  .ico-less-than-equals {
-    background-image: url("/systems/strive/presentation/image/less-than-equals-light.svg");
-  }
-  .ico-injury-state-active {
-    background-image: url("/systems/strive/presentation/image/injury-state-active-light.svg");
-  }
-  .ico-injury-state-treated {
-    background-image: url("/systems/strive/presentation/image/injury-state-treated-light.svg");
-  }
-  .ico-mutation {
-    background-image: url("/systems/strive/presentation/image/mutation-light.svg");
-  }
-  .ico-obstacle {
-    background-image: url("/systems/strive/presentation/image/obstacle-light.svg");
-  }
-  .ico-project {
-    background-image: url("/systems/strive/presentation/image/project-light.svg");
-  }
-  .ico-pushes {
-    background-image: url("/systems/strive/presentation/image/pushes-light.svg");
-  }
-  .ico-quality {
-    background-image: url("/systems/strive/presentation/image/quality-light.svg");
-  }
-  .ico-quantity {
-    background-image: url("/systems/strive/presentation/image/quantity-light.svg");
-  }
-  .ico-recipe {
-    background-image: url("/systems/strive/presentation/image/recipe-light.svg");
-  }
-  .ico-search {
-    background-image: url("/systems/strive/presentation/image/search-light.svg");
-  }
-  .ico-skill {
-    background-image: url("/systems/strive/presentation/image/skill-light.svg");
-  }
-  .ico-speech-bubble {
-    background-image: url("/systems/strive/presentation/image/speech-bubble-light.svg");
-  }
-  .ico-targeting-type-aoe {
-    background-image: url("/systems/strive/presentation/image/targeting-type-aoe-light.svg");
-  }
-  .ico-targeting-type-multi {
-    background-image: url("/systems/strive/presentation/image/targeting-type-multi-light.svg");
-  }
-  .ico-targeting-type-single {
-    background-image: url("/systems/strive/presentation/image/targeting-type-single-light.svg");
-  }
-  .ico-time {
-    background-image: url("/systems/strive/presentation/image/time-light.svg");
-  }
-  .ico-trait {
-    background-image: url("/systems/strive/presentation/image/trait-light.svg");
-  }
-  .ico-treatment-supplies {
-    background-image: url("/systems/strive/presentation/image/treatment-supplies-light.svg");
-  }
-  .ico-treatment-date {
-    background-image: url("/systems/strive/presentation/image/treatment-date-light.svg");
-  }
-  .ico-triangle-down {
-    background-image: url("/systems/strive/presentation/image/triangle-down-light.svg");
-  }
-  .ico-triangle-left {
-    background-image: url("/systems/strive/presentation/image/triangle-left-light.svg");
-  }
-  .ico-triangle-right {
-    background-image: url("/systems/strive/presentation/image/triangle-right-light.svg");
-  }
-  .ico-triangle-up {
-    background-image: url("/systems/strive/presentation/image/triangle-up-light.svg");
-  }
-}
+// What follows are all the icon definitions. ALL of these are expected to conform to a 10x10 px 
+// square size constraint and to be vector graphics files with the "svg" extension. 
+// Note these automatically respect the current theme via CSS. 
+// Note that if you are looking for larger images, such as the header underlines, they are not 
+// listed here. They are handled by a different mechanism and can be accessed via the TEMPLATES
+// constant. 
+
+@include icon-template(".ico-action-point-sm", "action-point-sm");
+@include icon-template(".ico-action-point", "action-point");
+@include icon-template(".ico-arrow-right", "arrow-right");
+@include icon-template(".ico-bag", "bag");
+@include icon-template(".ico-bulk", "bulk");
+@include icon-template(".ico-burger-menu", "burger-menu");
+@include icon-template(".ico-can-read", "can-read");
+@include icon-template(".ico-cannot-read", "cannot-read");
+@include icon-template(".ico-chain-link-broken", "chain-link-broken");
+@include icon-template(".ico-chain-link", "chain-link");
+@include icon-template(".ico-complications", "complications");
+@include icon-template(".ico-die", "die");
+@include icon-template(".ico-distance", "distance");
+@include icon-template(".ico-dumbbell", "dumbbell");
+@include icon-template(".ico-edit", "edit");
+@include icon-template(".ico-equals", "equals");
+@include icon-template(".ico-expertise ", "expertise");
+@include icon-template(".ico-eye-slash ", "eye-slash");
+@include icon-template(".ico-floppy ", "floppy");
+@include icon-template(".ico-greater-than-equals", "greater-than-equals");
+@include icon-template(".ico-greater-than", "greater-than");
+@include icon-template(".ico-healing-progress", "healing-progress");
+@include icon-template(".ico-health-condition", "health-condition");
+@include icon-template(".ico-illness-state-active", "illness-state-active");
+@include icon-template(".ico-illness-state-treated", "illness-state-treated");
+@include icon-template(".ico-infinity", "infinity");
+@include icon-template(".ico-injury-state-active", "injury-state-active");
+@include icon-template(".ico-injury-state-treated", "injury-state-treated");
+@include icon-template(".ico-language", "language");
+@include icon-template(".ico-less-than-equals", "less-than-equals");
+@include icon-template(".ico-less-than", "less-than");
+@include icon-template(".ico-mutation", "mutation");
+@include icon-template(".ico-obstacle", "obstacle");
+@include icon-template(".ico-project", "project");
+@include icon-template(".ico-pushes", "pushes");
+@include icon-template(".ico-quality", "quality");
+@include icon-template(".ico-quantity", "quantity");
+@include icon-template(".ico-recipe", "recipe");
+@include icon-template(".ico-search", "search");
+@include icon-template(".ico-skill", "skill");
+@include icon-template(".ico-speech-bubble", "speech-bubble");
+@include icon-template(".ico-targeting-type-aoe", "targeting-type-aoe");
+@include icon-template(".ico-targeting-type-multi", "targeting-type-multi");
+@include icon-template(".ico-targeting-type-single", "targeting-type-single");
+@include icon-template(".ico-time", "time");
+@include icon-template(".ico-trait", "trait");
+@include icon-template(".ico-treatment-date", "treatment-date");
+@include icon-template(".ico-treatment-supplies", "treatment-supplies");
+@include icon-template(".ico-triangle-down", "triangle-down");
+@include icon-template(".ico-triangle-left", "triangle-left");
+@include icon-template(".ico-triangle-right", "triangle-right");
+@include icon-template(".ico-triangle-up", "triangle-up");
