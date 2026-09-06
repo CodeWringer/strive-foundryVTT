@@ -124,6 +124,7 @@
         "query": "Select %s to Add"
       },
       "adjustInputLabel": "Amount to add/subtract",
+      "additionalContentHint": "Hold 'Alt' to see more",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "contextMenu": "Context-Menu",

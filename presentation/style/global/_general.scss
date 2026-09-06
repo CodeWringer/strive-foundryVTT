@@ -134,7 +134,16 @@
     background-color: $c-border-dark;
     color: $c-text-light;
     
-    * {
+    *,
+    input[type=text],
+    input[type=number],
+    input[type=password],
+    input[type=date],
+    input[type=time],
+    input[type=datetime-local],
+    input[type=search],
+    input[type=file],
+    select {
       background-color: $c-border-dark;
       color: $c-text-light;
     }
@@ -197,7 +206,16 @@
     background-color: $c-border-light;
     color: $c-text-dark;
     
-    * {
+    *,
+    input[type=text],
+    input[type=number],
+    input[type=password],
+    input[type=date],
+    input[type=time],
+    input[type=datetime-local],
+    input[type=search],
+    input[type=file],
+    select {
       background-color: $c-border-light;
       color: $c-text-dark;
     }
@@ -286,6 +304,30 @@
   }
   &-lg {
     width: 6rem;
+    max-width: 6rem;
+  }
+}
+
+.min-width {
+  &-sm {
+    min-width: 3rem;
+  }
+  &-md {
+    min-width: 4rem;
+  }
+  &-lg {
+    min-width: 6rem;
+  }
+}
+
+.max-width {
+  &-sm {
+    max-width: 3rem;
+  }
+  &-md {
+    max-width: 4rem;
+  }
+  &-lg {
     max-width: 6rem;
   }
 }

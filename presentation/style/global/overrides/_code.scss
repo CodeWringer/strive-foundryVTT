@@ -2,9 +2,18 @@ code {
   padding: 0 .4em;
   margin: 0;
   white-space: nowrap;
-  background-color: $c-bg-dark;
-  border-radius: 6px;
-  border: 1px solid $c-bg-dark;
+  border-radius: .3em;
   font-family: unset;
   font-weight: bold;
+}
+
+.theme-light {
+  code {
+    background-color: $c-bg-light-secondary;
+  }
+}
+.theme-dark {
+  code {
+    background-color: $c-bg-dark-secondary;
+  }
 }

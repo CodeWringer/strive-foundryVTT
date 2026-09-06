@@ -149,6 +149,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     this.#readModeElement = this.element.find("> .read-mode");
 
     // Ensure the correct value is displayed initially. 
+    
     let newContent = this.value.iconHtml;
     if (this.showValue) {
       newContent = `${newContent}<span>${this.value.localizedValue}</span>`;
@@ -156,5 +157,8 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
 
     this.#editValueElement.empty();
     this.#editValueElement.append(newContent);
+
+    this.#readModeElement.empty();
+    this.#readModeElement.append(newContent);
   }
 }

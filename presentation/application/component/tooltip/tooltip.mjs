@@ -1,4 +1,5 @@
 import { common } from "../../../../common/_module.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { MODIFIER_KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
@@ -79,6 +80,19 @@ export default class Tooltip {
   }
 
   /**
+   * @type {String}
+   */
+  #content = "";
+  get content() {
+    if (ValidationUtil.isNotBlankOrUndefined(this.additionalContent) && !this._modifierIsDown) {
+      const localizedAdditionalHint = StringUtil.getLoca("system.general.additionalContentHint");
+      return `${this.#content} | (${localizedAdditionalHint})`;
+    } else {
+      return this.#content;
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id A unique identifier. 
    * @param {JQuery | undefined} args.anchorElement The element to which to anchor the tooltip. 
@@ -108,7 +122,7 @@ export default class Tooltip {
     this._id = common.util.uuid.sanitizeId(args.id ?? common.util.uuid.createUuid());
 
     this.anchorElement = args.anchorElement;
-    this.content = args.content;
+    this.#content = args.content;
     this.additionalContent = args.additionalContent;
     this.modifierKey = args.modifierKey ?? MODIFIER_KEY_CODES.ALT,
     this.maxWidth = args.maxWidth ?? "50rem";
@@ -148,6 +162,7 @@ export default class Tooltip {
           this._modifierIsDown = true;
           if (ValidationUtil.isDefined(this._element)) {
             this._element.html(`<div class="flex flex-column">${this.content}<hr>${this.additionalContent}</div>`);
+            this._resizeElement();
           }
         },
       });
@@ -157,6 +172,7 @@ export default class Tooltip {
           this._modifierIsDown = false;
           if (ValidationUtil.isDefined(this._element)) {
             this._element.html(this.content);
+            this._resizeElement();
           }
         },
       });
@@ -198,78 +214,7 @@ export default class Tooltip {
       this._element.html(this.content);
     }
 
-    // Determine position and bounds. 
-
-    // Get tool tip size. 
-    const size = {
-      width: this._element.outerWidth(),
-      height: this._element.outerHeight(),
-    };
-
-    const parentRect = this._getParentRect();
-    // By default, try to horizontally center above the anchor element. 
-    const tooltipRect = new Rect({
-      x: parentRect.left + (parentRect.width / 2) - (size.width / 2),
-      y: parentRect.top - (size.height + Tooltip.ARROW_SIZE),
-      width: size.width,
-      height: size.height,
-    });
-    let arrowCssClass = "with-arrow-b";
-
-    // Now ensure the tool tip stays bounded in the window.
-
-    // Flags to keep track of which window borders the tool tip rectangle is out-of-bounds. 
-    let oobTop = false;
-    let oobBottom = false;
-    let oobLeft = false;
-    let oobRight = false;
-
-    if (tooltipRect.top < 0) {
-      oobTop = true;
-    } else if (tooltipRect.bottom > window.screen.height) {
-      oobBottom = true;
-    }
-    if (tooltipRect.left < 0) {
-      oobLeft = true;
-    } else if (tooltipRect.right > window.screen.width) {
-      oobRight = true;
-    }
-
-    if (oobTop && oobLeft) {
-      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
-      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
-      arrowCssClass = "with-arrow-tl";
-    } else if (oobTop && oobRight) {
-      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
-      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
-      arrowCssClass = "with-arrow-tr";
-    } else if (oobBottom && oobLeft) {
-      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
-      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
-      arrowCssClass = "with-arrow-bl";
-    } else if (oobBottom && oobRight) {
-      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
-      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
-      arrowCssClass = "with-arrow-br";
-    } else if (oobTop) {
-      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
-      arrowCssClass = "with-arrow-t";
-    } else if (oobBottom) {
-      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
-      arrowCssClass = "with-arrow-b";
-    } else if (oobLeft) {
-      tooltipRect.top = parentRect.top + (parentRect.height / 2) - (tooltipRect.height / 2);
-      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
-      arrowCssClass = "with-arrow-l";
-    } else if (oobRight) {
-      tooltipRect.top = parentRect.top + (parentRect.height / 2) - (tooltipRect.height / 2);
-      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
-      arrowCssClass = "with-arrow-r";
-    }
-
-    const cssClass = `${Tooltip.CSS_CLASS} ${arrowCssClass}`;
-    this._element.attr("class", cssClass);
-    this._element.attr("style", `left: ${tooltipRect.left}px; top: ${tooltipRect.top}px; max-width: ${this.maxWidth}; ${this.style}`);
+    this._resizeElement();
     this.onShown();
   }
 
@@ -342,5 +287,82 @@ export default class Tooltip {
    */
   _getParentRect() {
     return SheetUtil.getElementRect(this.anchorElement);
+  }
+
+  /**
+   * Resizes and re-positions the tool tip element. 
+   * @private
+   */
+  _resizeElement() {
+    // Get tool tip size. 
+    const size = {
+      width: this._element.outerWidth(),
+      height: this._element.outerHeight(),
+    };
+
+    const parentRect = this._getParentRect();
+    // By default, try to horizontally center above the anchor element. 
+    const tooltipRect = new Rect({
+      x: parentRect.left + (parentRect.width / 2) - (size.width / 2),
+      y: parentRect.top - (size.height + Tooltip.ARROW_SIZE),
+      width: size.width,
+      height: size.height,
+    });
+    let arrowCssClass = "with-arrow-b";
+
+    // Now ensure the tool tip stays bounded in the window.
+
+    // Flags to keep track of which window borders the tool tip rectangle is out-of-bounds. 
+    let oobTop = false;
+    let oobBottom = false;
+    let oobLeft = false;
+    let oobRight = false;
+
+    if (tooltipRect.top < 0) {
+      oobTop = true;
+    } else if (tooltipRect.bottom > window.screen.height) {
+      oobBottom = true;
+    }
+    if (tooltipRect.left < 0) {
+      oobLeft = true;
+    } else if (tooltipRect.right > window.screen.width) {
+      oobRight = true;
+    }
+
+    if (oobTop && oobLeft) {
+      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
+      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-tl";
+    } else if (oobTop && oobRight) {
+      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
+      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-tr";
+    } else if (oobBottom && oobLeft) {
+      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
+      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-bl";
+    } else if (oobBottom && oobRight) {
+      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
+      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-br";
+    } else if (oobTop) {
+      tooltipRect.top = parentRect.bottom + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-t";
+    } else if (oobBottom) {
+      tooltipRect.top = parentRect.top - (tooltipRect.height + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-b";
+    } else if (oobLeft) {
+      tooltipRect.top = parentRect.top + (parentRect.height / 2) - (tooltipRect.height / 2);
+      tooltipRect.left = parentRect.right + Tooltip.ARROW_SIZE;
+      arrowCssClass = "with-arrow-l";
+    } else if (oobRight) {
+      tooltipRect.top = parentRect.top + (parentRect.height / 2) - (tooltipRect.height / 2);
+      tooltipRect.left = parentRect.left - (tooltipRect.width + Tooltip.ARROW_SIZE);
+      arrowCssClass = "with-arrow-r";
+    }
+
+    const cssClass = `${Tooltip.CSS_CLASS} ${arrowCssClass}`;
+    this._element.attr("class", cssClass);
+    this._element.attr("style", `left: ${tooltipRect.left}px; top: ${tooltipRect.top}px; max-width: ${this.maxWidth}; ${this.style}`);
   }
 }
