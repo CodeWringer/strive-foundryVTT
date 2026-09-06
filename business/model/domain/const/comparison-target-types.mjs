@@ -23,10 +23,10 @@ export class ComparisonTargetType {
 export const COMPARISON_TARGET_TYPES = {
   hit: new ComparisonTargetType({
     name: "hit",
-    localizableName: "system.general.hit",
+    localizableName: "system.general.comparisonTargetType.hit",
   }),
   attribute: new ComparisonTargetType({
     name: "attribute",
-    localizableName: "system.domain.attribute.attribute",
+    localizableName: "system.general.comparisonTargetType.attribute",
   }),
 };

@@ -7,17 +7,9 @@ import Modifier from "./modifier.mjs";
 /**
  * Represents a graded effect. 
  * 
- * For example, this can be used to represent the damage gradings based 
- * on the number of Hits an attacker achieved:
- * 
- * The combination of `comparison`, `threshold` and `comparisonTarget` 
- * results in the grading. For example "greater or equal to 3 Hits":
- * `comparison: COMPARISON_TYPES.greater_equals`, `threshold: 3`, 
- * `comparisonTarget: new ComparisonTarget({ type: COMPARISON_TARGETS.hit })`
- * 
  * @property {ComparisonType} comparisonType 
  * @property {Number} threshold 
- * @property {ComparisonTargetType} comparisonTarget 
+ * @property {ComparisonTarget} comparisonTarget 
  * @property {String | null} unstructured Free form text that may represent 
  * any effect, but without program support. 
  * @property {Array<Modifier>} modifiers Fire-and-forget modifiers that 

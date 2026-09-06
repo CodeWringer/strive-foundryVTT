@@ -141,6 +141,27 @@
       },
       "custom": "Custom",
       "clearCurrentValue": "Clear the current value",
+      "comparisonType": {
+        "comparisonType": "Comparison Type",
+        "lessThan": "Less",
+        "lessEquals": "Less or equals",
+        "equals": "Equals",
+        "greaterThan": "Greater",
+        "greaterEquals": "Greater or equals"
+      },
+      "comparisonTarget": {
+        "comparisonTarget": "Comparison Target",
+        "additional": "In case of 'Hit', no additional comparison target is needed. <br>In case of 'Attribute', this should be the @-reference of that Attribute. E.g. <code>@agi</code>"
+      },
+      "comparisonThreshold": {
+        "comparisonThreshold": "Threshold",
+        "additional": "In combination with the 'comparison type' and 'comparison target', this yields the final comparison equation. E.g. 'Greater than or equal to 3 Hits'"
+      },
+      "comparisonTargetType": {
+        "comparisonTargetType": "Comparison Target Type",
+        "hit": "Hit(s)",
+        "attribute": "Attribute"
+      },
       "decrement": "Decrement",
       "delete": {
         "delete": "Delete",

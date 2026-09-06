@@ -2,6 +2,10 @@ import { COMPARISON_TARGET_TYPES } from "./const/comparison-target-types.mjs";
 import { ComparisonType } from "./const/comparison-types.mjs";
 import Persistable from "./persistable.mjs";
 
+/**
+ * @property {ComparisonType} type
+ * @property {String | null} data
+ */
 export default class ComparisonTarget extends Persistable {
   /** @override */
   static fromDto(dto) {
@@ -17,8 +21,10 @@ export default class ComparisonTarget extends Persistable {
    * @param {String | undefined} args.data An at-referencable string, if necessary. 
    */
   constructor(args = {}) {
+    super(args);
+    
     this.type = args.type ?? COMPARISON_TARGET_TYPES.hit;
-    this.data = args.data;
+    this.data = args.data ?? null;
   }
 
   /** @override */

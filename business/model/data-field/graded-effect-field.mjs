@@ -1,7 +1,6 @@
 import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
+import { COMPARISON_TARGET_TYPES } from "../domain/const/comparison-target-types.mjs";
 import { COMPARISON_TYPES } from "../domain/const/comparison-types.mjs";
-import DamageAndTypeField from "./damage-and-type-field.mjs";
-import HealthConditionEffectField from "./health-condition-effect-field.mjs";
 import ModifierField from "./modifier-field.mjs";
 
 /**
@@ -25,32 +24,31 @@ import ModifierField from "./modifier-field.mjs";
 export default class GradedEffectField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {
     fields = {
-      comparison: new FoundrySchemaFields.StringField({
-        required: true,
+      comparisonType: new FoundrySchemaFields.StringField({
         nullable: false,
-        initial: COMPARISON_TYPES.equals.name,
+        initial: COMPARISON_TYPES.less_equals.name,
       }),
       threshold: new FoundrySchemaFields.NumberField({
-        required: true,
         nullable: false,
         initial: 0,
-        min: 0,
       }),
-      comparisonTarget: new FoundrySchemaFields.StringField({}),
+      comparisonTarget: new FoundrySchemaFields.SchemaField({
+        type: new FoundrySchemaFields.StringField({
+          nullable: false,
+          initial: COMPARISON_TARGET_TYPES.hit.name,
+        }),
+        data: new FoundrySchemaFields.StringField({
+          nullable: true,
+          initial: null,
+        }),
+      }),
       unstructured: new FoundrySchemaFields.HTMLField({
-        nullable: true,
-      }),
-      conditions: new FoundrySchemaFields.ArrayField(new HealthConditionEffectField(), {
         nullable: false,
-        initial: []
-      }),
-      damages: new FoundrySchemaFields.ArrayField(new DamageAndTypeField(), {
-        nullable: false,
-        initial: []
+        initial: "",
       }),
       modifiers: new FoundrySchemaFields.ArrayField(new ModifierField(), {
         nullable: false,
-        initial: []
+        initial: [],
       }),
       ...fields
     };

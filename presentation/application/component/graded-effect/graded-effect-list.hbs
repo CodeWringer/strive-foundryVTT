@@ -9,7 +9,7 @@ viewModel: GradedEffectListViewModel
     </h3>
     {{{themedImage "image.underline.h2Secondary" "" "min-width: 500px; max-width: 500px;"}}}
   </div>
-  <ul>
+  <ul class="strive">
   {{#each viewModel.entryViewModels as |geVm|}}
   {{#with geVm.clazz.TEMPLATE as | template |}}
   {{> (template) viewModel=geVm }}

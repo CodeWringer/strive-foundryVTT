@@ -1,12 +1,16 @@
+import ComparisonTarget from "../../../../business/model/domain/comparison-target.mjs";
+import { COMPARISON_TARGET_TYPES } from "../../../../business/model/domain/const/comparison-target-types.mjs";
 import { COMPARISON_TYPES } from "../../../../business/model/domain/const/comparison-types.mjs";
 import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 
 export default class GradedEffectViewModel extends ViewModel {
   /** @override */
@@ -19,28 +23,10 @@ export default class GradedEffectViewModel extends ViewModel {
   set isEditable(value) {
     super.isEditable = value;
 
-    const editElement = this.element.find("> div > .edit-mode");
-    const readElement = this.element.find("> div > .read-mode");
-    if (!this._suppressAnims) {
-      if (value) {
-        new SlideDisplaceAnim({
-          displacingElement: editElement,
-          displacedElement: readElement,
-        }).execute();
-      } else {
-        new SlideDisplaceAnim({
-          displacingElement: readElement,
-          displacedElement: editElement,
-        }).execute();
-      }
+    if (value) {
+      this._emboldableElement.removeClass("embolden");
     } else {
-      if (value) {
-        editElement.removeClass("hidden");
-        readElement.addClass("hidden");
-      } else {
-        editElement.addClass("hidden");
-        readElement.removeClass("hidden");
-      }
+      this._emboldableElement.addClass("embolden");
     }
   }
 
@@ -80,7 +66,7 @@ export default class GradedEffectViewModel extends ViewModel {
       this.onChange(fieldName, newValue, oldValue);
     }
 
-    const comparisonTypeOptions = ChoicesUtil.getAsChoices(COMPARISON_TYPES);
+    const comparisonTypeOptions = ChoicesUtil.getAsChoices(COMPARISON_TYPES, "lg");
     let comparisonTypeOption = comparisonTypeOptions[0];
     if (ValidationUtil.isDefined(this.document.comparisonType)) {
       comparisonTypeOption = comparisonTypeOptions.find(it => it.value === this.document.comparisonType.name);
@@ -90,8 +76,49 @@ export default class GradedEffectViewModel extends ViewModel {
       parent: this,
       value: comparisonTypeOption,
       options: comparisonTypeOptions,
+      showValue: false,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.comparisonType.comparisonType"),
+      }),
       onChange: (newVal) => {
         this.document.comparisonType = COMPARISON_TYPES[newVal.value];
+      },
+    });
+
+    const comparisonTargetTypeOptions = ChoicesUtil.getAsChoices(COMPARISON_TARGET_TYPES);
+    let comparisonTargetTypeOption = comparisonTargetTypeOptions[0];
+    if (ValidationUtil.isDefined(this.document.comparisonTarget)) {
+      comparisonTargetTypeOption = comparisonTargetTypeOptions.find(it => it.value === this.document.comparisonTarget.type.name);
+    }
+    this.vmComparisonTargetType = new InputDropDownViewModel({
+      id: "vmComparisonTargetType",
+      parent: this,
+      value: comparisonTargetTypeOption,
+      options: comparisonTargetTypeOptions,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.comparisonTargetType.comparisonTargetType"),
+      }),
+      onChange: (newVal) => {
+        this.document.comparisonTarget = new ComparisonTarget({
+          type: COMPARISON_TARGET_TYPES[newVal.value],
+        });
+        this.vmComparisonTargetData.visible = newVal.value !== COMPARISON_TARGET_TYPES.hit.name;
+      },
+    });
+    this.vmComparisonTargetData = new InputTextFieldViewModel({
+      id: "vmComparisonTargetData",
+      parent: this,
+      value: this.document.comparisonTarget?.data,
+      visible: comparisonTargetTypeOption.value !== COMPARISON_TARGET_TYPES.hit.name,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.comparisonTarget.comparisonTarget"),
+        additionalLocalized: StringUtil.getLoca("system.general.comparisonTarget.additional")
+      }),
+      onChange: (newValue) => {
+        this.document.comparisonTarget = new ComparisonTarget({
+          type: this.document.comparisonTarget?.type ?? COMPARISON_TARGET_TYPES.attribute,
+          data: newValue,
+        });
       },
     });
 
@@ -99,8 +126,20 @@ export default class GradedEffectViewModel extends ViewModel {
       id: "vmThreshold",
       parent: this,
       value: this.document.threshold,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.general.comparisonThreshold.comparisonThreshold"),
+        additionalLocalized: StringUtil.getLoca("system.general.comparisonThreshold.additional"),
+      }),
       onChange: (newVal) => {
         this.document.threshold = newVal;
+      },
+    });
+    this.vmUnstructured = new InputRichTextViewModel({
+      id: "vmUnstructured",
+      parent: this,
+      value: this.document.unstructured,
+      onChange: (newValue) => {
+        this.document.unstructured = newValue;
       },
     });
   }
@@ -108,14 +147,11 @@ export default class GradedEffectViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    const editElement = this.element.find("> div > .edit-mode");
-    const readElement = this.element.find("> div > .read-mode");
+    this._emboldableElement = this.element.find("> .emboldable");
     if (this.isEditable) {
-      editElement.removeClass("hidden");
-      readElement.addClass("hidden");
+      this._emboldableElement.removeClass("embolden");
     } else {
-      editElement.addClass("hidden");
-      readElement.removeClass("hidden");
+      this._emboldableElement.addClass("embolden");
     }
   }
 }

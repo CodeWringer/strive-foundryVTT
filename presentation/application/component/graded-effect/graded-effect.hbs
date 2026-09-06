@@ -1,12 +1,12 @@
 {{!-- Context:
 viewModel: GradedEffectViewModel
 --}}
-<div id="{{viewModel.id}}" class="strive graded-effect flex flex-row flex-middle auto-margin-h-md">
-  <div class="flex flex-row flex-middle auto-margin-h-sm embolden">
+<div id="{{viewModel.id}}" class="strive graded-effect flex flex-row flex-start auto-margin-h-md">
+  <div class="flex flex-row flex-middle auto-margin-h-sm emboldable">
     {{> inputDropDown viewModel=viewModel.vmComparisonType cssClass="" }}
-    {{> inputNumberSpinner viewModel=viewModel.vmThreshold cssClass="width-md" }}
+    {{> inputNumberSpinner viewModel=viewModel.vmThreshold cssClass="max-width-md" }}
     {{> inputDropDown viewModel=viewModel.vmComparisonTargetType cssClass="" }}
-    {{> inputTextField viewModel=viewModel.vmComparisonTarget cssClass="" }}
+    {{> inputTextField viewModel=viewModel.vmComparisonTargetData cssClass="" }}
   </div>
-  {{> inputRichText viewModel=viewModel.vmUnstructured cssClass="pad-md" }}
+  {{> inputRichText viewModel=viewModel.vmUnstructured cssClass="flex-grow" }}
 </div>
