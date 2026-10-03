@@ -44,7 +44,6 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {InjuryState} state
  * @property {Object} treatment
  * * Read-only.
- * @property {String} treatment.lastTreatmentTime
  * @property {String} treatment.obstacle
  * @property {Reference} treatment.skill
  * @property {Object} treatment.requiredSupplies
@@ -63,7 +62,7 @@ import TransientBaseItem from "./transient-base-item.mjs"
  */
 export default class TransientInjury extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/injury-state-active-light.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/injury-light.svg"; }
 
   /** @override */
   get clazz() { return TransientInjury; }
@@ -77,12 +76,6 @@ export default class TransientInjury extends TransientBaseItem {
   get treatment() {
     const thiz = this;
     return {
-      /**
-       * @type {String}
-       */
-      get lastTreatmentTime() { return thiz._treatment.lastTreatmentTime.value; },
-      set lastTreatmentTime(value) { thiz._treatment.lastTreatmentTime.value = value; },
-
       /**
        * @type {String}
        */
@@ -157,10 +150,6 @@ export default class TransientInjury extends TransientBaseItem {
     });
 
     this._treatment = {
-      lastTreatmentTime: new DataFieldBridge({
-        document: this,
-        dataPath: "system.treatment.lastTreatmentTime",
-      }),
       obstacle: new DataFieldBridge({
         document: this,
         dataPath: "system.treatment.obstacle",

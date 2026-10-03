@@ -1,10 +1,11 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import DocumentViewModel from "./document-viewmodel.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
  * Represents the abstract base implementation of a sheet view model. 
  * 
- * @extends ViewModel
+ * @extends DocumentViewModel
  * 
  * @abstract Inheritors MUST override: 
  * * `static get TEMPLATE`
@@ -15,7 +16,7 @@ import ViewModel from "./view-model.mjs";
  * @property {Number} _scrollValue Cached scroll value of the sheet. 
  * * Private
  */
-export default class BaseSheetViewModel extends ViewModel {
+export default class BaseSheetViewModel extends DocumentViewModel {
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

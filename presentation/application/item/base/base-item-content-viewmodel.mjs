@@ -4,6 +4,7 @@ import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import Tooltip from "../../component/tooltip/tooltip.mjs";
 import { TEMPLATES } from "../../templates.mjs";
+import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 
 /**
@@ -25,13 +26,13 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
  * <a id={{viewModel.id}}-button>Click me!</a>
  * ```
  * 
- * @extends ViewModel
+ * @extends DocumentViewModel
  * 
  * @abstract Inheritors MUST override: 
  * * `static get TEMPLATE`
  * * `get clazz`
  */
-export default class BaseItemContentViewModel extends ViewModel {
+export default class BaseItemContentViewModel extends DocumentViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.item.base.content; }
 

@@ -88,11 +88,12 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * @property {Boolean} isEditable If true, the view model data is editable.
  * @property {Boolean} isGM Returns `true`, if the current user is a GM. 
  * * Read-only
- * @property {Boolean} isOwner Returns `true`, if the current user is the owner of the represented document.
- * * Read-only
  * @property {ViewModelToolTipDefinition | undefined} toolTipDefinition A localized text to 
  * display as a tool tip. 
  * @property {Boolean} showReminders Returns `true`, if rule reminders are enabled. 
+ * * Read-only
+ * @property {Boolean} showSecrets Returns `true`, if GM or user-specific secrets contained by this 
+ * view model are to be shown. 
  * * Read-only
  * @property {JQuery} element Returns a JQuery-wrapped HTMLElement whose id attribute corresponds to `this.id`. 
  * Note: Only available **after** the *first* call to `activateListeners`! 
@@ -111,6 +112,10 @@ export default class ViewModel {
    */
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
 
+  // TODO remove when no longer needed. 
+  get isOwner() { throw new Error("Deprecated"); }
+  get document() { throw new Error("Deprecated"); }
+  
   /**
    * The data source for view state objects. 
    * 
@@ -237,19 +242,6 @@ export default class ViewModel {
   }
   
   /**
-   * Returns true, if the current user is the owner of the represented document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isOwner() {
-    if (ValidationUtil.isDefined(this.document)) {
-      return this.document.isOwner;
-    } else {
-      return false;
-    }
-  }
-  
-  /**
    * If true, the current user is a GM. 
    * @type {Boolean}
    * @readonly
@@ -320,6 +312,13 @@ export default class ViewModel {
   /**
    * @type {Boolean}
    * @readonly
+   */
+  get showSecrets() { return this._showSecrets; }
+  set showSecrets(value) { this._showSecrets = value; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
    * @protected
    */
   get isDisposed() { return this._isDisposed; }
@@ -338,10 +337,13 @@ export default class ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Object | undefined} args.document An associated data document. 
    * @param {Boolean | undefined} args.visible
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
+   * 
+   * @param {Boolean | undefined} args.showSecrets `true`, if GM or user-specific secrets contained by this 
+   * view model are to be shown. 
+   * * default `false`
    */
   constructor(args = {}) {
     this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUuid());
@@ -350,12 +352,7 @@ export default class ViewModel {
     this._visible = args.visible ?? true;
     this._toolTipDefinition = args.toolTip;
     this._isDisposed = false;
-
-    if (ValidationUtil.isDefined(args.document) && ValidationUtil.isDefined(args.document.getTransientObject)) {
-      this.document = args.document.getTransientObject();
-    } else if (ValidationUtil.isDefined((args.document ?? {}).document) && ValidationUtil.isDefined((args.document ?? {}).document.getTransientObject)) {
-      this.document = args.document.document.getTransientObject();
-    }
+    this._showSecrets = args.showSecrets ?? false;
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 
@@ -691,7 +688,7 @@ export default class ViewModel {
    * This internal method is meant for use when updating an array of child 
    * view models, to fetch or create the needed child view models. 
    * 
-   * @param {Array<TransientDocument>} documents An array of source documents. 
+   * @param {Array<Object>} documents An array of source documents. 
    * These represent the current data state and will be compared against. 
    * @param {Array<ViewModel>} currentList An array of "current" view model 
    * instances. 

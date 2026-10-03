@@ -44,18 +44,6 @@ export default class IllnessContentViewModel extends BaseItemContentViewModel {
         this.document.description = newValue;
       },
     });
-    this.vmTreatmentDate = new InputTextFieldViewModel({
-      id: "vmTreatmentDate",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.illness.treatment.date"),
-      }),
-      value: this.document.treatment.lastTreatmentTime,
-      onChange: (newValue) => {
-        this.document.treatment.lastTreatmentTime = newValue;
-      },
-    });
     this.vmTreatmentObstacle = new InputTextFieldViewModel({
       id: "vmTreatmentObstacle",
       parent: this,

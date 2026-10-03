@@ -148,8 +148,11 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
     });
 
     // TODO #762
-    // this.vmExpertises = new ListViewModel({
-    // });
+    this.vmExpertises = new ListViewModel({
+      id: "vmExpertises",
+      parent: this,
+      
+    });
   }
 
   /**

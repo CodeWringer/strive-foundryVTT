@@ -35,6 +35,19 @@ $font-size-xl: 3rem;
   font-weight: bold;
 }
 
+// "Stroke"
+
+.theme-dark {
+  .stroke {
+    text-shadow: -1px -1px 0 $c-bg-dark, 1px -1px 0 $c-bg-dark, -1px 1px 0 $c-bg-dark, 1px 1px 0 $c-bg-dark;
+  }
+}
+.theme-light {
+  .stroke {
+    text-shadow: -1px -1px 0 $c-bg-light, 1px -1px 0 $c-bg-light, -1px 1px 0 $c-bg-light, 1px 1px 0 $c-bg-light;
+  }
+}
+
 // Overrides
 
 body.strive-regular-font .strive-regular-font {

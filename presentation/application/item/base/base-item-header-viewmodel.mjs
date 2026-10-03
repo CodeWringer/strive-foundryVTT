@@ -3,15 +3,18 @@ import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
+import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 
 /**
- * Abstract base class for Item header view models. By default, defines a view model for GM notes. 
+ * Abstract base class for Item header view models. 
+ * 
+ * By default, defines a view model for GM notes. 
  * 
  * The templating is a bit more complicated - `BaseItemHeaderViewModel.TEMPLATE` is used for the 
  * general layout of the header template, and inheritors who override `TEMPLATE` provide custom 
- * header content, which is then inserted into this layout. As such, inheritors MUST NOT provide 
- * their own wrapper element. So, instead of: 
+ * header content, which is then inserted into this layout. As such, inheritors MUST NOT insert  
+ * the ID! So, instead of: 
  * 
  * ```html
  * <div id="{{viewModel.id}}"> <!-- Bad! Do not provide this wrapper! -->
@@ -24,13 +27,17 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
  * <a id={{viewModel.id}}-button>Click me!</a>
  * ```
  * 
- * @extends ViewModel
+ * Additionally, this base class handles visibility of any content that is only to be shown when 
+ * this Item is embedded on an Actor. Add the CSS class `"embedded-only"` to all elements 
+ * that should only be visible when embedded. 
+ * 
+ * @extends DocumentViewModel
  * 
  * @abstract Inheritors MUST override:
  * * `static get TEMPLATE`
  * * `get clazz`
  */
-export default class BaseItemHeaderViewModel extends ViewModel {
+export default class BaseItemHeaderViewModel extends DocumentViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.item.base.header; }
 
@@ -94,5 +101,14 @@ export default class BaseItemHeaderViewModel extends ViewModel {
         this.document.name = newValue;
       },
     });
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    if (this.isIndependent) {
+      this.element.find(".embedded-only").addClass("hidden");
+    }
   }
 }

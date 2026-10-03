@@ -21,6 +21,7 @@ import { DataFieldComponent } from "../datafield-component.mjs"
 import ItemDropData from "../item-drop-data.mjs"
 import { TemplatedComponent } from "../templated-component.mjs"
 import ButtonDropDownViewModel from "../../../component/button-dropdown/button-dropdown-viewmodel.mjs"
+import DocumentViewModel from "../../../view-model/document-view-model.mjs"
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 
@@ -61,7 +62,7 @@ export const LIST_ITEM_DETAIL_MODES = {
  * @property {Boolean} isExpanded If `true`, will render in expanded state. 
  * @property {Boolean} isImportable If true, the document can be imported (to the world). 
  */
-export default class BaseListItemViewModel extends ViewModel {
+export default class BaseListItemViewModel extends DocumentViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_LIST_ITEM; }
   

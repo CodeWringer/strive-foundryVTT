@@ -2,13 +2,14 @@ import Complication from "../../../../business/model/domain/complication/complic
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
+import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
 import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 
-export default class ComplicationViewModel extends ViewModel {
+export default class ComplicationViewModel extends DocumentViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.complication.item; }
 
@@ -45,7 +46,7 @@ export default class ComplicationViewModel extends ViewModel {
   }
 
   /**
-   * @param {Object} args 
+   * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
    * If no value is provided, a shortened UUID will be generated for it. 
@@ -58,12 +59,12 @@ export default class ComplicationViewModel extends ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Object | undefined} args.document An associated data document. 
    * @param {Boolean | undefined} args.visible
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {Complication} args.document 
+   * @param {Object} args.document An associated data document. 
+   * 
    * @param {Function<void> | undefined} args.onChange Invoked when any property value of 
    * the complication document changes. Arguments: 
    * * `fieldName: String` - Name of the field/property on this instance that was changed. 
@@ -77,7 +78,6 @@ export default class ComplicationViewModel extends ViewModel {
     this.onChange = args.onChange ?? (() => { });
     this.onDelete = args.onDelete ?? (() => { });
 
-    this.document = args.document;
     this.document.onChange = (fieldName, newValue, oldValue) => {
       this.onChange(fieldName, newValue, oldValue);
     }

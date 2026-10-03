@@ -1,6 +1,5 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs"
 import ReferenceField from "../../data-field/reference-field.mjs"
-import { ILLNESS_STATES } from "../../domain/const/illness-states.mjs"
 import BaseItemData from "./base-item-data.mjs"
 
 export default class IllnessItemData extends BaseItemData {
@@ -8,18 +7,7 @@ export default class IllnessItemData extends BaseItemData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      state: new FoundrySchemaFields.StringField({
-        nullable: false,
-        required: true,
-        initial: ILLNESS_STATES.active.name,
-      }),
       treatment: new FoundrySchemaFields.SchemaField({
-        lastTreatmentTime: new FoundrySchemaFields.StringField({
-          nullable: false,
-          required: true,
-          initial: "",
-          trim: true,
-        }),
         obstacle: new FoundrySchemaFields.StringField({
           nullable: false,
           required: true,

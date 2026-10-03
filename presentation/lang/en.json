@@ -375,14 +375,7 @@
       },
       "illness": {
         "illness": "Illness",
-        "state": {
-          "state": "Illness State",
-          "stateWithCurrent": "Illness State<br>(= %s)",
-          "active": "Active",
-          "treated": "Treated"
-        },
         "treatment": {
-          "date": "Last Treatment Date",
           "obstacle": "Treatment Obstacle",
           "skill": "Treatment Skill",
           "supplies": {

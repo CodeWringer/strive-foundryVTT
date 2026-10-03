@@ -86,10 +86,6 @@ export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
     await super.activateListeners(html);
 
     this.#updateProgressMaximumReadMode();
-
-    if (this.isIndependent) {
-      this.element.find(`#${this.id}-embedded-content`).addClass("hidden");
-    }
   }
 
   /**

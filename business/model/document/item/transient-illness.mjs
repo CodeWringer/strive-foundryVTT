@@ -1,5 +1,4 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import { ILLNESS_STATES, IllnessState } from "../../domain/const/illness-states.mjs";
 import Reference from "../../domain/reference.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs"
@@ -41,10 +40,8 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * * Read-only.
  * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
  * 
- * @property {IllnessState} state
  * @property {Object} treatment
  * * Read-only.
- * @property {String} treatment.lastTreatmentTime
  * @property {String} treatment.obstacle
  * @property {Reference} treatment.skill
  * @property {Object} treatment.requiredSupplies
@@ -61,26 +58,14 @@ import TransientBaseItem from "./transient-base-item.mjs"
  */
 export default class TransientIllness extends TransientBaseItem {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/illness-state-active-light.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/illness-light.svg"; }
 
   /** @override */
   get clazz() { return TransientIllness; }
 
-  /**
-   * @type {IllnessState}
-   */
-  get state() { return this._state.value; }
-  set state(value) { this._state.value = value; }
-
   get treatment() {
     const thiz = this;
     return {
-      /**
-       * @type {String}
-       */
-      get lastTreatmentTime() { return thiz._treatment.lastTreatmentTime.value; },
-      set lastTreatmentTime(value) { thiz._treatment.lastTreatmentTime.value = value; },
-
       /**
        * @type {String}
        */
@@ -143,23 +128,7 @@ export default class TransientIllness extends TransientBaseItem {
   constructor(document) {
     super(document);
 
-    this._state = new DataFieldBridge({
-      document: this,
-      dataPath: "system.state",
-      default: ILLNESS_STATES.active,
-      fromDto: (dto) => {
-        return ILLNESS_STATES[dto];
-      },
-      toDto: (value) => {
-        return value.name;
-      },
-    });
-
     this._treatment = {
-      lastTreatmentTime: new DataFieldBridge({
-        document: this,
-        dataPath: "system.treatment.lastTreatmentTime",
-      }),
       obstacle: new DataFieldBridge({
         document: this,
         dataPath: "system.treatment.obstacle",
@@ -215,25 +184,5 @@ export default class TransientIllness extends TransientBaseItem {
         dataPath: "system.healProgress.untilCured",
       }),
     };
-  }
-
-  /**
-   * Compares the treatment state of this instance with a given instance and returns a numeric comparison result. 
-   * 
-   * @param {TransientIllness} other Another instance to compare with. 
-   * 
-   * @returns {Number} `-1` | `0` | `1`
-   * 
-   * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
-   * is more than / greater than `other`. 
-   */
-  compareTreatment(other) {
-    if (this.state.name === ILLNESS_STATES.active.name && other.state.name !== ILLNESS_STATES.active.name) {
-      return -1;
-    } else if (this.state.name === ILLNESS_STATES.treated.name && other.state.name !== ILLNESS_STATES.treated.name) {
-      return 1;
-    } else {
-      return 0;
-    }
   }
 }

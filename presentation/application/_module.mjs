@@ -9,6 +9,7 @@ import BaseSheetViewModel from "./view-model/base-sheet-viewmodel.mjs";
 import InputViewModel from "./view-model/input-view-model.mjs";
 import ViewModelCollection from "./view-model/view-model-collection.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "./view-model/view-model.mjs";
+import DocumentViewModel from "./view-model/document-viewmodel.mjs";
 import { dialog } from "./dialog/_module.mjs";
 import LanguageContentViewModel from "./item/language/language-content-viewmodel.mjs";
 import LanguageItemSheetViewModel from "./item/language/language-item-sheet-viewmodel.mjs";
@@ -63,6 +64,7 @@ export const application = {
   dialog: dialog,
   viewModel: {
     ViewModel: ViewModel,
+    DocumentViewModel: DocumentViewModel,
     ViewModelToolTipDefinition: ViewModelToolTipDefinition,
     ViewModelCollection: ViewModelCollection,
     ValueViewModel: ValueViewModel,

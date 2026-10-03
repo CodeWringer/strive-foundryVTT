@@ -44,18 +44,6 @@ export default class InjuryContentViewModel extends BaseItemContentViewModel {
         this.document.description = newValue;
       },
     });
-    this.vmTreatmentDate = new InputTextFieldViewModel({
-      id: "vmTreatmentDate",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.injury.treatment.date"),
-      }),
-      value: this.document.treatment.lastTreatmentTime,
-      onChange: (newValue) => {
-        this.document.treatment.lastTreatmentTime = newValue;
-      },
-    });
     this.vmTreatmentObstacle = new InputTextFieldViewModel({
       id: "vmTreatmentObstacle",
       parent: this,

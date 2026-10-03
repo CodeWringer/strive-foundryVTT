@@ -6,7 +6,6 @@ import { Attribute, ATTRIBUTES } from "./attributes.mjs";
 import { CHARACTER_TEST_TYPES, CharacterTestType } from "./character-test-types.mjs";
 import { COMPARISON_TYPES, ComparisonType } from "./comparison-types.mjs";
 import { DAMAGE_TYPES, DamageType } from "./damage-types.mjs";
-import { ILLNESS_STATES, IllnessState } from "./illness-states.mjs";
 import { INJURY_SHRUG_OFF_STATES, InjuryShrugOffState } from "./injury-shrug-off-states.mjs";
 import { INJURY_STATES, InjuryState } from "./injury-states.mjs";
 import { ITEM_TYPES } from "./item-types.mjs";
@@ -34,8 +33,6 @@ export const constants = {
   CHARACTER_TEST_TYPES: CHARACTER_TEST_TYPES,
   DamageType: DamageType,
   DAMAGE_TYPES: DAMAGE_TYPES,
-  IllnessState: IllnessState,
-  ILLNESS_STATES: ILLNESS_STATES,
   InjuryShrugOffState: InjuryShrugOffState,
   INJURY_SHRUG_OFF_STATES: INJURY_SHRUG_OFF_STATES,
   InjuryState: InjuryState,
@@ -61,7 +58,6 @@ export const constants = {
     common.util.constants.enrichConstant(ATTRIBUTES);
     common.util.constants.enrichConstant(CHARACTER_TEST_TYPES);
     common.util.constants.enrichConstant(DAMAGE_TYPES);
-    common.util.constants.enrichConstant(ILLNESS_STATES);
     common.util.constants.enrichConstant(INJURY_SHRUG_OFF_STATES);
     common.util.constants.enrichConstant(INJURY_STATES);
     common.util.constants.enrichConstant(VISIBILITY_MODES);

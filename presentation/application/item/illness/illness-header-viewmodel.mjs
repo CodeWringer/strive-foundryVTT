@@ -1,10 +1,7 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { ChoicesUtil } from "../../../util/choices-utility.mjs";
-import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
-import { ILLNESS_STATES } from "../../../../business/model/domain/const/illness-states.mjs";
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 
 export default class IllnessHeaderViewModel extends BaseItemHeaderViewModel {
@@ -53,29 +50,6 @@ export default class IllnessHeaderViewModel extends BaseItemHeaderViewModel {
         this.#updateProgressMaximumReadMode();
       },
     });
-    const stateOptions = ChoicesUtil.getAsChoices(ILLNESS_STATES, "xl");
-    const currentStateOption = stateOptions.find(it => it.value === this.document.state.name);
-    this.vmState = new InputDropDownViewModel({
-      id: "vmState",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.format(
-          StringUtil.getLoca("system.item.illness.state.stateWithCurrent"),
-          currentStateOption.localizedValue,
-        ),
-      }),
-      options: stateOptions,
-      showValue: false,
-      value: currentStateOption,
-      onChange: (newValue) => {
-        this.document.state = ILLNESS_STATES[newValue.value];
-        this.vmState.setToolTipContent(StringUtil.format(
-          StringUtil.getLoca("system.item.illness.state.stateWithCurrent"),
-          newValue.localizedValue,
-        ));
-      },
-    });
   }
 
   /** @override */
@@ -83,10 +57,6 @@ export default class IllnessHeaderViewModel extends BaseItemHeaderViewModel {
     await super.activateListeners(html);
 
     this.#updateProgressMaximumReadMode();
-
-    if (this.isIndependent) {
-      this.element.find(`#${this.id}-embedded-content`).addClass("hidden");
-    }
   }
 
   /**

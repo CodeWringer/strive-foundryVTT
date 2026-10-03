@@ -25,8 +25,6 @@ import ViewModel from "./view-model.mjs";
  * @property {Boolean} isEditable If true, the view model data is editable.
  * @property {Boolean} isGM Returns `true`, if the current user is a GM. 
  * * Read-only
- * @property {Boolean} isOwner Returns `true`, if the current user is the owner of the represented document.
- * * Read-only
  * @property {ViewModelToolTipDefinition | undefined} toolTipDefinition A localized text to 
  * display as a tool tip. 
  * @property {Boolean} showReminders Returns `true`, if rule reminders are enabled. 
@@ -95,7 +93,6 @@ export default class ValueViewModel extends ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Object | undefined} args.document An associated data document. 
    * @param {Boolean | undefined} args.visible
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
