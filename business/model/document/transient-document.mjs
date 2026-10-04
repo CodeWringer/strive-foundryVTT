@@ -1,4 +1,5 @@
 import { common } from "../../../common/_module.mjs"
+import { Callbacks } from "../../../common/callbacks.mjs";
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { DOCUMENT_CONTEXT } from "../../../presentation/model/document-context.mjs";
@@ -56,16 +57,12 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * @property {Boolean} isTransactionMode If `true`, field updates do not immediately fire and get 
  * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
  * Setting this to `false` immediately flushes all updates. 
+ * @method onChange Adds a handler that is invoked when any value changes. Arguments: 
+ * * `property: String` - Name of the property that changed. 
+ * * `newValue: Any`
+ * * `oldValue: Any`
  */
 export default class TransientDocument {
-  /**
-   * Encapsulates the logic to update by property path. 
-   * 
-   * @type {DocumentUpdater}
-   * @private
-   */
-  _updater;
-
   /**
    * Returns the default icon image path for this type of document. 
    * 
@@ -196,6 +193,20 @@ export default class TransientDocument {
   }
 
   /**
+   * Encapsulates the logic to update by property path. 
+   * 
+   * @type {DocumentUpdater}
+   * @protected
+   */
+  _updater;
+
+  /**
+   * @type {Callbacks}
+   * @protected
+   */
+  _onChangeCallbacks;
+
+  /**
    * @param {Actor | Item} document An encapsulated document instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -207,6 +218,7 @@ export default class TransientDocument {
 
     this._updater = new DocumentUpdater(document);
     this.document = document;
+    this._onChangeCallbacks = new Callbacks();
 
     this._gmNotes = new DataFieldBridge({
       document: this,
@@ -226,12 +238,19 @@ export default class TransientDocument {
           return value;
         }
       },
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("gmNotes", newValue, oldValue);
+      },
     });
     this._description = new DataFieldBridge({
       document: this,
       dataPath: "system.description",
       default: "",
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("description", newValue, oldValue);
+      },
     });
+
     ExtenderUtil.extend(this, this.clazz);
   }
 
@@ -419,5 +438,17 @@ export default class TransientDocument {
    */
   discardUpdates() {
     this._updater.discardUpdates();
+  }
+
+  /**
+   * Adds the given `handler` to invoke when any value changes. 
+   * @param {Function} handler Invoked when any value changes. Arguments: 
+   * * `property: String` - Name of the property that changed. 
+   * * `newValue: Any`
+   * * `oldValue: Any`
+   * @returns {String} Handler ID. Can be used to `remove` the handler. 
+   */
+  onChange(handler) {
+    return this._onChangeCallbacks.add(handler);
   }
 }

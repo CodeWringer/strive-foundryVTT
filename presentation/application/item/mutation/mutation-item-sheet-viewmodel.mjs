@@ -24,13 +24,13 @@ export default class MutationItemSheetViewModel extends BaseItemSheetViewModel {
     super({
       ...args,
       headerViewModel: new MutationHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new MutationContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

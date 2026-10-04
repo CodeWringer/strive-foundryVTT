@@ -24,13 +24,13 @@ export default class RecipeItemSheetViewModel extends BaseItemSheetViewModel {
     super({
       ...args,
       headerViewModel: new RecipeHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new RecipeContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

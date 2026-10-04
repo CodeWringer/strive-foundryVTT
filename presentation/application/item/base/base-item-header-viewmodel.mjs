@@ -45,20 +45,6 @@ export default class BaseItemHeaderViewModel extends DocumentViewModel {
   get clazz() { return BaseItemHeaderViewModel; }
 
   /**
-   * Returns `true`, if this is an embedded document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
-
-  /**
-   * Returns `true`, if this is an independent (i. e. not embedded) document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
-
-  /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -101,14 +87,5 @@ export default class BaseItemHeaderViewModel extends DocumentViewModel {
         this.document.name = newValue;
       },
     });
-  }
-
-  /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    if (this.isIndependent) {
-      this.element.find(".embedded-only").addClass("hidden");
-    }
   }
 }

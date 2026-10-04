@@ -40,20 +40,6 @@ export default class BaseItemContentViewModel extends DocumentViewModel {
   get clazz() { return BaseItemContentViewModel; }
 
   /**
-   * Returns `true`, if this is an embedded document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
-
-  /**
-   * Returns `true`, if this is an independent (i. e. not embedded) document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
-
-  /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 

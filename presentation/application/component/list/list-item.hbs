@@ -1,15 +1,13 @@
 {{!--
-viewModel: ListViewModel
+viewModel: ListItemViewModel
 --}}
-{{!-- The item's content --}}
 <li id="{{viewModel.id}}" class="flex flex-row flex-grow">
-  {{#with viewModel.itemTemplate as |template|}}
-    <div class="flex flex-grow">
-      {{> (template) viewModel=../viewModel.itemViewModel}}
-    </div>
+  {{#with viewModel.contentTemplate as |template|}}
+    {{> (template) viewModel=../viewModel.contentViewModel }}
   {{/with}}
-  {{!-- Remove button --}}
-  {{#if viewModel.isRemovable}}
-  {{> button viewModel=viewModel.vmBtnRemove }}
+  {{!-- Context menu --}}
+  {{#if viewModel.showContextMenu }}
+  <span class="v-divider"></span>
+  {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="" }}
   {{/if}}
 </li>

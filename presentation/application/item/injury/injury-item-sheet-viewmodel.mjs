@@ -24,13 +24,13 @@ export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
     super({
       ...args,
       headerViewModel: new InjuryHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new InjuryContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

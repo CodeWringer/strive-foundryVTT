@@ -3,6 +3,7 @@ import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
+import { DropDownOption } from "../../component/button-dropdown/dropdown-option.mjs";
 import GradedEffectListViewModel from "../../component/graded-effect/graded-effect-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -151,7 +152,21 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
     this.vmExpertises = new ListViewModel({
       id: "vmExpertises",
       parent: this,
-      
+      contextMenuOptions: [
+        new DropDownOption({
+          localizedValue: StringUtil.getLoca("system.item.expertise.add"),
+          onClick: () => {
+            // TODO
+          },
+        }),
+      ],
+      items: this.document.expertises,
+      viewModelFactory: (item, parent) => new ExpertiseHeaderViewModel({
+        id: "header",
+        parent: parent,
+        document: item,
+      }),
+      toSearchableTerm: (viewModel) => viewModel.document.name,
     });
   }
 

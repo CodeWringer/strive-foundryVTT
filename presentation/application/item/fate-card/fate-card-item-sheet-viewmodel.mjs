@@ -1,63 +1,41 @@
-import { ExtenderUtil } from "../../../../common/util/extender-util.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
-import { DataFieldComponent } from "../../datafield-component.mjs";
 
 /**
  * @property {TransientFateCard} document 
  */
 export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
-  getDataFields() {
-    return [
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          parent: this,
-          id: "vmNsMifp",
-          value: this.document.cost.miFP,
-          onChange: (newValue) => {
-            this.document.cost.miFP = newValue;
-          },
-          min: 0,
-        }),
-        localizedToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.minor.label"),
-        localizedLabel: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.minor.abbreviation"),
-      }),
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          parent: this,
-          id: "vmNsMafp",
-          value: this.document.cost.maFP,
-          onChange: (newValue) => {
-            this.document.cost.maFP = newValue;
-          },
-          min: 0,
-        }),
-        localizedToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.major.label"),
-        localizedLabel: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.major.abbreviation"),
-      }),
-      new DataFieldComponent({
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModel: new InputNumberSpinnerViewModel({
-          parent: this,
-          id: "vmNsAfp",
-          value: this.document.cost.AFP,
-          onChange: (newValue) => {
-            this.document.cost.AFP = newValue;
-          },
-          min: 0,
-        }),
-        localizedToolTip: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.ambition.label"),
-        localizedLabel: game.i18n.localize("system.character.driverSystem.fateSystem.fatePoints.ambition.abbreviation"),
-      }),
-    ];
-  }
-  
-  /** @override */
-  getExtenders() {
-    return super.getExtenders().concat(ExtenderUtil.getExtenders(FateCardItemSheetViewModel));
-  }
+  get clazz() { return FateCardItemSheetViewModel; }
 
+  /**
+   * @param {Object} args
+   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
+   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
+   * 
+   * @param {TransientIllness} args.document The represented transient document instance. 
+   * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
+   */
+  constructor(args = {}) {
+    super({
+      ...args,
+      headerViewModel: new FateCardHeaderViewModel({
+        id: "header",
+        isEditable: args.isEditable,
+        document: args.document,
+        sheet: args.sheet,
+      }),
+      contentViewModel: new FateCardContentViewModel({
+        id: "content",
+        isEditable: args.isEditable,
+        document: args.document,
+        sheet: args.sheet,
+      }),
+    });
+  }
 }

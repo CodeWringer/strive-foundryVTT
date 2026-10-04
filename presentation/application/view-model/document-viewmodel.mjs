@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import { DOCUMENT_CONTEXT } from "../../model/document-context.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
@@ -10,6 +11,9 @@ import ViewModel from "./view-model.mjs";
  * @extends ViewModel
  */
 export default class DocumentViewModel extends ViewModel {
+  /** @override */
+  get clazz() { return DocumentViewModel; }
+
   /**
    * Returns true, if the current user is the owner of the represented document. 
    * @type {Boolean}
@@ -30,7 +34,7 @@ export default class DocumentViewModel extends ViewModel {
    */
   get showSecrets() { return this.isOwner; }
   set showSecrets(_) { throw new Error("Cannot set showSecrets of DocumentViewModel"); }
-  
+
   /**
    * @type {Object}
    * @private
@@ -46,8 +50,19 @@ export default class DocumentViewModel extends ViewModel {
     this.#document = value;
   }
 
-  /** @override */
-  get clazz() { return DocumentViewModel; }
+  /**
+   * Returns `true`, if this is an embedded document. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
+
+  /**
+   * Returns `true`, if this is an independent (i. e. not embedded) document. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
 
   /**
    * @param {Object} args The arguments object. 
@@ -81,5 +96,20 @@ export default class DocumentViewModel extends ViewModel {
     } else {
       this.#document = args.document;
     }
+  }
+  
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    if (this.isIndependent) {
+      this.element.find(".embedded-only").addClass("hidden");
+    }
+    this.element.on("mouseenter", (e) => {
+      this.element.find(".hover-only").removeClass("hidden");
+    });
+    this.element.on("mouseleave", (e) => {
+      this.element.find(".hover-only").addClass("hidden");
+    });
   }
 }

@@ -59,7 +59,6 @@ export const component = {
     InputReferenceViewModel.registerHandlebarsPartial();
     InputImageViewModel.registerHandlebarsPartial();
     AbilityLevelViewModel.registerHandlebarsPartial();
-    ListViewModel.registerHandlebarsPartial();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 

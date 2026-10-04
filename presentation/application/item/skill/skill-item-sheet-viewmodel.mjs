@@ -24,13 +24,13 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
     super({
       ...args,
       headerViewModel: new SkillHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new SkillContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

@@ -427,6 +427,7 @@
         "advancement": "Advancement (Current/Required)"
       },
       "expertise": {
+        "add": "Add Expertise",
         "expertise": "Expertise",
         "expertises": "Expertises",
         "search": "Filter for Expertises by their name"

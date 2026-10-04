@@ -1,5 +1,7 @@
 import { common } from "../../../common/_module.mjs";
-// Do not import TransientDocument
+import { Callbacks } from "../../../common/callbacks.mjs";
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+// Do not import TransientDocument - circuar dependency risk!
 
 /**
  * For use in `TransientDocument`s, provides access to a document's 
@@ -20,6 +22,9 @@ import { common } from "../../../common/_module.mjs";
  * @method toDto Maps the current value to data that can be safely 
  * persisted to data base. Arguments: 
  * * `value: Any`
+ * @method onChange Adds a handler that is invoked when the value changes. Arguments: 
+ * * `newValue: Any`
+ * * `oldValue: Any`
  */
 export default class DataFieldBridge {
   /**
@@ -29,22 +34,25 @@ export default class DataFieldBridge {
   get value() { 
     // Fetch and transform value. 
     const dto = common.util.property.getNestedPropertyValue(this.document, this.#dataPath);
-    if (!common.util.validation.isDefined(dto)) {
+    if (common.util.validation.isDefined(dto)) {
+      return this.fromDto(dto);
+    } else {
       if (common.util.validation.isDefined(this.default)) {
         return this.default;
       } else {
         return null;
       }
-    } else {
-      return this.fromDto(dto);
     }
   }
   /**
    * Sets the new value, after mapping it through `this.toDto`. 
+   * @param {Any | null} value The new, yet untransformed value to set. 
    */
   set value(value) {
-    const mapped = this.toDto(value);
-    this.document.updateByPath(this.#dataPath, mapped);
+    const mappedNewValue = this.toDto(value);
+    const oldValue = this.value;
+    this.document.updateByPath(this.#dataPath, mappedNewValue);
+    this.#onChangeCallbacks.invoke(value, oldValue);
   }
 
   /**
@@ -60,6 +68,12 @@ export default class DataFieldBridge {
   get dataPath() { return this.#dataPath; }
 
   /**
+   * @type {Callbacks}
+   * @private
+   */
+  #onChangeCallbacks;
+
+  /**
    * @param {Object} args 
    * @param {TransientDocument} args.document 
    * @param {String} args.dataPath Identifies the data field on 
@@ -71,6 +85,9 @@ export default class DataFieldBridge {
    * Accepts a dto and must return a domain object. 
    * @param {Function | undefined} args.toDto Maps the current 
    * value to data that can be safely persisted to data base. 
+   * @param {Function | undefined} args.onChange Invoked when the value changes. Arguments: 
+   * * `newValue: Any`
+   * * `oldValue: Any`
    */
   constructor(args = {}) {
     common.util.validation.validateOrThrow(args, ["document", "dataPath"]);
@@ -80,5 +97,21 @@ export default class DataFieldBridge {
     this.default = args.default;
     this.fromDto = args.fromDto ?? ((dto) => dto);
     this.toDto = args.toDto ?? ((value) => value);
+    
+    this.#onChangeCallbacks = new Callbacks();
+    if (ValidationUtil.isDefined(args.onChange)) {
+      this.#onChangeCallbacks.add(args.onChange);
+    }
+  }
+  
+  /**
+   * Adds the given `handler` to invoke when the value changes. 
+   * @param {Function} handler Invoked when the value changes. Arguments: 
+   * * `newValue: Any`
+   * * `oldValue: Any`
+   * @returns {String} Handler ID. Can be used to `remove` the handler. 
+   */
+  onChange(handler) {
+    return this.#onChangeCallbacks.add(handler);
   }
 }

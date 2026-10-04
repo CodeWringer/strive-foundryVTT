@@ -24,13 +24,13 @@ export default class HealthConditionItemSheetViewModel extends BaseItemSheetView
     super({
       ...args,
       headerViewModel: new HealthConditionHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new HealthConditionContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

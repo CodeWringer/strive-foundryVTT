@@ -2,24 +2,38 @@
 viewModel: ListViewModel
 cssClass: String | undefined
 --}}
-<div id="{{viewModel.id}}"
-  class="auto-margin-v-md border-t-sm flex flex-column pad-t-md{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="auto-margin-v-md flex flex-column pad-t-md{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- List Header --}}
   <div class="auto-margin-v-md border-t-sm flex flex-column pad-t-md">
     <div class="flex flex-row flex-middle">
-      <div class="list-header-start" style="width: 33%;"></div>
-      <div class="list-header-center flex flex-center" style="width: 33%;">
+      {{!-- Empty spacer left --}}
+      <div class="list-header-start" style="width: 25%;"></div>
+      {{!-- Center with text --}}
+      <div class="list-header-center flex flex-center" style="width: 50%;">
         <h2 class="strive-regular-font">{{localize "system.item.expertise.expertises"}}</h2>
       </div>
-      <div class="list-header-end flex flex-row flex-grow flex-middle auto-margin-h-md" style="width: 33%;">
-        {{> inputTextField viewModel=viewModel.vmSearch cssClass="flex-grow" }}
+      {{!-- Search and context menu right --}}
+      <div class="list-header-end flex flex-row flex-middle auto-margin-h-md" style="width: 25%;">
+        {{> inputTextField viewModel=viewModel.vmFilter cssClass="flex-grow" }}
+        {{#if viewModel.showContextMenu }}
         <span class="v-divider"></span>
         {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="" }}
+        {{/if}}
       </div>
     </div>
+    {{!-- Header underline --}}
     <div class="flex flex-row flex-middle">
       {{{themedImage "image.underline.h1.left" "" "width: calc(50% - 1.0625rem); height: 1.25rem;"}}}
       {{{themedImage "image.underline.h1.center" "" "width: 2.125; height: 1.25rem;"}}}
       {{{themedImage "image.underline.h1.right" "" "width: calc(50% - 1.0625rem); height: 1.25rem;"}}}
     </div>
   </div>
+  {{!-- Actual list contents --}}
+  <ul class="auto-margin-v-md border-t-sm">
+  {{#each viewModel.itemViewModelss as |vm|}}
+  {{#with viewModel.itemTemplate as |template|}}
+    {{> (template) viewModel=vm }}
+  {{/with}}
+  {{/each}}
+  </ul>
 </div>

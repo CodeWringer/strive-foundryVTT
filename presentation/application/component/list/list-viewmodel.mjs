@@ -1,42 +1,36 @@
-import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
+import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import { TEMPLATES } from "../../templates.mjs"
-import ViewModel from "../../view-model/view-model.mjs"
-import ButtonViewModel from "../button/button-viewmodel.mjs"
+import ValueViewModel from "../../view-model/value-view-model.mjs";
+import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs"
+import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import ListItemViewModel from "./list-item-viewmodel.mjs"
 
 /**
- * Represents a simple item list in the sense that the presentation of 
- * individual items is entirely up to the user. 
- * 
- * @property {Array<Any>} value
- * @property {String} itemTemplate
- * * Read-only
- * @property {String} contentItemTemplate
- * @property {String} localizedAddLabel
- * @property {Boolean} isItemAddable
- * @property {Boolean} isItemRemovable
- * @property {ViewModel} vmBtnAddItem
+ * Wraps the basic structure of a vertical list of items, whose content 
+ * may be arbitrary. 
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
- * * `oldValue: {Any}`
- * * `newValue: {Any}`
+ * * `oldValue: {Array<Any>}`
+ * * `newValue: {Array<Any>}`
  * 
- * @extends ViewModel
+ * @extends ValueViewModel
  */
-export default class ListViewModel extends ViewModel {
+export default class ListViewModel extends ValueViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.list.list; }
 
   /**
-   * Registers the Handlebars partial for this component. 
+   * Returns the class reference of this instance. Required for extending this object. 
    * 
-   * @static
+   * @virtual
+   * @readonly
    */
-  static registerHandlebarsPartial() {
-    Handlebars.registerPartial('list', `{{> "${ListViewModel.TEMPLATE}"}}`);
-  }
+  get clazz() { return ListViewModel; }
 
   /**
    * @type {String}
@@ -44,22 +38,21 @@ export default class ListViewModel extends ViewModel {
    */
   get itemTemplate() { return ListItemViewModel.TEMPLATE; }
 
-  /**
-   * Returns the current value. 
-   * 
-   * @type {Array<Any>}
-   */
-  get value() { return this._value; }
-  /**
-   * Sets the current value. 
-   * 
-   * @param {Array<Any>} newValue
-   */
-  set value(newValue) {
-    const oldValue = this._value;
-    this._value = newValue;
-    this.onChange(newValue, oldValue);
+  get showContextMenu() { return this.contextMenuOptions.length > 0; }
+
+  #items;
+  get items() { return this.#items; }
+  set items(value) {
+    this.#items = value;
+    this.#convertItemsToViewModels();
+    this.#render();
   }
+
+  /**
+   * @type {Array<ListItemViewModel>}
+   * @private
+   */
+  #itemViewModels;
 
   /**
    * @param {Object} args The arguments object. 
@@ -80,151 +73,110 @@ export default class ListViewModel extends ViewModel {
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {String} args.contentItemTemplate
-   * @param {Function} args.contentItemViewModelFactory Expected to return a view model instance for list items. Arguments: 
-   * * `index: Number`
-   * * `item: Any`
-   * @param {Any} args.newItemDefaultValue 
-   * @param {Array<Any> | undefined} args.value
-   * @param {Boolean | undefined} args.isItemAddable 
-   * * Default `false`.
-   * @param {Boolean | undefined} args.isItemRemovable 
-   * * Default `false`.
-   * @param {String | undefined} args.localizedAddLabel
-   * 
-   * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
-   * Receives the following arguments: 
+   * @param {Array<Object> | undefined} args.value Initial value. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives arguments: 
    * * `newValue: {Any}`
    * * `oldValue: {Any}`
+   * 
+   * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
+   * @param {Array<Any> | undefined} args.items
+   * @param {Function} args.viewModelFactory
+   * @param {String | undefined} args.searchValue
+   * @param {Function | undefined} args.toSearchableTerm Must return a `String` representing the 
+   * searchable term. Arguments:
+   * * `viewModel: ViewModel` - content view model instance. 
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["contentItemTemplate", "contentItemViewModelFactory", "newItemDefaultValue"]);
 
-    this.contentItemTemplate = args.contentItemTemplate;
-    this.contentItemViewModelFactory = args.contentItemViewModelFactory;
-    this.newItemDefaultValue = args.newItemDefaultValue;
-    this._value = args.value ?? [];
-    this.isItemAddable = args.isItemAddable ?? false;
-    this.isItemRemovable = args.isItemRemovable ?? false;
-    this.localizedAddLabel = args.localizedAddLabel ?? "";
-    this.onChange = args.onChange ?? (() => {});
+    ValidationUtil.validateOrThrow(args, ["viewModelFactory"]);
 
-    this.onAddClick = async () => {
-      const index = this.value.length;
-      const vm = this._generateItemViewModel(index, this.newItemDefaultValue);
-      const renderedItem = await new FoundryWrapper().renderTemplate(ListItemViewModel.TEMPLATE, {
-        viewModel: vm,
-      });
-      const listElement = this.element.find(`#${this.id}-ul`);
-      listElement.append(renderedItem);
-      vm.activateListeners(listElement.find(`#${vm.id}`));
+    this.toSearchableTerm = args.toSearchableTerm ?? (() => {});
 
-      this.value = this.value.concat(this.newItemDefaultValue);
-    };
-    this.onRemoveClick = (index, vm) => {
-      const newValue = this.value.concat([]);
-      newValue.splice(index, 1);
-
-      this.element.find(`#${vm.id}`).remove();
-      this.value = newValue;
-    };
-
-    this.itemViewModels = this._generateItemViewModels();
-
-    if (this.isItemAddable === true) {
-      this.vmBtnAddItem = new ButtonViewModel({
-        id: "vmBtnAddItem",
+    this.contextMenuOptions = args.contextMenuOptions ?? [];
+    if (this.showContextMenu) {
+      this.vmContextMenu = new ButtonDropDownViewModel({
+        id: "vmContextMenu",
         parent: this,
-        content: `<div class="flex flex-middle auto-margin-h-sm"><i class="fas fa-plus"></i><span class="font-size-default fancy-font">${this.localizedAddLabel}</span></div>`,
-        isEditable: this.isEditable,
-        onClick: this.onAddClick,
+        options: this.contextMenuOptions,
+        visible: this.showContextMenu,
       });
     }
-  }
 
-  /** @override */
-  update(args = {}) {
-    // Remove current list of child view models. 
-    for (const vm of this.itemViewModels) {
-      vm.dispose();
-    }
-    // Generate new list of child view models. 
-    this.itemViewModels = this._generateItemViewModels();
-  }
+    this.#items = args.items ?? [];
+    this.viewModelFactory = args.viewModelFactory;
+    this.#convertItemsToViewModels();
 
-  /**
-   * @returns {Array<ListItemViewModel>}
-   * 
-   * @private
-   */
-  _generateItemViewModels() {
-    const result = [];
-
-    for (let i = 0; i < this.value.length; i++) {
-      const item = this.value[i];
-      const vm = this._generateItemViewModel(i, item);
-      result.push(vm);
-    }
-
-    return result;
-  }
-
-  /**
-   * @param {Number} index 
-   * @param {Any} item 
-   * 
-   * @returns {ListItemViewModel}
-   * 
-   * @private
-   */
-  _generateItemViewModel(index, item) {
-    const contentItemViewModel = this.contentItemViewModelFactory(index, item);
-    if (ValidationUtil.isDefined(contentItemViewModel.onChange)) {
-      contentItemViewModel.onChange = (newValue) => {
-        const newValues = this.value.concat([]);
-        newValues[index] = newValue;
-        this.value = newValues;
-      };
-    }
-    const vm = new ListItemViewModel({
-      id: `listItem-${index}`,
+    this.vmFilter = new InputTextFieldViewModel({
+      id: "vmFilter",
       parent: this,
-      itemViewModel: contentItemViewModel,
-      itemTemplate: this.contentItemTemplate,
-      isRemovable: this.isItemRemovable,
-      onRemoveClick: () => {
-        this.onRemoveClick(index, vm);
-      }
+      value: args.searchValue ?? "",
+      isEditable: true,
+      icon: '<i class="ico ico-search lg"></i>',
+      enableClearButton: true,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("TODO"),
+      }),
+      onChange: (newValue) => {
+        if (ValidationUtil.isBlankOrUndefined(newValue)) {
+          this.#itemViewModels.forEach(vm => {
+            vm.visible = true;
+          });
+        } else {
+          const searchItems = this.#itemViewModels.map(vm => new SearchItem({
+            id: vm.contentViewModel.independentId,
+            term: this.toSearchableTerm(vm.contentViewModel),
+          }));
+          const searchResults = new Search().search({
+            searchItems: searchItems,
+            searchTerm: newValue,
+            searchMode: SEARCH_MODES.FUZZY,
+          });
+          searchResults.forEach(searchResult => {
+            const vm = this.#itemViewModels.find(it => it.contentViewModel.independentId === searchResult.id);
+            vm.visible = searchResult.score > 0;
+          });
+        }
+      },
+      onFocus: () => {
+        this.element.find(".list-header-start").stop(true, true);
+        this.element.find(".list-header-start").animate({
+          width: "0%",
+        }, 300);
+        this.element.find(".list-header-end").stop(true, true);
+        this.element.find(".list-header-end").animate({
+          width: "50%",
+        }, 300);
+      },
+      onFocusLost: () => {
+        this.element.find(".list-header-start").stop(true, true);
+        this.element.find(".list-header-start").animate({
+          width: "25%",
+        }, 300);
+        this.element.find(".list-header-end").stop(true, true);
+        this.element.find(".list-header-end").animate({
+          width: "25%",
+        }, 300);
+      },
     });
-    contentItemViewModel.parent = vm;
-    return vm;
   }
 
+  #convertItemsToViewModels() {
+    this.#itemViewModels.forEach(viewModel => {
+      viewModel.dispose();
+    });
+    this.#itemViewModels = this.items.map(item => this.viewModelFactory(item, this));
+  }
+
+  async #render() {
+    const listElm = this.element.find("ul");
+    listElm.empty();
+    this.#itemViewModels.forEach(async (viewModel) => {
+      const rendered = await FoundryWrapper.renderTemplate(viewModel.clazz.TEMPLATE, {
+        viewModel: viewModel,
+      });
+      listElm.append(rendered);
+    });
+  }
 }
-// this.vmSearch = new InputTextFieldViewModel({
-//   id: "vmSearch",
-//   parent: this,
-//   value: this._searchValue,
-//   isEditable: true,
-//   icon: '<i class="ico ico-search lg"></i>',
-//   enableClearButton: true,
-//   toolTip: new ViewModelToolTipDefinition({
-//     localized: StringUtil.getLoca("system.item.graded.search"),
-//   }),
-//   onChange: (newValue) => {
-//     this._searchValue = newValue;
-//   },
-//   onFocus: () => {
-//     this.element.find(".list-header-start").stop(true, true);
-//     this.element.find(".list-header-start").animate({
-//       width: "50%",
-//     }, 300);
-//   },
-//   onFocusLost: () => {
-//     this.element.find(".list-header-start").stop(true, true);
-//     this.element.find(".list-header-start").animate({
-//       width: "33%",
-//     }, 300);
-//   },
-// });

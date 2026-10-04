@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node ./npm-scripts/build.mjs",
     "sass:transpile": "sass ./presentation/style/game-system.scss ./presentation/style/game-system.css",
-    "sass:transpile-and-watch": "sass -w ./presentation/style/ ./presentation/style"
+    "madge:circular-deps": "madge -c -i circular.png system.mjs"
   },
   "browserslist": [
     "last 3 versions"
@@ -20,6 +20,7 @@
     "sass": "^1.53.0",
     "should": "^13.2.3",
     "should-sinon": "0.0.6",
-    "sinon": "^13.0.2"
+    "sinon": "^13.0.2",
+    "madge": "^8.0.0"
   }
 }

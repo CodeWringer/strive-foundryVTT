@@ -295,6 +295,9 @@ export default class TransientSkill extends TransientBaseItem {
       toDto: (value) => {
         return value.map(attribute => attribute.name);
       },
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("baseAttributes", newValue, oldValue);
+      },
     });
     this._level = new DataFieldBridge({
       document: this,
@@ -309,64 +312,100 @@ export default class TransientSkill extends TransientBaseItem {
       toDto: (value) => {
         return value.map(it => it.toDto());
       },
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("expertises", newValue, oldValue);
+      },
     });
     this._itemOrders = {
       expertises: new ArrayDataFieldBridge({
         document: this,
         dataPath: "system.itemOrders.expertises",
         dataClass: Reference,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("itemOrders.expertises", newValue, oldValue);
+        },
       }),
       momentumActions: new ArrayDataFieldBridge({
         document: this,
         dataPath: "system.itemOrders.momentumActions",
         dataClass: Reference,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("itemOrders.momentumActions", newValue, oldValue);
+        },
       }),
     };
     this._actionPoints = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: "system.actionPoints.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("actionPoints.enabled", newValue, oldValue);
+        },
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: "system.actionPoints.current",
         default: 0,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("actionPoints.current", newValue, oldValue);
+        },
       }),
     };
     this._distance = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: "system.distance.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("distance.enabled", newValue, oldValue);
+        },
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: "system.distance.current",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("distance.current", newValue, oldValue);
+        },
       }),
     };
     this._targetingType = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: "system.targetingType.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("targetingType.enabled", newValue, oldValue);
+        },
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: "system.targetingType.current",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("targetingType.current", newValue, oldValue);
+        },
       }),
     };
     this._obstacle = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: "system.obstacle.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("obstacle.enabled", newValue, oldValue);
+        },
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: "system.obstacle.current",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("obstacle.current", newValue, oldValue);
+        },
       }),
     };
     this._opposedBy = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: "system.opposedBy.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("opposedBy.enabled", newValue, oldValue);
+        },
       }),
       current: new DataFieldBridge({
         document: this,
@@ -378,39 +417,60 @@ export default class TransientSkill extends TransientBaseItem {
         toDto: (value) => {
           return value.toDto();
         },
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("opposedBy.current", newValue, oldValue);
+        },
       }),
     };
     this._advancement = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: "system.advancement.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("advancement.enabled", newValue, oldValue);
+        },
       }),
       progress: new DataFieldBridge({
         document: this,
         dataPath: "system.advancement.progress",
         default: 0,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("advancement.progress", newValue, oldValue);
+        },
       }),
     };
     this._gradedEffects = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: "system.gradedEffects.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("gradedEffects.enabled", newValue, oldValue);
+        },
       }),
       entries: new ArrayDataFieldBridge({
         document: this,
         dataPath: "system.gradedEffects.entries",
         dataClass: GradedEffect,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("gradedEffects.entries", newValue, oldValue);
+        },
       }),
     };
     this._momentumActions = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.momentumActions",
       dataClass: MomentumAction,
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("system.momentumActions", newValue, oldValue);
+      },
     });
     this._isInnate = new DataFieldBridge({
       document: this,
       dataPath: "system.isInnate",
       default: false,
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("system.isInnate", newValue, oldValue);
+      },
     });
   }
 

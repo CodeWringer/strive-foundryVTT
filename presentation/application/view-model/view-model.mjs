@@ -151,6 +151,15 @@ export default class ViewModel {
   get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}-${this._id}`; }
 
   /**
+   * @summary
+   * Unique ID of just this view model instance, without its parent's ID. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get independentId() { return this._id; }
+
+  /**
    * Returns the class reference of this instance. Required for extending this object. 
    * 
    * @virtual
@@ -492,6 +501,8 @@ export default class ViewModel {
       this._toolTip.deactivateListeners();
     }
 
+    this.parent = null;
+
     // Dispose of children. 
     if (ValidationUtil.isDefined(this.children)) {
       for (const child of this.children) {
@@ -500,11 +511,6 @@ export default class ViewModel {
         } catch (error) {
           game.strive.logger.logWarn(error);
         }
-      }
-
-      // Remove children from collection.
-      for (const child of this.children) {
-        child.parent = undefined;
       }
     }
     

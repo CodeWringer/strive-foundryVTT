@@ -22,6 +22,9 @@ import TransientDocument from "./transient-document.mjs";
  * @method toDto Maps the current value to data that can be safely 
  * persisted to data base. Arguments: 
  * * `value: Any`
+ * @method onChange Adds a handler that is invoked when the value changes. Arguments: 
+ * * `newValue: Any`
+ * * `oldValue: Any`
  */
 export default class ArrayDataFieldBridge extends DataFieldBridge {
   /**
@@ -31,6 +34,9 @@ export default class ArrayDataFieldBridge extends DataFieldBridge {
    * the document instance itself. E. g. `"system.bulk"`
    * @param {Any | undefined} args.default A default value to 
    * use in case the data base field's value is undefined.
+   * @param {Function | undefined} args.onChange Invoked when the value changes. Arguments: 
+   * * `newValue: Any`
+   * * `oldValue: Any`
    * 
    * @param {Any} args.dataClass Class reference of the type this represents. 
    */

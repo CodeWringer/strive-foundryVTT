@@ -20,6 +20,9 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
   get clazz() { return SkillHeaderViewModel; }
 
+  get apCost() { return this.document.actionPoints.current ?? 0; }
+  get hasApCost() { return this.document.actionPoints.enabled ?? false; }
+
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

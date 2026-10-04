@@ -1,7 +1,8 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 
 /**
  * Represents a simple item list item. 
@@ -16,35 +17,30 @@ export default class ListItemViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.list.item; }
 
+  get showContextMenu() { return this.contextMenuOptions.length > 0; }
+
   /**
    * @param {Object} args
-   * @param {String | undefined} args.id Unique ID of this view model instance. 
-   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
-   * 
-   * @param {ViewModel} args.itemViewModel The wrapped content view model. 
-   * @param {String} args.itemTemplate Template path of the content. 
-   * @param {Boolean | undefined} args.isRemovable If `true`, the item is removable. 
-   * * Default `false`.
-   * @param {Function | undefined} args.onRemoveClick Invoked when the "remove" button is clicked. 
+   * @param {Object} args.content
+   * @param {String} args.content.template
+   * @param {ViewModel} args.content.viewModel
+   * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["itemViewModel", "itemTemplate"]);
+    ValidationUtil.validateOrThrow(args, ["content"]);
+    ValidationUtil.validateOrThrow(args.content, ["template", "viewModel"]);
 
-    this.itemViewModel = args.itemViewModel;
-    this.itemTemplate = args.itemTemplate;
-    this.isRemovable = args.isRemovable ?? false;
-    this.onRemoveClick = args.onRemoveClick ?? (() => {});
+    this.contentTemplate = args.content.template;
+    this.contentViewModel = args.content.viewModel;
+    this.contextMenuOptions = args.contextMenuOptions ?? [];
 
-    if (this.isRemovable) {
-      this.vmBtnRemove = new ButtonViewModel({
-        id: "vmBtnRemove",
+    if (this.showContextMenu) {
+      this.vmContextMenu = new ButtonDropDownViewModel({
+        id: "context-menu",
         parent: this,
-        isEditable: this.isEditable,
-        content: '<i class="fas fa-trash"></i>',
-        localizedToolTip: game.i18n.localize("system.general.delete.delete"),
-        onClick: this.onRemoveClick,
+        options: this.contextMenuOptions,
+        visible: this.showContextMenu,
       });
     }
   }

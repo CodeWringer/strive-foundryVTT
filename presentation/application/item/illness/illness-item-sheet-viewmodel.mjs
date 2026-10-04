@@ -24,13 +24,13 @@ export default class IllnessItemSheetViewModel extends BaseItemSheetViewModel {
     super({
       ...args,
       headerViewModel: new IllnessHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new IllnessContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

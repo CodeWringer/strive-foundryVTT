@@ -24,13 +24,13 @@ export default class TraitItemSheetViewModel extends BaseItemSheetViewModel {
     super({
       ...args,
       headerViewModel: new TraitHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new TraitContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

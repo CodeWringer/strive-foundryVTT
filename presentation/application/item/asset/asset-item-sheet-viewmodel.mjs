@@ -27,13 +27,13 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
     super({
       ...args,
       headerViewModel: new AssetHeaderViewModel({
-        id: "vmHeader",
+        id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
       contentViewModel: new AssetContentViewModel({
-        id: "vmContent",
+        id: "content",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,

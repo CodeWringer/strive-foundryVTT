@@ -6,13 +6,14 @@ import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
+import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 
-export default class GradedEffectViewModel extends ViewModel {
+export default class GradedEffectViewModel extends DocumentViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.gradedEffect.item; }
 
@@ -61,7 +62,6 @@ export default class GradedEffectViewModel extends ViewModel {
 
     this.onChange = args.onChange ?? (() => { });
 
-    this.document = args.document;
     this.document.onChange = (fieldName, newValue, oldValue) => {
       this.onChange(fieldName, newValue, oldValue);
     }
