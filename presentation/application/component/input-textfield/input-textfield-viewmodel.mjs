@@ -102,6 +102,7 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * @param {String | undefined} args.enableClearButton If `true`, when there is content in the text field, 
    * it will display a button to quickly clear the current value. 
    * * default `false`
+   * @param {String | undefined} args.placeholder 
    */
   constructor(args = {}) {
     super({

@@ -237,6 +237,7 @@
       "sendToChat": "Send to Chat",
       "select": "Select",
       "search": "Search",
+      "filter": "Filter",
       "sheet": {
         "tab": {
           "content": "Content"

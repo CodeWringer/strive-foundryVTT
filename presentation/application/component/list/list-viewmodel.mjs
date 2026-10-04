@@ -46,6 +46,7 @@ export default class ListViewModel extends ValueViewModel {
     this.#items = value;
     this.#convertItemsToViewModels();
     this.#render();
+    this.#filter(true);
   }
 
   /**
@@ -82,7 +83,7 @@ export default class ListViewModel extends ValueViewModel {
    * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
    * @param {Array<Any> | undefined} args.items
    * @param {Function} args.viewModelFactory
-   * @param {String | undefined} args.searchValue
+   * @param {String | undefined} args.searchTerm
    * @param {Function | undefined} args.toSearchableTerm Must return a `String` representing the 
    * searchable term. Arguments:
    * * `viewModel: ViewModel` - content view model instance. 
@@ -104,6 +105,7 @@ export default class ListViewModel extends ValueViewModel {
       });
     }
 
+    this._searchTerm = args.searchTerm ?? "";
     this.#items = args.items ?? [];
     this.viewModelFactory = args.viewModelFactory;
     this.#convertItemsToViewModels();
@@ -111,33 +113,15 @@ export default class ListViewModel extends ValueViewModel {
     this.vmFilter = new InputTextFieldViewModel({
       id: "vmFilter",
       parent: this,
-      value: args.searchValue ?? "",
+      value: this._searchTerm,
       isEditable: true,
       icon: '<i class="ico ico-search lg"></i>',
       enableClearButton: true,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("TODO"),
-      }),
+      placeholder: StringUtil.getLoca("system.general.filter"),
       onChange: (newValue) => {
-        if (ValidationUtil.isBlankOrUndefined(newValue)) {
-          this.#itemViewModels.forEach(vm => {
-            vm.visible = true;
-          });
-        } else {
-          const searchItems = this.#itemViewModels.map(vm => new SearchItem({
-            id: vm.contentViewModel.independentId,
-            term: this.toSearchableTerm(vm.contentViewModel),
-          }));
-          const searchResults = new Search().search({
-            searchItems: searchItems,
-            searchTerm: newValue,
-            searchMode: SEARCH_MODES.FUZZY,
-          });
-          searchResults.forEach(searchResult => {
-            const vm = this.#itemViewModels.find(it => it.contentViewModel.independentId === searchResult.id);
-            vm.visible = searchResult.score > 0;
-          });
-        }
+        this._searchTerm = newValue;
+
+        this.#filter(false);
       },
       onFocus: () => {
         this.element.find(".list-header-start").stop(true, true);
@@ -178,5 +162,38 @@ export default class ListViewModel extends ValueViewModel {
       });
       listElm.append(rendered);
     });
+  }
+
+  /**
+   * Applies the current `searchTerm` as filter on the items, toggling their 
+   * visibility. 
+   * @param {Boolean} earlyExit If `true`, allows for an early exit if the current 
+   * search term is empty or undefined. Should be most performant. 
+   * @returns 
+   */
+  #filter(earlyExit = false) {
+    if (ValidationUtil.isBlankOrUndefined(this._searchTerm)) {
+      if (earlyExit) {
+        return;
+      } else {
+        this.#itemViewModels.forEach(vm => {
+          vm.visible = true;
+        });
+      }
+    } else {
+      const searchItems = this.#itemViewModels.map(vm => new SearchItem({
+        id: vm.contentViewModel.independentId,
+        term: this.toSearchableTerm(vm.contentViewModel),
+      }));
+      const searchResults = new Search().search({
+        searchItems: searchItems,
+        searchTerm: this._searchTerm,
+        searchMode: SEARCH_MODES.FUZZY,
+      });
+      searchResults.forEach(searchResult => {
+        const vm = this.#itemViewModels.find(it => it.contentViewModel.independentId === searchResult.id);
+        vm.visible = searchResult.score > 0;
+      });
+    }
   }
 }
