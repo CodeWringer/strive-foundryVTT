@@ -1,3 +1,6 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+
 /**
  * For insertion into an application at run-time. 
  * 
@@ -27,5 +30,19 @@ export default class DynamicComponent {
     this.template = args.template;
     this.viewModelFactory = args.viewModelFactory;
     this.cssClass = args.cssClass ?? "";
+  }
+
+  /**
+   * @returns {Promise<String>}
+   */
+  async render() {
+    if (ValidationUtil.isDefined(this.html)) {
+      return this.html;
+    } else {
+      const viewModel = this.viewModelFactory();
+      return await FoundryWrapper.renderTemplate(this.template, {
+        viewModel: viewModel,
+      });
+    }
   }
 }

@@ -79,6 +79,10 @@ export const TEMPLATES = {
         header: `${basePathApplication}/item/skill/skill-header.hbs`,
         content: `${basePathApplication}/item/skill/skill-content.hbs`,
       },
+      expertise: {
+        header: `${basePathApplication}/item/expertise/expertise-header.hbs`,
+        content: `${basePathApplication}/item/expertise/expertise-content.hbs`,
+      },
       trait: {
         header: `${basePathApplication}/item/trait/trait-header.hbs`,
         content: `${basePathApplication}/item/trait/trait-content.hbs`,

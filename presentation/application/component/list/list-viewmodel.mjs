@@ -6,6 +6,7 @@ import { TEMPLATES } from "../../templates.mjs"
 import ValueViewModel from "../../view-model/value-view-model.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs"
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import DynamicComponent from "../dynamic-component/dynamic-component.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import ListItemViewModel from "./list-item-viewmodel.mjs"
 
@@ -38,22 +39,53 @@ export default class ListViewModel extends ValueViewModel {
    */
   get itemTemplate() { return ListItemViewModel.TEMPLATE; }
 
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
   get showContextMenu() { return this.contextMenuOptions.length > 0; }
 
-  #items;
+  /**
+   * @type {Array<Any>}
+   * @private
+   */
+  #items = [];
+  /**
+   * @type {Array<Any>}
+   */
   get items() { return this.#items; }
   set items(value) {
     this.#items = value;
-    this.#convertItemsToViewModels();
-    this.#render();
-    this.#filter(true);
+
+    new Promise(async (resolve) => {
+      await this.#render();
+      resolve();
+    });
+  }
+
+  /**
+   * @type {Array<ListSeparator>}
+   * @private
+   */
+  #separators = [];
+  /**
+   * @type {Array<ListSeparator>}
+   */
+  get separators() { return this.#separators; }
+  set separators(value) {
+    this.#separators = value;
+
+    new Promise(async (resolve) => {
+      await this.#render();
+      resolve();
+    });
   }
 
   /**
    * @type {Array<ListItemViewModel>}
    * @private
    */
-  #itemViewModels;
+  #listItemViewModels = [];
 
   /**
    * @param {Object} args The arguments object. 
@@ -81,19 +113,23 @@ export default class ListViewModel extends ValueViewModel {
    * * `oldValue: {Any}`
    * 
    * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
+   * @param {Array<DropDownOption> | undefined} args.itemContextMenuOptions
    * @param {Array<Any> | undefined} args.items
    * @param {Function} args.viewModelFactory
    * @param {String | undefined} args.searchTerm
    * @param {Function | undefined} args.toSearchableTerm Must return a `String` representing the 
    * searchable term. Arguments:
    * * `viewModel: ViewModel` - content view model instance. 
+   * @param {Array<ListSeparator> | undefined} args.separators A list of visual list separators. 
    */
   constructor(args = {}) {
     super(args);
 
     ValidationUtil.validateOrThrow(args, ["viewModelFactory"]);
 
-    this.toSearchableTerm = args.toSearchableTerm ?? (() => {});
+    this.toSearchableTerm = args.toSearchableTerm ?? (() => { });
+    this.#separators = args.separators ?? [];
+    this.itemContextMenuOptions = args.itemContextMenuOptions ?? [];
 
     this.contextMenuOptions = args.contextMenuOptions ?? [];
     if (this.showContextMenu) {
@@ -108,7 +144,6 @@ export default class ListViewModel extends ValueViewModel {
     this._searchTerm = args.searchTerm ?? "";
     this.#items = args.items ?? [];
     this.viewModelFactory = args.viewModelFactory;
-    this.#convertItemsToViewModels();
 
     this.vmFilter = new InputTextFieldViewModel({
       id: "vmFilter",
@@ -146,22 +181,97 @@ export default class ListViewModel extends ValueViewModel {
     });
   }
 
-  #convertItemsToViewModels() {
-    this.#itemViewModels.forEach(viewModel => {
-      viewModel.dispose();
-    });
-    this.#itemViewModels = this.items.map(item => this.viewModelFactory(item, this));
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    await this.#render();
   }
 
+  /**
+   * @returns {Promise<void>}
+   * @async
+   */
   async #render() {
+    await this.#prepareItems();
+    await this.#renderList();
+    this.#filter(true);
+  }
+
+  /**
+   * @returns {Promise<void>}
+   * @async
+   */
+  async #prepareItems() {
+    // Clear existing items
+    this.#listItemViewModels.forEach(viewModel => {
+      viewModel.dispose();
+    });
+
+    // Prepared items from view models. 
+    this.#listItemViewModels = this.items.map(item => {
+      const contentViewModel = this.viewModelFactory(item, this);
+      const viewModel = new ListItemViewModel({
+        id: `listitem-${contentViewModel.independentId}`,
+        parent: this,
+        contentViewModel: contentViewModel,
+        contextMenuOptions: this.itemContextMenuOptions,
+        isSeparator: false,
+      });
+      return viewModel;
+    });
+
+    // Prepared items from separators. 
+    const preparedSeparators = [];
+    for await (const separator of this.#separators) {
+      const index = separator.getIndex();
+      const html = await separator.separatorContent.render();
+      preparedSeparators.push({
+        index: index,
+        html: html,
+      });
+    };
+
+    preparedSeparators.sort((a, b) => b.index - a.index);
+
+    let separatorCount = 0;
+    preparedSeparators.forEach(preparedSeparator => {
+      const id = `separator${separatorCount}`;
+      separatorCount++;
+
+      const wrappedHtml = `<div id="${viewModel.id}">${preparedSeparator.html}</div>`;
+      const viewModel = new ListItemViewModel({
+        id: id,
+        parent: this,
+        html: wrappedHtml,
+        isSeparator: true,
+      });
+      this.#listItemViewModels.splice(preparedSeparator.index, 0, viewModel);
+    });
+  }
+
+  /**
+   * @returns {Promise<void>}
+   * @async
+   */
+  async #renderList() {
     const listElm = this.element.find("ul");
     listElm.empty();
-    this.#itemViewModels.forEach(async (viewModel) => {
-      const rendered = await FoundryWrapper.renderTemplate(viewModel.clazz.TEMPLATE, {
-        viewModel: viewModel,
-      });
-      listElm.append(rendered);
-    });
+
+    for await (const viewModel of this.#listItemViewModels) {
+      // Render and append to DOM. 
+      if (ValidationUtil.isDefined(viewModel.html)) {
+        listElm.append(viewModel.html);
+      } else {
+        const rendered = await FoundryWrapper.renderTemplate(viewModel.clazz.TEMPLATE, {
+          viewModel: viewModel,
+        });
+        listElm.append(rendered);
+      }
+
+      // Activate listeners.
+      const itemElm = listElm.find(`#${viewModel.id}`);
+      viewModel.activateListeners(itemElm);
+    };
   }
 
   /**
@@ -176,24 +286,58 @@ export default class ListViewModel extends ValueViewModel {
       if (earlyExit) {
         return;
       } else {
-        this.#itemViewModels.forEach(vm => {
-          vm.visible = true;
+        this.#listItemViewModels.forEach(viewModel => {
+          viewModel.visible = true;
         });
       }
     } else {
-      const searchItems = this.#itemViewModels.map(vm => new SearchItem({
-        id: vm.contentViewModel.independentId,
-        term: this.toSearchableTerm(vm.contentViewModel),
-      }));
+      // Map SearchItems
+      const searchItems = [];
+      this.#listItemViewModels.forEach(viewModel => {
+        if (ValidationUtil.isDefined(viewModel.contentViewModel)) {
+          searchItems.push(new SearchItem({
+            id: viewModel.independentId,
+            term: this.toSearchableTerm(viewModel.contentViewModel),
+          }));
+        }
+      });
+
+      // Search
       const searchResults = new Search().search({
         searchItems: searchItems,
         searchTerm: this._searchTerm,
         searchMode: SEARCH_MODES.FUZZY,
       });
+
+      // Filter
       searchResults.forEach(searchResult => {
-        const vm = this.#itemViewModels.find(it => it.contentViewModel.independentId === searchResult.id);
-        vm.visible = searchResult.score > 0;
+        const viewModel = this.#listItemViewModels.find(it => it.independentId === searchResult.id);
+        viewModel.visible = searchResult.score > 0;
       });
     }
+  }
+}
+
+/**
+ * Declares a visual separator in a `List`. 
+ * 
+ * @property {Function} getIndex Invoked to determine the index where 
+ * the separator is to be inserted. Must return a number! Receives no arguments. 
+ * @property {DynamicComponent} separatorContent Determines the content 
+ * that will be rendered in between list items. 
+ */
+export class ListSeparator {
+  /**
+   * @param {Object} args 
+   * @param {Function | undefined} args.getIndex Invoked to determine the index where 
+   * the separator is to be inserted. Must return a number! Receives no arguments. 
+   * @param {DynamicComponent | undefined} args.separatorContent Determines the content 
+   * that will be rendered in between list items. 
+   */
+  constructor(args = {}) {
+    this.getIndex = args.getIndex ?? (() => 0);
+    this.separatorContent = args.separatorContent ?? new DynamicComponent({
+      html: "",
+    });
   }
 }

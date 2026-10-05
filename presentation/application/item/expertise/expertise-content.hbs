@@ -1,5 +1,5 @@
 {{!-- context:
-viewModel: SkillContentViewModel
+viewModel: ExpertiseContentViewModel
 --}}
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
 <div class="auto-margin-v-md pad-h-md">
@@ -23,13 +23,6 @@ viewModel: SkillContentViewModel
     <div id="{{viewModel.id}}-targeting-type" class="flex flex-row flex-middle auto-margin-h-md">
       {{> inputDropDown viewModel=viewModel.vmTargetingType cssClass="" }}
     </div>
-    {{!-- Advancement --}}
-    <div id="{{viewModel.id}}-advancement" class="flex flex-row flex-middle auto-margin-h-md">
-      <div class="flex flex-row flex-middle">
-        <i class="ico ico-dumbbell xl"></i>
-        {{> inputSplitNumberSpinner viewModel=viewModel.vmAdvancement cssClass="width-md" }}
-      </div>
-    </div>
     {{!-- Obstacle --}}
     <div id="{{viewModel.id}}-ob" class="flex flex-row flex-middle auto-margin-h-md grid-span-6">
       <div class="flex flex-row flex-middle">
@@ -47,18 +40,4 @@ viewModel: SkillContentViewModel
 <span class="h-divider margin-b-md"></span>
 {{#with viewModel.vmGradedEffects.clazz.TEMPLATE as | template |}}
 {{> (template) viewModel=../viewModel.vmGradedEffects }}
-{{/with}}
-{{!-- Expertises --}}
-{{#with viewModel.vmExpertises.clazz.TEMPLATE as | template |}}
-{{> (template) viewModel=../viewModel.vmExpertises }}
-{{/with}}
-{{!-- Visual separator --}}
-<div id="{{viewModel.vmLockedExpertisesSeparator.id}}" class="flex flex-row flex-center">
-  <div class="flex-grow" style="height: 2px; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 55%, rgba(0, 0, 0, 1) 100%);"></div>
-  <i class="ico dark ico-locked-expertises-solid" style="height: 32px;"></i>
-  <div class="flex-grow" style="height: 2px; background: #000000; background: linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 45%, rgba(0, 0, 0, 0) 90%);"></div>
-</div>
-{{!-- Locked Expertises --}}
-{{#with viewModel.vmLockedExpertises.clazz.TEMPLATE as | template |}}
-{{> (template) viewModel=../viewModel.vmLockedExpertises }}
 {{/with}}

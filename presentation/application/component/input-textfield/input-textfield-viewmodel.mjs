@@ -140,6 +140,12 @@ export default class InputTextFieldViewModel extends InputViewModel {
     } else {
       this.vmClear.visible = false;
     }
+
+    this.element.on("click", () => {
+      if (this.isEditable) {
+        this.element.find("input").focus();
+      }
+    })
   }
 
   /** @override */

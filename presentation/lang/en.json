@@ -423,15 +423,21 @@
         },
         "actionPoints": "Action Point cost",
         "distance": "Maximum effective distance",
-        "obstacle": "Skill Obstacle",
+        "obstacle": "Test Obstacle",
         "opposedBy": "Opposing Skill/Expertise",
         "advancement": "Advancement (Current/Required)"
       },
       "expertise": {
+        "roll": "Roll a Test of this Expertise",
+        "level": "Required Parent Skill Level",
         "add": "Add Expertise",
         "expertise": "Expertise",
         "expertises": "Expertises",
-        "search": "Filter for Expertises by their name"
+        "search": "Filter Expertises by name",
+        "distance": "Maximum effective distance",
+        "obstacle": "Test Obstacle",
+        "opposedBy": "Opposing Skill/Expertise",
+        "actionPoints": "Action Point cost"
       },
       "trait": {
         "trait": "Trait"

@@ -54,6 +54,10 @@ import TraitHeaderViewModel from "./item/trait/trait-header-viewmodel.mjs";
 import TraitContentViewModel from "./item/trait/trait-content-viewmodel.mjs";
 import TraitItemSheet from "./item/trait/trait-item-sheet.mjs";
 import ValueViewModel from "./view-model/value-view-model.mjs";
+import ExpertiseContentViewModel from "./item/expertise/expertise-content-viewmodel.mjs";
+import ExpertiseHeaderViewModel from "./item/expertise/expertise-header-viewmodel.mjs";
+import ExpertiseItemSheetViewModel from "./item/expertise/expertise-item-sheet-viewmodel.mjs";
+import ExpertiseItemSheet from "./item/expertise/expertise-item-sheet.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -120,6 +124,11 @@ export const application = {
       SkillHeaderViewModel: SkillHeaderViewModel,
       SkillContentViewModel: SkillContentViewModel,
     },
+    expertise: {
+      ExpertiseItemSheetViewModel: ExpertiseItemSheetViewModel,
+      ExpertiseContentViewModel: ExpertiseContentViewModel,
+      ExpertiseHeaderViewModel: ExpertiseHeaderViewModel,
+    },
     trait: {
       TraitItemSheetViewModel: TraitItemSheetViewModel,
       TraitHeaderViewModel: TraitHeaderViewModel,
@@ -137,6 +146,7 @@ export const application = {
     ProjectItemSheet: ProjectItemSheet,
     RecipeItemSheet: RecipeItemSheet,
     SkillItemSheet: SkillItemSheet,
+    ExpertiseItemSheet: ExpertiseItemSheet,
     TraitItemSheet: TraitItemSheet,
   },
   Tooltip: Tooltip,

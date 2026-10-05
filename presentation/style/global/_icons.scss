@@ -163,12 +163,13 @@ li.directory-item > img.thumbnail {
 @include icon-template(".ico-health-condition", "health-condition");
 @include icon-template(".ico-illness", "illness");
 @include icon-template(".ico-infinity", "infinity");
-@include icon-template(".ico-injury", "injury");
 @include icon-template(".ico-injury-state-active", "injury-state-active");
 @include icon-template(".ico-injury-state-treated", "injury-state-treated");
+@include icon-template(".ico-injury", "injury");
 @include icon-template(".ico-language", "language");
 @include icon-template(".ico-less-than-equals", "less-than-equals");
 @include icon-template(".ico-less-than", "less-than");
+@include icon-template(".ico-locked-separator", "locked-separator");
 @include icon-template(".ico-mutation", "mutation");
 @include icon-template(".ico-obstacle", "obstacle");
 @include icon-template(".ico-project", "project");

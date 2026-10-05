@@ -2,12 +2,17 @@
 viewModel: ListItemViewModel
 --}}
 <li id="{{viewModel.id}}" class="flex flex-row flex-grow">
-  {{#with viewModel.contentTemplate as |template|}}
-    {{> (template) viewModel=../viewModel.contentViewModel }}
-  {{/with}}
+  {{#if viewModel.hasContentViewModel}}
+    {{#with viewModel.contentViewModel.clazz.TEMPLATE as |template|}}
+      {{> (template) viewModel=../viewModel.contentViewModel }}
+    {{/with}}
+  {{/if}}
+  {{#if viewModel.hasHtml}}
+    {{{viewModel.html}}}
+  {{/if}}
   {{!-- Context menu --}}
   {{#if viewModel.showContextMenu }}
-  <span class="v-divider"></span>
-  {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="" }}
+    <span class="v-divider"></span>
+    {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="" }}
   {{/if}}
 </li>

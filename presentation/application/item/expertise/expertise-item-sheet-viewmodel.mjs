@@ -1,11 +1,10 @@
-import TransientSkill from "../../../../business/model/document/item/transient-skill.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
-import SkillContentViewModel from "./skill-content-viewmodel.mjs";
-import SkillHeaderViewModel from "./skill-header-viewmodel.mjs";
+import ExpertiseContentViewModel from "./expertise-content-viewmodel.mjs";
+import ExpertiseHeaderViewModel from "./expertise-header-viewmodel.mjs";
 
-export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
+export default class ExpertiseItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
-  get clazz() { return SkillItemSheetViewModel; }
+  get clazz() { return ExpertiseItemSheetViewModel; }
 
   /**
    * @param {Object} args
@@ -15,7 +14,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientSkill} args.document The represented transient document instance. 
+   * @param {TransientIllness} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
    * independent document. This affects interactibility. 
@@ -24,13 +23,13 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      headerViewModel: new SkillHeaderViewModel({
+      headerViewModel: new ExpertiseHeaderViewModel({
         id: "header",
         isEditable: args.isEditable,
         document: args.document,
         sheet: args.sheet,
       }),
-      contentViewModel: new SkillContentViewModel({
+      contentViewModel: new ExpertiseContentViewModel({
         id: "content",
         isEditable: args.isEditable,
         document: args.document,

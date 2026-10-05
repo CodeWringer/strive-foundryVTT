@@ -1,43 +1,24 @@
 import { TARGETING_TYPES } from "../../../../business/model/domain/const/targeting-types.mjs";
 import Expertise from "../../../../business/model/domain/skill/expertise.mjs";
-import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
-import { DropDownOption } from "../../component/button-dropdown/dropdown-option.mjs";
 import GradedEffectListViewModel from "../../component/graded-effect/graded-effect-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
-import ListViewModel from "../../component/list/list-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemContentViewModel from "../base/base-item-content-viewmodel.mjs";
-import ExpertiseHeaderViewModel from "../expertise/expertise-header-viewmodel.mjs";
 
-export default class SkillContentViewModel extends BaseItemContentViewModel {
+export default class ExpertiseContentViewModel extends BaseItemContentViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.item.skill.content; }
+  static get TEMPLATE() { return TEMPLATES.application.item.expertise.content; }
 
   /** @override */
-  get clazz() { return SkillContentViewModel; }
-
-  /**
-   * @returns {Boolean}
-   * @readonly
-   */
-  get hasLockedExpertises() { return (this.lockedExpertises.length > 0); }
-
-  /**
-   * @returns {Array<Expertise>}
-   * @readonly
-   */
-  get lockedExpertises() {
-    return this.document.expertises.filter(expertise => expertise.requiredLevel > this.document.level);
-  }
+  get clazz() { return ExpertiseContentViewModel; }
 
   /**
    * @param {Object} args
@@ -47,7 +28,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * 
-   * @param {TransientSkill} args.document The represented transient document instance. 
+   * @param {Expertise} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
    * independent document. This affects interactibility. 
@@ -73,7 +54,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       parent: this,
       value: this.document.actionPoints.current,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.skill.actionPoints"),
+        localized: StringUtil.getLoca("system.item.expertise.actionPoints"),
       }),
       onChange: (newValue) => {
         this.document.actionPoints.current = newValue;
@@ -84,7 +65,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       parent: this,
       value: this.document.distance.current,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.skill.distance"),
+        localized: StringUtil.getLoca("system.item.expertise.distance"),
       }),
       onChange: (newValue) => {
         this.document.distance.current = newValue;
@@ -118,7 +99,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       parent: this,
       value: this.document.obstacle.current,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.skill.obstacle"),
+        localized: StringUtil.getLoca("system.item.expertise.obstacle"),
       }),
       onChange: (newValue) => {
         this.document.obstacle.current = newValue;
@@ -129,29 +110,10 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       parent: this,
       value: this.document.opposedBy.current,
       toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.skill.opposedBy"),
+        localized: StringUtil.getLoca("system.item.expertise.opposedBy"),
       }),
       onChange: (newValue) => {
         this.document.opposedBy.current = newValue;
-      },
-    });
-    this.vmAdvancement = new InputSplitNumberSpinnerViewModel({
-      id: "vmAdvancement",
-      parent: this,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.skill.advancement"),
-      }),
-      current: {
-        value: this.document.advancement.progress,
-        min: 0,
-        limitToMax: true,
-      },
-      maximum: {
-        value: this.#getMaximumAdvancementProgress(),
-        allowEditing: false,
-      },
-      onChange: (newValue) => {
-        this.document.advancement.progress = newValue.current;
       },
     });
 
@@ -163,41 +125,5 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         this.document.gradedEffects.entries = newValue;
       },
     });
-
-    // TODO #762
-    this.vmExpertises = new ListViewModel({
-      id: "vmExpertises",
-      parent: this,
-      contextMenuOptions: [
-        new DropDownOption({
-          localizedValue: StringUtil.getLoca("system.item.expertise.add"),
-          onClick: () => {
-            // TODO
-          },
-        }),
-      ],
-      items: this.document.expertises,
-      viewModelFactory: (item, parent) => new ExpertiseHeaderViewModel({
-        id: "header",
-        parent: parent,
-        document: item,
-      }),
-      toSearchableTerm: (viewModel) => viewModel.document.name,
-    });
-
-    this.vmLockedExpertisesSeparator = new ViewModel({
-      id: "vmLockedExpertisesSeparator",
-      parent: this,
-      localizedToolTip: game.i18n.localize("system.character.skill.expertise.lockedExplanation"),
-      visible: this.hasLockedExpertises,
-    });
-  }
-
-  /**
-   * @returns {Number}
-   * @private
-   */
-  #getMaximumAdvancementProgress() {
-    return Skill.getAdvancementRequirement(this.document.level);
   }
 }

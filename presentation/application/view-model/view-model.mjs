@@ -454,7 +454,7 @@ export default class ViewModel {
   /**
    * Registers events on elements of the given DOM. 
    * 
-   * @param {Object} html DOM of the sheet for which to register listeners. 
+   * @param {JQuery | String} html DOM of the sheet for which to register listeners. 
    * 
    * @virtual
    * @async
