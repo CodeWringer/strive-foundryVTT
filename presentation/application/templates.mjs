@@ -119,6 +119,9 @@ export const TEMPLATES = {
         item: `${basePathComponent}/list/list-item.hbs`,
         list: `${basePathComponent}/list/list.hbs`,
       },
+      separator: {
+        horizontalLockedSeparator: `${basePathComponent}/separator/horizontal-locked-separator.hbs`,
+      },
     },
   },
   image: {

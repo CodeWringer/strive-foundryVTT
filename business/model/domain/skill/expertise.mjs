@@ -1,12 +1,12 @@
 import { common } from "../../../../common/_module.mjs"
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import AtReferencer from "../../../search/at-referencer.mjs";
 import ArrayDataFieldBridge from "../../document/array-data-field-bridge.mjs";
 import DataFieldBridge from "../../document/data-field-bridge.mjs";
 import { ITEM_TYPES } from "../const/item-types.mjs";
+import { TARGETING_TYPES } from "../const/targeting-types.mjs";
 import GradedEffect from "../graded-effect.mjs";
-import MomentumAction from "../momentum-action.mjs";
 import Persistable from "../persistable.mjs"
-import Reference from "../reference.mjs";
 // Do not import TransientSkill
 
 /**
@@ -21,7 +21,7 @@ import Reference from "../reference.mjs";
  * @property {String} id Returns the id of the document. 
  * * Read-only.
  * @property {String} img Returns the icon/image path of the document. 
- * @property {String} name Internal name. 
+ * @property {String} name 
  * @property {String} description Html content.
  * @property {String | null} gmNotes Html content.
  * @property {TransientDocument | null} owningDocument
@@ -33,7 +33,6 @@ import Reference from "../reference.mjs";
  * @property {Number} requiredLevel
  * @property {Object} itemOrders
  * * Read-only.
- * @property {Array<Reference>} itemOrders.momentumActions
  * @property {Object} actionPoints
  * * Read-only.
  * @property {Boolean} actionPoints.enabled
@@ -54,15 +53,10 @@ import Reference from "../reference.mjs";
  * * Read-only.
  * @property {Boolean} opposedBy.enabled
  * @property {String} opposedBy.current
- * @property {Object} advancement
- * * Read-only.
- * @property {Boolean} advancement.enabled
- * @property {Number} advancement.progress
  * @property {Object} gradedEffects
  * * Read-only.
  * @property {Boolean} gradedEffects.enabled
  * @property {Array<GradedEffect>} gradedEffects.entries
- * @property {Array<MomentumAction>} momentumActions
  * 
  * @extends Persistable
  */
@@ -90,7 +84,19 @@ export default class Expertise extends Persistable {
    * @private
    * @readonly
    */
-  get _pathOnParent() { return `system.abilities.${this.id}`; }
+  get _pathOnParent() { return `system.expertises.${this.id}`; }
+
+  /**
+   * @type {String}
+   */
+  get img() { return this._img.value; }
+  set img(value) { this._img.value = value; }
+
+  /**
+   * @type {String}
+   */
+  get name() { return this._name.value; }
+  set name(value) { this._name.value = value; }
 
   /**
    * @type {String}
@@ -110,7 +116,6 @@ export default class Expertise extends Persistable {
    * Returns the default icon image path for this type of document. 
    * 
    * @type {String}
-   * @abstract
    * @readonly
    */
   get defaultImg() { return "systems/strive/presentation/image/expertise-light.svg"; }
@@ -118,7 +123,6 @@ export default class Expertise extends Persistable {
   /**
    * Returns the class reference of this document. 
    * @type {Expertise}
-   * @abstract
    * @readonly
    */
   get clazz() { return Expertise; }
@@ -126,7 +130,6 @@ export default class Expertise extends Persistable {
   /**
    * Returns the id of the document. 
    * @type {Expertise}
-   * @abstract
    * @readonly
    */
   get id() { return this._id; }
@@ -165,11 +168,6 @@ export default class Expertise extends Persistable {
   get itemOrders() {
     const thiz = this;
     return {
-      /**
-       * @type {Array<Reference>}
-       */
-      get momentumActions() { return thiz._itemOrders.momentumActions.value; },
-      set momentumActions(value) { thiz._itemOrders.momentumActions.value = value; },
     };
   }
 
@@ -276,12 +274,6 @@ export default class Expertise extends Persistable {
   }
 
   /**
-   * @type {Array<MomentumAction>}
-   */
-  get momentumActions() { return this._momentumActions.value; }
-  set momentumActions(value) { this._momentumActions.value = value; }
-
-  /**
    * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
    * @param {String | undefined} args.id
@@ -313,6 +305,16 @@ export default class Expertise extends Persistable {
         }
       },
     });
+    this._img = new DataFieldBridge({
+      document: this,
+      dataPath: `${this._pathOnParent}.img`,
+      default: this.defaultImg,
+    });
+    this._name = new DataFieldBridge({
+      document: this,
+      dataPath: `${this._pathOnParent}.name`,
+      default: StringUtil.getLoca("system.item.expertise.defaultName"),
+    });
     this._description = new DataFieldBridge({
       document: this,
       dataPath: `${this._pathOnParent}.description`,
@@ -320,18 +322,15 @@ export default class Expertise extends Persistable {
     this._requiredLevel = new DataFieldBridge({
       document: this.owningDocument,
       dataPath: `${this._pathOnParent}.requiredLevel`,
+      default: 0,
     });
     this._itemOrders = {
-      momentumActions: new ArrayDataFieldBridge({
-        document: this,
-        dataPath: `${this._pathOnParent}.itemOrders.momentumActions`,
-        dataClass: Reference,
-      }),
     };
     this._actionPoints = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.actionPoints.enabled`,
+        default: false,
       }),
       current: new DataFieldBridge({
         document: this,
@@ -343,58 +342,63 @@ export default class Expertise extends Persistable {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.distance.enabled`,
+        default: false,
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.distance.current`,
+        default: 0,
       }),
     };
     this._targetingType = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.targetingType.enabled`,
+        default: false,
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.targetingType.current`,
+        default: TARGETING_TYPES.singleTarget,
       }),
     };
     this._obstacle = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.obstacle.enabled`,
+        default: false,
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.obstacle.current`,
+        default: "",
       }),
     };
     this._opposedBy = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.opposedBy.enabled`,
+        default: false,
       }),
       current: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.opposedBy.current`,
+        default: "",
       }),
     };
     this._gradedEffects = {
       enabled: new DataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.gradedEffects.enabled`,
+        default: false,
       }),
       entries: new ArrayDataFieldBridge({
         document: this,
         dataPath: `${this._pathOnParent}.gradedEffects.entries`,
         dataClass: GradedEffect,
+        default: [],
       }),
     };
-    this._momentumActions = new ArrayDataFieldBridge({
-      document: this,
-      dataPath: `${this._pathOnParent}.momentumActions`,
-      dataClass: MomentumAction,
-    });
   }
 
   /**
@@ -456,7 +460,7 @@ export default class Expertise extends Persistable {
    * 
    * @param {String} propertyPath Path leading to the property to update, on the Expertise. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "itemOrders.momentumActions[0]"
+   *        E.g.: "itemOrders.b[0]"
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
@@ -504,11 +508,13 @@ export default class Expertise extends Persistable {
    */
   toDto() {
     return {
+      id: this.id,
+      img: this.img,
+      name: this.name,
       description: this.description,
       gmNotes: this.gmNotes,
       requiredLevel: this.requiredLevel,
       itemOrders: {
-        momentumActions: this.itemOrders.momentumActions.map(it => it.toDto()),
       },
       actionPoints: {
         enabled: this.actionPoints.enabled,
@@ -534,7 +540,6 @@ export default class Expertise extends Persistable {
         enabled: this.gradedEffects.enabled,
         entries: this.gradedEffects.entries.map(it => it.toDto()),
       },
-      momentumActions: this.momentumActions.map(it => it.toDto()),
     };
   }
 

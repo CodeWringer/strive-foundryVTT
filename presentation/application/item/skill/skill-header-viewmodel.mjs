@@ -20,8 +20,17 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
   get clazz() { return SkillHeaderViewModel; }
 
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get apCost() { return this.document.actionPoints.current ?? 0; }
-  get hasApCost() { return this.document.actionPoints.enabled ?? false; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasApCost() { return this.document.actionPoints.current > 0 && this.document.actionPoints.enabled; }
 
   /**
    * @param {Object} args
@@ -98,9 +107,10 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
    */
   #getRollableDiceCount() {
     const sumComps = [];
-    if (ValidationUtil.isDefined(this.document.owningDocument)) {
+    const owningDocument = this.document.owningDocument;
+    if (ValidationUtil.isDefined(owningDocument)) {
       for (const attribute of this.document.baseAttributes) {
-        const level = (this.document.owningDocument.attributes.find(it => it.name === attribute.name)).level;
+        const level = (owningDocument.attributes.find(it => it.name === attribute.name)).level;
         sumComps.push(new SumComponent(attribute.name, attribute.localizableName, level));
       }
     }

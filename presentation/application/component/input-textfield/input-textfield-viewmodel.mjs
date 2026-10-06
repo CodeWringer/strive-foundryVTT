@@ -125,6 +125,18 @@ export default class InputTextFieldViewModel extends InputViewModel {
         this.value = "";
       },
     });
+
+    this.onInput.add(() => {
+      // Ensure clear button visibility.
+      if (this.enableClearButton) {
+        const val = this.inputElement.val();
+        if (!ValidationUtil.isBlankOrUndefined(val)) {
+          this.vmClear.visible = true;
+        } else {
+          this.vmClear.visible = false;
+        }
+      }
+    });
   }
 
   /** @override */
@@ -146,20 +158,5 @@ export default class InputTextFieldViewModel extends InputViewModel {
         this.element.find("input").focus();
       }
     })
-  }
-
-  /** @override */
-  _onInput() {
-    super._onInput();
-
-    // Ensure clear button visibility.
-    if (this.enableClearButton) {
-      const val = this.inputElement.val();
-      if (!ValidationUtil.isBlankOrUndefined(val)) {
-        this.vmClear.visible = true;
-      } else {
-        this.vmClear.visible = false;
-      }
-    }
   }
 }

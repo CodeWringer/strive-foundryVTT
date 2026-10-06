@@ -1,5 +1,4 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
@@ -60,8 +59,6 @@ export default class BaseItemHeaderViewModel extends DocumentViewModel {
    */
   constructor(args = {}) {
     super(args);
-
-    this.context = args.context ?? DOCUMENT_CONTEXT.independent;
 
     this.vmImg = new InputImageViewModel({
       id: "vmImg",

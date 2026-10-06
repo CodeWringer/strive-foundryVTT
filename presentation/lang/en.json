@@ -428,16 +428,19 @@
         "advancement": "Advancement (Current/Required)"
       },
       "expertise": {
-        "roll": "Roll a Test of this Expertise",
-        "level": "Required Parent Skill Level",
+        "actionPoints": "Action Point cost",
         "add": "Add Expertise",
+        "defaultName": "New Expertise",
+        "delete": "Delete Expertise",
+        "distance": "Maximum effective distance",
         "expertise": "Expertise",
         "expertises": "Expertises",
-        "search": "Filter Expertises by name",
-        "distance": "Maximum effective distance",
+        "level": "Required Parent Skill Level",
+        "lockedHint": "Level up your Skill to unlock the following",
         "obstacle": "Test Obstacle",
         "opposedBy": "Opposing Skill/Expertise",
-        "actionPoints": "Action Point cost"
+        "roll": "Roll a Test of this Expertise",
+        "search": "Filter Expertises by name"
       },
       "trait": {
         "trait": "Trait"

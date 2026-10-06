@@ -345,14 +345,13 @@ export default class ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
-   * * Default `false`. 
+   * * default `parent.isEditable` or `false`. 
    * @param {Boolean | undefined} args.visible
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
-   * 
    * @param {Boolean | undefined} args.showSecrets `true`, if GM or user-specific secrets contained by this 
    * view model are to be shown. 
-   * * default `false`
+   * * default `parent.showSecrets` or `false`
    */
   constructor(args = {}) {
     this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUuid());
@@ -361,7 +360,7 @@ export default class ViewModel {
     this._visible = args.visible ?? true;
     this._toolTipDefinition = args.toolTip;
     this._isDisposed = false;
-    this._showSecrets = args.showSecrets ?? false;
+    this._showSecrets = args.showSecrets ?? (ValidationUtil.isDefined(args.parent) ? args.parent.showSecrets : false);
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 
@@ -417,7 +416,7 @@ export default class ViewModel {
    * Returns a map of view models and their respective 
    * update arguments. 
    * 
-   * By default, all child view models will have their `isEditable` property updated. 
+   * By default, all child view models will have their `isEditable` and showSecrets properties updated. 
    * 
    * **IMPORTANT** You only need to override this if a child view model requires 
    * more/other arguments than the default as described above. 
@@ -445,6 +444,7 @@ export default class ViewModel {
     for (const childViewModel of this.children) {
       result.set(childViewModel, {
         isEditable: this.isEditable,
+        showSecrets: this.showSecrets,
       });
     }
 
@@ -661,9 +661,9 @@ export default class ViewModel {
    * the given view model instance. 
    */
   isParentOf(viewModel) {
-    if (viewModel === undefined) {
+    if (!ValidationUtil.isDefined(viewModel)) {
       return false;
-    } else if (viewModel.parent === undefined) {
+    } else if (!ValidationUtil.isDefined(viewModel.parent)) {
       return false;
     } else if (viewModel.parent == this) {
       return true;

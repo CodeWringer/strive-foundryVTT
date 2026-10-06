@@ -38,7 +38,7 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
     this.vmLevel = new AbilityLevelViewModel({
       id: "vmLevel",
       parent: this,
-      value: this.document.level,
+      value: this.document.requiredLevel,
       diceCount: diceCount.total,
       levelToolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.item.expertise.level"),
@@ -47,7 +47,7 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
         localized: StringUtil.getLoca("system.item.expertise.roll"),
       }),
       onChange: (newValue) => {
-        this.document.level = newValue;
+        this.document.requiredLevel = newValue;
       },
       onRoll: () => {
         // TODO #762
@@ -69,10 +69,15 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
    */
   #getRollableDiceCount() {
     const sumComps = [];
-    if (ValidationUtil.isDefined(this.document.owningDocument)) {
-      for (const attribute of this.document.baseAttributes) {
-        const level = (this.document.owningDocument.attributes.find(it => it.name === attribute.name)).level;
-        sumComps.push(new SumComponent(attribute.name, attribute.localizableName, level));
+    const owningDocument = this.document.owningDocument;
+    if (ValidationUtil.isDefined(owningDocument)) {
+      const owningActor = owningDocument.owningDocument;
+
+      if (ValidationUtil.isDefined(owningActor)) {
+        for (const attribute of owningDocument.baseAttributes) {
+          const level = (owningActor.attributes.find(it => it.name === attribute.name)).level;
+          sumComps.push(new SumComponent(attribute.name, attribute.localizableName, level));
+        }
       }
     }
     return new Sum(sumComps);

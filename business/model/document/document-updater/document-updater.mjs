@@ -167,7 +167,7 @@ export default class DocumentUpdater {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
 
-    if (common.util.validation.isArray(newValue) === true) {
+    if (common.util.validation.isArray(newValue) === true && game.strive.debug === true) {
       this._logger.logWarn(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
     } else if (common.util.validation.isFunction(newValue) === true) {
       throw new Error("Detected a function as the value to set - functions cannot be persisted!");

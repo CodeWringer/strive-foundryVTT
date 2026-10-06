@@ -3,34 +3,24 @@ import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import { TEMPLATES } from "../../templates.mjs"
-import ValueViewModel from "../../view-model/value-view-model.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs"
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
-import DynamicComponent from "../dynamic-component/dynamic-component.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import ListItemViewModel from "./list-item-viewmodel.mjs"
+import ListItem from "./list-item.mjs";
+import ListSeparator from "./list-separator.mjs";
 
 /**
  * Wraps the basic structure of a vertical list of items, whose content 
  * may be arbitrary. 
  * 
- * @method onChange Callback that is invoked when the value changes. 
- * Receives the following arguments: 
- * * `oldValue: {Array<Any>}`
- * * `newValue: {Array<Any>}`
- * 
- * @extends ValueViewModel
+ * @extends ViewModel
  */
-export default class ListViewModel extends ValueViewModel {
+export default class ListViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.list.list; }
 
-  /**
-   * Returns the class reference of this instance. Required for extending this object. 
-   * 
-   * @virtual
-   * @readonly
-   */
+  /** @override */
   get clazz() { return ListViewModel; }
 
   /**
@@ -46,12 +36,12 @@ export default class ListViewModel extends ValueViewModel {
   get showContextMenu() { return this.contextMenuOptions.length > 0; }
 
   /**
-   * @type {Array<Any>}
+   * @type {Array<ListItem>}
    * @private
    */
   #items = [];
   /**
-   * @type {Array<Any>}
+   * @type {Array<ListItem>}
    */
   get items() { return this.#items; }
   set items(value) {
@@ -81,6 +71,15 @@ export default class ListViewModel extends ValueViewModel {
     });
   }
 
+  get isEditable() { return super.isEditable; }
+  set isEditable(value) {
+    super.isEditable = value;
+
+    if (ValidationUtil.isDefined(this.vmContextMenu)) {
+      this.vmContextMenu.visible = value;
+    }
+  }
+
   /**
    * @type {Array<ListItemViewModel>}
    * @private
@@ -106,26 +105,17 @@ export default class ListViewModel extends ValueViewModel {
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {Array<Object> | undefined} args.value Initial value. 
-   * @param {Function | undefined} args.onChange Callback that is invoked 
-   * when the value changes. Receives arguments: 
-   * * `newValue: {Any}`
-   * * `oldValue: {Any}`
-   * 
-   * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
-   * @param {Array<DropDownOption> | undefined} args.itemContextMenuOptions
-   * @param {Array<Any> | undefined} args.items
-   * @param {Function} args.viewModelFactory
+   * @param {Array<ListItem> | undefined} args.items
+   * @param {Array<ListSeparator> | undefined} args.separators A list of visual list separators. 
    * @param {String | undefined} args.searchTerm
    * @param {Function | undefined} args.toSearchableTerm Must return a `String` representing the 
    * searchable term. Arguments:
-   * * `viewModel: ViewModel` - content view model instance. 
-   * @param {Array<ListSeparator> | undefined} args.separators A list of visual list separators. 
+   * * `item: ListItem` - the item to convert to a searchable `String`. 
+   * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
+   * @param {Array<DropDownOption> | undefined} args.itemContextMenuOptions
    */
   constructor(args = {}) {
     super(args);
-
-    ValidationUtil.validateOrThrow(args, ["viewModelFactory"]);
 
     this.toSearchableTerm = args.toSearchableTerm ?? (() => { });
     this.#separators = args.separators ?? [];
@@ -137,13 +127,12 @@ export default class ListViewModel extends ValueViewModel {
         id: "vmContextMenu",
         parent: this,
         options: this.contextMenuOptions,
-        visible: this.showContextMenu,
+        visible: this.isEditable,
       });
     }
 
     this._searchTerm = args.searchTerm ?? "";
     this.#items = args.items ?? [];
-    this.viewModelFactory = args.viewModelFactory;
 
     this.vmFilter = new InputTextFieldViewModel({
       id: "vmFilter",
@@ -207,30 +196,26 @@ export default class ListViewModel extends ValueViewModel {
       viewModel.dispose();
     });
 
-    // Prepared items from view models. 
-    this.#listItemViewModels = this.items.map(item => {
-      const contentViewModel = this.viewModelFactory(item, this);
-      const viewModel = new ListItemViewModel({
-        id: `listitem-${contentViewModel.independentId}`,
-        parent: this,
-        contentViewModel: contentViewModel,
-        contextMenuOptions: this.itemContextMenuOptions,
-        isSeparator: false,
-      });
-      return viewModel;
-    });
+    this.#listItemViewModels = this.items.map(item => new ListItemViewModel({
+      id: `listitem-${item.id}`,
+      parent: this,
+      item: item,
+      contextMenuOptions: this.itemContextMenuOptions,
+    }));
 
     // Prepared items from separators. 
     const preparedSeparators = [];
     for await (const separator of this.#separators) {
-      const index = separator.getIndex();
-      const html = await separator.separatorContent.render();
+      if (!separator.applies()) continue;
+
+      const index = separator.getIndex(this.#listItemViewModels.length - 1);
+      const html = await separator.separatorContent.render(this);
       preparedSeparators.push({
         index: index,
         html: html,
+        tooltip: separator.tooltip,
       });
     };
-
     preparedSeparators.sort((a, b) => b.index - a.index);
 
     let separatorCount = 0;
@@ -244,6 +229,7 @@ export default class ListViewModel extends ValueViewModel {
         parent: this,
         html: wrappedHtml,
         isSeparator: true,
+        toolTip: preparedSeparator.tooltip,
       });
       this.#listItemViewModels.splice(preparedSeparator.index, 0, viewModel);
     });
@@ -259,7 +245,7 @@ export default class ListViewModel extends ValueViewModel {
 
     for await (const viewModel of this.#listItemViewModels) {
       // Render and append to DOM. 
-      if (ValidationUtil.isDefined(viewModel.html)) {
+      if (ValidationUtil.isNotBlankOrUndefined(viewModel.html)) {
         listElm.append(viewModel.html);
       } else {
         const rendered = await FoundryWrapper.renderTemplate(viewModel.clazz.TEMPLATE, {
@@ -315,29 +301,5 @@ export default class ListViewModel extends ValueViewModel {
         viewModel.visible = searchResult.score > 0;
       });
     }
-  }
-}
-
-/**
- * Declares a visual separator in a `List`. 
- * 
- * @property {Function} getIndex Invoked to determine the index where 
- * the separator is to be inserted. Must return a number! Receives no arguments. 
- * @property {DynamicComponent} separatorContent Determines the content 
- * that will be rendered in between list items. 
- */
-export class ListSeparator {
-  /**
-   * @param {Object} args 
-   * @param {Function | undefined} args.getIndex Invoked to determine the index where 
-   * the separator is to be inserted. Must return a number! Receives no arguments. 
-   * @param {DynamicComponent | undefined} args.separatorContent Determines the content 
-   * that will be rendered in between list items. 
-   */
-  constructor(args = {}) {
-    this.getIndex = args.getIndex ?? (() => 0);
-    this.separatorContent = args.separatorContent ?? new DynamicComponent({
-      html: "",
-    });
   }
 }

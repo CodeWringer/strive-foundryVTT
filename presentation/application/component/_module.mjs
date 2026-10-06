@@ -19,6 +19,8 @@ import GradedEffectListViewModel from "./graded-effect/graded-effect-list-viewmo
 import GradedEffectViewModel from "./graded-effect/graded-effect-viewmodel.mjs";
 import ListViewModel from "./list/list-viewmodel.mjs";
 import ListItemViewModel from "./list/list-item-viewmodel.mjs";
+import ListSeparator from "./list/list-separator.mjs";
+import ListItem from "./list/list-item.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -45,6 +47,8 @@ export const component = {
   GradedEffectListViewModel: GradedEffectListViewModel,
   ListItemViewModel: ListItemViewModel,
   ListViewModel: ListViewModel,
+  ListSeparator: ListSeparator,
+  ListItem: ListItem,
   /**
    * Initialization, which MUST be called during system setup!
    */

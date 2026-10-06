@@ -57,10 +57,12 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * @property {Boolean} isTransactionMode If `true`, field updates do not immediately fire and get 
  * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
  * Setting this to `false` immediately flushes all updates. 
- * @method onChange Adds a handler that is invoked when any value changes. Arguments: 
+ * @method onChange Adds a handler that is invoked when any value changes. Returns a handler ID. Arguments: 
  * * `property: String` - Name of the property that changed. 
  * * `newValue: Any`
  * * `oldValue: Any`
+ * @method offChange Removes the handle with the given `handlerId`. Arguments: 
+ * * `handlerId: String`
  */
 export default class TransientDocument {
   /**
@@ -450,5 +452,14 @@ export default class TransientDocument {
    */
   onChange(handler) {
     return this._onChangeCallbacks.add(handler);
+  }
+
+  /**
+   * Removes the handle with the given `handlerId`. 
+   * @param {String} handlerId 
+   * @returns {Boolean} 
+   */
+  offChange(handlerId) {
+    return this._onChangeCallbacks.remove(handlerId);
   }
 }

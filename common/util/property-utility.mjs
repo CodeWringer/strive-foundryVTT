@@ -77,7 +77,6 @@ export const PropertyUtil = {
 		try {
 			return this._get(obj, propertyPath);
 		} catch(error) {
-			game.strive.logger.logWarn(`Failed to get nested property value: { path: ${path} }`);
 			return undefined;
 		}
 	},

@@ -1,11 +1,10 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
-import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import Tooltip from "../../component/tooltip/tooltip.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
-import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 
 /**
  * Abstract base class for Item content view models. By default, defines a view model for GM notes. 
@@ -55,8 +54,6 @@ export default class BaseItemContentViewModel extends DocumentViewModel {
    */
   constructor(args = {}) {
     super(args);
-
-    this.context = args.context ?? DOCUMENT_CONTEXT.independent;
 
     if (this.isGM) {
       this.vmGmNotes = new InputRichTextViewModel({

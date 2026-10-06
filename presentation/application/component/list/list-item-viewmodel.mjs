@@ -3,36 +3,38 @@ import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
 import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
+import ListItem from "./list-item.mjs";
 
-/**
- * Represents a simple item list item. 
- * 
- * @property {ViewModel} contentViewModel The wrapped content view model. 
- * @property {Boolean} isRemovable If `true`, the item is removable. 
- * 
- * @extends ViewModel
- */
 export default class ListItemViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.component.list.item; }
 
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get hasContentViewModel() { return ValidationUtil.isDefined(this.contentViewModel); }
-  
+  /** @override */
+  get clazz() { return ListItemViewModel; }
+
   /**
    * @type {Boolean}
    * @readonly
    */
   get showContextMenu() { return this.contextMenuOptions.length > 0; }
-  
+
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hasHtml() { return ValidationUtil.isDefined(this.html); }
+  get hasContent() { return ValidationUtil.isDefined(this.item.content); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasHeaderViewModel() { return ValidationUtil.isDefined(this.vmHeader); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasContentViewModel() { return ValidationUtil.isDefined(this.vmContent); }
 
   /**
    * @param {Object} args The arguments object. 
@@ -51,31 +53,46 @@ export default class ListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.visible
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
-   * 
    * @param {Boolean | undefined} args.showSecrets `true`, if GM or user-specific secrets contained by this 
    * view model are to be shown. 
    * * default `false`
    * 
-   * @param {ViewModel | undefined} args.contentViewModel
+   * @param {ListItem} args.item
    * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
-   * @param {Boolean | undefined} args.isSeparator
-   * * default `false`
-   * @param {String | undefined} args.html
    */
   constructor(args = {}) {
     super(args);
+    ValidationUtil.validateOrThrow(args, ["item"]);
 
-    this.contentViewModel = args.contentViewModel;
+    this.item = args.item;
     this.contextMenuOptions = args.contextMenuOptions ?? [];
-    this.isSeparator = args.isSeparator ?? false;
-    this.html = args.html;
 
     if (this.showContextMenu) {
       this.vmContextMenu = new ButtonDropDownViewModel({
         id: "context-menu",
         parent: this,
         options: this.contextMenuOptions,
-        visible: this.showContextMenu,
+        visible: false,
+      });
+    }
+    if (ValidationUtil.isDefined(this.item.header.viewModelFactory)) {
+      this.vmHeader = this.item.header.viewModelFactory(this);
+    }
+    if (ValidationUtil.isDefined(this.item.content) && ValidationUtil.isDefined(this.item.content.viewModelFactory)) {
+      this.vmContent = this.item.content.viewModelFactory(this);
+    }
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    if (ValidationUtil.isDefined(this.vmContextMenu)) {
+      this.element.on("mouseenter", () => {
+        this.vmContextMenu.visible = true;
+      });
+      this.element.on("mouseleave", () => {
+        this.vmContextMenu.visible = false;
       });
     }
   }

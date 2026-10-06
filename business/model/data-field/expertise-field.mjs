@@ -1,16 +1,18 @@
+import { StringUtil } from "../../../common/util/string-utility.mjs";
+import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
 import GradedEffectField from "./graded-effect-field.mjs";
-import MomentumActionField from "./momentum-action-field.mjs";
-import ReferenceField from "./reference-field.mjs";
 
 /**
  * Declares an Expertise. 
  * 
+ * @property {FoundrySchemaFields.StringField} id 
+ * @property {FoundrySchemaFields.StringField} img 
+ * @property {FoundrySchemaFields.StringField} name 
  * @property {FoundrySchemaFields.HTMLField} description 
  * @property {FoundrySchemaFields.HTMLField} gmNotes 
  * @property {FoundrySchemaFields.NumberField} requiredLevel 
  * @property {FoundrySchemaFields.SchemaField} itemOrders 
- * @property {FoundrySchemaFields.ArrayField<ReferenceField>} itemOrders.momentumActions 
  * @property {FoundrySchemaFields.SchemaField} actionPoints 
  * @property {FoundrySchemaFields.BooleanField} actionPoints.enabled 
  * @property {FoundrySchemaFields.NumberField} actionPoints.current 
@@ -29,19 +31,33 @@ import ReferenceField from "./reference-field.mjs";
  * @property {FoundrySchemaFields.SchemaField} gradedEffects 
  * @property {FoundrySchemaFields.BooleanField} gradedEffects.enabled 
  * @property {FoundrySchemaFields.ArrayField<GradedEffectField>} gradedEffects.entries 
- * @property {FoundrySchemaFields.ArrayField<MomentumActionField>} momentumActions 
  * 
  * @extends FoundrySchemaFields.SchemaField
  */
 export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
   constructor(fields = {}, { initialValue = null, ...options } = {}) {
     fields = {
+      id: new FoundrySchemaFields.StringField({
+        nullable: false,
+        required: true,
+        initial: UuidUtil.createUuid(),
+      }),
+      img: new FoundrySchemaFields.StringField({
+        nullable: false,
+        initial: "",
+      }),
+      name: new FoundrySchemaFields.StringField({
+        nullable: false,
+        initial: StringUtil.getLoca("system.item.expertise.defaultName"),
+      }),
       description: new FoundrySchemaFields.HTMLField({
         blank: true,
         nullable: false,
         initial: "",
       }),
-      gmNotes: new FoundrySchemaFields.HTMLField(),
+      gmNotes: new FoundrySchemaFields.HTMLField({
+        nullable: true,
+      }),
       requiredLevel: new FoundrySchemaFields.NumberField({
         nullable: false,
         required: true,
@@ -49,23 +65,26 @@ export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
         initial: 0,
         min: 0,
       }),
-      itemOrders: new FoundrySchemaFields.SchemaField({
-        momentumActions: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
-          nullable: false,
-          initial: [],
-        }),
-      }),
+      itemOrders: new FoundrySchemaFields.SchemaField({}),
       actionPoints: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
         current: new FoundrySchemaFields.NumberField({
-          min: 0,
-          initial: 0,
+          nullable: false,
+          required: true,
           integer: true,
+          initial: 0,
+          min: 0,
         }),
       }),
       distance: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
-        current: new FoundrySchemaFields.StringField({}),
+        current: new FoundrySchemaFields.NumberField({
+          nullable: false,
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
       }),
       targetingType: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
@@ -82,10 +101,6 @@ export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
       gradedEffects: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
         entries: new FoundrySchemaFields.ArrayField(new GradedEffectField()),
-      }),
-      momentumActions: new FoundrySchemaFields.ArrayField(new MomentumActionField(), {
-        nullable: false,
-        initial: [],
       }),
       ...fields
     };

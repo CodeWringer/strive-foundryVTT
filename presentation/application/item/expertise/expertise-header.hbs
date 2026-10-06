@@ -5,7 +5,7 @@ viewModel: ExpertiseHeaderViewModel
   <span class="v-divider"></span>
   {{> abilityLevel viewModel=viewModel.vmLevel cssClass="lg" }}
 </div>
-<span class="v-divider"></span>
+<span class="v-divider hover-only"></span>
 {{#if viewModel.hasApCost }}
 <div id="{{viewModel.vmActionPoints.id}}" class="flex flex-column flex-wrap hover-only">
   {{#times viewModel.apCost }}
