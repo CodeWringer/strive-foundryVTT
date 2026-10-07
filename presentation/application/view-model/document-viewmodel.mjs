@@ -65,6 +65,13 @@ export default class DocumentViewModel extends ViewModel {
   get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
 
   /**
+   * Returns `true`, if this is locked (i. e. part of a locked compendium pack). 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isLocked() { return this.context === DOCUMENT_CONTEXT.embedded_locked || this.context === DOCUMENT_CONTEXT.independent_locked; }
+
+  /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
@@ -83,6 +90,9 @@ export default class DocumentViewModel extends ViewModel {
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {Object} args.document An associated data document. 
+   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
+   * independent document. This affects interactibility. 
+   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);

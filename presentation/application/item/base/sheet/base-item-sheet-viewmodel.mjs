@@ -71,47 +71,36 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get contentViewModel() { return this._contentViewModel ?? this; }
 
   /**
-   * Returns `true`, if this is an embedded document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
-
-  /**
-   * Returns `true`, if this is an independent (i. e. not embedded) document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
-  
-  /**
-   * Returns `true`, if this is locked (i. e. part of a locked compendium pack). 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isLocked() { return this.context === DOCUMENT_CONTEXT.embedded_locked || this.context === DOCUMENT_CONTEXT.independent_locked; }
-
-  /**
-   * @param {Object} args
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
+   * @param {Object} args The arguments object. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * 
+   * If no value is provided, a shortened UUID will be generated for it. 
+   * 
+   * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
+   * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
+   * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.visible
+   * * default `true`
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {TransientDocument} args.document The represented transient document instance. 
-   * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * @param {TransientDocument} args.document An associated data document. 
    * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
    * independent document. This affects interactibility. 
    * * default `DOCUMENT_CONTEXT.independent`
+   * 
+   * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
+   * 
    * @param {BaseItemHeaderViewModel | undefined} args.headerViewModel
    * @param {BaseItemContentViewModel | undefined} args.contentViewModel
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
-    this.context = args.context ?? DOCUMENT_CONTEXT.independent;
     this.document.isTransactionMode = this.isEditable;
 
     this._headerViewModel = args.headerViewModel;
