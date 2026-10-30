@@ -3,6 +3,7 @@ import { Sum, SumComponent } from "../../../../business/model/domain/summed-data
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
+import VisibilityRule from "../../../util/visibility-rule.mjs";
 import AbilityLevelViewModel from "../../component/ability-level/ability-level-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -15,8 +16,27 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
   get clazz() { return ExpertiseHeaderViewModel; }
 
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get apCost() { return this.document.actionPoints.current ?? 0; }
-  get hasApCost() { return this.document.actionPoints.enabled ?? false; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasApCost() { return this.document.actionPoints.current > 0 && this.document.actionPoints.enabled; }
+
+  /** @override */
+  get initialVisibilities() {
+    return super.initialVisibilities.concat([
+      new VisibilityRule({
+        cssClass: ".ap-cost",
+        shouldBeHidden: () => !this.hasApCost,
+      }),
+    ]);
+  }
 
   /**
    * @param {Object} args
@@ -52,14 +72,6 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
       onRoll: () => {
         // TODO #762
       },
-    });
-
-    this.vmActionPoints = new ViewModel({
-      id: "vmActionPoints",
-      parent: this,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.expertise.actionPoints"),
-      }),
     });
   }
 

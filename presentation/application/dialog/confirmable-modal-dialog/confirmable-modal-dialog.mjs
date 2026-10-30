@@ -26,6 +26,17 @@ import ModalDialog from "../modal-dialog/modal-dialog.mjs";
  */
 export default class ConfirmableModalDialog extends ModalDialog {
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get confirmed() { return this.#confirmed; }
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  #confirmed = false;
+
+  /**
    * @param {Object} args 
    * @param {Boolean | undefined} args.easyDismissal If true, allows for easier dialog 
    * dismissal, by clicking anywhere on the backdrop element. 
@@ -58,7 +69,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
                   parent: parent,
                   content: `<i class="fas fa-check"></i><span class="strive-regular-font font-size-lg">${StringUtil.getLoca("system.general.confirm")}</span>`,
                   onClick: () => {
-                    this.confirmed = true;
+                    this.#confirmed = true;
                     this.close();
                   }
                 }),
@@ -71,7 +82,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
                   parent: parent,
                   content: `<i class="fas fa-times"></i><span class="strive-regular-font font-size-lg">${StringUtil.getLoca("system.general.cancel")}</span>`,
                   onClick: () => {
-                    this.confirmed = false;
+                    this.#confirmed = false;
                     this.close();
                   }
                 }),
@@ -81,7 +92,5 @@ export default class ConfirmableModalDialog extends ModalDialog {
         }),
       ]),
     });
-
-    this.confirmed = false;
   }
 }

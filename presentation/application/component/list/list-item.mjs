@@ -11,12 +11,14 @@ export default class ListItem {
   /**
    * @param {Object} args 
    * @param {DynamicComponent} args.header 
+   * @param {Object | undefined} args.document 
    * @param {String | undefined} args.id 
    * @param {DynamicComponent | undefined} args.content 
    */
   constructor(args = {}) {
     ValidationUtil.validateOrThrow(args, ["header"]);
     this.id = args.id ?? UuidUtil.createUuid();
+    this.document = args.document;
     this.header = args.header;
     this.content = args.content;
   }

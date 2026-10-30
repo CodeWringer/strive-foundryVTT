@@ -16,9 +16,11 @@ import InputTextFieldViewModel from "../../component/input-textfield/input-textf
 import ListItem from "../../component/list/list-item.mjs";
 import ListSeparator from "../../component/list/list-separator.mjs";
 import ListViewModel from "../../component/list/list-viewmodel.mjs";
+import ConfirmableModalDialog from "../../dialog/confirmable-modal-dialog/confirmable-modal-dialog.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemContentViewModel from "../base/base-item-content-viewmodel.mjs";
+import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 import ExpertiseContentViewModel from "../expertise/expertise-content-viewmodel.mjs";
 import ExpertiseHeaderViewModel from "../expertise/expertise-header-viewmodel.mjs";
 
@@ -181,7 +183,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       return new ListItem({
         id: expertise.id,
         header: new DynamicComponent({
-          template: ExpertiseHeaderViewModel.TEMPLATE,
+          template: BaseItemHeaderViewModel.TEMPLATE,
           viewModelFactory: (parent) => new ExpertiseHeaderViewModel({
             id: `${expertise.id}-header`,
             parent: parent,
@@ -191,9 +193,9 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
           }),
         }),
         content: new DynamicComponent({
-          template: ExpertiseContentViewModel.TEMPLATE,
+          template: BaseItemContentViewModel.TEMPLATE,
           viewModelFactory: (parent) => new ExpertiseContentViewModel({
-            id: `${expertise.id}-header`,
+            id: `${expertise.id}-content`,
             parent: parent,
             document: expertise,
             sheet: args.sheet,
@@ -202,6 +204,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         }),
       })
     };
+
     this.vmExpertises = new ListViewModel({
       id: "vmExpertises",
       parent: this,
@@ -234,12 +237,74 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
             this.document.expertises = newExpertises;
           },
         }),
+        new DropDownOption({
+          localizedValue: StringUtil.format(
+            StringUtil.getLoca("system.general.sort.sortAscendingBy"),
+            StringUtil.getLoca("system.item.expertise.name")
+          ),
+          onClick: () => {
+            const newExpertises = this.document.expertises.concat([]);
+            newExpertises.sort((a, b) => a.name.localeCompare(b.name));
+            this.document.expertises = newExpertises;
+          },
+        }),
+        new DropDownOption({
+          localizedValue: StringUtil.format(
+            StringUtil.getLoca("system.general.sort.sortDescendingBy"),
+            StringUtil.getLoca("system.item.expertise.name")
+          ),
+          onClick: () => {
+            const newExpertises = this.document.expertises.concat([]);
+            newExpertises.sort((a, b) => b.name.localeCompare(a.name));
+            this.document.expertises = newExpertises;
+          },
+        }),
+        new DropDownOption({
+          localizedValue: StringUtil.format(
+            StringUtil.getLoca("system.general.sort.sortAscendingBy"),
+            StringUtil.getLoca("system.item.expertise.level")
+          ),
+          onClick: () => {
+            const newExpertises = this.document.expertises.concat([]);
+            newExpertises.sort((a, b) => a.requiredLevel - b.requiredLevel);
+            this.document.expertises = newExpertises;
+          },
+        }),
+        new DropDownOption({
+          localizedValue: StringUtil.format(
+            StringUtil.getLoca("system.general.sort.sortDescendingBy"),
+            StringUtil.getLoca("system.item.expertise.level")
+          ),
+          onClick: () => {
+            const newExpertises = this.document.expertises.concat([]);
+            newExpertises.sort((a, b) => b.requiredLevel - a.requiredLevel);
+            this.document.expertises = newExpertises;
+          },
+        }),
       ],
       itemContextMenuOptions: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.item.expertise.delete"),
-          onClick: () => {
-            // TODO #762 prompt confirm -> delete
+          onClick: async (item) => {
+            const dialog = await new ConfirmableModalDialog({
+              easyDismissal: true,
+              title: StringUtil.getLoca("system.general.delete.confirm"),
+              sections: [
+                new DynamicComponent({
+                  html: `<p>${StringUtil.format(
+                    StringUtil.getLoca("system.delete.confirmOf"),
+                    item.document.name
+                  )}</p>`,
+                }),
+              ],
+            }).renderAndAwait();
+
+            if (dialog.confirmed) {
+              const newExpertises = this.document.expertises.concat([]);
+              const index = this.document.expertises.findIndex(it => it.id === item.id);
+              newExpertises.splice(index, 1);
+              this.document.expertises = newExpertises;
+            }
           },
         }),
       ],

@@ -168,9 +168,9 @@
         "deleteOf": "Delete '%s'",
         "deleteType": "Delete %s",
         "deleteTypeOf": "Delete %s '%s'",
-        "query": "Confirm Deletion",
-        "queryOf": "Confirm Deletion of '%s'",
-        "queryTypeOf": "Confirm Deletion of %s '%s'"
+        "confirm": "Confirm Deletion",
+        "confirmOf": "Confirm Deletion of '%s'",
+        "confirmTypeOf": "Confirm Deletion of %s '%s'"
       },
       "description": "Description",
       "dragDrop": {
@@ -440,7 +440,8 @@
         "obstacle": "Test Obstacle",
         "opposedBy": "Opposing Skill/Expertise",
         "roll": "Roll a Test of this Expertise",
-        "search": "Filter Expertises by name"
+        "search": "Filter Expertises by name",
+        "name": "Expertise Name"
       },
       "trait": {
         "trait": "Trait"

@@ -141,6 +141,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
    * * default `'<i class="ico ico-burger-menu lg"></i>'`
    * @param {Array<DropDownOption> | undefined} args.options An array of context menu items, 
    * which are used to populate the context menu. 
+   * @param {Object | undefined} args.onClickContextData Data that is passed to the `onClick` handler 
+   * of the `options`. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. No arguments. 
    * @param {Function | undefined} args.onMenuShown Asynchronous callback that is invoked when 
@@ -156,6 +158,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this.onClick = args.onClick ?? (() => { });
     this.onMenuShown = args.onMenuShown ?? (() => { });
     this.onMenuHidden = args.onMenuHidden ?? (() => { });
+    this.onClickContextData = args.onClickContextData;
   }
 
   /**
@@ -237,7 +240,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
       menuItemElm.click((event) => {
         event.preventDefault();
         this.closeMenu();
-        option.onClick();
+        option.onClick(this.onClickContextData);
       });
 
       menuItemElm.on("keydown", (event) => {

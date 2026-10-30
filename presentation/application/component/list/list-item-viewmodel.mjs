@@ -16,12 +16,6 @@ export default class ListItemViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showContextMenu() { return this.contextMenuOptions.length > 0; }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
   get hasContent() { return ValidationUtil.isDefined(this.item.content); }
 
   /**
@@ -67,14 +61,13 @@ export default class ListItemViewModel extends ViewModel {
     this.item = args.item;
     this.contextMenuOptions = args.contextMenuOptions ?? [];
 
-    if (this.showContextMenu) {
-      this.vmContextMenu = new ButtonDropDownViewModel({
-        id: "context-menu",
-        parent: this,
-        options: this.contextMenuOptions,
-        visible: false,
-      });
-    }
+    this.vmContextMenu = new ButtonDropDownViewModel({
+      id: "context-menu",
+      parent: this,
+      options: this.contextMenuOptions,
+      visible: true,
+      onClickContextData: args.item,
+    });
     if (ValidationUtil.isDefined(this.item.header.viewModelFactory)) {
       this.vmHeader = this.item.header.viewModelFactory(this);
     }
@@ -87,12 +80,15 @@ export default class ListItemViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    if (ValidationUtil.isDefined(this.vmContextMenu)) {
+    const contextMenuElms = this.element.find(".context-menu");
+    if (this.contextMenuOptions.length === 0) {
+      contextMenuElms.addClass("hidden");
+    } else {
       this.element.on("mouseenter", () => {
-        this.vmContextMenu.visible = true;
+        contextMenuElms.removeClass("hidden");
       });
       this.element.on("mouseleave", () => {
-        this.vmContextMenu.visible = false;
+        contextMenuElms.addClass("hidden");
       });
     }
   }

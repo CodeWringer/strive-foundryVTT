@@ -27,7 +27,7 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
  * ```
  * 
  * Additionally, this base class handles visibility of any content that is only to be shown when 
- * this Item is embedded on an Actor. Add the CSS class `"embedded-only"` to all elements 
+ * this Item is embedded on an Actor. Add the CSS class `"context-embedded"` to all elements 
  * that should only be visible when embedded. 
  * 
  * @extends DocumentViewModel

@@ -1,15 +1,15 @@
 {{!-- context:
 viewModel: ExpertiseHeaderViewModel
 --}}
-<div class="embedded-only flex flex-row flex-middle auto-margin-h-md">
+<div class="flex flex-row flex-middle auto-margin-h-md">
   <span class="v-divider"></span>
   {{> abilityLevel viewModel=viewModel.vmLevel cssClass="lg" }}
 </div>
-<span class="v-divider hover-only"></span>
-{{#if viewModel.hasApCost }}
-<div id="{{viewModel.vmActionPoints.id}}" class="flex flex-column flex-wrap hover-only">
-  {{#times viewModel.apCost }}
-  <i class="ico ico-action-point-solid dark"></i>
-  {{/times}}
+<div class="ap-cost flex flex-row flex-middle auto-margin-h-md">
+  <span class="v-divider hover-only"></span>
+  <div class="flex flex-column flex-wrap hover-only">
+    {{#times viewModel.apCost }}
+    <i class="ico ico-action-point-solid dark"></i>
+    {{/times}}
+  </div>
 </div>
-{{/if}}

@@ -1,5 +1,6 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import { DOCUMENT_CONTEXT } from "../../model/document-context.mjs";
+import VisibilityRule from "../../util/visibility-rule.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
@@ -34,6 +35,21 @@ export default class DocumentViewModel extends ViewModel {
    */
   get showSecrets() { return this.isOwner; }
   set showSecrets(_) { throw new Error("Cannot set showSecrets of DocumentViewModel"); }
+
+  /**
+   * Defines the rules to hide elements after the template is rendered. 
+   * @type {Array<VisibilityRule>}
+   * @readonly
+   * @virtual
+   */
+  get initialVisibilities() {
+    return [
+      new VisibilityRule({
+        cssClass: ".context-embedded",
+        shouldBeHidden: () => !this.isEmbedded,
+      }),
+    ];
+  }
 
   /**
    * @type {Object}
@@ -113,10 +129,14 @@ export default class DocumentViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    // TODO #762 reconsider this
-    if (this.isIndependent) {
-      this.element.find(".embedded-only").addClass("hidden");
+    for (const rule of this.initialVisibilities) {
+      if (rule.shouldBeHidden()) {
+        const elements = this.element.find(rule.cssClass);
+        elements.addClass("hidden");
+        elements.removeClass("hover-only");
+      }
     }
+
     this.element.on("mouseenter", (e) => {
       this.element.find(".hover-only").removeClass("hidden");
     });

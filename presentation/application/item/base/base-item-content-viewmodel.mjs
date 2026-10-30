@@ -54,18 +54,6 @@ export default class BaseItemContentViewModel extends DocumentViewModel {
    */
   constructor(args = {}) {
     super(args);
-
-    if (this.isGM) {
-      this.vmGmNotes = new InputRichTextViewModel({
-        id: "vmGmNotes",
-        parent: this,
-        isEditable: this.isEditable,
-        value: this.document.gmNotes,
-        onChange: (newValue) => {
-          this.document.gmNotes = newValue;
-        },
-      });
-    }
   }
 
   /** @override */

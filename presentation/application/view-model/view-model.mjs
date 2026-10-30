@@ -104,14 +104,15 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  */
 export default class ViewModel {
   /**
-   * Static. Returns the template this ViewModel is intended for. 
-   * 
+   * Returns the template this ViewModel is intended for. 
+   * @type {String}
    * @abstract
    * @throws {Error} NotImplementedException - Thrown if not overriden by implementing types. 
    * @readonly
+   * @static
    */
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
-
+  
   // TODO remove when no longer needed. 
   get isOwner() { throw new Error("Deprecated"); }
   get document() { throw new Error("Deprecated"); }

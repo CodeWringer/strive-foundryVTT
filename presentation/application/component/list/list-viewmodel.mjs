@@ -30,12 +30,6 @@ export default class ListViewModel extends ViewModel {
   get itemTemplate() { return ListItemViewModel.TEMPLATE; }
 
   /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get showContextMenu() { return this.contextMenuOptions.length > 0; }
-
-  /**
    * @type {Array<ListItem>}
    * @private
    */
@@ -122,14 +116,13 @@ export default class ListViewModel extends ViewModel {
     this.itemContextMenuOptions = args.itemContextMenuOptions ?? [];
 
     this.contextMenuOptions = args.contextMenuOptions ?? [];
-    if (this.showContextMenu) {
-      this.vmContextMenu = new ButtonDropDownViewModel({
-        id: "vmContextMenu",
-        parent: this,
-        options: this.contextMenuOptions,
-        visible: this.isEditable,
-      });
-    }
+    this.vmContextMenu = new ButtonDropDownViewModel({
+      id: "vmContextMenu",
+      parent: this,
+      isEditable: true,
+      options: this.contextMenuOptions,
+      visible: true,
+    });
 
     this._searchTerm = args.searchTerm ?? "";
     this.#items = args.items ?? [];
@@ -148,22 +141,14 @@ export default class ListViewModel extends ViewModel {
         this.#filter(false);
       },
       onFocus: () => {
-        this.element.find(".list-header-start").stop(true, true);
+        this.element.find(".list-header-start").stop(true, false);
         this.element.find(".list-header-start").animate({
           width: "0%",
         }, 300);
-        this.element.find(".list-header-end").stop(true, true);
-        this.element.find(".list-header-end").animate({
-          width: "50%",
-        }, 300);
       },
       onFocusLost: () => {
-        this.element.find(".list-header-start").stop(true, true);
+        this.element.find(".list-header-start").stop(true, false);
         this.element.find(".list-header-start").animate({
-          width: "25%",
-        }, 300);
-        this.element.find(".list-header-end").stop(true, true);
-        this.element.find(".list-header-end").animate({
           width: "25%",
         }, 300);
       },
@@ -172,8 +157,11 @@ export default class ListViewModel extends ViewModel {
 
   async activateListeners(html) {
     await super.activateListeners(html);
-
     await this.#render();
+
+    if (this.contextMenuOptions.length === 0) {
+      this.element.find(".context-menu").addClass("hidden");
+    }
   }
 
   /**
