@@ -182,10 +182,11 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
     const mapExpertiseToListItem = (expertise) => {
       return new ListItem({
         id: expertise.id,
+        document: expertise,
         header: new DynamicComponent({
           template: BaseItemHeaderViewModel.TEMPLATE,
           viewModelFactory: (parent) => new ExpertiseHeaderViewModel({
-            id: `${expertise.id}-header`,
+            id: "header",
             parent: parent,
             document: expertise,
             sheet: args.sheet,
@@ -195,7 +196,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         content: new DynamicComponent({
           template: BaseItemContentViewModel.TEMPLATE,
           viewModelFactory: (parent) => new ExpertiseContentViewModel({
-            id: `${expertise.id}-content`,
+            id: "content",
             parent: parent,
             document: expertise,
             sheet: args.sheet,
@@ -228,6 +229,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       contextMenuOptions: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.item.expertise.add"),
+          icon: "fas fa-plus",
           onClick: () => {
             const newExpertises = this.document.expertises.concat([
               new Expertise({
@@ -242,6 +244,8 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
             StringUtil.getLoca("system.general.sort.sortAscendingBy"),
             StringUtil.getLoca("system.item.expertise.name")
           ),
+          icon: "ico ico-sort-asc",
+          iconCssClass: "lg",
           onClick: () => {
             const newExpertises = this.document.expertises.concat([]);
             newExpertises.sort((a, b) => a.name.localeCompare(b.name));
@@ -253,6 +257,8 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
             StringUtil.getLoca("system.general.sort.sortDescendingBy"),
             StringUtil.getLoca("system.item.expertise.name")
           ),
+          icon: "ico ico-sort-desc",
+          iconCssClass: "lg",
           onClick: () => {
             const newExpertises = this.document.expertises.concat([]);
             newExpertises.sort((a, b) => b.name.localeCompare(a.name));
@@ -264,6 +270,8 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
             StringUtil.getLoca("system.general.sort.sortAscendingBy"),
             StringUtil.getLoca("system.item.expertise.level")
           ),
+          icon: "ico ico-sort-asc",
+          iconCssClass: "lg",
           onClick: () => {
             const newExpertises = this.document.expertises.concat([]);
             newExpertises.sort((a, b) => a.requiredLevel - b.requiredLevel);
@@ -275,6 +283,8 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
             StringUtil.getLoca("system.general.sort.sortDescendingBy"),
             StringUtil.getLoca("system.item.expertise.level")
           ),
+          icon: "ico ico-sort-desc",
+          iconCssClass: "lg",
           onClick: () => {
             const newExpertises = this.document.expertises.concat([]);
             newExpertises.sort((a, b) => b.requiredLevel - a.requiredLevel);
@@ -285,14 +295,15 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       itemContextMenuOptions: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.item.expertise.delete"),
+          icon: "fas fa-trash",
           onClick: async (item) => {
             const dialog = await new ConfirmableModalDialog({
               easyDismissal: true,
               title: StringUtil.getLoca("system.general.delete.confirm"),
               sections: [
                 new DynamicComponent({
-                  html: `<p>${StringUtil.format(
-                    StringUtil.getLoca("system.delete.confirmOf"),
+                  html: `<p class="font-size-md">${StringUtil.format(
+                    StringUtil.getLoca("system.general.delete.confirmOf"),
                     item.document.name
                   )}</p>`,
                 }),

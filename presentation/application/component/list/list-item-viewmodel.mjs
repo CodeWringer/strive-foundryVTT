@@ -65,6 +65,7 @@ export default class ListItemViewModel extends ViewModel {
       id: "context-menu",
       parent: this,
       options: this.contextMenuOptions,
+      isEditable: true,
       visible: true,
       onClickContextData: args.item,
     });

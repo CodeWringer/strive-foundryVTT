@@ -16,6 +16,8 @@
 }
 
 .theme-dark .strive.button {
+  background-color: $c-bg-dark-secondary;
+  
   &:hover,
   &:focus,
   &:focus-within {
@@ -26,6 +28,8 @@
 }
 
 .theme-light .strive.button {
+  background-color: $c-bg-light-secondary;
+
   &:hover,
   &:focus,
   &:focus-within {

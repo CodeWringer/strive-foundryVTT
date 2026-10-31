@@ -179,6 +179,8 @@ li.directory-item > img.thumbnail {
 @include icon-template(".ico-recipe", "recipe");
 @include icon-template(".ico-search", "search");
 @include icon-template(".ico-skill", "skill");
+@include icon-template(".ico-sort-asc", "sort-asc");
+@include icon-template(".ico-sort-desc", "sort-desc");
 @include icon-template(".ico-speech-bubble", "speech-bubble");
 @include icon-template(".ico-targeting-type-aoe", "targeting-type-aoe");
 @include icon-template(".ico-targeting-type-multi", "targeting-type-multi");

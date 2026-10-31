@@ -149,7 +149,7 @@ export default class ViewModel {
    * @type {String}
    * @readonly
    */
-  get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}-${this._id}`; }
+  get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}_${this._id}`; }
 
   /**
    * @summary

@@ -252,7 +252,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
           menuItemElm.prev().focus();
         } else if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          option.onClick();
+          option.onClick(this.onClickContextData);
           this.closeMenu();
         }
       });

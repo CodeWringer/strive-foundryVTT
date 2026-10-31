@@ -16,11 +16,13 @@ viewModel: ListItemViewModel
     {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="context-menu" }}
   </div>
   {{!-- Content --}}
-  {{#if viewModel.hasContent}}
-  {{#with viewModel.item.content.template as | template |}}
-    {{> (template) viewModel=../viewModel.vmContent }}
-  {{/with}}
-  {{else}}
-    {{{viewModel.item.content.html}}}
-  {{/if}}
+  <div class="margin-l-xl margin-b-xl margin-r-xl border-l-sm border-b-sm border-r-sm secondary">
+    {{#if viewModel.hasContent}}
+    {{#with viewModel.item.content.template as | template |}}
+      {{> (template) viewModel=../viewModel.vmContent }}
+    {{/with}}
+    {{else}}
+      {{{viewModel.item.content.html}}}
+    {{/if}}
+  </div>
 </li>

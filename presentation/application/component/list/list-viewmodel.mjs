@@ -1,4 +1,5 @@
 import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
+import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
@@ -107,6 +108,7 @@ export default class ListViewModel extends ViewModel {
    * * `item: ListItem` - the item to convert to a searchable `String`. 
    * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
    * @param {Array<DropDownOption> | undefined} args.itemContextMenuOptions
+   * @param {ListItemExpansionMode | undefined} args.itemExpansionMode
    */
   constructor(args = {}) {
     super(args);
@@ -114,6 +116,7 @@ export default class ListViewModel extends ViewModel {
     this.toSearchableTerm = args.toSearchableTerm ?? (() => { });
     this.#separators = args.separators ?? [];
     this.itemContextMenuOptions = args.itemContextMenuOptions ?? [];
+    this.itemExpansionMode = args.itemExpansionMode ?? LIST_ITEM_EXPANSION_MODES.window;
 
     this.contextMenuOptions = args.contextMenuOptions ?? [];
     this.vmContextMenu = new ButtonDropDownViewModel({
