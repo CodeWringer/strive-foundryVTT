@@ -56,9 +56,12 @@ export default class BaseItemHeaderViewModel extends DocumentViewModel {
    * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
    * independent document. This affects interactibility. 
    * * default `DOCUMENT_CONTEXT.independent`
+   * @param {Function | undefined} args.onNameClick Invoked when the name input is clicked. 
    */
   constructor(args = {}) {
     super(args);
+
+    this.onNameClick = args.onNameClick;
 
     this.vmImg = new InputImageViewModel({
       id: "vmImg",
@@ -83,6 +86,7 @@ export default class BaseItemHeaderViewModel extends DocumentViewModel {
       onChange: (newValue) => {
         this.document.name = newValue;
       },
+      onClick: this.onNameClick,
     });
   }
 }

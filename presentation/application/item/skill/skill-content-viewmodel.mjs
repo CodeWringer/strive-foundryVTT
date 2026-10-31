@@ -1,6 +1,7 @@
 import { TARGETING_TYPES } from "../../../../business/model/domain/const/targeting-types.mjs";
 import Expertise from "../../../../business/model/domain/skill/expertise.mjs";
 import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
+import { LIST_ITEM_EXPANSION_MODES } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
@@ -183,6 +184,13 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       return new ListItem({
         id: expertise.id,
         document: expertise,
+        openSheet: async () => {
+          if (ValidationUtil.isFunction(expertise.openSheet)) {
+            return await expertise.openSheet(true);
+          } else {
+            game.strive.logger.warning("openSheet undefined");
+          }
+        },
         header: new DynamicComponent({
           template: BaseItemHeaderViewModel.TEMPLATE,
           viewModelFactory: (parent) => new ExpertiseHeaderViewModel({
@@ -191,6 +199,9 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
             document: expertise,
             sheet: args.sheet,
             context: this.context,
+            onNameClick: () => {
+              this.vmExpertises.toggleItemExpanded(expertise.id);
+            },
           }),
         }),
         content: new DynamicComponent({
@@ -209,6 +220,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
     this.vmExpertises = new ListViewModel({
       id: "vmExpertises",
       parent: this,
+      itemExpansionMode: LIST_ITEM_EXPANSION_MODES.inline,
       items: this.document.expertises.map(expertise => mapExpertiseToListItem(expertise)),
       separators: [
         new ListSeparator({

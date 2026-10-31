@@ -8,7 +8,6 @@ import { KEY_CODES, MODIFIER_KEY_CODES } from "./keyboard/key-codes.mjs";
 import { KEYBOARD } from "./keyboard/keyboard.mjs";
 import { Rect } from "./rect.mjs";
 import { SheetUtil } from "./sheet-utility.mjs";
-import VisibilityRule from "./visibility-rule.mjs";
 
 /**
  * Wraps the `presentation.util` module. 
@@ -27,7 +26,6 @@ export const util = {
   sheet: SheetUtil,
   chat: ChatUtil,
   choices: ChoicesUtil,
-  VisibilityRule: VisibilityRule,
   /**
    * Initialization to be called during the system's "ready" hook. 
    */

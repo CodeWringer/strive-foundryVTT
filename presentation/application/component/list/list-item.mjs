@@ -3,8 +3,9 @@ import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import DynamicComponent from "../dynamic-component/dynamic-component.mjs";
 
 /**
- * @property {DynamicComponent} header 
  * @property {String} id 
+ * @property {Object | undefined} document 
+ * @property {DynamicComponent} header 
  * @property {DynamicComponent | undefined} content 
  */
 export default class ListItem {
@@ -14,6 +15,8 @@ export default class ListItem {
    * @param {Object | undefined} args.document 
    * @param {String | undefined} args.id 
    * @param {DynamicComponent | undefined} args.content 
+   * @param {Function<Application> | undefined} args.openSheet When invoked, is expected to create 
+   * a new Application that represents the list item, which MUST return the Application instance. 
    */
   constructor(args = {}) {
     ValidationUtil.validateOrThrow(args, ["header"]);
@@ -21,5 +24,6 @@ export default class ListItem {
     this.document = args.document;
     this.header = args.header;
     this.content = args.content;
+    this.openSheet = args.openSheet;
   }
 }

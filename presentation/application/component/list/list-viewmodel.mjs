@@ -168,6 +168,38 @@ export default class ListViewModel extends ViewModel {
   }
 
   /**
+   * Returns the list item with either the given ID or index. 
+   * @param {String | Number} idOrIndex ID or index of the item to return. 
+   * @returns {ListItemViewModel}
+   */
+  getListItemViewModel(idOrIndex) {
+    const vm = this.#listItemViewModels.find(it => it.item.id === idOrIndex);
+    if (!ValidationUtil.isDefined(vm)) {
+      vm = this.#listItemViewModels[idOrIndex];
+    }
+    return vm;
+  }
+
+  /**
+   * Sets the expansion state of an item with either the given ID or index. 
+   * @param {String | Number} idOrIndex ID or index of the item to set. 
+   * @param {Boolean} state If `true`, will expand the item, else collapse it. 
+   */
+  setItemExpanded(idOrIndex, state) {
+    const vm = this.getListItemViewModel(idOrIndex);
+    vm.isExpanded = state;
+  }
+
+  /**
+   * Toggles the expansion state of an item with either the given ID or index. 
+   * @param {String | Number} idOrIndex ID or index of the item to toggle. 
+   */
+  toggleItemExpanded(idOrIndex) {
+    const vm = this.getListItemViewModel(idOrIndex);
+    vm.isExpanded = !vm.isExpanded;
+  }
+
+  /**
    * @returns {Promise<void>}
    * @async
    */
@@ -192,6 +224,7 @@ export default class ListViewModel extends ViewModel {
       parent: this,
       item: item,
       contextMenuOptions: this.itemContextMenuOptions,
+      expansionMode: this.itemExpansionMode,
     }));
 
     // Prepared items from separators. 
@@ -221,6 +254,7 @@ export default class ListViewModel extends ViewModel {
         html: wrappedHtml,
         isSeparator: true,
         toolTip: preparedSeparator.tooltip,
+        expansionMode: this.itemExpansionMode,
       });
       this.#listItemViewModels.splice(preparedSeparator.index, 0, viewModel);
     });

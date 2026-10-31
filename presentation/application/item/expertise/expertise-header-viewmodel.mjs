@@ -3,7 +3,7 @@ import { Sum, SumComponent } from "../../../../business/model/domain/summed-data
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
-import VisibilityRule from "../../../util/visibility-rule.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import AbilityLevelViewModel from "../../component/ability-level/ability-level-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -29,8 +29,8 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
   get hasApCost() { return this.document.actionPoints.current > 0 && this.document.actionPoints.enabled; }
 
   /** @override */
-  get initialVisibilities() {
-    return super.initialVisibilities.concat([
+  get visibilityRules() {
+    return super.visibilityRules.concat([
       new VisibilityRule({
         cssClass: ".ap-cost",
         shouldBeHidden: () => !this.hasApCost,
@@ -45,6 +45,7 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
+   * @param {Function | undefined} args.onNameClick Invoked when the name input is clicked. 
    * 
    * @param {Expertise} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 

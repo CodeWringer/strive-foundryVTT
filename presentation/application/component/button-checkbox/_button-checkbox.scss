@@ -7,7 +7,7 @@ label.component-button-checkbox {
     height: 1.2rem;
     width: 1.2rem;
     border: 2px solid $c-border-dark;
-    border-radius: 4px;
+    border-radius: $border-radius-md;
     display: inline-block;
     position: relative;
     cursor: pointer;

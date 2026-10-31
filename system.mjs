@@ -153,7 +153,7 @@ Hooks.once("ready", function () {
       // }).render(true);
     }
   } else {
-    game.strive.logger.logVerbose("Version up to date - skipping migrations");
+    game.strive.logger.verbose("Version up to date - skipping migrations");
     // Ensure the current system version is saved. 
     WorldSystemVersion.set(migrator.finalMigrationVersion);
   }

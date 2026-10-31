@@ -273,7 +273,7 @@ export default class Ruleset {
     const transientActor = actor.getTransientObject();
     const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
     if (!ValidationUtil.isDefined(characterAttribute)) {
-      game.strive.logger.logError(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
+      game.strive.logger.error(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
       return;
     }
     return characterAttribute.modifiedLevel;

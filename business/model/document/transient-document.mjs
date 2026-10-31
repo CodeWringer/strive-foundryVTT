@@ -462,4 +462,17 @@ export default class TransientDocument {
   offChange(handlerId) {
     return this._onChangeCallbacks.remove(handlerId);
   }
+
+  /**
+   * If possible, opens the sheet that represents the document, and returns it. 
+   * @returns {Promise<ApplicationV2>}
+   * @async
+   */
+  async openSheet() {
+    if (ValidationUtil.isDefined(this.document.sheet)) {
+      return await this.document.sheet.render(true);
+    } else {
+      game.strive.logger.warning("sheet undefined");
+    }
+  }
 }

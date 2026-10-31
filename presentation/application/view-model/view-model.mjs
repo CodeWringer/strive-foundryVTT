@@ -2,6 +2,7 @@ import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import { PropertyUtil } from "../../../common/util/property-utility.mjs";
 import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+import VisibilityRule from "../../model/visibility-rule.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
 
 /**
@@ -149,7 +150,7 @@ export default class ViewModel {
    * @type {String}
    * @readonly
    */
-  get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}_${this._id}`; }
+  get id() { return (!ValidationUtil.isDefined(this.parent)) ? this._id : `${this.parent.id}_${this._id}`; }
 
   /**
    * @summary
@@ -334,6 +335,14 @@ export default class ViewModel {
   get isDisposed() { return this._isDisposed; }
 
   /**
+   * Defines the rules to hide elements after the template is rendered. 
+   * @type {Array<VisibilityRule>}
+   * @readonly
+   * @virtual
+   */
+  get visibilityRules() { return []; }
+
+  /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
@@ -468,7 +477,7 @@ export default class ViewModel {
     }
 
     if (this._element === undefined || this._element === null || this._element.length === 0) {
-      game.strive.logger.logWarn(`Failed to get element with id '${this.id}'`);
+      game.strive.logger.warning(`Failed to get element with id '${this.id}'`);
     }
 
     if (this.visible !== true) {
@@ -483,7 +492,19 @@ export default class ViewModel {
       try {
         await child.activateListeners(html);
       } catch (error) {
-        game.strive.logger.logWarn(`${error.message}; ${error.stack}`);
+        game.strive.logger.warning(`${error.message}; ${error.stack}`);
+      }
+    }
+
+    this.evaluateVisibilityRules();
+  }
+
+  evaluateVisibilityRules() {
+    for (const rule of this.visibilityRules) {
+      if (rule.shouldBeHidden()) {
+        const elements = this.element.find(rule.cssClass);
+        elements.addClass("hidden");
+        elements.addClass("suppress-hover");
       }
     }
   }
@@ -510,7 +531,7 @@ export default class ViewModel {
         try {
           child.dispose();
         } catch (error) {
-          game.strive.logger.logWarn(error);
+          game.strive.logger.warning(error);
         }
       }
     }

@@ -14,7 +14,7 @@ export default class ExpertiseItemSheetViewModel extends BaseItemSheetViewModel 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientIllness} args.document The represented transient document instance. 
+   * @param {Expertise} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
    * independent document. This affects interactibility. 

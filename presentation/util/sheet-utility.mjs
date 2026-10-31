@@ -102,8 +102,34 @@ export const SheetUtil = {
         height: elm.outerHeight(),
       });
     } else {
-      game.strive.logger.logWarn("Failed to get 'parentPos'");
+      game.strive.logger.warning("Failed to get 'parentPos'");
       return new Rect();
     }
-  }
+  },
+
+  /**
+   * Sets up event listeners so that mouse enter and leave on the given `triggerElement` cause 
+   * the given `targetElements` to be shown or hidden. 
+   * @param {JQuery} triggerElement The element whose mouse enter and leave events cause 
+   * `targetElements` to become visible or hidden. 
+   * @param {JQuery} targetElements The element(s) whose visibility will be affected. 
+   */
+  setHover(triggerElement, targetElements) {
+    triggerElement.on("mouseenter", (e) => {
+      for (const element of targetElements) {
+        const jElement = $(element);
+        if (!jElement.hasClass("suppress-hover")) {
+          jElement.removeClass("hidden");
+        }
+      }
+    });
+    triggerElement.on("mouseleave", (e) => {
+      for (const element of targetElements) {
+        const jElement = $(element);
+        if (!jElement.hasClass("suppress-hover")) {
+          jElement.addClass("hidden");
+        }
+      }
+    });
+  },
 }

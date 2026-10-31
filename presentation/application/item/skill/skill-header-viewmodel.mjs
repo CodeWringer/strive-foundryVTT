@@ -12,7 +12,7 @@ import InputDropDownViewModel from "../../component/input-choice/input-dropdown/
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
-import VisibilityRule from "../../../util/visibility-rule.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 
 export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
@@ -34,8 +34,8 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   get hasApCost() { return this.document.actionPoints.current > 0 && this.document.actionPoints.enabled; }
 
   /** @override */
-  get initialVisibilities() {
-    return super.initialVisibilities.concat([
+  get visibilityRules() {
+    return super.visibilityRules.concat([
       new VisibilityRule({
         cssClass: ".ap-cost",
         shouldBeHidden: () => !this.hasApCost,

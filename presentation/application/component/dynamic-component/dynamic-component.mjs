@@ -37,9 +37,7 @@ export default class DynamicComponent {
    * Renders the component and returns the rendered result. 
    * @param {ViewModel | undefined} parent A parent `ViewModel` instance to pass 
    * to the `viewModelFactory`.
-   * @returns {Promise<Object>} properties:
-   * * `rendered: String`
-   * * `viewModel: ViewModel | undefined` - in case `viewModelFactory` is undefined. 
+   * @returns {Promise<DynamicComponentRenderResult>} 
    * @async
    */
   async render(parent) {
@@ -55,9 +53,23 @@ export default class DynamicComponent {
       });
     }
 
-    return {
+    return new DynamicComponentRenderResult({
       rendered: rendered,
       viewModel: viewModel,
-    };
+    });
+  }
+}
+
+export class DynamicComponentRenderResult {
+  /**
+   * @param {Object} args 
+   * @param {String} args.rendered 
+   * @param {ViewModel | undefined} args.viewModel 
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["rendered"]);
+
+    this.rendered = args.rendered;
+    this.viewModel = args.viewModel;
   }
 }

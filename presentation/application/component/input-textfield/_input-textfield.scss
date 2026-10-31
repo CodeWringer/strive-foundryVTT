@@ -4,4 +4,32 @@
     height: 100%;
     display: block;
   }
+
+  &.interactible {
+    cursor: pointer;
+  }
+}
+
+.theme-dark .strive.textfield {
+  &.interactible {
+    &:hover,
+    &:focus,
+    &:focus-within {
+      color: $c-text-dark-highlight;
+      text-shadow: 0 0 0.3rem $c-bg-themed;
+      filter: drop-shadow(0 0 4px $c-bg-themed);
+    }
+  }
+}
+
+.theme-light .strive.textfield {
+  &.interactible {
+    &:hover,
+    &:focus,
+    &:focus-within {
+      color: $c-text-light-highlight;
+      text-shadow: 0 0 0.3rem $c-bg-themed;
+      filter: drop-shadow(0 0 4px $c-bg-themed);
+    }
+  }
 }

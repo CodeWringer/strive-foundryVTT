@@ -60,9 +60,9 @@ export const UuidUtil = {
       }
       return sanitized;
     } catch (error) {
-      game.strive.logger.logError("Failed to sanitize the following ID");
-      game.strive.logger.logError(id);
-      game.strive.logger.logError(error);
+      game.strive.logger.error("Failed to sanitize the following ID");
+      game.strive.logger.error(id);
+      game.strive.logger.error(error);
       return UuidUtil.createUuid();
     }
   },

@@ -1,5 +1,5 @@
 import ButtonViewModel from "./button/button-viewmodel.mjs";
-import DynamicComponent from "./dynamic-component/dynamic-component.mjs";
+import DynamicComponent, { DynamicComponentRenderResult } from "./dynamic-component/dynamic-component.mjs";
 import InputDropDownViewModel from "./input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.mjs";
@@ -35,6 +35,7 @@ export const component = {
   InputDropDownViewModel: InputDropDownViewModel,
   InputRichTextViewModel: InputRichTextViewModel,
   DynamicComponent: DynamicComponent,
+  DynamicComponentRenderResult: DynamicComponentRenderResult,
   RowViewModel: RowViewModel,
   CustomProseMirrorMenu: CustomProseMirrorMenu,
   InputSplitNumberSpinnerViewModel: InputSplitNumberSpinnerViewModel,

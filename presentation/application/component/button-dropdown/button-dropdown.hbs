@@ -1,8 +1,8 @@
 {{!--
 viewModel: ButtonDropDownViewModel
 --}}
-<div id="{{viewModel.id}}" class="strive dropdown">
-  <a class="button auto-margin-h-sm{{#if cssClass}} {{cssClass}}{{/if}}" tabindex="0">
+<div id="{{viewModel.id}}" class="strive dropdown{{#if cssClass}} {{cssClass}}{{/if}}">
+  <a class="button auto-margin-h-sm" tabindex="0">
     {{#if viewModel.content}}{{{viewModel.content}}}{{/if}}
     {{#if @partial-block}}{{> @partial-block }}{{/if}}
   </a>

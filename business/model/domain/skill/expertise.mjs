@@ -1,5 +1,7 @@
 import { common } from "../../../../common/_module.mjs"
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import ExpertiseItemSheet from "../../../../presentation/application/item/expertise/expertise-item-sheet.mjs";
+import { DOCUMENT_CONTEXT } from "../../../../presentation/model/document-context.mjs";
 import AtReferencer from "../../../search/at-referencer.mjs";
 import ArrayDataFieldBridge from "../../document/array-data-field-bridge.mjs";
 import DataFieldBridge from "../../document/data-field-bridge.mjs";
@@ -274,6 +276,15 @@ export default class Expertise extends Persistable {
   }
 
   /**
+   * Returns the context of the document - whether it is embedded or independent. 
+   * @type {DOCUMENT_CONTEXT}
+   * @readonly
+   */
+  get context() {
+    return DOCUMENT_CONTEXT.embedded;
+  }
+
+  /**
    * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
    * @param {String | undefined} args.id
@@ -408,14 +419,14 @@ export default class Expertise extends Persistable {
    */
   delete() {
     if (!this.hasParent) {
-      game.strive.logger.logWarn("No parent");
+      game.strive.logger.warning("No parent");
       return false;
     }
 
     const safeParentExpertises = this.owningDocument.expertises.concat([]);
     const index = safeParentExpertises.findIndex(it => it.id === this.id);
     if (index < 0) {
-      game.strive.logger.logWarn("Not part of parent Skill's Expertises");
+      game.strive.logger.warning("Not part of parent Skill's Expertises");
       return false;
     }
 
@@ -436,14 +447,14 @@ export default class Expertise extends Persistable {
    */
   async update(delta, render = true) {
     if (!this.hasParent) {
-      game.strive.logger.logWarn("No parent");
+      game.strive.logger.warning("No parent");
       return;
     }
 
     const safeParentExpertises = this.owningDocument.expertises.concat([]);
     const index = safeParentExpertises.findIndex(it => it.id === this.id);
     if (index < 0) {
-      game.strive.logger.logWarn("Not part of parent Skill's Expertises");
+      game.strive.logger.warning("Not part of parent Skill's Expertises");
       return false;
     }
 
@@ -573,5 +584,14 @@ export default class Expertise extends Persistable {
    */
   compareRequiredLevel(other) {
     return common.util.compare.compareOrdinal(this.requiredLevel, other.requiredLevel)
+  }
+
+  /**
+   * If possible, opens the sheet that represents the document, and returns it. 
+   * @returns {Promise<ApplicationV2>}
+   * @async
+   */
+  async openSheet() {
+    return await new ExpertiseItemSheet(this).render(true);
   }
 }

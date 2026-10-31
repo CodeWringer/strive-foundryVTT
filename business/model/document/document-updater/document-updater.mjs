@@ -168,7 +168,7 @@ export default class DocumentUpdater {
     }
 
     if (common.util.validation.isArray(newValue) === true && game.strive.debug === true) {
-      this._logger.logWarn(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
+      this._logger.warning(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
     } else if (common.util.validation.isFunction(newValue) === true) {
       throw new Error("Detected a function as the value to set - functions cannot be persisted!");
     }
@@ -204,7 +204,7 @@ export default class DocumentUpdater {
           throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
         } else if (common.util.validation.isArray(currentDocumentProperty) === true) {
           arrayIsPartOfPath = true;
-          this._logger.logWarn(`Detected array as part by name '${propertyName}' of given property path '${propertyPath}' - consider converting the array to an object, instead, as arrays are slow to process`);
+          this._logger.verbose(`Detected array as part by name '${propertyName}' of given property path '${propertyPath}' - consider converting the array to an object, instead, as arrays are slow to process`);
           previousDtoProperty[propertyName] = currentDocumentProperty;
         } else if (common.util.validation.isObject(currentDocumentProperty) === true) {
           if (arrayIsPartOfPath === true) {
@@ -228,7 +228,7 @@ export default class DocumentUpdater {
         // The original object to build the DTO from is missing a piece of the path!
         // From this point on, the original object can no longer be used to determine elements of the path. 
 
-        this._logger.logWarn("Substituting missing object in path");
+        this._logger.warning("Substituting missing object in path");
         // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
         previousDtoProperty[propertyName] = {};
 

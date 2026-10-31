@@ -138,7 +138,7 @@ export const ChatUtil = {
       });
 
       if (document === undefined) {
-        game.strive.logger.logWarn(`renderChatMessage: Failed to get document represented by chat message`);
+        game.strive.logger.warning(`renderChatMessage: Failed to get document represented by chat message`);
         return;
       }
 
@@ -167,7 +167,7 @@ export const ChatUtil = {
     }
 
     if (viewModel === undefined) {
-      game.strive.logger.logWarn(`renderChatMessage: Failed to create view model for chat message`);
+      game.strive.logger.warning(`renderChatMessage: Failed to create view model for chat message`);
       return;
     }
     
@@ -198,7 +198,7 @@ export const ChatUtil = {
         } catch (error) {
           // It may already be disposed, in which case it might throw an error. 
           // Of course, if it is already disposed, the error isn't actually a problem. 
-          game.strive.logger.logVerbose(error);
+          game.strive.logger.verbose(error);
         }
       }
 

@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { SheetUtil } from "../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -96,5 +97,12 @@ export default class AbilityLevelViewModel extends InputViewModel {
         this.onRoll();
       },
     });
+  }
+
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    const rollButtonElm = this.element.find("> .read-mode > .roll-button");
+    SheetUtil.setHover(this.element, rollButtonElm);
   }
 }

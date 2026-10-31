@@ -58,6 +58,8 @@ import ExpertiseContentViewModel from "./item/expertise/expertise-content-viewmo
 import ExpertiseHeaderViewModel from "./item/expertise/expertise-header-viewmodel.mjs";
 import ExpertiseItemSheetViewModel from "./item/expertise/expertise-item-sheet-viewmodel.mjs";
 import ExpertiseItemSheet from "./item/expertise/expertise-item-sheet.mjs";
+import GeneralApplication from "./general/general-application.mjs";
+import GeneralDocumentApplication from "./general/general-document-application.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -73,6 +75,10 @@ export const application = {
     ViewModelCollection: ViewModelCollection,
     ValueViewModel: ValueViewModel,
     InputViewModel: InputViewModel,
+    general: {
+      GeneralApplication: GeneralApplication,
+      GeneralDocumentApplication: GeneralDocumentApplication,
+    },
     base: {
       BaseItemHeaderViewModel: BaseItemHeaderViewModel,
       BaseItemContentViewModel: BaseItemContentViewModel,

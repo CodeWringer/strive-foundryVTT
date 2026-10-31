@@ -67,7 +67,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     });
 
     if (toShow === undefined) {
-      game.strive.logger.logWarn(`NullPointerException: Failed to find document '${this.target}' to open sheet`);
+      game.strive.logger.warning(`NullPointerException: Failed to find document '${this.target}' to open sheet`);
       return;
     }
     toShow.sheet.render(true);

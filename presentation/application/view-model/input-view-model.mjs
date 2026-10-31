@@ -145,6 +145,9 @@ export default class InputViewModel extends ValueViewModel {
    * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onClick Callback that is invoked when the input element is clicked. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
    */
   constructor(args = {}) {
     super(args);
@@ -160,6 +163,9 @@ export default class InputViewModel extends ValueViewModel {
 
     this.onFocusLost = new Callbacks();
     this.onFocusLost.add(args.onFocusLost);
+
+    this.onClick = new Callbacks();
+    this.onClick.add(args.onClick);
   }
 
   /** @override */
@@ -177,6 +183,13 @@ export default class InputViewModel extends ValueViewModel {
     }
 
     if (!this._autoHandleEvents) return;
+
+    this.element.on("click", (event) => {
+      this.onClick.invoke(event, this);
+    });
+    if (this.onClick.count > 0) {
+      this.element.addClass("interactible"); // Only to support visual feedback. 
+    }
 
     if (ValidationUtil.isDefined(this.inputElement) && this.inputElement.length > 0) {
       $(this.inputElement).change(this._onChange.bind(this));
@@ -202,8 +215,8 @@ export default class InputViewModel extends ValueViewModel {
   _onChange(event) {
     const newValue = SheetUtil.getElementValue(event.currentTarget);
 
-    if (ValidationUtil.isDefined(newValue) !== true) {
-      game.strive.logger.logWarn(`Failed to get element's value - is '${newValue}' valid?`);
+    if (!ValidationUtil.isDefined(newValue)) {
+      game.strive.logger.warning("Failed to get element's value");
     }
 
     this.value = newValue;

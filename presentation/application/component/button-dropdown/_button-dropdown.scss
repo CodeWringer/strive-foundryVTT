@@ -6,7 +6,7 @@
     font-size: inherit;
     line-height: inherit;
     width: 100%;
-    border-radius: unset;
+    border-radius: $border-radius-md;
     padding: 0 5px;
     margin: 0;
     border: unset;
@@ -34,6 +34,16 @@ menu.strive.dropdown {
   // The following two lines are important - they prevent word-wrapping in the absolutely positioned element! 
   white-space: nowrap;
   overflow: visible;
+  border-radius: $border-radius-md;
+  
+  :first-child {
+    border-top-left-radius: $border-radius-md;
+    border-top-right-radius: $border-radius-md;
+  }
+  :last-child {
+    border-bottom-left-radius: $border-radius-md;
+    border-bottom-right-radius: $border-radius-md;
+  }
 
   li {
     min-height: $input-size-md;

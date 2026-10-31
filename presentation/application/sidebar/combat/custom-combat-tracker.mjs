@@ -63,7 +63,7 @@ export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
       const document = combatant.actor;
 
       if (ValidationUtil.isDefined(document) !== true) {
-        game.strive.logger.logWarn("Failed to get combatant actor");
+        game.strive.logger.warning("Failed to get combatant actor");
         continue;
       } else if (document.type === business.model.const.ACTOR_TYPES.PLAIN) {
         continue;

@@ -158,7 +158,7 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
       });
 
       if (!ValidationUtil.isDefined(owningDocument)) {
-        game.strive.logger.logWarn(`Failed to find owningDocument with type '${data.owningDocument.contentType}' and ID '${data.owningDocument.id}'`);
+        game.strive.logger.warning(`Failed to find owningDocument with type '${data.owningDocument.contentType}' and ID '${data.owningDocument.id}'`);
         return;
       }
 
@@ -173,7 +173,7 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
     }
 
     if (!ValidationUtil.isDefined(templateItem)) {
-      game.strive.logger.logWarn(`Failed to find document with type '${data.contentType}' ID '${data.id}'`);
+      game.strive.logger.warning(`Failed to find document with type '${data.contentType}' ID '${data.id}'`);
       return;
     }
 

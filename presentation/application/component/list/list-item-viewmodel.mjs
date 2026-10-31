@@ -1,4 +1,6 @@
+import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { SheetUtil } from "../../../util/sheet-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
@@ -31,6 +33,63 @@ export default class ListItemViewModel extends ViewModel {
   get hasContentViewModel() { return ValidationUtil.isDefined(this.vmContent); }
 
   /**
+   * @type {Boolean}
+   * @private
+   */
+  #isExpanded = false;
+  /**
+   * @type {Boolean}
+   */
+  get isExpanded() { return this.#isExpanded; }
+  /**
+   * @param {Boolean} value
+   */
+  set isExpanded(value) {
+    this.#isExpanded = value;
+    if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name) {
+      const contentElm = this.element.find("> .content");
+
+      if (value) {
+        contentElm.addClass("hidden");
+        
+        new Promise(async (resolve) => {
+          if (!ValidationUtil.isDefined(this.vmContent)) {
+            await this.#renderContentInline();
+          }
+          
+          contentElm.stop(true, false);
+          contentElm.removeClass("hidden");
+          contentElm.animate({
+            height: "100%",
+          }, {
+            duration: 300,
+            complete: resolve,
+          });
+        });
+      } else {
+        contentElm.stop(true, false);
+        contentElm.animate({
+          height: "0%",
+        }, {
+          duration: 300,
+          complete: () => {
+            contentElm.addClass("hidden");
+          },
+        });
+      }
+    } else if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.window.name) {
+      if (value) {
+        this._sheet = this.item.openSheet();
+      } else if (ValidationUtil.isDefined(this._sheet)) {
+        this._sheet.close();
+        this._sheet = undefined;
+      }
+    } else {
+      game.strive.logger.warning(`Unkown expansionMode '${this.expansionMode.name}'`);
+    }
+  }
+
+  /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
@@ -53,6 +112,9 @@ export default class ListItemViewModel extends ViewModel {
    * 
    * @param {ListItem} args.item
    * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
+   * @param {ListItemExpansionMode | undefined} args.expansionMode
+   * @param {Boolean | undefined} args.isExpanded Sets the initial expansion state. 
+   * * default `false`
    */
   constructor(args = {}) {
     super(args);
@@ -60,6 +122,8 @@ export default class ListItemViewModel extends ViewModel {
 
     this.item = args.item;
     this.contextMenuOptions = args.contextMenuOptions ?? [];
+    this.expansionMode = args.expansionMode ?? LIST_ITEM_EXPANSION_MODES.window;
+    this.#isExpanded = args.isExpanded ?? false;
 
     this.vmContextMenu = new ButtonDropDownViewModel({
       id: "context-menu",
@@ -72,25 +136,37 @@ export default class ListItemViewModel extends ViewModel {
     if (ValidationUtil.isDefined(this.item.header.viewModelFactory)) {
       this.vmHeader = this.item.header.viewModelFactory(this);
     }
-    if (ValidationUtil.isDefined(this.item.content) && ValidationUtil.isDefined(this.item.content.viewModelFactory)) {
-      this.vmContent = this.item.content.viewModelFactory(this);
-    }
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    const contextMenuElms = this.element.find(".context-menu");
+    const contextMenuElms = this.element.find("> .header > .context-menu");
     if (this.contextMenuOptions.length === 0) {
       contextMenuElms.addClass("hidden");
     } else {
-      this.element.on("mouseenter", () => {
-        contextMenuElms.removeClass("hidden");
-      });
-      this.element.on("mouseleave", () => {
-        contextMenuElms.addClass("hidden");
-      });
+      SheetUtil.setHover(this.element, contextMenuElms);
+    }
+
+    if (this.isExpanded) {
+      await this.#renderContentInline();
+    }
+  }
+
+  /**
+   * @returns {Promise<void>}
+   * @private
+   */
+  async #renderContentInline() {
+    if (ValidationUtil.isDefined(this.item.content) && ValidationUtil.isDefined(this.item.content.viewModelFactory)) {
+      const renderResult = await this.item.content.render(this);
+      this.vmContent = renderResult.viewModel;
+      const html = renderResult.rendered;
+      const contentElm = this.element.find("> .content");
+      contentElm.empty();
+      contentElm.append(html);
+      await this.vmContent.activateListeners(contentElm);
     }
   }
 }

@@ -12,6 +12,15 @@ export class Callbacks {
   #handlers = new Map();
 
   /**
+   * Returns the current number of registered handlers. 
+   * @returns {Number}
+   * @readonly
+   */
+  get count() {
+    return this.#handlers.size;
+  }
+
+  /**
    * Adds the given `handler` as a listener for events. 
    * @param {Function} handler 
    * @returns {String | undefined} ID of the event listener. 

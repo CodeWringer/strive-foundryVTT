@@ -1,8 +1,8 @@
 {{!--
 viewModel: ListItemViewModel
 --}}
-<li id="{{viewModel.id}}">
-  <div class="flex flex-row flex-middle border-b-sm">
+<li id="{{viewModel.id}}" class="list-item">
+  <div class="header flex flex-row flex-middle border-b-sm">
     {{!-- Header --}}
     {{#if viewModel.hasHeaderViewModel}}
     {{#with viewModel.item.header.template as | template |}}
@@ -12,17 +12,11 @@ viewModel: ListItemViewModel
       {{{viewModel.item.header.html}}}
     {{/if}}
     {{!-- Context menu --}}
-    <span class="v-divider context-menu"></span>
-    {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="context-menu" }}
+    <span class="v-divider context-menu hidden"></span>
+    {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="context-menu hidden" }}
   </div>
   {{!-- Content --}}
-  <div class="margin-l-xl margin-b-xl margin-r-xl border-l-sm border-b-sm border-r-sm secondary">
-    {{#if viewModel.hasContent}}
-    {{#with viewModel.item.content.template as | template |}}
-      {{> (template) viewModel=../viewModel.vmContent }}
-    {{/with}}
-    {{else}}
-      {{{viewModel.item.content.html}}}
-    {{/if}}
+  <div class="content margin-l-xl margin-b-xl margin-r-xl border-l-sm border-b-sm border-r-sm secondary hidden">
+    {{!-- Content is rendered and inserted by the view model --}}
   </div>
 </li>

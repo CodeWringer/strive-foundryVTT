@@ -97,6 +97,9 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
    * * `event: {Event}`
    * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onClick Callback that is invoked when the input element is clicked. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
    * 
    * @param {String | undefined} args.icon Icon HTML to display in the text field. 
    * @param {String | undefined} args.enableClearButton If `true`, when there is content in the text field, 
@@ -157,6 +160,6 @@ export default class InputTextFieldViewModel extends InputViewModel {
       if (this.isEditable) {
         this.element.find("input").focus();
       }
-    })
+    });
   }
 }

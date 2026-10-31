@@ -194,7 +194,7 @@ export class DragDropHandler {
     const jElement = $(element);
 
     if (!ValidationUtil.isDefined(jElement) || jElement.length === 0) {
-      game.strive.logger.logWarn("element must not be null");
+      game.strive.logger.warning("element must not be null");
       return;
     }
 

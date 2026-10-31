@@ -1,0 +1,20 @@
+.list-item {
+  > .content {
+    overflow: hidden;
+  }
+}
+
+.theme-dark {
+  .list-item {
+    &:hover {
+      background-color: $c-bg-hover-dark;
+    }
+  }
+}
+.theme-light {
+  .list-item {
+    &:hover {
+      background-color: $c-bg-hover-light;
+    }
+  }
+}
