@@ -148,6 +148,7 @@ export default class GameSystemSettings {
       config: setting.config,
       default: setting.default,
       type: setting.type,
+      choices: setting.choices,
       onChange: (value) => {
         FoundryWrapper.callHook("striveSettingChanged", key, value);
       },
@@ -190,6 +191,7 @@ export default class GameSystemSettings {
         menu: setting.menu,
         icon: setting.icon,
         restricted: setting.restricted,
+        choices: setting.choices,
       });
       GameSystemSettings._userSettings.push(newSettingDeclaration);
     }

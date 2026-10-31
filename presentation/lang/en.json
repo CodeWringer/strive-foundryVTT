@@ -77,6 +77,12 @@
       "toggleExpertiseVisibility": {
         "label": "Unusable Expertise Visibility",
         "hint": "Toggles the visibility of Expertises that are unusable (due to their owning skill's level being too low for the Expertise's requirement)."
+      },
+      "listItemExpansionMode": {
+        "label": "List Item Expansion Mode",
+        "hint": "Controls how list items on actor sheets are expanded. Window: list items will be expanded into a separate window. Inline: list items will be expanded directly into the sheet they're part of, without any separate window.",
+        "window": "Window",
+        "inline": "Inline"
       }
     },
     "combat": {

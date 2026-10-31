@@ -1,5 +1,7 @@
+import { StringUtil } from "../../common/util/string-utility.mjs";
 import GameSystemSettingDeclaration from "./game-system-setting-declaration.mjs";
 import GameSystemSettings from "./game-system-settings.mjs";
+import { LIST_ITEM_EXPANSION_MODES } from "./list-item-expansion-modes.mjs";
 import { SETTING_SCOPES } from "./setting-scopes.mjs";
 
 /**
@@ -35,6 +37,13 @@ export const GameSystemUserSettings = {
    * @readonly
    */
   KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY: "userToggleUnusableExpertiseVisibility",
+
+  /**
+   * @static
+   * @type {String}
+   * @readonly
+   */
+  KEY_LIST_ITEM_EXPANSION_MODE: "userListItemExpansionMode",
 
   /**
    * User settings initialization. To be called during the system's "ready" hook. 
@@ -82,6 +91,21 @@ export const GameSystemUserSettings = {
         config: true,
         default: true,
         type: Boolean,
+      }),
+    );
+    GameSystemSettings.addDeclaration(
+      new GameSystemSettingDeclaration({
+        key: GameSystemUserSettings.KEY_LIST_ITEM_EXPANSION_MODE,
+        name: game.i18n.localize("system.settings.listItemExpansionMode.label"),
+        hint: game.i18n.localize("system.settings.listItemExpansionMode.hint"),
+        scope: SETTING_SCOPES.USER,
+        config: true,
+        default: "window",
+        type: String,
+        choices: {
+          window: StringUtil.getLoca(LIST_ITEM_EXPANSION_MODES.window.localizableName),
+          inline: StringUtil.getLoca(LIST_ITEM_EXPANSION_MODES.inline.localizableName),
+        },
       }),
     );
   },
