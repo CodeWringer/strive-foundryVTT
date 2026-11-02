@@ -1,4 +1,4 @@
-import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 
 /**
  * Declares a Complication of a Project or of an Asset. 

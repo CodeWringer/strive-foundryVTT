@@ -1,4 +1,4 @@
-import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 import ReferenceField from "./reference-field.mjs";
 
 /**

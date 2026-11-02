@@ -1,5 +1,5 @@
-import { common } from "../../../common/_module.mjs";
-import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
+import { UuidUtil } from "../../../../common/util/uuid-utility.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 import ReferenceField from "./reference-field.mjs";
 
 /**
@@ -17,7 +17,7 @@ export default class PropertyLocationField extends FoundrySchemaFields.SchemaFie
       id: new FoundrySchemaFields.StringField({
         nullable: false,
         required: true,
-        initial: common.util.uuid.createUuid(),
+        initial: UuidUtil.createUuid(),
       }),
       name: new FoundrySchemaFields.StringField({
         nullable: false,

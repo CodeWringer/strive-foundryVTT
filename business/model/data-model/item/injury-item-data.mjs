@@ -1,5 +1,5 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import ReferenceField from "../../data-field/reference-field.mjs";
+import ReferenceField from "../data-field/reference-field.mjs";
 import { INJURY_STATES } from "../../domain/const/injury-states.mjs";
 import BaseItemData from "./base-item-data.mjs";
 

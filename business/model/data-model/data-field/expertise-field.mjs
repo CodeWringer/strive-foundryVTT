@@ -1,6 +1,6 @@
-import { StringUtil } from "../../../common/util/string-utility.mjs";
-import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
-import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { UuidUtil } from "../../../../common/util/uuid-utility.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 import GradedEffectField from "./graded-effect-field.mjs";
 
 /**

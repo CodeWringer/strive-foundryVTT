@@ -1,8 +1,8 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import ExpertiseField from "../../data-field/expertise-field.mjs";
-import GradedEffectField from "../../data-field/graded-effect-field.mjs";
-import MomentumActionField from "../../data-field/momentum-action-field.mjs";
-import ReferenceField from "../../data-field/reference-field.mjs";
+import ExpertiseField from "../data-field/expertise-field.mjs";
+import GradedEffectField from "../data-field/graded-effect-field.mjs";
+import MomentumActionField from "../data-field/momentum-action-field.mjs";
+import ReferenceField from "../data-field/reference-field.mjs";
 import BaseItemData from "./base-item-data.mjs";
 
 export default class SkillItemData extends BaseItemData {

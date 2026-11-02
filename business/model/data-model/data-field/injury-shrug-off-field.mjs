@@ -1,5 +1,5 @@
-import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
-import { INJURY_SHRUG_OFF_STATES } from "../domain/const/injury-shrug-off-states.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { INJURY_SHRUG_OFF_STATES } from "../../domain/const/injury-shrug-off-states.mjs";
 
 /**
  * Declares an injury shrug-off slot (on a Character). 

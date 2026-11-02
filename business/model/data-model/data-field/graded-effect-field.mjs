@@ -1,6 +1,6 @@
-import { FoundrySchemaFields } from "../../../foundry-interop/data-model-wrapper.mjs";
-import { COMPARISON_TARGET_TYPES } from "../domain/const/comparison-target-types.mjs";
-import { COMPARISON_TYPES } from "../domain/const/comparison-types.mjs";
+import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { COMPARISON_TARGET_TYPES } from "../../domain/const/comparison-target-types.mjs";
+import { COMPARISON_TYPES } from "../../domain/const/comparison-types.mjs";
 import ModifierField from "./modifier-field.mjs";
 
 /**

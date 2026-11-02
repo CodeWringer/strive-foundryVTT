@@ -1,5 +1,5 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import MomentumActionField from "../../data-field/momentum-action-field.mjs";
+import MomentumActionField from "../data-field/momentum-action-field.mjs";
 import BaseItemData from "./base-item-data.mjs";
 
 export default class TraitItemData extends BaseItemData {

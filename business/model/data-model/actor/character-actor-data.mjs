@@ -1,12 +1,12 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs"
-import AdvancementHistoryEntryField from "../../data-field/advancement-history-entry-field.mjs"
-import AssetSlotField from "../../data-field/asset-slot-field.mjs"
-import CharacterAttributeField from "../../data-field/character-attribute-field.mjs"
-import DriverHistoryEntryField from "../../data-field/driver-history-entry-field.mjs"
-import InjuryShrugOffField from "../../data-field/injury-shrug-off-field.mjs"
-import ModifierField from "../../data-field/modifier-field.mjs"
-import PropertyLocationField from "../../data-field/property-location-field.mjs"
-import ReferenceField from "../../data-field/reference-field.mjs"
+import AdvancementHistoryEntryField from "../data-field/advancement-history-entry-field.mjs"
+import AssetSlotField from "../data-field/asset-slot-field.mjs"
+import CharacterAttributeField from "../data-field/character-attribute-field.mjs"
+import DriverHistoryEntryField from "../data-field/driver-history-entry-field.mjs"
+import InjuryShrugOffField from "../data-field/injury-shrug-off-field.mjs"
+import ModifierField from "../data-field/modifier-field.mjs"
+import PropertyLocationField from "../data-field/property-location-field.mjs"
+import ReferenceField from "../data-field/reference-field.mjs"
 
 export default class CharacterActorData extends TypeDataModel {
   /** @override @see https://foundryvtt.com/api/classes/foundry.abstract.TypeDataModel.html#defineschema */
