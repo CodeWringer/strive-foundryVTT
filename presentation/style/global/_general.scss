@@ -10,6 +10,8 @@
   width: 1px;
   height: stretch;
   padding-right: 1px; // Ensures symmetry on the right side.
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .h-divider {
@@ -17,6 +19,8 @@
   height: 1px;
   padding-bottom: 1px; // Ensures symmetry below.
   display: block;
+  margin-top: 5px;
+  margin-bottom: 5px;
 
   &-full {
     width: stretch;

@@ -13,6 +13,8 @@ import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 import VisibilityRule from "../../../model/visibility-rule.mjs";
+import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
+import { ACTOR_TYPES } from "../../../../business/model/domain/const/actor-types.mjs";
 
 export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
@@ -37,10 +39,14 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   get visibilityRules() {
     return super.visibilityRules.concat([
       new VisibilityRule({
-        cssClass: ".ap-cost",
-        shouldBeHidden: () => !this.hasApCost,
+        selector: ".advancement",
+        shouldBeHidden: () => !this.isEmbeddedOnPC,
       }),
     ]);
+  }
+
+  get isEmbeddedOnPC() {
+    return this.document.hasParent && this.document.owningDocument.type === ACTOR_TYPES.pc;
   }
 
   /**
@@ -76,6 +82,26 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
       },
       onRoll: () => {
         // TODO #762
+      },
+    });
+
+    this.vmAdvancement = new InputSplitNumberSpinnerViewModel({
+      id: "vmAdvancement",
+      parent: this,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.advancement"),
+      }),
+      current: {
+        value: this.document.advancement.progress,
+        min: 0,
+        limitToMax: true,
+      },
+      maximum: {
+        value: this.#getMaximumAdvancementProgress(),
+        allowEditing: false,
+      },
+      onChange: (newValue) => {
+        this.document.advancement.progress = newValue.current;
       },
     });
 
@@ -145,5 +171,13 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
       }));
     }
     return r;
+  }
+
+  /**
+   * @returns {Number}
+   * @private
+   */
+  #getMaximumAdvancementProgress() {
+    return Skill.getAdvancementRequirement(this.document.level);
   }
 }

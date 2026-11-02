@@ -1,43 +1,51 @@
 {{!-- context:
 viewModel: ExpertiseContentViewModel
 --}}
-{{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
-<div class="auto-margin-v-md pad-h-md">
-  <span class="h-divider"></span>
-  <div class="grid col6 gap-md border-between-rows border-between-cols margin-b-md">
-    {{!-- Action Points --}}
-    <div id="{{viewModel.id}}-ap" class="flex flex-row flex-middle auto-margin-h-md">
-      <div class="flex flex-row flex-middle">
-        <i class="ico ico-action-point xl"></i>
-        {{> inputNumberSpinner viewModel=viewModel.vmActionPoints cssClass="width-md" }}
+<div class="pad-h-md">
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="" }}
+  <div class="dynamic-content">
+    <span class="h-divider"></span>
+    <div class="auto-margin-v-md flex flex-middle flex-row pad-h-md">
+      {{!-- Action Points --}}
+      <div class="action-points flex flex-row flex-middle auto-margin-h-md">
+        <div class="flex flex-row flex-middle">
+          <i class="ico ico-action-point xl"></i>
+          {{> inputNumberSpinner viewModel=viewModel.vmActionPoints cssClass="width-md" }}
+        </div>
+        <span class="v-divider"></span>
       </div>
-    </div>
-    {{!-- Distance --}}
-    <div id="{{viewModel.id}}-distance" class="flex flex-row flex-middle auto-margin-h-md">
-      <div class="flex flex-row flex-middle">
-        <i class="ico ico-distance xl"></i>
-        {{> inputNumberSpinner viewModel=viewModel.vmDistance cssClass="width-md" }}
+      {{!-- Distance --}}
+      <div class="distance flex flex-row flex-middle auto-margin-h-md">
+        <div class="flex flex-row flex-middle">
+          <i class="ico ico-distance xl"></i>
+          {{> inputNumberSpinner viewModel=viewModel.vmDistance cssClass="width-md" }}
+        </div>
+        <span class="v-divider"></span>
       </div>
-    </div>
-    {{!-- Targeting Type --}}
-    <div id="{{viewModel.id}}-targeting-type" class="flex flex-row flex-middle auto-margin-h-md">
-      {{> inputDropDown viewModel=viewModel.vmTargetingType cssClass="" }}
-    </div>
-    {{!-- Obstacle --}}
-    <div id="{{viewModel.id}}-ob" class="flex flex-row flex-middle auto-margin-h-md grid-span-6">
-      <div class="flex flex-row flex-middle">
-        <i class="ico ico-obstacle xl"></i>
-        {{> inputTextField viewModel=viewModel.vmObstacle cssClass="" }}
+      {{!-- Targeting Type --}}
+      <div class="targeting-type flex flex-row flex-middle auto-margin-h-md">
+        {{> inputDropDown viewModel=viewModel.vmTargetingType cssClass="" }}
+        <span class="v-divider"></span>
       </div>
-      <div class="flex flex-row flex-middle flex-grow">
-        <i class="ico ico-arrow-right lg"></i>
-        {{> inputReference viewModel=viewModel.vmOpposedBy cssClass="flex-grow" }}
+      {{!-- Obstacle --}}
+      <div class="obstacle flex flex-row flex-middle auto-margin-h-md grid-span-6">
+        <div class="flex flex-row flex-middle">
+          <i class="ico ico-obstacle xl"></i>
+          {{> inputTextField viewModel=viewModel.vmObstacle cssClass="" }}
+        </div>
+        <div class="flex flex-row flex-middle flex-grow">
+          <i class="ico ico-arrow-right lg"></i>
+          {{> inputReference viewModel=viewModel.vmOpposedBy cssClass="flex-grow" }}
+        </div>
       </div>
     </div>
   </div>
+  {{!-- Graded Effects --}}
+  <div class="graded-effects">
+    <span class="h-divider"></span>
+    {{#with viewModel.vmGradedEffects.clazz.TEMPLATE as | template |}}
+    {{> (template) viewModel=../viewModel.vmGradedEffects }}
+    {{/with}}
+  </div>
+  <span class="h-divider"></span>
 </div>
-{{!-- Graded Effects --}}
-<span class="h-divider margin-b-md"></span>
-{{#with viewModel.vmGradedEffects.clazz.TEMPLATE as | template |}}
-{{> (template) viewModel=../viewModel.vmGradedEffects }}
-{{/with}}

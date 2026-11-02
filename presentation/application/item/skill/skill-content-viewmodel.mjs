@@ -1,9 +1,9 @@
 import { TARGETING_TYPES } from "../../../../business/model/domain/const/targeting-types.mjs";
 import Expertise from "../../../../business/model/domain/skill/expertise.mjs";
-import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
 import { LIST_ITEM_EXPANSION_MODES } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import { DropDownOption } from "../../component/button-dropdown/dropdown-option.mjs";
 import DynamicComponent from "../../component/dynamic-component/dynamic-component.mjs";
@@ -12,7 +12,6 @@ import InputDropDownViewModel from "../../component/input-choice/input-dropdown/
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ListItem from "../../component/list/list-item.mjs";
 import ListSeparator from "../../component/list/list-separator.mjs";
@@ -44,6 +43,45 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
    */
   get lockedExpertises() {
     return this.document.expertises.filter(expertise => expertise.requiredLevel > this.document.level);
+  }
+
+  get hasDynamicContent() {
+    return this.document.gradedEffects.entries > 0 
+      || this.document.actionPoints.current > 0
+      || this.document.distance.current !== 0
+      || this.document.targetingType.enabled
+      || this.document.obstacle.enabled
+      ;
+  }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> div > .dynamic-content",
+        shouldBeHidden: () => !this.isEditable && !this.hasDynamicContent,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .graded-effects",
+        shouldBeHidden: () => !this.isEditable && this.document.gradedEffects.entries < 1,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .action-points",
+        shouldBeHidden: () => !this.isEditable && this.document.actionPoints.current < 1,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .distance",
+        shouldBeHidden: () => !this.isEditable && this.document.distance.current === 0,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .targeting-type",
+        shouldBeHidden: () => !this.isEditable && this.document.targetingType.enabled,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .obstacle",
+        shouldBeHidden: () => !this.isEditable && !this.document.obstacle.enabled,
+      }),
+    ]);
   }
 
   /**
@@ -142,26 +180,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
         this.document.opposedBy.current = newValue;
       },
     });
-    this.vmAdvancement = new InputSplitNumberSpinnerViewModel({
-      id: "vmAdvancement",
-      parent: this,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.skill.advancement"),
-      }),
-      current: {
-        value: this.document.advancement.progress,
-        min: 0,
-        limitToMax: true,
-      },
-      maximum: {
-        value: this.#getMaximumAdvancementProgress(),
-        allowEditing: false,
-      },
-      onChange: (newValue) => {
-        this.document.advancement.progress = newValue.current;
-      },
-    });
-
+    
     this.vmGradedEffects = new GradedEffectListViewModel({
       id: "vmGradedEffects",
       parent: this,
@@ -344,13 +363,5 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
   dispose() {
     this.document.offChange(this._callbackId);
     super.dispose();
-  }
-
-  /**
-   * @returns {Number}
-   * @private
-   */
-  #getMaximumAdvancementProgress() {
-    return Skill.getAdvancementRequirement(this.document.level);
   }
 }

@@ -6,14 +6,15 @@ import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 export default class VisibilityRule {
   /**
    * @param {Object} args 
-   * @param {String} args.cssClass 
+   * @param {String} args.selector Selects the element(s) to be affected. 
+   * E. g. `"> .my-class"`
    * @param {Function<Boolean>} args.shouldBeHidden Function that is invoked to determine whether the 
-   * element(s) identified by the given `cssClass` should be hidden. MUST return a boolean value! 
+   * element(s) identified by the given `selector` should be hidden. MUST return a boolean value! 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["cssClass", "shouldBeHidden"]);
+    ValidationUtil.validateOrThrow(args, ["selector", "shouldBeHidden"]);
 
-    this.cssClass = args.cssClass;
+    this.selector = args.selector;
     this.shouldBeHidden = args.shouldBeHidden;
   }
 }

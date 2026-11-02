@@ -40,7 +40,7 @@ export default class DocumentViewModel extends ViewModel {
   get visibilityRules() {
     return super.visibilityRules.concat([
       new VisibilityRule({
-        cssClass: ".context-embedded",
+        selector: ".context-embedded",
         shouldBeHidden: () => !this.isEmbedded,
       }),
     ]);

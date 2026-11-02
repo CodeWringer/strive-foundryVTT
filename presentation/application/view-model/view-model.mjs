@@ -250,6 +250,8 @@ export default class ViewModel {
     for (const child of this.children) {
       child.isEditable = value;
     }
+
+    this.evaluateVisibilityRules();
   }
   
   /**
@@ -499,12 +501,19 @@ export default class ViewModel {
     this.evaluateVisibilityRules();
   }
 
+  /**
+   * Evaluates all the `VisibilityRule`s and applies them. 
+   */
   evaluateVisibilityRules() {
     for (const rule of this.visibilityRules) {
+      const elements = this.element.find(rule.selector);
+
       if (rule.shouldBeHidden()) {
-        const elements = this.element.find(rule.cssClass);
         elements.addClass("hidden");
         elements.addClass("suppress-hover");
+      } else {
+        elements.removeClass("hidden");
+        elements.removeClass("suppress-hover");
       }
     }
   }

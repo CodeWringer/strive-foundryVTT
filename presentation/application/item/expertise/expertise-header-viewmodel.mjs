@@ -32,7 +32,7 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
   get visibilityRules() {
     return super.visibilityRules.concat([
       new VisibilityRule({
-        cssClass: ".ap-cost",
+        selector: ".ap-cost",
         shouldBeHidden: () => !this.hasApCost,
       }),
     ]);

@@ -2,6 +2,7 @@ import { TARGETING_TYPES } from "../../../../business/model/domain/const/targeti
 import Expertise from "../../../../business/model/domain/skill/expertise.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import GradedEffectListViewModel from "../../component/graded-effect/graded-effect-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -19,6 +20,45 @@ export default class ExpertiseContentViewModel extends BaseItemContentViewModel 
 
   /** @override */
   get clazz() { return ExpertiseContentViewModel; }
+
+  get hasDynamicContent() {
+    return this.document.gradedEffects.entries > 0 
+      || this.document.actionPoints.current > 0
+      || this.document.distance.current !== 0
+      || this.document.targetingType.enabled
+      || this.document.obstacle.enabled
+      ;
+  }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> div > .dynamic-content",
+        shouldBeHidden: () => !this.isEditable && !this.hasDynamicContent,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .graded-effects",
+        shouldBeHidden: () => !this.isEditable && this.document.gradedEffects.entries < 1,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .action-points",
+        shouldBeHidden: () => !this.isEditable && this.document.actionPoints.current < 1,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .distance",
+        shouldBeHidden: () => !this.isEditable && this.document.distance.current === 0,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .targeting-type",
+        shouldBeHidden: () => !this.isEditable && this.document.targetingType.enabled,
+      }),
+      new VisibilityRule({
+        selector: "> div > .dynamic-content > div > .obstacle",
+        shouldBeHidden: () => !this.isEditable && !this.document.obstacle.enabled,
+      }),
+    ]);
+  }
 
   /**
    * @param {Object} args

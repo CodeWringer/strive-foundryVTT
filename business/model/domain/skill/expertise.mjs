@@ -33,8 +33,6 @@ import Persistable from "../persistable.mjs"
  * @property {String} type Internal type name: `"expertise"`
  * * Read-only.
  * @property {Number} requiredLevel
- * @property {Object} itemOrders
- * * Read-only.
  * @property {Object} actionPoints
  * * Read-only.
  * @property {Boolean} actionPoints.enabled
@@ -72,12 +70,20 @@ export default class Expertise extends Persistable {
    * @static
    * @override
    */
-  static fromDto(dto, owningDocument) {
+  static fromDto(dto, owningDocument, index) {
     return new Expertise({
       owningDocument: owningDocument,
       id: dto.id,
+      index: index,
     });
   }
+
+  /**
+   * Index of this Expertise in the parent Skill's array. 
+   * @type {Number}
+   * @private
+   */
+  #index;
 
   /**
    * Returns the data path of this expertise on its parent. 
@@ -86,7 +92,7 @@ export default class Expertise extends Persistable {
    * @private
    * @readonly
    */
-  get _pathOnParent() { return `system.expertises.${this.id}`; }
+  get #pathOnParent() { return `system.expertises[${this.#index}]`; }
 
   /**
    * @type {String}
@@ -166,12 +172,6 @@ export default class Expertise extends Persistable {
    */
   get requiredLevel() { return this._requiredLevel.value; }
   set requiredLevel(value) { this._requiredLevel.value = value; }
-
-  get itemOrders() {
-    const thiz = this;
-    return {
-    };
-  }
 
   get actionPoints() {
     const thiz = this;
@@ -287,20 +287,22 @@ export default class Expertise extends Persistable {
   /**
    * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
+   * @param {Number} args.index
    * @param {String | undefined} args.id
    * 
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
   constructor(args = {}) {
     super(args);
-    common.util.validation.validateOrThrow(args, ["owningDocument"]);
+    common.util.validation.validateOrThrow(args, ["owningDocument", "index"]);
 
     this.owningDocument = args.owningDocument;
+    this.#index = args.index;
     this._id = args.id ?? common.util.uuid.createUuid();
 
     this._gmNotes = new DataFieldBridge({
       document: this,
-      dataPath: `${this._pathOnParent}.gmNotes`,
+      dataPath: `${this.#pathOnParent}.gmNotes`,
       fromDto: (dto) => {
         if (common.util.validation.isBlankOrUndefined(dto)) {
           return null;
@@ -318,94 +320,92 @@ export default class Expertise extends Persistable {
     });
     this._img = new DataFieldBridge({
       document: this,
-      dataPath: `${this._pathOnParent}.img`,
+      dataPath: `${this.#pathOnParent}.img`,
       default: this.defaultImg,
     });
     this._name = new DataFieldBridge({
       document: this,
-      dataPath: `${this._pathOnParent}.name`,
+      dataPath: `${this.#pathOnParent}.name`,
       default: StringUtil.getLoca("system.item.expertise.defaultName"),
     });
     this._description = new DataFieldBridge({
       document: this,
-      dataPath: `${this._pathOnParent}.description`,
+      dataPath: `${this.#pathOnParent}.description`,
     });
     this._requiredLevel = new DataFieldBridge({
       document: this.owningDocument,
-      dataPath: `${this._pathOnParent}.requiredLevel`,
+      dataPath: `${this.#pathOnParent}.requiredLevel`,
       default: 0,
     });
-    this._itemOrders = {
-    };
     this._actionPoints = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.actionPoints.enabled`,
+        dataPath: `${this.#pathOnParent}.actionPoints.enabled`,
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.actionPoints.current`,
+        dataPath: `${this.#pathOnParent}.actionPoints.current`,
         default: 0,
       }),
     };
     this._distance = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.distance.enabled`,
+        dataPath: `${this.#pathOnParent}.distance.enabled`,
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.distance.current`,
+        dataPath: `${this.#pathOnParent}.distance.current`,
         default: 0,
       }),
     };
     this._targetingType = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.targetingType.enabled`,
+        dataPath: `${this.#pathOnParent}.targetingType.enabled`,
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.targetingType.current`,
+        dataPath: `${this.#pathOnParent}.targetingType.current`,
         default: TARGETING_TYPES.singleTarget,
       }),
     };
     this._obstacle = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.obstacle.enabled`,
+        dataPath: `${this.#pathOnParent}.obstacle.enabled`,
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.obstacle.current`,
+        dataPath: `${this.#pathOnParent}.obstacle.current`,
         default: "",
       }),
     };
     this._opposedBy = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.opposedBy.enabled`,
+        dataPath: `${this.#pathOnParent}.opposedBy.enabled`,
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.opposedBy.current`,
+        dataPath: `${this.#pathOnParent}.opposedBy.current`,
         default: "",
       }),
     };
     this._gradedEffects = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.gradedEffects.enabled`,
+        dataPath: `${this.#pathOnParent}.gradedEffects.enabled`,
         default: false,
       }),
       entries: new ArrayDataFieldBridge({
         document: this,
-        dataPath: `${this._pathOnParent}.gradedEffects.entries`,
+        dataPath: `${this.#pathOnParent}.gradedEffects.entries`,
         dataClass: GradedEffect,
         default: [],
       }),
@@ -479,10 +479,10 @@ export default class Expertise extends Persistable {
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
-    if (propertyPath.startsWith(this._pathOnParent)) {
+    if (propertyPath.startsWith(this.#pathOnParent)) {
       this.owningDocument.updateByPath(propertyPath, newValue, render);
     } else {
-      const newPath = `${this._pathOnParent}.${propertyPath}`;
+      const newPath = `${this.#pathOnParent}.${propertyPath}`;
       this.owningDocument.updateByPath(newPath, newValue, render);
     }
   }
@@ -501,10 +501,10 @@ export default class Expertise extends Persistable {
    * @async
    */
   async deleteByPath(propertyPath, render = true) {
-    if (propertyPath.startsWith(this._pathOnParent)) {
+    if (propertyPath.startsWith(this.#pathOnParent)) {
       this.owningDocument.deleteByPath(propertyPath, render);
     } else {
-      const newPath = `${this._pathOnParent}.${propertyPath}`;
+      const newPath = `${this.#pathOnParent}.${propertyPath}`;
       this.owningDocument.deleteByPath(newPath, render);
     }
   }
@@ -525,8 +525,6 @@ export default class Expertise extends Persistable {
       description: this.description,
       gmNotes: this.gmNotes,
       requiredLevel: this.requiredLevel,
-      itemOrders: {
-      },
       actionPoints: {
         enabled: this.actionPoints.enabled,
         current: this.actionPoints.current,

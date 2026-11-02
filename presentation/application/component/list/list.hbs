@@ -2,9 +2,9 @@
 viewModel: ListViewModel
 cssClass: String | undefined
 --}}
-<div id="{{viewModel.id}}" class="auto-margin-v-md flex flex-column pad-t-md{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="auto-margin-v-md flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- List Header --}}
-  <div class="auto-margin-v-md border-t-sm flex flex-column pad-t-md">
+  <div class="auto-margin-v-md flex flex-column pad-t-md">
     <div class="flex flex-row flex-middle">
       {{!-- Empty spacer left --}}
       <div class="list-header-start" style="width: 25%;"></div>
