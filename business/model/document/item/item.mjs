@@ -54,14 +54,13 @@ export class GameSystemItem extends Item {
    * @virtual
    * @readonly
    */
-  get defaultImg() { return this.getTransientObject().defaultImg; }
+  get defaultImg() { return this.getEnhancedDocument().defaultImg; }
 
   /** @override */
   prepareData() {
     super.prepareData();
 
     this._invalidateTransientObject();
-    this.getTransientObject().prepareData(this);
   }
 
   /**
@@ -69,7 +68,7 @@ export class GameSystemItem extends Item {
    * 
    * @returns {TransientBaseItem}
    */
-  getTransientObject() {
+  getEnhancedDocument() {
     if (this._transientObject === undefined) {
       const factoryFunction = GameSystemItem.SUB_TYPES.get(this.type);
       
@@ -79,7 +78,7 @@ export class GameSystemItem extends Item {
 
       this._transientObject = factoryFunction(this);
     }
-    return this._transientObject.getTransientObject();
+    return this._transientObject.getEnhancedDocument();
   }
 
   /** @override */

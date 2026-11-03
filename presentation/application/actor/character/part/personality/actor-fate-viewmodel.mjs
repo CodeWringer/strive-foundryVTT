@@ -129,7 +129,7 @@ export default class ActorFateViewModel extends ViewModel {
               });
     
               if (ValidationUtil.isDefined(document)) {
-                const transientFateCard = document.getTransientObject();
+                const transientFateCard = document.getEnhancedDocument();
                 AFP = transientFateCard.cost.AFP;
                 MaFP = transientFateCard.cost.maFP;
                 MiFP = transientFateCard.cost.miFP;

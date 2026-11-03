@@ -12,7 +12,7 @@ import MomentumAction from "./momentum-action.mjs";
 import Reference from "./reference.mjs";
 import Ruleset from "./ruleset.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
-import Expertise from "./skill/expertise.mjs";
+import ExpertiseDocument from "../document/item/expertise-document.mjs";
 import { Sum, SumComponent } from "./summed-data.mjs";
 import Tag from "./tag/tag.mjs";
 import TimeIncrement from "./time-increment.mjs";
@@ -46,7 +46,7 @@ export const domain = {
   skill: {
     Skill: Skill,
     DamageAndType: DamageAndType,
-    Expertise: Expertise,
+    Expertise: ExpertiseDocument,
   },
   tag: {
     Tag: Tag,

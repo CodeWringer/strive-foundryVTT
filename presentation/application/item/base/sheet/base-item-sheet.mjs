@@ -168,7 +168,7 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
   async _prepareContext(options) {
     const context = await super._prepareContext(options)
 
-    const document = context.document.getTransientObject();
+    const document = context.document.getEnhancedDocument();
     const documentContext = document.context;
 
     // Ensure view model. 

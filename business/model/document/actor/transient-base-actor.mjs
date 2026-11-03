@@ -69,7 +69,7 @@ export default class TransientBaseActor extends TransientDocument {
    */
   get items() { 
     if (!common.util.validation.isDefined(this._items)) {
-      this._items = Array.from(this.document.items).map(it => it.getTransientObject()); 
+      this._items = Array.from(this.document.items).map(it => it.getEnhancedDocument()); 
     }
     return this._items;
   }

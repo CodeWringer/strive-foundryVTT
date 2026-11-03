@@ -112,9 +112,9 @@ export default class DocumentViewModel extends ViewModel {
     this.context = args.context ?? DOCUMENT_CONTEXT.independent;
 
     if (ValidationUtil.isDefined(args.document) && ValidationUtil.isDefined(args.document.getTransientObject)) {
-      this.#document = args.document.getTransientObject();
+      this.#document = args.document.getEnhancedDocument();
     } else if (ValidationUtil.isDefined((args.document ?? {}).document) && ValidationUtil.isDefined((args.document ?? {}).document.getTransientObject)) {
-      this.#document = args.document.document.getTransientObject();
+      this.#document = args.document.document.getEnhancedDocument();
     } else {
       this.#document = args.document;
     }

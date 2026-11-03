@@ -74,7 +74,7 @@ export default class TransientBaseItem extends TransientDocument {
    */
   get owningDocument() {
     if (common.util.validation.isDefined(this.document.parent)) {
-      return this.document.parent.getTransientObject();
+      return this.document.parent.getEnhancedDocument();
     } else {
       return null;
     }

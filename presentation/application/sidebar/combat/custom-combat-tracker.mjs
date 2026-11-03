@@ -80,7 +80,7 @@ export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
       this.actionPointsViewModels.push(turn.actionPointsViewModel);
       
       // Add grit points view model. 
-      const transientActor = document.getTransientObject();
+      const transientActor = document.getEnhancedDocument();
       turn.gritPointsTemplate = GritPointsCombatTrackerViewModel.TEMPLATE;
       turn.renderGritPoints = transientActor.type === business.model.const.ACTOR_TYPES.PC 
         || (transientActor.type === business.model.const.ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);

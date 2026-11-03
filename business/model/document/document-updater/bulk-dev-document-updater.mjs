@@ -58,7 +58,7 @@ export default class BulkDevDocumentUpdater {
       const skillsOfActor = actor.items.filter(it => it.type === ITEM_TYPES.skill);
 
       for await (const skill of skillsOfActor) {
-        const transientSkill = skill.getTransientObject();
+        const transientSkill = skill.getEnhancedDocument();
         const isInnate = transientSkill.innate;
         if (isInnate || transientSkill.isCustom) continue;
 

@@ -8,19 +8,22 @@ import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 export default class DocumentUpdater {
   /**
    * @type {Object}
-   * @private
+   * @protected
    */
   get _logger() { return game.strive.logger; }
 
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  #isTransactionMode = false;
   /**
    * If `true`, field updates do not immediately fire and get 
    * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
    * 
    * Setting this to `false` immediately flushes all updates. 
    * @type {Boolean}
-   * @private
    */
-  #isTransactionMode = false;
   get isTransactionMode() { return this.#isTransactionMode; }
   set isTransactionMode(value) {
     this.#isTransactionMode = value;
@@ -76,7 +79,7 @@ export default class DocumentUpdater {
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
-    const dto = this._buildDto(propertyPath, newValue);
+    const dto = this.#buildDto(propertyPath, newValue);
     if (this.isTransactionMode) {
       this.#transactions = FoundryWrapper.mergeObject(this.#transactions, dto);
     } else {
@@ -156,7 +159,7 @@ export default class DocumentUpdater {
    * 
    * @private
    */
-  _buildDto(propertyPath, newValue) {
+  #buildDto(propertyPath, newValue) {
     if (propertyPath === undefined || propertyPath.trim().length < 1) {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
@@ -204,7 +207,6 @@ export default class DocumentUpdater {
           throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
         } else if (common.util.validation.isArray(currentDocumentProperty) === true) {
           arrayIsPartOfPath = true;
-          this._logger.verbose(`Detected array as part by name '${propertyName}' of given property path '${propertyPath}' - consider converting the array to an object, instead, as arrays are slow to process`);
           previousDtoProperty[propertyName] = currentDocumentProperty;
         } else if (common.util.validation.isObject(currentDocumentProperty) === true) {
           if (arrayIsPartOfPath === true) {

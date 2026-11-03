@@ -177,7 +177,7 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
       return;
     }
 
-    templateItem = templateItem.getTransientObject();
+    templateItem = templateItem.getEnhancedDocument();
 
     const existingItem = this.document.items.find(it => it.id === templateItem.id || it.name === templateItem.name);
     const shouldUpdate = ValidationUtil.isDefined(existingItem) 

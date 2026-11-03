@@ -3,7 +3,7 @@ import { Attribute, ATTRIBUTES } from "../../domain/const/attributes.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import MomentumAction from "../../domain/momentum-action.mjs";
 import Reference from "../../domain/reference.mjs";
-import Expertise from "../../domain/skill/expertise.mjs";
+import ExpertiseDocument from "./expertise-document.mjs";
 import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-field-bridge.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
@@ -121,7 +121,7 @@ export default class TransientSkill extends TransientBaseItem {
   set level(value) { this._level.value = value; }
 
   /**
-   * @type {Array<Expertise>}
+   * @type {Array<ExpertiseDocument>}
    */
   get expertises() { return this._expertises.value; }
   set expertises(value) { this._expertises.value = value; }
@@ -307,7 +307,7 @@ export default class TransientSkill extends TransientBaseItem {
       document: this,
       dataPath: "system.expertises",
       fromDto: (dto) => {
-        return dto.map(it => Expertise.fromDto(it, this));
+        return dto.map(it => ExpertiseDocument.fromDto(it, this));
       },
       toDto: (value) => {
         return value.map(it => it.toDto());

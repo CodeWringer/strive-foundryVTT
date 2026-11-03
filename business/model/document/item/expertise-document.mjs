@@ -1,14 +1,16 @@
-import { common } from "../../../../common/_module.mjs"
+import { CompareUtility } from "../../../../common/util/compare-utility.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import ExpertiseItemSheet from "../../../../presentation/application/item/expertise/expertise-item-sheet.mjs";
-import { DOCUMENT_CONTEXT } from "../../../../presentation/model/document-context.mjs";
 import AtReferencer from "../../../search/at-referencer.mjs";
-import ArrayDataFieldBridge from "../../document/array-data-field-bridge.mjs";
-import DataFieldBridge from "../../document/data-field-bridge.mjs";
-import { ITEM_TYPES } from "../const/item-types.mjs";
-import { TARGETING_TYPES } from "../const/targeting-types.mjs";
-import GradedEffect from "../graded-effect.mjs";
-import Persistable from "../persistable.mjs"
+import { ITEM_TYPES } from "../../domain/const/item-types.mjs";
+import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
+import GradedEffect from "../../domain/graded-effect.mjs";
+import Persistable from "../../domain/persistable.mjs"
+import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
+import SyntheticDocument from "../synthetic-document.mjs";
+import TransientSkill from "./transient-skill.mjs";
 // Do not import TransientSkill
 
 /**
@@ -26,7 +28,6 @@ import Persistable from "../persistable.mjs"
  * @property {String} name 
  * @property {String} description Html content.
  * @property {String | null} gmNotes Html content.
- * @property {TransientDocument | null} owningDocument
  * * Read-only.
  * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
  * * Read-only.
@@ -60,21 +61,18 @@ import Persistable from "../persistable.mjs"
  * 
  * @extends Persistable
  */
-export default class Expertise extends Persistable {
+export default class ExpertiseDocument extends SyntheticDocument {
   /**
-   * @param {Object} dto 
-   * @param {TransientSkill} owningDocument 
-   * 
-   * @returns {Expertise}
-   * 
-   * @static
+   * @param {Object} args 
+   * @param {TransientSkill} args.parentDocument 
+   * @param {Number} args.index 
    * @override
    */
-  static fromDto(dto, owningDocument, index) {
-    return new Expertise({
-      owningDocument: owningDocument,
+  static fromDto(dto, args) {
+    return new ExpertiseDocument({
+      parentDocument: args.parentDocument,
+      index: args.index,
       id: dto.id,
-      index: index,
     });
   }
 
@@ -86,41 +84,6 @@ export default class Expertise extends Persistable {
   #index;
 
   /**
-   * Returns the data path of this expertise on its parent. 
-   * 
-   * @type {String}
-   * @private
-   * @readonly
-   */
-  get #pathOnParent() { return `system.expertises[${this.#index}]`; }
-
-  /**
-   * @type {String}
-   */
-  get img() { return this._img.value; }
-  set img(value) { this._img.value = value; }
-
-  /**
-   * @type {String}
-   */
-  get name() { return this._name.value; }
-  set name(value) { this._name.value = value; }
-
-  /**
-   * @type {String}
-   */
-  get description() { return this._description.value; }
-  set description(value) { this._description.value = value; }
-
-  /**
-   * Arbitrary notes only visible to game-masters. 
-   * 
-   * @type {String | null}
-   */
-  get gmNotes() { return this._gmNotes.value; }
-  set gmNotes(value) { this._gmNotes.value = value; }
-
-  /**
    * Returns the default icon image path for this type of document. 
    * 
    * @type {String}
@@ -130,17 +93,10 @@ export default class Expertise extends Persistable {
 
   /**
    * Returns the class reference of this document. 
-   * @type {Expertise}
+   * @type {ExpertiseDocument}
    * @readonly
    */
-  get clazz() { return Expertise; }
-
-  /**
-   * Returns the id of the document. 
-   * @type {Expertise}
-   * @readonly
-   */
-  get id() { return this._id; }
+  get clazz() { return ExpertiseDocument; }
 
   /**
    * Returns the content type of this "document". 
@@ -149,23 +105,6 @@ export default class Expertise extends Persistable {
    * @readonly
    */
   get type() { return ITEM_TYPES.expertise; }
-
-  /**
-   * Returns true, if there is an owning document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get hasParent() {
-    return common.util.validation.isDefined(this.owningDocument);
-  }
-
-  /**
-   * Returns true, if the current user is the owner of the document. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isOwner() { return this.hasParent ? this.owningDocument.isOwner : false; }
 
   /**
    * @type {Number}
@@ -276,136 +215,95 @@ export default class Expertise extends Persistable {
   }
 
   /**
-   * Returns the context of the document - whether it is embedded or independent. 
-   * @type {DOCUMENT_CONTEXT}
-   * @readonly
-   */
-  get context() {
-    return DOCUMENT_CONTEXT.embedded;
-  }
-
-  /**
    * @param {Object} args 
-   * @param {TransientSkill} args.owningDocument The owning document.
+   * @param {TransientSkill} args.parentDocument 
    * @param {Number} args.index
    * @param {String | undefined} args.id
-   * 
-   * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
   constructor(args = {}) {
-    super(args);
-    common.util.validation.validateOrThrow(args, ["owningDocument", "index"]);
+    super({
+      ...args,
+      pathOnParent: `system.expertises[${args.index}]`,
+    });
+    ValidationUtil.validateOrThrow(args, ["index"]);
 
-    this.owningDocument = args.owningDocument;
     this.#index = args.index;
-    this._id = args.id ?? common.util.uuid.createUuid();
 
-    this._gmNotes = new DataFieldBridge({
-      document: this,
-      dataPath: `${this.#pathOnParent}.gmNotes`,
-      fromDto: (dto) => {
-        if (common.util.validation.isBlankOrUndefined(dto)) {
-          return null;
-        } else {
-          return dto;
-        }
-      },
-      toDto: (value) => {
-        if (common.util.validation.isBlankOrUndefined(value)) {
-          return null;
-        } else {
-          return value;
-        }
-      },
-    });
-    this._img = new DataFieldBridge({
-      document: this,
-      dataPath: `${this.#pathOnParent}.img`,
-      default: this.defaultImg,
-    });
-    this._name = new DataFieldBridge({
-      document: this,
-      dataPath: `${this.#pathOnParent}.name`,
-      default: StringUtil.getLoca("system.item.expertise.defaultName"),
-    });
-    this._description = new DataFieldBridge({
-      document: this,
-      dataPath: `${this.#pathOnParent}.description`,
-    });
+    this._name.default = StringUtil.getLoca("system.item.expertise.defaultName");
     this._requiredLevel = new DataFieldBridge({
-      document: this.owningDocument,
-      dataPath: `${this.#pathOnParent}.requiredLevel`,
+      document: this,
+      dataPath: "requiredLevel",
       default: 0,
     });
     this._actionPoints = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.actionPoints.enabled`,
+        dataPath: "actionPoints.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.actionPoints.current`,
+        dataPath: "actionPoints.current",
         default: 0,
       }),
     };
     this._distance = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.distance.enabled`,
+        dataPath: "distance.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.distance.current`,
+        dataPath: "distance.current",
         default: 0,
       }),
     };
     this._targetingType = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.targetingType.enabled`,
+        dataPath: "targetingType.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.targetingType.current`,
+        dataPath: "targetingType.current",
         default: TARGETING_TYPES.singleTarget,
       }),
     };
     this._obstacle = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.obstacle.enabled`,
+        dataPath: "obstacle.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.obstacle.current`,
+        dataPath: "obstacle.current",
         default: "",
       }),
     };
     this._opposedBy = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.opposedBy.enabled`,
+        dataPath: "opposedBy.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.opposedBy.current`,
+        dataPath: "opposedBy.current",
         default: "",
       }),
     };
     this._gradedEffects = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.gradedEffects.enabled`,
+        dataPath: "gradedEffects.enabled",
         default: false,
       }),
       entries: new ArrayDataFieldBridge({
         document: this,
-        dataPath: `${this.#pathOnParent}.gradedEffects.entries`,
+        dataPath: "gradedEffects.entries",
         dataClass: GradedEffect,
         default: [],
       }),
@@ -413,109 +311,13 @@ export default class Expertise extends Persistable {
   }
 
   /**
-   * Deletes this `Expertise`. 
-   * 
-   * @returns {Boolean} True, if the `Expertise` could be removed. 
-   */
-  delete() {
-    if (!this.hasParent) {
-      game.strive.logger.warning("No parent");
-      return false;
-    }
-
-    const safeParentExpertises = this.owningDocument.expertises.concat([]);
-    const index = safeParentExpertises.findIndex(it => it.id === this.id);
-    if (index < 0) {
-      game.strive.logger.warning("Not part of parent Skill's Expertises");
-      return false;
-    }
-
-    safeParentExpertises.splice(index, 1);
-    this.owningDocument.expertises = safeParentExpertises;
-
-    return true;
-  }
-
-  /**
-   * Updates the properties of this object, based on the given delta object. 
-   * 
-   * @param {Object} delta An object containing the properties of this object to update. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @async
-   */
-  async update(delta, render = true) {
-    if (!this.hasParent) {
-      game.strive.logger.warning("No parent");
-      return;
-    }
-
-    const safeParentExpertises = this.owningDocument.expertises.concat([]);
-    const index = safeParentExpertises.findIndex(it => it.id === this.id);
-    if (index < 0) {
-      game.strive.logger.warning("Not part of parent Skill's Expertises");
-      return false;
-    }
-
-    safeParentExpertises[index] = {
-      ...safeParentExpertises[index],
-      ...delta,
-    };
-    // This causes the actual update through the parent Skill. 
-    this.owningDocument.expertises = safeParentExpertises;
-  }
-
-  /**
-   * Updates a property of this Expertise on the parent item, identified via the given path. 
-   * 
-   * @param {String} propertyPath Path leading to the property to update, on the Expertise. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "itemOrders.b[0]"
-   * @param {any} newValue The value to assign to the property. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @async
-   */
-  async updateByPath(propertyPath, newValue, render = true) {
-    if (propertyPath.startsWith(this.#pathOnParent)) {
-      this.owningDocument.updateByPath(propertyPath, newValue, render);
-    } else {
-      const newPath = `${this.#pathOnParent}.${propertyPath}`;
-      this.owningDocument.updateByPath(newPath, newValue, render);
-    }
-  }
-
-  /**
-   * Deletes a property on the expertise, via the given path. 
-   * 
-   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "system.attributes[0].level" 
-   *        E.g.: "system.attributes[4]" 
-   *        E.g.: "system.attributes" 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @async
-   */
-  async deleteByPath(propertyPath, render = true) {
-    if (propertyPath.startsWith(this.#pathOnParent)) {
-      this.owningDocument.deleteByPath(propertyPath, render);
-    } else {
-      const newPath = `${this.#pathOnParent}.${propertyPath}`;
-      this.owningDocument.deleteByPath(newPath, render);
-    }
-  }
-
-  /**
    * Returns a data transfer object version of this instance. 
    * 
-   * IMPORTANT: To avoid problems with recursion, the `owningDocument` field 
+   * IMPORTANT: To avoid problems with recursion, the `parentDocument` field 
    * **is not and must not** be included!
    * 
    * @returns {Object}
+   * @override
    */
   toDto() {
     return {
@@ -565,6 +367,7 @@ export default class Expertise extends Persistable {
    * 
    * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
    * * Only contains unique entries. No reference is included more than once. 
+   * @override
    */
   resolveReferences(str) {
     return new AtReferencer().resolveReferences(str, this);
@@ -573,22 +376,19 @@ export default class Expertise extends Persistable {
   /**
    * Compares the raw required level of this instance with a given instance and returns a numeric comparison result. 
    * 
-   * @param {Expertise} other Another instance to compare with. 
+   * @param {ExpertiseDocument} other Another instance to compare with. 
    * 
    * @returns {Number} `-1` | `0` | `1`
    * 
    * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
    * is more than / greater than `other`. 
+   * @override
    */
   compareRequiredLevel(other) {
-    return common.util.compare.compareOrdinal(this.requiredLevel, other.requiredLevel)
+    return CompareUtility.compareOrdinal(this.requiredLevel, other.requiredLevel)
   }
 
-  /**
-   * If possible, opens the sheet that represents the document, and returns it. 
-   * @returns {Promise<ApplicationV2>}
-   * @async
-   */
+  /** @override */
   async openSheet() {
     return await new ExpertiseItemSheet(this).render(true);
   }

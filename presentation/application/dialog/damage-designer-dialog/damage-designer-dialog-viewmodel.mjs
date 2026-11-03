@@ -297,7 +297,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     });
 
     skillDocuments.forEach(skillDocument => {
-      const transientSkillDocument = skillDocument.getTransientObject();
+      const transientSkillDocument = skillDocument.getEnhancedDocument();
 
       const pack = skillDocument.pack ?? "world";
       let collectionHierarchy;

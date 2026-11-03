@@ -10,7 +10,6 @@ import { GameSystemUserSettings } from "../business/setting/game-system-user-set
 import GameSystemSetting from "../business/setting/game-system-setting.mjs";
 import { SETTING_SCOPES } from "../business/setting/setting-scopes.mjs";
 import { animation } from "./animation/_module.mjs";
-import { DOCUMENT_CONTEXT } from "./model/document-context.mjs";
 import VisibilityRule from "./model/visibility-rule.mjs";
 
 /**
@@ -28,7 +27,6 @@ export const presentation = {
   RulesetExplainer: RulesetExplainer,
   model: {
     ChoiceOption: ChoiceOption,
-    DOCUMENT_CONTEXT: DOCUMENT_CONTEXT,
     VisibilityRule: VisibilityRule,
   },
   animation: animation,

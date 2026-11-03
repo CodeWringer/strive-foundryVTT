@@ -154,7 +154,7 @@ export class RollResult {
     let showReminder = false;
     if (showReminders) {
       if (common.util.validation.isDefined(args.actor) === true) {
-        const transientActor = args.actor.getTransientObject();
+        const transientActor = args.actor.getEnhancedDocument();
         // TODO: show reminder if advancement is enabled.
         // if (transientActor.type === business.model.const.ACTOR_TYPES.PC) {
         //   showReminder = true;

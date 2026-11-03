@@ -1,4 +1,4 @@
-import Expertise from "../../../../business/model/domain/skill/expertise.mjs";
+import ExpertiseDocument from "../../../../business/model/document/item/expertise-document.mjs";
 import { Sum, SumComponent } from "../../../../business/model/domain/summed-data.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
@@ -47,7 +47,7 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * @param {Function | undefined} args.onNameClick Invoked when the name input is clicked. 
    * 
-   * @param {Expertise} args.document The represented transient document instance. 
+   * @param {ExpertiseDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    * @param {DOCUMENT_CONTEXT | undefined} args.context 
    * * default `DOCUMENT_CONTEXT.independent`

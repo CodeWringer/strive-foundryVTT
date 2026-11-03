@@ -32,6 +32,6 @@ export default class SystemHealthConditionBroker {
       searchEmbedded: false,
       includeLocked: true,
     });
-    SystemHealthConditionBroker.conditions = documents.map(it => it.getTransientObject());
+    SystemHealthConditionBroker.conditions = documents.map(it => it.getEnhancedDocument());
   }
 }

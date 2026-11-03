@@ -23,7 +23,7 @@ export default class CombatTrackerActionPointsViewModel extends ViewModel {
 
     this.document = args.document;
     this.actionPoints = [];
-    const transientActor = this.document.getTransientObject();
+    const transientActor = this.document.getEnhancedDocument();
     for (let i = 0; i < transientActor.actionPoints.maximum; i++) {
       this.actionPoints.push({
         id: `${this.id}-${i}`,
@@ -37,7 +37,7 @@ export default class CombatTrackerActionPointsViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    const transientActor = this.document.getTransientObject();
+    const transientActor = this.document.getEnhancedDocument();
 
     if (this.isEditable === true) {
       html.find(`#${this.id}-empty-ap`).click(async (event) => {

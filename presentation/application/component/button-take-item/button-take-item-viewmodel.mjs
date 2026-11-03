@@ -244,9 +244,9 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       system: templateItem.document.system,
     };
     const assetDocument = await Item.create(itemData, { parent: parent });
-    const transientActor = parent.getTransientObject();
+    const transientActor = parent.getEnhancedDocument();
     transientActor.assets.luggage = transientActor.assets.luggage.concat([
-      assetDocument.getTransientObject(),
+      assetDocument.getEnhancedDocument(),
     ]);
 
     return assetDocument;

@@ -26,7 +26,6 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  * * `get clazz()`
  * 
  * Inheritors _should_ implement:
- * * `prepareData()`
  * * `resolveReference()`
  *
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
@@ -66,6 +65,16 @@ import DocumentUpdater from "./document-updater/document-updater.mjs"
  */
 export default class TransientDocument {
   /**
+   * Returns the class reference of this document. 
+   * 
+   * Required for extending instances thereof. 
+   * 
+   * @virtual
+   * @readonly
+   */
+  get clazz() { return TransientDocument; }
+
+  /**
    * Returns the default icon image path for this type of document. 
    * 
    * @type {String}
@@ -73,17 +82,6 @@ export default class TransientDocument {
    * @readonly
    */
   get defaultImg() { throw Error("Not implemented"); }
-
-  /**
-   * Returns the class reference of this document. 
-   * 
-   * Required for extending this instance. 
-   * 
-   * @type {TransientDocument}
-   * @abstract
-   * @readonly
-   */
-  get clazz() { throw Error("Not implemented"); }
 
   /**
    * The icon/image path of the document. 
@@ -116,7 +114,8 @@ export default class TransientDocument {
   set gmNotes(value) { this._gmNotes.value = value; }
 
   /**
-   * Returns the document type name. E. g. `"Actor"`
+   * Returns the document type name. See `GENERAL_DOCUMENT_TYPES`. 
+   * E. g. `"Actor"`
    * 
    * @type {String}
    * @readonly
@@ -255,20 +254,6 @@ export default class TransientDocument {
 
     ExtenderUtil.extend(this, this.clazz);
   }
-
-  /**
-   * Prepare data for the document. 
-   * 
-   * **IMPORTANT**: Any changes to the document made **will be persisted** to the 
-   * data base! Therefore, **only** use this method to ensure sensible 
-   * default values are set. Under no circumstance should derivable data 
-   * be added here! 
-   * 
-   * @param {Actor | Item} context A document instance. 
-   * 
-   * @virtual
-   */
-  prepareData(context) { /** Actual implementation left to inheriting types. */ }
 
   /**
    * Deletes a property on the given document, via the given path. 
@@ -424,7 +409,7 @@ export default class TransientDocument {
    * 
    * @returns {TransientDocument} 
    */
-  getTransientObject() {
+  getEnhancedDocument() {
     return this;
   }
 

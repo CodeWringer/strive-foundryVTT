@@ -147,11 +147,11 @@ export const ChatUtil = {
         if (dataset.expertiseId !== undefined) {
           // Create an expertise chat view model. 
           const expertiseId = dataset.expertiseId;
-          const skillDocument = document.getTransientObject();
+          const skillDocument = document.getEnhancedDocument();
           const expertise = skillDocument.expertises.find(it => it.id === expertiseId);
           viewModel = expertise.getChatViewModel({ id: vmId });
         } else {
-          viewModel = document.getTransientObject().getChatViewModel({ id: vmId });
+          viewModel = document.getEnhancedDocument().getChatViewModel({ id: vmId });
         }
       }
     } else if (common.util.validation.isDefined(viewModelClass)) {

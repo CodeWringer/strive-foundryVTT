@@ -20,7 +20,7 @@ export default class RulesetExplainer {
    */
   getExplanationForBaseInitiative(actor) {
     const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
-    const transientActor = actor.getTransientObject();
+    const transientActor = actor.getEnhancedDocument();
     const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
     const characterAwareness = transientActor.attributes.find(it => it.name === ATTRIBUTES.awareness.name);
     const characterWit = transientActor.attributes.find(it => it.name === ATTRIBUTES.wit.name);
@@ -45,7 +45,7 @@ export default class RulesetExplainer {
    */
   getExplanationForSprintingSpeed(actor) {
     const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
-    const transientActor = actor.getTransientObject();
+    const transientActor = actor.getEnhancedDocument();
     const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
     const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
     return common.util.string.format2(
@@ -67,7 +67,7 @@ export default class RulesetExplainer {
    */
   getExplanationForStability(actor) {
     const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
-    const transientActor = actor.getTransientObject();
+    const transientActor = actor.getEnhancedDocument();
     const characterStrength = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
     const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
     return common.util.string.format2(
@@ -118,7 +118,7 @@ export default class RulesetExplainer {
   getExplanationForMaxHp(actor) {
     const ITEM_TYPES = business.model.domain.const.ITEM_TYPES;
     const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
-    const transientActor = actor.getTransientObject();
+    const transientActor = actor.getEnhancedDocument();
 
     const baseHp = this._ruleset.getCharacterBaseHp();
     const toughnessLevel = parseInt(this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, transientActor));
@@ -148,7 +148,7 @@ export default class RulesetExplainer {
    */
   getExplanationForMaxExhaustion(actor) {
     const ATTRIBUTES = business.model.domain.const.ATTRIBUTES;
-    const transientActor = actor.getTransientObject();
+    const transientActor = actor.getEnhancedDocument();
 
     const rawLevel = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
     return common.util.string.format2(

@@ -30,7 +30,7 @@ export default class GameSystemCombat extends Combat {
     const refillApGlobalSetting = GameSystemWorldSettings.get(GameSystemWorldSettings.KEY_AUTO_REFILL_ACTION_POINTS);
     
     if (refillApGlobalSetting === true) {
-      const currentActor = this.turns[this.turn].actor.getTransientObject();
+      const currentActor = this.turns[this.turn].actor.getEnhancedDocument();
 
       if (currentActor.actionPoints.refill.enable === true) {
         const newApCount = Math.min(currentActor.actionPoints.maximum, currentActor.actionPoints.current + currentActor.actionPoints.refill.amount);
@@ -56,7 +56,7 @@ export default class GameSystemCombat extends Combat {
         includeLocked: false,
         searchEmbedded: false,
       });
-      const transientDocument = document.getTransientObject();
+      const transientDocument = document.getEnhancedDocument();
       if (common.util.validation.isDefined(transientDocument.initiative)
         && transientDocument.initiative.perTurn > 1) {
         // Insert additional combatants for this actor. 

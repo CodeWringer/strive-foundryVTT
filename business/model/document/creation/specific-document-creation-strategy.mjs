@@ -118,7 +118,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       const document = await new DocumentFetcher().find({
         id: id,
       });
-      const transientDocument = document.getTransientObject();
+      const transientDocument = document.getEnhancedDocument();
       if (this.filter(transientDocument) === true) {
         documents.set(id, transientDocument);
       }

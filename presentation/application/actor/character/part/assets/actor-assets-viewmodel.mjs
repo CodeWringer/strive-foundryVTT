@@ -127,7 +127,7 @@ export default class ActorAssetsViewModel extends ViewModel {
           ),
           onItemAdded: (_, document) => {
             this.document.assets.luggage = this.document.assets.luggage.concat([
-              document.getTransientObject(),
+              document.getEnhancedDocument(),
             ]);
           },
         })

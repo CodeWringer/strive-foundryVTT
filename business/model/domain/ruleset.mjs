@@ -249,7 +249,7 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const transientActor = actor.getTransientObject();
+    const transientActor = actor.getEnhancedDocument();
     const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
     return characterAttribute.level;
   }
@@ -270,7 +270,7 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const transientActor = actor.getTransientObject();
+    const transientActor = actor.getEnhancedDocument();
     const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
     if (!ValidationUtil.isDefined(characterAttribute)) {
       game.strive.logger.error(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
@@ -295,7 +295,7 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const transientSkill = skill.getTransientObject();
+    const transientSkill = skill.getEnhancedDocument();
     return transientSkill.modifiedLevel;
   }
 }

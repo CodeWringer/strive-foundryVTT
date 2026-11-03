@@ -36,21 +36,20 @@ export class GameSystemActor extends Actor {
    * @virtual
    * @readonly
    */
-  get defaultImg() { return this.getTransientObject().defaultImg; }
+  get defaultImg() { return this.getEnhancedDocument().defaultImg; }
 
   /**
    * Chat message template path. 
    * @type {String}
    * @readonly
    */
-  get chatMessageTemplate() { return this.getTransientObject().chatMessageTemplate; }
+  get chatMessageTemplate() { return this.getEnhancedDocument().chatMessageTemplate; }
 
   /** @override */
   prepareData() {
     super.prepareData();
 
     this._invalidateTransientObject();
-    this.getTransientObject().prepareData(this);
   }
 
   /**
@@ -58,7 +57,7 @@ export class GameSystemActor extends Actor {
    * 
    * @returns {TransientBaseActor}
    */
-  getTransientObject() {
+  getEnhancedDocument() {
     if (!common.util.validation.isDefined(this._transientObject)) {
       const factoryFunction = GameSystemActor.SUB_TYPES.get(this.type);
       
@@ -68,7 +67,7 @@ export class GameSystemActor extends Actor {
 
       this._transientObject = factoryFunction(this);
     }
-    return this._transientObject.getTransientObject();
+    return this._transientObject.getEnhancedDocument();
   }
   
   /** @override */
@@ -82,7 +81,7 @@ export class GameSystemActor extends Actor {
 
   /** @override */
   getRollData() {
-    const baseInitiative = this.getTransientObject().baseInitiative;
+    const baseInitiative = this.getEnhancedDocument().baseInitiative;
     return {
       baseInitiative: baseInitiative,
     };

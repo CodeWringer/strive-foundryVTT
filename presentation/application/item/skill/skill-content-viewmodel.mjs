@@ -1,5 +1,5 @@
 import { TARGETING_TYPES } from "../../../../business/model/domain/const/targeting-types.mjs";
-import Expertise from "../../../../business/model/domain/skill/expertise.mjs";
+import ExpertiseDocument from "../../../../business/model/document/item/expertise-document.mjs";
 import { LIST_ITEM_EXPANSION_MODES } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
@@ -38,7 +38,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
   get hasLockedExpertises() { return (this.lockedExpertises.length > 0); }
 
   /**
-   * @type {Array<Expertise>}
+   * @type {Array<ExpertiseDocument>}
    * @readonly
    */
   get lockedExpertises() {
@@ -263,7 +263,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
           icon: "fas fa-plus",
           onClick: () => {
             const newExpertises = this.document.expertises.concat([
-              new Expertise({
+              new ExpertiseDocument({
                 owningDocument: this.document,
               }),
             ]);
