@@ -70,9 +70,6 @@ export default class ExpertiseContentViewModel extends BaseItemContentViewModel 
    * 
    * @param {ExpertiseDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
-   * independent document. This affects interactibility. 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);

@@ -1,8 +1,9 @@
-import DataFieldBridge from "../data-field-bridge.mjs";
-import TransientBaseItem from "./transient-base-item.mjs"
+import MomentumAction from "../../domain/momentum-action.mjs";
+import AuthenticDocument from "../authentic-document.mjs";
+import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
 
 /**
- * @see `HealthConditionItemData` - Must contain all the fields defined in this data model. 
+ * @see `TraitItemData` - Must contain all the fields defined in this data model. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -29,54 +30,41 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
- * @property {Number} current
- * @property {Number} limit
+ * @property {Array<MomentumAction>} momentumActions
  * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientHealthCondition extends TransientBaseItem {
+export default class TraitDocument extends AuthenticDocument {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/health-condition-light.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/trait-light.svg"; }
   
   /** @override */
-  get clazz() { return TransientHealthCondition; }
+  get clazz() { return TraitDocument; }
 
   /**
-   * @type {Number}
+   * @type {Array<MomentumAction>}
    */
-  get current() { return this._current.value; }
-  set current(value) { this._current.value = value; }
+  get momentumActions() { return this._momentumActions.value; }
+  set momentumActions(value) { this._momentumActions.value = value; }
   
   /**
-   * @type {Number}
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
    */
-  get maximum() { return this._maximum.value; }
-  set maximum(value) { this._maximum.value = value; }
+  constructor(args) {
+    super(args);
 
-  /**
-   * @param {GameSystemItem} document An encapsulated document instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
-   */
-  constructor(document) {
-    super(document);
-    
-    this._current = new DataFieldBridge({
+    this._momentumActions = new ArrayDataFieldBridge({
       document: this,
-      dataPath: "system.current",
-      default: 0,
-    });
-    this._maximum = new DataFieldBridge({
-      document: this,
-      dataPath: "system.maximum",
-      default: null,
+      dataPath: "system.momentumActions",
+      dataClass: MomentumAction,
     });
   }
 }

@@ -19,7 +19,6 @@ export default class ExpertiseItemSheet extends GeneralDocumentApplication {
   /**
    * @param {Object} args 
    * @param {TransientDocument} args.document 
-   * @param {DOCUMENT_CONTEXT} args.documentContext 
    * @returns {ExpertiseItemSheetViewModel}
    * @override
    */
@@ -28,7 +27,6 @@ export default class ExpertiseItemSheet extends GeneralDocumentApplication {
       id: this.id,
       document: args.document,
       sheet: this,
-      context: args.documentContext,
     });
   }
 }

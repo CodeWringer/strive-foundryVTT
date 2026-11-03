@@ -10,8 +10,8 @@ import Persistable from "../../domain/persistable.mjs"
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 import SyntheticDocument from "../synthetic-document.mjs";
-import TransientSkill from "./transient-skill.mjs";
-// Do not import TransientSkill
+import SkillDocument from "./skill-document.mjs";
+// Do not import SkillDocument
 
 /**
  * Represents an Expertise (of a Skill). 
@@ -59,12 +59,12 @@ import TransientSkill from "./transient-skill.mjs";
  * @property {Boolean} gradedEffects.enabled
  * @property {Array<GradedEffect>} gradedEffects.entries
  * 
- * @extends Persistable
+ * @extends SyntheticDocument
  */
 export default class ExpertiseDocument extends SyntheticDocument {
   /**
    * @param {Object} args 
-   * @param {TransientSkill} args.parentDocument 
+   * @param {SkillDocument} args.parentDocument 
    * @param {Number} args.index 
    * @override
    */
@@ -216,7 +216,7 @@ export default class ExpertiseDocument extends SyntheticDocument {
 
   /**
    * @param {Object} args 
-   * @param {TransientSkill} args.parentDocument 
+   * @param {SkillDocument} args.parentDocument 
    * @param {Number} args.index
    * @param {String | undefined} args.id
    */

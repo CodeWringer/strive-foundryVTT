@@ -1,16 +1,17 @@
 import { ITEM_TYPES } from "../../domain/const/item-types.mjs";
-import TransientBaseItem from "./transient-base-item.mjs";
-import TransientAsset from "./transient-asset.mjs";
-import TransientFateCard from "./transient-fate-card.mjs";
-import TransientHealthCondition from "./transient-health-condition.mjs";
-import TransientIllness from "./transient-illness.mjs";
-import TransientInjury from "./transient-injury.mjs";
-import TransientLanguage from "./transient-language.mjs";
-import TransientMutation from "./transient-mutation.mjs";
-import TransientProject from "./transient-project.mjs";
-import TransientRecipe from "./transient-recipe.mjs";
-import TransientSkill from "./transient-skill.mjs";
-import TransientTrait from "./transient-trait.mjs";
+import AssetDocument from "./asset-document.mjs";
+import FateCardDocument from "./fate-card-document.mjs";
+import HealthConditionDocument from "./health-condition-document.mjs";
+import IllnessDocument from "./illness-document.mjs";
+import InjuryDocument from "./injury-document.mjs";
+import LanguageDocument from "./language-document.mjs";
+import MutationDocument from "./mutation-document.mjs";
+import ProjectDocument from "./project-document.mjs";
+import RecipeDocument from "./recipe-document.mjs";
+import SkillDocument from "./skill-document.mjs";
+import TraitDocument from "./trait-document.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import AuthenticDocument from "../authentic-document.mjs";
 
 /**
  * @summary
@@ -18,33 +19,33 @@ import TransientTrait from "./transient-trait.mjs";
  * 
  * @description
  * In truth, this class only serves as a "data source" and should never be worked with 
- * directly. Instead, an instance of `TransientBaseItem` should be fetched via the 
- * `getTransientObject`-method and used instead. 
+ * directly. Instead, an instance of `AuthenticDocument` should be fetched via the 
+ * `getEnhancedDocument`-method and used instead. 
  * 
- * @see TransientBaseItem
+ * @see AuthenticDocument
  */
 export class GameSystemItem extends Item {
   /**
    * Returns a map of `Item` sub-types and their factory functions. 
    * 
-   * @type {Map<String, Function<TransientBaseActor>>}
+   * @type {Map<String, Function>}
    * @static
    * @readonly
    * @private
    */
   static get SUB_TYPES() {
     return new Map([
-      [ITEM_TYPES.asset, (document) => { return new TransientAsset(document) }],
-      [ITEM_TYPES.fate_card, (document) => { return new TransientFateCard(document) }],
-      [ITEM_TYPES.health_condition, (document) => { return new TransientHealthCondition(document) }],
-      [ITEM_TYPES.illness, (document) => { return new TransientIllness(document) }],
-      [ITEM_TYPES.injury, (document) => { return new TransientInjury(document) }],
-      [ITEM_TYPES.language, (document) => { return new TransientLanguage(document) }],
-      [ITEM_TYPES.mutation, (document) => { return new TransientMutation(document) }],
-      [ITEM_TYPES.project, (document) => { return new TransientProject(document) }],
-      [ITEM_TYPES.recipe, (document) => { return new TransientRecipe(document) }],
-      [ITEM_TYPES.skill, (document) => { return new TransientSkill(document) }],
-      [ITEM_TYPES.trait, (document) => { return new TransientTrait(document) }],
+      [ITEM_TYPES.asset, (document) => { return new AssetDocument({ document: document }) }],
+      [ITEM_TYPES.fate_card, (document) => { return new FateCardDocument({ document: document }) }],
+      [ITEM_TYPES.health_condition, (document) => { return new HealthConditionDocument({ document: document }) }],
+      [ITEM_TYPES.illness, (document) => { return new IllnessDocument({ document: document }) }],
+      [ITEM_TYPES.injury, (document) => { return new InjuryDocument({ document: document }) }],
+      [ITEM_TYPES.language, (document) => { return new LanguageDocument({ document: document }) }],
+      [ITEM_TYPES.mutation, (document) => { return new MutationDocument({ document: document }) }],
+      [ITEM_TYPES.project, (document) => { return new ProjectDocument({ document: document }) }],
+      [ITEM_TYPES.recipe, (document) => { return new RecipeDocument({ document: document }) }],
+      [ITEM_TYPES.skill, (document) => { return new SkillDocument({ document: document }) }],
+      [ITEM_TYPES.trait, (document) => { return new TraitDocument({ document: document }) }],
     ]);
   }
 
@@ -56,29 +57,35 @@ export class GameSystemItem extends Item {
    */
   get defaultImg() { return this.getEnhancedDocument().defaultImg; }
 
+  /**
+   * @type {AuthenticDocument | undefined}
+   * @private
+   */
+  #internalDocument;
+
   /** @override */
   prepareData() {
     super.prepareData();
 
-    this._invalidateTransientObject();
+    this.#invalidateDocument();
   }
 
   /**
-   * Returns an instance of a specific type of transient object for this item. 
+   * Returns the enhanced document data instance. 
    * 
-   * @returns {TransientBaseItem}
+   * @returns {AuthenticDocument}
    */
   getEnhancedDocument() {
-    if (this._transientObject === undefined) {
+    if (!ValidationUtil.isDefined(this.#internalDocument)) {
       const factoryFunction = GameSystemItem.SUB_TYPES.get(this.type);
       
       if (factoryFunction === undefined) {
         throw new Error(`InvalidTypeException: Item subtype ${this.type} is unrecognized!`);
       }
 
-      this._transientObject = factoryFunction(this);
+      this.#internalDocument = factoryFunction(this);
     }
-    return this._transientObject.getEnhancedDocument();
+    return this.#internalDocument.getEnhancedDocument();
   }
 
   /** @override */
@@ -91,11 +98,11 @@ export class GameSystemItem extends Item {
   }
   
   /**
-   * Invalidates the cached transient object instance, causing a new one to be instantiated at the next access. 
+   * Invalidates the cached enhanced document data instance, causing a new one to be re-instantiated at next access. 
    * 
    * @private
    */
-  _invalidateTransientObject() {
-    this._transientObject = undefined;
+  #invalidateDocument() {
+    this.#internalDocument = undefined;
   }
 }

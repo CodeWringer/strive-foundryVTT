@@ -2,7 +2,6 @@ import { ValidationUtil } from "../../../../../common/util/validation-utility.mj
 import { SlideDisplaceAnim } from "../../../../animation/slide-displace-anim.mjs";
 import { SlideInAnim } from "../../../../animation/slide-in-anim.mjs";
 import { SlideOutAnim } from "../../../../animation/slide-out-anim.mjs";
-import { DOCUMENT_CONTEXT } from "../../../../model/document-context.mjs";
 import { ChatUtil } from "../../../../util/chat-utility.mjs";
 import { KEY_CODES, MODIFIER_KEY_CODES } from "../../../../util/keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../../../util/keyboard/keyboard.mjs";
@@ -89,9 +88,6 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {TransientDocument} args.document An associated data document. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
-   * independent document. This affects interactibility. 
-   * * default `DOCUMENT_CONTEXT.independent`
    * 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    * 
@@ -106,13 +102,11 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this._headerViewModel = args.headerViewModel;
     if (ValidationUtil.isDefined(this._headerViewModel)) {
       this._headerViewModel.parent = this;
-      this._headerViewModel.context = args.context;
     }
 
     this._contentViewModel = args.contentViewModel;
     if (ValidationUtil.isDefined(this._contentViewModel)) {
       this._contentViewModel.parent = this;
-      this._contentViewModel.context = args.context;
     }
   }
 

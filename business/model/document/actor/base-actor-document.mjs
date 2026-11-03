@@ -1,7 +1,10 @@
-import TransientBaseActor from "./transient-base-actor.mjs";
+import { common } from "../../../../common/_module.mjs";
+import AuthenticDocument from "../authentic-document.mjs";
 
 /**
- * Represents the full transient data of a plain actor. 
+ * Represents a Character document. 
+ * 
+ * @abstract
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -28,12 +31,35 @@ import TransientBaseActor from "./transient-base-actor.mjs";
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @extends TransientBaseActor
+ * @property {Array<AuthenticDocument>} items The embedded documents of this document. 
+ * * Read-only. 
+ * 
+ * @extends AuthenticDocument
  */
-export default class TransientPlainActor extends TransientBaseActor {
+export default class BaseActorDocument extends AuthenticDocument {
   /** @override */
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
-  
+
   /** @override */
-  get clazz() { return TransientPlainActor; }
+  get clazz() { return BaseActorDocument; }
+
+  /**
+   * Internal cache of the items which have been fetched from the Actor instance 
+   * and mapped to enhanced objects. 
+   * @type {Array<AuthenticDocument>}
+   * @private
+   */
+  #items;
+  /**
+   * Returns the embedded documents of the actor. 
+   * 
+   * @type {Array<AuthenticDocument>}
+   * @readonly
+   */
+  get items() { 
+    if (!common.util.validation.isDefined(this.#items)) {
+      this.#items = Array.from(this.document.items).map(it => it.getEnhancedDocument()); 
+    }
+    return this.#items;
+  }
 }

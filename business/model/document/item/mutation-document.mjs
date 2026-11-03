@@ -1,9 +1,9 @@
-import MomentumAction from "../../domain/momentum-action.mjs";
-import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
-import TransientBaseItem from "./transient-base-item.mjs"
+import AuthenticDocument from "../authentic-document.mjs";
 
 /**
- * @see `TraitItemData` - Must contain all the fields defined in this data model. 
+ * Represents a Mutation document. 
+ * 
+ * @see `MutationItemData` - Must contain all the fields defined in this data model. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -30,42 +30,19 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
- * @property {Array<MomentumAction>} momentumActions
- * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientTrait extends TransientBaseItem {
+export default class MutationDocument extends AuthenticDocument {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/trait-light.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/mutation-light.svg"; }
   
   /** @override */
-  get clazz() { return TransientTrait; }
-
-  /**
-   * @type {Array<MomentumAction>}
-   */
-  get momentumActions() { return this._momentumActions.value; }
-  set momentumActions(value) { this._momentumActions.value = value; }
-  
-  /**
-   * @param {GameSystemItem} document An encapsulated document instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
-   */
-  constructor(document) {
-    super(document);
-
-    this._momentumActions = new ArrayDataFieldBridge({
-      document: this,
-      dataPath: "system.momentumActions",
-      dataClass: MomentumAction,
-    });
-  }
+  get clazz() { return MutationDocument; }
 }

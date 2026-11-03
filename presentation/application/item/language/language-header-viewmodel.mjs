@@ -22,10 +22,8 @@ export default class LanguageHeaderViewModel extends BaseItemHeaderViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientLanguage} args.document The represented transient document instance. 
+   * @param {LanguageDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);

@@ -77,7 +77,7 @@ export default class GeneralDocumentApplication extends GeneralApplication {
     const args = {
       document: this.document,
     };
-    if (ValidationUtil.isFunction(this.document.getTransientObject)) {
+    if (ValidationUtil.isFunction(this.document.getEnhancedDocument)) {
       const document = this.document.getEnhancedDocument();
       const documentContext = document.context;
       args.document = document;

@@ -95,7 +95,7 @@ export default class RulesetExplainer {
   }
 
   /**
-   * @param {TransientSkill} skill 
+   * @param {SkillDocument} skill 
    * 
    * @returns {String}
    */

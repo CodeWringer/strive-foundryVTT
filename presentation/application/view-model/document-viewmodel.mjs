@@ -1,12 +1,12 @@
+import Document from "../../../business/model/document/document.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import { DOCUMENT_CONTEXT } from "../../model/document-context.mjs";
 import VisibilityRule from "../../model/visibility-rule.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
  * Wraps a document for use in a view model. 
  * 
- * @property {Object} document
+ * @property {Document} document
  * @property {Boolean} isOwner
  * 
  * @extends ViewModel
@@ -47,7 +47,7 @@ export default class DocumentViewModel extends ViewModel {
   }
 
   /**
-   * @type {Object}
+   * @type {Document}
    * @private
    */
   #document;
@@ -66,21 +66,21 @@ export default class DocumentViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
+  get isEmbedded() { return this.document.isEmbedded; }
 
   /**
    * Returns `true`, if this is an independent (i. e. not embedded) document. 
    * @type {Boolean}
    * @readonly
    */
-  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
+  get isIndependent() { return this.document.isIndependent; }
 
   /**
    * Returns `true`, if this is locked (i. e. part of a locked compendium pack). 
    * @type {Boolean}
    * @readonly
    */
-  get isLocked() { return this.context === DOCUMENT_CONTEXT.embedded_locked || this.context === DOCUMENT_CONTEXT.independent_locked; }
+  get isLocked() { return this.document.isLocked; }
 
   /**
    * @param {Object} args The arguments object. 
@@ -101,19 +101,15 @@ export default class DocumentViewModel extends ViewModel {
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {Object} args.document An associated data document. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
-   * independent document. This affects interactibility. 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
 
     ValidationUtil.validateOrThrow(args, ["document"]);
-    this.context = args.context ?? DOCUMENT_CONTEXT.independent;
 
-    if (ValidationUtil.isDefined(args.document) && ValidationUtil.isDefined(args.document.getTransientObject)) {
+    if (ValidationUtil.isDefined(args.document) && ValidationUtil.isDefined(args.document.getEnhancedDocument)) {
       this.#document = args.document.getEnhancedDocument();
-    } else if (ValidationUtil.isDefined((args.document ?? {}).document) && ValidationUtil.isDefined((args.document ?? {}).document.getTransientObject)) {
+    } else if (ValidationUtil.isDefined((args.document ?? {}).document) && ValidationUtil.isDefined((args.document ?? {}).document.getEnhancedDocument)) {
       this.#document = args.document.document.getEnhancedDocument();
     } else {
       this.#document = args.document;

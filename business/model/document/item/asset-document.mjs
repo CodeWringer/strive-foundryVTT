@@ -1,13 +1,13 @@
 import { ArrayUtil } from "../../../../common/util/array-utility.mjs"
-import TransientBaseItem from "./transient-base-item.mjs"
-import DataFieldBridge from "../data-field-bridge.mjs"
 import { common } from "../../../../common/_module.mjs"
 import AssetSlot from "../../domain/asset/asset-slot.mjs"
-import ArrayDataFieldBridge from "../array-data-field-bridge.mjs"
 import Complication from "../../domain/complication/complication.mjs"
+import AuthenticDocument from "../authentic-document.mjs"
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs"
+import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs"
 
 /**
- * Represents the full transient data of an asset. 
+ * Represents an Asset document. 
  * 
  * @see `AssetItemData` - Must contain all the fields defined in this data model. 
  * 
@@ -44,12 +44,12 @@ import Complication from "../../domain/complication/complication.mjs"
  * * `newValue: Any`
  * * `oldValue: Any`
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
  * @property {Number} bulk
  * @property {Object} quantity
@@ -71,14 +71,14 @@ import Complication from "../../domain/complication/complication.mjs"
  * that holds this asset. 
  * * Read-only
  * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientAsset extends TransientBaseItem {
+export default class AssetDocument extends AuthenticDocument {
   /** @override */
   get defaultImg() { return "systems/strive/presentation/image/bag-light.svg"; }
 
   /** @override */
-  get clazz() { return TransientAsset; }
+  get clazz() { return AssetDocument; }
 
   /**
    * @type {Number}
@@ -118,7 +118,7 @@ export default class TransientAsset extends TransientBaseItem {
    */
   get isProperty() {
     if (this.hasParent) {
-      return this.owningDocument.assets.property.find(it => it.id === this.id) !== undefined;
+      return this.parentDocument.assets.property.find(it => it.id === this.id) !== undefined;
     } else {
       return false;
     }
@@ -130,7 +130,7 @@ export default class TransientAsset extends TransientBaseItem {
    */
   get isLuggage() {
     if (this.hasParent) {
-      return this.owningDocument.assets.luggage.find(it => it.id === this.id) !== undefined;
+      return this.parentDocument.assets.luggage.find(it => it.id === this.id) !== undefined;
     } else {
       return false;
     }
@@ -142,7 +142,7 @@ export default class TransientAsset extends TransientBaseItem {
    */
   get isEquipped() {
     if (this.hasParent) {
-      return this.owningDocument.assets.equipment.find(it => it.id === this.id) !== undefined;
+      return this.parentDocument.assets.equipment.find(it => it.id === this.id) !== undefined;
     } else {
       return false;
     }
@@ -157,7 +157,7 @@ export default class TransientAsset extends TransientBaseItem {
   get assetSlot() {
     if (!this.hasParent) return null;
 
-    for (const group of this.owningDocument.assets.equipmentSlotGroups) {
+    for (const group of this.parentDocument.assets.equipmentSlotGroups) {
       for (const slot of group.slots) {
         if (slot.alottedId === this.id) {
           return slot;
@@ -168,12 +168,11 @@ export default class TransientAsset extends TransientBaseItem {
   }
 
   /**
-   * @param {GameSystemItem} document An encapsulated document instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
    */
-  constructor(document) {
-    super(document);
+  constructor(args) {
+    super(args);
 
     this._bulk = new DataFieldBridge({
       document: this,
@@ -211,7 +210,7 @@ export default class TransientAsset extends TransientBaseItem {
    * if possible. 
    */
   moveToProperty() {
-    if (this.owningDocument === undefined
+    if (this.parentDocument === undefined
       || this.isProperty === true) {
       return;
     }
@@ -230,7 +229,7 @@ export default class TransientAsset extends TransientBaseItem {
    * if possible.
    */
   moveToLuggage() {
-    if (this.owningDocument === undefined
+    if (this.parentDocument === undefined
       || this.isLuggage === true) {
       return;
     }
@@ -240,8 +239,8 @@ export default class TransientAsset extends TransientBaseItem {
     }
 
     // Add to luggage list.
-    const newLuggageList = this.owningDocument.assets.luggage.concat([this]);
-    this.owningDocument.assets.luggage = newLuggageList;
+    const newLuggageList = this.parentDocument.assets.luggage.concat([this]);
+    this.parentDocument.assets.luggage = newLuggageList;
   }
 
   /**
@@ -252,7 +251,7 @@ export default class TransientAsset extends TransientBaseItem {
    * assign the asset to. 
    */
   moveToAssetSlot(assetSlot) {
-    if (this.owningDocument === undefined
+    if (this.parentDocument === undefined
       || (this.assetSlot ?? {}).id === assetSlot.id) {
       return;
     }
@@ -270,7 +269,7 @@ export default class TransientAsset extends TransientBaseItem {
   /**
    * Compares the bulk of this instance with a given instance and returns a numeric comparison result. 
    * 
-   * @param {TransientAsset} other Another instance to compare with. 
+   * @param {AssetDocument} other Another instance to compare with. 
    * 
    * @returns {Number} `-1` | `0` | `1`
    * 
@@ -300,12 +299,12 @@ export default class TransientAsset extends TransientBaseItem {
    */
   _removeFromLuggageList() {
     const newLuggageList = ArrayUtil.arrayTakeUnless(
-      this.owningDocument.assets.luggage,
+      this.parentDocument.assets.luggage,
       it => it.id === this.id,
     );
     // Only send the update, if the list is actually smaller. 
-    if (newLuggageList.length < this.owningDocument.assets.luggage.length) {
-      this.owningDocument.assets.luggage = newLuggageList;
+    if (newLuggageList.length < this.parentDocument.assets.luggage.length) {
+      this.parentDocument.assets.luggage = newLuggageList;
     }
   }
 }

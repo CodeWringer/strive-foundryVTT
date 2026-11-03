@@ -1,26 +1,24 @@
 import { common } from "../../../common/_module.mjs";
-import TransientDocument from "./transient-document.mjs";
-import TransientBaseItem from "./item/transient-base-item.mjs";
-import TransientBaseActor from "./actor/transient-base-actor.mjs";
-import TransientBaseCharacterActor from "./actor/transient-character-actor.mjs";
-import TransientPlainActor from "./actor/transient-plain-actor.mjs";
+import BaseActorDocument from "./actor/base-actor-document.mjs";
+import TransientBaseCharacterActor from "./actor/character-actor-document.mjs";
+import PlainActorDocument from "./actor/plain-actor-document.mjs";
 import { GameSystemActor } from "./actor/actor.mjs";
 import { GameSystemItem } from "./item/item.mjs";
 import { DOCUMENT_COLLECTION_SOURCES, DocumentCollectionSource } from "./document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "./document-fetcher/document-fetcher.mjs";
 import { DocumentIndex } from "./document-fetcher/document-index.mjs";
-import TransientAsset from "./item/transient-asset.mjs";
-import TransientFateCard from "./item/transient-fate-card.mjs";
-import TransientHealthCondition from "./item/transient-health-condition.mjs";
-import TransientIllness from "./item/transient-illness.mjs";
-import TransientInjury from "./item/transient-injury.mjs";
-import TransientMutation from "./item/transient-mutation.mjs";
-import TransientProject from "./item/transient-project.mjs";
-import TransientTrait from "./item/transient-trait.mjs";
-import TransientLanguage from "./item/transient-language.mjs";
-import TransientSkill from "./item/transient-skill.mjs";
-import TransientRecipe from "./item/transient-recipe.mjs";
-import TransientCharacterActor from "./actor/transient-character-actor.mjs";
+import AssetDocument from "./item/asset-document.mjs";
+import FateCardDocument from "./item/fate-card-document.mjs";
+import HealthConditionDocument from "./item/health-condition-document.mjs";
+import IllnessDocument from "./item/illness-document.mjs";
+import InjuryDocument from "./item/injury-document.mjs";
+import MutationDocument from "./item/mutation-document.mjs";
+import ProjectDocument from "./item/project-document.mjs";
+import TraitDocument from "./item/trait-document.mjs";
+import LanguageDocument from "./item/language-document.mjs";
+import SkillDocument from "./item/skill-document.mjs";
+import RecipeDocument from "./item/recipe-document.mjs";
+import CharacterActorDocument from "./actor/character-actor-document.mjs";
 import { documentUpdater } from "./document-updater/_module.mjs";
 import { dataBridge } from "./data-bridge/_module.mjs";
 
@@ -32,7 +30,6 @@ import { dataBridge } from "./data-bridge/_module.mjs";
  * Note the `init` function MUST be called during system setup!
  */
 export const document = {
-  TransientDocument: TransientDocument,
   dataBridge: dataBridge,
   fetcher: {
     DocumentCollectionSource: DocumentCollectionSource,
@@ -42,26 +39,25 @@ export const document = {
   },
   updater: documentUpdater,
   actor: {
-    TransientBaseActor: TransientBaseActor,
+    BaseActorDocument: BaseActorDocument,
     TransientBaseCharacterActor: TransientBaseCharacterActor,
-    TransientPlainActor: TransientPlainActor,
-    TransientCharacterActor: TransientCharacterActor,
+    PlainActorDocument: PlainActorDocument,
+    CharacterActorDocument: CharacterActorDocument,
     GameSystemActor: GameSystemActor,
   },
   item: {
     GameSystemItem: GameSystemItem,
-    TransientAsset: TransientAsset,
-    TransientBaseItem: TransientBaseItem,
-    TransientFateCard: TransientFateCard,
-    TransientHealthCondition: TransientHealthCondition,
-    TransientIllness: TransientIllness,
-    TransientInjury: TransientInjury,
-    TransientLanguage: TransientLanguage,
-    TransientMutation: TransientMutation,
-    TransientProject: TransientProject,
-    TransientRecipe: TransientRecipe,
-    TransientSkill: TransientSkill,
-    TransientTrait: TransientTrait,
+    AssetDocument: AssetDocument,
+    FateCardDocument: FateCardDocument,
+    HealthConditionDocument: HealthConditionDocument,
+    IllnessDocument: IllnessDocument,
+    InjuryDocument: InjuryDocument,
+    LanguageDocument: LanguageDocument,
+    MutationDocument: MutationDocument,
+    ProjectDocument: ProjectDocument,
+    RecipeDocument: RecipeDocument,
+    SkillDocument: SkillDocument,
+    TraitDocument: TraitDocument,
   },
   init() {
     common.util.constants.enrichConstant(DOCUMENT_COLLECTION_SOURCES);

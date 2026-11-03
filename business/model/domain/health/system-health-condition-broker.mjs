@@ -13,7 +13,7 @@ export default class SystemHealthConditionBroker {
   /**
    * Static accessor for all system-defined health conditions. 
    * 
-   * @type {Array<TransientHealthCondition>}
+   * @type {Array<HealthConditionDocument>}
    * @static
    * @readonly
    */

@@ -2,15 +2,16 @@ import { Callbacks } from "../../../common/callbacks.mjs";
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import AtReferencer from "../../search/at-referencer.mjs";
-import DataFieldBridge from "./data-bridge/data-field-bridge.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
 
 /**
- * Represents the abstract base class for all documents, both embedded and independent. 
+ * @summary
+ * Represents the abstract base class for all documents. 
  * 
+ * @description
  * Its purpose is to define a base contract that abstracts away and unifies how document data is accessed and persisted. 
- * A concrete implementation will be what gets used to interact with a specific domain type, and can be seen as an 
- * "synthetic enhanced" version of a FoundryVTT document. 
+ * A concrete implementation will be what gets used to interact with a specific domain type, and can be seen as a 
+ * "synthetic, enhanced" version of a FoundryVTT document. 
  * 
  * @abstract Inheritors MUST implement: 
  * * `get clazz`
@@ -23,6 +24,9 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
  * * `delete()`
  * * `openSheet()`
  * 
+ * Inheritors _should_ override:
+ * * `get parentDocument`
+ * 
  * @property {Document} clazz
  * @property {String} defaultImg
  * @property {String} id
@@ -31,11 +35,8 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
  * @property {Boolean} isOwner
  * @property {Boolean} isEmbedded
  * @property {Boolean} isLocked
+ * @property {Boolean} hasParent
  * @property {Boolean} isTransactionMode
- * @property {String} img
- * @property {String} name
- * @property {String} description
- * @property {String | null} gmNotes
  * @property {DocumentUpdater} _updater
  * @property {Callbacks} _onChangeCallbacks
  */
@@ -99,6 +100,7 @@ export default class Document {
   /**
    * Returns `true`, if the document is currently embedded in another. 
    * @type {Boolean}
+   * @abstract
    * @readonly
    */
   get isEmbedded() { throw Error("Not implemented"); }
@@ -106,9 +108,27 @@ export default class Document {
   /**
    * Returns `true`, if the document is currently locked. 
    * @type {Boolean}
+   * @abstract
    * @readonly
    */
   get isLocked() { throw Error("Not implemented"); }
+
+  /**
+   * Returns true, if there is a parent document. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasParent() {
+    return ValidationUtil.isDefined(this.parentDocument);
+  }
+
+  /**
+   * Returns true, if there is a parent document. 
+   * @type {Document | null}
+   * @virtual
+   * @readonly
+   */
+  get parentDocument() { return null; }
 
   /**
    * If `true`, field updates do not immediately fire and get persisted, 
@@ -119,36 +139,6 @@ export default class Document {
    */
   get isTransactionMode() { return this._updater.isTransactionMode; }
   set isTransactionMode(value) { this._updater.isTransactionMode = value; }
-
-  /**
-   * The icon/image path of the document. 
-   * 
-   * @type {String}
-   */
-  get img() { return this._img.value; }
-  set img(value) { this._img.value = value; }
-
-  /**
-   * The internal name of the document. 
-   * 
-   * @type {String}
-   */
-  get name() { return this._name.name; }
-  set name(value) { this._name.value = value; }
-
-  /**
-   * @type {String}
-   */
-  get description() { return this._description.value; }
-  set description(value) { this._description.value = value; }
-
-  /**
-   * Arbitrary notes only visible to game-masters. 
-   * 
-   * @type {String | null}
-   */
-  get gmNotes() { return this._gmNotes.value; }
-  set gmNotes(value) { this._gmNotes.value = value; }
 
   /**
    * @type {DocumentUpdater}
@@ -171,52 +161,6 @@ export default class Document {
 
     this._updater = args.updater;
     this._onChangeCallbacks = new Callbacks();
-
-    this._img = new DataFieldBridge({
-      document: this,
-      dataPath: "img",
-      onChange: (newValue, oldValue) => {
-        this._onChangeCallbacks.invoke("img", newValue, oldValue);
-      },
-    });
-    this._name = new DataFieldBridge({
-      document: this,
-      dataPath: "name",
-      default: "Unknown",
-      onChange: (newValue, oldValue) => {
-        this._onChangeCallbacks.invoke("name", newValue, oldValue);
-      },
-    });
-    this._description = new DataFieldBridge({
-      document: this,
-      dataPath: "system.description",
-      default: "",
-      onChange: (newValue, oldValue) => {
-        this._onChangeCallbacks.invoke("description", newValue, oldValue);
-      },
-    });
-    this._gmNotes = new DataFieldBridge({
-      document: this,
-      dataPath: "system.gmNotes",
-      default: "",
-      fromDto: (dto) => {
-        if (ValidationUtil.isBlankOrUndefined(dto)) {
-          return null;
-        } else {
-          return dto;
-        }
-      },
-      toDto: (value) => {
-        if (ValidationUtil.isBlankOrUndefined(value)) {
-          return null;
-        } else {
-          return value;
-        }
-      },
-      onChange: (newValue, oldValue) => {
-        this._onChangeCallbacks.invoke("gmNotes", newValue, oldValue);
-      },
-    });
 
     ExtenderUtil.extend(this, this.clazz);
   }
@@ -337,7 +281,7 @@ export default class Document {
 
   /**
    * Returns the property values identified by the `@`-denoted references in the given string, 
-   * from this `TransientDocument`. 
+   * from this document. 
    * 
    * @param {String} str A string containing `@`-denoted references. 
    * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 

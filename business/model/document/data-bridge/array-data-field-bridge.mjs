@@ -1,6 +1,6 @@
-import { common } from "../../../common/_module.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import Document from "../document.mjs";
 import DataFieldBridge from "./data-field-bridge.mjs";
-import TransientDocument from "./transient-document.mjs";
 
 /**
  * For use in `TransientDocument`s, provides access to a document's 
@@ -29,7 +29,7 @@ import TransientDocument from "./transient-document.mjs";
 export default class ArrayDataFieldBridge extends DataFieldBridge {
   /**
    * @param {Object} args 
-   * @param {TransientDocument} args.document 
+   * @param {Document} args.document 
    * @param {String} args.dataPath Identifies the data field on 
    * the document instance itself. E. g. `"system.bulk"`
    * @param {Any | undefined} args.default A default value to 
@@ -47,7 +47,7 @@ export default class ArrayDataFieldBridge extends DataFieldBridge {
       fromDto: (dto) => dto.map(it => args.dataClass.fromDto(it)),
       toDto: (value) => value.map(it => it.toDto()),
     });
-    common.util.validation.validateOrThrow(args, ["document", "dataPath", "dataClass"]);
+    ValidationUtil.validateOrThrow(args, ["document", "dataPath", "dataClass"]);
 
     this.dataClass = args.dataClass;
   }

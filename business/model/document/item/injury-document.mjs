@@ -1,12 +1,13 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { INJURY_STATES, InjuryState } from "../../domain/const/injury-states.mjs";
 import Reference from "../../domain/reference.mjs";
-import DataFieldBridge from "../data-field-bridge.mjs";
-import TransientBaseItem from "./transient-base-item.mjs"
+import AuthenticDocument from "../authentic-document.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 
 /**
- * Represents the full transient data of an illness. 
+ * Represents an Injury document. 
  * 
- * @see `IllnessItemData` - Must contain all the fields defined in this data model. 
+ * @see `InjuryItemData` - Must contain all the fields defined in this data model. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -33,13 +34,14 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
+ * @property {InjuryState} state
  * @property {Object} treatment
  * * Read-only.
  * @property {String} treatment.obstacle
@@ -52,16 +54,24 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * * Read-only.
  * @property {Number} healProgress.current
  * @property {Number} healProgress.required
- * @property {Boolean} healProgress.untilCured
+ * @property {Boolean} healProgress.untilCured Is `true`, if `healProgress.required` 
+ * is `<= 0`. 
+ * * Read-only.
  * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientIllness extends TransientBaseItem {
+export default class InjuryDocument extends AuthenticDocument {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/illness-light.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/injury-light.svg"; }
 
   /** @override */
-  get clazz() { return TransientIllness; }
+  get clazz() { return InjuryDocument; }
+
+  /**
+   * @type {InjuryState}
+   */
+  get state() { return this._state.value; }
+  set state(value) { this._state.value = value; }
 
   get treatment() {
     const thiz = this;
@@ -96,7 +106,6 @@ export default class TransientIllness extends TransientBaseItem {
     };
   }
 
-
   get healProgress() {
     const thiz = this;
     return {
@@ -114,19 +123,30 @@ export default class TransientIllness extends TransientBaseItem {
 
       /**
        * @type {Boolean}
+       * @readonly
        */
-      get untilCured() { return thiz._healProgress.untilCured.value; },
-      set untilCured(value) { thiz._healProgress.untilCured.value = value; },
+      get untilCured() { return parseInt(thiz._healProgress.required.value) <= 0; },
     };
   }
 
   /**
-   * @param {GameSystemItem} document An encapsulated document instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
    */
-  constructor(document) {
-    super(document);
+  constructor(args) {
+    super(args);
+
+    this._state = new DataFieldBridge({
+      document: this,
+      dataPath: "system.state",
+      default: INJURY_STATES.active.name,
+      fromDto: (dto) => {
+        return INJURY_STATES[dto];
+      },
+      toDto: (value) => {
+        return value.name;
+      },
+    });
 
     this._treatment = {
       obstacle: new DataFieldBridge({
@@ -167,7 +187,7 @@ export default class TransientIllness extends TransientBaseItem {
             }
           },
         }),
-      }
+      },
     };
 
     this._healProgress = {
@@ -179,10 +199,26 @@ export default class TransientIllness extends TransientBaseItem {
         document: this,
         dataPath: "system.healProgress.required",
       }),
-      untilCured: new DataFieldBridge({
-        document: this,
-        dataPath: "system.healProgress.untilCured",
-      }),
     };
+  }
+
+  /**
+   * Compares the treatment state of this instance with a given instance and returns a numeric comparison result. 
+   * 
+   * @param {InjuryDocument} other Another instance to compare with. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
+   * is more than / greater than `other`. 
+   */
+  compareTreatment(other) {
+    if (this.state.name == INJURY_STATES.active && other.state.name != INJURY_STATES.active) {
+      return -1;
+    } else if (this.state.name == INJURY_STATES.treated && other.state.name != INJURY_STATES.treated) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }

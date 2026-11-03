@@ -2,7 +2,6 @@ import ExpertiseDocument from "../../../../business/model/document/item/expertis
 import { Sum, SumComponent } from "../../../../business/model/domain/summed-data.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import VisibilityRule from "../../../model/visibility-rule.mjs";
 import AbilityLevelViewModel from "../../component/ability-level/ability-level-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
@@ -49,8 +48,6 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
    * 
    * @param {ExpertiseDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);

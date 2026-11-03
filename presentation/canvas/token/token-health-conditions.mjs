@@ -76,7 +76,7 @@ export default class TokenHealthConditions extends TokenExtender {
 
   /**
    * @param {Token} token 
-   * @returns {Array<TransientHealthCondition>}
+   * @returns {Array<HealthConditionDocument>}
    * 
    * @private
    */

@@ -1,7 +1,7 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs"
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs"
 import { ACTOR_TYPES } from "../../domain/const/actor-types.mjs"
-import TransientBaseActor from "../actor/transient-base-actor.mjs"
+import BaseActorDocument from "../actor/transient-base-actor.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs"
 
 /**
@@ -17,7 +17,7 @@ import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs"
 export default class DocumentCreationStrategy {
   /**
    * @param {Object} args 
-   * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
+   * @param {BaseActorDocument | undefined} args.target The Actor document instance on which 
    * to embed the new document instance. Note it is only possible to nest Items in Actors. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 

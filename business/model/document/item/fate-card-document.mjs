@@ -1,8 +1,8 @@
-import DataFieldBridge from "../data-field-bridge.mjs";
-import TransientBaseItem from "./transient-base-item.mjs"
+import AuthenticDocument from "../authentic-document.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 
 /**
- * Represents the full transient data of a fate card. 
+ * Represents a Fate-Card document. 
  * 
  * @see `FateCardItemData` - Must contain all the fields defined in this data model. 
  * 
@@ -31,12 +31,12 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
  * @property {Object} cost
  * * Read-only
@@ -44,14 +44,14 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Number} cost.maFP
  * @property {Number} cost.AFP
  * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientFateCard extends TransientBaseItem {
+export default class FateCardDocument extends AuthenticDocument {
   /** @override */
   get defaultImg() { return "icons/svg/wing.svg"; }
 
   /** @override */
-  get clazz() { return TransientFateCard; }
+  get clazz() { return FateCardDocument; }
 
   /**
    * @type {Object}
@@ -80,12 +80,11 @@ export default class TransientFateCard extends TransientBaseItem {
   }
 
   /**
-   * @param {GameSystemItem} document An encapsulated document instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
    */
-  constructor(document) {
-    super(document);
+  constructor(args) {
+    super(args);
     
     this._costMifp = new DataFieldBridge({
       document: this,

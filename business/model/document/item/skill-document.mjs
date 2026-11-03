@@ -3,13 +3,13 @@ import { Attribute, ATTRIBUTES } from "../../domain/const/attributes.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import MomentumAction from "../../domain/momentum-action.mjs";
 import Reference from "../../domain/reference.mjs";
+import AuthenticDocument from "../authentic-document.mjs";
+import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 import ExpertiseDocument from "./expertise-document.mjs";
-import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
-import DataFieldBridge from "../data-field-bridge.mjs";
-import TransientBaseItem from "./transient-base-item.mjs";
 
 /**
- * Represents the full transient data of a skill. 
+ * Represents a Skill document. 
  * 
  * @see `SkillItemData` - Must contain all the fields defined in this data model. 
  * 
@@ -38,12 +38,12 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientCharacterActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
  * @property {Array<Attribute>} baseAttributes The Attributes this Skill depends on, 
  * and which dictate the number of dice in the pool. 
@@ -99,14 +99,14 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * @property {Boolean} isInnate If `true`, this Skill cannot be learned, and can only 
  * be acquired through ancestry or other, special means.
  * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientSkill extends TransientBaseItem {
+export default class SkillDocument extends AuthenticDocument {
   /** @override */
   get defaultImg() { return "systems/strive/presentation/image/skill-light.svg"; }
 
   /** @override */
-  get clazz() { return TransientSkill; }
+  get clazz() { return SkillDocument; }
 
   /**
    * @type {Array<Attribute>}
@@ -275,12 +275,11 @@ export default class TransientSkill extends TransientBaseItem {
   set isInnate(value) { this._isInnate.value = value; }
 
   /**
-   * @param {Item} document An encapsulated item instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
    */
-  constructor(document) {
-    super(document);
+  constructor(args) {
+    super(args);
 
     this._baseAttributes = new DataFieldBridge({
       document: this,

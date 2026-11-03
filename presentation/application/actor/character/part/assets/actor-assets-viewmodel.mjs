@@ -1,7 +1,7 @@
 import TransientBaseCharacterActor from "../../../../../business/model/document/actor/transient-base-character-actor.mjs"
 import SpecificDocumentCreationStrategy from "../../../../../business/model/document/creation/specific-document-creation-strategy.mjs"
 import { ITEM_TYPES } from "../../../../../business/model/document/item/item-types.mjs"
-import TransientAsset from "../../../../../business/model/document/item/transient-asset.mjs"
+import AssetDocument from "../../../../../business/model/document/item/transient-asset.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { ExtenderUtil } from "../../../../../common/util/extender-util.mjs"
 import { StringUtil } from "../../../../../common/util/string-utility.mjs"
@@ -228,10 +228,10 @@ export default class ActorAssetsViewModel extends ViewModel {
   }
   
   /**
-   * Returns an array of view models for the given array of `TransientAsset`s. 
+   * Returns an array of view models for the given array of `AssetDocument`s. 
    * 
-   * @param {Array<TransientAsset>} assets
-   * @param {Array<TransientAsset>} cacheList
+   * @param {Array<AssetDocument>} assets
+   * @param {Array<AssetDocument>} cacheList
    * 
    * @returns {Array<AssetListItemViewModel>}
    * 

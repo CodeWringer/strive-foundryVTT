@@ -1,9 +1,7 @@
-import TransientBaseItem from "./transient-base-item.mjs"
+import AuthenticDocument from "../authentic-document.mjs";
 
 /**
- * Represents the full transient data of a mutation. 
- * 
- * @see `MutationItemData` - Must contain all the fields defined in this data model. 
+ * Represents a Plain-Actor document. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -30,19 +28,12 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
- * document that this document is embedded in. 
- * * Read-only.
- * @property {Boolean} hasParent Returns true, if there is an owning document. 
- * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
- * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientMutation extends TransientBaseItem {
+export default class PlainActorDocument extends AuthenticDocument {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/mutation-light.svg"; }
+  get defaultImg() { return "icons/svg/mystery-man.svg"; }
   
   /** @override */
-  get clazz() { return TransientMutation; }
+  get clazz() { return PlainActorDocument; }
 }

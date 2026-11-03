@@ -4,7 +4,7 @@ import { ATTRIBUTE_TYPES } from "./const/attribute-types.mjs";
 import { ACTOR_TYPES } from "./const/actor-types.mjs";
 import { Attribute, ATTRIBUTES } from "./const/attributes.mjs";
 import CharacterAttribute from "./attribute/character-attribute.mjs";
-// Do not import TransientBaseCharacterActor, TransientSkill
+// Do not import TransientBaseCharacterActor, SkillDocument
 
 /**
  * Provides all the ruleset-specifics. 
@@ -283,7 +283,7 @@ export default class Ruleset {
    * Returns the effective modified level of the given actor for the 
    * given skill. 
    * 
-   * @param {Item | TransientSkill} skill The skill whose effective level 
+   * @param {Item | SkillDocument} skill The skill whose effective level 
    * is to be returned. 
    * @param {Actor} actor The actor whose skill it is. 
    * 
@@ -295,7 +295,7 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const transientSkill = skill.getEnhancedDocument();
-    return transientSkill.modifiedLevel;
+    const SkillDocument = skill.getEnhancedDocument();
+    return SkillDocument.modifiedLevel;
   }
 }

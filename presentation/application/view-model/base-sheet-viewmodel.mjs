@@ -36,9 +36,6 @@ export default class BaseSheetViewModel extends DocumentViewModel {
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {TransientDocument} args.document An associated data document. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
-   * independent document. This affects interactibility. 
-   * * default `DOCUMENT_CONTEXT.independent`
    * 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    */

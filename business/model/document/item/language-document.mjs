@@ -1,10 +1,10 @@
 import { common } from "../../../../common/_module.mjs";
 import { LANGUAGE_GRADES, LanguageGrade } from "../../domain/const/language-grades.mjs";
-import DataFieldBridge from "../data-field-bridge.mjs";
-import TransientBaseItem from "./transient-base-item.mjs"
+import AuthenticDocument from "../authentic-document.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 
 /**
- * Represents the full transient data of a language. 
+ * Represents a Language document. 
  * 
  * @see `LanguageItemData` - Must contain all the fields defined in this data model. 
  * 
@@ -33,24 +33,24 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
  * @property {LanguageGrade} grade
  * @property {Boolean} readAndWrite
  * 
- * @extends TransientBaseItem
+ * @extends AuthenticDocument
  */
-export default class TransientLanguage extends TransientBaseItem {
+export default class LanguageDocument extends AuthenticDocument {
   /** @override */
   get defaultImg() { return "systems/strive/presentation/image/language-light.svg"; }
 
   /** @override */
-  get clazz() { return TransientLanguage; }
+  get clazz() { return LanguageDocument; }
 
   /**
    * @type {LanguageGrade}
@@ -65,12 +65,11 @@ export default class TransientLanguage extends TransientBaseItem {
   set readAndWrite(value) { this._readAndWrite.value = value; }
 
   /**
-   * @param {GameSystemItem} document An encapsulated document instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
    */
-  constructor(document) {
-    super(document);
+  constructor(args) {
+    super(args);
 
     this._grade = new DataFieldBridge({
       document: this,
@@ -92,7 +91,7 @@ export default class TransientLanguage extends TransientBaseItem {
   /**
    * Compares the grade of this instance with a given instance and returns a numeric comparison result. 
    * 
-   * @param {TransientLanguage} other Another instance to compare with. 
+   * @param {LanguageDocument} other Another instance to compare with. 
    * 
    * @returns {Number} `-1` | `0` | `1`
    * 

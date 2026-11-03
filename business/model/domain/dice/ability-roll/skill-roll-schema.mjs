@@ -5,7 +5,7 @@ import InputNumberSpinnerViewModel from "../../../../../presentation/component/i
 import InputTextFieldViewModel from "../../../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
 import { business } from "../../../../_module.mjs"
 import { GameSystemUserSettings } from "../../../../setting/game-system-user-settings.mjs"
-import { TransientSkill } from "../../../document/_module.mjs"
+import { SkillDocument } from "../../../document/_module.mjs"
 import { CharacterAttribute, Sum } from "../../_module.mjs"
 import { VISIBILITY_MODES } from "../../const/visibility-modes.mjs"
 import RollData from "../roll-data.mjs"
@@ -27,7 +27,7 @@ export class SkillRollSchema extends RollSchema {
    * hits. Any face turning up this number and numbers above, are considered hits. 
    * * default `5`
    * 
-   * @param {TransientBaseActor | undefined} args.owningDocumentOverride If set, will be treated as the Skill's parent, 
+   * @param {BaseActorDocument | undefined} args.owningDocumentOverride If set, will be treated as the Skill's parent, 
    * even if it isn't. This is for use in synthetic Skill rolling. 
    */
   constructor(args = {}) {
@@ -37,7 +37,7 @@ export class SkillRollSchema extends RollSchema {
   }
 
   /**
-   * @param {TransientSkill} skillDocument 
+   * @param {SkillDocument} skillDocument 
    * @param {RollQueryData} rollQueryData 
    * 
    * @override
@@ -84,7 +84,7 @@ export class SkillRollSchema extends RollSchema {
   }
 
   /**
-   * @param {TransientSkill} document 
+   * @param {SkillDocument} document 
    * @param {DynamicInputDialog} dialog 
    * 
    * @override

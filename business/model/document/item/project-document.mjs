@@ -2,14 +2,14 @@ import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import Complication from "../../domain/complication/complication.mjs";
 import { TIME_UNITS } from "../../domain/const/time-units.mjs";
 import Reference from "../../domain/reference.mjs";
-import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
-import DataFieldBridge from "../data-field-bridge.mjs";
-import TransientBaseItem from "./transient-base-item.mjs"
+import AuthenticDocument from "../authentic-document.mjs";
+import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 
 /**
- * @extends TransientBaseItem
+ * Represents a Project document. 
  * 
- * @see `RecipeItemData` - Must contain all the fields defined in this data model. 
+ * @see `ProjectItemData` - Must contain all the fields defined in this data model. 
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -36,29 +36,35 @@ import TransientBaseItem from "./transient-base-item.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
  * document that this document is embedded in. 
  * * Read-only.
  * @property {Boolean} hasParent Returns true, if there is an owning document. 
  * * Read-only.
- * @property {Array<Modifier>} modifiers Modifiers to apply to the `owningDocument`. 
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
  * @property {Array<Complication>} complications
- * @property {Number} requiredProgress
+ * @property {Object} progress
+ * * Read-only.
+ * @property {Number} progress.current
+ * @property {Number} progress.increment
+ * @property {Number} progress.total
  * @property {Reference} projectSkill
+ * @property {Number} pushes
  * @property {Number} quality
  * @property {Object} timeIncrement
- * * Read-only
+ * * Read-only.
  * @property {Number} timeIncrement.value
  * @property {TimeUnit} timeIncrement.unit
- * @property {Reference} product
+ * 
+ * @extends AuthenticDocument
  */
-export default class TransientRecipe extends TransientBaseItem {
+export default class ProjectDocument extends AuthenticDocument {
   /** @override */
-  get defaultImg() { return "systems/strive/presentation/image/recipe-light.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/project-light.svg"; }
 
   /** @override */
-  get clazz() { return TransientRecipe; }
+  get clazz() { return ProjectDocument; }
 
   /**
    * @type {Array<Complication>}
@@ -66,23 +72,28 @@ export default class TransientRecipe extends TransientBaseItem {
   get complications() { return this._complications.value; }
   set complications(value) { this._complications.value = value; }
 
-  /**
-   * @type {Number}
-   */
-  get requiredProgress() { return this._requiredProgress.value; }
-  set requiredProgress(value) { this._requiredProgress.value = value; }
+  get progress() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._progress.current.value; },
+      set current(value) { thiz._progress.current.value = value; },
 
-  /**
-   * @type {Reference}
-   */
-  get projectSkill() { return this._projectSkill.value; }
-  set projectSkill(value) { this._projectSkill.value = value; }
+      /**
+       * @type {Number}
+       */
+      get increment() { return thiz._progress.increment.value; },
+      set increment(value) { thiz._progress.increment.value = value; },
 
-  /**
-   * @type {Number}
-   */
-  get quality() { return this._quality.value; }
-  set quality(value) { this._quality.value = value; }
+      /**
+       * @type {Number}
+       */
+      get total() { return thiz._progress.total.value; },
+      set total(value) { thiz._progress.total.value = value; },
+    };
+  }
 
   get timeIncrement() {
     const thiz = this;
@@ -104,31 +115,52 @@ export default class TransientRecipe extends TransientBaseItem {
   /**
    * @type {Reference}
    */
-  get product() { return this._product.value; }
-  set product(value) { this._product.value = value; }
+  get projectSkill() { return this._projectSkill.value; }
+  set projectSkill(value) { this._projectSkill.value = value; }
 
   /**
-   * @param {GameSystemItem} document An encapsulated document instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
+   * @type {Number}
    */
-  constructor(document) {
-    super(document);
+  get pushes() { return this._pushes.value; }
+  set pushes(value) { this._pushes.value = value; }
+
+  /**
+   * @type {Number}
+   */
+  get quality() { return this._quality.value; }
+  set quality(value) { this._quality.value = value; }
+
+  /**
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
+   */
+  constructor(args) {
+    super(args);
 
     this._complications = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.complications",
       dataClass: Complication,
     });
-    this._requiredProgress = new DataFieldBridge({
-      document: this,
-      dataPath: "system.requiredProgress",
-      default: 0,
-    });
+
+    this._progress = {
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.progress.current",
+      }),
+      increment: new DataFieldBridge({
+        document: this,
+        dataPath: "system.progress.increment",
+      }),
+      total: new DataFieldBridge({
+        document: this,
+        dataPath: "system.progress.total",
+      }),
+    };
+
     this._projectSkill = new DataFieldBridge({
       document: this,
       dataPath: "system.projectSkill",
-      default: null,
       fromDto: (dto) => {
         return Reference.fromDto(dto);
       },
@@ -140,22 +172,23 @@ export default class TransientRecipe extends TransientBaseItem {
         }
       },
     });
+    this._pushes = new DataFieldBridge({
+      document: this,
+      dataPath: "system.pushes",
+    });
     this._quality = new DataFieldBridge({
       document: this,
       dataPath: "system.quality",
-      default: 1,
     });
 
     this._timeIncrement = {
       value: new DataFieldBridge({
         document: this,
         dataPath: "system.timeIncrement.value",
-        default: 0,
       }),
       unit: new DataFieldBridge({
         document: this,
         dataPath: "system.timeIncrement.unit",
-        default: TIME_UNITS.none,
         fromDto: (dto) => {
           return TIME_UNITS[dto];
         },
@@ -164,21 +197,5 @@ export default class TransientRecipe extends TransientBaseItem {
         },
       }),
     };
-
-    this._product = new DataFieldBridge({
-      document: this,
-      dataPath: "system.product",
-      default: null,
-      fromDto: (dto) => {
-        return Reference.fromDto(dto);
-      },
-      toDto: (value) => {
-        if (ValidationUtil.isDefined(value)) {
-          return value.toDto();
-        } else {
-          return new Reference();
-        }
-      },
-    });
   }
 }

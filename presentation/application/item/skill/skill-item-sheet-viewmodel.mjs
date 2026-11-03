@@ -1,4 +1,4 @@
-import TransientSkill from "../../../../business/model/document/item/transient-skill.mjs";
+import SkillDocument from "../../../../business/model/document/item/skill-document.mjs";
 import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
 import SkillContentViewModel from "./skill-content-viewmodel.mjs";
 import SkillHeaderViewModel from "./skill-header-viewmodel.mjs";
@@ -15,11 +15,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientSkill} args.document The represented transient document instance. 
+   * @param {SkillDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
-   * independent document. This affects interactibility. 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super({

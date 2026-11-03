@@ -2,6 +2,7 @@ import { PropertyUtil } from "../../../common/util/property-utility.mjs";
 import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import AuthenticDocument from "./authentic-document.mjs";
+import DataFieldBridge from "./data-bridge/data-field-bridge.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
 import Document from "./document.mjs";
 
@@ -16,6 +17,11 @@ import Document from "./document.mjs";
  * * `get type`
  * * `openSheet()`
  * * `toDto()`
+ * 
+ * @property {String} img
+ * @property {String} name
+ * @property {String} description
+ * @property {String | null} gmNotes
  */
 export default class SyntheticDocument extends Document {
   /**
@@ -56,6 +62,39 @@ export default class SyntheticDocument extends Document {
   /** @override */
   get isLocked() { return ValidationUtil.isDefined(this.#parentDocument.pack) && this.#parentDocument.pack.metadata.locked; }
 
+  /** @override */
+  get parentDocument() { return this.#parentDocument; }
+
+  /**
+   * The icon/image path of the document. 
+   * 
+   * @type {String}
+   */
+  get img() { return this._img.value; }
+  set img(value) { this._img.value = value; }
+
+  /**
+   * The internal name of the document. 
+   * 
+   * @type {String}
+   */
+  get name() { return this._name.value; }
+  set name(value) { this._name.value = value; }
+
+  /**
+   * @type {String}
+   */
+  get description() { return this._description.value; }
+  set description(value) { this._description.value = value; }
+
+  /**
+   * Arbitrary notes only visible to game-masters. 
+   * 
+   * @type {String | null}
+   */
+  get gmNotes() { return this._gmNotes.value; }
+  set gmNotes(value) { this._gmNotes.value = value; }
+
   /**
    * The `AuthenticDocument` this synthetic one is embedded in. 
    * @type {AuthenticDocument}
@@ -88,6 +127,52 @@ export default class SyntheticDocument extends Document {
     this.#parentDocument = args.parentDocument;
     this.#pathOnParent = args.pathOnParent;
     this.#id = args.id ?? UuidUtil.createUuid();
+
+    this._img = new DataFieldBridge({
+      document: this,
+      dataPath: "img",
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("img", newValue, oldValue);
+      },
+    });
+    this._name = new DataFieldBridge({
+      document: this,
+      dataPath: "name",
+      default: "Unknown",
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("name", newValue, oldValue);
+      },
+    });
+    this._description = new DataFieldBridge({
+      document: this,
+      dataPath: "system.description",
+      default: "",
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("description", newValue, oldValue);
+      },
+    });
+    this._gmNotes = new DataFieldBridge({
+      document: this,
+      dataPath: "system.gmNotes",
+      default: "",
+      fromDto: (dto) => {
+        if (ValidationUtil.isBlankOrUndefined(dto)) {
+          return null;
+        } else {
+          return dto;
+        }
+      },
+      toDto: (value) => {
+        if (ValidationUtil.isBlankOrUndefined(value)) {
+          return null;
+        } else {
+          return value;
+        }
+      },
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("gmNotes", newValue, oldValue);
+      },
+    });
   }
 
   /**
@@ -179,10 +264,10 @@ export default class SyntheticDocument extends Document {
    */
   async updateByPath(propertyPath, newValue, render = true) {
     if (propertyPath.startsWith(this.#pathOnParent)) {
-      this.parentDocument.updateByPath(propertyPath, newValue, render);
+      this.#parentDocument.updateByPath(propertyPath, newValue, render);
     } else {
       const newPath = `${this.#pathOnParent}.${propertyPath}`;
-      this.parentDocument.updateByPath(newPath, newValue, render);
+      this.#parentDocument.updateByPath(newPath, newValue, render);
     }
   }
 
@@ -201,10 +286,10 @@ export default class SyntheticDocument extends Document {
    */
   async deleteByPath(propertyPath, render = true) {
     if (propertyPath.startsWith(this.#pathOnParent)) {
-      this.parentDocument.deleteByPath(propertyPath, render);
+      this.#parentDocument.deleteByPath(propertyPath, render);
     } else {
       const newPath = `${this.#pathOnParent}.${propertyPath}`;
-      this.parentDocument.deleteByPath(newPath, render);
+      this.#parentDocument.deleteByPath(newPath, render);
     }
   }
 

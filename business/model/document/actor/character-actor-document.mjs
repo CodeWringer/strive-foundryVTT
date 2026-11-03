@@ -10,23 +10,23 @@ import InjuryShrugOff from "../../domain/health/injury-shrug-off.mjs";
 import Modifier from "../../domain/modifier.mjs";
 import Reference from "../../domain/reference.mjs";
 import Ruleset from "../../domain/ruleset.mjs";
-import ArrayDataFieldBridge from "../array-data-field-bridge.mjs";
-import DataFieldBridge from "../data-field-bridge.mjs";
-import TransientAsset from "../item/transient-asset.mjs";
-import TransientHealthCondition from "../item/transient-health-condition.mjs";
-import TransientIllness from "../item/transient-illness.mjs";
-import TransientInjury from "../item/transient-injury.mjs";
-import TransientMutation from "../item/transient-mutation.mjs";
-import TransientRecipe from "../item/transient-recipe.mjs";
-import TransientSkill from "../item/transient-skill.mjs";
-import TransientTrait from "../item/transient-trait.mjs";
-import TransientBaseActor from "./transient-base-actor.mjs"
+import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
+import AssetDocument from "../item/asset-document.mjs";
+import HealthConditionDocument from "../item/health-condition-document.mjs";
+import IllnessDocument from "../item/illness-document.mjs";
+import InjuryDocument from "../item/injury-document.mjs";
+import MutationDocument from "../item/mutation-document.mjs";
+import RecipeDocument from "../item/recipe-document.mjs";
+import SkillDocument from "../item/skill-document.mjs";
+import TraitDocument from "../item/trait-document.mjs";
+import BaseActorDocument from "./base-actor-document.mjs"
 
 /**
  * Represents the base contract for a "specific" actor "sub-type" that 
  * represents a "character", in the way the rule set regards them. 
  * 
- * @extends TransientBaseActor
+ * @extends BaseActorDocument
  * 
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
@@ -53,7 +53,7 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
  * 
- * @property {Array<TransientBaseItem>} items The embedded documents of this document. 
+ * @property {Array<AuthenticDocument>} items The embedded documents of this document. 
  * * Read-only. 
  * 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
@@ -158,27 +158,27 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * @property {Number} health.deathSaves.current 
  * @property {Number} health.deathSaves.maximum Derived. 
  * * Read-only. 
- * @property {Array<TransientInjury>} health.injuries Derived. 
+ * @property {Array<InjuryDocument>} health.injuries Derived. 
  * * Read-only. 
- * @property {Array<TransientIllness>} health.illnesses Derived. 
+ * @property {Array<IllnessDocument>} health.illnesses Derived. 
  * * Read-only. 
- * @property {Array<TransientMutation>} health.mutations Derived. 
+ * @property {Array<MutationDocument>} health.mutations Derived. 
  * * Read-only. 
- * @property {Array<TransientHealthCondition>} health.conditions Derived. 
+ * @property {Array<HealthConditionDocument>} health.conditions Derived. 
  * * Read-only. 
  * 
  * @property {Object} assets
  * * Read-only. 
  * @property {Array<AssetSlot>} assets.slots 
- * @property {Array<TransientAsset>} assets.all Derived. 
+ * @property {Array<AssetDocument>} assets.all Derived. 
  * * Read-only. 
- * @property {Array<TransientAsset>} assets.equipment Derived. All assets that are currently 
+ * @property {Array<AssetDocument>} assets.equipment Derived. All assets that are currently 
  * assigned to a slot. 
  * * Read-only. 
  * @property {Array<Reference>} assets._luggage Identifiers of all assets that should be in 
  * luggage. 
  * * Private. 
- * @property {Array<TransientAsset>} assets.luggage Derived. All assets currently in luggage. 
+ * @property {Array<AssetDocument>} assets.luggage Derived. All assets currently in luggage. 
  * @property {Object} assets.property 
  * * Read-only. 
  * @property {PropertyLocation} assets.property.unknownLocation Catch-all for all assets 
@@ -202,21 +202,21 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * 
  * @property {Object} skills
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.all Derived. Returns **all** skills of the character. 
+ * @property {Array<SkillDocument>} skills.all Derived. Returns **all** skills of the character. 
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.learning Derived. Returns all learning skills of the character. 
+ * @property {Array<SkillDocument>} skills.learning Derived. Returns all learning skills of the character. 
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.known Derived. Returns all known skills of the character. 
+ * @property {Array<SkillDocument>} skills.known Derived. Returns all known skills of the character. 
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.innate Derived. Returns all innate skills of the character. 
+ * @property {Array<SkillDocument>} skills.innate Derived. Returns all innate skills of the character. 
  * * Read-only. 
 
- * @property {Array<TransientTrait>} traits A list of character traits. These are **not** the same as 
+ * @property {Array<TraitDocument>} traits A list of character traits. These are **not** the same as 
  * personality traits! 
  * * Read-only. 
- * @property {Array<TransientProject>} projects
+ * @property {Array<ProjectDocument>} projects
  * * Read-only. 
- * @property {Array<TransientRecipe>} recipes
+ * @property {Array<RecipeDocument>} recipes
  * * Read-only. 
  * 
  * @property {Object} modifiers 
@@ -231,12 +231,12 @@ import TransientBaseActor from "./transient-base-actor.mjs"
  * 
  * @property {Boolean} isNpc
  */
-export default class TransientCharacterActor extends TransientBaseActor {
+export default class CharacterActorDocument extends BaseActorDocument {
   /** @override */
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
 
   /** @override */
-  get clazz() { return TransientCharacterActor; }
+  get clazz() { return CharacterActorDocument; }
 
   /**
    * @type {Array<CharacterAttribute>}
@@ -547,22 +547,22 @@ export default class TransientCharacterActor extends TransientBaseActor {
         get maximum() { return Ruleset.getCharacterMaximumDeathSaves(thiz); },
       },
       /**
-       * @type {Array<TransientInjury>}
+       * @type {Array<InjuryDocument>}
        * @readonly
       */
       get injuries() { return thiz.items.filter(it => it.type === ITEM_TYPES.injury); },
       /**
-       * @type {Array<TransientIllness>}
+       * @type {Array<IllnessDocument>}
        * @readonly
       */
       get illnesses() { return thiz.items.filter(it => it.type === ITEM_TYPES.illness); },
       /**
-       * @type {Array<TransientMutation>}
+       * @type {Array<MutationDocument>}
        * @readonly
       */
       get mutations() { return thiz.items.filter(it => it.type === ITEM_TYPES.mutation); },
       /**
-       * @type {Array<TransientHealthCondition>}
+       * @type {Array<HealthConditionDocument>}
        * @readonly
       */
       get conditions() { return thiz.items.filter(it => it.type === ITEM_TYPES.health_condition); },
@@ -578,12 +578,12 @@ export default class TransientCharacterActor extends TransientBaseActor {
       get slots() { return thiz._assets.slots.value; },
       set slots(value) { thiz._assets.slots.value = value; },
       /**
-       * @type {Array<TransientAsset>}
+       * @type {Array<AssetDocument>}
        * @readonly
        */
       get all() { return thiz.items.filter(it => it.type === ITEM_TYPES.asset); },
       /**
-       * @type {Array<TransientAsset>}
+       * @type {Array<AssetDocument>}
        * @readonly
        */
       get equipment() {
@@ -598,7 +598,7 @@ export default class TransientCharacterActor extends TransientBaseActor {
         return arr;
       },
       /**
-       * @type {Array<TransientAsset>}
+       * @type {Array<AssetDocument>}
        * @readonly
        */
       get luggage() {
@@ -669,22 +669,22 @@ export default class TransientCharacterActor extends TransientBaseActor {
     const thiz = this;
     return {
       /**
-       * @type {Array<TransientSkill>}
+       * @type {Array<SkillDocument>}
        * @readonly
        */
       get all() { return thiz.items.filter(it => it.type === ITEM_TYPES.skill); },
       /**
-       * @type {Array<TransientSkill>}
+       * @type {Array<SkillDocument>}
        * @readonly
        */
       get learning() { return thiz.items.filter(it => it.type === ITEM_TYPES.skill && it.level === 0); },
       /**
-       * @type {Array<TransientSkill>}
+       * @type {Array<SkillDocument>}
        * @readonly
        */
       get known() { return thiz.items.filter(it => it.type === ITEM_TYPES.skill && it.level > 0); },
       /**
-       * @type {Array<TransientSkill>}
+       * @type {Array<SkillDocument>}
        * @readonly
        */
       get innate() { return thiz.items.filter(it => it.type === ITEM_TYPES.skill && it.isInnate); },
@@ -692,19 +692,19 @@ export default class TransientCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * @type {Array<TransientTrait>}
+   * @type {Array<TraitDocument>}
    * @readonly
    */
   get traits() { return this.items.filter(it => it.type === ITEM_TYPES.trait); }
 
   /**
-   * @type {Array<TransientProject>}
+   * @type {Array<ProjectDocument>}
    * @readonly
    */
   get projects() { return this.items.filter(it => it.type === ITEM_TYPES.project); }
 
   /**
-   * @type {Array<TransientRecipe>}
+   * @type {Array<RecipeDocument>}
    * @readonly
    */
   get recipes() { return this.items.filter(it => it.type === ITEM_TYPES.recipe); }
@@ -745,12 +745,11 @@ export default class TransientCharacterActor extends TransientBaseActor {
   set isNpc(value) { this._isNpc.value = value; }
 
   /**
-   * @param {Actor} document An encapsulated actor instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
+   * @param {Object} args 
+   * @param {GameSystemActor} args.document An encapsulated document instance. 
    */
-  constructor(document) {
-    super(document);
+  constructor(args) {
+    super(args);
 
     this._attributes = new ArrayDataFieldBridge({
       document: this,

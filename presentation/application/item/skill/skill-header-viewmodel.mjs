@@ -5,7 +5,6 @@ import { ArrayUtil } from "../../../../common/util/array-utility.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import ChoiceOption from "../../../model/choice-option.mjs";
-import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import AbilityLevelViewModel from "../../component/ability-level/ability-level-viewmodel.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -57,10 +56,8 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientSkill} args.document The represented transient document instance. 
+   * @param {SkillDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
