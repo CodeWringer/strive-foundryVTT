@@ -36,9 +36,6 @@ import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs"
  * * Read-only.
  * @property {Object} system Passes through the `document.system` field. 
  * * Read-only.
- * @property {Boolean} isTransactionMode If `true`, field updates do not immediately fire and get 
- * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
- * Setting this to `false` immediately flushes all updates. 
  * @method onChange Adds a handler that is invoked when any value changes. Arguments: 
  * * `property: String` - Name of the property that changed. 
  * * `newValue: Any`

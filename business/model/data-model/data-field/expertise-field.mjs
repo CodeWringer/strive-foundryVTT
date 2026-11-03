@@ -1,6 +1,7 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { UuidUtil } from "../../../../common/util/uuid-utility.mjs";
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
 import GradedEffectField from "./graded-effect-field.mjs";
 
 /**
@@ -88,7 +89,9 @@ export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
       }),
       targetingType: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
-        current: new FoundrySchemaFields.StringField({}),
+        current: new FoundrySchemaFields.StringField({
+          initial: TARGETING_TYPES.singleTarget.name,
+        }),
       }),
       obstacle: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),

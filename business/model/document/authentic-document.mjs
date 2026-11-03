@@ -55,6 +55,9 @@ export default class AuthenticDocument extends Document {
    */
   get documentName() { return this.#document.documentName; }
 
+  /** @override */
+  get system() { return this.#document.system; }
+
   /**
    * The icon/image path of the document. 
    * 
@@ -120,7 +123,7 @@ export default class AuthenticDocument extends Document {
       },
     });
     this._description = new DataFieldBridge({
-      document: this.#document,
+      document: this,
       dataPath: "system.description",
       default: "",
       onChange: (newValue, oldValue) => {
@@ -128,7 +131,7 @@ export default class AuthenticDocument extends Document {
       },
     });
     this._gmNotes = new DataFieldBridge({
-      document: this.#document,
+      document: this,
       dataPath: "system.gmNotes",
       default: "",
       fromDto: (dto) => {
@@ -152,8 +155,8 @@ export default class AuthenticDocument extends Document {
   }
 
   /** @override */
-  delete() {
-    this.document.delete();
+  async delete() {
+    await this.document.delete();
   }
 
   /** @override */

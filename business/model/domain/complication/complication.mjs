@@ -11,9 +11,9 @@ import Persistable from "../persistable.mjs";
  */
 export default class Complication extends Persistable {
   /**
-   * @param {Object} dto 
-   * @param {String} dto.name 
-   * @param {String | undefined} dto.description 
+   * @param {Object} raw 
+   * @param {String} raw.name 
+   * @param {String | undefined} raw.description 
    * 
    * @returns {Complication}
    * 

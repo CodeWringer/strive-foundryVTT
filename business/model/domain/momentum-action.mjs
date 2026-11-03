@@ -16,12 +16,12 @@ import Persistable from "./persistable.mjs";
  */
 export default class MomentumAction extends Persistable {
   /**
-   * @param {Object} dto 
-   * @param {Object} dto.desperate
+   * @param {Object} raw 
+   * @param {Object} raw.desperate
    * @param {String} dto.desperate.name
    * @param {Number} dto.desperate.cost
    * @param {String} dto.desperate.description
-   * @param {Object} dto.heroic
+   * @param {Object} raw.heroic
    * @param {String} dto.heroic.name
    * @param {Number} dto.heroic.cost
    * @param {String} dto.heroic.description

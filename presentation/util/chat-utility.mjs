@@ -86,7 +86,7 @@ export const ChatUtil = {
 
     const visibilityMode = args.visibilityMode ?? VISIBILITY_MODES.public;
 
-    const prop = common.util.property.getNestedPropertyValue(args.obj, args.propertyPath);
+    const prop = common.util.property.getByPath(args.obj, args.propertyPath);
     if (prop.type !== undefined) {
       if (prop.type === ITEM_TYPES.expertise) {
         await prop.sendToChat({

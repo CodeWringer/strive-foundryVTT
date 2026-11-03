@@ -1,6 +1,7 @@
 import { common } from "../../../../common/_module.mjs";
 import { Callbacks } from "../../../../common/callbacks.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import Document from "../document.mjs";
 // Do not import Document - circuar dependency risk!
 
 /**
@@ -33,7 +34,7 @@ export default class DataFieldBridge {
    */
   get value() { 
     // Fetch and transform value. 
-    const dto = common.util.property.getNestedPropertyValue(this.document, this.#dataPath);
+    const dto = common.util.property.getByPath(this.document, this.#dataPath);
     if (common.util.validation.isDefined(dto)) {
       return this.fromDto(dto);
     } else {
@@ -82,9 +83,11 @@ export default class DataFieldBridge {
    * use in case the data base field's value is undefined.
    * @param {Function | undefined} args.fromDto Maps the data 
    * coming from the data base to a domain object. 
-   * Accepts a dto and must return a domain object. 
+   * Accepts a dto and must return a domain object. Arguments: 
+   * * `dto: Any`
    * @param {Function | undefined} args.toDto Maps the current 
-   * value to data that can be safely persisted to data base. 
+   * value to data that can be safely persisted to data base. Arguments: 
+   * * `value: Any`
    * @param {Function | undefined} args.onChange Invoked when the value changes. Arguments: 
    * * `newValue: Any`
    * * `oldValue: Any`

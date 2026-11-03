@@ -62,7 +62,7 @@ export default class ListItemViewModel extends ViewModel {
           contentElm.animate({
             height: "100%",
           }, {
-            duration: 3000,
+            duration: 300,
             complete: resolve,
           });
         });
@@ -71,7 +71,7 @@ export default class ListItemViewModel extends ViewModel {
         contentElm.animate({
           height: "0%",
         }, {
-          duration: 3000,
+          duration: 300,
           complete: () => {
             contentElm.addClass("hidden");
           },

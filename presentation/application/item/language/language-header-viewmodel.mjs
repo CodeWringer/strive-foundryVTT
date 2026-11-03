@@ -66,13 +66,4 @@ export default class LanguageHeaderViewModel extends BaseItemHeaderViewModel {
       },
     });
   }
-
-  /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    if (this.isIndependent) {
-      this.element.find(`#${this.id}-embedded-content`).addClass("hidden");
-    }
-  }
 }

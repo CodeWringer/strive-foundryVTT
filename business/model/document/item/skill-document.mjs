@@ -1,5 +1,7 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import AtReferencer from "../../../search/at-referencer.mjs";
 import { Attribute, ATTRIBUTES } from "../../domain/const/attributes.mjs";
+import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import MomentumAction from "../../domain/momentum-action.mjs";
 import Reference from "../../domain/reference.mjs";
@@ -305,8 +307,12 @@ export default class SkillDocument extends AuthenticDocument {
     this._expertises = new DataFieldBridge({
       document: this,
       dataPath: "system.expertises",
-      fromDto: (dto) => {
-        return dto.map(it => ExpertiseDocument.fromDto(it, this));
+      fromDto: (dtos) => {
+        let index = 0;
+        return dtos.map(dto => ExpertiseDocument.fromDto(dto, {
+          parentDocument: this,
+          index: index++,
+        }));
       },
       toDto: (value) => {
         return value.map(it => it.toDto());
@@ -377,6 +383,15 @@ export default class SkillDocument extends AuthenticDocument {
       current: new DataFieldBridge({
         document: this,
         dataPath: "system.targetingType.current",
+        fromDto: (dto) => {
+          const targetingType = TARGETING_TYPES.asArray().find(it => it.name === dto);
+          if (ValidationUtil.isDefined(targetingType)) {
+            return targetingType;
+          } else {
+            return TARGETING_TYPES.singleTarget;
+          }
+        },
+        toDto: (value) => value.name,
         onChange: (newValue, oldValue) => {
           this._onChangeCallbacks.invoke("targetingType.current", newValue, oldValue);
         },

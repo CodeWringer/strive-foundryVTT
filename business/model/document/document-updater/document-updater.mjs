@@ -1,4 +1,4 @@
-import { common } from "../../../../common/_module.mjs";
+import { PropertyUtil } from "../../../../common/util/property-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 
@@ -16,7 +16,7 @@ export default class DocumentUpdater {
    * @type {Boolean}
    * @private
    */
-  #isTransactionMode = false;
+  #isBufferMode = false;
   /**
    * If `true`, field updates do not immediately fire and get 
    * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
@@ -24,9 +24,9 @@ export default class DocumentUpdater {
    * Setting this to `false` immediately flushes all updates. 
    * @type {Boolean}
    */
-  get isTransactionMode() { return this.#isTransactionMode; }
-  set isTransactionMode(value) {
-    this.#isTransactionMode = value;
+  get isBufferMode() { return this.#isBufferMode; }
+  set isBufferMode(value) {
+    this.#isBufferMode = value;
     if (!value) {
       this.flushUpdates();
     }
@@ -37,7 +37,7 @@ export default class DocumentUpdater {
    * @type {Object}
    * @private
    */
-  #transactions = {};
+  #buffer = {};
 
   constructor(document) {
     if (!ValidationUtil.isDefined(document)) {
@@ -57,8 +57,8 @@ export default class DocumentUpdater {
    * @async
    */
   async update(delta, render = true) {
-    if (this.isTransactionMode) {
-      this.#transactions = FoundryWrapper.mergeObject(this.#transactions, delta);
+    if (this.isBufferMode) {
+      this.#buffer = FoundryWrapper.mergeObject(this.#buffer, delta);
     } else {
       this.document.update(delta, { render: render, });
     }
@@ -80,11 +80,7 @@ export default class DocumentUpdater {
    */
   async updateByPath(propertyPath, newValue, render = true) {
     const dto = this.#buildDto(propertyPath, newValue);
-    if (this.isTransactionMode) {
-      this.#transactions = FoundryWrapper.mergeObject(this.#transactions, dto);
-    } else {
-      await this.document.update(dto, { render: render });
-    }
+    await this.update(dto, render);
   }
   
   /**
@@ -101,18 +97,17 @@ export default class DocumentUpdater {
    * @async
    */
   async deleteByPath(propertyPath, render = true) {
-    if (propertyPath.endsWith("]")) { // Delete item from array.
-      const indexBracket = propertyPath.lastIndexOf("[");
-      const indexLastBracket = propertyPath.length - 1;
-      const arrayPropertyPath = propertyPath.substring(0, indexBracket);
+    const mIndex = propertyPath.match(/\[\d+\]$/);
+    if (ValidationUtil.isDefined(mIndex)) { // Delete item from array.
+      const arrayPropertyPath = propertyPath.substring(0, mIndex.index);
       
-      let array = common.util.property.getNestedPropertyValue(this.document, arrayPropertyPath);
-      const index = parseInt(propertyPath.substring(indexBracket + 1, indexLastBracket));
+      let array = PropertyUtil.getByPath(this.document, arrayPropertyPath);
+      const index = parseInt(mIndex[0].substring(1, mIndex[0].length - 1));
       array = array.slice(0, index).concat(array.slice(index + 1));
 
       await this.updateByPath(arrayPropertyPath, array, render);
     } else { // Delete property from object. 
-      const parts = propertyPath.split(/\./g);
+      const parts = propertyPath.split(".");
 
       // Adjust the last property in the path. '-=' must be prepended to it. 
       // The '-=' is what makes FoundryVTT actually delete the property. 
@@ -129,7 +124,7 @@ export default class DocumentUpdater {
    * Persists all currently outstanding updates to the data base. 
    */
   flushUpdates() {
-    this.document.update(this.#transactions, { render: true, });
+    this.document.update(this.#buffer, { render: true, });
     this.discardUpdates();  
   }
 
@@ -137,7 +132,7 @@ export default class DocumentUpdater {
    * Clears the current updates buffer. 
    */
   discardUpdates() {
-    this.#transactions = {};
+    this.#buffer = {};
   }
 
   /**
@@ -164,15 +159,15 @@ export default class DocumentUpdater {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
     
-    const propertyNames = common.util.property.splitPropertyPath(propertyPath);
+    const propertyNames = PropertyUtil.splitPropertyPath(propertyPath);
     
     if (propertyNames.length < 1) {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
 
-    if (common.util.validation.isArray(newValue) === true && game.strive.debug === true) {
+    if (ValidationUtil.isArray(newValue) === true && game.strive.debug === true) {
       this._logger.warning(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
-    } else if (common.util.validation.isFunction(newValue) === true) {
+    } else if (ValidationUtil.isFunction(newValue) === true) {
       throw new Error("Detected a function as the value to set - functions cannot be persisted!");
     }
 
@@ -200,15 +195,15 @@ export default class DocumentUpdater {
     for (let i = 0; i < propertyNames.length; i++) {
       const propertyName = propertyNames[i];
 
-      if (common.util.validation.isDefined(previousDocumentProperty[propertyName])) {
+      if (ValidationUtil.isDefined(previousDocumentProperty[propertyName])) {
         const currentDocumentProperty = previousDocumentProperty[propertyName];
   
-        if (common.util.validation.isFunction(currentDocumentProperty) === true) {
+        if (ValidationUtil.isFunction(currentDocumentProperty) === true) {
           throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
-        } else if (common.util.validation.isArray(currentDocumentProperty) === true) {
+        } else if (ValidationUtil.isArray(currentDocumentProperty) === true) {
           arrayIsPartOfPath = true;
           previousDtoProperty[propertyName] = currentDocumentProperty;
-        } else if (common.util.validation.isObject(currentDocumentProperty) === true) {
+        } else if (ValidationUtil.isObject(currentDocumentProperty) === true) {
           if (arrayIsPartOfPath === true) {
             // Because differential updates to array elements are not possible, 
             // we must get the whole object from the document. 

@@ -12,9 +12,9 @@ import Persistable from "./persistable.mjs";
  */
 export default class Reference extends Persistable {
   /**
-   * @param {Object} dto 
-   * @param {String | undefined} dto.uuid If undefined, `name` MUST be defined. 
-   * @param {String | undefined} dto.name If undefined, `uuid` MUST be defined. 
+   * @param {Object} raw 
+   * @param {String | undefined} raw.uuid If undefined, `name` MUST be defined. 
+   * @param {String | undefined} raw.name If undefined, `uuid` MUST be defined. 
    * 
    * @returns {Reference | null}
    * 

@@ -70,6 +70,7 @@ export default class ExpertiseDocument extends SyntheticDocument {
    */
   static fromDto(dto, args) {
     return new ExpertiseDocument({
+      raw: dto,
       parentDocument: args.parentDocument,
       index: args.index,
       id: dto.id,
@@ -217,8 +218,9 @@ export default class ExpertiseDocument extends SyntheticDocument {
   /**
    * @param {Object} args 
    * @param {SkillDocument} args.parentDocument 
-   * @param {Number} args.index
-   * @param {String | undefined} args.id
+   * @param {Number} args.index Index of the Expertise on the parent document. 
+   * @param {Object | undefined} args.raw Raw data object. 
+   * @param {String | undefined} args.id Unique ID of this instance. 
    */
   constructor(args = {}) {
     super({
@@ -232,78 +234,87 @@ export default class ExpertiseDocument extends SyntheticDocument {
     this._name.default = StringUtil.getLoca("system.item.expertise.defaultName");
     this._requiredLevel = new DataFieldBridge({
       document: this,
-      dataPath: "requiredLevel",
+      dataPath: "system.requiredLevel",
       default: 0,
     });
     this._actionPoints = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: "actionPoints.enabled",
+        dataPath: "system.actionPoints.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: "actionPoints.current",
+        dataPath: "system.actionPoints.current",
         default: 0,
       }),
     };
     this._distance = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: "distance.enabled",
+        dataPath: "system.distance.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: "distance.current",
+        dataPath: "system.distance.current",
         default: 0,
       }),
     };
     this._targetingType = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: "targetingType.enabled",
+        dataPath: "system.targetingType.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: "targetingType.current",
+        dataPath: "system.targetingType.current",
+        fromDto: (dto) => {
+          const targetingType = TARGETING_TYPES.asArray().find(it => it.name === dto);
+          if (ValidationUtil.isDefined(targetingType)) {
+            return targetingType;
+          } else {
+            return TARGETING_TYPES.singleTarget;
+          }
+        },
+        toDto: (value) => value.name,
         default: TARGETING_TYPES.singleTarget,
       }),
     };
     this._obstacle = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: "obstacle.enabled",
+        dataPath: "system.obstacle.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: "obstacle.current",
+        dataPath: "system.obstacle.current",
         default: "",
       }),
     };
     this._opposedBy = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: "opposedBy.enabled",
+        dataPath: "system.opposedBy.enabled",
         default: false,
       }),
       current: new DataFieldBridge({
         document: this,
-        dataPath: "opposedBy.current",
+        dataPath: "system.opposedBy.current",
         default: "",
       }),
     };
     this._gradedEffects = {
       enabled: new DataFieldBridge({
         document: this,
-        dataPath: "gradedEffects.enabled",
+        dataPath: "system.gradedEffects.enabled",
         default: false,
       }),
       entries: new ArrayDataFieldBridge({
         document: this,
-        dataPath: "gradedEffects.entries",
+        dataPath: "system.gradedEffects.entries",
         dataClass: GradedEffect,
         default: [],
       }),

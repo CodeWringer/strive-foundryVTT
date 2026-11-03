@@ -134,7 +134,7 @@ export const HANDLEBARS_GLOBALS = {
    * @returns {String}
    */
   themedImage: (templatePath, cssClass, style) => {
-    const root = PropertyUtil.getNestedPropertyValue(TEMPLATES, templatePath);
+    const root = PropertyUtil.getByPath(TEMPLATES, templatePath);
     const dark = root.dark ?? root;
     const light = root.light ?? root;
     const _cssClass = ValidationUtil.isDefined(cssClass) ? ` ${cssClass}` : "";

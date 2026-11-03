@@ -97,7 +97,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.document.isTransactionMode = this.isEditable;
+    this.document.isBufferMode = this.isEditable;
 
     this._headerViewModel = args.headerViewModel;
     if (ValidationUtil.isDefined(this._headerViewModel)) {
@@ -147,7 +147,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     }).execute();
     this.#updateTitle();
 
-    this.document.isTransactionMode = true;
+    this.document.isBufferMode = true;
     this.document.discardUpdates();
   }
 
@@ -173,14 +173,14 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this.#updateTitle();
 
     await new Promise(resolve => setTimeout(resolve, 500));
-    this.document.isTransactionMode = false;
+    this.document.isBufferMode = false;
   }
 
   /** @override */
   dispose() {
     super.dispose();
     this.document.discardUpdates();
-    this.document.isTransactionMode = false;
+    this.document.isBufferMode = false;
     KEYBOARD.offKeyDown(this._editHotKeyListenerId);
     KEYBOARD.offKeyDown(this._saveHotKeyListenerId);
 

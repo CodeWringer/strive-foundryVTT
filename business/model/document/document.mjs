@@ -1,5 +1,6 @@
 import { Callbacks } from "../../../common/callbacks.mjs";
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
+import { PropertyUtil } from "../../../common/util/property-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import AtReferencer from "../../search/at-referencer.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
@@ -26,6 +27,7 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
  * 
  * Inheritors _should_ override:
  * * `get parentDocument`
+ * * `get system`
  * 
  * @property {Document} clazz
  * @property {String} defaultImg
@@ -36,7 +38,8 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
  * @property {Boolean} isEmbedded
  * @property {Boolean} isLocked
  * @property {Boolean} hasParent
- * @property {Boolean} isTransactionMode
+ * @property {Boolean} isBufferMode
+ * @property {Object} system
  * @property {DocumentUpdater} _updater
  * @property {Callbacks} _onChangeCallbacks
  */
@@ -137,8 +140,20 @@ export default class Document {
    * Setting this to `false` immediately flushes all updates. 
    * @type {Boolean}
    */
-  get isTransactionMode() { return this._updater.isTransactionMode; }
-  set isTransactionMode(value) { this._updater.isTransactionMode = value; }
+  get isBufferMode() { return this._updater.isBufferMode; }
+  set isBufferMode(value) { this._updater.isBufferMode = value; }
+
+  /**
+   * Wraps access to the `system` property of the underlying document. 
+   * 
+   * Used to keep access to persisted data possible by familiar property paths. 
+   * E.g. this ensures paths like `system.img` can work on this document instance. 
+   * This is employed by the `DataFieldBridge`s to wrap access. 
+   * @type {Object}
+   * @virtual
+   * @readonly
+   */
+  get system() { return {}; }
 
   /**
    * @type {DocumentUpdater}
@@ -182,6 +197,23 @@ export default class Document {
   }
 
   /**
+   * Returns the value of the property, identified by the given `propertyPath`, 
+   * or `undefined`, if there is no value. 
+   * 
+   * Handles missing pieces in the path by substituting empty objects. 
+   * 
+   * @param {String} propertyPath Path leading to the property to return, on the document. 
+   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"system.attributes[0].level"` - supported
+   * * E.g.: `"system.attributes['level']"` - NOT supported
+   * 
+   * @returns {Any | undefined}
+   */
+  getByPath(propertyPath) {
+    return PropertyUtil.getByPath(this, propertyPath);
+  }
+
+  /**
    * Deletes a property on the given document, via the given path. 
    * 
    * @param {Document} document A Foundry {Document}. 
@@ -197,6 +229,9 @@ export default class Document {
    * @async
    */
   async deleteByPath(propertyPath, render = true) {
+    if (!this.isBufferMode) {
+      PropertyUtil.deleteNestedProperty(this.document, propertyPath);
+    }
     await this._updater.deleteByPath(propertyPath, render);
   }
 
@@ -210,54 +245,15 @@ export default class Document {
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
+   * @returns {Promise<void>}
    * 
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
-    if (!this.isTransactionMode) {
-      common.util.property.setNestedPropertyValue(this.document, propertyPath, newValue);
+    if (!this.isBufferMode) {
+      PropertyUtil.setByPath(this.document, propertyPath, newValue);
     }
     await this._updater.updateByPath(propertyPath, newValue, render);
-  }
-
-  /**
-   * Returns the value of the document, identified by the given `propertyPath`, 
-   * or `undefined`, if there is no value. 
-   * 
-   * Handles missing pieces in the path by substituting empty objects. 
-   * 
-   * @param {String} propertyPath Path leading to the property to return, on the document. 
-   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"system.attributes[0].level"` - supported
-   * * E.g.: `"system.attributes['level']"` - NOT supported
-   * 
-   * @returns {Any | undefined}
-   */
-  getByPath(propertyPath) {
-    if (propertyPath === undefined || propertyPath.trim().length < 1) {
-      throw new Error(`Invalid property path '${propertyPath}'`);
-    }
-
-    const propertyNames = game.strive.util.property.splitPropertyPath(propertyPath);
-
-    if (propertyNames.length < 1) {
-      throw new Error(`Invalid property path '${propertyPath}'`);
-    }
-
-    let previousProperty = this.document;
-    for (let i = 0; i < propertyNames.length - 1; i++) {
-      const propertyName = propertyNames[i];
-      let current = previousProperty[propertyName];
-
-      if (common.util.validation.isDefined(current)) {
-        previousProperty = current;
-      } else {
-        previousProperty = {};
-      }
-    }
-
-    const finalPropertyName = propertyNames[propertyNames.length - 1];
-    return previousProperty[finalPropertyName];
   }
 
   /**
@@ -270,14 +266,33 @@ export default class Document {
    * @async
    */
   async update(delta, render = true) {
+    if (!this.isBufferMode) {
+      for (const propertyName in delta) {
+        if (!Object.hasOwn(delta, propertyName)) continue;
+        
+        const thizValue = this[propertyName];
+        const deltaPropertyValue = delta[propertyName];
+        if (ValidationUtil.isObject(thizValue)) {
+          const toApply = {
+            ...thizValue,
+            ...deltaPropertyValue,
+          };
+          PropertyUtil.setByPath(this, propertyName, toApply);
+        } else { // Array or primitive
+          PropertyUtil.setByPath(this, propertyName, deltaPropertyValue);
+        }
+      }
+    }
     await this._updater.update(delta, render);
   }
 
   /**
    * Deletes the underlying document. 
    * @abstract
+   * @async
+   * @returns {Promise<void>}
    */
-  delete() { throw new Error("Not implemented"); }
+  async delete() { throw new Error("Not implemented"); }
 
   /**
    * Returns the property values identified by the `@`-denoted references in the given string, 

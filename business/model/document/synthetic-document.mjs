@@ -65,6 +65,19 @@ export default class SyntheticDocument extends Document {
   /** @override */
   get parentDocument() { return this.#parentDocument; }
 
+  /** 
+   * @summary
+   * Serves as an accessor to the raw data of the synthetic document. 
+   * 
+   * @description
+   * This is a hack for most of the API 
+   * expecting authentic document accessing to work, i.e. `"system.a.b.c"`. However, a synthetic document 
+   * doesn't natively possess a `system` property. All its data is stored directly within it, without such 
+   * an additional nesting layer. 
+   * @override
+   */
+  get system() { return this.#raw; }
+
   /**
    * The icon/image path of the document. 
    * 
@@ -96,6 +109,13 @@ export default class SyntheticDocument extends Document {
   set gmNotes(value) { this._gmNotes.value = value; }
 
   /**
+   * Raw data object. 
+   * @type {Object}
+   * @private
+   */
+  #raw;
+
+  /**
    * The `AuthenticDocument` this synthetic one is embedded in. 
    * @type {AuthenticDocument}
    * @private
@@ -111,10 +131,27 @@ export default class SyntheticDocument extends Document {
   #pathOnParent;
 
   /**
+   * Returns the property path identifying the collection that contains this document instance. 
+   * @type {String}
+   * @readonly
+   */
+  get #collectionPath() {
+    const mIndex = this.#pathOnParent.match(/\[\d+\]$/);
+    if (ValidationUtil.isDefined(mIndex)) { // Part of an array. 
+      return this.#pathOnParent.substring(0, mIndex.index);
+    } else { // Probably part of an object. 
+      const path = this.#pathOnParent.split(".");
+      path.pop();
+      return path.join(".");
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {Object} args.parentDocument FoundryVTT document. 
    * @param {String} args.pathOnParent Data path on the `parentDocument` which can 
    * uniquely identify this instance. E.g. `"system.expertises.abc123"`
+   * @param {Object | undefined} args.raw Raw data object. 
    * @param {String | undefined} args.id Unique ID of this instance. 
    */
   constructor(args = {}) {
@@ -124,20 +161,21 @@ export default class SyntheticDocument extends Document {
     });
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
 
-    this.#parentDocument = args.parentDocument;
+    this.#raw = args.raw ?? {};
+    this.#parentDocument = args.parentDocument.getEnhancedDocument();
     this.#pathOnParent = args.pathOnParent;
     this.#id = args.id ?? UuidUtil.createUuid();
 
     this._img = new DataFieldBridge({
       document: this,
-      dataPath: "img",
+      dataPath: "system.img",
       onChange: (newValue, oldValue) => {
         this._onChangeCallbacks.invoke("img", newValue, oldValue);
       },
     });
     this._name = new DataFieldBridge({
       document: this,
-      dataPath: "name",
+      dataPath: "system.name",
       default: "Unknown",
       onChange: (newValue, oldValue) => {
         this._onChangeCallbacks.invoke("name", newValue, oldValue);
@@ -175,52 +213,33 @@ export default class SyntheticDocument extends Document {
     });
   }
 
-  /**
-   * Deletes this instance. 
-   * 
-   * @returns {Boolean} True, if the instance could be removed. 
-   * @override
-   */
-  delete() {
-    const collection = this.#getCollection();
-    let newCollection;
-    if (ValidationUtil.isArray(collection)) {
-      newCollection = collection.concat([]);
-      const index = newCollection.findIndex(it => it.id === this.id);
-      if (index < 0) {
-        game.strive.logger.warning("Failed to find index");
-        return false;
-      }
-
-      newCollection.splice(index, 1);
-      this.#setCollection(newCollection);
-    } else if (ValidationUtil.isObject(collection)) {
-      newCollection = {
-        ...collection,
-      };
-      delete newCollection[this.id];
-
-      this.#setCollection(newCollection);
-    } else {
-      game.strive.logger.error("Failed to get parent collection or parent collection is of unsupported type");
-      return false;
-    }
-
-    return true;
+  /** @override */
+  async delete() {
+    await this._updater.deleteByPath(this.#pathOnParent);
   }
 
-  /**
-   * Updates the properties of this object, based on the given delta object. 
-   * 
-   * @param {Object} delta An object containing the properties of this object to update. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @async
-   * @override
-   */
+  /** @override */
   async update(delta, render = true) {
     const collection = this.#getCollection();
+
+    // Remove 'system' from the delta, if necessary. 
+    // This is a hack as there is no 'system' property for this object on the parent document. 
+    // Instead, all the properties therein are flattened into the delta object. 
+    let newDelta = {
+      ...delta,
+    };
+    if (ValidationUtil.isDefined(delta.system)) {
+      newDelta = {
+        ...delta,
+        ...delta.system,
+      };
+      delete delta.system;
+    }
+    const dto = {
+      ...this.#raw,
+      ...newDelta,
+    };
+
     if (ValidationUtil.isArray(collection)) {
       const newCollection = collection.concat([]);
       const index = newCollection.findIndex(it => it.id === this.id);
@@ -228,69 +247,35 @@ export default class SyntheticDocument extends Document {
         game.strive.logger.warning("Failed to find index");
         return;
       }
-  
-      newCollection[index] = {
-        ...newCollection[index],
-        ...delta,
-      };
-      this.#setCollection(newCollection);
+
+      newCollection[index] = dto;
+      if (!this.isBufferMode) {
+        PropertyUtil.setByPath(this.#parentDocument, this.#collectionPath, newCollection);
+      }
+      this._updater.updateByPath(this.#collectionPath, newCollection, render);
     } else if (ValidationUtil.isObject(collection)) {
-      newCollection = {
-        ...collection,
-      };
-      newCollection[this.id] = {
-        ...newCollection[this.id],
-        ...delta,
-      };
-      this.#setCollection(newCollection);
+      if (!this.isBufferMode) {
+        PropertyUtil.setByPath(this.#parentDocument, this.#pathOnParent, dto);
+      }
+      this._updater.updateByPath(this.#pathOnParent, dto, render);
     } else {
       game.strive.logger.error("Failed to get parent collection or parent collection is of unsupported type");
       return;
     }
   }
 
-  /**
-   * Updates a property of this Expertise on the parent item, identified via the given path. 
-   * 
-   * @param {String} propertyPath Path leading to the property to update, on the Expertise. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "itemOrders.b[0]"
-   * @param {any} newValue The value to assign to the property. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @async
-   * @override
-   */
+  /** @override */
   async updateByPath(propertyPath, newValue, render = true) {
-    if (propertyPath.startsWith(this.#pathOnParent)) {
-      this.#parentDocument.updateByPath(propertyPath, newValue, render);
-    } else {
-      const newPath = `${this.#pathOnParent}.${propertyPath}`;
-      this.#parentDocument.updateByPath(newPath, newValue, render);
+    let correctedPath = propertyPath;
+    const systemPrefix = "system.";
+    if (propertyPath.startsWith(systemPrefix)) {
+      correctedPath = correctedPath.substring(systemPrefix.length);
     }
-  }
-
-  /**
-   * Deletes a property on the expertise, via the given path. 
-   * 
-   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "system.attributes[0].level" 
-   *        E.g.: "system.attributes[4]" 
-   *        E.g.: "system.attributes" 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @async
-   */
-  async deleteByPath(propertyPath, render = true) {
-    if (propertyPath.startsWith(this.#pathOnParent)) {
-      this.#parentDocument.deleteByPath(propertyPath, render);
-    } else {
-      const newPath = `${this.#pathOnParent}.${propertyPath}`;
-      this.#parentDocument.deleteByPath(newPath, render);
+    const fullPath = `${this.#pathOnParent}.${correctedPath}`;
+    if (!this.isBufferMode) {
+      PropertyUtil.setByPath(this.#parentDocument, fullPath, newValue);
     }
+    this._updater.updateByPath(fullPath, newValue, render);
   }
 
   /**
@@ -312,20 +297,6 @@ export default class SyntheticDocument extends Document {
    * @private
    */
   #getCollection() {
-    let path = this.#pathOnParent.split(".");
-    path.pop();
-    path = path.join(".");
-    return PropertyUtil.getNestedPropertyValue(this.#parentDocument, path);
-  }
-
-  /**
-   * Updates the collection that contains this document instance. 
-   * @private
-   */
-  #setCollection(newCollection) {
-    let path = this.#pathOnParent.split(".");
-    path.pop();
-    path = path.join(".");
-    this.#parentDocument.updateByPath(path, newCollection);
+    return PropertyUtil.getByPath(this.#parentDocument, this.#collectionPath);
   }
 }

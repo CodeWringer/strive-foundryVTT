@@ -259,7 +259,8 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
           onClick: () => {
             const newExpertises = this.document.expertises.concat([
               new ExpertiseDocument({
-                owningDocument: this.document,
+                parentDocument: this.document,
+                index: this.document.expertises.length,
               }),
             ]);
             this.document.expertises = newExpertises;

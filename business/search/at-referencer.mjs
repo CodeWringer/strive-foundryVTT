@@ -143,7 +143,7 @@ export default class AtReferencer {
     // Look in properties. 
     try {
       if (propertyPath !== undefined) {
-        return common.util.property.getNestedPropertyValue(document, propertyPath);
+        return common.util.property.getByPath(document, propertyPath);
       }
     } catch (error) {
       if (error.message.startsWith("Failed to get nested property value")) {
