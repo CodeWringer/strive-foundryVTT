@@ -33,35 +33,71 @@ export default class DocumentUpdater {
   }
 
   /**
-   * Holds all currently outstanding updates. 
    * @type {Object}
    * @private
    */
   #buffer = {};
+  /**
+   * Holds all currently outstanding updates. 
+   * @type {Object}
+   * @protected
+   */
+  get _buffer() { return this.#buffer; }
 
+  /**
+   * @type {Object}
+   * @private
+   */
+  #document;
+  /**
+   * FoundryVTT document instance. 
+   * @type {Object}
+   * @protected
+   */
+  get _document() { return this.#document; };
+
+  /**
+   * @param {Object} document FoundryVTT document instance. 
+   */
   constructor(document) {
     if (!ValidationUtil.isDefined(document)) {
       throw new Error("document must be defined");
     }
 
-    this.document = document;
+    this.#document = document;
   }
 
   /**
    * Updates the document with the given `delta` object. 
    * 
    * @param {Object} delta The update delta to persist. 
-   * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
+   * @param {Boolean} render If `true`, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
+   * @param {Boolean} force If `true`, will bypass the buffer mode. 
+   * * Default 'false'. 
    * 
    * @async
    */
-  async update(delta, render = true) {
-    if (this.isBufferMode) {
+  async update(delta, render = true, force = false) {
+    if (this.isBufferMode && !force) {
       this.#buffer = FoundryWrapper.mergeObject(this.#buffer, delta);
     } else {
-      this.document.update(delta, { render: render, });
+      this.#update(delta, render);
     }
+  }
+  
+  /**
+   * Updates the document with the given `delta` object. 
+   * 
+   * @param {Object} delta The update delta to persist. 
+   * @param {Boolean} render If `true`, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   * 
+   * @async
+   * @private
+   */
+  async #update(delta, render = true) {
+    this.#document.update(delta, { render: render, });
   }
 
   /**
@@ -79,7 +115,7 @@ export default class DocumentUpdater {
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
-    const dto = this.#buildDto(propertyPath, newValue);
+    const dto = this._buildDto(propertyPath, newValue);
     await this.update(dto, render);
   }
   
@@ -101,7 +137,7 @@ export default class DocumentUpdater {
     if (ValidationUtil.isDefined(mIndex)) { // Delete item from array.
       const arrayPropertyPath = propertyPath.substring(0, mIndex.index);
       
-      let array = PropertyUtil.getByPath(this.document, arrayPropertyPath);
+      let array = PropertyUtil.getByPath(this.#document, arrayPropertyPath);
       const index = parseInt(mIndex[0].substring(1, mIndex[0].length - 1));
       array = array.slice(0, index).concat(array.slice(index + 1));
 
@@ -124,7 +160,7 @@ export default class DocumentUpdater {
    * Persists all currently outstanding updates to the data base. 
    */
   flushUpdates() {
-    this.document.update(this.#buffer, { render: true, });
+    this.#update(this.#buffer, true);
     this.discardUpdates();  
   }
 
@@ -152,9 +188,9 @@ export default class DocumentUpdater {
    * @throws If a function is part or the end of the property path. 
    * @throws If a primitive is part of the property path. 
    * 
-   * @private
+   * @protected
    */
-  #buildDto(propertyPath, newValue) {
+  _buildDto(propertyPath, newValue) {
     if (propertyPath === undefined || propertyPath.trim().length < 1) {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
@@ -185,7 +221,7 @@ export default class DocumentUpdater {
     let previousDtoProperty = dto;
     // A reference to the previously looked at property, on the document. 
     // Initially, this is a reference to the document itself. 
-    let previousDocumentProperty = this.document;
+    let previousDocumentProperty = this.#document;
     // If this value is true, then an array is part of the property path. 
     // In such a case, we can no longer create small delta objects and have to instead start 
     // taking whole objects. Otherwise, all but the targeted property could be lost. 

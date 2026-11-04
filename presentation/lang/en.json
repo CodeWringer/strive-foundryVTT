@@ -82,7 +82,8 @@
         "label": "List Item Expansion Mode",
         "hint": "Controls how list items on actor sheets are expanded. Window: list items will be expanded into a separate window. Inline: list items will be expanded directly into the sheet they're part of, without any separate window.",
         "window": "Window",
-        "inline": "Inline"
+        "inline": "Inline",
+        "inline_locked": "Inline (Locked)"
       }
     },
     "combat": {

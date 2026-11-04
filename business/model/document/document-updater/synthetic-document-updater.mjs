@@ -1,0 +1,137 @@
+import { PropertyUtil } from "../../../../common/util/property-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import DocumentUpdater from "./document-updater.mjs";
+
+/**
+ * Utility for updating a document's data. 
+ * 
+ * @extends DocumentUpdater
+ */
+export default class SyntheticDocumentUpdater extends DocumentUpdater {
+  /**
+   * @type {String}
+   * @private
+   */
+  #pathOnParent;
+
+  /**
+   * Returns the property path identifying the collection that contains this document instance. 
+   * @type {String}
+   * @readonly
+   */
+  get #collectionPath() {
+    const mIndex = this.#pathOnParent.match(/\[\d+\]$/);
+    if (ValidationUtil.isDefined(mIndex)) { // Part of an array. 
+      return this.#pathOnParent.substring(0, mIndex.index);
+    } else { // Probably part of an object. 
+      const path = this.#pathOnParent.split(".");
+      path.pop();
+      return path.join(".");
+    }
+  }
+
+  /** 
+   * Serves as an accessor to the raw data of the synthetic document. 
+   * @override
+   */
+  get raw() { return PropertyUtil.getByPath(this._document, this.#pathOnParent); }
+
+  /**
+   * @param {Object} parentDocument FoundryVTT document instance. 
+   */
+  constructor(parentDocument, pathOnParent) {
+    super(parentDocument);
+
+    if (!ValidationUtil.isDefined(pathOnParent)) {
+      throw new Error("pathOnParent must be defined");
+    }
+    this.#pathOnParent = pathOnParent;
+  }
+
+  /** @override */
+  async update(delta, render = true, force = false) {
+    let hasChanges = false;
+    for (const key in delta) {
+      if (!Object.hasOwn(delta, key)) continue;
+      
+      hasChanges = true;
+      break;
+    }
+    if (!hasChanges) return;
+
+    // Remove 'system' from the delta, if necessary. 
+    // This is a hack as there is no 'system' property for this object on the parent document. 
+    // Instead, all the properties therein are flattened into the delta object. 
+    let newDelta = {
+      ...delta,
+    };
+    // Flatten `system` object, if necessary. 
+    if (ValidationUtil.isDefined(delta.system)) {
+      newDelta = {
+        ...delta,
+        ...delta.system,
+      };
+      newDelta.system = undefined;
+      delete newDelta.system;
+    }
+    // Merge raw data with sanitized delta. This object will replace the whole object that represents 
+    // 'our' document on the parent. That is why the entire object must be collected here, not just 
+    // the delta. 
+    const dto = {
+      ...this.raw,
+      ...newDelta,
+    };
+
+    const parentDto = this._buildDto(this.#pathOnParent, dto)
+    await super.update(parentDto, render, force);
+
+    // const collection = this.#getCollection();
+    // if (ValidationUtil.isArray(collection)) {
+    //   const newCollection = collection.concat([]);
+    //   const index = newCollection.findIndex(it => it.id === this.id);
+    //   if (index < 0) {
+    //     game.strive.logger.warning("Failed to find index");
+    //     return;
+    //   }
+
+    //   newCollection[index] = dto;
+    //   // await super.update(this.#collectionPath, newCollection, render);
+    // } else if (ValidationUtil.isObject(collection)) {
+    //   // await super.update(this.#pathOnParent, dto, render);
+    // } else {
+    //   game.strive.logger.error("Failed to get parent collection or parent collection is of unsupported type");
+    //   return;
+    // }
+  }
+
+  /** @override */
+  async updateByPath(propertyPath, newValue, render = true) {
+    const systemPrefix = "system.";
+    if (propertyPath.startsWith(systemPrefix)) {
+      propertyPath = propertyPath.substring(systemPrefix.length);
+    }
+    const actualPath = `${this.#pathOnParent}.${propertyPath}`;
+
+    const dto = this._buildDto(actualPath, newValue);
+    await super.update(dto, render);
+  }
+
+  /**
+   * Deletes the document instance. 
+   * @returns {Promise<void>}
+   * @async
+   */
+  async delete() {
+    await this.deleteByPath(this.#pathOnParent);
+  }
+
+  /**
+   * Returns the collection that contains this document instance. 
+   * @returns {Array<SyntheticDocument> | Object}
+   * @private
+   */
+  #getCollection() {
+    return PropertyUtil.getByPath(this._document, this.#collectionPath);
+  }
+}

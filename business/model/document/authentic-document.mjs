@@ -93,6 +93,11 @@ export default class AuthenticDocument extends Document {
    * @private
    */
   #document;
+  /**
+   * @type {Object}
+   * @protected
+   */
+  get _document() { return this.#document; }
 
   /**
    * @param {Object} args 

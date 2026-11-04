@@ -109,6 +109,8 @@ export default class ListViewModel extends ViewModel {
    * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
    * @param {Array<DropDownOption> | undefined} args.itemContextMenuOptions
    * @param {ListItemExpansionMode | undefined} args.itemExpansionMode
+   * @param {Boolean | undefined} args.itemsInitiallyExpanded
+   * * default `false`
    */
   constructor(args = {}) {
     super(args);
@@ -117,6 +119,7 @@ export default class ListViewModel extends ViewModel {
     this.#separators = args.separators ?? [];
     this.itemContextMenuOptions = args.itemContextMenuOptions ?? [];
     this.itemExpansionMode = args.itemExpansionMode ?? LIST_ITEM_EXPANSION_MODES.window;
+    this.itemsInitiallyExpanded = args.itemsInitiallyExpanded ?? false;
 
     this.contextMenuOptions = args.contextMenuOptions ?? [];
     this.vmContextMenu = new ButtonDropDownViewModel({
@@ -186,6 +189,8 @@ export default class ListViewModel extends ViewModel {
    * @param {Boolean} state If `true`, will expand the item, else collapse it. 
    */
   setItemExpanded(idOrIndex, state) {
+    if (this.itemExpansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name) return;
+    
     const vm = this.getListItemViewModel(idOrIndex);
     vm.isExpanded = state;
   }
@@ -195,6 +200,8 @@ export default class ListViewModel extends ViewModel {
    * @param {String | Number} idOrIndex ID or index of the item to toggle. 
    */
   toggleItemExpanded(idOrIndex) {
+    if (this.itemExpansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name) return;
+
     const vm = this.getListItemViewModel(idOrIndex);
     vm.isExpanded = !vm.isExpanded;
   }
@@ -225,6 +232,7 @@ export default class ListViewModel extends ViewModel {
       item: item,
       contextMenuOptions: this.itemContextMenuOptions,
       expansionMode: this.itemExpansionMode,
+      isExpanded: this.itemsInitiallyExpanded,
     }));
 
     // Prepared items from separators. 
@@ -255,6 +263,7 @@ export default class ListViewModel extends ViewModel {
         isSeparator: true,
         toolTip: preparedSeparator.tooltip,
         expansionMode: this.itemExpansionMode,
+        isExpanded: this.itemsInitiallyExpanded,
       });
       this.#listItemViewModels.splice(preparedSeparator.index, 0, viewModel);
     });

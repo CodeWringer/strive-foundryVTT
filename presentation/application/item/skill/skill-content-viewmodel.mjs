@@ -23,6 +23,8 @@ import BaseItemContentViewModel from "../base/base-item-content-viewmodel.mjs";
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 import ExpertiseContentViewModel from "../expertise/expertise-content-viewmodel.mjs";
 import ExpertiseHeaderViewModel from "../expertise/expertise-header-viewmodel.mjs";
+import GameSystemSettings from "../../../../business/setting/game-system-settings.mjs";
+import { GameSystemUserSettings } from "../../../../business/setting/game-system-user-settings.mjs";
 
 export default class SkillContentViewModel extends BaseItemContentViewModel {
   /** @override */
@@ -231,10 +233,18 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       })
     };
 
+    let itemsInitiallyExpanded = false;
+    const itemExpansionModeRaw = GameSystemSettings.get(GameSystemUserSettings.KEY_LIST_ITEM_EXPANSION_MODE);
+    let itemExpansionMode = LIST_ITEM_EXPANSION_MODES.asArray().find(it => it.name === itemExpansionModeRaw) ?? LIST_ITEM_EXPANSION_MODES.window;
+    if (!this.isEmbedded && itemExpansionModeRaw === LIST_ITEM_EXPANSION_MODES.inline.name) {
+      itemExpansionMode = LIST_ITEM_EXPANSION_MODES.inline_locked;
+      itemsInitiallyExpanded = true;
+    }
     this.vmExpertises = new ListViewModel({
       id: "vmExpertises",
       parent: this,
-      itemExpansionMode: LIST_ITEM_EXPANSION_MODES.inline,
+      itemExpansionMode: itemExpansionMode,
+      itemsInitiallyExpanded: itemsInitiallyExpanded,
       items: this.document.expertises.map(expertise => mapExpertiseToListItem(expertise)),
       separators: [
         new ListSeparator({

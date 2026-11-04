@@ -45,6 +45,8 @@ export default class ListItemViewModel extends ViewModel {
    * @param {Boolean} value
    */
   set isExpanded(value) {
+    if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name) return;
+
     this.#isExpanded = value;
     if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name) {
       const contentElm = this.element.find("> .content");
@@ -149,8 +151,13 @@ export default class ListItemViewModel extends ViewModel {
       SheetUtil.setHover(this.element, contextMenuElms);
     }
 
-    if (this.isExpanded) {
+    if (this.isExpanded 
+      && (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name 
+        || this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name)
+      ) {
       await this.#renderContentInline();
+      const contentElm = this.element.find("> .content");
+      contentElm.removeClass("hidden");
     }
   }
 
@@ -167,7 +174,6 @@ export default class ListItemViewModel extends ViewModel {
       contentElm.empty();
       contentElm.append(html);
       await this.vmContent.activateListeners(contentElm);
-      contentElm.css("height", "0%");
     }
   }
 }

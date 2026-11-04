@@ -25,4 +25,9 @@ export const LIST_ITEM_EXPANSION_MODES = {
     name: "inline",
     localizableName: "system.settings.listItemExpansionMode.inline",
   }),
+  /** Expand into its parent sheet. Effectively turns the list item into an 'accordion' control. */
+  inline_locked: new ListItemExpansionMode({
+    name: "inline_locked",
+    localizableName: "system.settings.listItemExpansionMode.inline_locked",
+  }),
 }

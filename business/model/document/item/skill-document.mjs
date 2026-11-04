@@ -310,7 +310,7 @@ export default class SkillDocument extends AuthenticDocument {
       fromDto: (dtos) => {
         let index = 0;
         return dtos.map(dto => ExpertiseDocument.fromDto(dto, {
-          parentDocument: this,
+          parentDocument: this._document,
           index: index++,
         }));
       },

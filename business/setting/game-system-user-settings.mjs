@@ -100,7 +100,7 @@ export const GameSystemUserSettings = {
         hint: game.i18n.localize("system.settings.listItemExpansionMode.hint"),
         scope: SETTING_SCOPES.USER,
         config: true,
-        default: "window",
+        default: LIST_ITEM_EXPANSION_MODES.window.name,
         type: String,
         choices: {
           window: StringUtil.getLoca(LIST_ITEM_EXPANSION_MODES.window.localizableName),

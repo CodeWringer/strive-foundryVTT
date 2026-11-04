@@ -3,13 +3,17 @@ import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import AuthenticDocument from "./authentic-document.mjs";
 import DataFieldBridge from "./data-bridge/data-field-bridge.mjs";
-import DocumentUpdater from "./document-updater/document-updater.mjs";
+import SyntheticDocumentUpdater from "./document-updater/synthetic-document-updater.mjs";
 import Document from "./document.mjs";
 
 /**
  * Represents the abstract base class for all embedded documents. These aren't - from FoundryVTT's point of view - real 
  * documents. They have no independent data-model equivalent, and are instead represented by custom data-fields, 
  * as properties of other, 'real' documents. 
+ * 
+ * Note that all `DataFieldBridge`s used to expose data properties of this `SyntheticDocument`, must prefix all 
+ * property paths with `"system."`, e.g. `"system.actionPoints.current"`. 
+ * Otherwise property access might conflict with accessors declared on the `SyntheticDocument`, and risk infinite recursion. 
  * 
  * @abstract Inheritors MUST implement: 
  * * `static fromDto()`
@@ -57,7 +61,7 @@ export default class SyntheticDocument extends Document {
   get isOwner() { return this.#parentDocument.isOwner ?? this.#parentDocument.owner ?? false; }
 
   /** @override */
-  get isEmbedded() { return true; }
+  get isEmbedded() { return this.#parentDocument.isEmbedded; }
 
   /** @override */
   get isLocked() { return ValidationUtil.isDefined(this.#parentDocument.pack) && this.#parentDocument.pack.metadata.locked; }
@@ -76,7 +80,7 @@ export default class SyntheticDocument extends Document {
    * an additional nesting layer. 
    * @override
    */
-  get system() { return this.#raw; }
+  get system() { return PropertyUtil.getByPath(this.#parentDocument, this.#pathOnParent); }
 
   /**
    * The icon/image path of the document. 
@@ -109,13 +113,6 @@ export default class SyntheticDocument extends Document {
   set gmNotes(value) { this._gmNotes.value = value; }
 
   /**
-   * Raw data object. 
-   * @type {Object}
-   * @private
-   */
-  #raw;
-
-  /**
    * The `AuthenticDocument` this synthetic one is embedded in. 
    * @type {AuthenticDocument}
    * @private
@@ -131,22 +128,6 @@ export default class SyntheticDocument extends Document {
   #pathOnParent;
 
   /**
-   * Returns the property path identifying the collection that contains this document instance. 
-   * @type {String}
-   * @readonly
-   */
-  get #collectionPath() {
-    const mIndex = this.#pathOnParent.match(/\[\d+\]$/);
-    if (ValidationUtil.isDefined(mIndex)) { // Part of an array. 
-      return this.#pathOnParent.substring(0, mIndex.index);
-    } else { // Probably part of an object. 
-      const path = this.#pathOnParent.split(".");
-      path.pop();
-      return path.join(".");
-    }
-  }
-
-  /**
    * @param {Object} args 
    * @param {Object} args.parentDocument FoundryVTT document. 
    * @param {String} args.pathOnParent Data path on the `parentDocument` which can 
@@ -157,11 +138,10 @@ export default class SyntheticDocument extends Document {
   constructor(args = {}) {
     super({
       ...args,
-      updater: new DocumentUpdater(args.parentDocument),
+      updater: new SyntheticDocumentUpdater(args.parentDocument, args.pathOnParent),
     });
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
 
-    this.#raw = args.raw ?? {};
     this.#parentDocument = args.parentDocument.getEnhancedDocument();
     this.#pathOnParent = args.pathOnParent;
     this.#id = args.id ?? UuidUtil.createUuid();
@@ -215,67 +195,7 @@ export default class SyntheticDocument extends Document {
 
   /** @override */
   async delete() {
-    await this._updater.deleteByPath(this.#pathOnParent);
-  }
-
-  /** @override */
-  async update(delta, render = true) {
-    const collection = this.#getCollection();
-
-    // Remove 'system' from the delta, if necessary. 
-    // This is a hack as there is no 'system' property for this object on the parent document. 
-    // Instead, all the properties therein are flattened into the delta object. 
-    let newDelta = {
-      ...delta,
-    };
-    if (ValidationUtil.isDefined(delta.system)) {
-      newDelta = {
-        ...delta,
-        ...delta.system,
-      };
-      delete delta.system;
-    }
-    const dto = {
-      ...this.#raw,
-      ...newDelta,
-    };
-
-    if (ValidationUtil.isArray(collection)) {
-      const newCollection = collection.concat([]);
-      const index = newCollection.findIndex(it => it.id === this.id);
-      if (index < 0) {
-        game.strive.logger.warning("Failed to find index");
-        return;
-      }
-
-      newCollection[index] = dto;
-      if (!this.isBufferMode) {
-        PropertyUtil.setByPath(this.#parentDocument, this.#collectionPath, newCollection);
-      }
-      this._updater.updateByPath(this.#collectionPath, newCollection, render);
-    } else if (ValidationUtil.isObject(collection)) {
-      if (!this.isBufferMode) {
-        PropertyUtil.setByPath(this.#parentDocument, this.#pathOnParent, dto);
-      }
-      this._updater.updateByPath(this.#pathOnParent, dto, render);
-    } else {
-      game.strive.logger.error("Failed to get parent collection or parent collection is of unsupported type");
-      return;
-    }
-  }
-
-  /** @override */
-  async updateByPath(propertyPath, newValue, render = true) {
-    let correctedPath = propertyPath;
-    const systemPrefix = "system.";
-    if (propertyPath.startsWith(systemPrefix)) {
-      correctedPath = correctedPath.substring(systemPrefix.length);
-    }
-    const fullPath = `${this.#pathOnParent}.${correctedPath}`;
-    if (!this.isBufferMode) {
-      PropertyUtil.setByPath(this.#parentDocument, fullPath, newValue);
-    }
-    this._updater.updateByPath(fullPath, newValue, render);
+    await this._updater.delete();
   }
 
   /**
@@ -290,13 +210,4 @@ export default class SyntheticDocument extends Document {
    * @abstract
    */
   toDto() { throw new Error("Not implemented"); }
-
-  /**
-   * Returns the collection that contains this document instance. 
-   * @returns {Array<SyntheticDocument> | Object}
-   * @private
-   */
-  #getCollection() {
-    return PropertyUtil.getByPath(this.#parentDocument, this.#collectionPath);
-  }
 }
