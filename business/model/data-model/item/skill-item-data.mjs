@@ -1,4 +1,5 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
+import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
 import ExpertiseField from "../data-field/expertise-field.mjs";
 import GradedEffectField from "../data-field/graded-effect-field.mjs";
 import MomentumActionField from "../data-field/momentum-action-field.mjs";
@@ -49,7 +50,9 @@ export default class SkillItemData extends BaseItemData {
       }),
       targetingType: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
-        current: new FoundrySchemaFields.StringField({}),
+        current: new FoundrySchemaFields.StringField({
+          initialValue: TARGETING_TYPES.none.name,
+        }),
       }),
       obstacle: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),

@@ -392,12 +392,13 @@ export default class SkillDocument extends AuthenticDocument {
       current: new DataFieldBridge({
         document: this,
         dataPath: "system.targetingType.current",
+        default: TARGETING_TYPES.none,
         fromDto: (dto) => {
           const targetingType = TARGETING_TYPES.asArray().find(it => it.name === dto);
           if (ValidationUtil.isDefined(targetingType)) {
             return targetingType;
           } else {
-            return TARGETING_TYPES.singleTarget;
+            return TARGETING_TYPES.none;
           }
         },
         toDto: (value) => value.name,

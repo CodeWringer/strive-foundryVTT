@@ -90,7 +90,7 @@ export default class ExpertiseField extends FoundrySchemaFields.SchemaField {
       targetingType: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
         current: new FoundrySchemaFields.StringField({
-          initial: TARGETING_TYPES.singleTarget.name,
+          initial: TARGETING_TYPES.none.name,
         }),
       }),
       obstacle: new FoundrySchemaFields.SchemaField({

@@ -22,6 +22,7 @@ export class TargetingType {
 /**
  * Represents the defined attack types.
  * 
+ * @property {TargetingType} none
  * @property {TargetingType} singleTarget
  * @property {TargetingType} areaOfEffect
  * @property {TargetingType} multipleSingleTarget
@@ -29,6 +30,11 @@ export class TargetingType {
  * @constant
  */
 export const TARGETING_TYPES = {
+  none: new TargetingType({
+    name: "none",
+    localizableName: "system.domain.targetingType.none",
+    icon: "ico ico-crossed-circle",
+  }),
   singleTarget: new TargetingType({
     name: "singleTarget",
     localizableName: "system.domain.targetingType.singleTarget",

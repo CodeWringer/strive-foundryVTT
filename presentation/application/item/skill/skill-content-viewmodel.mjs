@@ -77,7 +77,7 @@ export default class SkillContentViewModel extends BaseItemContentViewModel {
       }),
       new VisibilityRule({
         selector: "> div > .dynamic-content > div > .targeting-type",
-        shouldBeHidden: () => !this.isEditable && this.document.targetingType.enabled,
+        shouldBeHidden: () => !this.isEditable && this.document.targetingType.current.name === TARGETING_TYPES.none.name,
       }),
       new VisibilityRule({
         selector: "> div > .dynamic-content > div > .obstacle",

@@ -6,7 +6,6 @@ import AtReferencer from "../../../search/at-referencer.mjs";
 import { ITEM_TYPES } from "../../domain/const/item-types.mjs";
 import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
-import Persistable from "../../domain/persistable.mjs"
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 import SyntheticDocument from "../synthetic-document.mjs";
@@ -275,11 +274,11 @@ export default class ExpertiseDocument extends SyntheticDocument {
           if (ValidationUtil.isDefined(targetingType)) {
             return targetingType;
           } else {
-            return TARGETING_TYPES.singleTarget;
+            return TARGETING_TYPES.none;
           }
         },
         toDto: (value) => value.name,
-        default: TARGETING_TYPES.singleTarget,
+        default: TARGETING_TYPES.none,
       }),
     };
     this._obstacle = {
