@@ -75,7 +75,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @param {Function | undefined} args.filter A function that can filter, allowing only 
    * those documents for which it returns true to be valid choices. **Must** return a boolean
    * value. Receives arguments:
-   * * `document: TransientDocument` - A document instance
+   * * `document: Document` - A document instance
    * 
    * @param {Function | undefined} args.selectionLabelMapper If not undefined, will be used 
    * to change the content's of a label based on the currently selected entry. 
@@ -118,9 +118,9 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       const document = await new DocumentFetcher().find({
         id: id,
       });
-      const transientDocument = document.getEnhancedDocument();
-      if (this.filter(transientDocument) === true) {
-        documents.set(id, transientDocument);
+      const Document = document.getEnhancedDocument();
+      if (this.filter(Document) === true) {
+        documents.set(id, Document);
       }
     }
 

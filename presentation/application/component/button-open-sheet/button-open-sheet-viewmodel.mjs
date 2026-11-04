@@ -33,7 +33,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {TransientDocument} args.target The target object to affect. 
+   * @param {Document} args.target The target object to affect. 
    */
   constructor(args = {}) {
     super({

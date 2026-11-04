@@ -106,7 +106,9 @@ export default class AuthenticDocument extends Document {
   constructor(args = {}) {
     super({
       ...args,
-      updater: new DocumentUpdater(args.document),
+      updater: new DocumentUpdater({
+        document: args.document,
+      }),
     });
     ValidationUtil.validateOrThrow(args, ["document"]);
 

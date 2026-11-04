@@ -11,7 +11,7 @@ import ViewModel from "./view-model.mjs";
  * * `static get TEMPLATE`
  * * `get clazz`
  * 
- * @property {TransientDocument} document The underlying data document instance. 
+ * @property {Document} document The underlying data document instance. 
  * This represents a concrete Actor or Item document instance. 
  * @property {Number} _scrollValue Cached scroll value of the sheet. 
  * * Private
@@ -35,7 +35,7 @@ export default class BaseSheetViewModel extends DocumentViewModel {
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {TransientDocument} args.document An associated data document. 
+   * @param {Document} args.document An associated data document. 
    * 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    */

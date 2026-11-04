@@ -18,8 +18,8 @@ export default class DocumentUpdater {
    */
   #isBufferMode = false;
   /**
-   * If `true`, field updates do not immediately fire and get 
-   * persisted, but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
+   * If `true`, field updates do not immediately fire and get persisted, 
+   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
    * 
    * Setting this to `false` immediately flushes all updates. 
    * @type {Boolean}
@@ -57,14 +57,17 @@ export default class DocumentUpdater {
   get _document() { return this.#document; };
 
   /**
-   * @param {Object} document FoundryVTT document instance. 
+   * @param {Object} args
+   * @param {Object} args.document FoundryVTT document instance. 
+   * @param {Boolean | undefined} args.isBufferMode If `true`, field updates do not immediately fire and get persisted, 
+   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
+   * * default `false`
    */
-  constructor(document) {
-    if (!ValidationUtil.isDefined(document)) {
-      throw new Error("document must be defined");
-    }
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
-    this.#document = document;
+    this.#document = args.document;
+    this.#isBufferMode = args.isBufferMode ?? false;
   }
 
   /**
@@ -79,10 +82,23 @@ export default class DocumentUpdater {
    * @async
    */
   async update(delta, render = true, force = false) {
+    // // Local/session persistence. 
+    // for (const key in delta) {
+    //   if (!Object.hasOwn(delta, key)) continue;
+    //   const deltaValue = delta[key];
+    //   if (ValidationUtil.isObject(deltaValue)) {
+    //     const deltaObjectValue = FoundryWrapper.mergeObject(this.#document[key], deltaValue);
+    //     PropertyUtil.setByPath(this.#document, key, deltaObjectValue);
+    //   } else {
+    //     PropertyUtil.setByPath(this.#document, key, deltaValue);
+    //   }
+    // }
+
+    // DB persistence.
     if (this.isBufferMode && !force) {
       this.#buffer = FoundryWrapper.mergeObject(this.#buffer, delta);
     } else {
-      this.#update(delta, render);
+      await this.#update(delta, render);
     }
   }
   

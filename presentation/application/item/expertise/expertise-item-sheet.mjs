@@ -18,7 +18,7 @@ export default class ExpertiseItemSheet extends GeneralDocumentApplication {
 
   /**
    * @param {Object} args 
-   * @param {TransientDocument} args.document 
+   * @param {Document} args.document 
    * @returns {ExpertiseItemSheetViewModel}
    * @override
    */

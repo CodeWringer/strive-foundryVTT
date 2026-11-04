@@ -56,11 +56,11 @@ export default class GameSystemCombat extends Combat {
         includeLocked: false,
         searchEmbedded: false,
       });
-      const transientDocument = document.getEnhancedDocument();
-      if (common.util.validation.isDefined(transientDocument.initiative)
-        && transientDocument.initiative.perTurn > 1) {
+      const Document = document.getEnhancedDocument();
+      if (common.util.validation.isDefined(Document.initiative)
+        && Document.initiative.perTurn > 1) {
         // Insert additional combatants for this actor. 
-        for (let i = 1; i < transientDocument.initiative.perTurn; i++) {
+        for (let i = 1; i < Document.initiative.perTurn; i++) {
           newData.push({
             actorId: entry.actorId,
             hidden: entry.hidden,

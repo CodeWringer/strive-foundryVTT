@@ -52,7 +52,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: RollResult | Object` - The rolled result. 
    * 
-   * @param {TransientDocument | Object} args.target The target object to affect. 
+   * @param {Document | Object} args.target The target object to affect. 
    * @param {RollSchema} args.rollSchema Determines which dice, how many and how they will be rolled. 
    * @param {String | undefined} args.primaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} args.primaryChatImage Primary image to display above the roll result in the chat message. 

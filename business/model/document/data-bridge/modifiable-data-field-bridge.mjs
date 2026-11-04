@@ -1,14 +1,14 @@
 import DataFieldBridge from "./data-field-bridge.mjs";
 
 /**
- * For use in `TransientDocument`s, provides access to a document's 
+ * For use in `Document`s, provides access to a document's 
  * data, with regard for data mappings. 
  * 
  * @property {Any} value The current value. Note that this is only 
  * a cached value - if you bypass this `DataFieldBridge` instance 
  * and update the value directly in the document's system reference, 
  * that change will not be reflected here!
- * @property {TransientDocument} document
+ * @property {Document} document
  * @property {String} dataPath Identifies the data field on 
  * the document instance itself. E. g. `"system.bulk"`
  * * Read-only

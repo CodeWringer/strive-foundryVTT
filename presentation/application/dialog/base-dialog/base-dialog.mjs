@@ -93,7 +93,7 @@ export default class BaseDialog extends FoundryWrapper.HandlebarsApplicationMixi
   }
 
   /**
-   * @param {TransientDocument} document 
+   * @param {Document} document 
    * @returns {BaseDialogViewModel}
    * 
    * @virtual

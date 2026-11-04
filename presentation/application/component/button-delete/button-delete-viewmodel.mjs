@@ -45,7 +45,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {TransientDocument} args.target The target object to affect. 
+   * @param {Document} args.target The target object to affect. 
    * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
    * @param {Boolean | undefined} args.withDialog If `true`, will prompt the user to make a selection with a dialog. 
    * * default `true`

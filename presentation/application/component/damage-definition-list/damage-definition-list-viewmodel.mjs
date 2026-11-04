@@ -1,4 +1,4 @@
-import TransientDocument from "../../../business/model/document/transient-document.mjs"
+import Document from "../../../business/model/document/transient-document.mjs"
 import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs"
 import { StringUtil } from "../../../common/util/string-utility.mjs"
@@ -17,7 +17,7 @@ import DamageDefinitionListItemViewModel from "./damage-definition-list-item-vie
  * @property {Array<DamageAndType>} value
  * @property {DiceRollListViewModel} vmList
  * @property {Array<DamageDefinitionListItemViewModel>} damageDefinitionViewModels
- * @property {TransientDocument} resolveFormulaContext A document 
+ * @property {Document} resolveFormulaContext A document 
  * which is used to resolve references in the damage formulae. 
  * 
  * @method onChange Callback that is invoked when the value changes. 
@@ -48,7 +48,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
   /**
    * @param {Object} args
    * @param {Array<DamageAndType>} args.value The current value. 
-   * @param {TransientDocument} args.resolveFormulaContext A document 
+   * @param {Document} args.resolveFormulaContext A document 
    * which is used to resolve references in the damage formulae. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 

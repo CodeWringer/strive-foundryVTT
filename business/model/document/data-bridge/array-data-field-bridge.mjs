@@ -3,11 +3,11 @@ import Document from "../document.mjs";
 import DataFieldBridge from "./data-field-bridge.mjs";
 
 /**
- * For use in `TransientDocument`s, provides access to a document's 
+ * For use in `Document`s, provides access to a document's 
  * data, with regard for data mappings. 
  * 
  * @property {Any} value 
- * @property {TransientDocument} document
+ * @property {Document} document
  * @property {String} dataPath Identifies the data field on 
  * the document instance itself. E. g. `"system.bulk"`
  * * Read-only

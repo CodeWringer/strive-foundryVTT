@@ -1,6 +1,5 @@
 import { PropertyUtil } from "../../../../common/util/property-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 import DocumentUpdater from "./document-updater.mjs";
 
 /**
@@ -38,15 +37,22 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
   get raw() { return PropertyUtil.getByPath(this._document, this.#pathOnParent); }
 
   /**
-   * @param {Object} parentDocument FoundryVTT document instance. 
+   * @param {Object} args
+   * @param {Boolean | undefined} args.isBufferMode If `true`, field updates do not immediately fire and get persisted, 
+   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
+   * * default `false`
+   * 
+   * @param {Object} args.parentDocument FoundryVTT document instance. 
+   * @param {Object} args.pathOnParent Property path that identifies the document on the `parentDocument`. 
    */
-  constructor(parentDocument, pathOnParent) {
-    super(parentDocument);
+  constructor(args = {}) {
+    super({
+      ...args,
+      document: args.parentDocument,
+    });
 
-    if (!ValidationUtil.isDefined(pathOnParent)) {
-      throw new Error("pathOnParent must be defined");
-    }
-    this.#pathOnParent = pathOnParent;
+    ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
+    this.#pathOnParent = args.pathOnParent;
   }
 
   /** @override */

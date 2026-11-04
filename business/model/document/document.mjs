@@ -225,14 +225,12 @@ export default class Document {
    * * E.g.: `"system.attributes['level']"` - NOT supported
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
+   * @returns {Promise<void>}
    * 
    * @async
    */
   async deleteByPath(propertyPath, render = true) {
-    if (!this.isBufferMode) {
-      PropertyUtil.deleteNestedProperty(this.document, propertyPath);
-    }
-    await this._updater.deleteByPath(propertyPath, render);
+    return await this._updater.deleteByPath(propertyPath, render);
   }
 
   /**
@@ -250,10 +248,7 @@ export default class Document {
    * @async
    */
   async updateByPath(propertyPath, newValue, render = true) {
-    if (!this.isBufferMode) {
-      PropertyUtil.setByPath(this.document, propertyPath, newValue);
-    }
-    await this._updater.updateByPath(propertyPath, newValue, render);
+    return await this._updater.updateByPath(propertyPath, newValue, render);
   }
 
   /**
@@ -262,36 +257,20 @@ export default class Document {
    * @param {Object} delta The update delta to persist. 
    * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
+   * @returns {Promise<void>}
    * 
    * @async
    */
   async update(delta, render = true) {
-    if (!this.isBufferMode) {
-      for (const propertyName in delta) {
-        if (!Object.hasOwn(delta, propertyName)) continue;
-        
-        const thizValue = this[propertyName];
-        const deltaPropertyValue = delta[propertyName];
-        if (ValidationUtil.isObject(thizValue)) {
-          const toApply = {
-            ...thizValue,
-            ...deltaPropertyValue,
-          };
-          PropertyUtil.setByPath(this, propertyName, toApply);
-        } else { // Array or primitive
-          PropertyUtil.setByPath(this, propertyName, deltaPropertyValue);
-        }
-      }
-    }
-    await this._updater.update(delta, render);
+    return await this._updater.update(delta, render);
   }
 
   /**
    * Deletes the underlying document. 
+   * @returns {Promise<void>}
    * @abstract
    * @async
-   * @returns {Promise<void>}
-   */
+  */
   async delete() { throw new Error("Not implemented"); }
 
   /**

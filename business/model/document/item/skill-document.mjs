@@ -109,6 +109,15 @@ export default class SkillDocument extends AuthenticDocument {
 
   /** @override */
   get clazz() { return SkillDocument; }
+  
+  /** @override */
+  get isBufferMode() { return super.isBufferMode; }
+  set isBufferMode(value) {
+    super.isBufferMode = value;
+    for (const expertise of this.expertises) {
+      expertise.isBufferMode = value;
+    }
+  }
 
   /**
    * @type {Array<Attribute>}

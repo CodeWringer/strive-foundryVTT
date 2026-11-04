@@ -87,7 +87,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {TransientDocument} args.document An associated data document. 
+   * @param {Document} args.document An associated data document. 
    * 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    * 
@@ -114,7 +114,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * Returns the root owning document of the list item, if it has one. 
    * Otherwise, returns the list item itself.  
    * 
-   * @returns {TransientDocument}
+   * @returns {Document}
    * 
    * @protected
    */

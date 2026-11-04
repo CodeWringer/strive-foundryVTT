@@ -138,7 +138,10 @@ export default class SyntheticDocument extends Document {
   constructor(args = {}) {
     super({
       ...args,
-      updater: new SyntheticDocumentUpdater(args.parentDocument, args.pathOnParent),
+      updater: new SyntheticDocumentUpdater({
+        parentDocument: args.parentDocument,
+        pathOnParent: args.pathOnParent,
+      }),
     });
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
 

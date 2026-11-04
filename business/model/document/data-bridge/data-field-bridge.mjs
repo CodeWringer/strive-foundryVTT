@@ -1,15 +1,14 @@
-import { common } from "../../../../common/_module.mjs";
 import { Callbacks } from "../../../../common/callbacks.mjs";
+import { PropertyUtil } from "../../../../common/util/property-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import Document from "../document.mjs";
 // Do not import Document - circuar dependency risk!
 
 /**
- * For use in `TransientDocument`s, provides access to a document's 
+ * For use in `Document`s, provides access to a document's 
  * data, with regard for data mappings. 
  * 
  * @property {Any} value The current value, as cached on the document. 
- * @property {TransientDocument} document
+ * @property {Document} document
  * @property {String} dataPath Identifies the data field on 
  * the document instance itself. E. g. `"system.bulk"`
  * * Read-only
@@ -32,13 +31,13 @@ export default class DataFieldBridge {
    * Returns the mapped value obtained through `this.fromDto`, if possible. Otherwise, returns `null`. 
    * @type {Any | null}
    */
-  get value() { 
+  get value() {
     // Fetch and transform value. 
-    const dto = common.util.property.getByPath(this.document, this.#dataPath);
-    if (common.util.validation.isDefined(dto)) {
+    const dto = PropertyUtil.getByPath(this.document, this.#dataPath);
+    if (ValidationUtil.isDefined(dto)) {
       return this.fromDto(dto);
     } else {
-      if (common.util.validation.isDefined(this.default)) {
+      if (ValidationUtil.isDefined(this.default)) {
         return this.default;
       } else {
         return null;
@@ -93,7 +92,7 @@ export default class DataFieldBridge {
    * * `oldValue: Any`
    */
   constructor(args = {}) {
-    common.util.validation.validateOrThrow(args, ["document", "dataPath"]);
+    ValidationUtil.validateOrThrow(args, ["document", "dataPath"]);
 
     this.document = args.document;
     this.#dataPath = args.dataPath;

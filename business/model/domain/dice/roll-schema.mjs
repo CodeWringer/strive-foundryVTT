@@ -123,7 +123,7 @@ export class RollSchema {
    * Returns a sum of dice components representing all possible combinations 
    * a user may choose from when rolling. 
    * 
-   * @param {TransientDocument} document 
+   * @param {Document} document 
    * 
    * @returns {Array<Sum>}
    */
@@ -134,7 +134,7 @@ export class RollSchema {
   /**
    * Returns an explanation of how the dice availabilites came to be. 
    * 
-   * @param {TransientDocument} document 
+   * @param {Document} document 
    * 
    * @returns {String}
    */

@@ -1,5 +1,5 @@
 import { GameSystemActor } from "../../business/model/document/actor/actor.mjs"
-import TransientDocument from "../../business/model/document/transient-document.mjs"
+import Document from "../../business/model/document/transient-document.mjs"
 import { VISIBILITY_MODES } from "../../business/model/domain/const/visibility-modes.mjs"
 import { common } from "../../common/_module.mjs"
 import { DynamicInputDefinition, DynamicInputDialog } from "../application/_module.mjs"
@@ -10,7 +10,7 @@ export default class SendToChatHandler {
    * Prompt the user to select a visibility and then sends the `target` to chat. 
    * 
    * @param {Object} args
-   * @param {TransientDocument} args.target
+   * @param {Document} args.target
    * @param {String | undefined} args.dialogTitle
    * @param {String | undefined} args.propertyPath A property path on the `target` that is to be sent 
    * to chat, instead of `target` itself. 
