@@ -316,6 +316,7 @@ export default class SkillDocument extends AuthenticDocument {
     this._expertises = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.expertises",
+      dataClass: ExpertiseDocument,
       fromDtoArgs: {
         parentDocument: this._document,
       },
