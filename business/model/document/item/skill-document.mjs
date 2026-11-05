@@ -313,18 +313,11 @@ export default class SkillDocument extends AuthenticDocument {
       document: this,
       dataPath: "system.level",
     });
-    this._expertises = new DataFieldBridge({
+    this._expertises = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.expertises",
-      fromDto: (dtos) => {
-        let index = 0;
-        return dtos.map(dto => ExpertiseDocument.fromDto(dto, {
-          parentDocument: this._document,
-          index: index++,
-        }));
-      },
-      toDto: (value) => {
-        return value.map(it => it.toDto());
+      fromDtoArgs: {
+        parentDocument: this._document,
       },
       onChange: (newValue, oldValue) => {
         this._onChangeCallbacks.invoke("expertises", newValue, oldValue);

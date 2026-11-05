@@ -6,6 +6,11 @@ import DataFieldBridge from "./data-field-bridge.mjs";
  * For use in `Document`s, provides access to a document's 
  * data, with regard for data mappings. 
  * 
+ * The `fromDto` and `toDto` methods are called implicitly. A user of this class 
+ * doesn't call them explicitly. The `fromDto` method's args object gets the index 
+ * passed through, as well as the `fromDtoArgs`, which is flattened into the args 
+ * object. 
+ * 
  * @property {Any} value 
  * @property {Document} document
  * @property {String} dataPath Identifies the data field on 
@@ -15,13 +20,6 @@ import DataFieldBridge from "./data-field-bridge.mjs";
  * @property {Array<Any>} default A default value to 
  * use in case the data base field's value is undefined.
  * 
- * @method fromDto Maps the data coming from the data base to a 
- * domain object. 
- * Accepts a dto and must return a domain object. Arguments: 
- * * `dto: Object`
- * @method toDto Maps the current value to data that can be safely 
- * persisted to data base. Arguments: 
- * * `value: Any`
  * @method onChange Adds a handler that is invoked when the value changes. Arguments: 
  * * `newValue: Any`
  * * `oldValue: Any`
@@ -29,11 +27,14 @@ import DataFieldBridge from "./data-field-bridge.mjs";
 export default class ArrayDataFieldBridge extends DataFieldBridge {
   /**
    * @param {Object} args 
-   * @param {Document} args.document 
+   * @param {Document} args.document Document instance that will be read from 
+   * and written to. The `dataPath` must be relative to this object. 
    * @param {String} args.dataPath Identifies the data field on 
    * the document instance itself. E. g. `"system.bulk"`
    * @param {Any | undefined} args.default A default value to 
    * use in case the data base field's value is undefined.
+   * @param {Object | undefined} args.fromDtoArgs Additional arguments to be passed to the 
+   * `fromDto` function. 
    * @param {Function | undefined} args.onChange Invoked when the value changes. Arguments: 
    * * `newValue: Any`
    * * `oldValue: Any`
@@ -44,8 +45,14 @@ export default class ArrayDataFieldBridge extends DataFieldBridge {
     super({
       ...args,
       default: args.default ?? [],
-      fromDto: (dto) => dto.map(it => args.dataClass.fromDto(it)),
-      toDto: (value) => value.map(it => it.toDto()),
+      fromDto: (dtos) => {
+        let index = 0;
+        return dtos.map(dto => args.dataClass.fromDto(dto, {
+          index: index++,
+          ...(args.fromDtoArgs ?? {}),
+        }));
+      },
+      toDto: (value) => value.map(domainObjects => domainObjects.toDto()),
     });
     ValidationUtil.validateOrThrow(args, ["document", "dataPath", "dataClass"]);
 

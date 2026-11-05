@@ -35,7 +35,7 @@ export default class DataFieldBridge {
     // Fetch and transform value. 
     const dto = PropertyUtil.getByPath(this.document, this.#dataPath);
     if (ValidationUtil.isDefined(dto)) {
-      return this.fromDto(dto);
+      return this.fromDto(dto, this.fromDtoArgs);
     } else {
       if (ValidationUtil.isDefined(this.default)) {
         return this.default;
