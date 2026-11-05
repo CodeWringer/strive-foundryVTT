@@ -24,6 +24,7 @@ export default class GradedEffectViewModel extends DocumentViewModel {
   set isEditable(value) {
     super.isEditable = value;
 
+    this.vmComparisonTargetType.visible = value;
     if (value) {
       this._emboldableElement.removeClass("embolden");
     } else {
@@ -95,6 +96,7 @@ export default class GradedEffectViewModel extends DocumentViewModel {
       parent: this,
       value: comparisonTargetTypeOption,
       options: comparisonTargetTypeOptions,
+      visible: this.isEditable,
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.general.comparisonTargetType.comparisonTargetType"),
       }),
