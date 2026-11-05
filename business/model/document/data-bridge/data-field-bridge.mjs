@@ -28,6 +28,20 @@ import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
  */
 export default class DataFieldBridge {
   /**
+   * @summary
+   * Contains a cached version of the domain value. 
+   * 
+   * @description
+   * Specifically targets `Document` instances, which should preserve state, instead of being 
+   * re-created on every access. Since `Document` instance data is always up-to-date anyway, there is 
+   * no need to re-create such instances. 
+   * 
+   * @type {Any}
+   * @private
+   */
+  #cache;
+
+  /**
    * Returns the mapped value obtained through `this.fromDto`, if possible. Otherwise, returns `null`. 
    * @type {Any | null}
    */
@@ -35,7 +49,25 @@ export default class DataFieldBridge {
     // Fetch and transform value. 
     const dto = PropertyUtil.getByPath(this.document, this.#dataPath);
     if (ValidationUtil.isDefined(dto)) {
-      return this.fromDto(dto, this.fromDtoArgs);
+      const converted = this.fromDto(dto, this.fromDtoArgs);
+
+      if (!ValidationUtil.isDefined(this.#cache)) {
+        this.#cache = converted;
+      } else {
+        if (ValidationUtil.isObject(converted) && ValidationUtil.isDefined(converted.id)) {
+          if (this.#cache.id === converted.id) {
+            return this.#cache;
+          }
+        } else if (ValidationUtil.isArray(converted)) {
+          const arr = this.#getCongruatedArray(converted);
+          this.#cache = arr;
+          return arr;
+        }
+      }
+      // Only reach this point in case the cache cannot be used. 
+      // This will be the case for any object whose identity cannot be congruated. 
+      // In practice, this targets Document instances, whose identity can be checked. 
+      return converted;
     } else {
       if (ValidationUtil.isDefined(this.default)) {
         return this.default;
@@ -120,5 +152,27 @@ export default class DataFieldBridge {
    */
   onChange(handler) {
     return this.#onChangeCallbacks.add(handler);
+  }
+
+  /**
+   * @param {Array<Object>} converted 
+   * @returns {Array<Object>}
+   * @private
+   */
+  #getCongruatedArray(converted) {
+    const result = [];
+    for (const element of converted) {
+      if (ValidationUtil.isDefined(element.id)) {
+        const cachedElement = this.#cache.find(it => it.id === element.id);
+        if (ValidationUtil.isDefined(cachedElement)) {
+          result.push(cachedElement);
+        } else {
+          result.push(element);
+        }
+      } else {
+        result.push(element);
+      }
+    }
+    return result;
   }
 }

@@ -509,4 +509,20 @@ export default class SkillDocument extends AuthenticDocument {
 
     return super.resolveReference(comparableReference, propertyPath);
   }
+
+  /** @override */
+  flushUpdates() {
+    super.flushUpdates();
+    for (const expertise of this.expertises) {
+      expertise.flushUpdates();
+    }
+  }
+  
+  /** @override */
+  discardUpdates() {
+    super.discardUpdates();
+    for (const expertise of this.expertises) {
+      expertise.discardUpdates();
+    }
+  }
 }

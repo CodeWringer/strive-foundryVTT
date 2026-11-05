@@ -82,19 +82,6 @@ export default class DocumentUpdater {
    * @async
    */
   async update(delta, render = true, force = false) {
-    // // Local/session persistence. 
-    // for (const key in delta) {
-    //   if (!Object.hasOwn(delta, key)) continue;
-    //   const deltaValue = delta[key];
-    //   if (ValidationUtil.isObject(deltaValue)) {
-    //     const deltaObjectValue = FoundryWrapper.mergeObject(this.#document[key], deltaValue);
-    //     PropertyUtil.setByPath(this.#document, key, deltaObjectValue);
-    //   } else {
-    //     PropertyUtil.setByPath(this.#document, key, deltaValue);
-    //   }
-    // }
-
-    // DB persistence.
     if (this.isBufferMode && !force) {
       this.#buffer = FoundryWrapper.mergeObject(this.#buffer, delta);
     } else {
@@ -218,7 +205,7 @@ export default class DocumentUpdater {
     }
 
     if (ValidationUtil.isArray(newValue) === true && game.strive.debug === true) {
-      this._logger.warning(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
+      this._logger.debug(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
     } else if (ValidationUtil.isFunction(newValue) === true) {
       throw new Error("Detected a function as the value to set - functions cannot be persisted!");
     }
