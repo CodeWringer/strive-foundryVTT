@@ -241,12 +241,12 @@ export default class DocumentUpdater {
           throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
         } else if (ValidationUtil.isArray(currentDocumentProperty) === true) {
           arrayIsPartOfPath = true;
-          previousDtoProperty[propertyName] = currentDocumentProperty;
+          previousDtoProperty[propertyName] = currentDocumentProperty.concat([]);
         } else if (ValidationUtil.isObject(currentDocumentProperty) === true) {
           if (arrayIsPartOfPath === true) {
             // Because differential updates to array elements are not possible, 
             // we must get the whole object from the document. 
-            previousDtoProperty[propertyName] = currentDocumentProperty;
+            previousDtoProperty[propertyName] = FoundryWrapper.deepClone(currentDocumentProperty);
           } else {
             // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
             previousDtoProperty[propertyName] = {};

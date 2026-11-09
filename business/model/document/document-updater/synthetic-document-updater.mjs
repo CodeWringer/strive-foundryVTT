@@ -14,22 +14,6 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
    */
   #pathOnParent;
 
-  /**
-   * Returns the property path identifying the collection that contains this document instance. 
-   * @type {String}
-   * @readonly
-   */
-  get #collectionPath() {
-    const mIndex = this.#pathOnParent.match(/\[\d+\]$/);
-    if (ValidationUtil.isDefined(mIndex)) { // Part of an array. 
-      return this.#pathOnParent.substring(0, mIndex.index);
-    } else { // Probably part of an object. 
-      const path = this.#pathOnParent.split(".");
-      path.pop();
-      return path.join(".");
-    }
-  }
-
   /** 
    * Serves as an accessor to the raw data of the synthetic document. 
    * @override
@@ -91,24 +75,6 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
 
     const parentDto = this._buildDto(this.#pathOnParent, dto)
     await super.update(parentDto, render, force);
-
-    // const collection = this.#getCollection();
-    // if (ValidationUtil.isArray(collection)) {
-    //   const newCollection = collection.concat([]);
-    //   const index = newCollection.findIndex(it => it.id === this.id);
-    //   if (index < 0) {
-    //     game.strive.logger.warning("Failed to find index");
-    //     return;
-    //   }
-
-    //   newCollection[index] = dto;
-    //   // await super.update(this.#collectionPath, newCollection, render);
-    // } else if (ValidationUtil.isObject(collection)) {
-    //   // await super.update(this.#pathOnParent, dto, render);
-    // } else {
-    //   game.strive.logger.error("Failed to get parent collection or parent collection is of unsupported type");
-    //   return;
-    // }
   }
 
   /** @override */
@@ -130,14 +96,5 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
    */
   async delete() {
     await this.deleteByPath(this.#pathOnParent);
-  }
-
-  /**
-   * Returns the collection that contains this document instance. 
-   * @returns {Array<SyntheticDocument> | Object}
-   * @private
-   */
-  #getCollection() {
-    return PropertyUtil.getByPath(this._document, this.#collectionPath);
   }
 }
