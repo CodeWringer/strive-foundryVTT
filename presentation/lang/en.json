@@ -326,10 +326,11 @@
         "add": "Add Graded Effect"
       },
       "targetingType": {
-        "targetingTypeOf": "Targeting Type (%s)",
+        "none": "None",
         "singleTarget": "Single Target",
         "areaOfEffect": "Area of Effect",
-        "multipleSingleTarget": "Multiple Single Targets"
+        "multipleSingleTarget": "Multiple Single Targets",
+        "targetingTypeOf": "Targeting Type (%s)"
       }
     },
     "actor": {

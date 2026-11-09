@@ -2,6 +2,7 @@ import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import VisibilityRule from "../../model/visibility-rule.mjs";
+import { SheetUtil } from "../../util/sheet-utility.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
 import ViewState from "./view-state.mjs";
 
@@ -518,6 +519,7 @@ export default class ViewModel {
   #evaluateVisibilityRules() {
     for (const rule of this.visibilityRules) {
       const elements = this.element.find(rule.selector);
+      const isHoverEnabled = ValidationUtil.isDefined(rule.hoverTriggerElementSelector);
 
       if (rule.shouldBeHidden()) {
         elements.addClass("hidden");
@@ -525,6 +527,17 @@ export default class ViewModel {
       } else {
         elements.removeClass("hidden");
         elements.removeClass("suppress-hover");
+      }
+
+      if (isHoverEnabled) {
+        if (rule.hoverTriggerElementSelector === `#${this.id}`) {
+          SheetUtil.setHover(this.element, elements);
+        } else {
+          const triggerElement = this.element.find(rule.hoverTriggerElementSelector);
+          SheetUtil.setHover(triggerElement, elements);
+        }
+        // Ensures hoverable elements are hidden inititally. 
+        elements.addClass("hidden");
       }
     }
   }

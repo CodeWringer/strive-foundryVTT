@@ -100,7 +100,7 @@ export default class DocumentViewModel extends ViewModel {
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {Object} args.document An associated data document. 
+   * @param {Document} args.document An associated data document. 
    */
   constructor(args = {}) {
     super(args);

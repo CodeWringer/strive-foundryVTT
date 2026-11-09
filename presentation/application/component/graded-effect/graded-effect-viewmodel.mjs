@@ -4,10 +4,13 @@ import { COMPARISON_TYPES } from "../../../../business/model/domain/const/compar
 import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { ChoicesUtil } from "../../../util/choices-utility.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
@@ -24,12 +27,18 @@ export default class GradedEffectViewModel extends DocumentViewModel {
   set isEditable(value) {
     super.isEditable = value;
 
-    this.vmComparisonTargetType.visible = value;
-    if (value) {
-      this._emboldableElement.removeClass("embolden");
-    } else {
-      this._emboldableElement.addClass("embolden");
-    }
+    this.#updateDynamicConent();
+  }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> .context-menu",
+        shouldBeHidden: () => !this.isEditable,
+        hoverTriggerElementSelector: `#${this.id}`,
+      }),
+    ]);
   }
 
   /**
@@ -57,11 +66,13 @@ export default class GradedEffectViewModel extends DocumentViewModel {
    * * `fieldName: String` - Name of the field/property on this instance that was changed. 
    * * `newValue: Any` - Value after the change, and the current value. 
    * * `oldValue: Any` - Value prior to the change. 
+   * @param {Function<void> | undefined} args.onDelete Invoked when the `GradedEffect` is to be deleted. 
    */
   constructor(args = {}) {
     super(args);
 
     this.onChange = args.onChange ?? (() => { });
+    this.onDelete = args.onDelete ?? (() => { });
 
     this.document.onChange = (fieldName, newValue, oldValue) => {
       this.onChange(fieldName, newValue, oldValue);
@@ -144,16 +155,59 @@ export default class GradedEffectViewModel extends DocumentViewModel {
         this.document.unstructured = newValue;
       },
     });
+
+    this.vmContextMenu = new ButtonDropDownViewModel({
+      id: "context-menu",
+      parent: this,
+      options: [
+        new DropDownOption({
+          localizedValue: StringUtil.format(
+            StringUtil.getLoca("system.general.delete.deleteOf"),
+            StringUtil.getLoca("system.domain.gradedEffect.gradedEffect")
+          ),
+          icon: "fas fa-trash",
+          onClick: () => {
+            this.onDelete();
+          },
+        }),
+      ],
+      isEditable: true,
+      visible: true,
+      onClickContextData: args.item,
+    });
   }
 
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this._emboldableElement = this.element.find("> .emboldable");
+    this.#updateDynamicConent();
+  }
+
+  /**
+   * @private
+   */
+  #updateDynamicConent() {
+    if (ValidationUtil.isDefined(this.vmComparisonTargetType)) {
+      this.vmComparisonTargetType.visible = this.isEditable;
+    }
+
+    const emboldableElement = this.element.find("> .dynamic > .emboldable");
+    const dynamicElm = this.element.find("> .dynamic");
+
     if (this.isEditable) {
-      this._emboldableElement.removeClass("embolden");
+      emboldableElement.removeClass("embolden");
+
+      dynamicElm.removeClass("flex-row");
+      dynamicElm.removeClass("flex-middle");
+      dynamicElm.addClass("flex-column");
+      dynamicElm.addClass("flex-grow");
     } else {
-      this._emboldableElement.addClass("embolden");
+      emboldableElement.addClass("embolden");
+      
+      dynamicElm.addClass("flex-middle");
+      dynamicElm.addClass("flex-row");
+      dynamicElm.removeClass("flex-column");
+      dynamicElm.removeClass("flex-grow");
     }
   }
 }

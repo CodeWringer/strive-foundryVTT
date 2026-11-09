@@ -1,6 +1,6 @@
 import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
@@ -13,6 +13,17 @@ export default class ListItemViewModel extends ViewModel {
 
   /** @override */
   get clazz() { return ListItemViewModel; }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> .header > .context-menu",
+        shouldBeHidden: () => !this.isEditable || this.contextMenuOptions.length === 0,
+        hoverTriggerElementSelector: `#${this.id}`,
+      }),
+    ]);
+  }
 
   /**
    * @type {Boolean}
@@ -147,13 +158,6 @@ export default class ListItemViewModel extends ViewModel {
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
-
-    const contextMenuElms = this.element.find("> .header > .context-menu");
-    if (this.contextMenuOptions.length === 0) {
-      contextMenuElms.addClass("hidden");
-    } else {
-      SheetUtil.setHover(this.element, contextMenuElms);
-    }
 
     if (this.isExpanded 
       && (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name 

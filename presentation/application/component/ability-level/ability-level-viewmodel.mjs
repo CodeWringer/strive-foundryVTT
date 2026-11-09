@@ -1,5 +1,5 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import { SheetUtil } from "../../../util/sheet-utility.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -21,6 +21,17 @@ export default class AbilityLevelViewModel extends InputViewModel {
 
   /** @override */
   get clazz() { return AbilityLevelViewModel; }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> .read-mode > .roll-button",
+        shouldBeHidden: () => !this.isEditable,
+        hoverTriggerElementSelector: `#${this.id}`,
+      }),
+    ]);
+  }
 
   /**
    * @param {Object} args
@@ -97,12 +108,5 @@ export default class AbilityLevelViewModel extends InputViewModel {
         this.onRoll();
       },
     });
-  }
-
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    const rollButtonElm = this.element.find("> .read-mode > .roll-button");
-    SheetUtil.setHover(this.element, rollButtonElm);
   }
 }
