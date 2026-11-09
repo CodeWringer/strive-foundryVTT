@@ -1,4 +1,5 @@
 import ExpertiseDocument from "../../../../business/model/document/item/expertise-document.mjs";
+import { SkillRollSchema } from "../../../../business/model/domain/dice/ability-roll/skill-roll-schema.mjs";
 import { Sum, SumComponent } from "../../../../business/model/domain/summed-data.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
@@ -67,8 +68,26 @@ export default class ExpertiseHeaderViewModel extends BaseItemHeaderViewModel {
       onChange: (newValue) => {
         this.document.requiredLevel = newValue;
       },
-      onRoll: () => {
-        // TODO #762
+      onRoll: async () => {
+        const rollSchema = new SkillRollSchema({
+          document: this.document.parentDocument,
+        });
+        const queried = await rollSchema.queryRollData();
+
+        if (!ValidationUtil.isDefined(queried)) return; // User canceled. 
+
+        const actor = this.document.parentDocument.parentDocument;
+
+        const rollData = await rollSchema.getRollData(queried);
+        const rollResult = await rollData.roll();
+        await rollResult.sendToChat({
+          visibilityMode: queried.visbilityMode,
+          actor: actor,
+          primaryTitle: actor.name,
+          primaryImage: actor.img,
+          secondaryTitle: this.document.name,
+          secondaryImage: this.document.img,
+        });
       },
     });
   }

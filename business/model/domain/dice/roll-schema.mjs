@@ -1,3 +1,11 @@
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import DynamicComponent from "../../../../presentation/application/component/dynamic-component/dynamic-component.mjs";
+import InputDropDownViewModel from "../../../../presentation/application/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import RowViewModel from "../../../../presentation/application/component/row/row-viewmodel.mjs";
+import ConfirmableModalDialog from "../../../../presentation/application/dialog/confirmable-modal-dialog/confirmable-modal-dialog.mjs";
+import Document from "../../document/document.mjs";
+import { VISIBILITY_MODES } from "../const/visibility-modes.mjs";
 import RollData from "./roll-data.mjs"
 import RollQueryData from "./roll-query-data.mjs"
 
@@ -13,11 +21,11 @@ import RollQueryData from "./roll-query-data.mjs"
  * @example
  * ```JS
  *  const rollSchema = new RollSchema();
- *  const queried = await rollSchema.queryRollData(myDocument);
+ *  const queried = await rollSchema.queryRollData();
  * 
- *  if (ValidationUtil.isDefined(queried) === false) return; // User canceled. 
+ *  if (!ValidationUtil.isDefined(queried)) return; // User canceled. 
  * 
- *  const rollData = await rollSchema.getRollData(myDocument, queried);
+ *  const rollData = await rollSchema.getRollData(queried);
  *  const rollResult = await rollData.roll();
  *  await rollResult.sendToChat({
  *    visibilityMode: queried.visbilityMode,
@@ -41,13 +49,13 @@ import RollQueryData from "./roll-query-data.mjs"
  */
 export class RollSchema {
   /**
-   * Internal name of the bonus dice `SumComponent`. 
+   * Internal name of the modify dice `SumComponent`. 
    * 
    * @type {String}
    * @readonly
    * @static
    */
-  static BONUS_DICE_COMPONENT = "bonus";
+  static MODIFY_DICE_COMPONENT = "modify";
 
   /**
    * @type {String}
@@ -58,6 +66,7 @@ export class RollSchema {
 
   /**
    * @param {Object} args 
+   * @param {Document} args.document
    * @param {Number | undefined} args.dieFaces The number of faces on a die. 
    * * default `6`
    * @param {Number | undefined} args.hitThreshold Sets the lower bound of faces that are considered 
@@ -65,22 +74,24 @@ export class RollSchema {
    * * default `5`
    */
   constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["document"]);
+
+    this.document = args.document;
     this.dieFaces = args.dieFaces ?? 6;
     this.hitThreshold = args.hitThreshold ?? 5;
   }
 
   /**
-   * Returns the roll data for the given document. 
+   * Returns the roll data for the document. 
    * 
-   * @param {Any} document 
    * @param {RollQueryData} rollQueryData 
    * 
-   * @returns {RollData} 
+   * @returns {Promise<RollData>} 
    * 
    * @abstract
    * @async
    */
-  async getRollData(document, rollQueryData) {
+  async getRollData(rollQueryData) {
     throw new Error("Not implemented");
   }
 
@@ -88,64 +99,67 @@ export class RollSchema {
    * Prompts the user to enter required non-inferrable data for the roll, 
    * such as the obstacle formula. 
    * 
-   * @param {Any} document 
-   * 
-   * @returns {RollQueryData | undefined} The queried roll data or undefined, 
+   * @returns {Promise<RollQueryData | undefined>} The queried roll data or undefined, 
    * if the user canceled. 
    * 
    * @async
    */
-  async queryRollData(document) {
+  async queryRollData() {
     // Prepare the dialog. 
     // By default, it allows selection of the visibility mode. 
-    // const dialog = new DynamicInputDialog({
-    //   localizedTitle: game.i18n.localize("system.roll.query"),
-    //   inputDefinitions: [
-    //     new DynamicInputDefinition({
-    //       name: this._nameInputVisibility,
-    //       template: InputDropDownViewModel.TEMPLATE,
-    //       viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
-    //         id: id,
-    //         parent: parent,
-    //         value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
-    //         options: VISIBILITY_MODES.asChoices(),
-    //         ...overrides,
-    //       }),
-    //       localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
-    //     }),
-    //   ],
-    // });
+    const dialog = new ConfirmableModalDialog({
+      title: StringUtil.getLoca("system.general.roll.query"),
+      easyDismissal: true,
+      sections: [
+        new DynamicComponent({
+          template: RowViewModel.TEMPLATE,
+          cssClass: "grid-2col",
+          viewModelFactory: (parent) => new RowViewModel({
+            parent: parent,
+            sections: [
+              new DynamicComponent({
+                html: `<p>${StringUtil.getLoca("system.general.messageVisibility.visibility")}</p>`
+              }),
+              new DynamicComponent({
+                template: InputDropDownViewModel.TEMPLATE,
+                viewModelFactory: (parent) => new InputDropDownViewModel({
+                  id: "visibility",
+                  parent: parent,
+                  value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+                  options: VISIBILITY_MODES.asChoices(),
+                }),
+              }),
+            ],
+          }),
+        }),
+      ],
+    });
 
-    return await this._queryRollData(document, dialog);
+    return await this._queryRollData(dialog);
   }
 
   /**
    * Returns a sum of dice components representing all possible combinations 
    * a user may choose from when rolling. 
    * 
-   * @param {Document} document 
-   * 
    * @returns {Array<Sum>}
    */
-  getAvailableDiceComponents(document) {
+  getAvailableDiceComponents() {
     throw new Error("Not implemented");
   }
 
   /**
    * Returns an explanation of how the dice availabilites came to be. 
    * 
-   * @param {Document} document 
-   * 
    * @returns {String}
    */
-  getAvailableDiceComponentExplanation(document) {
+  getAvailableDiceComponentExplanation() {
     throw new Error("Not implemented");
   }
 
   /**
    * Internal abstract method to prompt the user. Is called by `queryRollData`. 
    * 
-   * @param {Any} document 
    * @param {DynamicInputDialog} dialog The dialog to extend with required inputs. 
    * 
    * @returns {Promise<RollQueryData | undefined>} The queried roll data or undefined, 
@@ -155,7 +169,7 @@ export class RollSchema {
    * @abstract
    * @async
    */
-  async _queryRollData(document, dialog) {
+  async _queryRollData(dialog) {
     throw new Error("Not implemented");
   }
 }

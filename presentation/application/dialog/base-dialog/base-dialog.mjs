@@ -141,6 +141,15 @@ export default class BaseDialog extends FoundryWrapper.HandlebarsApplicationMixi
     });
   }
 
+  /**
+   * Recurses through the `ViewModel` and its children and returns the one whose ID matches the given `id`. 
+   * @param {String} id 
+   * @returns {ViewModel | undefined}
+   */
+  find(id) {
+    return this.viewModel.find(id);
+  }
+
   /** 
    * Returns an object that represents sheet and enriched item data. 
    * 

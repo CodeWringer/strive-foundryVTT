@@ -60,6 +60,7 @@ import ExpertiseItemSheetViewModel from "./item/expertise/expertise-item-sheet-v
 import ExpertiseItemSheet from "./item/expertise/expertise-item-sheet.mjs";
 import GeneralApplication from "./general/general-application.mjs";
 import GeneralDocumentApplication from "./general/general-document-application.mjs";
+import ViewState from "./view-model/view-state.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -70,6 +71,7 @@ export const application = {
   dialog: dialog,
   viewModel: {
     ViewModel: ViewModel,
+    ViewState: ViewState,
     DocumentViewModel: DocumentViewModel,
     ViewModelToolTipDefinition: ViewModelToolTipDefinition,
     ViewModelCollection: ViewModelCollection,

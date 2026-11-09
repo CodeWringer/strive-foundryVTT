@@ -513,6 +513,25 @@ export default class ViewModel {
   }
 
   /**
+   * Recurses through children and returns the one whose ID matches the given `id`. 
+   * @param {String} id 
+   * @returns {ViewModel | undefined}
+   */
+  find(id) {
+    if (this.id === id || this.independentId === id) {
+      return this;
+    } else {
+      for (const child of this.children) {
+        const foundViewModel = child.find(id);
+        if (ValidationUtil.isDefined(foundViewModel)) {
+          return foundViewModel;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  /**
    * Evaluates all the `VisibilityRule`s and applies them. 
    * @private
    */

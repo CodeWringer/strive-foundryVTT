@@ -16,7 +16,7 @@ import ResolvedObstacle from "./resolved-obstacle.mjs";
  * @property {SumComponent} bonusDiceComponent
  * @property {Number} hitModifier Number of automatic hits/misses. 
  * @property {Number} hitLimit Maximum number of hits that may count towards the overall result. 
- * @property {Number} compensationPoints The number of miss-faces that can be turned 
+ * @property {Number} edge The number of miss-faces that can be turned 
  * to the next higher face, until they score a hit. 
  * @property {RollDiceModifierType} rollModifier The selected roll modifier. 
  */
@@ -28,10 +28,10 @@ export default class RollData {
    * hits. Any face turning up this number and numbers above, are considered hits. 
    * @param {String} args.obFormula The obstacle formula to roll against. 
    * @param {Sum} args.diceComponents The number of dice to roll. 
-   * @param {SumComponent} args.bonusDiceComponent 
+   * @param {SumComponent} args.modifyDiceComponent 
    * @param {Number | undefined} args.hitModifier Number of automatic hits/misses. 
    * @param {Number | undefined} args.hitLimit Maximum number of hits that may count towards the overall result. 
-   * @param {Number | undefined} args.compensationPoints The number of miss-faces that can be turned 
+   * @param {Number | undefined} args.edge The number of miss-faces that can be turned 
    * to the next higher face, until they score a hit. 
    * @param {RollDiceModifierType} args.rollModifier The selected roll modifier. 
    */
@@ -49,10 +49,10 @@ export default class RollData {
     this.hitThreshold = args.hitThreshold;
     this.obFormula = args.obFormula;
     this.diceComponents = args.diceComponents;
-    this.bonusDiceComponent = args.bonusDiceComponent;
+    this.bonusDiceComponent = args.modifyDiceComponent;
     this.hitModifier = args.hitModifier ?? 0;
     this.hitLimit = args.hitLimit ?? 0;
-    this.compensationPoints = args.compensationPoints ?? 0;
+    this.edge = args.edge ?? 0;
     this.rollModifier = args.rollModifier;
   }
 
@@ -61,19 +61,19 @@ export default class RollData {
    * 
    * Calling this method again will produce different results every time. 
    * 
-   * @returns {RollResult}
+   * @returns {Promise<RollResult>}
    * 
    * @async
    */
   async roll() {
-    const intermediateResults = await this._rollIntermediate();
-    const results = this._finalize(intermediateResults);
+    const intermediateResults = await this.#rollIntermediate();
+    const results = this.#finalize(intermediateResults);
 
     return new RollResult({
       inputData: new RollInputData({
         dice: this.diceComponents,
         bonusDice: this.bonusDiceComponent.value,
-        compensationPoints: this.compensationPoints,
+        edge: this.edge,
         hitModifier: this.hitModifier,
         hitLimit: this.hitLimit,
         rollModifier: this.rollModifier,
@@ -92,9 +92,9 @@ export default class RollData {
    * @async
    * @private
    */
-  async _rollIntermediate() {
-    const finalDiceCount = this._getFinalDiceCount();
-    const resolvedObstacle = await this._resolveOb(this.obFormula);
+  async #rollIntermediate() {
+    const finalDiceCount = this.#getFinalDiceCount();
+    const resolvedObstacle = await this.#resolveOb(this.obFormula);
 
     let rolledFaces = [];
     // Only try to do any rolls, if there are dice to roll. 
@@ -108,8 +108,8 @@ export default class RollData {
     }
     
     // Analyze results. 
-    const faceResults = this._evaluateFaces(rolledFaces, resolvedObstacle.ob);
-    const degreeAndOutcome = this._evaluateDegreeAndOutcome({
+    const faceResults = this.#evaluateFaces(rolledFaces, resolvedObstacle.ob);
+    const degreeAndOutcome = this.#evaluateDegreeAndOutcome({
       hitCount: faceResults.hits.length, 
       hitLimit: this.hitLimit,
       obstacle: resolvedObstacle.ob,
@@ -136,7 +136,7 @@ export default class RollData {
    * 
    * @private
    */
-  _finalize(intermediateResults) {
+  #finalize(intermediateResults) {
     const modifiedFaces = intermediateResults.faces.concat([]); // Safe copy. 
     const resolvedObstacle = intermediateResults.resolvedObstacle;
 
@@ -165,26 +165,26 @@ export default class RollData {
     }
 
     // Apply compensation points. 
-    let remainingCompensationPoints = this.compensationPoints;
+    let remainingEdge = this.edge;
     for (let i = 0; i < modifiedFaces.length; i++) {
       const face = modifiedFaces[i];
 
-      if (remainingCompensationPoints < 1) break;
+      if (remainingEdge < 1) break;
 
       const delta = this.hitThreshold - face;
-      if (delta > remainingCompensationPoints) {
-        modifiedFaces[i] = face + remainingCompensationPoints;
+      if (delta > remainingEdge) {
+        modifiedFaces[i] = face + remainingEdge;
         break;
       } else if (delta > 0) {
         modifiedFaces[i] = face + delta;
-        remainingCompensationPoints -= delta;
+        remainingEdge -= delta;
       }
     }
 
     // Analyze results. 
-    const hitLimit = this.hitLimit + this.compensationPoints;
-    const faceResults = this._evaluateFaces(modifiedFaces, resolvedObstacle.ob);
-    const degreeAndOutcome = this._evaluateDegreeAndOutcome({
+    const hitLimit = this.hitLimit + this.edge;
+    const faceResults = this.#evaluateFaces(modifiedFaces, resolvedObstacle.ob);
+    const degreeAndOutcome = this.#evaluateDegreeAndOutcome({
       hitCount: faceResults.hits.length, 
       hitLimit: hitLimit,
       obstacle: resolvedObstacle.ob,
@@ -209,7 +209,7 @@ export default class RollData {
    * 
    * @private
    */
-  _getFinalDiceCount() {
+  #getFinalDiceCount() {
     let modifiedDiceCount = this.diceComponents.total;
     
     if (this.rollModifier.name === ROLL_DICE_MODIFIER_TYPES.HALF_ROUNDED_DOWN.name) {
@@ -229,7 +229,7 @@ export default class RollData {
    * 
    * @async
    */
-  async _resolveOb(obFormula) {
+  async #resolveOb(obFormula) {
     const rgxIsPlainNumber = new RegExp("^\\d+$");
     const isPlainNumber = common.util.validation.isDefined(obFormula.match(rgxIsPlainNumber));
 
@@ -268,7 +268,7 @@ export default class RollData {
    * 
    * @private
    */
-  _evaluateDegreeAndOutcome(args = {}) {
+  #evaluateDegreeAndOutcome(args = {}) {
     common.util.validation.validateOrThrow(args, ["hitCount", "hitLimit", "obstacle"]);
     let degree = 0;
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
@@ -306,7 +306,7 @@ export default class RollData {
    * 
    * @private
    */
-  _evaluateFaces(rolledFaces, obstacle) {
+  #evaluateFaces(rolledFaces, obstacle) {
     const hits = [];
     const misses = [];
     const blankCount = Math.max(0, obstacle - rolledFaces.length);

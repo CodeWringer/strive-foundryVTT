@@ -127,7 +127,7 @@ export default class GeneralApplication extends FoundryWrapper.HandlebarsApplica
 
   /** @override */
   async _postRender(context, options) {
-    this.#html = context.viewModel.sheet.form; // TODO #762 verify
+    this.#html = context.viewModel.sheet.form; // TODO verify
     this.#content = $(this.html).find("section.window-content");
 
     await this.viewModel.activateListeners(this.#html);

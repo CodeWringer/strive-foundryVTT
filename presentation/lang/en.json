@@ -217,7 +217,7 @@
         "selectSpecific": "Hand-pick It"
       },
       "messageVisibility": {
-        "label": "Visibility",
+        "visibility": "Visibility",
         "query": "Select Message Visibility",
         "public": "Public",
         "self": "Self",
@@ -278,6 +278,16 @@
         "minute": "Minute(s)",
         "hour": "Hour(s)",
         "day": "Day(s)"
+      },
+      "roll": {
+        "query": "Prepare Roll",
+        "obstacle": {
+          "obstacle": "Roll Obstacle",
+          "abbreviation": "Ob",
+          "edge": "Edge",
+          "modifyDice": "Modify Number of Dice",
+          "forkReminder": "Don't forget to Fork other Known Skills into your Test!"
+        }
       }
     },
     "domain": {

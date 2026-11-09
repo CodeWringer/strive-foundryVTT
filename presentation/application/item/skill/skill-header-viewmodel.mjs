@@ -14,6 +14,7 @@ import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 import VisibilityRule from "../../../model/visibility-rule.mjs";
 import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 import { ACTOR_TYPES } from "../../../../business/model/domain/const/actor-types.mjs";
+import { SkillRollSchema } from "../../../../business/model/domain/dice/ability-roll/skill-roll-schema.mjs";
 
 export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
@@ -77,8 +78,26 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
       onChange: (newValue) => {
         this.document.level = newValue;
       },
-      onRoll: () => {
-        // TODO #762
+      onRoll: async () => {
+        const rollSchema = new SkillRollSchema({
+          document: this.document,
+        });
+        const queried = await rollSchema.queryRollData();
+
+        if (!ValidationUtil.isDefined(queried)) return; // User canceled. 
+
+        const actor = this.document.parentDocument;
+
+        const rollData = await rollSchema.getRollData(queried);
+        const rollResult = await rollData.roll();
+        await rollResult.sendToChat({
+          visibilityMode: queried.visbilityMode,
+          actor: actor,
+          primaryTitle: actor.name,
+          primaryImage: actor.img,
+          secondaryTitle: this.document.name,
+          secondaryImage: this.document.img,
+        });
       },
     });
 

@@ -17,7 +17,7 @@ import { ROLL_DICE_MODIFIER_TYPES } from "./roll-dice-modifier-types.mjs"
  * that were available in the roll. 
  * @property {Number} bonusDice An additional number of dice that 
  * were rolled and unaffected by the roll modifier. 
- * @property {Number} compensationPoints Modifies the faces of misses, 
+ * @property {Number} edge Modifies the faces of misses, 
  * to potentially turn them into hits. 
  * @property {Number} hitModifier Number of automatic hits/misses. 
  * @property {Number} hitLimit Maximum number of hits that may count towards the overall result. 
@@ -31,7 +31,7 @@ export class RollInputData {
    * that were available in the roll. 
    * @param {Number} args.bonusDice An additional number of dice that 
    * were rolled and unaffected by the roll modifier. 
-   * @param {Number} args.compensationPoints Modifies the faces of misses, 
+   * @param {Number} args.edge Modifies the faces of misses, 
    * to potentially turn them into hits. 
    * @param {Number | undefined} args.hitModifier Number of automatic hits/misses. 
    * @param {Number | undefined} args.hitLimit Maximum number of hits that may count towards the overall result. 
@@ -42,13 +42,13 @@ export class RollInputData {
     common.util.validation.validateOrThrow(args, [
       "dice",
       "bonusDice",
-      "compensationPoints",
+      "edge",
       "rollModifier",
     ]);
 
     this.dice = args.dice;
     this.bonusDice = args.bonusDice;
-    this.compensationPoints = args.compensationPoints;
+    this.edge = args.edge;
     this.hitModifier = args.hitModifier ?? 0;
     this.hitLimit = args.hitLimit ?? 0;
     this.rollModifier = args.rollModifier;
@@ -229,11 +229,11 @@ export class RollResult {
       ));
     }
 
-    if (this.inputData.compensationPoints !== 0) {
+    if (this.inputData.edge !== 0) {
       components.push(new SumComponent(
-        "compensationPoints",
-        "system.roll.compensationPoints",
-        this.inputData.compensationPoints,
+        "edge",
+        "system.roll.edge",
+        this.inputData.edge,
       ));
     }
 

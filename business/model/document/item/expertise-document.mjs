@@ -9,7 +9,6 @@ import GradedEffect from "../../domain/graded-effect.mjs";
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 import SyntheticDocument from "../synthetic-document.mjs";
-import SkillDocument from "./skill-document.mjs";
 // Do not import SkillDocument
 
 /**
