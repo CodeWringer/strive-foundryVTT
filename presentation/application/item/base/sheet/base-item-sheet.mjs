@@ -147,7 +147,6 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
   /** @override */
   async close() {
     if (ValidationUtil.isDefined(this.viewModel)) {
-      this.viewModel.writeViewState();
       this.viewModel.dispose();
       this.viewModel = null;
     }

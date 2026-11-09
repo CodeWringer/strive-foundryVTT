@@ -97,7 +97,6 @@ export default class GeneralApplication extends FoundryWrapper.HandlebarsApplica
   /** @override */
   async close() {
     if (ValidationUtil.isDefined(this.viewModel)) {
-      this.viewModel.writeViewState();
       this.viewModel.dispose();
       this.viewModel = null;
     }
