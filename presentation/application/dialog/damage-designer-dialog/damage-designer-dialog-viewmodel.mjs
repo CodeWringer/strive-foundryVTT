@@ -79,7 +79,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     this.ui = args.ui;
     this.isEditable = true;
 
-    this.registerViewStateProperty("_uiState");
+    this.viewState.register("_uiState");
 
     this.vmRefresh = new ButtonViewModel({
       id: "vmRefresh",

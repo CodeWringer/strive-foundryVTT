@@ -1,3 +1,4 @@
+import Document from "../../../../../business/model/document/document.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import { SlideDisplaceAnim } from "../../../../animation/slide-displace-anim.mjs";
 import { SlideInAnim } from "../../../../animation/slide-in-anim.mjs";

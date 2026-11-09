@@ -48,6 +48,7 @@ export default class ListItemViewModel extends ViewModel {
     if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name) return;
 
     this.#isExpanded = value;
+    this.viewState.write();
     if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name) {
       const contentElm = this.element.find("> .content");
 
@@ -126,6 +127,9 @@ export default class ListItemViewModel extends ViewModel {
     this.contextMenuOptions = args.contextMenuOptions ?? [];
     this.expansionMode = args.expansionMode ?? LIST_ITEM_EXPANSION_MODES.window;
     this.#isExpanded = args.isExpanded ?? false;
+
+    this.viewState.register("isExpanded");
+    this.viewState.read();
 
     this.vmContextMenu = new ButtonDropDownViewModel({
       id: "context-menu",

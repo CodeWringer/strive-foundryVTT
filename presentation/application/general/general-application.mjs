@@ -120,7 +120,7 @@ export default class GeneralApplication extends FoundryWrapper.HandlebarsApplica
 
     // Ensure view model. 
     this.viewModel = this.createViewModel(this._getViewModelConstructorArgs());
-    this.viewModel.readAllViewState();
+    this.viewModel.viewState.read();
     context.viewModel = this.viewModel;
 
     return context;

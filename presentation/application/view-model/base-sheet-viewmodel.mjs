@@ -46,7 +46,7 @@ export default class BaseSheetViewModel extends DocumentViewModel {
     this.sheet = args.sheet;
 
     // Register view state properties. 
-    this.registerViewStateProperty("_scrollValue");
+    this.viewState.register("_scrollValue");
 
     // Prepare scroll value. 
     this.saveScrollPosition();
@@ -68,7 +68,7 @@ export default class BaseSheetViewModel extends DocumentViewModel {
    */
   saveScrollPosition() {
     this._scrollValue = this.sheet.scrollValue ?? 0;
-    this.writeViewState();
+    this.viewState.write();
   }
 
   /**

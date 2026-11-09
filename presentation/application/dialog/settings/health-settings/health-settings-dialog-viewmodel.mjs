@@ -54,11 +54,11 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     this.formApplication = args.formApplication;
 
     // Register cachable view state properties. 
-    this.registerViewStateProperty("stateSettings");
+    this.viewState.register("stateSettings");
     
     // Load state. 
     this.stateSettings = GameSystemWorldSettings.get(GameSystemWorldSettings.KEY_HEALTH_SETTINGS);
-    this.readAllViewState();
+    this.viewState.read();
 
     // Prepare data for system default health state visibilities. 
     this._stateVisibilityItems = this._getHealthStateVisibilityViewModels();
@@ -114,7 +114,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * @private
    */
   _renderFormApplication() {
-    this.writeAllViewState();
+    this.viewState.write();
     this.formApplication.render(true);
   }
 }

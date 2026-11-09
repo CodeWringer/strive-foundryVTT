@@ -1,9 +1,9 @@
 import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
-import { PropertyUtil } from "../../../common/util/property-utility.mjs";
 import { UuidUtil } from "../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import VisibilityRule from "../../model/visibility-rule.mjs";
 import Tooltip from "../component/tooltip/tooltip.mjs";
+import ViewState from "./view-state.mjs";
 
 /**
  * @summary
@@ -18,14 +18,16 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * @description
  * For example, in order to determine whether an element in the ui template should be visible, instead of having 
  * if-blocks inside the template which check for many conditions, there is a simple if block that only queries 
- * one boolean value from the view model. E. g.: 
+ * one boolean value from the view model. E.g.: 
  * ```HTML
  * {{#if viewModel.isHpVisible}}<span>viewModel.HP</span>{{/if}}
  * ```
  * The advantage of this is to keep ui-logic outside of ui templates, where Handlebars would take over executing 
  * its helper functions. Those helper functions are very difficult to debug, as it is difficult to keep track 
  * of where they're actually being called. With a view model, it is immediately apparent which template 
- * is faulty and the code being run can be easily debugged, too. 
+ * is faulty and the code being run can be easily debugged. 
+ * 
+ * ## Less Indirection
  * 
  * Another advantage of the view models is that one can pass in specific instances to be used in operations. 
  * As an example, a button on an actor sheet is supposed to delete a specific item from the actor, when 
@@ -39,7 +41,9 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * then work with that instance, directly. A layer of indirection and DOM manipulation/analysis can thus be 
  * omitted, entirely. 
  * 
- * Also a feature of the view models is the ability to have persistent view state. 
+ * ## View State
+ * 
+ * Also a feature of the view models is the ability to have persistent view state - at least during a session. 
  * In order to achieve that, view models can write their current state to an object, which can then be 
  * stored in some global location and later retrieved and applied to the view model. 
  * 
@@ -63,14 +67,15 @@ import Tooltip from "../component/tooltip/tooltip.mjs";
  * [...]
  * 
  * constructor() {
- *   this.registerViewStateProperty("_isExpanded");
+ *   this.viewState.register("_isExpanded");
+ *   this.viewState.read();
  * }
  * 
  * [...]
  * 
  * // Some other code, maybe an event callback.
  * this._isExpanded = true;
- * this.writeViewState(); // Must be called explicitly to persist the view state change. 
+ * this.viewState.write(); // Must be called explicitly to persist the view state change. 
  * ```
  * 
  * @abstract Inheritors MUST implement:
@@ -118,14 +123,6 @@ export default class ViewModel {
   get isOwner() { throw new Error("Deprecated"); }
   get document() { throw new Error("Deprecated"); }
   
-  /**
-   * The data source for view state objects. 
-   * 
-   * @type {Map<String, Object>}
-   * @private
-   */
-  #viewStateSource = game.strive.viewStates;
-
   /**
    * Internal unique ID of this view model instance.
    * 
@@ -196,7 +193,7 @@ export default class ViewModel {
   set parent(value) {
     if (value == this) {
       throw new Error("InvalidArgumentException: Recursion! A view model cannot be assigned as its own parent");
-    } else if (this.isParentOf(value) === true) {
+    } else if (this.#isParentOf(value) === true) {
       throw new Error("InvalidArgumentException: Recursion! A child or indirect child view model cannot be assigned as the parent of one of its parents");
     }
 
@@ -222,15 +219,6 @@ export default class ViewModel {
   children = [];
 
   /**
-   * An array of property names. These are the properties of *this* view model that will 
-   * automatically be written to / restored from view state. 
-   * 
-   * @type {Array<String>}
-   * @protected
-   */
-  viewStateFields = [];
-
-  /**
    * @type {Boolean}
    * @protected
    */
@@ -251,7 +239,7 @@ export default class ViewModel {
       child.isEditable = value;
     }
 
-    this.evaluateVisibilityRules();
+    this.#evaluateVisibilityRules();
   }
   
   /**
@@ -345,6 +333,17 @@ export default class ViewModel {
   get visibilityRules() { return []; }
 
   /**
+   * @type {ViewState}
+   * @private
+   */
+  #viewState;
+  /**
+   * @type {ViewState}
+   * @readonly
+   */
+  get viewState() { return this.#viewState; }
+
+  /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
@@ -387,6 +386,10 @@ export default class ViewModel {
       });
     }
 
+    this.#viewState = new ViewState({
+      viewModel: this,
+    });
+
     ExtenderUtil.extend(this, this.clazz);
   }
 
@@ -425,45 +428,6 @@ export default class ViewModel {
   }
 
   /**
-   * Returns a map of view models and their respective 
-   * update arguments. 
-   * 
-   * By default, all child view models will have their `isEditable` and showSecrets properties updated. 
-   * 
-   * **IMPORTANT** You only need to override this if a child view model requires 
-   * more/other arguments than the default as described above. 
-   * 
-   * @example
-   * ```JS
-   * _getChildUpdates() {
-   *   const updates = super._getChildUpdates();
-   *   updates.set(myViewModel, {
-   *     ...updates.get(myViewModel),
-   *     a: 42,
-   *   });
-   *   return updates;
-   * }
-   * ```
-   * 
-   * @returns {Map<ViewModel, Object>} A map of view models and their 
-   * update arguments. 
-   * 
-   * @virtual
-   */
-  _getChildUpdates() {
-    const result = new Map();
-
-    for (const childViewModel of this.children) {
-      result.set(childViewModel, {
-        isEditable: this.isEditable,
-        showSecrets: this.showSecrets,
-      });
-    }
-
-    return result;
-  }
-
-  /**
    * Registers events on elements of the given DOM. 
    * 
    * @param {JQuery | String} html DOM of the sheet for which to register listeners. 
@@ -498,24 +462,7 @@ export default class ViewModel {
       }
     }
 
-    this.evaluateVisibilityRules();
-  }
-
-  /**
-   * Evaluates all the `VisibilityRule`s and applies them. 
-   */
-  evaluateVisibilityRules() {
-    for (const rule of this.visibilityRules) {
-      const elements = this.element.find(rule.selector);
-
-      if (rule.shouldBeHidden()) {
-        elements.addClass("hidden");
-        elements.addClass("suppress-hover");
-      } else {
-        elements.removeClass("hidden");
-        elements.removeClass("suppress-hover");
-      }
-    }
+    this.#evaluateVisibilityRules();
   }
 
   /**
@@ -533,6 +480,7 @@ export default class ViewModel {
     }
 
     this.parent = null;
+    this.viewState.write();
 
     // Dispose of children. 
     if (ValidationUtil.isDefined(this.children)) {
@@ -546,161 +494,6 @@ export default class ViewModel {
     }
     
     this.children = undefined;
-  }
-
-  /**
-   * @summary
-   * Registers a property of *this* view model as view state storeable/restorable. 
-   * 
-   * @description
-   * Silently prevents adding the same property name multiple times. 
-   * 
-   * Does not verify that a property with the given name exists on this view model instance. 
-   * 
-   * @param {String} propertyName Name of a property to register as view state writeable/restorable. 
-   */
-  registerViewStateProperty(propertyName) {
-    const existingEntry = this.viewStateFields.find(it => { return it === propertyName });
-    if (existingEntry === undefined) {
-      this.viewStateFields.push(propertyName);
-    }
-  }
-
-  /**
-   * @summary
-   * Returns the current view state. 
-   * 
-   * @description
-   * Creates an object that represents the view state, if there is any view state to store. 
-   * 
-   * Keep in mind that **only** _this_ view model's state is returned. **No** child view model states 
-   * will be included! 
-   * 
-   * Whether there is any view state to store, is determined by whether any properties have been registered 
-   * and if any of the child view models return view state to store. 
-   * 
-   * This method should only have to be overridden, if specific data transformations need to be applied to values 
-   * to store on the view state. 
-   * 
-   * @returns {Object | undefined} An object that represents the current view state, 
-   * or undefined, if there is no view state to save. 
-   * 
-   * @virtual
-   */
-  getViewState() {
-    if ((this.viewStateFields ?? []).length < 1) {
-      return undefined;
-    }
-
-    const viewState = Object.create(null);
-    for (const propertyName of this.viewStateFields) {
-      viewState[propertyName] = this[propertyName];
-    }
-
-    return viewState;
-  }
-  
-  /**
-   * @summary
-   * Applies the given view state, overriding any current values. 
-   * 
-   * @description
-   * This method applies any properties from the given view state to _this_ view model instance, whose names are contained 
-   * by the array of registered properties. 
-   * 
-   * Keep in mind that **only** _this_ view model's state is affected. **No** child view model states 
-   * will be affected! 
-   * 
-   * This method should only have to be overridden, if specific data transformations need to be applied to values 
-   * to apply from the view state. 
-   * 
-   * @param {Object | undefined} viewState The view state to apply, or undefined. 
-   * * It can be undefined, if there is no view state to store. This can be the case, if no properties are registered 
-   * as storeable. 
-   * 
-   * @virtual
-   */
-  applyViewState(viewState) {
-    // If the view state is undefined, it cannot be applied. 
-    if (viewState === undefined || viewState === null) return;
-
-    for (const propertyName of this.viewStateFields) {
-      // Skip any potential "mistakes" - for example from old versions of the code. 
-      if (PropertyUtil.hasProperty(viewState, propertyName) !== true) continue;
-      // Override the matching property's value. 
-      this[propertyName] = viewState[propertyName];
-    }
-  }
-  
-  /**
-   * Retrieves and applies the view state of _this_ view model, if possible. 
-   * 
-   * In order for this operation to succeed, view state properties must have been 
-   * registered and the view state written out, beforehand. 
-   */
-  readViewState() {
-    const viewState = this.#viewStateSource.get(this.id);
-    if (viewState !== undefined) {
-      this.applyViewState(viewState);
-    }
-  }
-
-  /**
-   * Retrieves and applies the view state of _this_ view model **and** of all 
-   * its children, if possible. 
-   * 
-   * In order for this operation to succeed, view state properties must have been 
-   * registered and the view state written out, beforehand. 
-   */
-  readAllViewState() {
-    this.readViewState();
-
-    for (const child of this.children) {
-      child.readAllViewState();
-    }
-  }
-
-  /**
-   * Stores the current view state of **only** _this_ view model. 
-   */
-  writeViewState() {
-    const viewState = this.getViewState()
-    if (ValidationUtil.isDefined(viewState) === true) {
-      this.#viewStateSource.set(this.id, viewState);
-    }
-  }
-
-  /**
-   * Stores the current view state of _this_ view model **and** all its children. 
-   */
-  writeAllViewState() {
-    this.writeViewState();
-    
-    for (const child of this.children) {
-      child.writeAllViewState();
-    }
-  }
-  
-  /**
-   * Returns true, if this view model is a direct or indirect parent of 
-   * the given view model instance. 
-   * 
-   * @param {ViewModel | undefined} viewModel A view model instance to check on whether it is 
-   * a direct or indirect child of this view model. 
-   * 
-   * @returns {Boolean} True, if this view model is a direct or indirect parent of 
-   * the given view model instance. 
-   */
-  isParentOf(viewModel) {
-    if (!ValidationUtil.isDefined(viewModel)) {
-      return false;
-    } else if (!ValidationUtil.isDefined(viewModel.parent)) {
-      return false;
-    } else if (viewModel.parent == this) {
-      return true;
-    } else {
-      return this.isParentOf(viewModel.parent);
-    }
   }
 
   /**
@@ -719,61 +512,42 @@ export default class ViewModel {
   }
 
   /**
-   * Returns an array of view model instances that have either been fetched 
-   * from the `currentList` or newly instantiated, using the `factoryFunc`. 
-   * 
-   * This internal method is meant for use when updating an array of child 
-   * view models, to fetch or create the needed child view models. 
-   * 
-   * @param {Array<Object>} documents An array of source documents. 
-   * These represent the current data state and will be compared against. 
-   * @param {Array<ViewModel>} currentList An array of "current" view model 
-   * instances. 
-   * @param {Function} factoryFunc A factory function that receives the default 
-   * instantiation arguments (`id`, `document` and `isEditable`) 
-   * and which must return a new instance of a view model of the expected type. 
-   * 
-   * @returns {Array<ViewModel>}
-   * 
-   * @protected
+   * Evaluates all the `VisibilityRule`s and applies them. 
+   * @private
    */
-  _getViewModels(documents, currentList, factoryFunc) {
-    const result = [];
-    
-    for (const document of documents) {
-      let vm = (currentList ?? []).find(it => it._id === document.id);
-      if (vm === undefined) {
-        vm = factoryFunc({
-          id: document.id,
-          document: document,
-          parent: this,
-          isEditable: this.isEditable,
-        });
-      }
-      result.push(vm);
-    }
+  #evaluateVisibilityRules() {
+    for (const rule of this.visibilityRules) {
+      const elements = this.element.find(rule.selector);
 
-    return result;
+      if (rule.shouldBeHidden()) {
+        elements.addClass("hidden");
+        elements.addClass("suppress-hover");
+      } else {
+        elements.removeClass("hidden");
+        elements.removeClass("suppress-hover");
+      }
+    }
   }
 
   /**
-   * Removes the parent from all view models of the given `list` array, which 
-   * are **not** also present on the `compare` array. 
+   * Returns true, if this view model is a direct or indirect parent of 
+   * the given view model instance. 
+   * @param {ViewModel | undefined} viewModel A view model instance to check on whether it is 
+   * a direct or indirect child of this view model. 
+   * @returns {Boolean} True, if this view model is a direct or indirect parent of 
+   * the given view model instance. 
    * 
-   * This internal method is meant for use when updating an array of child 
-   * view models, to ensure obsolete children aren't kept. 
-   * 
-   * @param {Array<ViewModel>} list An array of view models "to cull". 
-   * @param {Array<ViewModel>} compare An array of view models to compare against. 
-   * 
-   * @protected
+   * @private
    */
-  _cullObsolete(list, compare) {
-    for (const viewModel of list) {
-      const cull = compare.find(it => it._id === viewModel._id) === undefined;
-      if (cull === true) {
-        viewModel.parent = undefined;
-      }
+  #isParentOf(viewModel) {
+    if (!ValidationUtil.isDefined(viewModel)) {
+      return false;
+    } else if (!ValidationUtil.isDefined(viewModel.parent)) {
+      return false;
+    } else if (viewModel.parent == this) {
+      return true;
+    } else {
+      return this.#isParentOf(viewModel.parent);
     }
   }
 }

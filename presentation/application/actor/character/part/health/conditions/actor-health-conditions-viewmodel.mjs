@@ -52,7 +52,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     }
     
     // Immediately write view state. 
-    this.writeViewState();
+    this.viewState.write();
   }
 
   /**
@@ -74,8 +74,8 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
 
     this.document = args.document;
 
-    this.registerViewStateProperty("_isExpanded");
-    this.readViewState();
+    this.viewState.register("_isExpanded");
+    this.viewState.read();
 
     const systemHealthConditions = SystemHealthConditionBroker.conditions;
     const characterHealthConditions = this.document.health.conditions;

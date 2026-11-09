@@ -75,7 +75,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     this.ui = args.ui;
     this.isEditable = true;
 
-    this.registerViewStateProperty("_uiState");
+    this.viewState.register("_uiState");
 
     this.vmHitThresholdSlider = new InputSliderViewModel({
       id: "vmHitThresholdSlider",

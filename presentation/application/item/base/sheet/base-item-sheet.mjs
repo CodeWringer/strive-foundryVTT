@@ -171,7 +171,7 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
 
     // Ensure view model. 
     this.viewModel = this.createViewModel(document, documentContext);
-    this.viewModel.readAllViewState();
+    this.viewModel.viewState.read();
     context.viewModel = this.viewModel;
 
     return context;

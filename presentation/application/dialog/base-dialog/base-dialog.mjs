@@ -155,7 +155,7 @@ export default class BaseDialog extends FoundryWrapper.HandlebarsApplicationMixi
 
     // Ensure view model. 
     this.viewModel = this.createViewModel();
-    this.viewModel.readAllViewState();
+    this.viewModel.viewState.read();
     context.viewModel = this.viewModel;
 
     return context;
