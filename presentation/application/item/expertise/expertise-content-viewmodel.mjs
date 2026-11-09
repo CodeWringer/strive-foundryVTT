@@ -38,10 +38,6 @@ export default class ExpertiseContentViewModel extends BaseItemContentViewModel 
         shouldBeHidden: () => !this.isEditable && !this.hasDynamicContent,
       }),
       new VisibilityRule({
-        selector: "> div > .dynamic-content > div > .graded-effects",
-        shouldBeHidden: () => !this.isEditable && this.document.gradedEffects.entries < 1,
-      }),
-      new VisibilityRule({
         selector: "> div > .dynamic-content > div > .action-points",
         shouldBeHidden: () => !this.isEditable && this.document.actionPoints.current < 1,
       }),
