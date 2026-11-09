@@ -57,6 +57,10 @@ export default class ExpertiseContentViewModel extends BaseItemContentViewModel 
         selector: "> div > .dynamic-content > div > .obstacle",
         shouldBeHidden: () => !this.isEditable && !this.document.obstacle.enabled,
       }),
+      new VisibilityRule({
+        selector: "> div > .graded-effects",
+        shouldBeHidden: () => !this.isEditable && this.document.gradedEffects.entries.length === 0,
+      }),
     ]);
   }
 
