@@ -1,6 +1,5 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import Complication from "../../domain/complication/complication.mjs";
-import { TIME_UNITS } from "../../domain/const/time-units.mjs";
 import Reference from "../../domain/reference.mjs";
 import AuthenticDocument from "../authentic-document.mjs";
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
@@ -52,10 +51,7 @@ import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
  * @property {Reference} projectSkill
  * @property {Number} pushes
  * @property {Number} quality
- * @property {Object} timeIncrement
- * * Read-only.
- * @property {Number} timeIncrement.value
- * @property {TimeUnit} timeIncrement.unit
+ * @property {Number} workRate
  * 
  * @extends AuthenticDocument
  */
@@ -95,22 +91,11 @@ export default class ProjectDocument extends AuthenticDocument {
     };
   }
 
-  get timeIncrement() {
-    const thiz = this;
-    return {
-      /**
-       * @type {Number}
-       */
-      get value() { return thiz._timeIncrement.value.value; },
-      set value(value) { thiz._timeIncrement.value.value = value; },
-
-      /**
-       * @type {TimeUnit}
-       */
-      get unit() { return thiz._timeIncrement.unit.value; },
-      set unit(value) { thiz._timeIncrement.unit.value = value; },
-    };
-  }
+  /**
+   * @type {Number}
+   */
+  get workRate() { return this._workRate.value; }
+  set workRate(value) { this._workRate.value = value; }
 
   /**
    * @type {Reference}
@@ -180,22 +165,10 @@ export default class ProjectDocument extends AuthenticDocument {
       document: this,
       dataPath: "system.quality",
     });
-
-    this._timeIncrement = {
-      value: new DataFieldBridge({
-        document: this,
-        dataPath: "system.timeIncrement.value",
-      }),
-      unit: new DataFieldBridge({
-        document: this,
-        dataPath: "system.timeIncrement.unit",
-        fromDto: (dto) => {
-          return TIME_UNITS[dto];
-        },
-        toDto: (value) => {
-          return value.name;
-        },
-      }),
-    };
+    this._workRate = new DataFieldBridge({
+      document: this,
+      dataPath: "system.workRate.value",
+      default: 1,
+    });
   }
 }

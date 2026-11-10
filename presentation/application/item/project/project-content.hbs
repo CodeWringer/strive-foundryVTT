@@ -1,38 +1,43 @@
 {{!-- context:
 viewModel: ProjectContentViewModel
 --}}
-{{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
-<div class="auto-margin-v-md pad-h-md">
+<div class="pad-h-md">
+  {{!-- Description --}}
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
   <span class="h-divider"></span>
   <div class="flex flex-row flex-middle auto-margin-h-md">
+    {{!-- Quality --}}
     <div class="flex flex-row flex-middle">
       <i class="ico ico-quality xl"></i>
       {{> inputNumberSpinner viewModel=viewModel.vmQuality cssClass="width-lg" }}
     </div>
+    {{!-- Pushes --}}
     <span class="v-divider"></span>
     <div class="flex flex-row flex-middle">
       <i class="ico ico-pushes xl"></i>
       {{> inputNumberSpinner viewModel=viewModel.vmPushes cssClass="width-lg" }}
     </div>
+    {{!-- PI --}}
     <span class="v-divider"></span>
     <div class="flex flex-row flex-middle auto-margin-h-md">
       <span class="font-size-lg">{{localize "system.item.projectAndRecipe.progress.increment.abbreviation"}}</span>
       {{> inputNumberSpinner viewModel=viewModel.vmProgressIncrement cssClass="width-lg" }}
     </div>
-  </div>
-  <span class="h-divider"></span>
-  <div class="flex flex-row flex-middle auto-margin-h-md">
-    <div class="flex flex-row flex-middle flex-grow">
-      <i class="ico ico-skill xl"></i>
-      {{> inputReference viewModel=viewModel.vmProjectSkill cssClass="flex-grow" }}
-    </div>
+    {{!-- Work-Rate --}}
     <span class="v-divider"></span>
     <div class="flex flex-row flex-middle auto-margin-h-md">
       <i class="ico ico-time xl"></i>
-      {{> inputNumberSpinner viewModel=viewModel.vmProgressTimeAmount cssClass="width-md" }}
-      {{> inputDropDown viewModel=viewModel.vmProgressTimeUnit cssClass="" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmWorkRate cssClass="width-md" }}
+      <span class="font-size-lg margin-l-sm">/ {{localize "system.general.quarterOfDay.abbreviation"}}</span>
     </div>
   </div>
+  <span class="h-divider"></span>
+  {{!-- Project Skill --}}
+  <div class="flex flex-row flex-middle flex-grow">
+    <i class="ico ico-skill xl"></i>
+    {{> inputReference viewModel=viewModel.vmProjectSkill cssClass="flex-grow" }}
+  </div>
+  {{!-- Complications --}}
   <span class="h-divider"></span>
   {{#with viewModel.vmComplications.clazz.TEMPLATE as |template|}}
   {{> (template) viewModel=../viewModel.vmComplications }}
