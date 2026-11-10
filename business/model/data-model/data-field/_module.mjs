@@ -12,7 +12,6 @@ import ModifierField from "./modifier-field.mjs";
 import MomentumActionField from "./momentum-action-field.mjs";
 import PropertyLocationField from "./property-location-field.mjs";
 import ReferenceField from "./reference-field.mjs";
-import TimeIncrementField from "./time-increment-field.mjs";
 
 export const dataField = {
   AssetSlotField: AssetSlotField,
@@ -26,7 +25,6 @@ export const dataField = {
   ModifierField: ModifierField,
   MomentumActionField: MomentumActionField,
   ReferenceField: ReferenceField,
-  TimeIncrementField: TimeIncrementField,
   PropertyLocationField: PropertyLocationField,
   AdvancementHistoryEntryField: AdvancementHistoryEntryField,
   DriverHistoryEntryField: DriverHistoryEntryField,
