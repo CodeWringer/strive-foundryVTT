@@ -142,6 +142,7 @@ li.directory-item > img.thumbnail {
 
 @include icon-template(".ico-action-point-sm", "action-point-sm");
 @include icon-template(".ico-action-point", "action-point");
+@include icon-template(".ico-afp", "AFP");
 @include icon-template(".ico-arrow-right", "arrow-right");
 @include icon-template(".ico-bag", "bag");
 @include icon-template(".ico-bulk", "bulk");
@@ -159,6 +160,7 @@ li.directory-item > img.thumbnail {
 @include icon-template(".ico-equals", "equals");
 @include icon-template(".ico-expertise ", "expertise");
 @include icon-template(".ico-eye-slash ", "eye-slash");
+@include icon-template(".ico-fate-card", "fate-card");
 @include icon-template(".ico-floppy ", "floppy");
 @include icon-template(".ico-greater-than-equals", "greater-than-equals");
 @include icon-template(".ico-greater-than", "greater-than");
@@ -173,6 +175,8 @@ li.directory-item > img.thumbnail {
 @include icon-template(".ico-less-than-equals", "less-than-equals");
 @include icon-template(".ico-less-than", "less-than");
 @include icon-template(".ico-locked-separator", "locked-separator");
+@include icon-template(".ico-mafp", "maFP");
+@include icon-template(".ico-mifp", "miFP");
 @include icon-template(".ico-mutation", "mutation");
 @include icon-template(".ico-obstacle", "obstacle");
 @include icon-template(".ico-project", "project");

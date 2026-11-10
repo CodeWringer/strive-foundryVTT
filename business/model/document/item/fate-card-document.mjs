@@ -48,7 +48,7 @@ import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
  */
 export default class FateCardDocument extends AuthenticDocument {
   /** @override */
-  get defaultImg() { return "icons/svg/wing.svg"; }
+  get defaultImg() { return "systems/strive/presentation/image/fate-card-light.svg"; }
 
   /** @override */
   get clazz() { return FateCardDocument; }

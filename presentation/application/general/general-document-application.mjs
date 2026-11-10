@@ -1,5 +1,6 @@
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
+import { TEMPLATES } from "../templates.mjs";
 import GeneralApplication from "./general-application.mjs";
 
 /**
@@ -18,7 +19,14 @@ import GeneralApplication from "./general-application.mjs";
  * @extends FoundryWrapper.ApplicationV2
  */
 export default class GeneralDocumentApplication extends GeneralApplication {
-/** @override */
+  /** @override */
+  static PARTS = {
+    form: {
+      template: TEMPLATES.application.item.base.sheet,
+    },
+  }
+
+  /** @override */
   static DEFAULT_OPTIONS = {
     position: { width: 600, height: 520, },
     classes: ["strive", "sheet", "item", "strive-regular-font"],

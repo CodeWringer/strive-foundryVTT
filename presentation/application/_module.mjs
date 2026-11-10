@@ -61,6 +61,10 @@ import ExpertiseItemSheet from "./item/expertise/expertise-item-sheet.mjs";
 import GeneralApplication from "./general/general-application.mjs";
 import GeneralDocumentApplication from "./general/general-document-application.mjs";
 import ViewState from "./view-model/view-state.mjs";
+import FateCardHeaderViewModel from "./item/fate-card/fate-card-header-viewmodel.mjs";
+import FateCardContentViewModel from "./item/fate-card/fate-card-content-viewmodel.mjs";
+import FateCardItemSheetViewModel from "./item/fate-card/fate-card-item-sheet-viewmodel.mjs";
+import FateCardItemSheet from "./item/fate-card/fate-card-item-sheet.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -91,6 +95,11 @@ export const application = {
       AssetItemSheetViewModel: AssetItemSheetViewModel,
       AssetHeaderViewModel: AssetHeaderViewModel,
       AssetContentViewModel: AssetContentViewModel,
+    },
+    fateCard: {
+      FateCardItemSheetViewModel: FateCardItemSheetViewModel,
+      FateCardHeaderViewModel: FateCardHeaderViewModel,
+      FateCardContentViewModel: FateCardContentViewModel,
     },
     healthCondition: {
       HealthConditionContentViewModel: HealthConditionContentViewModel,
@@ -146,6 +155,7 @@ export const application = {
   sheet: {
     BaseItemSheet: BaseItemSheet,
     AssetItemSheet: AssetItemSheet,
+    FateCardItemSheet: FateCardItemSheet,
     HealthConditionItemSheet: HealthConditionItemSheet,
     InjuryItemSheet: InjuryItemSheet,
     IllnessItemSheet: IllnessItemSheet,
@@ -171,6 +181,11 @@ export const application = {
       registry: FoundryWrapper.collections.documents.items,
       type: ITEM_TYPES.asset,
       sheet: AssetItemSheet,
+    });
+    FoundryWrapper.registerSheet({
+      registry: FoundryWrapper.collections.documents.items,
+      type: ITEM_TYPES.fate_card,
+      sheet: FateCardItemSheet,
     });
     FoundryWrapper.registerSheet({
       registry: FoundryWrapper.collections.documents.items,

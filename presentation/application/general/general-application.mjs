@@ -30,11 +30,7 @@ export default class GeneralApplication extends FoundryWrapper.HandlebarsApplica
   }
 
   /** @override */
-  static PARTS = {
-    // form: {
-    //   template: TEMPLATES.application.item.base.sheet,
-    // },
-  }
+  static PARTS = {}
 
   /**
    * @type {HTMLElement}
