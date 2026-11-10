@@ -1,13 +1,16 @@
 import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import BaseAnim from "./base-anim.mjs";
 
-export class SlideOutAnim extends BaseAnim {
+export class SlideInFromTopAnim extends BaseAnim {
   /** @override */
   get cssClass() { return "slide-anim"; }
 
   /**
    * @param {Object} args
    * @param {JQuery | HTMLElement} args.elm
+   * @param {Function | undefined} args.onComplete Invoked upon animation completion, 
+   * but only if it isn't canceled. 
+   * @param {Function | undefined} args.onCancel Invoked upon animation cancellation. 
    */
   constructor(args = {}) {
     super({
@@ -28,15 +31,15 @@ export class SlideOutAnim extends BaseAnim {
 
   /** @override @inheritdoc */
   async _execute() {
-    $(this._elm).addClass("exit");
+    $(this._elm).addClass("enter-from-top");
     $(this._elm).removeClass("hidden");
-    
+
     await new Promise(resolve => setTimeout(resolve, 500));
   }
 
   /** @override @inheritdoc */
   _complete() {
+    $(this.elm).removeClass("hidden");
     super._complete();
-    $(this.elm).addClass("hidden");
   }
 }

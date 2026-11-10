@@ -2,8 +2,8 @@ import GradedEffect from "../../../../business/model/domain/graded-effect.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
-import { SlideInAnim } from "../../../animation/slide-in-anim.mjs";
-import { SlideOutAnim } from "../../../animation/slide-out-anim.mjs";
+import { SlideInFromTopAnim } from "../../../animation/slide-in-from-top-anim.mjs";
+import { SlideOutToBottomAnim } from "../../../animation/slide-out-to-bottom-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ValueViewModel from "../../view-model/value-view-model.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -52,11 +52,11 @@ export default class GradedEffectListViewModel extends ValueViewModel {
     super.isEditable = value;
 
     if (value) {
-      new SlideInAnim({
+      new SlideInFromTopAnim({
         elm: this.element.find("> .edit-mode"),
       }).execute();
     } else {
-      new SlideOutAnim({
+      new SlideOutToBottomAnim({
         elm: this.element.find("> .edit-mode"),
       }).execute();
     }
