@@ -1,0 +1,34 @@
+.strive.text-button {
+  padding: 0;
+  min-height: unset;
+  min-width: unset;
+  border-radius: unset;
+  display: flex;
+  max-height: unset;
+  --button-size: unset;
+  --button-background-color: unset;
+  --button-border-color: unset;
+  --button-text-color: unset;
+  --button-focus-outline-color: unset;
+  --button-hover-background-color: unset;
+  --button-hover-border-color: unset;
+  --button-hover-text-color: unset;
+}
+
+.theme-dark .strive.text-button {
+  
+  &:hover,
+  &:focus,
+  &:focus-within {
+    text-shadow: 0 0 0.3rem $c-bg-themed;
+  }
+}
+
+.theme-light .strive.text-button {
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    text-shadow: 0 0 0.3rem $c-bg-themed;
+  }
+}

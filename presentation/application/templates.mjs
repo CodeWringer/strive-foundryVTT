@@ -97,6 +97,7 @@ export const TEMPLATES = {
       button: `${basePathComponent}/button/button.hbs`,
       buttonDropDown: `${basePathComponent}/button-dropdown/button-dropdown.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
+      textButton: `${basePathComponent}/text-button/text-button.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
       splitNumberSpinner: `${basePathComponent}/input-split-number-spinner/input-split-number-spinner.hbs`,
       dropDown: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,

@@ -21,6 +21,7 @@ import ListViewModel from "./list/list-viewmodel.mjs";
 import ListItemViewModel from "./list/list-item-viewmodel.mjs";
 import ListSeparator from "./list/list-separator.mjs";
 import ListItem from "./list/list-item.mjs";
+import TextButtonViewModel from "./text-button/text-button-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -28,6 +29,7 @@ import ListItem from "./list/list-item.mjs";
 export const component = {
   PreparedSection: PreparedSection,
   ButtonViewModel: ButtonViewModel,
+  TextButtonViewModel: TextButtonViewModel,
   DropDownOption: DropDownOption,
   ButtonDropDownViewModel: ButtonDropDownViewModel,
   InputTextFieldViewModel: InputTextFieldViewModel,
@@ -55,6 +57,7 @@ export const component = {
    */
   init: async () => {
     ButtonViewModel.registerHandlebarsPartial();
+    TextButtonViewModel.registerHandlebarsPartial();
     ButtonDropDownViewModel.registerHandlebarsPartial();
     InputTextFieldViewModel.registerHandlebarsPartial();
     InputNumberSpinnerViewModel.registerHandlebarsPartial();

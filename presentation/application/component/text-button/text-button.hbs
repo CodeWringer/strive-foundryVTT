@@ -1,0 +1,7 @@
+{{!-- Required context:
+viewModel: TextButtonViewModel
+cssClass: String | undefined
+--}}
+<a id="{{viewModel.id}}" class="strive text-button{{#if cssClass}} {{cssClass}}{{/if}}" tabindex="0">
+  {{#if viewModel.content}}{{{viewModel.content}}}{{/if}}
+</a>

@@ -3,8 +3,8 @@ import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../input-number-spinner/input-number-spinner-viewmodel.mjs";
+import TextButtonViewModel from "../text-button/text-button-viewmodel.mjs";
 
 export default class AbilityLevelViewModel extends InputViewModel {
   /** @override */
@@ -99,7 +99,7 @@ export default class AbilityLevelViewModel extends InputViewModel {
       toolTip: args.levelToolTip,
     });
 
-    this.vmRollReadMode = new ButtonViewModel({
+    this.vmRollReadMode = new TextButtonViewModel({
       id: "vmRollReadMode",
       parent: this,
       content: buttonContent,
