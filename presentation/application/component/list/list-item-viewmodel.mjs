@@ -1,5 +1,7 @@
 import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import { ScaleVInAnim } from "../../../animation/scale-v-in-anim.mjs";
+import { ScaleVOutAnim } from "../../../animation/scale-v-out-anim.mjs";
 import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
@@ -61,34 +63,31 @@ export default class ListItemViewModel extends ViewModel {
     this.#isExpanded = value;
     this.viewState.write();
     if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name) {
-      const contentElm = this.element.find("> .content");
-
       if (value) {
-        contentElm.addClass("hidden");
-        
         new Promise(async (resolve) => {
           if (!ValidationUtil.isDefined(this.vmContent)) {
             await this.#renderContentInline();
           }
-          
-          contentElm.stop(true, false);
+
+          const contentElm = this.element.find("> .content");
           contentElm.removeClass("hidden");
-          contentElm.animate({
-            height: "100%",
-          }, {
-            duration: 300,
-            complete: resolve,
-          });
+          await new ScaleVInAnim({
+            elm: contentElm,
+          }).execute();
+          resolve();
         });
       } else {
-        contentElm.stop(true, false);
-        contentElm.animate({
-          height: "0%",
-        }, {
-          duration: 300,
-          complete: () => {
-            contentElm.addClass("hidden");
-          },
+        new Promise(async (resolve) => {
+          if (!ValidationUtil.isDefined(this.vmContent)) {
+            await this.#renderContentInline();
+          }
+
+          const contentElm = this.element.find("> .content");
+          await new ScaleVOutAnim({
+            elm: contentElm,
+          }).execute();
+          contentElm.addClass("hidden");
+          resolve();
         });
       }
     } else if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.window.name) {
@@ -159,10 +158,10 @@ export default class ListItemViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    if (this.isExpanded 
-      && (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name 
+    if (this.isExpanded
+      && (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name
         || this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name)
-      ) {
+    ) {
       await this.#renderContentInline();
       const contentElm = this.element.find("> .content");
       contentElm.removeClass("hidden");

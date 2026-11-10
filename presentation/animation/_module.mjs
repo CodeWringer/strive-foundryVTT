@@ -1,4 +1,6 @@
 import BaseAnimation from "./base-anim.mjs";
+import { ScaleVInAnim } from "./scale-v-in-anim.mjs";
+import { ScaleVOutAnim } from "./scale-v-out-anim.mjs";
 import { SlideDisplaceAnim } from "./slide-displace-anim.mjs";
 import { SlideInAnim } from "./slide-in-anim.mjs";
 import { SlideOutAnim } from "./slide-out-anim.mjs";
@@ -8,4 +10,6 @@ export const animation = {
   SlideDisplaceAnim: SlideDisplaceAnim,
   SlideOutAnim: SlideOutAnim,
   SlideInAnim: SlideInAnim,
+  ScaleVInAnim: ScaleVInAnim,
+  ScaleVOutAnim: ScaleVOutAnim,
 };
