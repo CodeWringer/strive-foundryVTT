@@ -419,7 +419,8 @@
         }
       },
       "recipe": {
-        "recipe": "Recipe"
+        "recipe": "Recipe",
+        "product": "Product"
       },
       "projectAndRecipe": {
         "quality": "Quality",

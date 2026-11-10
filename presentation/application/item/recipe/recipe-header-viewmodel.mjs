@@ -1,7 +1,5 @@
-import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
-import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 
 export default class RecipeHeaderViewModel extends BaseItemHeaderViewModel {
@@ -24,30 +22,5 @@ export default class RecipeHeaderViewModel extends BaseItemHeaderViewModel {
    */
   constructor(args = {}) {
     super(args);
-
-    this.vmQuality = new InputNumberSpinnerViewModel({
-      id: "vmQuality",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.projectAndRecipe.quality"),
-      }),
-      value: this.document.quality,
-      onChange: (newValue) => {
-        this.document.quality = newValue;
-      },
-    });
-    this.vmRequiredProgress = new InputNumberSpinnerViewModel({
-      id: "vmRequiredProgress",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.getLoca("system.item.projectAndRecipe.progress.required"),
-      }),
-      value: this.document.requiredProgress,
-      onChange: (newValue) => {
-        this.document.requiredProgress = newValue;
-      },
-    });
   }
 }

@@ -1,6 +1,5 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import Complication from "../../domain/complication/complication.mjs";
-import { TIME_UNITS } from "../../domain/const/time-units.mjs";
 import Reference from "../../domain/reference.mjs";
 import AuthenticDocument from "../authentic-document.mjs";
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
@@ -45,10 +44,7 @@ import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
  * @property {Number} requiredProgress
  * @property {Reference} projectSkill
  * @property {Number} quality
- * @property {Object} timeIncrement
- * * Read-only
- * @property {Number} timeIncrement.value
- * @property {TimeUnit} timeIncrement.unit
+ * @property {Number} workRate
  * @property {Reference} product
  * 
  * @extends AuthenticDocument
@@ -84,22 +80,11 @@ export default class RecipeDocument extends AuthenticDocument {
   get quality() { return this._quality.value; }
   set quality(value) { this._quality.value = value; }
 
-  get timeIncrement() {
-    const thiz = this;
-    return {
-      /**
-       * @type {Number}
-       */
-      get value() { return thiz._timeIncrement.value.value; },
-      set value(value) { thiz._timeIncrement.value.value = value; },
-
-      /**
-       * @type {TimeUnit}
-       */
-      get unit() { return thiz._timeIncrement.unit.value; },
-      set unit(value) { thiz._timeIncrement.unit.value = value; },
-    };
-  }
+  /**
+   * @type {Number}
+   */
+  get workRate() { return this._workRate.value; }
+  set workRate(value) { this._workRate.value = value; }
 
   /**
    * @type {Reference}
@@ -144,26 +129,11 @@ export default class RecipeDocument extends AuthenticDocument {
       dataPath: "system.quality",
       default: 1,
     });
-
-    this._timeIncrement = {
-      value: new DataFieldBridge({
-        document: this,
-        dataPath: "system.timeIncrement.value",
-        default: 0,
-      }),
-      unit: new DataFieldBridge({
-        document: this,
-        dataPath: "system.timeIncrement.unit",
-        default: TIME_UNITS.none,
-        fromDto: (dto) => {
-          return TIME_UNITS[dto];
-        },
-        toDto: (value) => {
-          return value.name;
-        },
-      }),
-    };
-
+    this._workRate = new DataFieldBridge({
+      document: this,
+      dataPath: "system.workRate.value",
+      default: 1,
+    });
     this._product = new DataFieldBridge({
       document: this,
       dataPath: "system.product",
