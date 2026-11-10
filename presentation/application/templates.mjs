@@ -79,6 +79,10 @@ export const TEMPLATES = {
         header: `${basePathApplication}/item/skill/skill-header.hbs`,
         content: `${basePathApplication}/item/skill/skill-content.hbs`,
       },
+      expertise: {
+        header: `${basePathApplication}/item/expertise/expertise-header.hbs`,
+        content: `${basePathApplication}/item/expertise/expertise-content.hbs`,
+      },
       trait: {
         header: `${basePathApplication}/item/trait/trait-header.hbs`,
         content: `${basePathApplication}/item/trait/trait-content.hbs`,
@@ -89,9 +93,11 @@ export const TEMPLATES = {
       uiDebug: `${basePathApplication}/dialog/ui-debug-dialog/ui-debug-dialog.hbs`,
     },
     component: {
+      abilityLevel: `${basePathComponent}/ability-level/ability-level.hbs`,
       button: `${basePathComponent}/button/button.hbs`,
       buttonDropDown: `${basePathComponent}/button-dropdown/button-dropdown.hbs`,
       textField: `${basePathComponent}/input-textfield/input-textfield.hbs`,
+      textButton: `${basePathComponent}/text-button/text-button.hbs`,
       numberSpinner: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
       splitNumberSpinner: `${basePathComponent}/input-split-number-spinner/input-split-number-spinner.hbs`,
       dropDown: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
@@ -103,13 +109,42 @@ export const TEMPLATES = {
       row: `${basePathComponent}/row/row.hbs`,
       image: `${basePathComponent}/input-image/input-image.hbs`,
       complication: {
-        complication: `${basePathComponent}/complication/complication.hbs`,
+        item: `${basePathComponent}/complication/complication.hbs`,
         list: `${basePathComponent}/complication/complication-list.hbs`,
+      },
+      gradedEffect: {
+        item: `${basePathComponent}/graded-effect/graded-effect.hbs`,
+        list: `${basePathComponent}/graded-effect/graded-effect-list.hbs`,
+      },
+      list: {
+        item: `${basePathComponent}/list/list-item.hbs`,
+        list: `${basePathComponent}/list/list.hbs`,
+      },
+      separator: {
+        horizontalLockedSeparator: `${basePathComponent}/separator/horizontal-locked-separator.hbs`,
       },
     },
   },
   image: {
+    diamondBg: {
+      dark: `${basePathPresentation}/image/diamond-bg-dark.svg`,
+      light: `${basePathPresentation}/image/diamond-bg-light.svg`,
+    },
     underline: {
+      h1: {
+        left: {
+          dark: `${basePathPresentation}/image/h1-left-dark.svg`,
+          light: `${basePathPresentation}/image/h1-left-light.svg`,
+        },
+        center: {
+          dark: `${basePathPresentation}/image/h1-center-dark.svg`,
+          light: `${basePathPresentation}/image/h1-center-light.svg`,
+        },
+        right: {
+          dark: `${basePathPresentation}/image/h1-right-dark.svg`,
+          light: `${basePathPresentation}/image/h1-right-light.svg`,
+        }
+      },
       h2: {
         dark: `${basePathPresentation}/image/underline-h2-325x7-dark.svg`,
         light: `${basePathPresentation}/image/underline-h2-325x7-light.svg`,

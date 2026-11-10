@@ -8,7 +8,7 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 
 /**
- * @property {TransientInjury} document 
+ * @property {InjuryDocument} document 
  */
 export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
@@ -25,10 +25,8 @@ export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientInjury} args.document The represented transient document instance. 
+   * @param {InjuryDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
@@ -49,7 +47,7 @@ export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
         value: this.document.healProgress.required,
         min: 0,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.healProgress.current = newValue.current;
         this.document.healProgress.required = newValue.maximum;
 
@@ -71,7 +69,7 @@ export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
       options: stateOptions,
       showValue: false,
       value: currentStateOption,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.state = INJURY_STATES[newValue.value];
         this.vmState.setToolTipContent(StringUtil.format(
           StringUtil.getLoca("system.item.injury.state.stateWithCurrent"),
@@ -86,10 +84,6 @@ export default class InjuryHeaderViewModel extends BaseItemHeaderViewModel {
     await super.activateListeners(html);
 
     this.#updateProgressMaximumReadMode();
-
-    if (this.isIndependent) {
-      this.element.find(`#${this.id}-embedded-content`).addClass("hidden");
-    }
   }
 
   /**

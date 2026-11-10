@@ -2,6 +2,15 @@ $border-size-sm: 1px;
 $border-size-md: 2px;
 
 .border {
+  &-sm {
+    border-style: solid;
+    border-width: $border-size-sm;
+  }
+  &-md {
+    border-style: solid;
+    border-width: $border-size-md;
+  }
+
   &-t {
     &-sm {
       border-top-style: solid;
@@ -45,30 +54,68 @@ $border-size-md: 2px;
 }
 
 .theme-light {
+  .border-sm, .border-md {
+    border-color: $c-border-light;
+    &.secondary {
+      border-color: $c-border-light-secondary;
+    }
+  }
+
   .border-t-sm, .border-t-md {
     border-top-color: $c-border-light;
+    &.secondary {
+      border-top-color: $c-border-light-secondary;
+    }
   }
   .border-b-sm, .border-b-md {
     border-bottom-color: $c-border-light;
+    &.secondary {
+      border-bottom-color: $c-border-light-secondary;
+    }
   }
   .border-r-sm, .border-r-md {
     border-right-color: $c-border-light;
+    &.secondary {
+      border-right-color: $c-border-light-secondary;
+    }
   }
   .border-l-sm, .border-l-md {
     border-left-color: $c-border-light;
+    &.secondary {
+      border-left-color: $c-border-light-secondary;
+    }
   }
 }
 .theme-dark {
+  .border-sm, .border-md {
+    border-color: $c-border-dark;
+    &.secondary {
+      border-color: $c-border-dark-secondary;
+    }
+  }
+
   .border-t-sm, .border-t-md {
     border-top-color: $c-border-dark;
+    &.secondary {
+      border-top-color: $c-border-dark-secondary;
+    }
   }
   .border-b-sm, .border-b-md {
     border-bottom-color: $c-border-dark;
+    &.secondary {
+      border-bottom-color: $c-border-dark-secondary;
+    }
   }
   .border-l-sm, .border-l-md {
     border-left-color: $c-border-dark;
+    &.secondary {
+      border-left-color: $c-border-dark-secondary;
+    }
   }
   .border-r-sm, .border-r-md {
     border-right-color: $c-border-dark;
+    &.secondary {
+      border-right-color: $c-border-dark-secondary;
+    }
   }
 }

@@ -2,10 +2,7 @@
 viewModel: ButtonViewModel
 cssClass: String | undefined
 --}}
-<a class="strive button auto-margin-h-sm{{#if cssClass}} {{cssClass}}{{/if}}" 
-  id="{{viewModel.id}}"
-  tabindex="0"
->
+<a id="{{viewModel.id}}" class="strive button auto-margin-h-sm border-sm{{#if cssClass}} {{cssClass}}{{/if}}" tabindex="0">
   {{#if viewModel.content}}{{{viewModel.content}}}{{/if}}
   {{#if @partial-block}}{{> @partial-block }}{{/if}}
 </a>

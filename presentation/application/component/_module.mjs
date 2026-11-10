@@ -1,5 +1,5 @@
 import ButtonViewModel from "./button/button-viewmodel.mjs";
-import DynamicComponent from "./dynamic-component/dynamic-component.mjs";
+import DynamicComponent, { DynamicComponentRenderResult } from "./dynamic-component/dynamic-component.mjs";
 import InputDropDownViewModel from "./input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.mjs";
@@ -14,6 +14,14 @@ import ComplicationListViewModel from "./complication/complication-list-viewmode
 import ComplicationViewModel from "./complication/complication-viewmodel.mjs";
 import { DropDownOption } from "./button-dropdown/dropdown-option.mjs";
 import ButtonDropDownViewModel from "./button-dropdown/button-dropdown-viewmodel.mjs";
+import AbilityLevelViewModel from "./ability-level/ability-level-viewmodel.mjs";
+import GradedEffectListViewModel from "./graded-effect/graded-effect-list-viewmodel.mjs";
+import GradedEffectViewModel from "./graded-effect/graded-effect-viewmodel.mjs";
+import ListViewModel from "./list/list-viewmodel.mjs";
+import ListItemViewModel from "./list/list-item-viewmodel.mjs";
+import ListSeparator from "./list/list-separator.mjs";
+import ListItem from "./list/list-item.mjs";
+import TextButtonViewModel from "./text-button/text-button-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application.component` module. 
@@ -21,6 +29,7 @@ import ButtonDropDownViewModel from "./button-dropdown/button-dropdown-viewmodel
 export const component = {
   PreparedSection: PreparedSection,
   ButtonViewModel: ButtonViewModel,
+  TextButtonViewModel: TextButtonViewModel,
   DropDownOption: DropDownOption,
   ButtonDropDownViewModel: ButtonDropDownViewModel,
   InputTextFieldViewModel: InputTextFieldViewModel,
@@ -28,6 +37,7 @@ export const component = {
   InputDropDownViewModel: InputDropDownViewModel,
   InputRichTextViewModel: InputRichTextViewModel,
   DynamicComponent: DynamicComponent,
+  DynamicComponentRenderResult: DynamicComponentRenderResult,
   RowViewModel: RowViewModel,
   CustomProseMirrorMenu: CustomProseMirrorMenu,
   InputSplitNumberSpinnerViewModel: InputSplitNumberSpinnerViewModel,
@@ -35,11 +45,19 @@ export const component = {
   InputImageViewModel: InputImageViewModel,
   ComplicationViewModel: ComplicationViewModel,
   ComplicationListViewModel: ComplicationListViewModel,
+  AbilityLevelViewModel: AbilityLevelViewModel,
+  GradedEffectViewModel: GradedEffectViewModel,
+  GradedEffectListViewModel: GradedEffectListViewModel,
+  ListItemViewModel: ListItemViewModel,
+  ListViewModel: ListViewModel,
+  ListSeparator: ListSeparator,
+  ListItem: ListItem,
   /**
    * Initialization, which MUST be called during system setup!
    */
   init: async () => {
     ButtonViewModel.registerHandlebarsPartial();
+    TextButtonViewModel.registerHandlebarsPartial();
     ButtonDropDownViewModel.registerHandlebarsPartial();
     InputTextFieldViewModel.registerHandlebarsPartial();
     InputNumberSpinnerViewModel.registerHandlebarsPartial();
@@ -48,6 +66,7 @@ export const component = {
     InputSplitNumberSpinnerViewModel.registerHandlebarsPartial();
     InputReferenceViewModel.registerHandlebarsPartial();
     InputImageViewModel.registerHandlebarsPartial();
+    AbilityLevelViewModel.registerHandlebarsPartial();
   },
   /**
    * Initialization to be called during the system's "setup" hook. 

@@ -1,5 +1,5 @@
+import ProjectDocument from "../../../../business/model/document/item/project-document.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
@@ -20,10 +20,8 @@ export default class ProjectHeaderViewModel extends BaseItemHeaderViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientProject} args.document The represented transient document instance. 
+   * @param {ProjectDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
@@ -38,13 +36,13 @@ export default class ProjectHeaderViewModel extends BaseItemHeaderViewModel {
       current: {
         value: this.document.progress.current,
         min: 0,
-        allowEditing: this.context === DOCUMENT_CONTEXT.embedded,
+        allowEditing: this.document.isEmbedded,
       },
       maximum: {
         value: this.document.progress.total,
         min: 0,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.progress.current = newValue.current;
         this.document.progress.total = newValue.maximum;
       },

@@ -3,7 +3,7 @@ import InputTextFieldViewModel from "../../../../presentation/component/input-te
 import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { ITEM_TYPES } from "../../domain/const/item-types.mjs"
-import TransientSkill from "../item/skill/transient-skill.mjs"
+import SkillDocument from "../item/skill/transient-skill.mjs"
 import DocumentCreationStrategy from "./document-creation-strategy.mjs"
 
 /**
@@ -11,7 +11,7 @@ import DocumentCreationStrategy from "./document-creation-strategy.mjs"
  * 
  * Does not prompt for anything and can not be canceled. 
  * 
- * @property {TransientBaseActor | undefined} target The Actor document instance on which 
+ * @property {BaseActorDocument | undefined} target The Actor document instance on which 
  * to embed the new document instance. 
  * @property {Object | undefined} creationDataOverrides Overrides applied to the selected 
  * creation data. Can be used to override a specific property, while leaving 
@@ -22,7 +22,7 @@ import DocumentCreationStrategy from "./document-creation-strategy.mjs"
 export default class ExpertiseCreationStrategy extends DocumentCreationStrategy {
   /**
    * @param {Object} args 
-   * @param {TransientSkill} args.target The skill document instance to which to add 
+   * @param {SkillDocument} args.target The skill document instance to which to add 
    * a new blank Expertise. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 

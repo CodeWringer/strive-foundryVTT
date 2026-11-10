@@ -1,15 +1,22 @@
 {{!--
-viewModel: ListViewModel
+viewModel: ListItemViewModel
 --}}
-{{!-- The item's content --}}
-<li id="{{viewModel.id}}" class="flex flex-row flex-grow">
-  {{#with viewModel.itemTemplate as |template|}}
-    <div class="flex flex-grow">
-      {{> (template) viewModel=../viewModel.itemViewModel}}
-    </div>
-  {{/with}}
-  {{!-- Remove button --}}
-  {{#if viewModel.isRemovable}}
-  {{> button viewModel=viewModel.vmBtnRemove }}
-  {{/if}}
+<li id="{{viewModel.id}}" class="list-item">
+  <div class="header flex flex-row flex-middle border-b-sm">
+    {{!-- Header --}}
+    {{#if viewModel.hasHeaderViewModel}}
+    {{#with viewModel.item.header.template as | template |}}
+      {{> (template) viewModel=../viewModel.vmHeader }}
+    {{/with}}
+    {{else}}
+      {{{viewModel.item.header.html}}}
+    {{/if}}
+    {{!-- Context menu --}}
+    <span class="v-divider context-menu hidden"></span>
+    {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="context-menu hidden" }}
+  </div>
+  {{!-- Content --}}
+  <div class="content margin-l-xl margin-b-xl margin-r-xl border-l-sm border-b-sm border-r-sm secondary hidden" style="height: 0%;">
+    {{!-- Content is rendered and inserted by the view model --}}
+  </div>
 </li>

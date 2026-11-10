@@ -93,7 +93,7 @@ export default class BaseDialog extends FoundryWrapper.HandlebarsApplicationMixi
   }
 
   /**
-   * @param {TransientDocument} document 
+   * @param {Document} document 
    * @returns {BaseDialogViewModel}
    * 
    * @virtual
@@ -141,6 +141,15 @@ export default class BaseDialog extends FoundryWrapper.HandlebarsApplicationMixi
     });
   }
 
+  /**
+   * Recurses through the `ViewModel` and its children and returns the one whose ID matches the given `id`. 
+   * @param {String} id 
+   * @returns {ViewModel | undefined}
+   */
+  find(id) {
+    return this.viewModel.find(id);
+  }
+
   /** 
    * Returns an object that represents sheet and enriched item data. 
    * 
@@ -155,7 +164,7 @@ export default class BaseDialog extends FoundryWrapper.HandlebarsApplicationMixi
 
     // Ensure view model. 
     this.viewModel = this.createViewModel();
-    this.viewModel.readAllViewState();
+    this.viewModel.viewState.read();
     context.viewModel = this.viewModel;
 
     return context;

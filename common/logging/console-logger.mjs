@@ -20,14 +20,22 @@ export class ConsoleLogger {
    * @param {String} message A message to write to the log. 
    */
   log(level, message) {
-    // Concrete logging implementation required in implementing types.
+    if (this.logLevel >= LOG_LEVELS.VERBOSE && level == LOG_LEVELS.VERBOSE) {
+      console.log(message);
+    } else if (this.logLevel >= LOG_LEVELS.DEBUG && level == LOG_LEVELS.DEBUG) {
+      console.log(message);
+    } else if (this.logLevel >= LOG_LEVELS.WARN && level == LOG_LEVELS.WARN) {
+      console.warn(message);
+    } else if (this.logLevel >= LOG_LEVELS.ERROR && level == LOG_LEVELS.ERROR) {
+      console.error(message);
+    }
   }
 
   /**
    * Writes the given message to the log, at verbose log level. 
    * @param {String} message A message to write to the log. 
    */
-  logVerbose(message) {
+  verbose(message) {
     this.log(LOG_LEVELS.VERBOSE, `[VERBOSE] ${message}`);
   }
 
@@ -35,7 +43,7 @@ export class ConsoleLogger {
    * Writes the given message to the log, at debug log level. 
    * @param {String} message A message to write to the log. 
    */
-  logDebug(message) {
+  debug(message) {
     this.log(LOG_LEVELS.DEBUG, `[DEBUG] ${message}`);
   }
 
@@ -43,7 +51,7 @@ export class ConsoleLogger {
    * Writes the given message to the log, at warn log level. 
    * @param {String} message A message to write to the log. 
    */
-  logWarn(message) {
+  warning(message) {
     this.log(LOG_LEVELS.WARN, `[WARN] ${message}`);
   }
 
@@ -51,7 +59,7 @@ export class ConsoleLogger {
    * Writes the given message to the log, at error log level. 
    * @param {Error | String} error An error (message) to write to the log. 
    */
-  logError(error) {
+  error(error) {
     this.log(LOG_LEVELS.ERROR, `[ERROR] ${error.message ?? error}`);
   }
 
@@ -69,7 +77,7 @@ export class ConsoleLogger {
     const perf0 = performance.now();
     functionBlock();
     const perf1 = performance.now();
-    this.logVerbose(`Perf: ${msg} took: ${perf1 - perf0} milliseconds`);
+    this.verbose(`Perf: ${msg} took: ${perf1 - perf0} milliseconds`);
   }
 
   /**
@@ -88,23 +96,6 @@ export class ConsoleLogger {
     const perf0 = performance.now();
     await functionBlock();
     const perf1 = performance.now();
-    this.logVerbose(`Perf: ${msg} took: ${perf1 - perf0} milliseconds`);
-  }
-
-  /**
-   * Writes the given message to the log, at the given log level. 
-   * @param {LOG_LEVELS} level The logging level. 
-   * @param {String} message A message to write to the log. 
-   */
-  log(level, message) {
-    if (this.logLevel >= LOG_LEVELS.VERBOSE && level == LOG_LEVELS.VERBOSE) {
-      console.log(message);
-    } else if (this.logLevel >= LOG_LEVELS.DEBUG && level == LOG_LEVELS.DEBUG) {
-      console.log(message);
-    } else if (this.logLevel >= LOG_LEVELS.WARN && level == LOG_LEVELS.WARN) {
-      console.warn(message);
-    } else if (this.logLevel >= LOG_LEVELS.ERROR && level == LOG_LEVELS.ERROR) {
-      console.error(message);
-    }
+    this.verbose(`Perf: ${msg} took: ${perf1 - perf0} milliseconds`);
   }
 }

@@ -71,13 +71,12 @@ export const PropertyUtil = {
 	 * @returns {Any} If the property in question is an object, returns that object, 
 	 * otherwise, returns the value of the property. 
 	 */
-	getNestedPropertyValue: function(obj, path) {
+	getByPath: function(obj, path) {
 		const propertyPath = this.splitPropertyPath(path);
 	
 		try {
 			return this._get(obj, propertyPath);
 		} catch(error) {
-			game.strive.logger.logWarn(`Failed to get nested property value: { path: ${path} }`);
 			return undefined;
 		}
 	},
@@ -97,7 +96,7 @@ export const PropertyUtil = {
 	 * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
 	 * @throws {Error} UnknownException If updating the property failed. 
 	 */
-	setNestedPropertyValue: function(obj, path, value) {
+	setByPath: function(obj, path, value) {
 		const propertyPath = this.splitPropertyPath(path);
 		const propertyToSet = propertyPath.pop();
 	

@@ -1,4 +1,5 @@
 import { common } from "../../common/_module.mjs";
+import { ValidationUtil } from "../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../foundry-interop/foundry-wrapper.mjs";
 import { SYSTEM_ID } from "../../system-id.mjs";
 import GameSystemSettingDeclaration from "./game-system-setting-declaration.mjs";
@@ -65,7 +66,8 @@ export default class GameSystemSettings {
    * @static
    */
   static set(key, value) {
-    this._ensureSetting(key);
+    key = GameSystemSettings.#ensureCorrectKey(key);
+    this.#ensureSetting(key);
     game.settings.set(GameSystemSettings.SETTINGS_NAMESPACE, key, value);
   }
 
@@ -77,7 +79,8 @@ export default class GameSystemSettings {
    * @static
    */
   static get(key) {
-    this._ensureSetting(key);
+    key = GameSystemSettings.#ensureCorrectKey(key);
+    this.#ensureSetting(key);
     return game.settings.get(GameSystemSettings.SETTINGS_NAMESPACE, key);
   }
 
@@ -130,11 +133,12 @@ export default class GameSystemSettings {
    * @private
    * @static
    */
-  static _ensureSetting(key) {
-    const allSettings = GameSystemSettings._worldSettings
-      .concat(GameSystemSettings._userSettingTemplates)
+  static #ensureSetting(key) {
+    key = GameSystemSettings.#ensureCorrectKey(key);
+
+    const settings = GameSystemSettings._worldSettings
       .concat(GameSystemSettings._userSettings);
-    const setting = allSettings.find(it => it.key === key);
+    const setting = settings.find(it => it.key === key);
 
     if (setting === undefined) {
       throw new Error(`Failed to get setting with key '${key}'`);
@@ -148,6 +152,7 @@ export default class GameSystemSettings {
       config: setting.config,
       default: setting.default,
       type: setting.type,
+      choices: setting.choices,
       onChange: (value) => {
         FoundryWrapper.callHook("striveSettingChanged", key, value);
       },
@@ -190,15 +195,30 @@ export default class GameSystemSettings {
         menu: setting.menu,
         icon: setting.icon,
         restricted: setting.restricted,
+        choices: setting.choices,
       });
       GameSystemSettings._userSettings.push(newSettingDeclaration);
     }
 
     for (const setting of GameSystemSettings._worldSettings) {
-      GameSystemSettings._ensureSetting(setting.key);
+      GameSystemSettings.#ensureSetting(setting.key);
     }
     for (const setting of GameSystemSettings._userSettings) {
-      GameSystemSettings._ensureSetting(setting.key);
+      GameSystemSettings.#ensureSetting(setting.key);
+    }
+  }
+
+  /**
+   * Ensures the given `key` contains the userId, if necessary, and returns it. 
+   * @param {String} key The key to correct. 
+   * @returns {String}
+   */
+  static #ensureCorrectKey(key) {
+    const userTemplateSetting = GameSystemSettings._userSettingTemplates.find(it => it.key === key);
+    if (ValidationUtil.isDefined(userTemplateSetting) && !userTemplateSetting.key.startsWith(game.userId)) {
+      return `${game.userId}-${userTemplateSetting.key}`;
+    } else {
+      return key;
     }
   }
 }

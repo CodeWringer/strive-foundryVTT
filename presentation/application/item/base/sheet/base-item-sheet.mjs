@@ -1,7 +1,7 @@
+import Document from "../../../../../business/model/document/document.mjs";
 import { StringUtil } from "../../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../../foundry-interop/foundry-wrapper.mjs";
-import { DOCUMENT_CONTEXT } from "../../../../model/document-context.mjs";
 import { TEMPLATES } from "../../../templates.mjs";
 import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
 
@@ -37,7 +37,7 @@ import BaseItemSheetViewModel from "./base-item-sheet-viewmodel.mjs";
 export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationMixin(FoundryWrapper.ItemSheetV2) {
   /** @override */
   static DEFAULT_OPTIONS = {
-    position: { width: 600, height: 520, },
+    position: { width: 700, height: 520, },
     classes: ["strive", "sheet", "item", "strive-regular-font"],
     tag: "form",
     window: {
@@ -130,26 +130,23 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
   get isOwner() { return ((this.actor ?? this.item) ?? {}).isOwner ?? false; }
 
   /**
-   * @param {TransientDocument} document 
-   * @param {DOCUMENT_CONTEXT} context 
+   * @param {Document} document 
    * @returns {BaseItemSheetViewModel}
    * 
    * @virtual Inheritors _should_ override this to provide their own, more specific 
    * view model instance! 
    */
-  createViewModel(document, context) {
+  createViewModel(document) {
     return new BaseItemSheetViewModel({
       id: document.id,
       document: document,
       sheet: this,
-      context: context,
     });
   }
 
   /** @override */
   async close() {
     if (ValidationUtil.isDefined(this.viewModel)) {
-      this.viewModel.writeViewState();
       this.viewModel.dispose();
       this.viewModel = null;
     }
@@ -168,12 +165,12 @@ export default class BaseItemSheet extends FoundryWrapper.HandlebarsApplicationM
   async _prepareContext(options) {
     const context = await super._prepareContext(options)
 
-    const document = context.document.getTransientObject();
+    const document = context.document.getEnhancedDocument();
     const documentContext = document.context;
 
     // Ensure view model. 
     this.viewModel = this.createViewModel(document, documentContext);
-    this.viewModel.readAllViewState();
+    this.viewModel.viewState.read();
     context.viewModel = this.viewModel;
 
     return context;

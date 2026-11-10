@@ -77,7 +77,7 @@ export default class ModalDialog extends BaseDialog {
   constructor(args = {}) {
     super(args);
 
-    this._backdropElementId = common.util.uuid.createUUID();
+    this._backdropElementId = common.util.uuid.createUuid();
     this.easyDismissal = args.easyDismissal ?? true;
   }
 

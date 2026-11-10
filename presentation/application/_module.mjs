@@ -9,6 +9,7 @@ import BaseSheetViewModel from "./view-model/base-sheet-viewmodel.mjs";
 import InputViewModel from "./view-model/input-view-model.mjs";
 import ViewModelCollection from "./view-model/view-model-collection.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "./view-model/view-model.mjs";
+import DocumentViewModel from "./view-model/document-viewmodel.mjs";
 import { dialog } from "./dialog/_module.mjs";
 import LanguageContentViewModel from "./item/language/language-content-viewmodel.mjs";
 import LanguageItemSheetViewModel from "./item/language/language-item-sheet-viewmodel.mjs";
@@ -52,6 +53,14 @@ import TraitItemSheetViewModel from "./item/trait/trait-item-sheet-viewmodel.mjs
 import TraitHeaderViewModel from "./item/trait/trait-header-viewmodel.mjs";
 import TraitContentViewModel from "./item/trait/trait-content-viewmodel.mjs";
 import TraitItemSheet from "./item/trait/trait-item-sheet.mjs";
+import ValueViewModel from "./view-model/value-view-model.mjs";
+import ExpertiseContentViewModel from "./item/expertise/expertise-content-viewmodel.mjs";
+import ExpertiseHeaderViewModel from "./item/expertise/expertise-header-viewmodel.mjs";
+import ExpertiseItemSheetViewModel from "./item/expertise/expertise-item-sheet-viewmodel.mjs";
+import ExpertiseItemSheet from "./item/expertise/expertise-item-sheet.mjs";
+import GeneralApplication from "./general/general-application.mjs";
+import GeneralDocumentApplication from "./general/general-document-application.mjs";
+import ViewState from "./view-model/view-state.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -62,9 +71,16 @@ export const application = {
   dialog: dialog,
   viewModel: {
     ViewModel: ViewModel,
+    ViewState: ViewState,
+    DocumentViewModel: DocumentViewModel,
     ViewModelToolTipDefinition: ViewModelToolTipDefinition,
     ViewModelCollection: ViewModelCollection,
+    ValueViewModel: ValueViewModel,
     InputViewModel: InputViewModel,
+    general: {
+      GeneralApplication: GeneralApplication,
+      GeneralDocumentApplication: GeneralDocumentApplication,
+    },
     base: {
       BaseItemHeaderViewModel: BaseItemHeaderViewModel,
       BaseItemContentViewModel: BaseItemContentViewModel,
@@ -116,6 +132,11 @@ export const application = {
       SkillHeaderViewModel: SkillHeaderViewModel,
       SkillContentViewModel: SkillContentViewModel,
     },
+    expertise: {
+      ExpertiseItemSheetViewModel: ExpertiseItemSheetViewModel,
+      ExpertiseContentViewModel: ExpertiseContentViewModel,
+      ExpertiseHeaderViewModel: ExpertiseHeaderViewModel,
+    },
     trait: {
       TraitItemSheetViewModel: TraitItemSheetViewModel,
       TraitHeaderViewModel: TraitHeaderViewModel,
@@ -133,6 +154,7 @@ export const application = {
     ProjectItemSheet: ProjectItemSheet,
     RecipeItemSheet: RecipeItemSheet,
     SkillItemSheet: SkillItemSheet,
+    ExpertiseItemSheet: ExpertiseItemSheet,
     TraitItemSheet: TraitItemSheet,
   },
   Tooltip: Tooltip,

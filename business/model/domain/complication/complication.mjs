@@ -11,9 +11,9 @@ import Persistable from "../persistable.mjs";
  */
 export default class Complication extends Persistable {
   /**
-   * @param {Object} dto 
-   * @param {String} dto.name 
-   * @param {String | undefined} dto.description 
+   * @param {Object} raw 
+   * @param {String} raw.name 
+   * @param {String | undefined} raw.description 
    * 
    * @returns {Complication}
    * 
@@ -36,7 +36,7 @@ export default class Complication extends Persistable {
   set name(value) {
     const old = this.#name;
     this.#name = value;
-    this.onChange("name", old, value);
+    this.onChange("name", value, old);
   }
   
   /**
@@ -48,18 +48,17 @@ export default class Complication extends Persistable {
  set description(value) {
    const old = this.#description;
    this.#description = value;
-   this.onChange("description", old, value);
+   this.onChange("description", value, old);
  }
 
   /**
    * @param {Object} args 
    * @param {String} args.name
    * @param {String | undefined} args.description Html content. 
-   * @param {Function<void> | undefined} args.onChange Invoked when any property value changes. 
-   * Arguments: 
+   * @param {Function<void> | undefined} args.onChange Invoked when any property value changes. Arguments: 
    * * `fieldName: String` - Name of the field/property on this instance that was changed. 
-   * * `oldValue: Any` - Value prior to the change. 
    * * `newValue: Any` - Value after the change, and the current value. 
+   * * `oldValue: Any` - Value prior to the change. 
    */
   constructor(args = {}) {
     super(args);

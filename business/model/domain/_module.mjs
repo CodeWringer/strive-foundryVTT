@@ -12,7 +12,7 @@ import MomentumAction from "./momentum-action.mjs";
 import Reference from "./reference.mjs";
 import Ruleset from "./ruleset.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
-import Expertise from "./skill/expertise.mjs";
+import ExpertiseDocument from "../document/item/expertise-document.mjs";
 import { Sum, SumComponent } from "./summed-data.mjs";
 import Tag from "./tag/tag.mjs";
 import TimeIncrement from "./time-increment.mjs";
@@ -21,6 +21,8 @@ import InjuryShrugOff from "./health/injury-shrug-off.mjs";
 import PropertyLocation from "./asset/property-location.mjs";
 import AdvancementHistoryEntry from "./advancement-history-entry.mjs";
 import DriverHistoryEntry from "./driver-history-entry.mjs";
+import { Skill } from "./skill/skill.mjs";
+import ComparisonTarget from "./comparison-target.mjs";
 
 /**
  * Wraps the `business.model.domain` module, which is a bit of an oddball, 
@@ -42,8 +44,9 @@ export const domain = {
     InjuryShrugOff: InjuryShrugOff,
   },
   skill: {
+    Skill: Skill,
     DamageAndType: DamageAndType,
-    Expertise: Expertise,
+    Expertise: ExpertiseDocument,
   },
   tag: {
     Tag: Tag,
@@ -62,6 +65,7 @@ export const domain = {
   GradedEffect: GradedEffect,
   AdvancementHistoryEntry: AdvancementHistoryEntry,
   DriverHistoryEntry: DriverHistoryEntry,
+  ComparisonTarget: ComparisonTarget,
   init: () => {
     constants.init();
     SystemHealthConditionBroker.preload();

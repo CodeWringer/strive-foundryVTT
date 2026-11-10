@@ -1,3 +1,7 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
+
 /**
  * For insertion into an application at run-time. 
  * 
@@ -27,5 +31,45 @@ export default class DynamicComponent {
     this.template = args.template;
     this.viewModelFactory = args.viewModelFactory;
     this.cssClass = args.cssClass ?? "";
+  }
+
+  /**
+   * Renders the component and returns the rendered result. 
+   * @param {ViewModel | undefined} parent A parent `ViewModel` instance to pass 
+   * to the `viewModelFactory`.
+   * @returns {Promise<DynamicComponentRenderResult>} 
+   * @async
+   */
+  async render(parent) {
+    const viewModel = this.viewModelFactory(parent);
+    let rendered;
+
+    if (ValidationUtil.isDefined(this.html)) {
+      rendered = this.html;
+    } else {
+      rendered = await FoundryWrapper.renderTemplate(this.template, {
+        viewModel: viewModel,
+        cssClass: this.cssClass,
+      });
+    }
+
+    return new DynamicComponentRenderResult({
+      rendered: rendered,
+      viewModel: viewModel,
+    });
+  }
+}
+
+export class DynamicComponentRenderResult {
+  /**
+   * @param {Object} args 
+   * @param {String} args.rendered 
+   * @param {ViewModel | undefined} args.viewModel 
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["rendered"]);
+
+    this.rendered = args.rendered;
+    this.viewModel = args.viewModel;
   }
 }

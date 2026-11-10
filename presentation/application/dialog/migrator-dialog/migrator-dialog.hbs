@@ -18,7 +18,7 @@ viewModel: MigratorDialogViewModel
 				<span>{{localize "system.migration.inProgress"}}</span>
 			</div>
 			<div class="flex flex-column flex-middle auto-margin-h-sm">
-				<h3 id="{{viewModel.vmWorkTitle.id}}"></h3>
+				<h3 id="{{viewModel.vmWorkTitle.id}}" class="strive"></h3>
 				<p id="{{viewModel.vmProgressNumbers.id}}"></p>
 				<p id="{{viewModel.vmWorkIncrement.id}}"></p>
 			</div>
@@ -26,13 +26,13 @@ viewModel: MigratorDialogViewModel
 	</div>
 	{{!-- Error --}}
 	<div id="{{viewModel.vmErrorSection.id}}" class="flex flex-column hidden">
-		<h2 class="hint-card error"><i class="fas fa-exclamation-triangle"></i> {{localize "system.migration.error"}}</h2>
+		<h2 class="strive hint-card error"><i class="fas fa-exclamation-triangle"></i> {{localize "system.migration.error"}}</h2>
 		<p id="{{viewModel.vmErrorDetails.id}}" class="hint-card error cohesive"></p>
 		<p class="hint-card warn">{{localize "system.migration.errorHint"}} <a href="https://github.com/CodeWringer/strive-foundryVTT/issues">https://github.com/CodeWringer/strive-foundryVTT/issues</a></p>
 	</div>
 	{{!-- Success --}}
 	<div id="{{viewModel.vmSuccessSection.id}}" class="flex flex-column hidden">
-		<h2 class="hint-card success"><i class="fas fa-check-circle"></i> {{localize "system.migration.completion"}}</h2>
+		<h2 class="strive hint-card success"><i class="fas fa-check-circle"></i> {{localize "system.migration.completion"}}</h2>
 		<p class="hint-card success cohesive">{{localize "system.migration.completionHint"}}</p>
 	</div>
 	{{!-- Log --}}

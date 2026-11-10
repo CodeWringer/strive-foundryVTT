@@ -35,6 +35,19 @@ $font-size-xl: 3rem;
   font-weight: bold;
 }
 
+// "Stroke"
+
+.theme-dark {
+  .stroke {
+    text-shadow: -1px -1px 0 $c-bg-dark, 1px -1px 0 $c-bg-dark, -1px 1px 0 $c-bg-dark, 1px 1px 0 $c-bg-dark;
+  }
+}
+.theme-light {
+  .stroke {
+    text-shadow: -1px -1px 0 $c-bg-light, 1px -1px 0 $c-bg-light, -1px 1px 0 $c-bg-light, 1px 1px 0 $c-bg-light;
+  }
+}
+
 // Overrides
 
 body.strive-regular-font .strive-regular-font {
@@ -43,4 +56,49 @@ body.strive-regular-font .strive-regular-font {
 
 form.strive-regular-font h1.window-title {
   font-size: 1.5rem;
+}
+
+h1.strive {
+  font-size: 3em;
+  font-weight: unset;
+  text-transform: uppercase;
+  user-select: text;
+}
+
+h2.strive {
+  font-size: 2.5em;
+  font-weight: unset;
+  text-transform: uppercase;
+  user-select: text;
+}
+
+h3.strive {
+  font-size: 2em;
+  font-weight: unset;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  text-transform: uppercase;
+  user-select: text;
+}
+
+h4.strive {
+  font-size: 1.5em;
+  font-weight: unset;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  text-transform: uppercase;
+  user-select: text;
+}
+
+.theme-dark {
+  h3.strive,
+  h4.strive {
+    border-bottom-color: $c-border-dark;
+  }
+}
+.theme-light {
+  h3.strive,
+  h4.strive {
+    border-bottom-color: $c-border-light;
+  }
 }

@@ -44,7 +44,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 
   /** @override */
-  get value() { return parseInt(this._value); }
+  get value() { return parseInt(super.value); }
   /**
    * @param {String | Number} newValue The new value to set.
    * Supports integer numbers and arithmetic formulae, e. g.
@@ -56,28 +56,25 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     try {
       parsedValue = FormulaUtility.eval(newValue);
     } catch (error) {
-      // TODO: pop-up
+      // TODO: error pop-up
     }
 
-    const oldValue = this._value;
-    if (parsedValue === NaN)
-      this._value = this.hasMin ? this.min : 0;
-    else if (this.hasMin && parsedValue < this.min)
-      this._value = this.min;
-    else if (this.hasMax && parsedValue > this.max)
-      this._value = this.max;
-    else
-      this._value = parsedValue;
-
-    this.onChange(oldValue, this._value);
+    if (!Number.isNaN(parsedValue)) {
+      if (this.hasMin && parsedValue < this.min)
+        super.value = this.min;
+      else if (this.hasMax && parsedValue > this.max)
+        super.value = this.max;
+      else
+        super.value = parsedValue;
+    }
 
     // Update visuals. 
 
-    this.inputElement[0].value = this._value + "";
+    this.inputElement[0].value = this.value + "";
 
     const readModeElement = this.element.find("> .read-mode");
     readModeElement.empty();
-    readModeElement.append(this._value);
+    readModeElement.append(this.value);
   }
 
   /**
@@ -102,8 +99,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set min(value) {
     this._min = value;
-    if (this._value < this._min) {
-      this._value = this._min;
+    if (this.value < this._min) {
+      this.value = this._min;
     }
   }
 
@@ -116,8 +113,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   set max(value) {
     this._max = value;
-    if (this._value > this._max) {
-      this._value = this._max;
+    if (this.value > this._max) {
+      this.value = this._max;
     }
   }
 
@@ -162,13 +159,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * * default `1`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Number}`
    * * `newValue: {Number}`
+   * * `oldValue: {Number}`
    */
   constructor(args = {}) {
-    super(args);
-
-    this._value = args.value ?? 0;
+    super({
+      ...args,
+      value: args.value ?? 0,
+    });
+    
     this._min = args.min ?? undefined;
     this._max = args.max ?? undefined;
     this._step = args.step ?? 1;

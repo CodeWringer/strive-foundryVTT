@@ -10,6 +10,8 @@
   width: 1px;
   height: stretch;
   padding-right: 1px; // Ensures symmetry on the right side.
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .h-divider {
@@ -17,6 +19,8 @@
   height: 1px;
   padding-bottom: 1px; // Ensures symmetry below.
   display: block;
+  margin-top: 5px;
+  margin-bottom: 5px;
 
   &-full {
     width: stretch;
@@ -30,13 +34,13 @@
     border-radius: unset;
 
     .edit-mode {
-      height: $input-size-md;
+      min-height: $input-size-md;
       line-height: $input-size-md;
       font-size: $font-size-md;
     }
 
     .read-mode {
-      height: $input-size-md;
+      min-height: $input-size-md;
       line-height: $input-size-md;
       font-size: $font-size-md;
       border: unset;
@@ -53,18 +57,24 @@
 
     &.lg {
       .edit-mode {
-        height: $input-size-lg;
+        min-height: $input-size-lg;
         line-height: $input-size-lg;
         font-size: $font-size-lg;
       }
 
       .read-mode {
-        height: $input-size-lg;
+        min-height: $input-size-lg;
         line-height: $input-size-lg;
         font-size: $font-size-lg;
       }
     }
   }
+}
+
+.embolden {
+  padding: 0.12rem 0.3rem 0 0.3rem;
+  border-radius: 0.3rem;
+  font-weight: bold;
 }
 
 .theme-dark {
@@ -103,7 +113,43 @@
           outline: unset;
           box-shadow: none;
         }
+
+        // Override nested to avoid double-highlighting. 
+        .edit-mode {
+          border-bottom: unset !important;
+          
+          &:hover,
+          &:focus,
+          &:focus-within {
+            background-color: unset !important;
+            border-top: unset !important;
+            border-left: unset !important;
+            border-right: unset !important;
+            border-bottom: unset !important;
+            outline: unset !important;
+            box-shadow: none !important;
+          }
+        }
       }
+    }
+  }
+
+  .embolden {
+    background-color: $c-border-dark;
+    color: $c-text-light;
+    
+    *,
+    input[type=text],
+    input[type=number],
+    input[type=password],
+    input[type=date],
+    input[type=time],
+    input[type=datetime-local],
+    input[type=search],
+    input[type=file],
+    select {
+      background-color: $c-border-dark;
+      color: $c-text-light;
     }
   }
 }
@@ -144,7 +190,38 @@
           outline: unset;
           box-shadow: none;
         }
+
+        // Override nested to avoid double-highlighting. 
+        .edit-mode {
+          border-bottom: unset !important;
+
+          &:hover,
+          &:focus,
+          &:focus-within {
+            background-color: unset !important;
+            border-bottom: unset !important;
+          }
+        }
       }
+    }
+  }
+
+  .embolden {
+    background-color: $c-border-light;
+    color: $c-text-dark;
+    
+    *,
+    input[type=text],
+    input[type=number],
+    input[type=password],
+    input[type=date],
+    input[type=time],
+    input[type=datetime-local],
+    input[type=search],
+    input[type=file],
+    select {
+      background-color: $c-border-light;
+      color: $c-text-dark;
     }
   }
 }
@@ -231,6 +308,30 @@
   }
   &-lg {
     width: 6rem;
+    max-width: 6rem;
+  }
+}
+
+.min-width {
+  &-sm {
+    min-width: 3rem;
+  }
+  &-md {
+    min-width: 4rem;
+  }
+  &-lg {
+    min-width: 6rem;
+  }
+}
+
+.max-width {
+  &-sm {
+    max-width: 3rem;
+  }
+  &-md {
+    max-width: 4rem;
+  }
+  &-lg {
     max-width: 6rem;
   }
 }

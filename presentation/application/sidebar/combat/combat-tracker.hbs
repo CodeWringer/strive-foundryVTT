@@ -10,7 +10,7 @@
         previousId}}data-document-id="{{previousId}}" {{else}}disabled{{/if}}>
         <i class="fas fa-caret-left"></i>
       </a>
-      <h4 class="encounter">{{localize "COMBAT.Encounter"}} {{currentIndex}} / {{combatCount}}</h4>
+      <h4 class="strive encounter">{{localize "COMBAT.Encounter"}} {{currentIndex}} / {{combatCount}}</h4>
       <a class="combat-button combat-cycle" data-tooltip="COMBAT.EncounterNext" {{#if
         nextId}}data-document-id="{{nextId}}" {{else}}disabled{{/if}}>
         <i class="fas fa-caret-right"></i>
@@ -37,12 +37,12 @@
 
       {{#if combatCount}}
       {{#if combat.round}}
-      <h3 class="encounter-title noborder">{{localize 'COMBAT.Round'}} {{combat.round}}</h3>
+      <h3 class="strive encounter-title noborder">{{localize 'COMBAT.Round'}} {{combat.round}}</h3>
       {{else}}
-      <h3 class="encounter-title noborder">{{localize 'COMBAT.NotStarted'}}</h3>
+      <h3 class="strive encounter-title noborder">{{localize 'COMBAT.NotStarted'}}</h3>
       {{/if}}
       {{else}}
-      <h3 class="encounter-title noborder">{{localize "COMBAT.None"}}</h3>
+      <h3 class="strive encounter-title noborder">{{localize "COMBAT.None"}}</h3>
       {{/if}}
 
       {{!-- Button to send general combat action reminders to chat --}}
@@ -77,7 +77,7 @@
     <li class="combatant actor directory-item flexrow {{this.css}}" data-combatant-id="{{this.id}}">
       <img class="token-image" data-src="{{this.img}}" alt="{{this.name}}" />
       <div class="token-name flexcol">
-        <h4>{{this.name}}</h4>
+        <h4 class="strive">{{this.name}}</h4>
         {{!-- Action Points --}}
         {{#if this.renderActionPoints}}
         {{#with this.actionPointsTemplate as |template|}}

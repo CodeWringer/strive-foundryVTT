@@ -1,7 +1,20 @@
-import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
+import { ATTRIBUTES } from "../../../../business/model/domain/const/attributes.mjs";
+import { Skill } from "../../../../business/model/domain/skill/skill.mjs";
+import { Sum, SumComponent } from "../../../../business/model/domain/summed-data.mjs";
+import { ArrayUtil } from "../../../../common/util/array-utility.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import ChoiceOption from "../../../model/choice-option.mjs";
+import { ChoicesUtil } from "../../../util/choices-utility.mjs";
+import AbilityLevelViewModel from "../../component/ability-level/ability-level-viewmodel.mjs";
+import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
+import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
+import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
+import { ACTOR_TYPES } from "../../../../business/model/domain/const/actor-types.mjs";
+import { SkillRollSchema } from "../../../../business/model/domain/dice/ability-roll/skill-roll-schema.mjs";
 
 export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   /** @override */
@@ -11,6 +24,32 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
   get clazz() { return SkillHeaderViewModel; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get apCost() { return this.document.actionPoints.current ?? 0; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasApCost() { return this.document.actionPoints.current > 0 && this.document.actionPoints.enabled; }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: ".advancement",
+        shouldBeHidden: () => !this.isEmbeddedOnPC,
+      }),
+    ]);
+  }
+
+  get isEmbeddedOnPC() {
+    return this.document.hasParent && this.document.owningDocument.type === ACTOR_TYPES.pc;
+  }
+
+  /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -18,12 +57,143 @@ export default class SkillHeaderViewModel extends BaseItemHeaderViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientSkill} args.document The represented transient document instance. 
+   * @param {SkillDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
+
+    const diceCount = this.#getRollableDiceCount();
+    this.vmLevel = new AbilityLevelViewModel({
+      id: "vmLevel",
+      parent: this,
+      value: this.document.level,
+      diceCount: diceCount.total,
+      levelToolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.level"),
+      }),
+      rollButtonToolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.roll"),
+      }),
+      onChange: (newValue) => {
+        this.document.level = newValue;
+      },
+      onRoll: async () => {
+        const rollSchema = new SkillRollSchema({
+          document: this.document,
+        });
+        const queried = await rollSchema.queryRollData();
+
+        if (!ValidationUtil.isDefined(queried)) return; // User canceled. 
+
+        const actor = this.document.parentDocument;
+
+        const rollData = await rollSchema.getRollData(queried);
+        const rollResult = await rollData.roll();
+        await rollResult.sendToChat({
+          visibilityMode: queried.visbilityMode,
+          actor: actor,
+          primaryTitle: actor.name,
+          primaryImage: actor.img,
+          secondaryTitle: this.document.name,
+          secondaryImage: this.document.img,
+        });
+      },
+    });
+
+    this.vmAdvancement = new InputSplitNumberSpinnerViewModel({
+      id: "vmAdvancement",
+      parent: this,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.advancement"),
+      }),
+      current: {
+        value: this.document.advancement.progress,
+        min: 0,
+        limitToMax: true,
+      },
+      maximum: {
+        value: this.#getMaximumAdvancementProgress(),
+        allowEditing: false,
+      },
+      onChange: (newValue) => {
+        this.document.advancement.progress = newValue.current;
+      },
+    });
+
+    this.vmBaseAttributes = new ViewModel({
+      id: "vmBaseAttributes",
+      parent: this,
+      toolTip: new ViewModelToolTipDefinition({
+        localized: StringUtil.getLoca("system.item.skill.baseAttribute.baseAttributes"),
+      }),
+    });
+    const attributeOptions = this.#getAttributeChoices();
+    this.baseAttributeVms = [];
+    for (let i = 0; i < Skill.baseAttributeCount; i++) {
+      let value = attributeOptions[0];
+
+      if ((this.document.baseAttributes ?? []).length > i) {
+        value = attributeOptions.find(it => it.value === this.document.baseAttributes[i].name);
+      }
+
+      this.baseAttributeVms.push(new InputDropDownViewModel({
+        id: `vmAttribute-${i}`,
+        parent: this,
+        value: value,
+        options: attributeOptions,
+        onChange: (newValue) => {
+          const newAttributes = (this.document.baseAttributes ?? []).concat([]);
+          while (newAttributes.length <= i) {
+            newAttributes.push(ATTRIBUTES.agility);
+          }
+          newAttributes[i] = ATTRIBUTES[newValue.value];
+          this.document.baseAttributes = newAttributes;
+        },
+      }));
+    }
+  }
+
+  /**
+   * @returns {Sum}
+   * @private
+   */
+  #getRollableDiceCount() {
+    const sumComps = [];
+    const owningDocument = this.document.owningDocument;
+    if (ValidationUtil.isDefined(owningDocument)) {
+      for (const attribute of this.document.baseAttributes) {
+        const level = (owningDocument.attributes.find(it => it.name === attribute.name)).level;
+        sumComps.push(new SumComponent(attribute.name, attribute.localizableName, level));
+      }
+    }
+    return new Sum(sumComps);
+  }
+
+  /**
+   * @returns {Array<ChoiceOption>}
+   * @private
+   */
+  #getAttributeChoices() {
+    const r = [];
+    for (const key in ATTRIBUTES) {
+      if (!Object.hasOwn(ATTRIBUTES, key)) continue;
+      if (ArrayUtil.arrayContains(ChoicesUtil._defaultExcludes, key)) continue;
+
+      const attribute = ATTRIBUTES[key];
+      r.push(new ChoiceOption({
+        value: attribute.name,
+        localizedValue: StringUtil.getLoca(attribute.localizableAbbreviation),
+      }));
+    }
+    return r;
+  }
+
+  /**
+   * @returns {Number}
+   * @private
+   */
+  #getMaximumAdvancementProgress() {
+    return Skill.getAdvancementRequirement(this.document.level);
   }
 }

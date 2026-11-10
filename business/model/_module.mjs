@@ -1,4 +1,4 @@
-import { dataField } from "./data-field/_module.mjs";
+import { dataField } from "./data-model/data-field/_module.mjs";
 import { dataModel } from "./data-model/_module.mjs";
 import { document } from "./document/_module.mjs";
 import { domain } from "./domain/_module.mjs";

@@ -75,7 +75,7 @@ export default class InputRichTextViewModel extends InputViewModel {
     this.element.empty();
     this.enrichedHtml = await FoundryWrapper.TextEditor.implementation.enrichHTML(
       this.value, {
-        secrets: this.isOwner,
+        secrets: this.showSecrets,
         relativeTo: this,
       }
     );

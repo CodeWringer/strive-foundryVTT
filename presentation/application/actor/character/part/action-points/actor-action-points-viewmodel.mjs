@@ -14,7 +14,7 @@ export default class ActorActionPointsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {TransientBaseActor} args.document The represented transient document instance. 
+   * @param {BaseActorDocument} args.document The represented transient document instance. 
    */
   constructor(args = {}) {
     super(args);

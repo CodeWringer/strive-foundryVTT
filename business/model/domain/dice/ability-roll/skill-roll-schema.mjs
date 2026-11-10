@@ -1,17 +1,18 @@
-import { common } from "../../../../../common/_module.mjs"
-import { DynamicInputDefinition } from "../../../../../presentation/application/_module.mjs"
-import InputDropDownViewModel from "../../../../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
-import InputNumberSpinnerViewModel from "../../../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputTextFieldViewModel from "../../../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs"
-import { business } from "../../../../_module.mjs"
-import { GameSystemUserSettings } from "../../../../setting/game-system-user-settings.mjs"
-import { TransientSkill } from "../../../document/_module.mjs"
-import { CharacterAttribute, Sum } from "../../_module.mjs"
-import { VISIBILITY_MODES } from "../../const/visibility-modes.mjs"
-import RollData from "../roll-data.mjs"
-import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs"
-import RollQueryData from "../roll-query-data.mjs"
-import { RollSchema } from "../roll-schema.mjs"
+import { StringUtil } from "../../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
+import DynamicComponent from "../../../../../presentation/application/component/dynamic-component/dynamic-component.mjs";
+import InputDropDownViewModel from "../../../../../presentation/application/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../../../presentation/application/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../../../presentation/application/component/input-textfield/input-textfield-viewmodel.mjs";
+import RowViewModel from "../../../../../presentation/application/component/row/row-viewmodel.mjs";
+import { GameSystemUserSettings } from "../../../../setting/game-system-user-settings.mjs";
+import CharacterActorDocument from "../../../document/actor/character-actor-document.mjs";
+import SkillDocument from "../../../document/item/skill-document.mjs";
+import { Sum, SumComponent } from "../../summed-data.mjs";
+import RollData from "../roll-data.mjs";
+import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
+import RollQueryData from "../roll-query-data.mjs";
+import { RollSchema } from "../roll-schema.mjs";
 
 /**
  * Defines a schema for rolling dice to test a skill. 
@@ -20,15 +21,21 @@ import { RollSchema } from "../roll-schema.mjs"
  */
 export class SkillRollSchema extends RollSchema {
   /**
+   * @type {SkillDocument}
+   * @private
+   */
+  get #owningDocument() {
+    if (ValidationUtil.isDefined(this._owningDocumentOverride)) {
+      return this._owningDocumentOverride;
+    } else {
+      return this.document.parentDocument;
+    }
+  }
+
+  /**
    * @param {Object} args 
-   * @param {Number | undefined} args.dieFaces The number of faces on a die. 
-   * * default `6`
-   * @param {Number | undefined} args.hitThreshold Sets the lower bound of faces that are considered 
-   * hits. Any face turning up this number and numbers above, are considered hits. 
-   * * default `5`
-   * 
-   * @param {TransientBaseActor | undefined} args.owningDocumentOverride If set, will be treated as the Skill's parent, 
-   * even if it isn't. This is for use in synthetic Skill rolling. 
+   * @param {SkillDocument} args.document
+   * @param {CharacterActorDocument | undefined} args.owningDocumentOverride
    */
   constructor(args = {}) {
     super(args);
@@ -36,152 +43,182 @@ export class SkillRollSchema extends RollSchema {
     this._owningDocumentOverride = args.owningDocumentOverride;
   }
 
-  /**
-   * @param {TransientSkill} skillDocument 
-   * @param {RollQueryData} rollQueryData 
-   * 
-   * @override
-   */
-  async getRollData(skillDocument, rollQueryData) {
-    const owningDocument = this._owningDocumentOverride ?? skillDocument.owningDocument;
-    if (!common.util.validation.isDefined(owningDocument)) return;
-
-    const diceComponents = skillDocument.baseAttributes
-    .map(it => new CharacterAttribute(owningDocument, it.name))
-    .map(it => new SumComponent(it.name, it.localizableName, it.modifiedLevel));
-
-    return new RollData({
-      dieFaces: this.dieFaces,
-      hitThreshold: this.hitThreshold,
-      obFormula: rollQueryData.ob,
-      diceComponents: new Sum(diceComponents),
-      bonusDiceComponent: new SumComponent(RollSchema.BONUS_DICE_COMPONENT, "system.roll.bonusDice", rollQueryData.bonusDice),
-      compensationPoints: rollQueryData.compensationPoints,
-      rollModifier: rollQueryData.rollModifier,
-      hitLimit: skillDocument.modifiedLevel,
-    });
-  }
-
   /** @override */
-  getAvailableDiceComponents(skillDocument) {
-    const owningDocument = this._owningDocumentOverride ?? skillDocument.owningDocument;
-    const diceComponents = skillDocument.baseAttributes
-    .map(it => new CharacterAttribute(owningDocument, it.name))
-    .map(it => new SumComponent(it.name, it.localizableName, it.modifiedLevel));
+  getAvailableDiceComponents() {
+    const owningDocument = this.#owningDocument;
+    if (!ValidationUtil.isDefined(owningDocument)) return;
+
+    const diceComponents = this.document.baseAttributes
+      .map(baseAttribute => owningDocument.attributes.find(attribute => attribute.name === baseAttribute.name))
+      .map(attribute => new SumComponent({
+        name: attribute.name,
+        localizableName: attribute.localizableName,
+        value: attribute.level
+      }));
 
     return [
       new Sum(diceComponents),
     ];
   }
 
+  /**
+   * @param {RollQueryData} rollQueryData 
+   * @returns {Promise<RollData>}
+   * 
+   * @async
+   * @override
+   */
+  async getRollData(rollQueryData) {
+    const diceComponents = this.getAvailableDiceComponents()[0];
+
+    return new RollData({
+      dieFaces: this.dieFaces,
+      hitThreshold: this.hitThreshold,
+      obFormula: rollQueryData.ob,
+      diceComponents: diceComponents,
+      modifyDiceComponent: new SumComponent({
+        name: RollSchema.MODIFY_DICE_COMPONENT,
+        localizableName: "system.roll.modifyDice",
+        value: rollQueryData.modifyDice,
+      }),
+      edge: rollQueryData.edge,
+      rollModifier: rollQueryData.rollModifier,
+      hitLimit: this.document.level,
+    });
+  }
+
   /** @override */
-  getAvailableDiceComponentExplanation(skillDocument) {
-    const owningDocument = this._owningDocumentOverride ?? skillDocument.owningDocument;
-    return skillDocument.baseAttributes
-    .map(it => new CharacterAttribute(owningDocument, it.name))
-    .map(it => `${it.modifiedLevel} (${game.i18n.localize(it.localizableName)})`)
-    .join(" + ");
+  getAvailableDiceComponentExplanation() {
+    const owningDocument = this.#owningDocument;
+    return this.document.baseAttributes
+      .map(baseAttribute => owningDocument.attributes.find(attribute => attribute.name === baseAttribute.name))
+      .map(attribute => `${attribute.level} (${StringUtil.getLoca(attribute.localizableName)})`)
+      .join(" + ");
   }
 
   /**
-   * @param {TransientSkill} document 
    * @param {DynamicInputDialog} dialog 
    * 
    * @override
    */
-  async _queryRollData(document, dialog) {
+  async _queryRollData(dialog) {
     // Input definitions specific to dice pool rolls. 
     const nameInputObstacle = "inputObstacle";
-    const nameInputBonusDice = "inputBonusDice";
-    const nameInputCompensationPoints = "inputCompensationPoints";
-    const nameInputRollDiceModifier = "inputRollDiceModifier";
+    const nameInputModifyDice = "inputBonusDice";
+    const nameInputEdge = "inputEdge";
 
-    const owningDocument = this._owningDocumentOverride ?? document.owningDocument;
-    const actor = owningDocument.document;
-    const attributes = document.baseAttributes.map(attribute => new CharacterAttribute(actor, attribute.name));
+    const owningDocument = this.#owningDocument;
+    // const actor = owningDocument.document;
+    // const attributes = document.baseAttributes.map(attribute => new CharacterAttribute(actor, attribute.name));
 
     const availableDiceExplanation = this.getAvailableDiceComponentExplanation(document);
+    
+    let diceCompositionAndReminder = `<p class="font-size-sm">${availableDiceExplanation}</p>`;
+    const showReminders = GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
+    if (showReminders) {
+      diceCompositionAndReminder = `${diceCompositionAndReminder}<p>${StringUtil.getLoca("system.roll.forkReminder")}</p>`;
+    }
 
-    dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
-      new DynamicInputDefinition({
-        name: "diceCompositionLabel",
-        localizedLabel: `<p class="font-size-sm">${availableDiceExplanation}</p>`,
+    dialog.sections.splice(0, 0, // Insert the following before the visibility drop down. 
+      new DynamicComponent({
+        html: diceCompositionAndReminder,
       }),
-      new DynamicInputDefinition({
-        name: nameInputObstacle,
-        localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputTextFieldViewModel({
-          id: id,
+      new DynamicComponent({
+        template: RowViewModel.TEMPLATE,
+        cssClass: "grid-2col",
+        viewModelFactory: (parent) => new RowViewModel({
           parent: parent,
-          value: "0",
-          placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
-          ...overrides,
+          sections: [
+            new DynamicComponent({
+              html: `<p>${StringUtil.getLoca("system.roll.obstacle.abbreviation")}</p>`
+            }),
+            new DynamicComponent({
+              template: InputTextFieldViewModel.TEMPLATE,
+              viewModelFactory: (parent) => new InputTextFieldViewModel({
+                id: nameInputObstacle,
+                parent: parent,
+                value: "0",
+                placeholder: StringUtil.getLoca("system.roll.obstacle.rollForPlaceholder"),
+                // validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
+              }),
+            }),
+          ],
         }),
-        required: true,
-        validationFunc: (value) => { return ValidationUtil.isNotBlankOrUndefined(value); },
       }),
-      new DynamicInputDefinition({
-        name: nameInputBonusDice,
-        localizedLabel: game.i18n.localize("system.roll.bonusDice"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
+      new DynamicComponent({
+        template: RowViewModel.TEMPLATE,
+        cssClass: "grid-2col",
+        viewModelFactory: (parent) => new RowViewModel({
           parent: parent,
-          value: 0,
-          ...overrides,
+          sections: [
+            new DynamicComponent({
+              html: `<p>${StringUtil.getLoca("system.roll.modifyDice")}</p>`
+            }),
+            new DynamicComponent({
+              template: InputNumberSpinnerViewModel.TEMPLATE,
+              viewModelFactory: (parent) => new InputNumberSpinnerViewModel({
+                id: nameInputModifyDice,
+                parent: parent,
+                value: 0,
+                // validationFunc: (value) => { return parseInt(value) !== NaN; },
+              }),
+            }),
+          ],
         }),
-        required: true,
-        validationFunc: (value) => { return parseInt(value) !== NaN; },
       }),
-      new DynamicInputDefinition({
-        name: nameInputCompensationPoints,
-        localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
-        template: InputNumberSpinnerViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
-          id: id,
+      new DynamicComponent({
+        template: RowViewModel.TEMPLATE,
+        cssClass: "grid-2col",
+        viewModelFactory: (parent) => new RowViewModel({
           parent: parent,
-          value: 0,
-          ...overrides,
+          sections: [
+            new DynamicComponent({
+              html: `<p>${StringUtil.getLoca("system.roll.edge")}</p>`
+            }),
+            new DynamicComponent({
+              template: InputNumberSpinnerViewModel.TEMPLATE,
+              viewModelFactory: (parent) => new InputNumberSpinnerViewModel({
+                id: nameInputEdge,
+                parent: parent,
+                value: 0,
+                // validationFunc: (value) => { return parseInt(value) !== NaN; },
+              }),
+            }),
+          ],
         }),
-        required: true,
-        validationFunc: (value) => { return parseInt(value) !== NaN; },
       }),
-      new DynamicInputDefinition({
-        name: nameInputRollDiceModifier,
-        localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
-        template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: (id, parent, overrides) => new InputDropDownViewModel({
-          id: id,
+      new DynamicComponent({
+        template: RowViewModel.TEMPLATE,
+        cssClass: "grid-2col",
+        viewModelFactory: (parent) => new RowViewModel({
           parent: parent,
-          options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
-          value: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
-          ...overrides,
+          sections: [
+            new DynamicComponent({
+              html: `<p>${StringUtil.getLoca("system.roll.edge")}</p>`
+            }),
+            new DynamicComponent({
+              template: InputDropDownViewModel.TEMPLATE,
+              viewModelFactory: (parent) => new InputDropDownViewModel({
+                id: nameInputRollDiceModifier,
+                parent: parent,
+                options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
+                value: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
+              }),
+            }),
+          ],
         }),
       }),
     );
-
-    const showReminders = GameSystemUserSettings.get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
-    const isPC = owningDocument.type === business.model.const.ACTOR_TYPES.PC;
-    if (showReminders && isPC) {
-      dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
-        new DynamicInputDefinition({
-          name: "forkReminderLabel",
-          localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
-        }),
-      );
-    }
 
     await dialog.renderAndAwait(true);
     if (dialog.confirmed !== true) return undefined;
 
     return new RollQueryData({
-      ob: dialog[nameInputObstacle],
-      bonusDice: parseInt(dialog[nameInputBonusDice]),
-      compensationPoints: parseInt(dialog[nameInputCompensationPoints]),
-      rollModifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[nameInputRollDiceModifier].value),
-      visbilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this._nameInputVisibility].value),
+      ob: dialog.find(nameInputObstacle),
+      bonusDice: parseInt(dialog.find(nameInputModifyDice)),
+      edge: parseInt(dialog.find(nameInputEdge)),
+      rollModifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog.find(nameInputRollDiceModifier).value),
+      visbilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog.find(this._nameInputVisibility).value),
     });
   }
-
 }

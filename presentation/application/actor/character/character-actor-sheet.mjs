@@ -116,7 +116,6 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
   /** @override */
   async close() {
     if (ValidationUtil.isDefined(this.viewModel)) {
-      this.viewModel.writeViewState();
       this.viewModel.dispose();
     }
     return super.close();
@@ -136,7 +135,7 @@ export class CharacterActorSheet extends FoundryWrapper.HandlebarsApplicationMix
 
     // Ensure view model. 
     this.viewModel = this.createViewModel(context, context.item, this);
-    this.viewModel.readAllViewState();
+    this.viewModel.viewState.read();
     context.viewModel = this.viewModel;
 
     return context;

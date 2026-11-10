@@ -3,7 +3,7 @@ viewModel: {ActorDriversViewModel}
 cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="{{cssClass}}">
-  <h3 class="strive-header flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+  <h3 class="strive flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
     {{!-- Reminder --}}
     {{#if viewModel.showReminders}}
     <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmAmbitionReminder.id}}">
@@ -15,7 +15,7 @@ cssClass: {undefined | String}
   <div class="margin-b-md">
     {{> inputTextField viewModel=viewModel.vmTfAmbition }}
   </div>
-  <h3 class="strive-header flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+  <h3 class="strive flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
     {{!-- Reminder --}}
     {{#if viewModel.showReminders}}
     <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmAspirationReminder.id}}">
@@ -29,7 +29,7 @@ cssClass: {undefined | String}
       {{> inputTextField viewModel=vm}}
     </div>
   {{/each}}
-  <h3 class="strive-header flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+  <h3 class="strive flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
     {{!-- Reminder --}}
     {{#if viewModel.showReminders}}
     <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmReactionReminder.id}}">

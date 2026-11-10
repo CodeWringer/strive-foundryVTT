@@ -11,9 +11,9 @@ import Persistable from "./persistable.mjs";
 */
 export default class TimeIncrement extends Persistable {
   /**
-   * @param {Object} dto 
-   * @param {Number} dto.value
-   * @param {TimeUnit} dto.unit 
+   * @param {Object} raw 
+   * @param {Number} raw.value
+   * @param {TimeUnit} raw.unit 
    * 
    * @returns {TimeIncrement}
    * 

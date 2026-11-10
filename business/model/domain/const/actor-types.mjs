@@ -4,6 +4,7 @@
  * @constant
  */
 export const ACTOR_TYPES = {
-  character: "character",
+  pc: "pc",
+  npc: "npc",
   plain: "plain",
 };

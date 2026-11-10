@@ -90,7 +90,7 @@ export default class BaseAnimation {
    * @param {Array<JQuery | HTMLElement> | undefined} args.elements 
    */
   constructor(args = {}) {
-    this.#id = args.id ?? UuidUtil.createUUID();
+    this.#id = args.id ?? UuidUtil.createUuid();
     this.#elements = args.elements ?? [];
   }
 

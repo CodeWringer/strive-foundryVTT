@@ -2,7 +2,7 @@
   padding: 0;
   min-height: unset;
   min-width: unset;
-  border-radius: 5px;
+  border-radius: $border-radius-md;
   display: flex;
   max-height: unset;
   --button-size: unset;
@@ -16,6 +16,8 @@
 }
 
 .theme-dark .strive.button {
+  background-color: $c-bg-dark-secondary;
+  
   &:hover,
   &:focus,
   &:focus-within {
@@ -26,6 +28,8 @@
 }
 
 .theme-light .strive.button {
+  background-color: $c-bg-light-secondary;
+
   &:hover,
   &:focus,
   &:focus-within {
@@ -33,8 +37,4 @@
     background-color: $c-bg-input-focus-light;
     text-shadow: 0 0 0.3rem $c-bg-themed;
   }
-}
-
-button {
-  min-height: unset;
 }

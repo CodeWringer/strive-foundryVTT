@@ -3,7 +3,7 @@ viewModel: {DamageDefinitionListViewModel}
 cssClass: {String | undefined}
 --}}
 <div id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
-  <h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin: 0;">
+  <h3 class="strive flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin: 0;">
     <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.damageDefinition.label"}}</span>
     {{!-- Button Add Item --}}
     {{#if viewModel.isEditable}}

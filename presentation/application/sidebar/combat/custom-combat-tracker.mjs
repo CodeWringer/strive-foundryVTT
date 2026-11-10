@@ -48,7 +48,7 @@ export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
         id: "vmMomentum",
         isEditable: true,
         value: data.combat.momentum,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           data.combat.momentum = newValue;
         },
       });
@@ -63,7 +63,7 @@ export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
       const document = combatant.actor;
 
       if (ValidationUtil.isDefined(document) !== true) {
-        game.strive.logger.logWarn("Failed to get combatant actor");
+        game.strive.logger.warning("Failed to get combatant actor");
         continue;
       } else if (document.type === business.model.const.ACTOR_TYPES.PLAIN) {
         continue;
@@ -80,7 +80,7 @@ export default class CustomCombatTracker extends FoundryWrapper.CombatTracker {
       this.actionPointsViewModels.push(turn.actionPointsViewModel);
       
       // Add grit points view model. 
-      const transientActor = document.getTransientObject();
+      const transientActor = document.getEnhancedDocument();
       turn.gritPointsTemplate = GritPointsCombatTrackerViewModel.TEMPLATE;
       turn.renderGritPoints = transientActor.type === business.model.const.ACTOR_TYPES.PC 
         || (transientActor.type === business.model.const.ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);

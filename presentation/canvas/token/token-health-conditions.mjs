@@ -76,12 +76,12 @@ export default class TokenHealthConditions extends TokenExtender {
 
   /**
    * @param {Token} token 
-   * @returns {Array<TransientHealthCondition>}
+   * @returns {Array<HealthConditionDocument>}
    * 
    * @private
    */
   _getTokenHealthConditions(token) {
-    const transientActor = token.actor.getTransientObject();
+    const transientActor = token.actor.getEnhancedDocument();
     return transientActor.health.conditions.concat([]).sort((a, b) => {
       const localizedA = game.i18n.localize(a.name);
       const localizedB = game.i18n.localize(b.name);
@@ -171,7 +171,7 @@ export default class TokenHealthConditions extends TokenExtender {
           container.addChild(sprite);
           
           if (!common.util.validation.isDefined(token.healthConditionContainer)) {
-            game.strive.logger.logWarn("Undefined container reference");
+            game.strive.logger.warning("Undefined container reference");
             continue;
           }
           token.healthConditionContainer.addChild(container);
@@ -253,7 +253,7 @@ export default class TokenHealthConditions extends TokenExtender {
       container.position.set(x, y);
       let xInContainer = 0;
       if (!common.util.validation.isDefined(striveHoverLayer.healthConditionHoverContainer)) {
-        game.strive.logger.logWarn("Undefined container reference");
+        game.strive.logger.warning("Undefined container reference");
         continue;
       }
       striveHoverLayer.healthConditionHoverContainer.addChild(container);
@@ -329,7 +329,7 @@ export default class TokenHealthConditions extends TokenExtender {
         token.y + cornerRadius
       );
     } else {
-      game.strive.logger.logWarn("Hover container is undefined");
+      game.strive.logger.warning("Hover container is undefined");
     }
   }
 }

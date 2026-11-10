@@ -68,7 +68,7 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
       parent: this,
       id: "vmName",
       value: this.document.name,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.name = newValue;
       },
       placeholder: game.i18n.localize("system.general.name.label"),
@@ -77,7 +77,7 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
       parent: this,
       id: "vmImg",
       value: this.document.img,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.img = newValue;
       },
     });
@@ -158,7 +158,7 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
       });
 
       if (!ValidationUtil.isDefined(owningDocument)) {
-        game.strive.logger.logWarn(`Failed to find owningDocument with type '${data.owningDocument.contentType}' and ID '${data.owningDocument.id}'`);
+        game.strive.logger.warning(`Failed to find owningDocument with type '${data.owningDocument.contentType}' and ID '${data.owningDocument.id}'`);
         return;
       }
 
@@ -173,11 +173,11 @@ export default class CharacterActorSheetViewModel extends BaseSheetViewModel {
     }
 
     if (!ValidationUtil.isDefined(templateItem)) {
-      game.strive.logger.logWarn(`Failed to find document with type '${data.contentType}' ID '${data.id}'`);
+      game.strive.logger.warning(`Failed to find document with type '${data.contentType}' ID '${data.id}'`);
       return;
     }
 
-    templateItem = templateItem.getTransientObject();
+    templateItem = templateItem.getEnhancedDocument();
 
     const existingItem = this.document.items.find(it => it.id === templateItem.id || it.name === templateItem.name);
     const shouldUpdate = ValidationUtil.isDefined(existingItem) 

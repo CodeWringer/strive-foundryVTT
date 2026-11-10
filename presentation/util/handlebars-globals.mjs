@@ -134,11 +134,22 @@ export const HANDLEBARS_GLOBALS = {
    * @returns {String}
    */
   themedImage: (templatePath, cssClass, style) => {
-    const root = PropertyUtil.getNestedPropertyValue(TEMPLATES, templatePath);
+    const root = PropertyUtil.getByPath(TEMPLATES, templatePath);
     const dark = root.dark ?? root;
     const light = root.light ?? root;
     const _cssClass = ValidationUtil.isDefined(cssClass) ? ` ${cssClass}` : "";
 
     return `<img src="${dark}" class="strive themed dark${_cssClass}" style="${style}"><img src="${light}" class="strive themed light${_cssClass}" style="${style}">`
   },
+
+  /**
+   * Wraps the `Handlebars.registerPartial` call. 
+   * @param {String} name Invokable name of the partial. 
+   * E.g. `"myButtong"`
+   * @param {String} partial The partial content. 
+   * E.g. `"{{> path/to/my/template}}"` or e.g. `"<p>Hello World</p>"`
+   */
+  registerPartial: (name, partial) => {
+    Handlebars.registerPartial(name, partial);
+  }
 };

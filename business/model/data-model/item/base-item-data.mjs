@@ -1,5 +1,5 @@
 import { FoundrySchemaFields, TypeDataModel } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import ModifierField from "../../data-field/modifier-field.mjs";
+import ModifierField from "../data-field/modifier-field.mjs";
 
 /**
  * Abstract base item model. 

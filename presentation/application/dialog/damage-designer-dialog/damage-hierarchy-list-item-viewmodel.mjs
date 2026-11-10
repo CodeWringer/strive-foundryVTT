@@ -115,7 +115,7 @@ export default class DamageHierarchyListItemViewModel extends ViewModel {
       if (ValidationUtil.isDefined(toShow)) {
         toShow.sheet.render(true);
       } else {
-        game.strive.logger.logWarn(`Failed to find document '${id}' to open sheet`);
+        game.strive.logger.warning(`Failed to find document '${id}' to open sheet`);
       }
     });
   }

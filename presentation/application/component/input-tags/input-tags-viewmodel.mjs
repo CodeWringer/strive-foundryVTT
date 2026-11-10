@@ -56,7 +56,7 @@ export default class InputTagsViewModel extends ViewModel {
   set value(newValue) {
     const oldValue = this._value;
     this._value = newValue;
-    this._onChange(oldValue, newValue);
+    this._onChange(newValue, oldValue);
   }
 
   /**
@@ -299,7 +299,7 @@ export default class InputTagsViewModel extends ViewModel {
     const tags = this.value.concat([]); // safe copy
     const index = tags.findIndex(it => it.id === tag.id);
     if (index < 0) {
-      game.strive.logger.logWarn(`Attempting to delete tag '${tag.id}' failed!`);
+      game.strive.logger.warning(`Attempting to delete tag '${tag.id}' failed!`);
     } else {
       tags.splice(index, 1);
       this.value = tags;
@@ -311,12 +311,12 @@ export default class InputTagsViewModel extends ViewModel {
    * 
    * Is invoked before external subscribers are invoked.
    * 
-   * @param {Array<Tag>} oldValue 
    * @param {Array<Tag>} newValue 
+   * @param {Array<Tag>} oldValue 
    * 
    * @private
    */
-  async _onChange(oldValue, newValue) {
+  async _onChange(newValue, oldValue) {
     // Clear out all existing tags. 
     this.tagViewModels.forEach(vm => {
       $(vm.element).remove();
@@ -352,6 +352,6 @@ export default class InputTagsViewModel extends ViewModel {
     }
     
     if (ValidationUtil.isDefined(this.onChange))
-      this.onChange(oldValue, newValue);
+      this.onChange(newValue, oldValue);
   };
 }

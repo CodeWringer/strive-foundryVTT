@@ -3,7 +3,7 @@ viewModel: {ActorHealthConditionsViewModel}
 cssClass: {undefined | String}
 --}}
 <div id="{{viewModel.id}}" class="sheet-block">
-  <h2 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0;">
+  <h2 class="strive flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0;">
     {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
       <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.health.condition.conditions"}}</span>
       {{!-- Expansion Toggle --}}

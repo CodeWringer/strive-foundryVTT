@@ -4,7 +4,7 @@ cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Title --}}
-  <h1 class="strive-header flex flex-row flex-center {{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
+  <h1 class="strive flex flex-row flex-center {{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0.5rem;">
     <span class="flex-grow">{{viewModel.localizedTitle}}</span>
     {{> buttonDropDown viewModel=viewModel.vmContextMenu }}
   </h1>

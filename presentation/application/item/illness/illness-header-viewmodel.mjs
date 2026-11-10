@@ -1,10 +1,7 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { ChoicesUtil } from "../../../util/choices-utility.mjs";
-import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import InputSplitNumberSpinnerViewModel from "../../component/input-split-number-spinner/input-split-number-spinner-viewmodel.mjs";
-import { ILLNESS_STATES } from "../../../../business/model/domain/const/illness-states.mjs";
 import BaseItemHeaderViewModel from "../base/base-item-header-viewmodel.mjs";
 
 export default class IllnessHeaderViewModel extends BaseItemHeaderViewModel {
@@ -22,10 +19,8 @@ export default class IllnessHeaderViewModel extends BaseItemHeaderViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientIllness} args.document The represented transient document instance. 
+   * @param {IllnessDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context 
-   * * default `DOCUMENT_CONTEXT.independent`
    */
   constructor(args = {}) {
     super(args);
@@ -46,34 +41,11 @@ export default class IllnessHeaderViewModel extends BaseItemHeaderViewModel {
         value: this.document.healProgress.required,
         min: 0,
       },
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.healProgress.current = newValue.current;
         this.document.healProgress.required = newValue.maximum;
         
         this.#updateProgressMaximumReadMode();
-      },
-    });
-    const stateOptions = ChoicesUtil.getAsChoices(ILLNESS_STATES, "xl");
-    const currentStateOption = stateOptions.find(it => it.value === this.document.state.name);
-    this.vmState = new InputDropDownViewModel({
-      id: "vmState",
-      parent: this,
-      isEditable: this.isEditable,
-      toolTip: new ViewModelToolTipDefinition({
-        localized: StringUtil.format(
-          StringUtil.getLoca("system.item.illness.state.stateWithCurrent"),
-          currentStateOption.localizedValue,
-        ),
-      }),
-      options: stateOptions,
-      showValue: false,
-      value: currentStateOption,
-      onChange: (_, newValue) => {
-        this.document.state = ILLNESS_STATES[newValue.value];
-        this.vmState.setToolTipContent(StringUtil.format(
-          StringUtil.getLoca("system.item.illness.state.stateWithCurrent"),
-          newValue.localizedValue,
-        ));
       },
     });
   }
@@ -83,10 +55,6 @@ export default class IllnessHeaderViewModel extends BaseItemHeaderViewModel {
     await super.activateListeners(html);
 
     this.#updateProgressMaximumReadMode();
-
-    if (this.isIndependent) {
-      this.element.find(`#${this.id}-embedded-content`).addClass("hidden");
-    }
   }
 
   /**

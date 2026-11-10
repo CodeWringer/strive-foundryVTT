@@ -1,17 +1,19 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
-import { DOCUMENT_CONTEXT } from "../../../model/document-context.mjs";
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
+import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 
 /**
- * Abstract base class for Item header view models. By default, defines a view model for GM notes. 
+ * Abstract base class for Item header view models. 
+ * 
+ * By default, defines a view model for GM notes. 
  * 
  * The templating is a bit more complicated - `BaseItemHeaderViewModel.TEMPLATE` is used for the 
  * general layout of the header template, and inheritors who override `TEMPLATE` provide custom 
- * header content, which is then inserted into this layout. As such, inheritors MUST NOT provide 
- * their own wrapper element. So, instead of: 
+ * header content, which is then inserted into this layout. As such, inheritors MUST NOT insert  
+ * the ID! So, instead of: 
  * 
  * ```html
  * <div id="{{viewModel.id}}"> <!-- Bad! Do not provide this wrapper! -->
@@ -24,32 +26,22 @@ import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-mod
  * <a id={{viewModel.id}}-button>Click me!</a>
  * ```
  * 
- * @extends ViewModel
+ * Additionally, this base class handles visibility of any content that is only to be shown when 
+ * this Item is embedded on an Actor. Add the CSS class `"context-embedded"` to all elements 
+ * that should only be visible when embedded. 
+ * 
+ * @extends DocumentViewModel
  * 
  * @abstract Inheritors MUST override:
  * * `static get TEMPLATE`
  * * `get clazz`
  */
-export default class BaseItemHeaderViewModel extends ViewModel {
+export default class BaseItemHeaderViewModel extends DocumentViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.application.item.base.header; }
 
   /** @override */
   get clazz() { return BaseItemHeaderViewModel; }
-
-  /**
-   * Returns `true`, if this is an embedded document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
-
-  /**
-   * Returns `true`, if this is an independent (i. e. not embedded) document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
 
   /**
    * @param {Object} args
@@ -59,16 +51,14 @@ export default class BaseItemHeaderViewModel extends ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {TransientBaseItem} args.document The represented transient document instance. 
+   * @param {AuthenticDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
-   * independent document. This affects interactibility. 
-   * * default `DOCUMENT_CONTEXT.independent`
+   * @param {Function | undefined} args.onNameClick Invoked when the name input is clicked. 
    */
   constructor(args = {}) {
     super(args);
 
-    this.context = args.context ?? DOCUMENT_CONTEXT.independent;
+    this.onNameClick = args.onNameClick;
 
     this.vmImg = new InputImageViewModel({
       id: "vmImg",
@@ -78,7 +68,7 @@ export default class BaseItemHeaderViewModel extends ViewModel {
         localized: StringUtil.getLoca("system.general.image"),
       }),
       value: this.document.img,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.img = newValue;
       },
     });
@@ -90,12 +80,10 @@ export default class BaseItemHeaderViewModel extends ViewModel {
         localized: StringUtil.getLoca("system.general.name.documentName"),
       }),
       value: this.document.name,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.name = newValue;
       },
-      onClickInReadMode: this.context === DOCUMENT_CONTEXT.embedded ? () => {
-        // TODO
-      } : null,
+      onClick: this.onNameClick,
     });
   }
 }

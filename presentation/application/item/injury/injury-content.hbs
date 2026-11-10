@@ -4,26 +4,20 @@ viewModel: InjuryContentViewModel
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
 <div class="auto-margin-v-md pad-h-md">
   <span class="h-divider"></span>
-  <div class="flex flex-row flex-middle auto-margin-h-md">
-    <div class="flex flex-row flex-middle">
-      <i class="ico ico-obstacle xl"></i>
-      {{> inputTextField viewModel=viewModel.vmTreatmentObstacle cssClass="width-lg" }}
+  <div class="grid col6 gap-md border-between-rows border-between-cols margin-b-md">
+    <div class="flex flex-row flex-middle auto-margin-h-md grid-span-3">
+      <div class="flex flex-row flex-middle">
+        <i class="ico ico-obstacle xl"></i>
+        {{> inputTextField viewModel=viewModel.vmTreatmentObstacle cssClass="" }}
+      </div>
+      <div class="flex flex-row flex-middle flex-grow">
+        <i class="ico ico-arrow-right lg"></i>
+        {{> inputReference viewModel=viewModel.vmTreatmentSkill cssClass="flex-grow" }}
+      </div>
     </div>
-    <div class="flex flex-row flex-middle flex-grow">
-      <i class="ico ico-arrow-right lg"></i>
-      {{> inputReference viewModel=viewModel.vmTreatmentSkill cssClass="flex-grow" }}
-    </div>
-  </div>
-  <span class="h-divider"></span>
-  <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
-    <div class="flex flex-row flex-middle flex-grow" style="max-width: 40%;">
-      <i class="ico ico-treatment-date xl"></i>
-      {{> inputTextField viewModel=viewModel.vmTreatmentDate cssClass="flex-grow" }}
-    </div>
-    <span class="v-divider"></span>
-    <div class="flex flex-row flex-middle flex-grow auto-margin-h-md">
+    <div class="flex flex-row flex-middle flex-grow auto-margin-h-md grid-span-3">
       <i class="ico ico-treatment-supplies xl"></i>
-      {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount cssClass="width-sm" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount cssClass="" }}
       {{> inputReference viewModel=viewModel.vmTreatmentSuppliesAsset cssClass="flex-grow" }}
     </div>
   </div>

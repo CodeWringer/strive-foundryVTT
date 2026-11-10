@@ -5,7 +5,7 @@ import InputDropDownViewModel from "../../../../presentation/component/input-cho
 import DynamicLabelViewModel from "../../../../presentation/component/label/dynamic-label.mjs"
 import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import TransientBaseActor from "../actor/transient-base-actor.mjs"
+import BaseActorDocument from "../actor/transient-base-actor.mjs"
 import { DOCUMENT_COLLECTION_SOURCES } from "../document-fetcher/document-collection-source.mjs"
 import DocumentFetcher from "../document-fetcher/document-fetcher.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../general-document-types.mjs"
@@ -16,7 +16,7 @@ import DocumentCreationStrategy from "./document-creation-strategy.mjs"
  * 
  * @property {String} localizedSelectionType The localized type of document 
  * that is rollable. E. g. `"Injury"`. 
- * @property {TransientBaseActor | undefined} target The Actor document instance on which 
+ * @property {BaseActorDocument | undefined} target The Actor document instance on which 
  * to embed the new document instance. 
  * @property {Object | undefined} creationDataOverrides Overrides applied to the selected 
  * creation data. Can be used to override a specific property, while leaving 
@@ -67,7 +67,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @param {Object} args 
    * @param {ITEM_TYPES | ACTOR_TYPES} args.documentType Must be the internal type name of 
    * the type of document to create. E. g. `"skill"` or `"expertise"` or `"npc"` and so on.
-   * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
+   * @param {BaseActorDocument | undefined} args.target The Actor document instance on which 
    * to embed the new document instance. Note it is only possible to nest Items in Actors. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 
@@ -75,7 +75,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @param {Function | undefined} args.filter A function that can filter, allowing only 
    * those documents for which it returns true to be valid choices. **Must** return a boolean
    * value. Receives arguments:
-   * * `document: TransientDocument` - A document instance
+   * * `document: Document` - A document instance
    * 
    * @param {Function | undefined} args.selectionLabelMapper If not undefined, will be used 
    * to change the content's of a label based on the currently selected entry. 
@@ -118,9 +118,9 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       const document = await new DocumentFetcher().find({
         id: id,
       });
-      const transientDocument = document.getTransientObject();
-      if (this.filter(transientDocument) === true) {
-        documents.set(id, transientDocument);
+      const Document = document.getEnhancedDocument();
+      if (this.filter(Document) === true) {
+        documents.set(id, Document);
       }
     }
 

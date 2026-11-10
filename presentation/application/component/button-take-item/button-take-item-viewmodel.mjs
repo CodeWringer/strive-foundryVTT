@@ -1,6 +1,6 @@
 import DocumentFetcher from "../../../business/model/document/document-fetcher/document-fetcher.mjs"
 import { ITEM_TYPES } from "../../../business/model/document/item/item-types.mjs"
-import TransientAsset from "../../../business/model/document/item/transient-asset.mjs"
+import AssetDocument from "../../../business/model/document/item/transient-asset.mjs"
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
@@ -59,7 +59,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {TransientAsset} args.target The target object to affect. 
+   * @param {AssetDocument} args.target The target object to affect. 
    * @param {TAKE_ITEM_CONTEXT_TYPES} args.contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
    * 
@@ -229,7 +229,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   /**
    * Clones the given item, sets its parent to the given actor and returns the clone. 
    * 
-   * @param {TransientAsset} templateItem 
+   * @param {AssetDocument} templateItem 
    * @param {Actor} parent
    * 
    * @returns {Item} The cloned item document. This is **not** a transient type instance!
@@ -244,9 +244,9 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       system: templateItem.document.system,
     };
     const assetDocument = await Item.create(itemData, { parent: parent });
-    const transientActor = parent.getTransientObject();
+    const transientActor = parent.getEnhancedDocument();
     transientActor.assets.luggage = transientActor.assets.luggage.concat([
-      assetDocument.getTransientObject(),
+      assetDocument.getEnhancedDocument(),
     ]);
 
     return assetDocument;

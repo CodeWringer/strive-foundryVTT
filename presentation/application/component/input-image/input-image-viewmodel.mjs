@@ -23,7 +23,7 @@ export default class InputImageViewModel extends InputViewModel {
   get clazz() { return InputImageViewModel; }
 
   /** @override */
-  get value() { return this._value; }
+  get value() { return super.value; }
   /**
    * @param {String | Number} newValue The new value to set.
    * Supports integer numbers and arithmetic formulae, e. g.
@@ -33,15 +33,12 @@ export default class InputImageViewModel extends InputViewModel {
   set value(newValue) {
     if (this.isDisposed) return;
 
-    const oldValue = this._value;
-    this._value = newValue;
+    super.value = newValue;
 
     const readElement = this.element.find("> .read-mode > img");
     readElement.attr("src", newValue);
     const editElement = this.element.find("> .edit-mode > img");
     editElement.attr("src", newValue);
-
-    this.onChange(oldValue, newValue);
   }
 
   /**
@@ -64,8 +61,8 @@ export default class InputImageViewModel extends InputViewModel {
    * @param {String | undefined} args.value The current value. Must be a URL string. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {String | undefined}`
    * * `newValue: {String | undefined}`
+   * * `oldValue: {String | undefined}`
    */
   constructor(args = {}) {
     super(args);

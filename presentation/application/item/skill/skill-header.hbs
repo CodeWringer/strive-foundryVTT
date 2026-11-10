@@ -1,4 +1,22 @@
 {{!-- context:
-viewModel: SkillItemSheetViewModel
+viewModel: SkillHeaderViewModel
 --}}
+<div class="context-embedded flex flex-row flex-middle">
+  <span class="v-divider"></span>
+  {{> abilityLevel viewModel=viewModel.vmLevel cssClass="lg" }}
+</div>
+{{!-- Advancement --}}
+<div class="advancement flex flex-row flex-middle">
+  <span class="v-divider"></span>
+  <div class="flex flex-row flex-middle">
+    <i class="ico ico-dumbbell xl"></i>
+    {{> inputSplitNumberSpinner viewModel=viewModel.vmAdvancement cssClass="width-md" }}
+  </div>
+</div>
 <span class="v-divider"></span>
+{{!-- Base Attributes --}}
+<div id="{{viewModel.vmBaseAttributes.id}}" class="flex flex-column flex-center auto-margin-v-md">
+  {{#each viewModel.baseAttributeVms as |vm|}}
+  {{> inputDropDown viewModel=vm cssClass="attribute" }}
+  {{/each}}
+</div>

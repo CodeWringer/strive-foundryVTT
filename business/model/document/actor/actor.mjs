@@ -1,7 +1,7 @@
 import { common } from "../../../../common/_module.mjs";
 import { ACTOR_TYPES } from "../../domain/const/actor-types.mjs";
-import TransientCharacterActor from "./transient-character-actor.mjs";
-import TransientPlainActor from "./transient-plain-actor.mjs";
+import CharacterActorDocument from "./character-actor-document.mjs";
+import PlainActorDocument from "./plain-actor-document.mjs";
 
 /**
  * @summary
@@ -9,24 +9,24 @@ import TransientPlainActor from "./transient-plain-actor.mjs";
  * 
  * @description
  * In truth, this class only serves as a "data source" and should never be worked with 
- * directly. Instead, an instance of `TransientBaseActor` should be fetched via the 
- * `getTransientObject`-method and used instead. 
+ * directly. Instead, an instance of `AuthenticDocument` should be fetched via the 
+ * `getEnhancedDocument`-method and used instead. 
  * 
- * @see TransientBaseActor
+ * @see AuthenticDocument
  */
 export class GameSystemActor extends Actor {
   /**
    * Returns a map of `Actor` sub-types and their factory functions. 
    * 
-   * @type {Map<String, Function<TransientBaseActor>>}
+   * @type {Map<String, Function>}
    * @static
    * @readonly
    * @private
    */
   static get SUB_TYPES() {
     return new Map([
-      [ACTOR_TYPES.character, (document) => { return new TransientCharacterActor(document) }],
-      [ACTOR_TYPES.plain, (document) => { return new TransientPlainActor(document) }],
+      [ACTOR_TYPES.character, (document) => { return new CharacterActorDocument({ document: document }) }],
+      [ACTOR_TYPES.plain, (document) => { return new PlainActorDocument({ document: document }) }],
     ]);
   }
 
@@ -36,39 +36,44 @@ export class GameSystemActor extends Actor {
    * @virtual
    * @readonly
    */
-  get defaultImg() { return this.getTransientObject().defaultImg; }
+  get defaultImg() { return this.getEnhancedDocument().defaultImg; }
 
   /**
    * Chat message template path. 
    * @type {String}
    * @readonly
    */
-  get chatMessageTemplate() { return this.getTransientObject().chatMessageTemplate; }
+  get chatMessageTemplate() { return this.getEnhancedDocument().chatMessageTemplate; }
+
+  /**
+   * @type {AuthenticDocument | undefined}
+   * @private
+   */
+  #internalDocument;
 
   /** @override */
   prepareData() {
     super.prepareData();
 
-    this._invalidateTransientObject();
-    this.getTransientObject().prepareData(this);
+    this.#invalidateDocument();
   }
 
   /**
-   * Returns an instance of a specific type of transient object for this actor. 
+   * Returns the enhanced document data instance. 
    * 
-   * @returns {TransientBaseActor}
+   * @returns {AuthenticDocument}
    */
-  getTransientObject() {
-    if (!common.util.validation.isDefined(this._transientObject)) {
+  getEnhancedDocument() {
+    if (!common.util.validation.isDefined(this.#internalDocument)) {
       const factoryFunction = GameSystemActor.SUB_TYPES.get(this.type);
       
       if (factoryFunction === undefined) {
         throw new Error(`InvalidTypeException: Actor subtype ${this.type} is unrecognized!`);
       }
 
-      this._transientObject = factoryFunction(this);
+      this.#internalDocument = factoryFunction(this);
     }
-    return this._transientObject.getTransientObject();
+    return this.#internalDocument.getEnhancedDocument();
   }
   
   /** @override */
@@ -82,18 +87,18 @@ export class GameSystemActor extends Actor {
 
   /** @override */
   getRollData() {
-    const baseInitiative = this.getTransientObject().baseInitiative;
+    const baseInitiative = this.getEnhancedDocument().baseInitiative;
     return {
       baseInitiative: baseInitiative,
     };
   }
   
   /**
-   * Invalidates the cached transient object instance, causing a new one to be instantiated at the next access. 
+   * Invalidates the cached enhanced document data instance, causing a new one to be re-instantiated at next access. 
    * 
    * @private
    */
-  _invalidateTransientObject() {
-    this._transientObject = undefined;
+  #invalidateDocument() {
+    this.#internalDocument = undefined;
   }
 }

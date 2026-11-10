@@ -36,7 +36,7 @@ export default class CompositeSortableListViewModel extends ViewModel {
     this._filter(value, this.searchItemProvder());
 
     // Immediately write view state. 
-    this.writeViewState();
+    this.viewState.write();
   }
 
   /**
@@ -91,8 +91,8 @@ export default class CompositeSortableListViewModel extends ViewModel {
     this.headerExtraContent = args.headerExtraContent;
 
     // View state.
-    this.registerViewStateProperty("_searchTerm");
-    this.readViewState();
+    this.viewState.register("_searchTerm");
+    this.viewState.read();
 
     this.vmContextMenu = new ButtonDropDownViewModel({
       id: "vmContextMenu",

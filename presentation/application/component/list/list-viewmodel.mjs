@@ -1,41 +1,28 @@
-import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
-import FoundryWrapper from "../../../foundry-interop/foundry-wrapper.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import ListItemViewModel from "./list-item-viewmodel.mjs";
+import { Search, SEARCH_MODES, SearchItem } from "../../../../business/search/search.mjs";
+import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../business/setting/list-item-expansion-modes.mjs";
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import { TEMPLATES } from "../../templates.mjs"
+import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs"
+import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
+import ListItemViewModel from "./list-item-viewmodel.mjs"
+import ListItem from "./list-item.mjs";
+import ListSeparator from "./list-separator.mjs";
 
 /**
- * Represents a simple item list in the sense that the presentation of 
- * individual items is entirely up to the user. 
- * 
- * @property {Array<Any>} value
- * @property {String} itemTemplate
- * * Read-only
- * @property {String} contentItemTemplate
- * @property {String} localizedAddLabel
- * @property {Boolean} isItemAddable
- * @property {Boolean} isItemRemovable
- * @property {ViewModel} vmBtnAddItem
- * 
- * @method onChange Callback that is invoked when the value changes. 
- * Receives the following arguments: 
- * * `oldValue: {Any}`
- * * `newValue: {Any}`
+ * Wraps the basic structure of a vertical list of items, whose content 
+ * may be arbitrary. 
  * 
  * @extends ViewModel
  */
 export default class ListViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_LIST; }
+  static get TEMPLATE() { return TEMPLATES.application.component.list.list; }
 
-  /**
-   * Registers the Handlebars partial for this component. 
-   * 
-   * @static
-   */
-  static registerHandlebarsPartial() {
-    Handlebars.registerPartial('list', `{{> "${ListViewModel.TEMPLATE}"}}`);
-  }
+  /** @override */
+  get clazz() { return ListViewModel; }
 
   /**
    * @type {String}
@@ -44,152 +31,309 @@ export default class ListViewModel extends ViewModel {
   get itemTemplate() { return ListItemViewModel.TEMPLATE; }
 
   /**
-   * Returns the current value. 
-   * 
-   * @type {Array<Any>}
+   * @type {Array<ListItem>}
+   * @private
    */
-  get value() { return this._value; }
+  #items = [];
   /**
-   * Sets the current value. 
-   * 
-   * @param {Array<Any>} newValue
+   * @type {Array<ListItem>}
    */
-  set value(newValue) {
-    const oldValue = this._value;
-    this._value = newValue;
-    this.onChange(oldValue, newValue);
+  get items() { return this.#items; }
+  set items(value) {
+    this.#items = value;
+
+    new Promise(async (resolve) => {
+      await this.#render();
+      resolve();
+    });
   }
 
   /**
-   * @param {Object} args
+   * @type {Array<ListSeparator>}
+   * @private
+   */
+  #separators = [];
+  /**
+   * @type {Array<ListSeparator>}
+   */
+  get separators() { return this.#separators; }
+  set separators(value) {
+    this.#separators = value;
+
+    new Promise(async (resolve) => {
+      await this.#render();
+      resolve();
+    });
+  }
+
+  get isEditable() { return super.isEditable; }
+  set isEditable(value) {
+    super.isEditable = value;
+
+    if (ValidationUtil.isDefined(this.vmContextMenu)) {
+      this.vmContextMenu.visible = value;
+    }
+  }
+
+  /**
+   * @type {Array<ListItemViewModel>}
+   * @private
+   */
+  #listItemViewModels = [];
+
+  /**
+   * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
-   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {Boolean | undefined} args.isSendable
-   * @param {Boolean | undefined} args.isOwner
-   * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
    * 
-   * @param {String} args.contentItemTemplate
-   * @param {Function} args.contentItemViewModelFactory Expected to return a view model instance for list items. Arguments: 
-   * * `index: Number`
-   * * `item: Any`
-   * @param {Any} args.newItemDefaultValue 
-   * @param {Array<Any> | undefined} args.value
-   * @param {Boolean | undefined} args.isItemAddable 
-   * * Default `false`.
-   * @param {Boolean | undefined} args.isItemRemovable 
-   * * Default `false`.
-   * @param {String | undefined} args.localizedAddLabel
+   * If no value is provided, a shortened UUID will be generated for it. 
    * 
-   * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
-   * Receives the following arguments: 
-   * * `oldValue: {Any}`
-   * * `newValue: {Any}`
+   * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
+   * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
+   * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Object | undefined} args.document An associated data document. 
+   * @param {Boolean | undefined} args.visible
+   * * default `true`
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
+   * 
+   * @param {Array<ListItem> | undefined} args.items
+   * @param {Array<ListSeparator> | undefined} args.separators A list of visual list separators. 
+   * @param {String | undefined} args.searchTerm
+   * @param {Function | undefined} args.toSearchableTerm Must return a `String` representing the 
+   * searchable term. Arguments:
+   * * `item: ListItem` - the item to convert to a searchable `String`. 
+   * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
+   * @param {Array<DropDownOption> | undefined} args.itemContextMenuOptions
+   * @param {ListItemExpansionMode | undefined} args.itemExpansionMode
+   * @param {Boolean | undefined} args.itemsInitiallyExpanded
+   * * default `false`
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["contentItemTemplate", "contentItemViewModelFactory", "newItemDefaultValue"]);
 
-    this.contentItemTemplate = args.contentItemTemplate;
-    this.contentItemViewModelFactory = args.contentItemViewModelFactory;
-    this.newItemDefaultValue = args.newItemDefaultValue;
-    this._value = args.value ?? [];
-    this.isItemAddable = args.isItemAddable ?? false;
-    this.isItemRemovable = args.isItemRemovable ?? false;
-    this.localizedAddLabel = args.localizedAddLabel ?? "";
-    this.onChange = args.onChange ?? (() => {});
+    this.toSearchableTerm = args.toSearchableTerm ?? (() => { });
+    this.#separators = args.separators ?? [];
+    this.itemContextMenuOptions = args.itemContextMenuOptions ?? [];
+    this.itemExpansionMode = args.itemExpansionMode ?? LIST_ITEM_EXPANSION_MODES.window;
+    this.itemsInitiallyExpanded = args.itemsInitiallyExpanded ?? false;
 
-    this.onAddClick = async () => {
-      const index = this.value.length;
-      const vm = this._generateItemViewModel(index, this.newItemDefaultValue);
-      const renderedItem = await new FoundryWrapper().renderTemplate(ListItemViewModel.TEMPLATE, {
-        viewModel: vm,
-      });
-      const listElement = this.element.find(`#${this.id}-ul`);
-      listElement.append(renderedItem);
-      vm.activateListeners(listElement.find(`#${vm.id}`));
-
-      this.value = this.value.concat(this.newItemDefaultValue);
-    };
-    this.onRemoveClick = (index, vm) => {
-      const newValue = this.value.concat([]);
-      newValue.splice(index, 1);
-
-      this.element.find(`#${vm.id}`).remove();
-      this.value = newValue;
-    };
-
-    this.itemViewModels = this._generateItemViewModels();
-
-    if (this.isItemAddable === true) {
-      this.vmBtnAddItem = new ButtonViewModel({
-        id: "vmBtnAddItem",
-        parent: this,
-        content: `<div class="flex flex-middle auto-margin-h-sm"><i class="fas fa-plus"></i><span class="font-size-default fancy-font">${this.localizedAddLabel}</span></div>`,
-        isEditable: this.isEditable,
-        onClick: this.onAddClick,
-      });
-    }
-  }
-
-  /** @override */
-  update(args = {}) {
-    // Remove current list of child view models. 
-    for (const vm of this.itemViewModels) {
-      vm.dispose();
-    }
-    // Generate new list of child view models. 
-    this.itemViewModels = this._generateItemViewModels();
-  }
-
-  /**
-   * @returns {Array<ListItemViewModel>}
-   * 
-   * @private
-   */
-  _generateItemViewModels() {
-    const result = [];
-
-    for (let i = 0; i < this.value.length; i++) {
-      const item = this.value[i];
-      const vm = this._generateItemViewModel(i, item);
-      result.push(vm);
-    }
-
-    return result;
-  }
-
-  /**
-   * @param {Number} index 
-   * @param {Any} item 
-   * 
-   * @returns {ListItemViewModel}
-   * 
-   * @private
-   */
-  _generateItemViewModel(index, item) {
-    const contentItemViewModel = this.contentItemViewModelFactory(index, item);
-    if (ValidationUtil.isDefined(contentItemViewModel.onChange)) {
-      contentItemViewModel.onChange = (newValue) => {
-        const newValues = this.value.concat([]);
-        newValues[index] = newValue;
-        this.value = newValues;
-      };
-    }
-    const vm = new ListItemViewModel({
-      id: `listItem-${index}`,
+    this.contextMenuOptions = args.contextMenuOptions ?? [];
+    this.vmContextMenu = new ButtonDropDownViewModel({
+      id: "vmContextMenu",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      itemViewModel: contentItemViewModel,
-      itemTemplate: this.contentItemTemplate,
-      isRemovable: this.isItemRemovable,
-      onRemoveClick: () => {
-        this.onRemoveClick(index, vm);
-      }
+      isEditable: true,
+      options: this.contextMenuOptions,
+      visible: true,
     });
-    contentItemViewModel.parent = vm;
+
+    this._searchTerm = args.searchTerm ?? "";
+    this.#items = args.items ?? [];
+
+    this.vmFilter = new InputTextFieldViewModel({
+      id: "vmFilter",
+      parent: this,
+      value: this._searchTerm,
+      isEditable: true,
+      icon: '<i class="ico ico-search lg"></i>',
+      enableClearButton: true,
+      placeholder: StringUtil.getLoca("system.general.filter"),
+      onChange: (newValue) => {
+        this._searchTerm = newValue;
+
+        this.#filter(false);
+      },
+      onFocus: () => {
+        this.element.find(".list-header-start").stop(true, false);
+        this.element.find(".list-header-start").animate({
+          width: "0%",
+        }, 300);
+      },
+      onFocusLost: () => {
+        this.element.find(".list-header-start").stop(true, false);
+        this.element.find(".list-header-start").animate({
+          width: "25%",
+        }, 300);
+      },
+    });
+  }
+
+  async activateListeners(html) {
+    await super.activateListeners(html);
+    await this.#render();
+
+    if (this.contextMenuOptions.length === 0) {
+      this.element.find(".context-menu").addClass("hidden");
+    }
+  }
+
+  /**
+   * Returns the list item with either the given ID or index. 
+   * @param {String | Number} idOrIndex ID or index of the item to return. 
+   * @returns {ListItemViewModel}
+   */
+  getListItemViewModel(idOrIndex) {
+    const vm = this.#listItemViewModels.find(it => it.item.id === idOrIndex);
+    if (!ValidationUtil.isDefined(vm)) {
+      vm = this.#listItemViewModels[idOrIndex];
+    }
     return vm;
   }
 
+  /**
+   * Sets the expansion state of an item with either the given ID or index. 
+   * @param {String | Number} idOrIndex ID or index of the item to set. 
+   * @param {Boolean} state If `true`, will expand the item, else collapse it. 
+   */
+  setItemExpanded(idOrIndex, state) {
+    if (this.itemExpansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name) return;
+    
+    const vm = this.getListItemViewModel(idOrIndex);
+    vm.isExpanded = state;
+  }
+
+  /**
+   * Toggles the expansion state of an item with either the given ID or index. 
+   * @param {String | Number} idOrIndex ID or index of the item to toggle. 
+   */
+  toggleItemExpanded(idOrIndex) {
+    if (this.itemExpansionMode.name === LIST_ITEM_EXPANSION_MODES.inline_locked.name) return;
+
+    const vm = this.getListItemViewModel(idOrIndex);
+    vm.isExpanded = !vm.isExpanded;
+  }
+
+  /**
+   * @returns {Promise<void>}
+   * @async
+   */
+  async #render() {
+    await this.#prepareItems();
+    await this.#renderList();
+    this.#filter(true);
+  }
+
+  /**
+   * @returns {Promise<void>}
+   * @async
+   */
+  async #prepareItems() {
+    // Clear existing items
+    this.#listItemViewModels.forEach(viewModel => {
+      viewModel.dispose();
+    });
+
+    this.#listItemViewModels = this.items.map(item => new ListItemViewModel({
+      id: `listitem-${item.id}`,
+      parent: this,
+      item: item,
+      contextMenuOptions: this.itemContextMenuOptions,
+      expansionMode: this.itemExpansionMode,
+      isExpanded: this.itemsInitiallyExpanded,
+    }));
+
+    // Prepared items from separators. 
+    const preparedSeparators = [];
+    for await (const separator of this.#separators) {
+      if (!separator.applies()) continue;
+
+      const index = separator.getIndex(this.#listItemViewModels.length - 1);
+      const html = await separator.separatorContent.render(this);
+      preparedSeparators.push({
+        index: index,
+        html: html,
+        tooltip: separator.tooltip,
+      });
+    };
+    preparedSeparators.sort((a, b) => b.index - a.index);
+
+    let separatorCount = 0;
+    preparedSeparators.forEach(preparedSeparator => {
+      const id = `separator${separatorCount}`;
+      separatorCount++;
+
+      const wrappedHtml = `<div id="${viewModel.id}">${preparedSeparator.html}</div>`;
+      const viewModel = new ListItemViewModel({
+        id: id,
+        parent: this,
+        html: wrappedHtml,
+        isSeparator: true,
+        toolTip: preparedSeparator.tooltip,
+        expansionMode: this.itemExpansionMode,
+        isExpanded: this.itemsInitiallyExpanded,
+      });
+      this.#listItemViewModels.splice(preparedSeparator.index, 0, viewModel);
+    });
+  }
+
+  /**
+   * @returns {Promise<void>}
+   * @async
+   */
+  async #renderList() {
+    const listElm = this.element.find("ul");
+    listElm.empty();
+
+    for await (const viewModel of this.#listItemViewModels) {
+      // Render and append to DOM. 
+      if (ValidationUtil.isNotBlankOrUndefined(viewModel.html)) {
+        listElm.append(viewModel.html);
+      } else {
+        const rendered = await FoundryWrapper.renderTemplate(viewModel.clazz.TEMPLATE, {
+          viewModel: viewModel,
+        });
+        listElm.append(rendered);
+      }
+
+      // Activate listeners.
+      const itemElm = listElm.find(`#${viewModel.id}`);
+      viewModel.activateListeners(itemElm);
+    };
+  }
+
+  /**
+   * Applies the current `searchTerm` as filter on the items, toggling their 
+   * visibility. 
+   * @param {Boolean} earlyExit If `true`, allows for an early exit if the current 
+   * search term is empty or undefined. Should be most performant. 
+   * @returns 
+   */
+  #filter(earlyExit = false) {
+    if (ValidationUtil.isBlankOrUndefined(this._searchTerm)) {
+      if (earlyExit) {
+        return;
+      } else {
+        this.#listItemViewModels.forEach(viewModel => {
+          viewModel.visible = true;
+        });
+      }
+    } else {
+      // Map SearchItems
+      const searchItems = [];
+      this.#listItemViewModels.forEach(viewModel => {
+        if (ValidationUtil.isDefined(viewModel.contentViewModel)) {
+          searchItems.push(new SearchItem({
+            id: viewModel.independentId,
+            term: this.toSearchableTerm(viewModel.contentViewModel),
+          }));
+        }
+      });
+
+      // Search
+      const searchResults = new Search().search({
+        searchItems: searchItems,
+        searchTerm: this._searchTerm,
+        searchMode: SEARCH_MODES.FUZZY,
+      });
+
+      // Filter
+      searchResults.forEach(searchResult => {
+        const viewModel = this.#listItemViewModels.find(it => it.independentId === searchResult.id);
+        viewModel.visible = searchResult.score > 0;
+      });
+    }
+  }
 }

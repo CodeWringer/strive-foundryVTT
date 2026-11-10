@@ -39,7 +39,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @property {Number} value.diceLimit 
    * @property {Number} value.sampleSize 
    * @property {Number} value.modifier Number of automatic hits/misses. 
-   * @property {Number} value.compensationPoints The number of faces that misses will be turned 
+   * @property {Number} value.edge The number of faces that misses will be turned 
    * to the next higher face, until they score a hit. 
    * 
    * @type {Object}
@@ -53,7 +53,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       diceLimit: 20,
       sampleSize: 1000,
       modifier: 0,
-      compensationPoints: 0,
+      edge: 0,
     }
   });
 
@@ -75,7 +75,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     this.ui = args.ui;
     this.isEditable = true;
 
-    this.registerViewStateProperty("_uiState");
+    this.viewState.register("_uiState");
 
     this.vmHitThresholdSlider = new InputSliderViewModel({
       id: "vmHitThresholdSlider",
@@ -83,7 +83,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: this._uiState.value.dieFaces,
       value: this._uiState.value.hitThreshold,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           hitThreshold: newValue,
@@ -96,7 +96,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: this._uiState.value.dieFaces,
       value: this._uiState.value.hitThreshold,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           hitThreshold: newValue,
@@ -110,7 +110,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: 30,
       value: this._uiState.value.diceLimit,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           diceLimit: newValue,
@@ -123,7 +123,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.diceLimit,
       min: 1,
       max: 30,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           diceLimit: newValue,
@@ -137,7 +137,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: 30,
       value: this._uiState.value.obLimit,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           obLimit: newValue,
@@ -150,7 +150,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.obLimit,
       min: 1,
       max: 30,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           obLimit: newValue,
@@ -164,7 +164,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 2,
       max: 20,
       value: this._uiState.value.dieFaces,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           dieFaces: newValue,
@@ -177,7 +177,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.dieFaces,
       min: 2,
       max: 20,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           dieFaces: newValue,
@@ -191,7 +191,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: -20,
       max: 20,
       value: this._uiState.value.modifier,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           modifier: newValue,
@@ -204,7 +204,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       value: this._uiState.value.modifier,
       min: -20,
       max: 20,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           modifier: newValue,
@@ -219,7 +219,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       max: 10000,
       step: 100,
       value: this._uiState.value.sampleSize,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           sampleSize: newValue,
@@ -233,7 +233,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       min: 1,
       max: 10000,
       step: 100,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
           sampleSize: newValue,
@@ -241,29 +241,29 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       },
     });
 
-    this.vmCompensationPointsSlider = new InputSliderViewModel({
-      id: "vmCompensationPointsSlider",
+    this.vmEdgeSlider = new InputSliderViewModel({
+      id: "vmEdgeSlider",
       parent: this,
       min: 0,
       max: 20,
-      value: this._uiState.value.compensationPoints,
-      onChange: (_, newValue) => {
+      value: this._uiState.value.edge,
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
-          compensationPoints: newValue,
+          edge: newValue,
         };
       },
     });
-    this.vmCompensationPoints = new InputNumberSpinnerViewModel({
-      id: "vmCompensationPoints",
+    this.vmEdge = new InputNumberSpinnerViewModel({
+      id: "vmEdge",
       parent: this,
-      value: this._uiState.value.compensationPoints,
+      value: this._uiState.value.edge,
       min: 0,
       max: 20,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this._uiState.value = {
           ...this._uiState.value,
-          compensationPoints: newValue,
+          edge: newValue,
         };
       },
     });
@@ -289,8 +289,8 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       SheetUtil.setElementValue(this.vmSampleSizeSlider.element, newValue.sampleSize);
       SheetUtil.setElementValue(this.vmSampleSize.element, newValue.sampleSize);
 
-      SheetUtil.setElementValue(this.vmCompensationPointsSlider.element, newValue.compensationPoints);
-      SheetUtil.setElementValue(this.vmCompensationPoints.element, newValue.compensationPoints);
+      SheetUtil.setElementValue(this.vmEdgeSlider.element, newValue.edge);
+      SheetUtil.setElementValue(this.vmEdge.element, newValue.edge);
 
       await this._updateTable();
     });
@@ -368,7 +368,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
           ob: ob,
           hitThreshold: uiState.hitThreshold,
           modifier: uiState.modifier,
-          compensationPoints: uiState.compensationPoints,
+          edge: uiState.edge,
         });
         const successLikelihoodHtml = `<span>${diceResults.successLikelihood}%</span>`;
 
@@ -397,7 +397,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @param {Array<Array<Number>>} args.totalRolledFaces 
    * @param {Number} args.hitThreshold 
    * @param {Number} args.modifier 
-   * @param {Number} args.compensationPoints 
+   * @param {Number} args.edge 
    * * default `0`
    * 
    * @returns {Object} 
@@ -412,19 +412,19 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       const rolledFaces = args.totalRolledFaces[sample];
 
       let hitsInRoll = 0;
-      let remainingCompensationPoints = args.compensationPoints ?? 0;
+      let remainingEdge = args.edge ?? 0;
       for (let i = 0; i < rolledFaces.length; i++) {
         const face = rolledFaces[i];
         if (face >= args.hitThreshold) {
           hitsInRoll++;
-        } else if (remainingCompensationPoints > 0) {
+        } else if (remainingEdge > 0) {
           const delta = args.hitThreshold - face;
-          const compensationDelta = remainingCompensationPoints - delta;
+          const compensationDelta = remainingEdge - delta;
           if (compensationDelta < 0) {
             break;
           } else {
             hitsInRoll++;
-            remainingCompensationPoints = compensationDelta;
+            remainingEdge = compensationDelta;
           }
         } else {
           break;

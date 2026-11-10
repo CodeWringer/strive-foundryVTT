@@ -51,11 +51,13 @@ export default class VisibilityToggleListItemViewModel extends InputViewModel {
    * @param {String} args.localizedLabel A localized label for the state. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? false,
+    });
     common.util.validation.validateOrThrow(args, ["localizedLabel"]);
 
     this.localizedLabel = args.localizedLabel;
-    this._value = args.value ?? false;
     
     this.btnToggle = new ButtonToggleIconViewModel({
       id: "btnToggle",

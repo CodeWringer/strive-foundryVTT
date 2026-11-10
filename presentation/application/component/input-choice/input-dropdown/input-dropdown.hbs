@@ -6,26 +6,15 @@ cssClass: String | undefined
   {{!-- Edit mode --}}
   <div class="edit-mode">
     {{#> buttonDropDown viewModel=viewModel.vmDropDown}}
-      <div class="edit-value flex flex-row">
-        {{{viewModel.value.iconHtml}}}
-        {{#if viewModel.showValue}}
-        <span>{{viewModel.value.localizedValue}}</span>
-        {{/if}}
-      </div>
+      <div class="edit-value flex flex-row">{{!-- Content added dynamically, at run-time --}}</div>
+      {{#if viewModel.showValue}}
       <span class="flex-grow"></span>
+      {{/if}}
       <div class="flex-center">
         <i class="ico ico-triangle-down xs margin-l-md"></i>
       </div>
     {{/buttonDropDown}}
   </div>
   {{!-- Read mode --}}
-  <div 
-    class="read-mode flex flex-row" 
-    name="{{viewModel.id}}"
-  >
-    {{{viewModel.value.iconHtml}}}
-    {{#if viewModel.showValue}}
-    <span>{{viewModel.value.localizedValue}}</span>
-    {{/if}}
-  </div>
+  <div class="read-mode flex flex-row">{{!-- Content added dynamically, at run-time --}}</div>
 </div>

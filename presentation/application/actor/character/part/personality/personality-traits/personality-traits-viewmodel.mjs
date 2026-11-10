@@ -76,7 +76,7 @@ export default class PersonalityTraitsViewModel extends ViewModel {
         parent: this,
         options: options,
         value: activeOption,
-        onChange: (_, newValue) => {
+        onChange: (newValue) => {
           if (ValidationUtil.isDefined(newValue)) {
             this.document.personalityTraits[propertyName] = parseInt(newValue.value);
           }

@@ -23,7 +23,7 @@ export default class Migrator_1_16_1__1_16_2 extends AbstractMigrator {
     });
     const totalProgress = actors.length;
     args.onBegin(totalProgress, "Updating actors");
-    const transientActors = actors.map(it => it.getTransientObject());
+    const transientActors = actors.map(it => it.getEnhancedDocument());
 
     let currentProgress = 1;
     for await (const actor of transientActors) {

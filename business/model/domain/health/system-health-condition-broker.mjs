@@ -13,7 +13,7 @@ export default class SystemHealthConditionBroker {
   /**
    * Static accessor for all system-defined health conditions. 
    * 
-   * @type {Array<TransientHealthCondition>}
+   * @type {Array<HealthConditionDocument>}
    * @static
    * @readonly
    */
@@ -32,6 +32,6 @@ export default class SystemHealthConditionBroker {
       searchEmbedded: false,
       includeLocked: true,
     });
-    SystemHealthConditionBroker.conditions = documents.map(it => it.getTransientObject());
+    SystemHealthConditionBroker.conditions = documents.map(it => it.getEnhancedDocument());
   }
 }

@@ -33,7 +33,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {TransientDocument} args.target The target object to affect. 
+   * @param {Document} args.target The target object to affect. 
    */
   constructor(args = {}) {
     super({
@@ -67,7 +67,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     });
 
     if (toShow === undefined) {
-      game.strive.logger.logWarn(`NullPointerException: Failed to find document '${this.target}' to open sheet`);
+      game.strive.logger.warning(`NullPointerException: Failed to find document '${this.target}' to open sheet`);
       return;
     }
     toShow.sheet.render(true);

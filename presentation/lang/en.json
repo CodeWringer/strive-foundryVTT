@@ -77,6 +77,13 @@
       "toggleExpertiseVisibility": {
         "label": "Unusable Expertise Visibility",
         "hint": "Toggles the visibility of Expertises that are unusable (due to their owning skill's level being too low for the Expertise's requirement)."
+      },
+      "listItemExpansionMode": {
+        "label": "List Item Expansion Mode",
+        "hint": "Controls how list items on actor sheets are expanded. Window: list items will be expanded into a separate window. Inline: list items will be expanded directly into the sheet they're part of, without any separate window.",
+        "window": "Window",
+        "inline": "Inline",
+        "inline_locked": "Inline (Locked)"
       }
     },
     "combat": {
@@ -96,7 +103,7 @@
         "shiftHeroic": "Heroic Act Momentum Shift",
         "shift": "Momentum Shift",
         "reminder": {
-          "reminder": "When Momentum reaches <code>%{desperationThreshold}</code>, <b>Desperate Measures</b> become available. When it reaches <code>+%{heroismThreshold}</code>, <b>Heroic Acts</b> become available.<br><div class='grid col2 gap-lg borders dark'><h3 class='strive-header'>Losing Momentum</h3><h3 class='strive-header'>Gaining Momentum</h3>%{row1}%{row2}%{row3}%{row4}%{row5}</div>",
+          "reminder": "When Momentum reaches <code>%{desperationThreshold}</code>, <b>Desperate Measures</b> become available. When it reaches <code>+%{heroismThreshold}</code>, <b>Heroic Acts</b> become available.<br><div class='grid col2 gap-lg borders dark'><h3 class='strive strive-regular-font'>Losing Momentum</h3><h3 class='strive strive-regular-font'>Gaining Momentum</h3>%{row1}%{row2}%{row3}%{row4}%{row5}</div>",
           "losingMomentum": {
             "1": "<span>PC or ally being successfully attacked: <code>-2</code></span>",
             "2": "<span>A foe helping <i>their</i> ally: <code>-2</code></span>",
@@ -124,6 +131,7 @@
         "query": "Select %s to Add"
       },
       "adjustInputLabel": "Amount to add/subtract",
+      "additionalContentHint": "Hold 'Alt' to see more",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "contextMenu": "Context-Menu",
@@ -139,15 +147,37 @@
         "world": "World"
       },
       "custom": "Custom",
+      "clearCurrentValue": "Clear the current value",
+      "comparisonType": {
+        "comparisonType": "Comparison Type",
+        "lessThan": "Less",
+        "lessEquals": "Less or equals",
+        "equals": "Equals",
+        "greaterThan": "Greater",
+        "greaterEquals": "Greater or equals"
+      },
+      "comparisonTarget": {
+        "comparisonTarget": "Comparison Target",
+        "additional": "In case of 'Hit', no additional comparison target is needed. <br>In case of 'Attribute', this should be the @-reference of that Attribute. E.g. <code>@agi</code>"
+      },
+      "comparisonThreshold": {
+        "comparisonThreshold": "Threshold",
+        "additional": "In combination with the 'comparison type' and 'comparison target', this yields the final comparison equation. E.g. 'Greater than or equal to 3 Hits'"
+      },
+      "comparisonTargetType": {
+        "comparisonTargetType": "Comparison Target Type",
+        "hit": "Hit(s)",
+        "attribute": "Attribute"
+      },
       "decrement": "Decrement",
       "delete": {
         "delete": "Delete",
         "deleteOf": "Delete '%s'",
         "deleteType": "Delete %s",
         "deleteTypeOf": "Delete %s '%s'",
-        "query": "Confirm Deletion",
-        "queryOf": "Confirm Deletion of '%s'",
-        "queryTypeOf": "Confirm Deletion of %s '%s'"
+        "confirm": "Confirm Deletion",
+        "confirmOf": "Confirm Deletion of '%s'",
+        "confirmTypeOf": "Confirm Deletion of %s '%s'"
       },
       "description": "Description",
       "dragDrop": {
@@ -172,6 +202,8 @@
         "gmNotes": "GM Notes",
         "gmNotesHidden": "GM Notes (Hidden)"
       },
+      "hit": "Hit",
+      "miss": "Miss",
       "id": "ID",
       "increment": "Increment",
       "isCustom": "Custom",
@@ -185,7 +217,7 @@
         "selectSpecific": "Hand-pick It"
       },
       "messageVisibility": {
-        "label": "Visibility",
+        "visibility": "Visibility",
         "query": "Select Message Visibility",
         "public": "Public",
         "self": "Self",
@@ -212,6 +244,7 @@
       "sendToChat": "Send to Chat",
       "select": "Select",
       "search": "Search",
+      "filter": "Filter",
       "sheet": {
         "tab": {
           "content": "Content"
@@ -245,9 +278,48 @@
         "minute": "Minute(s)",
         "hour": "Hour(s)",
         "day": "Day(s)"
+      },
+      "roll": {
+        "query": "Prepare Roll",
+        "obstacle": {
+          "obstacle": "Roll Obstacle",
+          "abbreviation": "Ob",
+          "edge": "Edge",
+          "modifyDice": "Modify Number of Dice",
+          "forkReminder": "Don't forget to Fork other Known Skills into your Test!"
+        }
       }
     },
     "domain": {
+      "attribute": {
+        "attribute": "Attribute",
+        "agility": {
+          "agility": "Agility",
+          "abbreviation": "AGI"
+        },
+        "awareness": {
+          "awareness": "Awareness",
+          "abbreviation": "AWAR"
+        },
+        "strength": {
+          "strength": "Strength",
+          "abbreviation": "STR"
+        },
+        "toughness": {
+          "toughness": "Toughness",
+          "abbreviation": "TOUGH"
+        },
+        "wit": {
+          "wit": "Wit",
+          "abbreviation": "WIT"
+        },
+        "type": {
+          "normal": "Normal",
+          "core": "Core",
+          "favored": "Favored",
+          "penalized": "Penalized"
+        }
+      },
       "complication": {
         "add": "Add Complication",
         "complication": "Complication",
@@ -257,6 +329,18 @@
         "name": "Complication Name",
         "sortAsc": "Sort A-Z ('Alt' inverts)",
         "sortDesc": "Sort Z-A"
+      },
+      "gradedEffect": {
+        "gradedEffect": "Graded Effect",
+        "gradedEffects": "Graded Effects",
+        "add": "Add Graded Effect"
+      },
+      "targetingType": {
+        "none": "None",
+        "singleTarget": "Single Target",
+        "areaOfEffect": "Area of Effect",
+        "multipleSingleTarget": "Multiple Single Targets",
+        "targetingTypeOf": "Targeting Type (%s)"
       }
     },
     "actor": {
@@ -310,14 +394,7 @@
       },
       "illness": {
         "illness": "Illness",
-        "state": {
-          "state": "Illness State",
-          "stateWithCurrent": "Illness State<br>(= %s)",
-          "active": "Active",
-          "treated": "Treated"
-        },
         "treatment": {
-          "date": "Last Treatment Date",
           "obstacle": "Treatment Obstacle",
           "skill": "Treatment Skill",
           "supplies": {
@@ -356,7 +433,33 @@
         }
       },
       "skill": {
-        "skill": "Skill"
+        "skill": "Skill",
+        "roll": "Roll a Test of this Skill",
+        "level": "Skill Level",
+        "baseAttribute": {
+          "baseAttributes": "Base Attributes"
+        },
+        "actionPoints": "Action Point cost",
+        "distance": "Maximum effective distance",
+        "obstacle": "Test Obstacle",
+        "opposedBy": "Opposing Skill/Expertise",
+        "advancement": "Advancement (Current/Required)"
+      },
+      "expertise": {
+        "actionPoints": "Action Point cost",
+        "add": "Add Expertise",
+        "defaultName": "New Expertise",
+        "delete": "Delete Expertise",
+        "distance": "Maximum effective distance",
+        "expertise": "Expertise",
+        "expertises": "Expertises",
+        "level": "Required Parent Skill Level",
+        "lockedHint": "Level up your Skill to unlock the following",
+        "obstacle": "Test Obstacle",
+        "opposedBy": "Opposing Skill/Expertise",
+        "roll": "Roll a Test of this Expertise",
+        "search": "Filter Expertises by name",
+        "name": "Expertise Name"
       },
       "trait": {
         "trait": "Trait"

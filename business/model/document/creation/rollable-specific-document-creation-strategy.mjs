@@ -12,7 +12,7 @@ import DocumentCreationStrategy from "./document-creation-strategy.mjs"
  * @property {String} selectedRollTable The currently selected RollTable's name. 
  * @property {String} localizedSelectionType The localized type of document 
  * that is rollable. E. g. `"Injury"`. 
- * @property {TransientBaseActor | undefined} target The Actor document instance on which 
+ * @property {BaseActorDocument | undefined} target The Actor document instance on which 
  * to embed the new document instance. 
  * @property {Object | undefined} creationDataOverrides Overrides applied to the selected 
  * creation data. Can be used to override a specific property, while leaving 
@@ -29,7 +29,7 @@ export default class RollableSpecificDocumentCreationStrategy extends DocumentCr
    * that is rollable. E. g. `"Injury"`. 
    * @param {String | undefined} args.selectedRollTable Name of the RollTable to pre-select. 
    * * default is the first entry of the `rollTables` list. 
-   * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
+   * @param {BaseActorDocument | undefined} args.target The Actor document instance on which 
    * to embed the new document instance. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 

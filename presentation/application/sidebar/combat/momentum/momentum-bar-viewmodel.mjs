@@ -30,7 +30,7 @@ export default class MomentumBarViewModel extends ViewModel {
     centerImageElement.attr("style", this.centerImageStyle);
 
     if (this._isDragging === false) {
-      this.onChange(oldValue, newValue);
+      this.onChange(newValue, oldValue);
     }
   }
 
@@ -93,8 +93,8 @@ export default class MomentumBarViewModel extends ViewModel {
    * 
    * @param {Number | undefined} args.value 
    * @param {Function | undefined} args.onChange Arguments: 
-   * * `oldValue: Number`
    * * `newValue: Number`
+   * * `oldValue: Number`
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -134,7 +134,7 @@ export default class MomentumBarViewModel extends ViewModel {
       value: this.value,
       min: this.min,
       max: this.max,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.value = newValue;
       },
     });

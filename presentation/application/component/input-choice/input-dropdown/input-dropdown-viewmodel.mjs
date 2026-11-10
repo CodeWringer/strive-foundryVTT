@@ -115,6 +115,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     this.vmDropDown = new ButtonDropDownViewModel({
       id: "vmDropDown",
       parent: this,
+      content: '',
       options: args.options.map(option => new DropDownOption({
         value: option.value,
         localizedValue: option.localizedValue,
@@ -148,6 +149,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
     this.#readModeElement = this.element.find("> .read-mode");
 
     // Ensure the correct value is displayed initially. 
+    
     let newContent = this.value.iconHtml;
     if (this.showValue) {
       newContent = `${newContent}<span>${this.value.localizedValue}</span>`;
@@ -155,5 +157,8 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
 
     this.#editValueElement.empty();
     this.#editValueElement.append(newContent);
+
+    this.#readModeElement.empty();
+    this.#readModeElement.append(newContent);
   }
 }

@@ -26,7 +26,7 @@ export default class CustomProseMirrorMenu extends FoundryWrapper.ProseMirrorMen
 
     const richTextElement = $(view.dom).closest(".strive.rich-text");
     const id = richTextElement.attr("id");
-    const viewModel = _findViewModel(id, game.strive.viewModels.getAll().map(it => it.vm));
+    const viewModel = _findViewModel(id, game.strive.viewModels.getAll());
     if (ValidationUtil.isDefined(viewModel) && ValidationUtil.isDefined(viewModel.flushValue)) {
       viewModel.flushValue();
     }

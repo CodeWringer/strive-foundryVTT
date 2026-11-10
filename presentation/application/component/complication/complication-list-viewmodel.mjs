@@ -39,6 +39,36 @@ export default class ComplicationListViewModel extends InputViewModel {
 
   /**
    * @param {Object} args
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
+   * 
+   * @param {Boolean | undefined} args.autoHandleEvents If `true`, will automatically attach 
+   * event listeners for the input element. This behavior may be undesirable by some inheritors, 
+   * which can disable it by setting this to `false`. 
+   * * default `true`
+   * @param {Boolean | undefined} args.suppressAnims If `true`, suppresses animations that would play when 
+   * `isEditable` is changed at run-time. Useful for when this component is child to another, which 
+   * instead handles the animations. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Any}`
+   * * `newValue: {Any}`
+   * @param {Function | undefined} args.onInput Callback that is invoked when any input is made (by keyboard or mouse or other input device). 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocus Callback that is invoked when the input element is focused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * @param {Function | undefined} args.onFocusLost Callback that is invoked when the input element is unfocused. 
+   * * `event: {Event}`
+   * * `viewModel: {ViewModel}`
+   * 
    * @param {Array<Complication> | undefined} args.value
    */
   constructor(args = {}) {
@@ -50,7 +80,6 @@ export default class ComplicationListViewModel extends InputViewModel {
       id: "vmContextMenuButton",
       parent: this,
       isEditable: this.isEditable,
-      content: '<i class="ico ico-burger-menu lg"></i>',
       options: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.domain.complication.add"),
@@ -122,8 +151,8 @@ export default class ComplicationListViewModel extends InputViewModel {
       id: `complication-${index++}`,
       parent: this,
       document: complication,
-      onChange: (fieldName, oldValue, _) => {
-        this.#onComplicationChange(fieldName, oldValue, complication);
+      onChange: (fieldName, oldValue) => {
+        this.#onComplicationChange(fieldName, complication, oldValue);
       },
       onDelete: () => {
         this.#onComplicationDelete(complication);
@@ -134,11 +163,11 @@ export default class ComplicationListViewModel extends InputViewModel {
   /**
    * Internal handler of a Complication's internal value change. 
    * @param {String} fieldName 
-   * @param {Any} oldValue 
    * @param {Complication} complication 
+   * @param {Any} oldValue 
    * @private
    */
-  #onComplicationChange(fieldName, oldValue, complication) {
+  #onComplicationChange(fieldName, complication, oldValue) {
     const thisOldValue = this.value.map(c => new Complication({
       name: c.name,
       description: c.description,
@@ -146,7 +175,7 @@ export default class ComplicationListViewModel extends InputViewModel {
     const index = this.value.findIndex(it => it == complication);
     const oldComplication = thisOldValue[index];
     oldComplication[fieldName] = oldValue;
-    this.onChange(thisOldValue, this.value);
+    this.onChange(this.value, thisOldValue);
   }
 
   /**

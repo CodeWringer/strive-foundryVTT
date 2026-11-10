@@ -1,0 +1,18 @@
+{{!--
+viewModel: AbilityLevelViewModel
+cssClass: String | undefined
+--}}
+<div id="{{viewModel.id}}" class="strive input ability-level flex flex-middle flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="edit-mode context-embedded flex flex-row flex-middle width-md">
+    {{> inputNumberSpinner viewModel=viewModel.vmLevelEditMode cssClass="" }}
+  </div>
+  <div class="read-mode flex flex-row flex-middle">
+    <div class="level flex flex-center">
+      {{{themedImage "image.diamondBg" "fill" "position: relative;"}}}
+      <span id="{{viewModel.vmLevelReadMode.id}}" class="text stroke">{{viewModel.value}}</span>
+    </div>
+    <span class="roll-button context-embedded border-b-sm margin-l-md">
+      {{> textButton viewModel=viewModel.vmRollReadMode cssClass="font-size-md strive-regular-font" }}
+    </span>
+  </div>
+</div>

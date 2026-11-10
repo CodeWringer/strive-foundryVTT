@@ -1,7 +1,7 @@
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
-import ComplicationField from "../../data-field/complication-field.mjs";
-import ReferenceField from "../../data-field/reference-field.mjs";
-import TimeIncrementField from "../../data-field/time-increment-field.mjs";
+import ComplicationField from "../data-field/complication-field.mjs";
+import ReferenceField from "../data-field/reference-field.mjs";
+import TimeIncrementField from "../data-field/time-increment-field.mjs";
 import BaseItemData from "./base-item-data.mjs";
 
 export default class ProjectItemData extends BaseItemData {

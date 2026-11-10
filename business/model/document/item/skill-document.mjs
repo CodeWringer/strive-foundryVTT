@@ -1,0 +1,528 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
+import AtReferencer from "../../../search/at-referencer.mjs";
+import { Attribute, ATTRIBUTES } from "../../domain/const/attributes.mjs";
+import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
+import GradedEffect from "../../domain/graded-effect.mjs";
+import MomentumAction from "../../domain/momentum-action.mjs";
+import Reference from "../../domain/reference.mjs";
+import AuthenticDocument from "../authentic-document.mjs";
+import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
+import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
+import ExpertiseDocument from "./expertise-document.mjs";
+
+/**
+ * Represents a Skill document. 
+ * 
+ * @see `SkillItemData` - Must contain all the fields defined in this data model. 
+ * 
+ * @property {String} defaultImg Returns the default icon image path for this type of document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} clazz Returns the class reference of this document. 
+ * * Read-only.
+ * * Abstract. 
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * @property {String} name Internal name. 
+ * @property {String} description Html content.
+ * @property {String | null} gmNotes Html content.
+ * @property {String} documentName Returns the document type name. E. g. `"Actor"`
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item | Actor} document Returns the encapsulated document instance. 
+ * * Read-only.
+ * @property {String} type Internal type name. E. g. `"skill"`
+ * * Read-only.
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
+ * * Read-only.
+ * @property {Object} system Passes through the `document.system` field. 
+ * * Read-only.
+ * 
+ * @property {AuthenticDocument | undefined} parentDocument Another 
+ * document that this document is embedded in. 
+ * * Read-only.
+ * @property {Boolean} hasParent Returns true, if there is an owning document. 
+ * * Read-only.
+ * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
+ * 
+ * @property {Array<Attribute>} baseAttributes The Attributes this Skill depends on, 
+ * and which dictate the number of dice in the pool. 
+ * @property {Number} level Current level of the Skill. 
+ * @property {Array<Expertise>} expertises Sub-abilities of this Skill. 
+ * @property {Object} itemOrders Stores sub-item rendering orders. 
+ * * Read-only.
+ * @property {Array<Reference>} itemOrders.expertises Stores the order in which 
+ * Expertises are to be rendered. 
+ * @property {Array<Reference>} itemOrders.momentumActions Stores the order in which 
+ * Momentum Actions are to be rendered. 
+ * @property {Object} actionPoints
+ * * Read-only.
+ * @property {Boolean} actionPoints.enabled If `true`, using this Skill costs Action 
+ * Points. 
+ * @property {Number} actionPoints.current The amount of Action Points using this 
+ * Skill costs. 
+ * @property {Object} distance
+ * * Read-only.
+ * @property {Boolean} distance.enabled If `true`, this Skill may only be used up to 
+ * a certain distance away. 
+ * @property {Number} distance.current The distance up to which the Skill may be used. 
+ * @property {Object} targetingType
+ * * Read-only.
+ * @property {Boolean} targetingType.enabled If `true`, this Skill may be used on 
+ * one or more targets. 
+ * @property {TargetingType} targetingType.current The number of targets affected. 
+ * @property {Object} obstacle
+ * * Read-only.
+ * @property {Boolean} obstacle.enabled If `true`, using this Skill requires an 
+ * Obstacle to be overcome. 
+ * @property {String} obstacle.current The obstacle to overcome. May be a formula, 
+ * e. g. `"1D4 + @agility"`
+ * @property {Object} opposedBy
+ * * Read-only.
+ * @property {Boolean} opposedBy.enabled If `true`, this Skill may be opposed only 
+ * by a specific other Ability. 
+ * @property {Reference} opposedBy.current References another Skill or Expertise 
+ * that may oppose this Skill. 
+ * @property {Object} advancement
+ * * Read-only.
+ * @property {Boolean} advancement.enabled If `true`, this Skill may be advanced, 
+ * i. e. "leveled up". 
+ * @property {Number} advancement.progress The current advancement progress. 
+ * Required progress is not stored on the Skill, but rather fetched at run-time. 
+ * @property {Object} gradedEffects
+ * * Read-only.
+ * @property {Boolean} gradedEffects.enabled If `true`, this Skill has graded effects, 
+ * with escalating effects based on the number of Hits rolled. 
+ * @property {Array<GradedEffect>} gradedEffects.entries The graded effects. 
+ * @property {Array<MomentumAction>} momentumActions Momentum Actions that this 
+ * Skill grants. 
+ * @property {Boolean} isInnate If `true`, this Skill cannot be learned, and can only 
+ * be acquired through ancestry or other, special means.
+ * 
+ * @extends AuthenticDocument
+ */
+export default class SkillDocument extends AuthenticDocument {
+  /** @override */
+  get defaultImg() { return "systems/strive/presentation/image/skill-light.svg"; }
+
+  /** @override */
+  get clazz() { return SkillDocument; }
+  
+  /** @override */
+  get isBufferMode() { return super.isBufferMode; }
+  set isBufferMode(value) {
+    super.isBufferMode = value;
+    for (const expertise of this.expertises) {
+      expertise.isBufferMode = value;
+    }
+  }
+
+  /**
+   * @type {Array<Attribute>}
+   */
+  get baseAttributes() { return this._baseAttributes.value; }
+  set baseAttributes(value) { this._baseAttributes.value = value; }
+
+  /**
+   * @type {Number}
+   */
+  get level() { return this._level.value; }
+  set level(value) { this._level.value = value; }
+
+  /**
+   * @type {Array<ExpertiseDocument>}
+   */
+  get expertises() { return this._expertises.value; }
+  set expertises(value) { this._expertises.value = value; }
+
+  get itemOrders() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Array<Reference>}
+       */
+      get expertises() { return thiz._itemOrders.expertises.value; },
+      set expertises(value) { thiz._itemOrders.expertises.value = value; },
+
+      /**
+       * @type {Array<Reference>}
+       */
+      get momentumActions() { return thiz._itemOrders.momentumActions.value; },
+      set momentumActions(value) { thiz._itemOrders.momentumActions.value = value; },
+    };
+  }
+
+  get actionPoints() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._actionPoints.enabled.value; },
+      set enabled(value) { thiz._actionPoints.enabled.value = value; },
+
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._actionPoints.current.value; },
+      set current(value) { thiz._actionPoints.current.value = value; },
+    };
+  }
+
+  get distance() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._distance.enabled.value; },
+      set enabled(value) { thiz._distance.enabled.value = value; },
+
+      /**
+       * @type {Number}
+       */
+      get current() { return thiz._distance.current.value; },
+      set current(value) { thiz._distance.current.value = value; },
+    };
+  }
+
+  get targetingType() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._targetingType.enabled.value; },
+      set enabled(value) { thiz._targetingType.enabled.value = value; },
+
+      /**
+       * @type {TargetingType}
+       */
+      get current() { return thiz._targetingType.current.value; },
+      set current(value) { thiz._targetingType.current.value = value; },
+    };
+  }
+
+  get obstacle() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._obstacle.enabled.value; },
+      set enabled(value) { thiz._obstacle.enabled.value = value; },
+
+      /**
+       * @type {String}
+       */
+      get current() { return thiz._obstacle.current.value; },
+      set current(value) { thiz._obstacle.current.value = value; },
+    };
+  }
+
+  get opposedBy() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._opposedBy.enabled.value; },
+      set enabled(value) { thiz._opposedBy.enabled.value = value; },
+
+      /**
+       * @type {Reference}
+       */
+      get current() { return thiz._opposedBy.current.value; },
+      set current(value) { thiz._opposedBy.current.value = value; },
+    };
+  }
+
+  get advancement() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._advancement.enabled.value; },
+      set enabled(value) { thiz._advancement.enabled.value = value; },
+
+      /**
+       * @type {Number}
+       */
+      get progress() { return thiz._advancement.progress.value; },
+      set progress(value) { thiz._advancement.progress.value = value; },
+    };
+  }
+
+  get gradedEffects() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Boolean}
+       */
+      get enabled() { return thiz._gradedEffects.enabled.value; },
+      set enabled(value) { thiz._gradedEffects.enabled.value = value; },
+
+      /**
+       * @type {Array<GradedEffect>}
+       */
+      get entries() { return thiz._gradedEffects.entries.value; },
+      set entries(value) { thiz._gradedEffects.entries.value = value; },
+    };
+  }
+
+  /**
+   * @type {Array<MomentumAction>}
+   */
+  get momentumActions() { return this._momentumActions.value; }
+  set momentumActions(value) { this._momentumActions.value = value; }
+
+  /**
+   * @type {Boolean}
+   */
+  get isInnate() { return this._isInnate.value; }
+  set isInnate(value) { this._isInnate.value = value; }
+
+  /**
+   * @param {Object} args 
+   * @param {GameSystemItem} args.document An encapsulated document instance. 
+   */
+  constructor(args) {
+    super(args);
+
+    this._baseAttributes = new DataFieldBridge({
+      document: this,
+      dataPath: "system.baseAttributes",
+      default: [
+        ATTRIBUTES.agility.name,
+        ATTRIBUTES.agility.name,
+      ],
+      fromDto: (dto) => {
+        return dto.map(name => ATTRIBUTES[name]);
+      },
+      toDto: (value) => {
+        return value.map(attribute => attribute.name);
+      },
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("baseAttributes", newValue, oldValue);
+      },
+    });
+    this._level = new DataFieldBridge({
+      document: this,
+      dataPath: "system.level",
+    });
+    this._expertises = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: "system.expertises",
+      dataClass: ExpertiseDocument,
+      fromDtoArgs: {
+        parentDocument: this._document,
+      },
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("expertises", newValue, oldValue);
+      },
+    });
+    this._itemOrders = {
+      expertises: new ArrayDataFieldBridge({
+        document: this,
+        dataPath: "system.itemOrders.expertises",
+        dataClass: Reference,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("itemOrders.expertises", newValue, oldValue);
+        },
+      }),
+      momentumActions: new ArrayDataFieldBridge({
+        document: this,
+        dataPath: "system.itemOrders.momentumActions",
+        dataClass: Reference,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("itemOrders.momentumActions", newValue, oldValue);
+        },
+      }),
+    };
+    this._actionPoints = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.actionPoints.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("actionPoints.enabled", newValue, oldValue);
+        },
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.actionPoints.current",
+        default: 0,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("actionPoints.current", newValue, oldValue);
+        },
+      }),
+    };
+    this._distance = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.distance.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("distance.enabled", newValue, oldValue);
+        },
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.distance.current",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("distance.current", newValue, oldValue);
+        },
+      }),
+    };
+    this._targetingType = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.targetingType.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("targetingType.enabled", newValue, oldValue);
+        },
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.targetingType.current",
+        default: TARGETING_TYPES.none,
+        fromDto: (dto) => {
+          const targetingType = TARGETING_TYPES.asArray().find(it => it.name === dto);
+          if (ValidationUtil.isDefined(targetingType)) {
+            return targetingType;
+          } else {
+            return TARGETING_TYPES.none;
+          }
+        },
+        toDto: (value) => value.name,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("targetingType.current", newValue, oldValue);
+        },
+      }),
+    };
+    this._obstacle = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.obstacle.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("obstacle.enabled", newValue, oldValue);
+        },
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.obstacle.current",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("obstacle.current", newValue, oldValue);
+        },
+      }),
+    };
+    this._opposedBy = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.opposedBy.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("opposedBy.enabled", newValue, oldValue);
+        },
+      }),
+      current: new DataFieldBridge({
+        document: this,
+        dataPath: "system.opposedBy.current",
+        default: new Reference(),
+        fromDto: (dto) => {
+          return Reference.fromDto(dto);
+        },
+        toDto: (value) => {
+          return value.toDto();
+        },
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("opposedBy.current", newValue, oldValue);
+        },
+      }),
+    };
+    this._advancement = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.advancement.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("advancement.enabled", newValue, oldValue);
+        },
+      }),
+      progress: new DataFieldBridge({
+        document: this,
+        dataPath: "system.advancement.progress",
+        default: 0,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("advancement.progress", newValue, oldValue);
+        },
+      }),
+    };
+    this._gradedEffects = {
+      enabled: new DataFieldBridge({
+        document: this,
+        dataPath: "system.gradedEffects.enabled",
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("gradedEffects.enabled", newValue, oldValue);
+        },
+      }),
+      entries: new ArrayDataFieldBridge({
+        document: this,
+        dataPath: "system.gradedEffects.entries",
+        dataClass: GradedEffect,
+        onChange: (newValue, oldValue) => {
+          this._onChangeCallbacks.invoke("gradedEffects.entries", newValue, oldValue);
+        },
+      }),
+    };
+    this._momentumActions = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: "system.momentumActions",
+      dataClass: MomentumAction,
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("system.momentumActions", newValue, oldValue);
+      },
+    });
+    this._isInnate = new DataFieldBridge({
+      document: this,
+      dataPath: "system.isInnate",
+      default: false,
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("system.isInnate", newValue, oldValue);
+      },
+    });
+  }
+
+  /**
+   * @override
+   * 
+   * Also searches in: 
+   * * Embedded expertises
+   */
+  resolveReference(comparableReference, propertyPath) {
+    const collectionsToSearch = [
+      this.expertises,
+    ];
+    const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
+    if (r !== undefined) {
+      return r;
+    }
+
+    return super.resolveReference(comparableReference, propertyPath);
+  }
+
+  /** @override */
+  flushUpdates() {
+    super.flushUpdates();
+    for (const expertise of this.expertises) {
+      expertise.flushUpdates();
+    }
+  }
+  
+  /** @override */
+  discardUpdates() {
+    super.discardUpdates();
+    for (const expertise of this.expertises) {
+      expertise.discardUpdates();
+    }
+  }
+}

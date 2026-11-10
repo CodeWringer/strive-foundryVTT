@@ -10,6 +10,11 @@ import { common } from "../../../../common/_module.mjs";
  * @property {String} localizableName Localization key. 
  */
 export class CharacterTestType {
+  /**
+   * @param {Object} args
+   * @param {String} args.name Internal name. 
+   * @param {String} args.localizableName Localization key. 
+   */
   constructor(args = {}) {
     common.util.validation.validateOrThrow(args, ["name", "localizableName"]);
 

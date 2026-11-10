@@ -52,7 +52,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
     }
     
     // Immediately write view state. 
-    this.writeViewState();
+    this.viewState.write();
   }
 
   /**
@@ -74,8 +74,8 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
 
     this.document = args.document;
 
-    this.registerViewStateProperty("_isExpanded");
-    this.readViewState();
+    this.viewState.register("_isExpanded");
+    this.viewState.read();
 
     const systemHealthConditions = SystemHealthConditionBroker.conditions;
     const characterHealthConditions = this.document.health.conditions;
@@ -128,7 +128,7 @@ export default class ActorHealthConditionsViewModel extends ViewModel {
       this.conditionViewModels.push(vm);
     }
 
-    // Iterating instances of `TransientHealthCondition`s - instances of system-defined 
+    // Iterating instances of `HealthConditionDocument`s - instances of system-defined 
     // **and** custom Health Conditions (but actually, only custom ones will be worked with here).
     for (const condition of characterHealthConditions) {
       if (this._isHiddenBySettings(condition.name)) continue;

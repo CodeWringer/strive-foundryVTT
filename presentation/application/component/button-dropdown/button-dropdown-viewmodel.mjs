@@ -1,3 +1,4 @@
+import { UuidUtil } from "../../../../common/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { MODIFIER_KEY_CODES } from "../../../util/keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../../util/keyboard/keyboard.mjs";
@@ -117,18 +118,31 @@ export default class ButtonDropDownViewModel extends ViewModel {
   #menuElement = undefined;
 
   /**
-   * @param {Object} args
+   * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * 
+   * If no value is provided, a shortened UUID will be generated for it. 
+   * 
+   * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
+   * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
+   * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
    * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Object | undefined} args.document An associated data document. 
+   * @param {Boolean | undefined} args.visible
+   * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
    * @param {String | undefined} args.content Raw HTML to render as the content 
    * of the button. 
+   * * default `'<i class="ico ico-burger-menu lg"></i>'`
    * @param {Array<DropDownOption> | undefined} args.options An array of context menu items, 
    * which are used to populate the context menu. 
+   * @param {Object | undefined} args.onClickContextData Data that is passed to the `onClick` handler 
+   * of the `options`. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. No arguments. 
    * @param {Function | undefined} args.onMenuShown Asynchronous callback that is invoked when 
@@ -139,11 +153,12 @@ export default class ButtonDropDownViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.content = args.content;
+    this.content = args.content ?? '<i class="ico ico-burger-menu lg"></i>';
     this.options = args.options ?? [];
     this.onClick = args.onClick ?? (() => { });
     this.onMenuShown = args.onMenuShown ?? (() => { });
     this.onMenuHidden = args.onMenuHidden ?? (() => { });
+    this.onClickContextData = args.onClickContextData;
   }
 
   /**
@@ -169,6 +184,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyDownAlt = KEYBOARD.onKeyDown({
       modifier: MODIFIER_KEY_CODES.ALT,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+        
         this._evaluateConditions({
           altKey: true,
           ctrlKey: false,
@@ -179,6 +196,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyDownCtrl = KEYBOARD.onKeyDown({
       modifier: MODIFIER_KEY_CODES.CTRL,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+
         this._evaluateConditions({
           altKey: false,
           ctrlKey: true,
@@ -189,6 +208,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyUpAlt = KEYBOARD.onKeyUp({
       modifier: MODIFIER_KEY_CODES.ALT,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+
         this._evaluateConditions({
           altKey: false,
           ctrlKey: false,
@@ -199,6 +220,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
     this._globalOnKeyUpCtrl = KEYBOARD.onKeyUp({
       modifier: MODIFIER_KEY_CODES.CTRL,
       handler: () => {
+        if (!this.#isMenuOpen) return;
+
         this._evaluateConditions({
           altKey: false,
           ctrlKey: false,
@@ -217,7 +240,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
       menuItemElm.click((event) => {
         event.preventDefault();
         this.closeMenu();
-        option.onClick();
+        option.onClick(this.onClickContextData);
       });
 
       menuItemElm.on("keydown", (event) => {
@@ -229,7 +252,7 @@ export default class ButtonDropDownViewModel extends ViewModel {
           menuItemElm.prev().focus();
         } else if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          option.onClick();
+          option.onClick(this.onClickContextData);
           this.closeMenu();
         }
       });
@@ -265,6 +288,8 @@ export default class ButtonDropDownViewModel extends ViewModel {
   openMenu() {
     if (this.#isMenuOpen) return;
 
+    this.#menuElement.detach();
+    this.element.closest("body").append(this.#menuElement);
     this.#menuElement.removeClass("hidden");
     this.#isMenuOpen = true;
     this._evaluateConditions({
@@ -272,6 +297,14 @@ export default class ButtonDropDownViewModel extends ViewModel {
       ctrlKey: false,
     });
     this.#adjustMenuPos();
+
+    const scrollableParent = this.#getScrollableParent();
+    this._scrollEventId = UuidUtil.createUuid();
+    scrollableParent.on(`scroll.${this._scrollEventId}`, () => {
+      this._scrollTimeout = setTimeout(() => {
+        this.#adjustMenuPos();
+      }, 100);
+    });
 
     this.onMenuShown();
 
@@ -288,7 +321,13 @@ export default class ButtonDropDownViewModel extends ViewModel {
   closeMenu() {
     if (!this.#isMenuOpen) return;
 
+    const scrollableParent = this.#getScrollableParent();
+    scrollableParent.off(`scroll.${this._scrollEventId}`);
+    clearTimeout(this._scrollTimeout);
+
     this.#menuElement.addClass("hidden");
+    this.#menuElement.detach();
+    this.element.append(this.#menuElement);
     this.#isMenuOpen = false;
 
     this.onMenuHidden();
@@ -351,27 +390,44 @@ export default class ButtonDropDownViewModel extends ViewModel {
    * @private
    */
   #adjustMenuPos() {
-    let rootContainerElm = this.element.closest("form");
-    if (rootContainerElm.length === 0) {
-      rootContainerElm = this.element.closest("body");
-    }
+    const rootContainerElm = this.#getRootParent();
 
     const buttonRect = SheetUtil.getElementRect(this.#buttonElement[0]);
     const boundsRect = SheetUtil.getElementRect(rootContainerElm[0]);
     const menuRect = SheetUtil.getElementRect(this.#menuElement[0]);
-    let left = 0;
-    let top = buttonRect.height;
+    let left = buttonRect.left;
+    let top = buttonRect.bottom;
 
     const deltaX = boundsRect.right - (buttonRect.left + menuRect.width);
     const deltaY = boundsRect.bottom - (buttonRect.bottom + menuRect.height);
 
     if (deltaX < 0) { // Clipping right.
-      left = buttonRect.width - menuRect.width;
+      left = buttonRect.left - menuRect.width + buttonRect.width;
     }
     if (deltaY < 0) { // Clipping bottom.
-      top = -menuRect.height;
+      top = buttonRect.top - menuRect.height;
     }
 
     this.#menuElement.attr("style", `left: ${left}px; top: ${top}px;`);
+  }
+
+  /**
+   * Returns the root `form` or `body` element this element is nested in. 
+   * @returns {JQuery}
+   */
+  #getRootParent() {
+    let rootContainerElm = this.element.closest("form");
+    if (rootContainerElm.length === 0) {
+      rootContainerElm = this.element.closest("body");
+    }
+    return rootContainerElm;
+  }
+
+  /**
+   * Returns the root `section` this element is nested in. 
+   * @returns {JQuery}
+   */
+  #getScrollableParent() {
+    return this.element.closest(".sheet-section");
   }
 }

@@ -58,9 +58,9 @@ export default class BulkDevDocumentUpdater {
       const skillsOfActor = actor.items.filter(it => it.type === ITEM_TYPES.skill);
 
       for await (const skill of skillsOfActor) {
-        const transientSkill = skill.getTransientObject();
-        const isInnate = transientSkill.innate;
-        if (isInnate || transientSkill.isCustom) continue;
+        const SkillDocument = skill.getEnhancedDocument();
+        const isInnate = SkillDocument.innate;
+        if (isInnate || SkillDocument.isCustom) continue;
 
         const templateSkill = templateSkills.find(it => it.id === skill.id || it.name === skill.name);
         if (!common.util.validation.isDefined(templateSkill)) {
@@ -77,7 +77,7 @@ export default class BulkDevDocumentUpdater {
             failures: skill.system.failures,
           },
         };
-        await transientSkill.update(updateData);
+        await SkillDocument.update(updateData);
       }
 
       currentProgress++;

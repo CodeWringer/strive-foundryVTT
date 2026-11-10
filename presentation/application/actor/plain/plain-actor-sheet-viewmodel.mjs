@@ -28,7 +28,7 @@ export default class PlainActorSheetViewModel extends BaseSheetViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {TransientBaseActor} args.document The represented transient document instance. 
+   * @param {BaseActorDocument} args.document The represented transient document instance. 
    * @param {ActorSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
@@ -41,7 +41,7 @@ export default class PlainActorSheetViewModel extends BaseSheetViewModel {
       parent: this,
       id: "vmName",
       value: this.document.name,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.name = newValue;
       },
       placeholder: game.i18n.localize("system.general.name.label"),
@@ -50,7 +50,7 @@ export default class PlainActorSheetViewModel extends BaseSheetViewModel {
       parent: this,
       id: "vmImg",
       value: this.document.img,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.img = newValue;
       },
     });
@@ -58,7 +58,7 @@ export default class PlainActorSheetViewModel extends BaseSheetViewModel {
       id: "vmRtDescription",
       parent: this,
       value: this.document.description,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.description = newValue;
       },
     });

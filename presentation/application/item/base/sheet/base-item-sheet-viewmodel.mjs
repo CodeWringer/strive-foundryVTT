@@ -1,8 +1,8 @@
+import Document from "../../../../../business/model/document/document.mjs";
 import { ValidationUtil } from "../../../../../common/util/validation-utility.mjs";
 import { SlideDisplaceAnim } from "../../../../animation/slide-displace-anim.mjs";
 import { SlideInAnim } from "../../../../animation/slide-in-anim.mjs";
 import { SlideOutAnim } from "../../../../animation/slide-out-anim.mjs";
-import { DOCUMENT_CONTEXT } from "../../../../model/document-context.mjs";
 import { ChatUtil } from "../../../../util/chat-utility.mjs";
 import { KEY_CODES, MODIFIER_KEY_CODES } from "../../../../util/keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../../../util/keyboard/keyboard.mjs";
@@ -71,59 +71,43 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   get contentViewModel() { return this._contentViewModel ?? this; }
 
   /**
-   * Returns `true`, if this is an embedded document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isEmbedded() { return this.context === DOCUMENT_CONTEXT.embedded; }
-
-  /**
-   * Returns `true`, if this is an independent (i. e. not embedded) document. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isIndependent() { return this.context === DOCUMENT_CONTEXT.independent; }
-  
-  /**
-   * Returns `true`, if this is locked (i. e. part of a locked compendium pack). 
-   * @type {Boolean}
-   * @readonly
-   */
-  get isLocked() { return this.context === DOCUMENT_CONTEXT.embedded_locked || this.context === DOCUMENT_CONTEXT.independent_locked; }
-
-  /**
-   * @param {Object} args
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
+   * @param {Object} args The arguments object. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * 
+   * If no value is provided, a shortened UUID will be generated for it. 
+   * 
+   * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
+   * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
+   * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.visible
+   * * default `true`
+   * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {TransientDocument} args.document The represented transient document instance. 
+   * @param {Document} args.document An associated data document. 
+   * 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
-   * @param {DOCUMENT_CONTEXT | undefined} args.context Indicates whether this is an embedded or 
-   * independent document. This affects interactibility. 
-   * * default `DOCUMENT_CONTEXT.independent`
+   * 
    * @param {BaseItemHeaderViewModel | undefined} args.headerViewModel
    * @param {BaseItemContentViewModel | undefined} args.contentViewModel
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
-    this.context = args.context ?? DOCUMENT_CONTEXT.independent;
-    this.document.isTransactionMode = this.isEditable;
+    this.document.isBufferMode = this.isEditable;
 
     this._headerViewModel = args.headerViewModel;
     if (ValidationUtil.isDefined(this._headerViewModel)) {
       this._headerViewModel.parent = this;
-      this._headerViewModel.context = args.context;
     }
 
     this._contentViewModel = args.contentViewModel;
     if (ValidationUtil.isDefined(this._contentViewModel)) {
       this._contentViewModel.parent = this;
-      this._contentViewModel.context = args.context;
     }
   }
 
@@ -131,7 +115,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * Returns the root owning document of the list item, if it has one. 
    * Otherwise, returns the list item itself.  
    * 
-   * @returns {TransientDocument}
+   * @returns {Document}
    * 
    * @protected
    */
@@ -164,7 +148,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     }).execute();
     this.#updateTitle();
 
-    this.document.isTransactionMode = true;
+    this.document.isBufferMode = true;
     this.document.discardUpdates();
   }
 
@@ -190,14 +174,14 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
     this.#updateTitle();
 
     await new Promise(resolve => setTimeout(resolve, 500));
-    this.document.isTransactionMode = false;
+    this.document.isBufferMode = false;
   }
 
   /** @override */
   dispose() {
     super.dispose();
     this.document.discardUpdates();
-    this.document.isTransactionMode = false;
+    this.document.isBufferMode = false;
     KEYBOARD.offKeyDown(this._editHotKeyListenerId);
     KEYBOARD.offKeyDown(this._saveHotKeyListenerId);
 

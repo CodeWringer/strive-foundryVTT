@@ -2,15 +2,16 @@ import Complication from "../../../../business/model/domain/complication/complic
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { SlideDisplaceAnim } from "../../../animation/slide-displace-anim.mjs";
 import { TEMPLATES } from "../../templates.mjs";
+import DocumentViewModel from "../../view-model/document-viewmodel.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
 import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 
-export default class ComplicationViewModel extends ViewModel {
+export default class ComplicationViewModel extends DocumentViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.application.component.complication.complication; }
+  static get TEMPLATE() { return TEMPLATES.application.component.complication.item; }
 
   /** @override */
   get clazz() { return ComplicationViewModel; }
@@ -45,7 +46,7 @@ export default class ComplicationViewModel extends ViewModel {
   }
 
   /**
-   * @param {Object} args 
+   * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
    * If no value is provided, a shortened UUID will be generated for it. 
@@ -58,17 +59,17 @@ export default class ComplicationViewModel extends ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Object | undefined} args.document An associated data document. 
    * @param {Boolean | undefined} args.visible
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
-   * @param {Complication} args.document 
+   * @param {Object} args.document An associated data document. 
+   * 
    * @param {Function<void> | undefined} args.onChange Invoked when any property value of 
    * the complication document changes. Arguments: 
    * * `fieldName: String` - Name of the field/property on this instance that was changed. 
-   * * `oldValue: Any` - Value prior to the change. 
    * * `newValue: Any` - Value after the change, and the current value. 
+   * * `oldValue: Any` - Value prior to the change. 
    * @param {Function<void> | undefined} args.onDelete Invoked when the entry is to be deleted. 
    */
   constructor(args = {}) {
@@ -77,9 +78,8 @@ export default class ComplicationViewModel extends ViewModel {
     this.onChange = args.onChange ?? (() => { });
     this.onDelete = args.onDelete ?? (() => { });
 
-    this.document = args.document;
-    this.document.onChange = (fieldName, oldValue, newValue) => {
-      this.onChange(fieldName, oldValue, newValue);
+    this.document.onChange = (fieldName, newValue, oldValue) => {
+      this.onChange(fieldName, newValue, oldValue);
     }
 
     this.vmName = new InputTextFieldViewModel({
@@ -90,7 +90,7 @@ export default class ComplicationViewModel extends ViewModel {
       toolTip: new ViewModelToolTipDefinition({
         localized: StringUtil.getLoca("system.domain.complication.name"),
       }),
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.name = newValue;
       }
     });
@@ -98,7 +98,6 @@ export default class ComplicationViewModel extends ViewModel {
       id: "vmContextMenuButton",
       parent: this,
       isEditable: this.isEditable,
-      content: '<i class="ico ico-burger-menu lg"></i>',
       options: [
         new DropDownOption({
           localizedValue: StringUtil.getLoca("system.domain.complication.delete"),
@@ -116,7 +115,7 @@ export default class ComplicationViewModel extends ViewModel {
         localized: StringUtil.getLoca("system.general.description"),
       }),
       value: this.document.description,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         this.document.description = newValue;
       },
     });

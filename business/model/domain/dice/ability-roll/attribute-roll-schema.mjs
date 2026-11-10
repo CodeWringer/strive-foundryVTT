@@ -35,7 +35,7 @@ export class AttributeRollSchema extends RollSchema {
       obFormula: rollQueryData.ob,
       diceComponents: new Sum(diceComponents),
       bonusDiceComponent: new SumComponent(RollSchema.BONUS_DICE_COMPONENT, "system.roll.bonusDice", rollQueryData.bonusDice),
-      compensationPoints: rollQueryData.compensationPoints,
+      edge: rollQueryData.edge,
       rollModifier: rollQueryData.rollModifier,
     });
   }
@@ -55,7 +55,7 @@ export class AttributeRollSchema extends RollSchema {
     // Input definitions specific to dice pool rolls. 
     const nameInputObstacle = "inputObstacle";
     const nameInputBonusDice = "inputBonusDice";
-    const nameInputCompensationPoints = "inputCompensationPoints";
+    const nameInputEdge = "inputEdge";
     const nameInputRollDiceModifier = "inputRollDiceModifier";
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
@@ -91,8 +91,8 @@ export class AttributeRollSchema extends RollSchema {
         validationFunc: (value) => { return parseInt(value) !== NaN; },
       }),
       new DynamicInputDefinition({
-        name: nameInputCompensationPoints,
-        localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
+        name: nameInputEdge,
+        localizedLabel: game.i18n.localize("system.roll.edge"),
         template: InputNumberSpinnerViewModel.TEMPLATE,
         viewModelFactory: (id, parent, overrides) => new InputNumberSpinnerViewModel({
           id: id,
@@ -123,7 +123,7 @@ export class AttributeRollSchema extends RollSchema {
     return new RollQueryData({
       ob: dialog[nameInputObstacle],
       bonusDice: parseInt(dialog[nameInputBonusDice]),
-      compensationPoints: parseInt(dialog[nameInputCompensationPoints]),
+      edge: parseInt(dialog[nameInputEdge]),
       rollModifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[nameInputRollDiceModifier].value),
       visbilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this._nameInputVisibility].value),
     });

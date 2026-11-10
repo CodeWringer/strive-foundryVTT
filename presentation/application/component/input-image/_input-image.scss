@@ -2,6 +2,8 @@
   img {
     width: $input-size-md;
     height: $input-size-md;
+    min-width: 1rem;
+    min-height: 1rem;
   }
 
   &.lg img {

@@ -18,7 +18,7 @@ export default class TokenActionPoints extends TokenExtender {
   addTo(token) {
     if (!common.util.validation.isDefined(token.actor)) return;
 
-    const transientActor = token.actor.getTransientObject();
+    const transientActor = token.actor.getEnhancedDocument();
 
     const scale = this.getScale(token);
 
@@ -142,7 +142,7 @@ export default class TokenActionPoints extends TokenExtender {
         && common.util.validation.isDefined(token.actionPointContainer.text)
         && common.util.validation.isDefined(token.actionPointContainer.text.text)
       ) {
-        const newActionPoints = token.actor.getTransientObject().actionPoints.current;
+        const newActionPoints = token.actor.getEnhancedDocument().actionPoints.current;
         token.actionPointContainer.text.text = newActionPoints;
 
         if (newActionPoints > 0) {

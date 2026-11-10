@@ -37,7 +37,7 @@ export default class ActorPersonalsViewModel extends ViewModel {
       parent: thiz,
       id: "vmTfSpecies",
       value: thiz.document.person.species,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         thiz.document.person.species = newValue;
       },
     });
@@ -45,7 +45,7 @@ export default class ActorPersonalsViewModel extends ViewModel {
       parent: thiz,
       id: "vmTfCulture",
       value: thiz.document.person.culture,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         thiz.document.person.culture = newValue;
       },
     });
@@ -53,7 +53,7 @@ export default class ActorPersonalsViewModel extends ViewModel {
       parent: thiz,
       id: "vmTfSex",
       value: thiz.document.person.sex,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         thiz.document.person.sex = newValue;
       },
     });
@@ -61,7 +61,7 @@ export default class ActorPersonalsViewModel extends ViewModel {
       parent: thiz,
       id: "vmTfAge",
       value: thiz.document.person.age,
-      onChange: (_, newValue) => {
+      onChange: (newValue) => {
         thiz.document.person.age = newValue;
       },
     });

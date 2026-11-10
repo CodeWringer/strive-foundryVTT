@@ -79,7 +79,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     this.ui = args.ui;
     this.isEditable = true;
 
-    this.registerViewStateProperty("_uiState");
+    this.viewState.register("_uiState");
 
     this.vmRefresh = new ButtonViewModel({
       id: "vmRefresh",
@@ -297,29 +297,29 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     });
 
     skillDocuments.forEach(skillDocument => {
-      const transientSkillDocument = skillDocument.getTransientObject();
+      const SkillDocumentDocument = skillDocument.getEnhancedDocument();
 
       const pack = skillDocument.pack ?? "world";
       let collectionHierarchy;
       let actorHierarchy;
-      if (ValidationUtil.isDefined(transientSkillDocument.owningDocument)) { // Skill is embedded on actor. 
+      if (ValidationUtil.isDefined(SkillDocumentDocument.owningDocument)) { // Skill is embedded on actor. 
         collectionHierarchy = this._getCollectionHierarchy(rootHierarchy, pack);
-        actorHierarchy = this._getActorHierarchy(collectionHierarchy, transientSkillDocument.owningDocument);
+        actorHierarchy = this._getActorHierarchy(collectionHierarchy, SkillDocumentDocument.owningDocument);
       } else { // Skill is contained in collection. 
         collectionHierarchy = this._getCollectionHierarchy(rootHierarchy, pack);
       }
 
       const skillHierarchy = new DamageFindingHierarchy({
-        id: transientSkillDocument.id,
-        name: transientSkillDocument.name
+        id: SkillDocumentDocument.id,
+        name: SkillDocumentDocument.name
       });
 
-      if (ValidationUtil.isDefined(transientSkillDocument.damage) && ValidationUtil.isDefined(transientSkillDocument.damage.length)) {
+      if (ValidationUtil.isDefined(SkillDocumentDocument.damage) && ValidationUtil.isDefined(SkillDocumentDocument.damage.length)) {
         const skillDamageFinding = new DamageFinding({
-          name: transientSkillDocument.name,
-          id: transientSkillDocument.id,
-          damage: transientSkillDocument.damage.concat([]), // Safe-copy
-          document: transientSkillDocument,
+          name: SkillDocumentDocument.name,
+          id: SkillDocumentDocument.id,
+          damage: SkillDocumentDocument.damage.concat([]), // Safe-copy
+          document: SkillDocumentDocument,
         });
 
         flat.push(skillDamageFinding);
@@ -334,7 +334,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
         rootHierarchy.addSubHierarchy(collectionHierarchy);
       }
 
-      transientSkillDocument.expertises.forEach(expertise => {
+      SkillDocumentDocument.expertises.forEach(expertise => {
         if (ValidationUtil.isDefined(expertise.damage) && ValidationUtil.isDefined(expertise.damage.length)) {
           if (expertise.damage.length > 0) {
             const expertiseDamageFinding = new DamageFinding({

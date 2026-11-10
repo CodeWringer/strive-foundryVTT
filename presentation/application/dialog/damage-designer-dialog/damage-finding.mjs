@@ -1,5 +1,5 @@
 import Expertise from "../../../business/model/document/item/skill/expertise.mjs"
-import TransientSkill from "../../../business/model/document/item/skill/transient-skill.mjs"
+import SkillDocument from "../../../business/model/document/item/skill/transient-skill.mjs"
 import AtReferencer from "../../../business/search/at-referencer.mjs"
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs"
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
@@ -13,7 +13,7 @@ import { ValidationUtil } from "../../../common/util/validation-utility.mjs"
  * These formulae may contain variables that may need to be manually fed some 
  * values. 
  * E. g. `["6D + @strength", "5 - @SI"]`
- * @property {TransientSkill | Expertise | undefined} document 
+ * @property {SkillDocument | Expertise | undefined} document 
  */
 export class DamageFinding {
   /**
@@ -34,7 +34,7 @@ export class DamageFinding {
    * These formulae may contain variables that may need to be manually fed some 
    * values. 
    * E. g. `["6D + @strength", "5 - @SI"]`
-   * @param {TransientSkill | Expertise | undefined} args.document 
+   * @param {SkillDocument | Expertise | undefined} args.document 
    */
   constructor(args = {}) {
     this.name = args.name;

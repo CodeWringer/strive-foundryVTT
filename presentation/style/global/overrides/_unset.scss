@@ -25,12 +25,13 @@
   h2,
   h3,
   h4 {
-    margin: 0;
-    padding: 0;
+    font-weight: unset;
+    margin: unset;
+    padding: unset;
   }
 }
 
-ul.strive.unset {
+ul.strive {
   margin: 0;
   padding: 0;
   list-style: none;

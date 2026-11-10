@@ -13,13 +13,14 @@ export default class Persistable {
    * dto (= data transfer object). 
    * 
    * @param {Object} dto
+   * @param {Object | undefined} args
    * 
    * @returns {Any}
    * 
    * @abstract
    * @static
    */
-  static fromDto(dto) {
+  static fromDto(dto, args = {}) {
     throw new Error("Not implemented");
   }
 

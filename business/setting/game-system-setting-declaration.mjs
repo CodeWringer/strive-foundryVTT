@@ -38,6 +38,8 @@ export default class GameSystemSettingDeclaration {
    * * E. g. `"fas fa-bars"`. 
    * @param {Boolean} args.restricted If `true`, only a GM may open the `menu`. 
    * * Default `false`;
+   * @param {Object | undefined} args.choices Turns the control into a drop-down. 
+   * E.g. `{ a: "Option A", b: "Option B" }`
    */
   constructor(args = {}) {
     common.util.validation.validateOrThrow(args, ["key", "name", "scope"]);
@@ -52,5 +54,6 @@ export default class GameSystemSettingDeclaration {
     this.menu = args.menu;
     this.icon = args.icon;
     this.restricted = args.restricted ?? false;
+    this.choices = args.choices;
   }
 }

@@ -40,9 +40,11 @@ export default class InputSearchTextViewModel extends InputViewModel {
    * * `newValue: {String}`
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      value: args.value ?? "",
+    });
 
-    this._value = args.value ?? "";
     this.localizedPlaceholder = args.localizedPlaceholder ?? game.i18n.localize("system.general.search");
   }
 

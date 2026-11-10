@@ -1,0 +1,29 @@
+.strive.input.ability-level {
+  .read-mode {
+    .level {
+      position: relative;
+      width: 3rem;
+      height: 3rem
+    }
+
+    .text {
+      position: absolute;
+      font-size: 2rem;
+    }
+  }
+
+  &.lg {
+    .read-mode {
+      .level {
+        position: relative;
+        width: 4rem;
+        height: 4rem
+      }
+
+      .text {
+        position: absolute;
+        font-size: 2.5rem;
+      }
+    }
+  }
+}

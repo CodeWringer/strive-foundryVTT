@@ -1,3 +1,5 @@
+import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
+
 /**
  * Represents the sum of one or more numeric data components. 
  * 
@@ -34,11 +36,19 @@ export class Sum {
  * @property {String} name Internal name of the component. 
  * @property {String} localizableName Localizable name of the component. 
  * @property {Number} value The value of the component. 
- */
+*/
 export class SumComponent {
-  constructor(name, localizableName, value) {
-    this.name = name;
-    this.localizableName = localizableName;
-    this.value = value;
+  /**
+   * @param {Object} args 
+   * @param {String} args.name Internal name of the component. 
+   * @param {String} args.localizableName Localizable name of the component. 
+   * @param {Number} args.value The value of the component. 
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["name", "localizableName", "value"]);
+
+    this.name = args.name;
+    this.localizableName = args.localizableName;
+    this.value = args.value;
   }
 }
