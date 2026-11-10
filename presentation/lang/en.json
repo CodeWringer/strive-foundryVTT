@@ -288,6 +288,10 @@
           "modifyDice": "Modify Number of Dice",
           "forkReminder": "Don't forget to Fork other Known Skills into your Test!"
         }
+      },
+      "quarterOfDay": {
+        "quarterOfDay": "Quarter of Day",
+        "abbreviation": "QoD"
       }
     },
     "domain": {
@@ -427,10 +431,7 @@
             "abbreviation": "PI"
           }
         },
-        "time": {
-          "amount": "Time Increment Amount",
-          "unit": "Time Increment Unit"
-        }
+        "workRate": "Work-Rate"
       },
       "skill": {
         "skill": "Skill",
