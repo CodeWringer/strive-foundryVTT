@@ -12,12 +12,11 @@ export default class MutationItemSheet extends BaseItemSheet {
   }
 
   /** @override */
-  createViewModel(document, context) {
+  createViewModel(document) {
     return new MutationItemSheetViewModel({
       id: this.id,
       document: document,
       sheet: this,
-      context: context,
     });
   }
 }

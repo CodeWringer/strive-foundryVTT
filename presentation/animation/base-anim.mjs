@@ -88,10 +88,15 @@ export default class BaseAnimation {
    * @param {Object} args
    * @param {String | undefined} args.id 
    * @param {Array<JQuery | HTMLElement> | undefined} args.elements 
+   * @param {Function | undefined} args.onComplete Invoked upon animation completion, 
+   * but only if it isn't canceled. 
+   * @param {Function | undefined} args.onCancel Invoked upon animation cancellation. 
    */
   constructor(args = {}) {
     this.#id = args.id ?? UuidUtil.createUuid();
     this.#elements = args.elements ?? [];
+    this.onComplete = args.onComplete ?? (() => {});
+    this.onCancel = args.onCancel ?? (() => {});
   }
 
   /**
@@ -105,6 +110,7 @@ export default class BaseAnimation {
     if (ValidationUtil.isDefined(this._container)) {
       this._container.addClass("hidden");
     }
+    this.onCancel();
   }
 
   /**
@@ -160,7 +166,9 @@ export default class BaseAnimation {
    * @protected
    * @virtual
    */
-  _complete() {}
+  _complete() {
+    this.onComplete();
+  }
 
   /**
    * Cancels ALL other active animations which target any one of the elements 

@@ -9,12 +9,11 @@ export default class SkillItemSheet extends BaseItemSheet {
   }
   
   /** @override */
-  createViewModel(document, context) {
+  createViewModel(document) {
     return new SkillItemSheetViewModel({
       id: this.id,
       document: document,
       sheet: this,
-      context: context,
     });
   }
 }

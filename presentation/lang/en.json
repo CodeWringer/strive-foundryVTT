@@ -362,6 +362,12 @@
         "quantity": "Amount (Current / Limit per Stack)",
         "quality": "Quality"
       },
+      "fateCard": {
+        "fateCard": "Fate-Card",
+        "mifp": "Minor Fate Points",
+        "mafp": "Major Fate Points",
+        "afp": "Ambition Fate Points"
+      },
       "language": {
         "language": "Language",
         "grade": {

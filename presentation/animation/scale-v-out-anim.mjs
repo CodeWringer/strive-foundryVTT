@@ -8,6 +8,9 @@ export class ScaleVOutAnim extends BaseAnim {
   /**
    * @param {Object} args
    * @param {JQuery | HTMLElement} args.elm
+   * @param {Function | undefined} args.onComplete Invoked upon animation completion, 
+   * but only if it isn't canceled. 
+   * @param {Function | undefined} args.onCancel Invoked upon animation cancellation. 
    */
   constructor(args = {}) {
     super({
@@ -36,7 +39,7 @@ export class ScaleVOutAnim extends BaseAnim {
 
   /** @override @inheritdoc */
   _complete() {
-    super._complete();
     $(this.elm).removeClass("hidden");
+    super._complete();
   }
 }

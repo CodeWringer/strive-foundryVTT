@@ -12,12 +12,11 @@ export default class InjuryItemSheet extends BaseItemSheet {
   }
   
   /** @override */
-  createViewModel(document, context) {
+  createViewModel(document) {
     return new InjuryItemSheetViewModel({
       id: this.id,
       document: document,
       sheet: this,
-      context: context,
     });
   }
 }

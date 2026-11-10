@@ -9,12 +9,11 @@ export default class ProjectItemSheet extends BaseItemSheet {
   }
   
   /** @override */
-  createViewModel(document, context) {
+  createViewModel(document) {
     return new ProjectItemSheetViewModel({
       id: this.id,
       document: document,
       sheet: this,
-      context: context,
     });
   }
 }

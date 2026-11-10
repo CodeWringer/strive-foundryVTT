@@ -1,4 +1,6 @@
-import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
+import BaseItemSheetViewModel from "../base/sheet/base-item-sheet-viewmodel.mjs";
+import FateCardContentViewModel from "./fate-card-content-viewmodel.mjs";
+import FateCardHeaderViewModel from "./fate-card-header-viewmodel.mjs";
 
 /**
  * @property {FateCardDocument} document 
@@ -15,7 +17,7 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the sheet is in edit mode. 
    * 
-   * @param {IllnessDocument} args.document The represented transient document instance. 
+   * @param {FateCardDocument} args.document The represented transient document instance. 
    * @param {ActorSheet | ItemSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {

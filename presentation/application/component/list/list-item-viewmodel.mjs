@@ -2,6 +2,8 @@ import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../bu
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import { ScaleVInAnim } from "../../../animation/scale-v-in-anim.mjs";
 import { ScaleVOutAnim } from "../../../animation/scale-v-out-anim.mjs";
+import { SlideInFromTopAnim } from "../../../animation/slide-in-from-top-anim.mjs";
+import { SlideOutToTopAnim } from "../../../animation/slide-out-to-top-anim.mjs";
 import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
@@ -63,33 +65,28 @@ export default class ListItemViewModel extends ViewModel {
     this.#isExpanded = value;
     this.viewState.write();
     if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.inline.name) {
-      if (value) {
-        new Promise(async (resolve) => {
-          if (!ValidationUtil.isDefined(this.vmContent)) {
-            await this.#renderContentInline();
-          }
+      new Promise(async (resolve) => {
+        if (!ValidationUtil.isDefined(this.vmContent)) {
+          await this.#renderContentInline();
+        }
+        
+        const contentElm = this.element.find("> .content");
 
-          const contentElm = this.element.find("> .content");
+        if (value) {
           contentElm.removeClass("hidden");
-          await new ScaleVInAnim({
+          await new SlideInFromTopAnim({
             elm: contentElm,
           }).execute();
-          resolve();
-        });
-      } else {
-        new Promise(async (resolve) => {
-          if (!ValidationUtil.isDefined(this.vmContent)) {
-            await this.#renderContentInline();
-          }
-
-          const contentElm = this.element.find("> .content");
-          await new ScaleVOutAnim({
+        } else {
+          await new SlideOutToTopAnim({
             elm: contentElm,
+            onComplete: () => {
+              contentElm.addClass("hidden");
+            },
           }).execute();
-          contentElm.addClass("hidden");
-          resolve();
-        });
-      }
+        }
+        resolve();
+      });
     } else if (this.expansionMode.name === LIST_ITEM_EXPANSION_MODES.window.name) {
       if (value) {
         this._sheet = this.item.openSheet();

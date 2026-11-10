@@ -47,6 +47,10 @@ export const TEMPLATES = {
         header: `${basePathApplication}/item/asset/asset-header.hbs`,
         content: `${basePathApplication}/item/asset/asset-content.hbs`,
       },
+      fateCard: {
+        header: `${basePathApplication}/item/fate-card/fate-card-header.hbs`,
+        content: `${basePathApplication}/item/fate-card/fate-card-content.hbs`,
+      },
       healthCondition: {
         header: `${basePathApplication}/item/health-condition/health-condition-header.hbs`,
         content: `${basePathApplication}/item/health-condition/health-condition-content.hbs`,

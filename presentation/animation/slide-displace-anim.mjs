@@ -12,6 +12,9 @@ export class SlideDisplaceAnim extends BaseAnim {
    * @param {Boolean | undefined} args.keepCurrentDisplacedVisibility If `true`, will force 
    * the `displacedElement` visible for the animation, but rather keeps its current visibility. 
    * * default `false`
+   * @param {Function | undefined} args.onComplete Invoked upon animation completion, 
+   * but only if it isn't canceled. 
+   * @param {Function | undefined} args.onCancel Invoked upon animation cancellation. 
    */
   constructor(args = {}) {
     super({
@@ -49,8 +52,8 @@ export class SlideDisplaceAnim extends BaseAnim {
 
   /** @override @inheritdoc */
   _complete() {
-    super._complete();
     $(this.displacingElement).removeClass("hidden");
     $(this.displacedElement).addClass("hidden");
+    super._complete();
   }
 }

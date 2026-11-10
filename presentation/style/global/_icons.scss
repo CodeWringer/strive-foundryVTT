@@ -133,13 +133,16 @@ li.directory-item > img.thumbnail {
 
 // What follows are all the icon definitions. ALL of these are expected to conform to a 10x10 px 
 // square size constraint and to be vector graphics files with the "svg" extension. 
+// 
 // Note these automatically respect the current theme via CSS. 
+// 
 // Note that if you are looking for larger images, such as the header underlines, they are not 
 // listed here. They are handled by a different mechanism and can be accessed via the TEMPLATES
 // constant. 
 
 @include icon-template(".ico-action-point-sm", "action-point-sm");
 @include icon-template(".ico-action-point", "action-point");
+@include icon-template(".ico-afp", "AFP");
 @include icon-template(".ico-arrow-right", "arrow-right");
 @include icon-template(".ico-bag", "bag");
 @include icon-template(".ico-bulk", "bulk");
@@ -157,6 +160,7 @@ li.directory-item > img.thumbnail {
 @include icon-template(".ico-equals", "equals");
 @include icon-template(".ico-expertise ", "expertise");
 @include icon-template(".ico-eye-slash ", "eye-slash");
+@include icon-template(".ico-fate-card", "fate-card");
 @include icon-template(".ico-floppy ", "floppy");
 @include icon-template(".ico-greater-than-equals", "greater-than-equals");
 @include icon-template(".ico-greater-than", "greater-than");
@@ -171,6 +175,8 @@ li.directory-item > img.thumbnail {
 @include icon-template(".ico-less-than-equals", "less-than-equals");
 @include icon-template(".ico-less-than", "less-than");
 @include icon-template(".ico-locked-separator", "locked-separator");
+@include icon-template(".ico-mafp", "maFP");
+@include icon-template(".ico-mifp", "miFP");
 @include icon-template(".ico-mutation", "mutation");
 @include icon-template(".ico-obstacle", "obstacle");
 @include icon-template(".ico-project", "project");

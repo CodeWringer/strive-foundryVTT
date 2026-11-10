@@ -1,0 +1,26 @@
+{{!-- context:
+viewModel: ExpertiseContentViewModel
+--}}
+<div class="pad-h-md">
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="" }}
+  <span class="h-divider"></span>
+  <div class="auto-margin-v-md flex flex-middle flex-row pad-h-md">
+    {{!-- Minor Fate Points --}}
+    <div class="flex flex-row flex-middle">
+      <i class="ico ico-mifp xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmMifp cssClass="width-md" }}
+    </div>
+    <span class="v-divider"></span>
+    {{!-- Major Fate Points --}}
+    <div class="flex flex-row flex-middle">
+      <i class="ico ico-mafp xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmMafp cssClass="width-md" }}
+    </div>
+    <span class="v-divider"></span>
+    {{!-- Ambition Fate Points --}}
+    <div class="flex flex-row flex-middle">
+      <i class="ico ico-afp xl"></i>
+      {{> inputNumberSpinner viewModel=viewModel.vmAfp cssClass="width-md" }}
+    </div>
+  </div>
+</div>
