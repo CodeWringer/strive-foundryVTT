@@ -14,11 +14,10 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
    */
   #pathOnParent;
 
-  /** 
-   * Serves as an accessor to the raw data of the synthetic document. 
-   * @override
+  /**
+   * @type {SyntheticDocument | undefined}
    */
-  get raw() { return PropertyUtil.getByPath(this._document, this.#pathOnParent); }
+  syntheticDocument;
 
   /**
    * @param {Object} args
@@ -34,8 +33,8 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
       ...args,
       document: args.parentDocument,
     });
-
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
+
     this.#pathOnParent = args.pathOnParent;
   }
 
@@ -69,7 +68,7 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
     // 'our' document on the parent. That is why the entire object must be collected here, not just 
     // the delta. 
     const dto = {
-      ...this.raw,
+      ...this.syntheticDocument.toDto(),
       ...newDelta,
     };
 
@@ -83,9 +82,7 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
     if (propertyPath.startsWith(systemPrefix)) {
       propertyPath = propertyPath.substring(systemPrefix.length);
     }
-    const actualPath = `${this.#pathOnParent}.${propertyPath}`;
-
-    const dto = this._buildDto(actualPath, newValue);
+    const dto = this._buildDto(propertyPath, newValue);
     await super.update(dto, render);
   }
 
@@ -96,5 +93,12 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
    */
   async delete() {
     await this.deleteByPath(this.#pathOnParent);
+  }
+
+  /** @override */
+  _buildDto(propertyPath, newValue) {
+    const dto = this.syntheticDocument.toDto();
+    PropertyUtil.setByPath(dto, propertyPath, newValue);
+    return super._buildDto(this.#pathOnParent, dto);
   }
 }

@@ -15,6 +15,7 @@ export const ITEM_TYPES = {
   illness: "illness",
   injury: "injury",
   language: "language",
+  momentum_action: "momentumAction",
   mutation: "mutation",
   project: "project",
   recipe: "recipe",

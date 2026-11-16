@@ -100,7 +100,7 @@ export default class DocumentUpdater {
    * @private
    */
   async #update(delta, render = true) {
-    this.#document.update(delta, { render: render, });
+    this._document.update(delta, { render: render, });
   }
 
   /**
@@ -140,7 +140,7 @@ export default class DocumentUpdater {
     if (ValidationUtil.isDefined(mIndex)) { // Delete item from array.
       const arrayPropertyPath = propertyPath.substring(0, mIndex.index);
       
-      let array = PropertyUtil.getByPath(this.#document, arrayPropertyPath);
+      let array = PropertyUtil.getByPath(this._document, arrayPropertyPath);
       const index = parseInt(mIndex[0].substring(1, mIndex[0].length - 1));
       array = array.slice(0, index).concat(array.slice(index + 1));
 
@@ -172,6 +172,20 @@ export default class DocumentUpdater {
    */
   discardUpdates() {
     this.#buffer = {};
+  }
+
+  /**
+   * Returns the buffered value identified by the given property path, 
+   * if it exists. 
+   * @param {String} propertyPath Path leading to the property. 
+   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"system.attributes[0].level"`
+   * * E.g.: `"system.attributes[4]"`
+   * * E.g.: `"system.attributes"`
+   * @returns {Any | undefined}
+   */
+  getBufferByPath(propertyPath) {
+    return PropertyUtil.getByPath(this.#buffer, propertyPath);
   }
 
   /**
@@ -224,7 +238,7 @@ export default class DocumentUpdater {
     let previousDtoProperty = dto;
     // A reference to the previously looked at property, on the document. 
     // Initially, this is a reference to the document itself. 
-    let previousDocumentProperty = this.#document;
+    let previousDocumentProperty = this._document;
     // If this value is true, then an array is part of the property path. 
     // In such a case, we can no longer create small delta objects and have to instead start 
     // taking whole objects. Otherwise, all but the targeted property could be lost. 

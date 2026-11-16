@@ -87,6 +87,10 @@ export const TEMPLATES = {
         header: `${basePathApplication}/item/expertise/expertise-header.hbs`,
         content: `${basePathApplication}/item/expertise/expertise-content.hbs`,
       },
+      momentumAction: {
+        header: `${basePathApplication}/item/momentum-action/momentum-action-header.hbs`,
+        content: `${basePathApplication}/item/momentum-action/momentum-action-content.hbs`,
+      },
       trait: {
         header: `${basePathApplication}/item/trait/trait-header.hbs`,
         content: `${basePathApplication}/item/trait/trait-content.hbs`,

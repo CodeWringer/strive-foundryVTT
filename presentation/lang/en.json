@@ -475,6 +475,26 @@
       "healthCondition": {
         "healthCondition": "Health Condition",
         "quantity": "Degree (Current / Limit)"
+      },
+      "momentumAction": {
+        "momentumAction": "Momentum Action",
+        "momentumActions": "Momentum Actions",
+        "add": "Add Momentum Action",
+        "delete": "Delete Momentum Action",
+        "desperate": {
+          "defaultName": "New Desperate Measure",
+          "name": "Desperate Measure Name",
+          "img": "Desperate Measure Image",
+          "description": "Desperate Measure Description",
+          "momentumChange": "Desperate Measure<br>Required Momentum / Momentum Shift"
+        },
+        "heroic": {
+          "defaultName": "New Heroic Act",
+          "name": "Heroic Act Name",
+          "img": "Heroic Act Image",
+          "description": "Heroic Act Description",
+          "momentumChange": "Heroic Act<br>Required Momentum / Momentum Shift"
+        }
       }
     }
   }

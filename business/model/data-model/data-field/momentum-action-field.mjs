@@ -1,14 +1,17 @@
+import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { FoundrySchemaFields } from "../../../../foundry-interop/data-model-wrapper.mjs";
 
 /**
  * Declares a Momentum Action. 
  * 
  * @property {FoundrySchemaFields.SchemaField} desperate
+ * @property {FoundrySchemaFields.StringField} desperate.img
  * @property {FoundrySchemaFields.StringField} desperate.name
  * @property {FoundrySchemaFields.NumberField} desperate.cost
  * @property {FoundrySchemaFields.StringField} desperate.description
  * @property {FoundrySchemaFields.SchemaField} heroic
  * @property {FoundrySchemaFields.StringField} heroic.name
+ * @property {FoundrySchemaFields.StringField} heroic.img
  * @property {FoundrySchemaFields.NumberField} heroic.cost
  * @property {FoundrySchemaFields.StringField} heroic.description
  * 
@@ -21,9 +24,14 @@ export default class MomentumActionField extends FoundrySchemaFields.SchemaField
         name: new FoundrySchemaFields.StringField({
           nullable: false,
           required: true,
-          initial: "New Desperate Measure", // TODO loca
+          initial: StringUtil.getLoca("system.item.momentumAction.desperate.defaultName"),
         }),
-        cost: new FoundrySchemaFields.NumberField({
+        img: new FoundrySchemaFields.StringField({
+          nullable: false,
+          required: true,
+          initial: "systems/strive/presentation/image/desperate-measure.svg",
+        }),
+        momentumChange: new FoundrySchemaFields.NumberField({
           nullable: false,
           required: true,
           initial: 0,
@@ -39,9 +47,14 @@ export default class MomentumActionField extends FoundrySchemaFields.SchemaField
         name: new FoundrySchemaFields.StringField({
           nullable: false,
           required: true,
-          initial: "New Heroic Act", // TODO loca
+          initial: StringUtil.getLoca("system.item.momentumAction.heroic.defaultName"),
         }),
-        cost: new FoundrySchemaFields.NumberField({
+        img: new FoundrySchemaFields.StringField({
+          nullable: false,
+          required: true,
+          initial: "systems/strive/presentation/image/heroic-act.svg",
+        }),
+        momentumChange: new FoundrySchemaFields.NumberField({
           nullable: false,
           required: true,
           initial: 0,

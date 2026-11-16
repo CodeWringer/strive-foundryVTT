@@ -1,3 +1,4 @@
+import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import ChoiceOption from "../../../model/choice-option.mjs";
 
 /**
@@ -47,13 +48,17 @@ export class DropDownOption extends ChoiceOption {
    * the entry of the menu is clicked
    * @param {Function | undefined} args.condition Invoked to determine visibility of the option. 
    * Must return `true` to make the option visible. Arguments:
-   * * `event: Object`
-   * * `event.altKey: Boolean`
-   * * `event.ctrlKey: Boolean`
+   * * `event: Object | undefined`
+   * * `event.altKey: Boolean | undefined`
+   * * `event.ctrlKey: Boolean | undefined`
    */
   constructor(args = {}) {
     super(args);
 
+    if (ValidationUtil.isDefined(args.condition) && !ValidationUtil.isFunction(args.condition)) {
+      game.strive.logger.warning("args.condition is not a function");
+    }
+    
     this.onClick = args.onClick ?? (() => {});
     this.condition = args.condition ?? (() => true);
   }

@@ -2,14 +2,12 @@ import { CompareUtility } from "../../../../common/util/compare-utility.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import ExpertiseItemSheet from "../../../../presentation/application/item/expertise/expertise-item-sheet.mjs";
-import AtReferencer from "../../../search/at-referencer.mjs";
 import { ITEM_TYPES } from "../../domain/const/item-types.mjs";
 import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 import SyntheticDocument from "../synthetic-document.mjs";
-// Do not import SkillDocument
 
 /**
  * Represents an Expertise (of a Skill). 
@@ -29,7 +27,7 @@ import SyntheticDocument from "../synthetic-document.mjs";
  * * Read-only.
  * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
  * * Read-only.
- * @property {String} type Internal type name: `"expertise"`
+ * @property {String} type Internal type name. 
  * * Read-only.
  * @property {Number} requiredLevel
  * @property {Object} actionPoints
@@ -68,7 +66,6 @@ export default class ExpertiseDocument extends SyntheticDocument {
    */
   static fromDto(dto, args) {
     return new ExpertiseDocument({
-      raw: dto,
       parentDocument: args.parentDocument,
       index: args.index,
       id: dto.id,
@@ -217,8 +214,9 @@ export default class ExpertiseDocument extends SyntheticDocument {
    * @param {Object} args 
    * @param {SkillDocument} args.parentDocument 
    * @param {Number} args.index Index of the Expertise on the parent document. 
-   * @param {Object | undefined} args.raw Raw data object. 
    * @param {String | undefined} args.id Unique ID of this instance. 
+   * @param {Boolean | undefined} args.isBufferMode
+   * * default `false`
    */
   constructor(args = {}) {
     super({
@@ -361,25 +359,6 @@ export default class ExpertiseDocument extends SyntheticDocument {
         entries: this.gradedEffects.entries.map(it => it.toDto()),
       },
     };
-  }
-
-  /**
-   * Returns the property values identified by the `@`-denoted references in the given string, 
-   * from this `Expertise`. 
-   * 
-   * @param {String} str A string containing `@`-denoted references. 
-   * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 
-   * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
-   * * If a reference's name contains spaces, they must be replaced with underscores. 
-   * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
-   * * *Can* contain property paths! E. g. `@a_fate_card.cost.miFP`. 
-   * 
-   * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
-   * * Only contains unique entries. No reference is included more than once. 
-   * @override
-   */
-  resolveReferences(str) {
-    return new AtReferencer().resolveReferences(str, this);
   }
 
   /**

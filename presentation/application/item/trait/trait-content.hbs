@@ -2,3 +2,10 @@
 viewModel: TraitContentViewModel
 --}}
 {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
+{{!-- Momentum Actions --}}
+<div class="momentum-actions">
+  <span class="h-divider"></span>
+  {{#with viewModel.vmMomentumActions.clazz.TEMPLATE as | template |}}
+  {{> (template) viewModel=../viewModel.vmMomentumActions }}
+  {{/with}}
+</div>

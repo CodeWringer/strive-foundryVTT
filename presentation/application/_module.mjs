@@ -65,6 +65,10 @@ import FateCardHeaderViewModel from "./item/fate-card/fate-card-header-viewmodel
 import FateCardContentViewModel from "./item/fate-card/fate-card-content-viewmodel.mjs";
 import FateCardItemSheetViewModel from "./item/fate-card/fate-card-item-sheet-viewmodel.mjs";
 import FateCardItemSheet from "./item/fate-card/fate-card-item-sheet.mjs";
+import MomentumActionItemSheet from "./item/momentum-action/momentum-action-item-sheet.mjs";
+import MomentumActionItemSheetViewModel from "./item/momentum-action/momentum-action-item-sheet-viewmodel.mjs";
+import MomentumActionContentViewModel from "./item/momentum-action/momentum-action-content-viewmodel.mjs";
+import MomentumActionHeaderViewModel from "./item/momentum-action/momentum-action-header-viewmodel.mjs";
 
 /**
  * Wraps the `presentation.application` module, which contains all dedicated windows, 
@@ -146,6 +150,11 @@ export const application = {
       ExpertiseContentViewModel: ExpertiseContentViewModel,
       ExpertiseHeaderViewModel: ExpertiseHeaderViewModel,
     },
+    momentumAction: {
+      MomentumActionItemSheetViewModel: MomentumActionItemSheetViewModel,
+      MomentumActionContentViewModel: MomentumActionContentViewModel,
+      MomentumActionHeaderViewModel: MomentumActionHeaderViewModel,
+    },
     trait: {
       TraitItemSheetViewModel: TraitItemSheetViewModel,
       TraitHeaderViewModel: TraitHeaderViewModel,
@@ -165,6 +174,7 @@ export const application = {
     RecipeItemSheet: RecipeItemSheet,
     SkillItemSheet: SkillItemSheet,
     ExpertiseItemSheet: ExpertiseItemSheet,
+    MomentumActionItemSheet: MomentumActionItemSheet,
     TraitItemSheet: TraitItemSheet,
   },
   Tooltip: Tooltip,

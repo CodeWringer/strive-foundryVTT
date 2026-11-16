@@ -102,12 +102,15 @@ export default class AuthenticDocument extends Document {
   /**
    * @param {Object} args 
    * @param {Object} args.document FoundryVTT document. 
+   * @param {Boolean | undefined} args.isBufferMode
+   * * default `false`
    */
   constructor(args = {}) {
     super({
       ...args,
       updater: new DocumentUpdater({
         document: args.document,
+        isBufferMode: args.isBufferMode,
       }),
     });
     ValidationUtil.validateOrThrow(args, ["document"]);

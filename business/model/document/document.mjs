@@ -3,6 +3,7 @@ import { ExtenderUtil } from "../../../common/util/extender-util.mjs";
 import { PropertyUtil } from "../../../common/util/property-utility.mjs";
 import { ValidationUtil } from "../../../common/util/validation-utility.mjs";
 import AtReferencer from "../../search/at-referencer.mjs";
+import ArrayDataFieldBridge from "./data-bridge/array-data-field-bridge.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
 
 /**
@@ -141,7 +142,15 @@ export default class Document {
    * @type {Boolean}
    */
   get isBufferMode() { return this._updater.isBufferMode; }
-  set isBufferMode(value) { this._updater.isBufferMode = value; }
+  set isBufferMode(value) {
+    this._updater.isBufferMode = value;
+
+    for (const arrayDataFieldBridge of this._linkedSubDocumentBridges) {
+      for (const element of arrayDataFieldBridge.value) {
+        element.isBufferMode = true;
+      }
+    }
+  }
 
   /**
    * Wraps access to the `system` property of the underlying document. 
@@ -166,6 +175,13 @@ export default class Document {
    * @protected
    */
   _onChangeCallbacks;
+
+  /**
+   * @type {Array<ArrayDataFieldBridge>}
+   * @protected
+   * @virtual
+   */
+  _linkedSubDocumentBridges = [];
 
   /**
    * @param {Object} args 
@@ -313,13 +329,32 @@ export default class Document {
    * @virtual
    * @protected
    */
-  resolveReference(comparableReference, propertyPath) { /** Implementation up to inheriting types. */ }
+  resolveReference(comparableReference, propertyPath) {
+    const collectionsToSearch = [];
+    for (const arrayDataFieldBridge of this._linkedSubDocumentBridges) {
+      for (const element of arrayDataFieldBridge.value) {
+        collectionsToSearch.push(element);
+      }
+    }
+
+    const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
+    if (r !== undefined) {
+      return r;
+    }
+
+    return super.resolveReference(comparableReference, propertyPath);
+  }
 
   /**
    * Persists all currently outstanding updates to the data base. 
    */
   flushUpdates() {
     this._updater.flushUpdates();
+    for (const arrayDataFieldBridge of this._linkedSubDocumentBridges) {
+      for (const element of arrayDataFieldBridge.value) {
+        element.flushUpdates();
+      }
+    }
   }
 
   /**
@@ -327,6 +362,11 @@ export default class Document {
    */
   discardUpdates() {
     this._updater.discardUpdates();
+    for (const arrayDataFieldBridge of this._linkedSubDocumentBridges) {
+      for (const element of arrayDataFieldBridge.value) {
+        element.discardUpdates();
+      }
+    }
   }
 
   /**

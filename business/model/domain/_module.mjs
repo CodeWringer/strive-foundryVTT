@@ -8,7 +8,6 @@ import Persistable from "./persistable.mjs";
 import GradedEffect from "./graded-effect.mjs";
 import SystemHealthConditionBroker from "./health/system-health-condition-broker.mjs";
 import Modifier from "./modifier.mjs";
-import MomentumAction from "./momentum-action.mjs";
 import Reference from "./reference.mjs";
 import Ruleset from "./ruleset.mjs";
 import DamageAndType from "./skill/damage-and-type.mjs";
@@ -56,7 +55,6 @@ export const domain = {
   Complication: Complication,
   Reference: Reference,
   TimeIncrement: TimeIncrement,
-  MomentumAction: MomentumAction,
   Ruleset: Ruleset,
   Sum: Sum,
   SumComponent: SumComponent,
