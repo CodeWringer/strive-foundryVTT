@@ -150,8 +150,6 @@ export default class MomentumActionDocument extends SyntheticDocument {
    * @param {Document} args.parentDocument 
    * @param {Number} args.index Index of the document in the parent's collection. 
    * @param {String | undefined} args.id Unique ID of this instance. 
-   * @param {Boolean | undefined} args.isBufferMode
-   * * default `false`
    */
   constructor(args = {}) {
     super({

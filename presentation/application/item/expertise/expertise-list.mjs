@@ -38,7 +38,6 @@ export default class ExpertiseListViewModel extends ListViewModel {
             new ExpertiseDocument({
               parentDocument: this.document,
               index: expertises.length,
-              isBufferMode: this.document.isBufferMode,
             }),
           ]);
           this.document.expertises = newExpertises;
@@ -216,7 +215,7 @@ export default class ExpertiseListViewModel extends ListViewModel {
           document: document,
           sheet: sheet,
           onNameClick: () => {
-            this.toggleItemExpanded(expertise.id);
+            this.toggleItemExpanded(document.id);
           },
         }),
       }),

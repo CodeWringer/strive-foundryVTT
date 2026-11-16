@@ -133,8 +133,6 @@ export default class SyntheticDocument extends Document {
    * @param {String} args.pathOnParent Data path on the `parentDocument` which can 
    * uniquely identify this instance. E.g. `"system.expertises.abc123"`
    * @param {String | undefined} args.id Unique ID of this instance. 
-   * @param {Boolean | undefined} args.isBufferMode
-   * * default `false`
    */
   constructor(args = {}) {
     super({
@@ -142,7 +140,6 @@ export default class SyntheticDocument extends Document {
       updater: new SyntheticDocumentUpdater({
         parentDocument: args.parentDocument,
         pathOnParent: args.pathOnParent,
-        isBufferMode: args.isBufferMode,
       }),
     });
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);

@@ -215,8 +215,6 @@ export default class ExpertiseDocument extends SyntheticDocument {
    * @param {SkillDocument} args.parentDocument 
    * @param {Number} args.index Index of the Expertise on the parent document. 
    * @param {String | undefined} args.id Unique ID of this instance. 
-   * @param {Boolean | undefined} args.isBufferMode
-   * * default `false`
    */
   constructor(args = {}) {
     super({

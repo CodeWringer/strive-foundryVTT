@@ -42,8 +42,7 @@ export default class DataFieldBridge {
   get value() {
     const buffered = this.updater.getBufferByPath(this.#dataPath);
     if (ValidationUtil.isDefined(buffered)) {
-      const converted = this.fromDto(buffered, this.fromDtoArgs);
-      return converted;
+      return this.fromDto(buffered, this.fromDtoArgs);
     } else {
       // Fetch and transform value. 
       const dto = PropertyUtil.getByPath(this.document, this.#dataPath);

@@ -35,7 +35,6 @@ export default class MomentumActionListViewModel extends ListViewModel {
             new MomentumActionDocument({
               parentDocument: this.document,
               index: momentumActions.length,
-              isBufferMode: this.document.isBufferMode,
             }),
           ]);
           this.document.momentumActions = newArr;

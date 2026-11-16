@@ -39,7 +39,6 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
  * @property {Boolean} isEmbedded
  * @property {Boolean} isLocked
  * @property {Boolean} hasParent
- * @property {Boolean} isBufferMode
  * @property {Object} system
  * @property {DocumentUpdater} _updater
  * @property {Callbacks} _onChangeCallbacks
@@ -135,24 +134,6 @@ export default class Document {
   get parentDocument() { return null; }
 
   /**
-   * If `true`, field updates do not immediately fire and get persisted, 
-   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
-   * 
-   * Setting this to `false` immediately flushes all updates. 
-   * @type {Boolean}
-   */
-  get isBufferMode() { return this._updater.isBufferMode; }
-  set isBufferMode(value) {
-    this._updater.isBufferMode = value;
-
-    for (const arrayDataFieldBridge of this._linkedSubDocumentBridges) {
-      for (const element of arrayDataFieldBridge.value) {
-        element.isBufferMode = true;
-      }
-    }
-  }
-
-  /**
    * Wraps access to the `system` property of the underlying document. 
    * 
    * Used to keep access to persisted data possible by familiar property paths. 
@@ -239,14 +220,14 @@ export default class Document {
    * * E.g.: `"system.attributes[4]" ` - supported
    * * E.g.: `"system.attributes" ` - supported
    * * E.g.: `"system.attributes['level']"` - NOT supported
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
+   * @param {Boolean | undefined} force If `true`, will bypass the buffer and immediately flush the update. 
+   * * default `false`. 
    * @returns {Promise<void>}
    * 
    * @async
    */
-  async deleteByPath(propertyPath, render = true) {
-    return await this._updater.deleteByPath(propertyPath, render);
+  async deleteByPath(propertyPath, force = false) {
+    return await this._updater.deleteByPath(propertyPath, force);
   }
 
   /**
@@ -271,14 +252,14 @@ export default class Document {
    * Updates the document with the given `delta` object. 
    * 
    * @param {Object} delta The update delta to persist. 
-   * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
+   * @param {Boolean} force If `true`, will bypass the buffer and immediately flush the update. 
+   * * Default 'false'. 
    * @returns {Promise<void>}
    * 
    * @async
    */
-  async update(delta, render = true) {
-    return await this._updater.update(delta, render);
+  async update(delta, force = false) {
+    return await this._updater.update(delta, force);
   }
 
   /**

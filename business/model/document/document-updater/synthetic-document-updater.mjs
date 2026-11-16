@@ -15,11 +15,19 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
   #pathOnParent;
 
   /**
+   * @type {Document}
+   * @readonly
+   * @private
+   */
+  get #parentDocument() { return this._document.getEnhancedDocument(); }
+
+  /** @override */
+  get buffer() { return this.#parentDocument._updater.buffer; }
+  /** @override */
+  set buffer(value) { this.#parentDocument._updater.buffer = value; }
+
+  /**
    * @param {Object} args
-   * @param {Boolean | undefined} args.isBufferMode If `true`, field updates do not immediately fire and get persisted, 
-   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
-   * * default `false`
-   * 
    * @param {Object} args.parentDocument FoundryVTT document instance. 
    * @param {Object} args.pathOnParent Property path that identifies the document on the `parentDocument`. 
    */
@@ -34,7 +42,9 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
   }
 
   /** @override */
-  async update(delta, render = true, force = false) {
+  async update(delta, force = false) {
+    // This check ensures updates are only fired when the delta actually differs from the 
+    // current working data. 
     let hasChanges = false;
     for (const key in delta) {
       if (!Object.hasOwn(delta, key)) continue;
@@ -68,14 +78,14 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
     };
 
     const parentDto = this._buildDto(this.#pathOnParent, dto)
-    await super.update(parentDto, render, force);
+    await super.update(parentDto, force);
   }
 
   /** @override */
-  async updateByPath(propertyPath, newValue, render = true) {
+  async updateByPath(propertyPath, newValue, force = false) {
     const sanitizedPath = this.#sanitizePath(propertyPath);
     const dto = this._buildDto(sanitizedPath, newValue);
-    await super.update(dto, render);
+    await super.update(dto, force);
   }
 
   /**
