@@ -1,0 +1,16 @@
+{{!-- context:
+viewModel: MomentumActionHeaderViewModel
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-grow pad-lg auto-margin-h-md header">
+  {{> inputImage viewModel=viewModel.vmImgDesperate cssClass="lg" }}
+  <span class="v-divider"></span>
+  {{> inputTextField viewModel=viewModel.vmNameDesperate cssClass="flex-grow" }}
+  <span class="v-divider"></span>
+  {{> inputNumberSpinner viewModel=viewModel.vmMomentumShiftDesperate cssClass="width-md" }}
+  <span class="v-divider"></span>
+  {{> inputNumberSpinner viewModel=viewModel.vmMomentumShiftHeroic cssClass="width-md" }}
+  <span class="v-divider"></span>
+  {{> inputTextField viewModel=viewModel.vmNameHeroic cssClass="flex-grow" }}
+  <span class="v-divider"></span>
+  {{> inputImage viewModel=viewModel.vmImgHeroic cssClass="lg" }}
+</div>

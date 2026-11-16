@@ -120,10 +120,6 @@ export default class ViewModel {
    */
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
   
-  // TODO remove when no longer needed. 
-  get isOwner() { throw new Error("Deprecated"); }
-  get document() { throw new Error("Deprecated"); }
-  
   /**
    * Internal unique ID of this view model instance.
    * 

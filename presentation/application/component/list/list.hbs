@@ -10,13 +10,15 @@ cssClass: String | undefined
       <div class="list-header-start" style="width: 25%;"></div>
       {{!-- Center with text --}}
       <div class="list-header-center flex flex-center" style="width: 50%;">
-        <h2 class="strive-regular-font">{{localize "system.item.expertise.expertises"}}</h2>
+        <h2 class="strive-regular-font">{{viewModel.title}}</h2>
       </div>
       {{!-- Search and context menu right --}}
       <div class="list-header-end flex flex-row flex-grow flex-middle auto-margin-h-md">
         {{> inputTextField viewModel=viewModel.vmFilter cssClass="flex-grow" }}
-        <span class="v-divider context-menu"></span>
-        {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="context-menu" }}
+        <div class="context-menu flex flex-row flex-middle">
+          <span class="v-divider context-menu"></span>
+          {{> buttonDropDown viewModel=viewModel.vmContextMenu cssClass="context-menu" }}
+        </div>
       </div>
     </div>
     {{!-- Header underline --}}

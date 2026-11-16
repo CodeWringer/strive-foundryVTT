@@ -1,7 +1,5 @@
 import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import { ScaleVInAnim } from "../../../animation/scale-v-in-anim.mjs";
-import { ScaleVOutAnim } from "../../../animation/scale-v-out-anim.mjs";
 import { SlideInFromTopAnim } from "../../../animation/slide-in-from-top-anim.mjs";
 import { SlideOutToTopAnim } from "../../../animation/slide-out-to-top-anim.mjs";
 import VisibilityRule from "../../../model/visibility-rule.mjs";

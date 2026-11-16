@@ -14,12 +14,11 @@ export const PropertyUtil = {
 	 * @private
 	 */
 	_get: function(obj, properties) {
-		if (!properties || properties.length === 0) return obj;
+		if (!ValidationUtil.isArray(properties) || properties.length === 0) return obj;
 	
 		const prop = properties.shift();
 		if (this.hasProperty(obj, prop) !== true && Array.isArray(obj) !== true) {
-			const msg = `Failed to get value of property at '${prop}'! Original context object:`;
-			throw new Error(`InvalidStateException: ${msg}`);
+			return undefined;
 		} else {
 			return this._get(obj[prop], properties);
 		}
@@ -74,42 +73,61 @@ export const PropertyUtil = {
 	getByPath: function(obj, path) {
 		const propertyPath = this.splitPropertyPath(path);
 	
-		try {
-			return this._get(obj, propertyPath);
-		} catch(error) {
-			return undefined;
-		}
+		return this._get(obj, propertyPath);
 	},
 	
 	/**
 	 * Sets the value of a nested property. 
 	 * 
-	 * Supports array-access-notation. Does not support accessing properties via '[<propName>]'.
+	 * Will substitute missing steps in the path, but only for object intermediates. 
+	 * Substituting arrays is not supported! 
 	 * 
 	 * @param {Object} obj The object whose nested property is to be returned. 
-	 * @param {String} path The property path. 
-	 *        Separate properties with dot-notation. 
-	 *        Access arrays with bracket-notation. 
-	 *        E. g. "expertises[4].name"
+	 * @param {String} path The property path. Supports array-access-notation. 
+	 * Does not support accessing properties via '[<propName>]'.
+	 * * Separate properties with dot-notation. 
+	 * * Access arrays with bracket-notation. 
+	 * * E. g. "expertises[4].name"
 	 * @param {Any} value The value to set. 
 	 * 
-	 * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
-	 * @throws {Error} UnknownException If updating the property failed. 
+	 * @throws {Error} If the given path doesn't resolve to a property. 
 	 */
 	setByPath: function(obj, path, value) {
 		const propertyPath = this.splitPropertyPath(path);
 		const propertyToSet = propertyPath.pop();
 	
-		if (propertyToSet === undefined) {
-			throw new Error(`InvalidParameterException: Failed to set value of property at '${path}'!`);
+		if (!ValidationUtil.isDefined(propertyToSet)) {
+			throw new Error("'path' is empty");
 		}
-	
-		try {
-			const propertyOwner = this._get(obj, propertyPath);
-			propertyOwner[propertyToSet] = value;
-		} catch (error) {
-			throw new Error(`UnknownException: Failed to set nested property value: { path: ${path}, value: ${value} }`, { cause: error });
+		if (!ValidationUtil.isDefined(obj) || !ValidationUtil.isObject(obj)) {
+			throw new Error("'obj' is undefined");
 		}
+
+		// For debugging purposes. 
+		let pathUntilNow = propertyPath[0];
+
+		// Traverse the path, either grabbing the next property in the path, or substituting 
+		// missing steps as empty objects or arrays. 
+		let previousProperty = obj;
+		for (let i = 0; i < propertyPath.length; i++) {
+			const propertyName = propertyPath[i];
+			const property = previousProperty[propertyName];
+
+			if (propertyName !== propertyPath[0]) {
+				pathUntilNow = `${pathUntilNow}.${propertyName}`;
+			}
+
+			if (ValidationUtil.isDefined(property)) {
+				previousProperty = property;
+			} else if (ValidationUtil.isObject(previousProperty)) {
+				previousProperty[propertyName] = {};
+				previousProperty = previousProperty[propertyName];
+			} else {
+				throw new Error(`Failed to set property at '${path}'; Cannot substitute path at '${pathUntilNow}'`);
+			}
+		}
+		// Finally, set the value that was actually desired. 
+		previousProperty[propertyToSet] = value;
 	},
 	
 	/**
@@ -123,22 +141,22 @@ export const PropertyUtil = {
 	 *        Access arrays with bracket-notation. 
 	 *        E. g. "expertises[4].name"
 	 * 
-	 * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
-	 * @throws {Error} UnknownException If deleting the property failed. 
+	 * @throws {Error} If the given path doesn't resolve to a property. 
+	 * @throws {Error} If deleting the property failed. 
 	 */
 	deleteNestedProperty: function(obj, path) {
 		const propertyPath = this.splitPropertyPath(path);
 		const propertyToDelete = propertyPath.pop();
 	
 		if (propertyToDelete === undefined) {
-			throw new Error(`InvalidParameterException: Failed to delete property at '${path}'!`);
+			throw new Error(`Failed to delete property at '${path}'!`);
 		}
 	
-		try {
-			const propertyOwner = this._get(obj, propertyPath);
+		const propertyOwner = this._get(obj, propertyPath);
+		if (ValidationUtil.isDefined(propertyOwner)) {
 			delete propertyOwner[propertyToSet];
-		} catch (error) {
-			throw new Error(`UnknownException: Failed to delete nested property: { path: ${path} }`, { cause: error });
+		} else {
+			throw new Error(`Failed to delete nested property: { path: ${path} }`);
 		}
 	},
 	
@@ -151,7 +169,11 @@ export const PropertyUtil = {
 	 * @returns {Boolean} True, if the given object has a property with the given name. 
 	 */
 	hasProperty: function(obj, prop) {
-		return prop in obj;
+		if (ValidationUtil.isObject(obj) || ValidationUtil.isArray(obj)) {
+			return prop in obj;
+		} else {
+			return false;
+		}
 	},
 	
 	/**

@@ -3,9 +3,11 @@ import { LIST_ITEM_EXPANSION_MODES, ListItemExpansionMode } from "../../../../bu
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
 import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import { TEMPLATES } from "../../templates.mjs"
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs"
 import ButtonDropDownViewModel from "../button-dropdown/button-dropdown-viewmodel.mjs";
+import { DropDownOption } from "../button-dropdown/dropdown-option.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import ListItemViewModel from "./list-item-viewmodel.mjs"
 import ListItem from "./list-item.mjs";
@@ -24,6 +26,16 @@ export default class ListViewModel extends ViewModel {
   /** @override */
   get clazz() { return ListViewModel; }
 
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> div > div > .list-header-end > .context-menu",
+        shouldBeHidden: () => !this.isEditable || this.contextMenuOptions.length === 0,
+      }),
+    ]);
+  }
+
   /**
    * @type {String}
    * @readonly
@@ -34,13 +46,13 @@ export default class ListViewModel extends ViewModel {
    * @type {Array<ListItem>}
    * @private
    */
-  #items = [];
+  _items = [];
   /**
    * @type {Array<ListItem>}
    */
-  get items() { return this.#items; }
+  get items() { return this._items; }
   set items(value) {
-    this.#items = value;
+    this._items = value;
 
     new Promise(async (resolve) => {
       await this.#render();
@@ -49,16 +61,30 @@ export default class ListViewModel extends ViewModel {
   }
 
   /**
-   * @type {Array<ListSeparator>}
-   * @private
+   * @type {String}
+   * @protected
    */
-  #separators = [];
+  _title = "";
+  /**
+   * @type {String}
+   */
+  get title() { return this._title; }
+  set title(value) {
+    this._title = value;
+    this.element.find("> div > div > .list-header-center > h2").text(value);
+  }
+
+  /**
+   * @type {Array<ListSeparator>}
+   * @protected
+   */
+  _separators = [];
   /**
    * @type {Array<ListSeparator>}
    */
-  get separators() { return this.#separators; }
+  get separators() { return this._separators; }
   set separators(value) {
-    this.#separators = value;
+    this._separators = value;
 
     new Promise(async (resolve) => {
       await this.#render();
@@ -70,10 +96,51 @@ export default class ListViewModel extends ViewModel {
   set isEditable(value) {
     super.isEditable = value;
 
-    if (ValidationUtil.isDefined(this.vmContextMenu)) {
-      this.vmContextMenu.visible = value;
-    }
+    this.vmFilter.isEditable = true;
   }
+
+  /**
+   * @type {Array<DropDownOption>}
+   * @protected
+   */
+  _itemContextMenuOptions;
+  get itemContextMenuOptions() { return this._itemContextMenuOptions; }
+  
+
+  /**
+   * @type {Array<DropDownOption>}
+   * @private
+   */
+  #contextMenuOptions;
+  get contextMenuOptions() { return this.#contextMenuOptions; }
+  
+  /**
+   * @type {ListItemExpansionMode}
+   * @protected
+   */
+  _itemExpansionMode;
+  get itemExpansionMode() { return this._itemExpansionMode; }
+  
+  /**
+   * @type {Boolean}
+   * @protected
+   */
+  _itemsInitiallyExpanded;
+  get itemsInitiallyExpanded() { return this._itemsInitiallyExpanded; }
+  
+  /**
+   * @type {Boolean}
+   * @protected
+   */
+  _enableFilter;
+  get enableFilter() { return this._enableFilter; }
+  
+  /**
+   * @type {String}
+   * @protected
+   */
+  _searchTerm;
+  get searchTerm() { return this._searchTerm; }
 
   /**
    * @type {Array<ListItemViewModel>}
@@ -95,33 +162,39 @@ export default class ListViewModel extends ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
-   * @param {Object | undefined} args.document An associated data document. 
    * @param {Boolean | undefined} args.visible
    * * default `true`
    * @param {ViewModelToolTipDefinition | undefined} args.toolTip Creates a tool tip definition.
    * 
+   * @param {String | undefined} args.title
    * @param {Array<ListItem> | undefined} args.items
    * @param {Array<ListSeparator> | undefined} args.separators A list of visual list separators. 
    * @param {String | undefined} args.searchTerm
    * @param {Function | undefined} args.toSearchableTerm Must return a `String` representing the 
    * searchable term. Arguments:
    * * `item: ListItem` - the item to convert to a searchable `String`. 
+   * * default will return the wrapped document's `name` property. 
    * @param {Array<DropDownOption> | undefined} args.contextMenuOptions
    * @param {Array<DropDownOption> | undefined} args.itemContextMenuOptions
    * @param {ListItemExpansionMode | undefined} args.itemExpansionMode
    * @param {Boolean | undefined} args.itemsInitiallyExpanded
    * * default `false`
+   * @param {Boolean | undefined} args.enableFilter
+   * * default `true`
    */
   constructor(args = {}) {
     super(args);
 
-    this.toSearchableTerm = args.toSearchableTerm ?? (() => { });
-    this.#separators = args.separators ?? [];
-    this.itemContextMenuOptions = args.itemContextMenuOptions ?? [];
-    this.itemExpansionMode = args.itemExpansionMode ?? LIST_ITEM_EXPANSION_MODES.window;
-    this.itemsInitiallyExpanded = args.itemsInitiallyExpanded ?? false;
+    this._title = args.title;
+    this._separators = args.separators ?? [];
+    this._itemContextMenuOptions = args.itemContextMenuOptions ?? [];
+    this._itemExpansionMode = args.itemExpansionMode ?? LIST_ITEM_EXPANSION_MODES.window;
+    this._itemsInitiallyExpanded = args.itemsInitiallyExpanded ?? false;
+    this._enableFilter = args.enableFilter ?? true;
+    this._items = args.items ?? [];
+    this.toSearchableTerm = args.toSearchableTerm ?? ((listItem) => listItem.document.name);
 
-    this.contextMenuOptions = args.contextMenuOptions ?? [];
+    this.#contextMenuOptions = args.contextMenuOptions ?? [];
     this.vmContextMenu = new ButtonDropDownViewModel({
       id: "vmContextMenu",
       parent: this,
@@ -131,19 +204,17 @@ export default class ListViewModel extends ViewModel {
     });
 
     this._searchTerm = args.searchTerm ?? "";
-    this.#items = args.items ?? [];
-
     this.vmFilter = new InputTextFieldViewModel({
       id: "vmFilter",
       parent: this,
-      value: this._searchTerm,
+      value: this.searchTerm,
       isEditable: true,
       icon: '<i class="ico ico-search lg"></i>',
       enableClearButton: true,
       placeholder: StringUtil.getLoca("system.general.filter"),
+      visible: this.enableFilter,
       onChange: (newValue) => {
-        this._searchTerm = newValue;
-
+        this.searchTerm = newValue;
         this.#filter(false);
       },
       onFocus: () => {
@@ -237,7 +308,7 @@ export default class ListViewModel extends ViewModel {
 
     // Prepared items from separators. 
     const preparedSeparators = [];
-    for await (const separator of this.#separators) {
+    for await (const separator of this._separators) {
       if (!separator.applies()) continue;
 
       const index = separator.getIndex(this.#listItemViewModels.length - 1);
@@ -297,43 +368,33 @@ export default class ListViewModel extends ViewModel {
   /**
    * Applies the current `searchTerm` as filter on the items, toggling their 
    * visibility. 
-   * @param {Boolean} earlyExit If `true`, allows for an early exit if the current 
-   * search term is empty or undefined. Should be most performant. 
-   * @returns 
    */
-  #filter(earlyExit = false) {
-    if (ValidationUtil.isBlankOrUndefined(this._searchTerm)) {
-      if (earlyExit) {
-        return;
-      } else {
-        this.#listItemViewModels.forEach(viewModel => {
-          viewModel.visible = true;
-        });
+  #filter() {
+    this.#listItemViewModels.forEach(viewModel => {
+      viewModel.visible = true;
+    });
+    // Map SearchItems
+    const searchItems = [];
+    this.#listItemViewModels.forEach(viewModel => {
+      if (ValidationUtil.isDefined(viewModel.contentViewModel)) {
+        searchItems.push(new SearchItem({
+          id: viewModel.independentId,
+          term: this.toSearchableTerm(viewModel.item),
+        }));
       }
-    } else {
-      // Map SearchItems
-      const searchItems = [];
-      this.#listItemViewModels.forEach(viewModel => {
-        if (ValidationUtil.isDefined(viewModel.contentViewModel)) {
-          searchItems.push(new SearchItem({
-            id: viewModel.independentId,
-            term: this.toSearchableTerm(viewModel.contentViewModel),
-          }));
-        }
-      });
+    });
 
-      // Search
-      const searchResults = new Search().search({
-        searchItems: searchItems,
-        searchTerm: this._searchTerm,
-        searchMode: SEARCH_MODES.FUZZY,
-      });
+    // Search
+    const searchResults = new Search().search({
+      searchItems: searchItems,
+      searchTerm: this.searchTerm,
+      searchMode: SEARCH_MODES.FUZZY,
+    });
 
-      // Filter
-      searchResults.forEach(searchResult => {
-        const viewModel = this.#listItemViewModels.find(it => it.independentId === searchResult.id);
-        viewModel.visible = searchResult.score > 0;
-      });
-    }
+    // Filter
+    searchResults.forEach(searchResult => {
+      const viewModel = this.#listItemViewModels.find(it => it.independentId === searchResult.id);
+      viewModel.visible = searchResult.score > 0;
+    });
   }
 }

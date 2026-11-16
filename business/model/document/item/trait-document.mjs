@@ -1,6 +1,6 @@
-import MomentumAction from "../../domain/momentum-action.mjs";
 import AuthenticDocument from "../authentic-document.mjs";
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
+import MomentumActionDocument from "./momentum-action-document.mjs";
 
 /**
  * @see `TraitItemData` - Must contain all the fields defined in this data model. 
@@ -37,7 +37,7 @@ import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
  * * Read-only.
  * @property {Array<Modifier>} modifiers Modifiers to apply to the `parentDocument`. 
  * 
- * @property {Array<MomentumAction>} momentumActions
+ * @property {Array<MomentumActionDocument>} momentumActions
  * 
  * @extends AuthenticDocument
  */
@@ -49,7 +49,7 @@ export default class TraitDocument extends AuthenticDocument {
   get clazz() { return TraitDocument; }
 
   /**
-   * @type {Array<MomentumAction>}
+   * @type {Array<MomentumActionDocument>}
    */
   get momentumActions() { return this._momentumActions.value; }
   set momentumActions(value) { this._momentumActions.value = value; }
@@ -64,7 +64,7 @@ export default class TraitDocument extends AuthenticDocument {
     this._momentumActions = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.momentumActions",
-      dataClass: MomentumAction,
+      dataClass: MomentumActionDocument,
     });
   }
 }

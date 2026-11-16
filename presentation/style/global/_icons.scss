@@ -200,3 +200,15 @@ li.directory-item > img.thumbnail {
 @include icon-template(".ico-triangle-left", "triangle-left");
 @include icon-template(".ico-triangle-right", "triangle-right");
 @include icon-template(".ico-triangle-up", "triangle-up");
+
+// Un-themed icons
+
+.ico-momentum-action {
+  background-image: url("/systems/strive/presentation/image/momentum-action.svg");
+}
+.ico-desperate-measure {
+  background-image: url("/systems/strive/presentation/image/desperate-measure.svg");
+}
+.ico-heroic-act {
+  background-image: url("/systems/strive/presentation/image/heroic-act.svg");
+}

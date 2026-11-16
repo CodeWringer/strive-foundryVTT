@@ -21,6 +21,7 @@ import RecipeDocument from "./item/recipe-document.mjs";
 import CharacterActorDocument from "./actor/character-actor-document.mjs";
 import { documentUpdater } from "./document-updater/_module.mjs";
 import { dataBridge } from "./data-bridge/_module.mjs";
+import MomentumActionDocument from "./item/momentum-action-document.mjs";
 
 /**
  * Wraps the `business.model.document` module, which contains all the transient 
@@ -58,6 +59,7 @@ export const document = {
     RecipeDocument: RecipeDocument,
     SkillDocument: SkillDocument,
     TraitDocument: TraitDocument,
+    MomentumActionDocument: MomentumActionDocument,
   },
   init() {
     common.util.constants.enrichConstant(DOCUMENT_COLLECTION_SOURCES);

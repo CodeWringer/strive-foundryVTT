@@ -1,14 +1,13 @@
 import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
-import AtReferencer from "../../../search/at-referencer.mjs";
 import { Attribute, ATTRIBUTES } from "../../domain/const/attributes.mjs";
 import { TARGETING_TYPES } from "../../domain/const/targeting-types.mjs";
 import GradedEffect from "../../domain/graded-effect.mjs";
-import MomentumAction from "../../domain/momentum-action.mjs";
 import Reference from "../../domain/reference.mjs";
 import AuthenticDocument from "../authentic-document.mjs";
 import ArrayDataFieldBridge from "../data-bridge/array-data-field-bridge.mjs";
 import DataFieldBridge from "../data-bridge/data-field-bridge.mjs";
 import ExpertiseDocument from "./expertise-document.mjs";
+import MomentumActionDocument from "./momentum-action-document.mjs";
 
 /**
  * Represents a Skill document. 
@@ -96,7 +95,7 @@ import ExpertiseDocument from "./expertise-document.mjs";
  * @property {Boolean} gradedEffects.enabled If `true`, this Skill has graded effects, 
  * with escalating effects based on the number of Hits rolled. 
  * @property {Array<GradedEffect>} gradedEffects.entries The graded effects. 
- * @property {Array<MomentumAction>} momentumActions Momentum Actions that this 
+ * @property {Array<MomentumActionDocument>} momentumActions Momentum Actions that this 
  * Skill grants. 
  * @property {Boolean} isInnate If `true`, this Skill cannot be learned, and can only 
  * be acquired through ancestry or other, special means.
@@ -109,15 +108,6 @@ export default class SkillDocument extends AuthenticDocument {
 
   /** @override */
   get clazz() { return SkillDocument; }
-  
-  /** @override */
-  get isBufferMode() { return super.isBufferMode; }
-  set isBufferMode(value) {
-    super.isBufferMode = value;
-    for (const expertise of this.expertises) {
-      expertise.isBufferMode = value;
-    }
-  }
 
   /**
    * @type {Array<Attribute>}
@@ -274,7 +264,7 @@ export default class SkillDocument extends AuthenticDocument {
   }
 
   /**
-   * @type {Array<MomentumAction>}
+   * @type {Array<MomentumActionDocument>}
    */
   get momentumActions() { return this._momentumActions.value; }
   set momentumActions(value) { this._momentumActions.value = value; }
@@ -312,17 +302,6 @@ export default class SkillDocument extends AuthenticDocument {
     this._level = new DataFieldBridge({
       document: this,
       dataPath: "system.level",
-    });
-    this._expertises = new ArrayDataFieldBridge({
-      document: this,
-      dataPath: "system.expertises",
-      dataClass: ExpertiseDocument,
-      fromDtoArgs: {
-        parentDocument: this._document,
-      },
-      onChange: (newValue, oldValue) => {
-        this._onChangeCallbacks.invoke("expertises", newValue, oldValue);
-      },
     });
     this._itemOrders = {
       expertises: new ArrayDataFieldBridge({
@@ -474,12 +453,26 @@ export default class SkillDocument extends AuthenticDocument {
         },
       }),
     };
+    this._expertises = new ArrayDataFieldBridge({
+      document: this,
+      dataPath: "system.expertises",
+      dataClass: ExpertiseDocument,
+      fromDtoArgs: {
+        parentDocument: this._document,
+      },
+      onChange: (newValue, oldValue) => {
+        this._onChangeCallbacks.invoke("expertises", newValue, oldValue);
+      },
+    });
     this._momentumActions = new ArrayDataFieldBridge({
       document: this,
       dataPath: "system.momentumActions",
-      dataClass: MomentumAction,
+      dataClass: MomentumActionDocument,
+      fromDtoArgs: {
+        parentDocument: this._document,
+      },
       onChange: (newValue, oldValue) => {
-        this._onChangeCallbacks.invoke("system.momentumActions", newValue, oldValue);
+        this._onChangeCallbacks.invoke("momentumActions", newValue, oldValue);
       },
     });
     this._isInnate = new DataFieldBridge({
@@ -487,42 +480,13 @@ export default class SkillDocument extends AuthenticDocument {
       dataPath: "system.isInnate",
       default: false,
       onChange: (newValue, oldValue) => {
-        this._onChangeCallbacks.invoke("system.isInnate", newValue, oldValue);
+        this._onChangeCallbacks.invoke("isInnate", newValue, oldValue);
       },
     });
-  }
 
-  /**
-   * @override
-   * 
-   * Also searches in: 
-   * * Embedded expertises
-   */
-  resolveReference(comparableReference, propertyPath) {
-    const collectionsToSearch = [
-      this.expertises,
+    this._linkedSubDocumentBridges = [
+      this._expertises,
+      this._momentumActions,
     ];
-    const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
-    if (r !== undefined) {
-      return r;
-    }
-
-    return super.resolveReference(comparableReference, propertyPath);
-  }
-
-  /** @override */
-  flushUpdates() {
-    super.flushUpdates();
-    for (const expertise of this.expertises) {
-      expertise.flushUpdates();
-    }
-  }
-  
-  /** @override */
-  discardUpdates() {
-    super.discardUpdates();
-    for (const expertise of this.expertises) {
-      expertise.discardUpdates();
-    }
   }
 }

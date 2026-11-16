@@ -47,9 +47,18 @@ viewModel: SkillContentViewModel
     {{> (template) viewModel=../viewModel.vmGradedEffects }}
     {{/with}}
   </div>
-  <span class="h-divider"></span>
 </div>
 {{!-- Expertises --}}
-{{#with viewModel.vmExpertises.clazz.TEMPLATE as | template |}}
-{{> (template) viewModel=../viewModel.vmExpertises }}
-{{/with}}
+<div class="expertises">
+  <span class="h-divider"></span>
+  {{#with viewModel.vmExpertises.clazz.TEMPLATE as | template |}}
+  {{> (template) viewModel=../viewModel.vmExpertises }}
+  {{/with}}
+</div>
+{{!-- Momentum Actions --}}
+<div class="momentum-actions">
+  <span class="h-divider"></span>
+  {{#with viewModel.vmMomentumActions.clazz.TEMPLATE as | template |}}
+  {{> (template) viewModel=../viewModel.vmMomentumActions }}
+  {{/with}}
+</div>

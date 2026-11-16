@@ -1,8 +1,13 @@
+import GameSystemSettings from "../../../../business/setting/game-system-settings.mjs";
+import { GameSystemUserSettings } from "../../../../business/setting/game-system-user-settings.mjs";
+import { LIST_ITEM_EXPANSION_MODES } from "../../../../business/setting/list-item-expansion-modes.mjs";
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templates.mjs";
 import ViewModel, { ViewModelToolTipDefinition } from "../../view-model/view-model.mjs";
 import BaseItemContentViewModel from "../base/base-item-content-viewmodel.mjs";
+import MomentumActionListViewModel from "../momentum-action/momentum-action-list.mjs";
 
 export default class TraitContentViewModel extends BaseItemContentViewModel {
   /** @override */
@@ -10,6 +15,16 @@ export default class TraitContentViewModel extends BaseItemContentViewModel {
 
   /** @override */
   get clazz() { return TraitContentViewModel; }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> .momentum-actions",
+        shouldBeHidden: () => !this.isEditable && this.document.momentumActions.length === 0,
+      }),
+    ]);
+  }
 
   /**
    * @param {Object} args
@@ -36,6 +51,22 @@ export default class TraitContentViewModel extends BaseItemContentViewModel {
       onChange: (newValue) => {
         this.document.description = newValue;
       },
+    });
+
+    let itemsInitiallyExpanded = false;
+    const itemExpansionModeRaw = GameSystemSettings.get(GameSystemUserSettings.KEY_LIST_ITEM_EXPANSION_MODE);
+    let itemExpansionMode = LIST_ITEM_EXPANSION_MODES.asArray().find(it => it.name === itemExpansionModeRaw) ?? LIST_ITEM_EXPANSION_MODES.window;
+    if (!this.isEmbedded && itemExpansionModeRaw === LIST_ITEM_EXPANSION_MODES.inline.name) {
+      itemExpansionMode = LIST_ITEM_EXPANSION_MODES.inline_locked;
+      itemsInitiallyExpanded = true;
+    }
+
+    this.vmMomentumActions = new MomentumActionListViewModel({
+      id: "vmMomentumActions",
+      parent: this,
+      itemExpansionMode: itemExpansionMode,
+      itemsInitiallyExpanded: itemsInitiallyExpanded,
+      document: this.document,
     });
   }
 }

@@ -27,49 +27,29 @@ import { ValidationUtil } from "../../../../common/util/validation-utility.mjs";
  * * `oldValue: Any`
  */
 export default class DataFieldBridge {
-  /**
-   * @summary
-   * Contains a cached version of the domain value. 
-   * 
-   * @description
-   * Specifically targets `Document` instances, which should preserve state, instead of being 
-   * re-created on every access. Since `Document` instance data is always up-to-date anyway, there is 
-   * no need to re-create such instances. 
-   * 
-   * @type {Any}
-   * @private
-   */
-  #cache;
+  get updater() {
+    if (ValidationUtil.isDefined(this.document._updater)) {
+      return this.document._updater;
+    } else {
+      return this.document.getEnhancedDocument()._updater;
+    }
+  }
 
   /**
    * Returns the mapped value obtained through `this.fromDto`, if possible. Otherwise, returns `null`. 
    * @type {Any | null}
    */
   get value() {
-    // Fetch and transform value. 
-    const dto = PropertyUtil.getByPath(this.document, this.#dataPath);
-    if (ValidationUtil.isDefined(dto)) {
-      const converted = this.fromDto(dto, this.fromDtoArgs);
-
-      if (!ValidationUtil.isDefined(this.#cache)) {
-        this.#cache = converted;
-      } else {
-        if (ValidationUtil.isObject(converted) && ValidationUtil.isDefined(converted.id)) {
-          if (this.#cache.id === converted.id) {
-            return this.#cache;
-          }
-        } else if (ValidationUtil.isArray(converted)) {
-          const arr = this.#getCongruatedArray(converted);
-          this.#cache = arr;
-          return arr;
-        }
-      }
-      // Only reach this point in case the cache cannot be used. 
-      // This will be the case for any object whose identity cannot be congruated. 
-      // In practice, this targets Document instances, whose identity can be checked. 
-      return converted;
+    const buffered = this.updater.getBufferByPath(this.#dataPath);
+    if (ValidationUtil.isDefined(buffered)) {
+      return this.fromDto(buffered, this.fromDtoArgs);
     } else {
-      if (ValidationUtil.isDefined(this.default)) {
+      // Fetch and transform value. 
+      const dto = PropertyUtil.getByPath(this.document, this.#dataPath);
+      const converted = this.fromDto(dto, this.fromDtoArgs);
+      if (ValidationUtil.isDefined(converted)) {
+        return converted;
+      } else if (ValidationUtil.isDefined(this.default)) {
         return this.default;
       } else {
         return null;
@@ -83,7 +63,7 @@ export default class DataFieldBridge {
   set value(value) {
     const mappedNewValue = this.toDto(value);
     const oldValue = this.value;
-    this.document.updateByPath(this.#dataPath, mappedNewValue);
+    this.updater.updateByPath(this.#dataPath, mappedNewValue);
     this.#onChangeCallbacks.invoke(value, oldValue);
   }
 
@@ -107,7 +87,7 @@ export default class DataFieldBridge {
 
   /**
    * @param {Object} args 
-   * @param {Document} args.document Document instance that will be read from 
+   * @param {Document | Object} args.document Document instance that will be read from 
    * and written to. The `dataPath` must be relative to this object. 
    * @param {String} args.dataPath Identifies the data field on 
    * the document instance itself. E. g. `"system.bulk"`
@@ -152,27 +132,5 @@ export default class DataFieldBridge {
    */
   onChange(handler) {
     return this.#onChangeCallbacks.add(handler);
-  }
-
-  /**
-   * @param {Array<Object>} converted 
-   * @returns {Array<Object>}
-   * @private
-   */
-  #getCongruatedArray(converted) {
-    const result = [];
-    for (const element of converted) {
-      if (ValidationUtil.isDefined(element.id)) {
-        const cachedElement = this.#cache.find(it => it.id === element.id);
-        if (ValidationUtil.isDefined(cachedElement)) {
-          result.push(cachedElement);
-        } else {
-          result.push(element);
-        }
-      } else {
-        result.push(element);
-      }
-    }
-    return result;
   }
 }

@@ -14,18 +14,20 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
    */
   #pathOnParent;
 
-  /** 
-   * Serves as an accessor to the raw data of the synthetic document. 
-   * @override
+  /**
+   * @type {Document}
+   * @readonly
+   * @private
    */
-  get raw() { return PropertyUtil.getByPath(this._document, this.#pathOnParent); }
+  get #parentDocument() { return this._document.getEnhancedDocument(); }
+
+  /** @override */
+  get buffer() { return this.#parentDocument._updater.buffer; }
+  /** @override */
+  set buffer(value) { this.#parentDocument._updater.buffer = value; }
 
   /**
    * @param {Object} args
-   * @param {Boolean | undefined} args.isBufferMode If `true`, field updates do not immediately fire and get persisted, 
-   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
-   * * default `false`
-   * 
    * @param {Object} args.parentDocument FoundryVTT document instance. 
    * @param {Object} args.pathOnParent Property path that identifies the document on the `parentDocument`. 
    */
@@ -34,17 +36,19 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
       ...args,
       document: args.parentDocument,
     });
-
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
+
     this.#pathOnParent = args.pathOnParent;
   }
 
   /** @override */
-  async update(delta, render = true, force = false) {
+  async update(delta, force = false) {
+    // This check ensures updates are only fired when the delta actually differs from the 
+    // current working data. 
     let hasChanges = false;
     for (const key in delta) {
       if (!Object.hasOwn(delta, key)) continue;
-      
+
       hasChanges = true;
       break;
     }
@@ -69,24 +73,19 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
     // 'our' document on the parent. That is why the entire object must be collected here, not just 
     // the delta. 
     const dto = {
-      ...this.raw,
+      ...this.syntheticDocument.toDto(),
       ...newDelta,
     };
 
     const parentDto = this._buildDto(this.#pathOnParent, dto)
-    await super.update(parentDto, render, force);
+    await super.update(parentDto, force);
   }
 
   /** @override */
-  async updateByPath(propertyPath, newValue, render = true) {
-    const systemPrefix = "system.";
-    if (propertyPath.startsWith(systemPrefix)) {
-      propertyPath = propertyPath.substring(systemPrefix.length);
-    }
-    const actualPath = `${this.#pathOnParent}.${propertyPath}`;
-
-    const dto = this._buildDto(actualPath, newValue);
-    await super.update(dto, render);
+  async updateByPath(propertyPath, newValue, force = false) {
+    const sanitizedPath = this.#sanitizePath(propertyPath);
+    const dto = this._buildDto(sanitizedPath, newValue);
+    await super.update(dto, force);
   }
 
   /**
@@ -96,5 +95,33 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
    */
   async delete() {
     await this.deleteByPath(this.#pathOnParent);
+  }
+
+  /** @override */
+  getBufferByPath(propertyPath) {
+    const sanitizedPath = this.#sanitizePath(propertyPath);
+    return super.getBufferByPath(`${this.#pathOnParent}.${sanitizedPath}`);
+  }
+
+  /** @override */
+  _buildDto(propertyPath, newValue) {
+    const dto = this.syntheticDocument.toDto();
+    PropertyUtil.setByPath(dto, propertyPath, newValue);
+    return super._buildDto(this.#pathOnParent, dto);
+  }
+
+  /**
+   * Strips the `"system."` substring from the given `propertyPath`, and returns it. 
+   * @param {String} propertyPath 
+   * @returns {String}
+   * @private
+   */
+  #sanitizePath(propertyPath) {
+    const systemPrefix = "system.";
+    if (propertyPath.startsWith(systemPrefix)) {
+      return propertyPath.substring(systemPrefix.length);
+    } else {
+      return propertyPath;
+    }
   }
 }

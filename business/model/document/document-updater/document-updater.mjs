@@ -4,6 +4,10 @@ import FoundryWrapper from "../../../../foundry-interop/foundry-wrapper.mjs";
 
 /**
  * Utility for updating a document's data. 
+ * 
+ * Buffers updates, to prevent them from being immediately being persisted, which would cause 
+ * sheet re-rendering and interrupting the user's editing flow. Persisting to DB must be done via 
+ * a `flushUpdates()` call. 
  */
 export default class DocumentUpdater {
   /**
@@ -13,36 +17,20 @@ export default class DocumentUpdater {
   get _logger() { return game.strive.logger; }
 
   /**
-   * @type {Boolean}
-   * @private
-   */
-  #isBufferMode = false;
-  /**
-   * If `true`, field updates do not immediately fire and get persisted, 
-   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
-   * 
-   * Setting this to `false` immediately flushes all updates. 
-   * @type {Boolean}
-   */
-  get isBufferMode() { return this.#isBufferMode; }
-  set isBufferMode(value) {
-    this.#isBufferMode = value;
-    if (!value) {
-      this.flushUpdates();
-    }
-  }
-
-  /**
    * @type {Object}
    * @private
    */
   #buffer = {};
   /**
-   * Holds all currently outstanding updates. 
+   * Returns all currently outstanding updates. 
    * @type {Object}
-   * @protected
    */
-  get _buffer() { return this.#buffer; }
+  get buffer() { return this.#buffer; }
+  /**
+   * Sets all currently outstanding updates. 
+   * @param {Object} value
+   */
+  set buffer(value) { this.#buffer = value; }
 
   /**
    * @type {Object}
@@ -59,33 +47,26 @@ export default class DocumentUpdater {
   /**
    * @param {Object} args
    * @param {Object} args.document FoundryVTT document instance. 
-   * @param {Boolean | undefined} args.isBufferMode If `true`, field updates do not immediately fire and get persisted, 
-   * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
-   * * default `false`
    */
   constructor(args = {}) {
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.#document = args.document;
-    this.#isBufferMode = args.isBufferMode ?? false;
   }
 
   /**
    * Updates the document with the given `delta` object. 
    * 
    * @param {Object} delta The update delta to persist. 
-   * @param {Boolean} render If `true`, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * @param {Boolean} force If `true`, will bypass the buffer mode. 
+   * @param {Boolean} force If `true`, will bypass the buffer and immediately flush the update. 
    * * Default 'false'. 
    * 
    * @async
    */
-  async update(delta, render = true, force = false) {
-    if (this.isBufferMode && !force) {
-      this.#buffer = FoundryWrapper.mergeObject(this.#buffer, delta);
-    } else {
-      await this.#update(delta, render);
+  async update(delta, force = false) {
+    this.buffer = FoundryWrapper.mergeObject(this.buffer, delta);
+    if (force) {
+      this.flushUpdates();
     }
   }
   
@@ -100,7 +81,7 @@ export default class DocumentUpdater {
    * @private
    */
   async #update(delta, render = true) {
-    this.#document.update(delta, { render: render, });
+    this._document.update(delta, { render: render, });
   }
 
   /**
@@ -112,14 +93,14 @@ export default class DocumentUpdater {
    *        E.g.: `"system.attributes[4]" `
    *        E.g.: `"system.attributes" `
    * @param {any} newValue The value to assign to the property. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * default `true`. 
+   * @param {Boolean | undefined} force If `true`, will bypass the buffer and immediately flush the update. 
+   * * default `false`. 
    * 
    * @async
    */
-  async updateByPath(propertyPath, newValue, render = true) {
+  async updateByPath(propertyPath, newValue, force = false) {
     const dto = this._buildDto(propertyPath, newValue);
-    await this.update(dto, render);
+    await this.update(dto, force);
   }
   
   /**
@@ -130,21 +111,21 @@ export default class DocumentUpdater {
    * * E.g.: `"system.attributes[0].level"`
    * * E.g.: `"system.attributes[4]"`
    * * E.g.: `"system.attributes"`
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * default `true`. 
+   * @param {Boolean | undefined} force If `true`, will bypass the buffer and immediately flush the update. 
+   * * default `false`. 
    * 
    * @async
    */
-  async deleteByPath(propertyPath, render = true) {
+  async deleteByPath(propertyPath, force = false) {
     const mIndex = propertyPath.match(/\[\d+\]$/);
     if (ValidationUtil.isDefined(mIndex)) { // Delete item from array.
       const arrayPropertyPath = propertyPath.substring(0, mIndex.index);
       
-      let array = PropertyUtil.getByPath(this.#document, arrayPropertyPath);
+      let array = PropertyUtil.getByPath(this._document, arrayPropertyPath);
       const index = parseInt(mIndex[0].substring(1, mIndex[0].length - 1));
       array = array.slice(0, index).concat(array.slice(index + 1));
 
-      await this.updateByPath(arrayPropertyPath, array, render);
+      await this.updateByPath(arrayPropertyPath, array, force);
     } else { // Delete property from object. 
       const parts = propertyPath.split(".");
 
@@ -155,7 +136,7 @@ export default class DocumentUpdater {
 
       // Null must be given as the value for a property to be deleted. 
       // Undefined wouldn't work, as undefined properties are simply skipped by FoundryVTT.
-      await this.updateByPath(parentPropertyPath, null, render);
+      await this.updateByPath(parentPropertyPath, null, force);
     }
   }
 
@@ -163,7 +144,7 @@ export default class DocumentUpdater {
    * Persists all currently outstanding updates to the data base. 
    */
   flushUpdates() {
-    this.#update(this.#buffer, true);
+    this.#update(this.buffer, true);
     this.discardUpdates();  
   }
 
@@ -172,6 +153,20 @@ export default class DocumentUpdater {
    */
   discardUpdates() {
     this.#buffer = {};
+  }
+
+  /**
+   * Returns the buffered value identified by the given property path, 
+   * if it exists. 
+   * @param {String} propertyPath Path leading to the property. 
+   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"system.attributes[0].level"`
+   * * E.g.: `"system.attributes[4]"`
+   * * E.g.: `"system.attributes"`
+   * @returns {Any | undefined}
+   */
+  getBufferByPath(propertyPath) {
+    return PropertyUtil.getByPath(this.buffer, propertyPath);
   }
 
   /**
@@ -224,7 +219,7 @@ export default class DocumentUpdater {
     let previousDtoProperty = dto;
     // A reference to the previously looked at property, on the document. 
     // Initially, this is a reference to the document itself. 
-    let previousDocumentProperty = this.#document;
+    let previousDocumentProperty = this._document;
     // If this value is true, then an array is part of the property path. 
     // In such a case, we can no longer create small delta objects and have to instead start 
     // taking whole objects. Otherwise, all but the targeted property could be lost. 

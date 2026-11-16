@@ -22,20 +22,6 @@ export default class SkillItemData extends BaseItemData {
         initial: 0,
         min: 0,
       }),
-      expertises: new FoundrySchemaFields.ArrayField(new ExpertiseField(), {
-        nullable: false,
-        initial: [],
-      }),
-      itemOrders: new FoundrySchemaFields.SchemaField({
-        expertises: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
-          nullable: false,
-          initial: [],
-        }),
-        momentumActions: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
-          nullable: false,
-          initial: [],
-        }),
-      }),
       actionPoints: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
         current: new FoundrySchemaFields.NumberField({
@@ -43,6 +29,10 @@ export default class SkillItemData extends BaseItemData {
           initial: 0,
           integer: true,
         }),
+      }),
+      isInnate: new FoundrySchemaFields.BooleanField({
+        nullable: false,
+        initial: false,
       }),
       distance: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
@@ -71,6 +61,21 @@ export default class SkillItemData extends BaseItemData {
           min: 0,
         }),
       }),
+      // Sub-items
+      itemOrders: new FoundrySchemaFields.SchemaField({
+        expertises: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+          nullable: false,
+          initial: [],
+        }),
+        momentumActions: new FoundrySchemaFields.ArrayField(new ReferenceField(), {
+          nullable: false,
+          initial: [],
+        }),
+      }),
+      expertises: new FoundrySchemaFields.ArrayField(new ExpertiseField(), {
+        nullable: false,
+        initial: [],
+      }),
       gradedEffects: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
         entries: new FoundrySchemaFields.ArrayField(new GradedEffectField()),
@@ -78,10 +83,6 @@ export default class SkillItemData extends BaseItemData {
       momentumActions: new FoundrySchemaFields.ArrayField(new MomentumActionField(), {
         nullable: false,
         initial: [],
-      }),
-      isInnate: new FoundrySchemaFields.BooleanField({
-        nullable: false,
-        initial: false,
       }),
     };
   }

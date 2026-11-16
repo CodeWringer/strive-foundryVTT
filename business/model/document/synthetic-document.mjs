@@ -132,7 +132,6 @@ export default class SyntheticDocument extends Document {
    * @param {Object} args.parentDocument FoundryVTT document. 
    * @param {String} args.pathOnParent Data path on the `parentDocument` which can 
    * uniquely identify this instance. E.g. `"system.expertises.abc123"`
-   * @param {Object | undefined} args.raw Raw data object. 
    * @param {String | undefined} args.id Unique ID of this instance. 
    */
   constructor(args = {}) {
@@ -144,6 +143,7 @@ export default class SyntheticDocument extends Document {
       }),
     });
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
+    this._updater.syntheticDocument = this;
 
     this.#parentDocument = args.parentDocument.getEnhancedDocument();
     this.#pathOnParent = args.pathOnParent;
