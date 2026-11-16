@@ -15,11 +15,6 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
   #pathOnParent;
 
   /**
-   * @type {SyntheticDocument | undefined}
-   */
-  syntheticDocument;
-
-  /**
    * @param {Object} args
    * @param {Boolean | undefined} args.isBufferMode If `true`, field updates do not immediately fire and get persisted, 
    * but are instead collected and aggregated, to be flushed via a `flushUpdates()` call. 
@@ -43,7 +38,7 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
     let hasChanges = false;
     for (const key in delta) {
       if (!Object.hasOwn(delta, key)) continue;
-      
+
       hasChanges = true;
       break;
     }
@@ -78,11 +73,8 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
 
   /** @override */
   async updateByPath(propertyPath, newValue, render = true) {
-    const systemPrefix = "system.";
-    if (propertyPath.startsWith(systemPrefix)) {
-      propertyPath = propertyPath.substring(systemPrefix.length);
-    }
-    const dto = this._buildDto(propertyPath, newValue);
+    const sanitizedPath = this.#sanitizePath(propertyPath);
+    const dto = this._buildDto(sanitizedPath, newValue);
     await super.update(dto, render);
   }
 
@@ -96,9 +88,30 @@ export default class SyntheticDocumentUpdater extends DocumentUpdater {
   }
 
   /** @override */
+  getBufferByPath(propertyPath) {
+    const sanitizedPath = this.#sanitizePath(propertyPath);
+    return super.getBufferByPath(`${this.#pathOnParent}.${sanitizedPath}`);
+  }
+
+  /** @override */
   _buildDto(propertyPath, newValue) {
     const dto = this.syntheticDocument.toDto();
     PropertyUtil.setByPath(dto, propertyPath, newValue);
     return super._buildDto(this.#pathOnParent, dto);
+  }
+
+  /**
+   * Strips the `"system."` substring from the given `propertyPath`, and returns it. 
+   * @param {String} propertyPath 
+   * @returns {String}
+   * @private
+   */
+  #sanitizePath(propertyPath) {
+    const systemPrefix = "system.";
+    if (propertyPath.startsWith(systemPrefix)) {
+      return propertyPath.substring(systemPrefix.length);
+    } else {
+      return propertyPath;
+    }
   }
 }

@@ -33,10 +33,11 @@ export default class ExpertiseListViewModel extends ListViewModel {
         localizedValue: StringUtil.getLoca("system.item.expertise.add"),
         icon: "fas fa-plus",
         onClick: () => {
-          const newExpertises = this.document.expertises.concat([
+          const expertises = this.document.expertises;
+          const newExpertises = expertises.concat([
             new ExpertiseDocument({
               parentDocument: this.document,
-              index: this.document.expertises.length,
+              index: expertises.length,
               isBufferMode: this.document.isBufferMode,
             }),
           ]);

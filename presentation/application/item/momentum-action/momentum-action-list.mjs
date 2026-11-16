@@ -30,10 +30,11 @@ export default class MomentumActionListViewModel extends ListViewModel {
         localizedValue: StringUtil.getLoca("system.item.momentumAction.add"),
         icon: "fas fa-plus",
         onClick: () => {
-          const newArr = this.document.momentumActions.concat([
+          const momentumActions = this.document.momentumActions;
+          const newArr = momentumActions.concat([
             new MomentumActionDocument({
               parentDocument: this.document,
-              index: this.document.momentumActions.length,
+              index: momentumActions.length,
               isBufferMode: this.document.isBufferMode,
             }),
           ]);

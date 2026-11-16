@@ -146,6 +146,7 @@ export default class SyntheticDocument extends Document {
       }),
     });
     ValidationUtil.validateOrThrow(args, ["parentDocument", "pathOnParent"]);
+    this._updater.syntheticDocument = this;
 
     this.#parentDocument = args.parentDocument.getEnhancedDocument();
     this.#pathOnParent = args.pathOnParent;
