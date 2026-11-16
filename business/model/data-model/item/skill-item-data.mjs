@@ -36,7 +36,11 @@ export default class SkillItemData extends BaseItemData {
       }),
       distance: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
-        current: new FoundrySchemaFields.StringField({}),
+        current: new FoundrySchemaFields.NumberField({
+          nullable: false,
+          initial: 0,
+          integer: true,
+        }),
       }),
       targetingType: new FoundrySchemaFields.SchemaField({
         enabled: new FoundrySchemaFields.BooleanField(),
