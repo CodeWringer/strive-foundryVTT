@@ -3,7 +3,7 @@ viewModel: RecipeContentViewModel
 --}}
 <div class="pad-h-md">
   {{!-- Description --}}
-  {{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="" }}
   <span class="h-divider"></span>
   <div class="flex flex-row flex-middle auto-margin-h-md">
     {{!-- Quality --}}
@@ -37,6 +37,8 @@ viewModel: RecipeContentViewModel
     <i class="ico ico-skill xl"></i>
     {{> inputReference viewModel=viewModel.vmProjectSkill cssClass="flex-grow" }}
   </div>
+</div>
+<div class="complications">
   {{!-- Complications --}}
   <span class="h-divider"></span>
   {{#with viewModel.vmComplications.clazz.TEMPLATE as |template|}}

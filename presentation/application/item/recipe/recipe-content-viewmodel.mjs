@@ -1,4 +1,5 @@
 import { StringUtil } from "../../../../common/util/string-utility.mjs";
+import VisibilityRule from "../../../model/visibility-rule.mjs";
 import ComplicationListViewModel from "../../component/complication/complication-list-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputReferenceViewModel from "../../component/input-reference/input-reference-viewmodel.mjs";
@@ -13,6 +14,16 @@ export default class RecipeContentViewModel extends BaseItemContentViewModel {
 
   /** @override */
   get clazz() { return RecipeContentViewModel; }
+
+  /** @override */
+  get visibilityRules() {
+    return super.visibilityRules.concat([
+      new VisibilityRule({
+        selector: "> .complications",
+        shouldBeHidden: () => !this.isEditable && this.document.complications.length < 1,
+      }),
+    ]);
+  }
 
   /**
    * @param {Object} args

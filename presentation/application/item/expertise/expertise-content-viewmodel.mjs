@@ -24,7 +24,7 @@ export default class ExpertiseContentViewModel extends BaseItemContentViewModel 
   get hasDynamicContent() {
     return this.document.gradedEffects.entries > 0 
       || this.document.actionPoints.current > 0
-      || this.document.distance.current !== 0
+      || !this.document.distance.current === 0
       || this.document.targetingType.enabled
       || this.document.obstacle.enabled
       ;
@@ -34,28 +34,28 @@ export default class ExpertiseContentViewModel extends BaseItemContentViewModel 
   get visibilityRules() {
     return super.visibilityRules.concat([
       new VisibilityRule({
-        selector: "> div > .dynamic-content",
+        selector: "> div > .divider1",
         shouldBeHidden: () => !this.isEditable && !this.hasDynamicContent,
       }),
       new VisibilityRule({
-        selector: "> div > .dynamic-content > div > .action-points",
+        selector: "> div > .graded-effects",
+        shouldBeHidden: () => !this.isEditable && this.document.gradedEffects.entries.length < 1,
+      }),
+      new VisibilityRule({
+        selector: "> div > div > .action-points",
         shouldBeHidden: () => !this.isEditable && this.document.actionPoints.current < 1,
       }),
       new VisibilityRule({
-        selector: "> div > .dynamic-content > div > .distance",
+        selector: "> div > div > .distance",
         shouldBeHidden: () => !this.isEditable && this.document.distance.current === 0,
       }),
       new VisibilityRule({
-        selector: "> div > .dynamic-content > div > .targeting-type",
+        selector: "> div > div > .targeting-type",
         shouldBeHidden: () => !this.isEditable && this.document.targetingType.current.name === TARGETING_TYPES.none.name,
       }),
       new VisibilityRule({
-        selector: "> div > .dynamic-content > div > .obstacle",
+        selector: "> div > div > .obstacle",
         shouldBeHidden: () => !this.isEditable && !this.document.obstacle.enabled,
-      }),
-      new VisibilityRule({
-        selector: "> div > .graded-effects",
-        shouldBeHidden: () => !this.isEditable && this.document.gradedEffects.entries.length === 0,
       }),
     ]);
   }

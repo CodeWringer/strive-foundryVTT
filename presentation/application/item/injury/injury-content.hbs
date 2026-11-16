@@ -1,24 +1,29 @@
 {{!-- context:
 viewModel: InjuryContentViewModel
 --}}
-{{> inputRichText viewModel=viewModel.vmDescription cssClass="pad-md" }}
-<div class="auto-margin-v-md pad-h-md">
+<div class="pad-h-md">
+  {{!-- Description --}}
+  {{> inputRichText viewModel=viewModel.vmDescription cssClass="" }}
   <span class="h-divider"></span>
-  <div class="grid col6 gap-md border-between-rows border-between-cols margin-b-md">
-    <div class="flex flex-row flex-middle auto-margin-h-md grid-span-3">
-      <div class="flex flex-row flex-middle">
-        <i class="ico ico-obstacle xl"></i>
-        {{> inputTextField viewModel=viewModel.vmTreatmentObstacle cssClass="" }}
-      </div>
-      <div class="flex flex-row flex-middle flex-grow">
-        <i class="ico ico-arrow-right lg"></i>
-        {{> inputReference viewModel=viewModel.vmTreatmentSkill cssClass="flex-grow" }}
-      </div>
+  <div class="auto-margin-v-md flex flex-middle flex-row">
+    {{!-- Treatment Obstacle --}}
+    <div class="treatment-obstacle flex flex-row flex-middle">
+      <i class="ico ico-obstacle xl"></i>
+      {{> inputTextField viewModel=viewModel.vmTreatmentObstacle cssClass="" }}
+      <span class="v-divider"></span>
     </div>
-    <div class="flex flex-row flex-middle flex-grow auto-margin-h-md grid-span-3">
+    {{!-- Treatment Skill --}}
+    <div class="treatment-skill flex flex-row flex-middle">
+      <i class="ico ico-arrow-right lg"></i>
+      {{> inputReference viewModel=viewModel.vmTreatmentSkill cssClass="flex-grow" }}
+      <span class="v-divider"></span>
+    </div>
+    {{!-- Treatment Supplies --}}
+    <div class="treatment-supplies flex flex-row flex-middle">
       <i class="ico ico-treatment-supplies xl"></i>
       {{> inputNumberSpinner viewModel=viewModel.vmTreatmentSuppliesAmount cssClass="" }}
       {{> inputReference viewModel=viewModel.vmTreatmentSuppliesAsset cssClass="flex-grow" }}
+      <span class="v-divider"></span>
     </div>
   </div>
 </div>

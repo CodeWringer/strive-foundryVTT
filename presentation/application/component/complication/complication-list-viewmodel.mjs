@@ -175,7 +175,7 @@ export default class ComplicationListViewModel extends InputViewModel {
     const index = this.value.findIndex(it => it == complication);
     const oldComplication = thisOldValue[index];
     oldComplication[fieldName] = oldValue;
-    this.onChange(this.value, thisOldValue);
+    this.onChange.invoke(this.value, thisOldValue);
   }
 
   /**
